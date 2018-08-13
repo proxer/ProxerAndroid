@@ -8,14 +8,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ucp.topten.UcpTopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.ucp.UcpTopTenEntry
 import me.proxer.library.util.ProxerUrls
@@ -47,29 +51,27 @@ class UcpTopTenAdapter : BaseAdapter<UcpTopTenEntry, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val image: ImageView by bindView(R.id.image)
         internal val removeButton: ImageButton by bindView(R.id.deleteButton)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
-
             removeButton.setIconicsImage(CommunityMaterial.Icon.cmd_star_off, 48)
-
-            removeButton.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    deleteSubject.onNext(data[it])
-                }
-            }
         }
 
         fun bind(item: UcpTopTenEntry) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
+            removeButton.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteSubject)
+
             ViewCompat.setTransitionName(image, "ucp_top_ten_${item.id}")
 
             title.text = item.name

@@ -20,11 +20,12 @@ import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -134,7 +135,7 @@ class MangaActivity : BaseActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             window.decorView.systemUiVisibilityChanges()
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe { visibility ->
                     if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                         window.decorView.systemUiVisibility = defaultUiFlags()
@@ -198,7 +199,7 @@ class MangaActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 name?.let {
                     MediaActivity.navigateTo(this, id, name, Category.MANGA)

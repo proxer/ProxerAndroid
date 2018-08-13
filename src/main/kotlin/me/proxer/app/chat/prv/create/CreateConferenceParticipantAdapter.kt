@@ -9,14 +9,18 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceParticipantAdapter.ViewHolder
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
@@ -63,7 +67,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
 
     fun contains(username: String) = data.find { it.username.equals(username, ignoreCase = true) } != null
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val username: TextView by bindView(R.id.username)
@@ -71,21 +75,20 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
 
         init {
             delete.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
-
-            delete.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    data[it].let { removedParticipant ->
-                        data -= removedParticipant
-
-                        notifyItemRemoved(it)
-
-                        removalSubject.onNext(removedParticipant)
-                    }
-                }
-            }
         }
 
         fun bind(item: Participant) {
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] to it }
+                .autoDisposable(this)
+                .subscribe { (removedParticipant, position) ->
+                    data -= removedParticipant
+
+                    notifyItemRemoved(position)
+
+                    removalSubject.onNext(removedParticipant)
+                }
+
             username.text = item.username
 
             if (item.image.isBlank()) {

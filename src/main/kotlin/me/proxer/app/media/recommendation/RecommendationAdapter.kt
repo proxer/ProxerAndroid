@@ -9,17 +9,21 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.recommendation.RecommendationAdapter.ViewHolder
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.info.Recommendation
@@ -54,7 +58,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
@@ -73,15 +77,14 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
         init {
             upvotesImage.setImageDrawable(generateUpvotesImage())
             downvotesImage.setImageDrawable(generateDownvotesImage())
-
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
         }
 
         fun bind(item: Recommendation) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             ViewCompat.setTransitionName(image, "recommendation_${item.id}")
 
             title.text = item.name

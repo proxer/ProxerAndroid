@@ -3,10 +3,11 @@ package me.proxer.app.chat.pub.message
 import android.app.Activity
 import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoActivity
-import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
 
 /**
@@ -54,7 +55,7 @@ class ChatActivity : DrawerActivity() {
         title = chatRoomName
 
         toolbar.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 ChatRoomInfoActivity.navigateTo(this, chatRoomId, chatRoomName)
             }

@@ -1,7 +1,6 @@
 package me.proxer.app.media.discussion
 
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -9,11 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.discussion.DiscussionAdapter.ViewHolder
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.entity.info.ForumDiscussion
 
 /**
@@ -33,20 +36,17 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val subject: TextView by bindView(R.id.subject)
         internal val metaInfo: TextView by bindView(R.id.metaInfo)
 
-        init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-        }
-
         fun bind(item: ForumDiscussion) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             val metaInfoText = metaInfo.context.getString(R.string.fragment_discussion_meta_info,
                 item.firstPostUsername, item.category)
 

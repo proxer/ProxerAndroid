@@ -1,5 +1,6 @@
 package me.proxer.app.media.info
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.graphics.Typeface
 import android.os.Bundle
@@ -19,6 +20,8 @@ import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -27,7 +30,6 @@ import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.media.MediaInfoViewModelProvider
 import me.proxer.app.ui.view.MaxLineFlexboxLayout
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.snackbar
@@ -128,19 +130,19 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         updateSpoilerButton()
 
         noteContainer.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.note() }
 
         favorContainer.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFavorite() }
 
         finishContainer.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFinished() }
 
         unratedTags.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 showUnratedTags = !showUnratedTags
 
@@ -148,7 +150,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             }
 
         spoilerTags.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 showSpoilerTags = !showSpoilerTags
 
@@ -261,8 +263,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                         }
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
+
                         contentView.clicks()
-                            .autoDispose(viewLifecycleOwner)
+                            .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                             .subscribe {
                                 MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
                                     adaptionInfo.medium?.toCategory())
@@ -362,9 +365,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                     .inflate(R.layout.layout_image, fskConstraints, false) as ImageView
 
                 image.setImageDrawable(constraint.toAppDrawable(requireContext()))
-                image.setOnClickListener {
-                    multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
-                }
+
+                image.clicks()
+                    .autoDisposable(viewLifecycleOwner.scope())
+                    .subscribe { multilineSnackbar(root, constraint.toAppStringDescription(requireContext())) }
 
                 fskConstraints.addView(image)
             }
@@ -413,7 +417,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 badge.setTypeface(null, Typeface.BOLD)
                 badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
                 badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
-                badge.setOnClickListener { onClick?.invoke(items[index]) }
+
+                if (onClick != null) {
+                    badge.clicks()
+                        .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe { _ -> onClick.invoke(items[index]) }
+                }
 
                 if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
                     layout.enableShowAllButton {

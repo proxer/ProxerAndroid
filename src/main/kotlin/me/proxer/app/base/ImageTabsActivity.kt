@@ -17,12 +17,13 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.ActivityUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import okhttp3.HttpUrl
 
@@ -98,7 +99,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
         ViewCompat.setTransitionName(headerImage, ActivityUtils.getTransitionName(this))
 
         headerImage.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 val safeHeaderImageUrl = headerImageUrl
 
@@ -144,7 +145,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
         collapsingToolbar.isTitleEnabled = false
 
         appbar.offsetChanges()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 isHeaderImageVisible = collapsingToolbar.height + it > collapsingToolbar.scrimVisibleHeightTrigger
             }

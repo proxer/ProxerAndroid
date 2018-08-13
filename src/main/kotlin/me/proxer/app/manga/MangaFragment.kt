@@ -22,6 +22,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -31,6 +33,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.MediaControlView
+import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
@@ -38,7 +41,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.activityManager
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
@@ -136,7 +138,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribeAndLogErrors { (view, coordinates, position) ->
                 val (xCoordinate, yCoordinate) = coordinates
                 val parentHeight = recyclerView.height
@@ -159,9 +161,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                     }
                 } else {
                     if (xCoordinate < parentWidth / 3) {
-                        recyclerView.smoothScrollToPosition(position)
+                        recyclerView.smoothScrollToPosition(position - 1)
                     } else {
-                        recyclerView.smoothScrollToPosition(position + 2)
+                        recyclerView.smoothScrollToPosition(position + 1)
                     }
                 }
             }
@@ -190,15 +192,15 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-            .autoDispose(this)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-            .autoDispose(this)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
 
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-            .autoDispose(this)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
                     viewModel.bookmark(it)
@@ -208,11 +210,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
 
         Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-            .autoDispose(this)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.bookmark(it) }
 
         Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-            .autoDispose(this)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_manga, container, false)
@@ -331,10 +333,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                 episodeAmount = it.episodeAmount
                 name = it.name
 
-                header.setEpisodeInfo(it.episodeAmount, episode)
-                header.setTranslatorGroup(null)
-                header.setUploader(null)
-                header.setDateTime(null)
+                header.episodeInfo = SimpleEpisodeInfo(it.episodeAmount, episode)
+                header.translatorGroup = null
+                header.uploader = null
+                header.dateTime = null
 
                 adapter.header = header
             }
@@ -361,17 +363,18 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private fun showHeaderAndFooter(data: MangaChapterInfo) {
         bindHeaderAndFooterHeight()
 
-        header.setEpisodeInfo(data.episodeAmount, episode)
-        header.setDateTime(data.chapter.date.convertToDateTime())
-        header.setUploader(Uploader(data.chapter.uploaderId, data.chapter.uploaderName))
-
-        footer.setEpisodeInfo(data.episodeAmount, episode)
-
-        data.chapter.scanGroupId?.let { id ->
+        val translatorGroup = data.chapter.scanGroupId?.let { id ->
             data.chapter.scanGroupName?.let { name ->
-                header.setTranslatorGroup(SimpleTranslatorGroup(id, name))
+                SimpleTranslatorGroup(id, name)
             }
         }
+
+        header.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)
+        header.uploader = Uploader(data.chapter.uploaderId, data.chapter.uploaderName)
+        header.dateTime = data.chapter.date.convertToDateTime()
+        header.translatorGroup = translatorGroup
+
+        footer.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)
 
         adapter.header = header
         adapter.footer = footer

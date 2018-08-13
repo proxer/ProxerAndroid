@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.topten.TopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.entity.user.TopTenEntry
 import me.proxer.library.util.ProxerUrls
 
@@ -43,20 +47,17 @@ class TopTenAdapter : BaseAdapter<TopTenEntry, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
 
-        init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
-        }
-
         fun bind(item: TopTenEntry) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             ViewCompat.setTransitionName(image, "top_ten_${item.id}")
 
             title.text = item.name

@@ -10,14 +10,17 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.jakewharton.rxbinding2.view.clicks
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
@@ -25,6 +28,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.dip
@@ -62,7 +66,7 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
         return old.conference.id == new.conference.id
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val topic: TextView by bindView(R.id.topic)
@@ -72,16 +76,15 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
         internal val newMessages: MaterialBadgeTextView by bindView(R.id.newMessages)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-
             newMessages.setBackgroundColor(ContextCompat.getColor(newMessages.context, R.color.colorAccent))
         }
 
         fun bind(item: ConferenceWithMessage) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             bindTopic(item)
             bindTime(item)
             bindPreviewText(item)

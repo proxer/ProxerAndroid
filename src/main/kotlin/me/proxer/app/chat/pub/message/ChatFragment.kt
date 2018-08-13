@@ -22,6 +22,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.Observable
@@ -37,7 +39,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
@@ -148,14 +149,14 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         innerAdapter = ChatAdapter(savedInstanceState)
 
         innerAdapter.titleClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 ProfileActivity.navigateTo(requireActivity(), item.userId, item.username, item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null)
             }
 
         innerAdapter.messageSelectionSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 if (it > 0) {
                     when (actionMode) {
@@ -170,11 +171,11 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             }
 
         innerAdapter.linkClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { showPage(it) }
 
         innerAdapter.linkLongClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 getString(R.string.clipboard_title).let { title ->
                     requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
@@ -183,7 +184,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             }
 
         innerAdapter.mentionsClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
     }
 
@@ -209,7 +210,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
@@ -220,7 +221,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             }
 
         scrollToBottom.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(0, 0)
@@ -232,11 +233,11 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 messageInput.safeText.toString().trim().let { text ->
                     if (text.isNotBlank()) {
@@ -251,7 +252,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { message ->
                 viewModel.updateDraft(message.toString())
 
@@ -260,7 +261,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 updateInputVisibility()
 

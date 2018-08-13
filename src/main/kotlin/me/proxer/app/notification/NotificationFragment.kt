@@ -9,10 +9,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.extension.ProxerNotification
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
@@ -46,11 +47,11 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
         innerAdapter = NotificationAdapter()
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { showPage(it.contentLink) }
 
         innerAdapter.deleteClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { viewModel.addItemToDelete(it) }
 
         setHasOptionsMenu(true)

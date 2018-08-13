@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
@@ -29,7 +31,6 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.safeLayoutManager
@@ -80,7 +81,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         adapter = ConferenceAdapter()
 
         adapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (conference) -> MessengerActivity.navigateTo(requireActivity(), conference) }
 
         setHasOptionsMenu(true)
@@ -130,7 +131,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe {
                     if (it.menuItem().isActionViewExpanded) {
                         searchQuery = null
@@ -143,7 +144,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                 .skipInitialValue()
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe {
                     searchQuery = it.queryText().toString().trim()
 

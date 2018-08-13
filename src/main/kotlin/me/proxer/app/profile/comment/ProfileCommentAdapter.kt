@@ -11,17 +11,21 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -73,7 +77,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         outState.putParcelable(EXPANDED_STATE, expansionMap)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)
         internal val image: ImageView by bindView(R.id.image)
@@ -108,20 +112,6 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
 
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
 
-            expand.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    expansionMap.putOrRemove(data[it].id)
-
-                    handleExpansion(true)
-                }
-            }
-
-            titleContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    titleClickSubject.onNext(data[it])
-                }
-            }
-
             comment.glide = glide
             comment.heightChangedListener = {
                 withSafeAdapterPosition(this) {
@@ -130,7 +120,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
                         false -> expansionMap.remove(data[it].id)
                     }
 
-                    handleExpansion(true)
+                    handleExpansion(data[it].id, true)
                 }
             }
 
@@ -138,6 +128,8 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         }
 
         fun bind(item: ParsedUserComment) {
+            initListeners()
+
             ViewCompat.setTransitionName(image, "comment_${item.id}")
 
             title.text = item.entryName
@@ -156,35 +148,46 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 
-            handleExpansion()
+            handleExpansion(item.id)
         }
 
-        private fun handleExpansion(animate: Boolean = false) {
-            withSafeAdapterPosition(this) {
+        private fun initListeners() {
+            expand.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .doOnNext { expansionMap.putOrRemove(it) }
+                .autoDisposable(this)
+                .subscribe { handleExpansion(it, true) }
+
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(titleClickSubject)
+        }
+
+        private fun handleExpansion(itemId: String, animate: Boolean = false) {
                 ViewCompat.animate(expand).cancel()
 
-                if (expansionMap.containsKey(data[it].id)) {
-                    comment.maxHeight = Int.MAX_VALUE
+            if (expansionMap.containsKey(itemId)) {
+                comment.maxHeight = Int.MAX_VALUE
 
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(180f)
-                        false -> expand.rotation = 180f
-                    }
-                } else {
-                    comment.maxHeight = maxHeight
-
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(0f)
-                        false -> expand.rotation = 0f
-                    }
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(180f)
+                    false -> expand.rotation = 180f
                 }
+            } else {
+                comment.maxHeight = maxHeight
 
-                comment.post { bindExpandButton(maxHeight) }
-
-                if (animate) {
-                    comment.requestLayout()
-                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(0f)
+                    false -> expand.rotation = 0f
                 }
+            }
+
+            comment.post { bindExpandButton(maxHeight) }
+
+            if (animate) {
+                comment.requestLayout()
+                layoutManager?.requestSimpleAnimationsInNextLayout()
             }
         }
 

@@ -2,26 +2,40 @@
 
 package me.proxer.app.util.extension
 
-import android.arch.lifecycle.LifecycleOwner
+import android.os.Looper
+import android.support.v7.widget.RecyclerView
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import timber.log.Timber
 
-inline fun <T> Observable<T>.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope())
+inline fun Observer<*>.checkMainThread(): Boolean {
+    return if (Looper.myLooper() != Looper.getMainLooper()) {
+        val threadName = Thread.currentThread().name
 
-inline fun <T> Single<T>.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope())
+        onSubscribe(Disposables.empty())
+        onError(IllegalStateException("Expected to be called on the main thread but was $threadName"))
 
-inline fun Completable.autoDispose(owner: LifecycleOwner) = this
-    .autoDisposable(owner.scope())
+        false
+    } else {
+        true
+    }
+}
+
+inline fun <reified I, reified O> Observable<I>.mapAdapterPosition(
+    noinline adapterPosition: (I) -> Int,
+    noinline mapper: (Int) -> O
+): Observable<O> {
+    return this.map(adapterPosition)
+        .filter { it != RecyclerView.NO_POSITION }
+        .map(mapper)
+}
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(
     noinline onSuccess: (T) -> Unit,

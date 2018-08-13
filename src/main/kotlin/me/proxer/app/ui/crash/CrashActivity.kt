@@ -8,12 +8,13 @@ import android.widget.TextView
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 
@@ -53,11 +54,11 @@ class CrashActivity : BaseActivity() {
         title = getString(R.string.section_crash)
 
         report.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { CrashDialog.show(this, errorDetails) }
 
         restart.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { CustomActivityOnCrash.restartApplication(this, config) }
 
         text.setSimpleOnLinkClickListener { _, _ ->

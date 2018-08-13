@@ -9,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.longClicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -55,7 +60,7 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
     override fun areItemsTheSame(old: Bookmark, new: Bookmark) = old.entryId == new.entryId
     override fun areContentsTheSame(old: Bookmark, new: Bookmark) = old.id == new.id
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
@@ -65,30 +70,12 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-
-            itemView.setOnLongClickListener {
-                withSafeAdapterPosition(this) {
-                    longClickSubject.onNext(image to data[it])
-                }
-
-                true
-            }
-
-            delete.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    deleteClickSubject.onNext(data[it])
-                }
-            }
-
             delete.setIconicsImage(CommunityMaterial.Icon.cmd_bookmark_remove, 48)
         }
 
         fun bind(item: Bookmark) {
+            initListeners()
+
             ViewCompat.setTransitionName(image, "bookmark_${item.id}")
 
             val availabilityIndicator = AppCompatResources.getDrawable(episode.context, when (item.isAvailable) {
@@ -104,6 +91,23 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
             language.setImageDrawable(item.language.toGeneralLanguage().toAppDrawable(language.context))
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
+        }
+
+        private fun initListeners() {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
+            itemView.longClicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(longClickSubject)
+
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteClickSubject)
         }
     }
 }

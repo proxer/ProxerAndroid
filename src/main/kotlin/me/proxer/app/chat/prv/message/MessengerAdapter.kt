@@ -9,12 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.longClicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindOptionalView
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.message.MessengerAdapter.MessageViewHolder
@@ -25,10 +29,12 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
+import java.util.concurrent.Callable
 
 /**
  * @author Ruben Gees
@@ -243,7 +249,7 @@ class MessengerAdapter(
         return marginTop to if (position == 0) 0 else marginBottom
     }
 
-    open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    open inner class MessageViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val root: ViewGroup by bindView(R.id.root)
         internal val container: CardView by bindView(R.id.container)
@@ -252,15 +258,22 @@ class MessengerAdapter(
         internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
-            root.setOnClickListener { onContainerClick(it) }
-            root.setOnLongClickListener { onContainerLongClick(it) }
-
             sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
                 .sizeDp(16)
                 .iconColor(text.context))
         }
 
         internal open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
+            root.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe { onContainerClick(root, it) }
+
+            root.longClicks(Callable { onContainerLongClickHandled(root) })
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe { onContainerLongClick(root, it) }
+
             applyMessage(message)
             applyTime(message)
             applySendStatus(message)
@@ -269,9 +282,8 @@ class MessengerAdapter(
             applyMargins(marginTop, marginBottom)
         }
 
-        internal open fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
-            val current = data[it]
-            val id = current.id.toString()
+        internal open fun onContainerClick(v: View, message: LocalMessage) {
+            val id = message.id.toString()
 
             if (isSelecting) {
                 messageSelectionMap.putOrRemove(id)
@@ -285,18 +297,14 @@ class MessengerAdapter(
                 timeDisplayMap.putOrRemove(id)
             }
 
-            applySelection(current)
-            applyTimeVisibility(current)
+            applySelection(message)
+            applyTimeVisibility(message)
 
             layoutManager?.requestSimpleAnimationsInNextLayout()
         }
 
-        internal open fun onContainerLongClick(v: View): Boolean {
-            var consumed = false
-
-            withSafeAdapterPosition(this) {
-                val current = data[it]
-                val id = current.id.toString()
+        internal open fun onContainerLongClick(v: View, message: LocalMessage) {
+            val id = message.id.toString()
 
                 if (!isSelecting) {
                     isSelecting = true
@@ -304,13 +312,12 @@ class MessengerAdapter(
                     messageSelectionMap.put(id, true)
                     messageSelectionSubject.onNext(messageSelectionMap.size)
 
-                    applySelection(current)
-
-                    consumed = true
+                    applySelection(message)
                 }
-            }
+        }
 
-            return consumed
+        internal open fun onContainerLongClickHandled(v: View): Boolean {
+            return !isSelecting
         }
 
         internal open fun applyMessage(message: LocalMessage) {
@@ -355,18 +362,17 @@ class MessengerAdapter(
         internal val title: TextView by bindView(R.id.title)
 
         init {
-            titleContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    titleClickSubject.onNext(data[it])
-                }
-            }
-
             // Messages in the private messages do not come with an avatar yet.
             image.visibility = View.GONE
         }
 
         override fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
             super.bind(message, marginTop, marginBottom)
+
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(titleClickSubject)
 
             title.text = message.username
             title.requestLayout()
@@ -375,16 +381,17 @@ class MessengerAdapter(
 
     internal inner class ActionViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
-        override fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
-            val current = data[it]
-            val id = current.id.toString()
+        override fun onContainerClick(v: View, message: LocalMessage) {
+            val id = message.id.toString()
 
             timeDisplayMap.putOrRemove(id)
 
             time.visibility = if (timeDisplayMap.containsKey(id)) View.VISIBLE else View.GONE
         }
 
-        override fun onContainerLongClick(v: View) = false
+        override fun onContainerLongClick(v: View, message: LocalMessage) = Unit
+
+        override fun onContainerLongClickHandled(v: View) = false
 
         override fun applyMessage(message: LocalMessage) {
             val messageText = message.action.toAppString(text.context, message.username, message.message)

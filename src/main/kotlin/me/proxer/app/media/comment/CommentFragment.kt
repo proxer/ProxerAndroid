@@ -7,12 +7,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -66,7 +67,7 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
         innerAdapter = CommentAdapter(savedInstanceState)
 
         innerAdapter.profileClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, comment) ->
                 ProfileActivity.navigateTo(requireActivity(), comment.authorId, comment.author, comment.image,
                     if (view.drawable != null && comment.image.isNotBlank()) view else null)

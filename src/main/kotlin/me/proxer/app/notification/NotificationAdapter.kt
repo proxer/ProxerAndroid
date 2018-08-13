@@ -1,20 +1,23 @@
 package me.proxer.app.notification
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.notification.NotificationAdapter.ViewHolder
 import me.proxer.app.util.compat.HtmlCompat
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 
 /**
@@ -35,29 +38,27 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val text: TextView by bindView(R.id.text)
         internal val date: TextView by bindView(R.id.date)
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            itemView.setOnClickListener { _ ->
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-
-            delete.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    deleteClickSubject.onNext(data[it])
-                }
-            }
-
             delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32, 4)
         }
 
         fun bind(item: ProxerNotification) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteClickSubject)
+
             text.text = HtmlCompat.fromHtml(item.text)
             date.text = item.date.convertToRelativeReadableTime(date.context)
         }

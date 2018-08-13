@@ -8,11 +8,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.Utils
 import org.threeten.bp.LocalDateTime
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -37,6 +41,52 @@ class MediaControlView(context: Context, attrs: AttributeSet?) : FrameLayout(con
             }
         }
 
+    var uploader by Delegates.observable<Uploader?>(null) { _, _, new ->
+        if (new == null) {
+            uploaderRow.visibility = View.GONE
+        } else {
+            uploaderRow.visibility = View.VISIBLE
+            uploaderText.text = new.name
+        }
+    }
+
+    var translatorGroup by Delegates.observable<SimpleTranslatorGroup?>(null) { _, _, new ->
+        if (new == null) {
+            translatorRow.visibility = View.GONE
+        } else {
+            translatorRow.visibility = View.VISIBLE
+            translatorGroupText.text = new.name
+        }
+    }
+
+    var dateTime by Delegates.observable<LocalDateTime?>(null) { _, _, new ->
+        if (new == null) {
+            dateRow.visibility = View.GONE
+        } else {
+            dateRow.visibility = View.VISIBLE
+            dateText.text = Utils.dateFormatter.format(new)
+        }
+    }
+
+    var episodeInfo by Delegates.observable(SimpleEpisodeInfo(Int.MAX_VALUE, 1)) { _, _, new ->
+        if (new.current <= 1) {
+            previous.visibility = View.GONE
+        } else {
+            previous.visibility = View.VISIBLE
+        }
+
+        if (new.current >= new.amount) {
+            next.visibility = View.GONE
+        } else {
+            next.visibility = View.VISIBLE
+        }
+
+        bookmarkNext.text = when {
+            new.current < new.amount -> textResolver?.bookmarkNext()
+            else -> bookmarkNext.context.getString(R.string.view_media_control_finish)
+        }
+    }
+
     private val uploaderRow: ViewGroup by bindView(R.id.uploaderRow)
     private val translatorRow: ViewGroup by bindView(R.id.translatorRow)
     private val dateRow: ViewGroup by bindView(R.id.dateRow)
@@ -53,85 +103,61 @@ class MediaControlView(context: Context, attrs: AttributeSet?) : FrameLayout(con
     init {
         LayoutInflater.from(context).inflate(R.layout.view_media_control, this, true)
 
-        setUploader(null)
-        setDateTime(null)
-        setTranslatorGroup(null)
+        uploader = null
+        translatorGroup = null
+        dateTime = null
     }
 
-    fun setUploader(uploader: Uploader?) = if (uploader == null) {
-        uploaderRow.visibility = View.GONE
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
 
-        uploaderText.setOnClickListener(null)
-    } else {
-        uploaderRow.visibility = View.VISIBLE
-        uploaderText.text = uploader.name
+        uploaderText.clicks()
+            .filter { uploader != null }
+            .map { uploader }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(uploaderClickSubject)
 
-        uploaderText.setOnClickListener {
-            uploaderClickSubject.onNext(uploader)
-        }
-    }
+        translatorGroupText.clicks()
+            .filter { translatorGroup != null }
+            .map { translatorGroup }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(translatorGroupClickSubject)
 
-    fun setTranslatorGroup(group: SimpleTranslatorGroup?) = if (group == null) {
-        translatorRow.visibility = View.GONE
+        previous.clicks()
+            .map { episodeInfo.current - 1 }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(episodeSwitchSubject)
 
-        translatorGroupText.setOnClickListener(null)
-    } else {
-        translatorRow.visibility = View.VISIBLE
-        translatorGroupText.text = group.name
+        next.clicks()
+            .map { episodeInfo.current + 1 }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(episodeSwitchSubject)
 
-        translatorGroupText.setOnClickListener {
-            translatorGroupClickSubject.onNext(group)
-        }
-    }
+        bookmarkThis.clicks()
+            .map { episodeInfo.current }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(bookmarkSetSubject)
 
-    fun setDateTime(dateTime: LocalDateTime?) = if (dateTime == null) {
-        dateRow.visibility = View.GONE
-    } else {
-        dateRow.visibility = View.VISIBLE
-        dateText.text = Utils.dateFormatter.format(dateTime)
-    }
+        bookmarkNext.clicks()
+            .map { episodeInfo.current to episodeInfo.amount }
+            .publish()
+            .also { observable ->
+                observable.filter { (current, amount) -> current < amount }
+                    .map { (current, _) -> current + 1 }
+                    .autoDisposable(ViewScopeProvider.from(this))
+                    .subscribe(bookmarkSetSubject)
 
-    fun setEpisodeInfo(episodeAmount: Int, currentEpisode: Int) {
-        if (currentEpisode <= 1) {
-            previous.visibility = View.GONE
-        } else {
-            previous.visibility = View.VISIBLE
-
-            previous.setOnClickListener {
-                episodeSwitchSubject.onNext(currentEpisode - 1)
+                observable.filter { (current, amount) -> current >= amount }
+                    .map { (current, _) -> current }
+                    .autoDisposable(ViewScopeProvider.from(this))
+                    .subscribe(finishClickSubject)
             }
-        }
-
-        if (currentEpisode >= episodeAmount) {
-            next.visibility = View.GONE
-        } else {
-            next.visibility = View.VISIBLE
-
-            next.setOnClickListener {
-                episodeSwitchSubject.onNext(currentEpisode + 1)
-            }
-        }
-
-        bookmarkNext.text = when {
-            currentEpisode < episodeAmount -> textResolver?.bookmarkNext()
-            else -> bookmarkNext.context.getString(R.string.view_media_control_finish)
-        }
-
-        bookmarkNext.setOnClickListener {
-            if (currentEpisode < episodeAmount) {
-                bookmarkSetSubject.onNext(currentEpisode + 1)
-            } else {
-                finishClickSubject.onNext(currentEpisode)
-            }
-        }
-
-        bookmarkThis.setOnClickListener {
-            bookmarkSetSubject.onNext(currentEpisode)
-        }
+            .connect()
     }
 
     data class Uploader(val id: String, val name: String)
     data class SimpleTranslatorGroup(val id: String, val name: String)
+    data class SimpleEpisodeInfo(val amount: Int, val current: Int)
 
     interface TextResourceResolver {
         fun next(): String

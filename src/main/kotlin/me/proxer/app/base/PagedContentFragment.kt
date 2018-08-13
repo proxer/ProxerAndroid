@@ -10,13 +10,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
@@ -76,7 +77,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         recyclerView.endScrolls(pagingThreshold)
             .throttleFirst(300, TimeUnit.MILLISECONDS)
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.loadIfPossible() }
 
         viewModel.refreshError.observe(viewLifecycleOwner, Observer {

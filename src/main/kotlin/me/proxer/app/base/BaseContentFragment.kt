@@ -9,13 +9,14 @@ import android.widget.Button
 import android.widget.TextView
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
@@ -51,7 +52,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.refresh() }
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
@@ -112,7 +113,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         errorButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 when (action.message == R.string.error_captcha) {
                     true -> {

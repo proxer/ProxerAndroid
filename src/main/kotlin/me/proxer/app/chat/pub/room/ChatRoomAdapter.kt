@@ -1,17 +1,20 @@
 package me.proxer.app.chat.pub.room
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
@@ -32,24 +35,23 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
         holder.bind(data[position])
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : AutoDisposeViewHolder(view) {
 
         internal val nameView by bindView<TextView>(R.id.name)
         internal val topic by bindView<TextView>(R.id.topic)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-
             topic.setSimpleOnLinkClickListener { _, link ->
                 Utils.parseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
             }
         }
 
         fun bind(item: ChatRoom) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             nameView.text = item.name
 
             if (item.topic.isBlank()) {

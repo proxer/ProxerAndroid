@@ -14,11 +14,12 @@ import android.widget.ProgressBar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.unsafeLazy
@@ -69,12 +70,12 @@ class ChatReportDialog : BaseDialog() {
 
         messageInput.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
             .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-            .autoDispose(dialogLifecycleOwner)
+            .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe { validateAndSendReport() }
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(dialogLifecycleOwner)
+            .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe { setError(messageContainer, null) }
 
         viewModel.data.observe(dialogLifecycleOwner, Observer {

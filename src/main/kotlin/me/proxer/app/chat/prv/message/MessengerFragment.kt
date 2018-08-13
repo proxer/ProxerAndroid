@@ -21,6 +21,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,7 +38,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
@@ -143,11 +144,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter = MessengerAdapter(savedInstanceState, conference.isGroup)
 
         innerAdapter.titleClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), it.userId, it.username) }
 
         innerAdapter.messageSelectionSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 if (it > 0) {
                     when (actionMode) {
@@ -162,11 +163,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             }
 
         innerAdapter.linkClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { showPage(it) }
 
         innerAdapter.linkLongClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 getString(R.string.clipboard_title).let { title ->
                     requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
@@ -175,7 +176,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             }
 
         innerAdapter.mentionsClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
     }
 
@@ -196,7 +197,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         recyclerView.scrollEvents()
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 val currentPosition = layoutManager.findFirstVisibleItemPosition()
 
@@ -211,7 +212,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
 
         scrollToBottom.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(0, 0)
@@ -223,11 +224,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 messageInput.text.toString().trim().let { text ->
                     if (text.isNotBlank()) {
@@ -242,7 +243,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         messageInput.textChanges()
             .skipInitialValue()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { message ->
                 viewModel.updateDraft(message.toString())
 

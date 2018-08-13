@@ -9,9 +9,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.jetbrains.anko.intentFor
@@ -107,7 +108,7 @@ class TopicActivity : DrawerActivity() {
         title = topic
 
         toolbar.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribeAndLogErrors {
                 topic?.also { topic ->
                     multilineSnackbar(root, topic)

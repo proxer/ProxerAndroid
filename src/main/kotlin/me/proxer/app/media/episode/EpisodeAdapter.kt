@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -18,12 +20,14 @@ import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -100,7 +104,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
     override fun areItemsTheSame(old: EpisodeRow, new: EpisodeRow) = old.number == new.number
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val titleContainer: ViewGroup by bindView(R.id.titleContainer)
@@ -108,18 +112,19 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
         internal val languages: ViewGroup by bindView(R.id.languages)
 
         init {
-            titleContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    expansionMap.putOrRemove(data[it].number.toString())
-
-                    notifyItemChanged(it)
-                }
-            }
-
             watched.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
         }
 
         fun bind(item: EpisodeRow) {
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it].number.toString() to it }
+                .autoDisposable(this)
+                .subscribe { (number, position) ->
+                    expansionMap.putOrRemove(number)
+
+                    notifyItemChanged(position)
+                }
+
             title.text = item.title ?: item.category.toEpisodeAppString(title.context, item.number)
 
             if (item.userProgress >= item.number) {
@@ -153,11 +158,10 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                 languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
                     .toAppDrawable(languageView.context), null, null, null)
 
-                languageContainer.setOnClickListener {
-                    withSafeAdapterPosition(this) {
-                        languageClickSubject.onNext(language to data[it])
-                    }
-                }
+                languageContainer.clicks()
+                    .mapAdapterPosition({ adapterPosition }) { language to data[it] }
+                    .autoDisposable(this)
+                    .subscribe(languageClickSubject)
 
                 bindHosterImages(hosterImages, hostersView)
             }

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
@@ -18,7 +20,6 @@ import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -53,17 +54,17 @@ abstract class DrawerActivity : BaseActivity() {
 
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity, isMainActivity).also {
             it.itemClickSubject
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe { handleDrawerItemClick(it) }
 
             it.accountClickSubject
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe { handleAccountItemClick(it) }
         }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { drawer.refreshHeader() }
     }
 

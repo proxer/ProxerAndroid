@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.view.View
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
@@ -44,11 +45,11 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         innerAdapter = NewsAdapter(savedInstanceState)
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { TopicActivity.navigateTo(requireActivity(), it.threadId, it.categoryId, it.subject) }
 
         innerAdapter.imageClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, article) ->
                 ImageDetailActivity.navigateTo(requireActivity(),
                     ProxerUrls.newsImage(article.id, article.image), view)

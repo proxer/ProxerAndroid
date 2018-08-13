@@ -6,11 +6,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.pub.message.ChatActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatRoom
 import org.jetbrains.anko.bundleOf
@@ -42,11 +43,11 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
         adapter = ChatRoomAdapter()
 
         adapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { item -> ChatActivity.navigateTo(requireActivity(), item.id, item.name, item.isReadOnly) }
 
         adapter.linkClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { showPage(it) }
     }
 

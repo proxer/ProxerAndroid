@@ -18,25 +18,34 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
 import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
+import com.gojuno.koptional.Some
+import com.gojuno.koptional.toOptional
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
+import touchesFixed
 import java.io.File
 import java.lang.Exception
 import kotlin.properties.Delegates
@@ -133,7 +142,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             ?.into(target)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
@@ -147,11 +156,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             image.isExifInterfaceEnabled = false
 
             errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
-
-            initListeners(itemView)
         }
 
         fun bind(item: Page) {
+            initListeners()
+
             image.setMinimumTileDpi(120)
 
             if (isVertical) {
@@ -190,12 +199,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        private fun initListeners(itemView: View) {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    bind(data[it])
-                }
-            }
+        private fun initListeners() {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(this::bind)
 
             @Suppress("LabeledExpression")
             image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
@@ -217,23 +225,25 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 }
             })
 
-            image.setOnTouchListener { view, event ->
-                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                    val (viewX, viewY) = IntArray(2).apply { view.getLocationInWindow(this) }
+            image.touchesFixed(Predicate { false })
+                .filter { it.actionMasked == MotionEvent.ACTION_DOWN }
+                .map {
+                    val (viewX, viewY) = IntArray(2).apply { image.getLocationInWindow(this) }
 
-                    lastTouchCoordinates = event.x + viewX to event.y + viewY
+                    it.x + viewX to it.y + viewY
                 }
+                .autoDisposable(this)
+                .subscribe { lastTouchCoordinates = it }
 
-                false
-            }
-
-            image.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    lastTouchCoordinates?.let { touchCoordinates ->
-                        clickSubject.onNext(Triple(image, touchCoordinates, it))
-                    }
+            image.clicks()
+                .mapAdapterPosition({ adapterPosition }) { it }
+                .flatMap { position ->
+                    Observable.just(lastTouchCoordinates.toOptional())
+                        .filter { it is Some }
+                        .map { Triple(image as View, (it as Some).value, position) }
                 }
-            }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
         }
 
         private fun handleImageLoadError(error: Exception, position: Int) {

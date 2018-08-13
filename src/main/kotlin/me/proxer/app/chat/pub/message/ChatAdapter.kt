@@ -11,13 +11,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.longClicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindOptionalView
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.message.ChatAdapter.MessageViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
@@ -26,10 +30,12 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
+import java.util.concurrent.Callable
 
 /**
  * @author Ruben Gees
@@ -232,7 +238,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         return marginTop to if (position == 0) 0 else marginBottom
     }
 
-    open inner class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    open inner class MessageViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val root: ViewGroup by bindView(R.id.root)
         internal val container: CardView by bindView(R.id.container)
@@ -241,15 +247,22 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
-            root.setOnClickListener { onContainerClick(it) }
-            root.setOnLongClickListener { onContainerLongClick(it) }
-
             sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
                 .sizeDp(16)
                 .iconColor(text.context))
         }
 
         internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
+            root.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe { onContainerClick(root, it) }
+
+            root.longClicks(Callable { onContainerLongClickHandled(root) })
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe { onContainerLongClick(root, it) }
+
             applyMessage(message)
             applyTime(message)
             applySendStatus(message)
@@ -258,12 +271,9 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
             applyMargins(marginTop, marginBottom)
         }
 
-        internal open fun onContainerClick(v: View) = withSafeAdapterPosition(this) {
-            val current = data[it]
-            val id = current.id
-
+        internal open fun onContainerClick(v: View, message: ParsedChatMessage) {
             if (isSelecting) {
-                messageSelectionMap.putOrRemove(id)
+                messageSelectionMap.putOrRemove(message.id)
 
                 if (messageSelectionMap.size <= 0) {
                     isSelecting = false
@@ -271,34 +281,28 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
 
                 messageSelectionSubject.onNext(messageSelectionMap.size)
             } else {
-                timeDisplayMap.putOrRemove(id)
+                timeDisplayMap.putOrRemove(message.id)
             }
 
-            applySelection(current)
-            applyTimeVisibility(current)
+            applySelection(message)
+            applyTimeVisibility(message)
 
             layoutManager?.requestSimpleAnimationsInNextLayout()
         }
 
-        internal open fun onContainerLongClick(v: View): Boolean {
-            var consumed = false
+        internal open fun onContainerLongClick(v: View, message: ParsedChatMessage) {
+            if (!isSelecting) {
+                isSelecting = true
 
-            withSafeAdapterPosition(this) {
-                val current = data[it]
+                messageSelectionMap.put(message.id, true)
+                messageSelectionSubject.onNext(messageSelectionMap.size)
 
-                if (!isSelecting) {
-                    isSelecting = true
-
-                    messageSelectionMap.put(current.id, true)
-                    messageSelectionSubject.onNext(messageSelectionMap.size)
-
-                    applySelection(current)
-
-                    consumed = true
-                }
+                applySelection(message)
             }
+        }
 
-            return consumed
+        internal open fun onContainerLongClickHandled(v: View): Boolean {
+            return !isSelecting
         }
 
         internal open fun applyMessage(message: ParsedChatMessage) {
@@ -342,16 +346,13 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
 
-        init {
-            titleContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    titleClickSubject.onNext(image to data[it])
-                }
-            }
-        }
-
         override fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
             super.bind(message, marginTop, marginBottom)
+
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(titleClickSubject)
 
             ViewCompat.setTransitionName(image, "chat_${message.id}")
 

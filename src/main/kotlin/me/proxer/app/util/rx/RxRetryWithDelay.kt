@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.rx
 
 import io.reactivex.Flowable
 import io.reactivex.functions.Function

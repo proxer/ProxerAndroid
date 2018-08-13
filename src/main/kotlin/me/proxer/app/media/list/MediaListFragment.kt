@@ -18,6 +18,8 @@ import android.widget.CheckBox
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -27,7 +29,6 @@ import me.proxer.app.media.LocalTag
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.ui.view.ExpandableSelectionView
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.getEnumSet
 import me.proxer.app.util.extension.putEnumSet
 import me.proxer.app.util.extension.toCategory
@@ -209,7 +210,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         }
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, entry) ->
                 MediaActivity.navigateTo(requireActivity(), entry.id, entry.name, entry.medium.toCategory(), view)
             }
@@ -265,7 +266,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe {
                     if (it.menuItem().isActionViewExpanded) {
                         searchQuery = null
@@ -278,7 +279,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
             searchView.queryTextChangeEvents()
                 .skipInitialValue()
-                .autoDispose(this)
+                .autoDisposable(this.scope())
                 .subscribe {
                     searchQuery = it.queryText().toString().trim()
 

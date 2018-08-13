@@ -10,16 +10,20 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
@@ -75,7 +79,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val expand: ImageButton by bindView(R.id.expand)
         internal val description: TextView by bindView(R.id.description)
@@ -85,30 +89,12 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         internal val time: TextView by bindView(R.id.time)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(data[it])
-                }
-            }
-
-            image.setOnClickListener { view ->
-                withSafeAdapterPosition(this) {
-                    imageClickSubject.onNext(view as ImageView to data[it])
-                }
-            }
-
-            expand.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    expansionMap.putOrRemove(data[it].id)
-
-                    handleExpansion(true)
-                }
-            }
-
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
         }
 
         fun bind(item: NewsArticle) {
+            initListeners()
+
             ViewCompat.setTransitionName(image, "news_${item.id}")
 
             title.text = item.subject
@@ -116,43 +102,62 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             category.text = item.category
             time.text = item.date.convertToRelativeReadableTime(time.context)
 
-            handleExpansion()
+            handleExpansion(item.id)
 
             glide?.defaultLoad(image, ProxerUrls.newsImage(item.id, item.image))
         }
 
-        private fun handleExpansion(animate: Boolean = false) {
-            withSafeAdapterPosition(this) {
-                ViewCompat.animate(expand).cancel()
+        private fun initListeners() {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
 
-                if (expansionMap.containsKey(data[it].id)) {
-                    description.maxLines = Int.MAX_VALUE
+            image.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(imageClickSubject)
 
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(180f)
-                        false -> expand.rotation = 180f
-                    }
+            expand.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .autoDisposable(this)
+                .subscribe { it ->
+                    expansionMap.putOrRemove(it)
+
+                    handleExpansion(it, true)
+                }
+        }
+
+        private fun handleExpansion(itemId: String, animate: Boolean = false) {
+            ViewCompat.animate(expand).cancel()
+
+            if (expansionMap.containsKey(itemId)) {
+                description.maxLines = Int.MAX_VALUE
+
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(180f)
+                    false -> expand.rotation = 180f
+                }
+            } else {
+                description.maxLines = 3
+
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(0f)
+                    false -> expand.rotation = 0f
+                }
+            }
+
+            description.post {
+                if (description.lineCount <= 3) {
+                    expand.visibility = View.GONE
                 } else {
-                    description.maxLines = 3
-
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(0f)
-                        false -> expand.rotation = 0f
-                    }
+                    expand.visibility = View.VISIBLE
                 }
+            }
 
-                description.post {
-                    if (description.lineCount <= 3) {
-                        expand.visibility = View.GONE
-                    } else {
-                        expand.visibility = View.VISIBLE
-                    }
-                }
-
-                if (animate) {
-                    description.requestLayout()
-                    layoutManager?.requestSimpleAnimationsInNextLayout()
-                }
+            if (animate) {
+                description.requestLayout()
+                layoutManager?.requestSimpleAnimationsInNextLayout()
             }
         }
     }

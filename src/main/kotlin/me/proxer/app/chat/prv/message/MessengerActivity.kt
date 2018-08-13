@@ -5,12 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.autoDispose
 import org.jetbrains.anko.intentFor
 
 /**
@@ -65,7 +66,7 @@ class MessengerActivity : DrawerActivity() {
         title = conference.topic
 
         toolbar.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 when (conference.isGroup) {
                     true -> ConferenceInfoActivity.navigateTo(this, conference)

@@ -6,6 +6,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -14,7 +16,6 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Relation
 import org.jetbrains.anko.bundleOf
@@ -52,7 +53,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter = RelationAdapter()
 
         adapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, relation) ->
                 MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category, view)
             }

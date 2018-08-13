@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ActivityUtils
-import me.proxer.app.util.extension.autoDispose
 import okhttp3.HttpUrl
 import org.jetbrains.anko.intentFor
 
@@ -59,7 +60,7 @@ class ImageDetailActivity : BaseActivity() {
             })
 
         root.clicks()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { supportFinishAfterTransition() }
     }
 }

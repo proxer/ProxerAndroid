@@ -7,13 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.longClicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.history.HistoryAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
@@ -46,30 +51,24 @@ class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
         internal val image: ImageView by bindView(R.id.image)
         internal val status: TextView by bindView(R.id.status)
 
-        init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
-
-            itemView.setOnLongClickListener {
-                withSafeAdapterPosition(this) {
-                    longClickSubject.onNext(image to data[it])
-                }
-
-                true
-            }
-        }
-
         fun bind(item: UserHistoryEntry) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
+            itemView.longClicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(longClickSubject)
+
             ViewCompat.setTransitionName(image, "history_${item.id}")
 
             title.text = item.name

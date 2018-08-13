@@ -17,13 +17,14 @@ import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
@@ -91,14 +92,14 @@ class LoginDialog : BaseDialog() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                 .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
-                .autoDispose(dialogLifecycleOwner)
+                .autoDisposable(dialogLifecycleOwner.scope())
                 .subscribe { validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
             input.textChanges()
                 .skipInitialValue()
-                .autoDispose(dialogLifecycleOwner)
+                .autoDisposable(dialogLifecycleOwner.scope())
                 .subscribe { setError(container, null) }
         }
 

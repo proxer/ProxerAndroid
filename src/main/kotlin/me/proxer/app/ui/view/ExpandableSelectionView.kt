@@ -18,10 +18,11 @@ import android.widget.RadioButton
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.jetbrains.anko.childrenSequence
@@ -89,13 +90,13 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         if (!isInEditMode) {
             controlContainer.clicks().mergeWith(toggleButton.clicks())
-                .autoDispose(context as LifecycleOwner)
+                .autoDisposable((context as LifecycleOwner).scope())
                 .subscribeAndLogErrors {
                     isExtended = !isExtended
                 }
 
             resetButton.clicks()
-                .autoDispose(context as LifecycleOwner)
+                .autoDisposable((context as LifecycleOwner).scope())
                 .subscribeAndLogErrors {
                     selection = mutableListOf()
 
@@ -162,7 +163,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         radioButton.text = item
         radioButton.isChecked = selection.contains(item)
         radioButton.clicks()
-            .autoDispose(context as LifecycleOwner)
+            .autoDisposable((context as LifecycleOwner).scope())
             .subscribeAndLogErrors {
                 selection.clear()
                 selection.add(item)
@@ -183,7 +184,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         checkBox.text = item
         checkBox.isChecked = selection.contains(item)
         checkBox.clicks()
-            .autoDispose(context as LifecycleOwner)
+            .autoDisposable((context as LifecycleOwner).scope())
             .subscribeAndLogErrors {
                 if (!selection.remove(item)) {
                     selection.add(item)

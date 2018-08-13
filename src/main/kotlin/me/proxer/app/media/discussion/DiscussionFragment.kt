@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -13,7 +15,6 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.ForumDiscussion
 import org.jetbrains.anko.bundleOf
@@ -51,7 +52,7 @@ class DiscussionFragment : BaseContentFragment<List<ForumDiscussion>>() {
         adapter = DiscussionAdapter()
 
         adapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { item ->
                 TopicActivity.navigateTo(requireActivity(), item.id, item.categoryId, item.subject)
             }

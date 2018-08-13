@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -22,6 +24,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.MediaControlView
+import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
@@ -29,7 +32,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.addReferer
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeData
 import me.proxer.app.util.extension.snackbar
@@ -103,11 +105,11 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
 
         innerAdapter.uploaderClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), it.uploaderId, it.uploaderName) }
 
         innerAdapter.translatorGroupClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 it.translatorGroupId?.let { id ->
                     it.translatorGroupName?.let { name ->
@@ -117,7 +119,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
 
         innerAdapter.playClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { viewModel.resolve(it.hosterName, it.id) }
     }
 
@@ -132,7 +134,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
 
         header.episodeSwitchSubject
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
                     viewModel.bookmark(it)
@@ -142,11 +144,11 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
 
         header.bookmarkSetSubject
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.bookmark(it) }
 
         header.finishClickSubject
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFinished() }
 
         return inflater.inflate(R.layout.fragment_anime, container, false)
@@ -232,7 +234,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         episodeAmount = data.episodeAmount
         name = data.name
 
-        header.setEpisodeInfo(data.episodeAmount, episode)
+        header.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)
         adapter.header = header
 
         innerAdapter.swapDataAndNotifyWithDiffing(data.streams)
@@ -250,7 +252,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 episodeAmount = it.episodeAmount
                 name = it.name
 
-                header.setEpisodeInfo(it.episodeAmount, episode)
+                header.episodeInfo = SimpleEpisodeInfo(it.episodeAmount, episode)
                 adapter.header = header
             }
         }

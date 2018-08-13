@@ -6,12 +6,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatRoomUser
 import org.jetbrains.anko.bundleOf
@@ -46,14 +47,14 @@ class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>() {
         adapter = ChatRoomUserAdapter()
 
         adapter.participantClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 ProfileActivity.navigateTo(requireActivity(), item.id, item.name, item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null)
             }
 
         adapter.statusLinkClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { showPage(it) }
     }
 

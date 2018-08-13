@@ -12,8 +12,11 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import org.jetbrains.anko.childrenSequence
@@ -70,14 +73,20 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
         LayoutInflater.from(context).inflate(R.layout.view_bb_spoiler, this, true)
 
-        toggle.setOnClickListener { isExpanded = !isExpanded }
-
         toggleText.setTextColor(spoilerTextColor)
         toggleText.setTag(R.id.ignore_tag, Unit)
         toggleText.gravity = Gravity.CENTER
 
         updateToggleButtonIcon()
         handleExpansion()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        toggle.clicks()
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe { isExpanded = !isExpanded }
     }
 
     override fun addView(child: View?) {

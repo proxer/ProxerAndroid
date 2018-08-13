@@ -6,12 +6,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
@@ -44,7 +45,7 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         adapter = ScheduleAdapter()
 
         adapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null, view)
             }

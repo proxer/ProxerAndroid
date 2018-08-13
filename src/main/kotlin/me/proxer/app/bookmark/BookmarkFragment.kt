@@ -10,6 +10,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeActivity
@@ -18,7 +20,6 @@ import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -74,7 +75,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter = BookmarkAdapter()
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 when (it.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), it.entryId, it.episode,
@@ -85,13 +86,13 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             }
 
         innerAdapter.longClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, bookmark) ->
                 MediaActivity.navigateTo(requireActivity(), bookmark.entryId, bookmark.name, bookmark.category, view)
             }
 
         innerAdapter.deleteClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 viewModel.addItemToDelete(it)
             }

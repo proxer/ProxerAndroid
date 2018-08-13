@@ -9,15 +9,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
@@ -55,7 +59,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val userContainer by bindView<ViewGroup>(R.id.userContainer)
         internal val image by bindView<ImageView>(R.id.image)
@@ -68,12 +72,6 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         internal val thankYou by bindView<TextView>(R.id.thankYou)
 
         init {
-            userContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    profileClickSubject.onNext(image to data[it])
-                }
-            }
-
             post.glide = glide
             post.enableEmotions = true
             post.heightChangedListener = {
@@ -92,6 +90,11 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         }
 
         fun bind(item: ParsedPost) {
+            userContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(profileClickSubject)
+
             ViewCompat.setTransitionName(image, "post_${item.id}")
 
             user.text = item.username

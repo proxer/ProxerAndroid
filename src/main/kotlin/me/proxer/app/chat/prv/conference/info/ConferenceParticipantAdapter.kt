@@ -8,17 +8,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.messenger.ConferenceParticipant
@@ -54,25 +58,24 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val image: ImageView by bindView(R.id.image)
         internal val username: TextView by bindView(R.id.username)
         internal val status: TextView by bindView(R.id.status)
 
         init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    participantClickSubject.onNext(image to data[it])
-                }
-            }
-
             status.setSimpleOnLinkClickListener { _, link ->
                 statusLinkClickSubject.onNext(Utils.getAndFixUrl(link))
             }
         }
 
         fun bind(item: ConferenceParticipant) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(participantClickSubject)
+
             ViewCompat.setTransitionName(image, "conference_participant_${item.id}")
 
             username.text = item.username

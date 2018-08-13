@@ -8,9 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.checkedChanges
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.util.extension.ProxerLibExtensions
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
 import me.proxer.app.util.extension.enumSetOf
@@ -51,12 +52,12 @@ class MediaListSearchBottomSheet private constructor(
 
         fragment.includeUnratedTags.checkedChanges()
             .skipInitialValue()
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribe { fragment.tagRateFilter = if (it) TagRateFilter.ALL else TagRateFilter.RATED_ONLY }
 
         fragment.includeSpoilerTags.checkedChanges()
             .skipInitialValue()
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribe { fragment.tagSpoilerFilter = if (it) TagSpoilerFilter.ALL else TagSpoilerFilter.NO_SPOILERS }
 
         val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
@@ -101,7 +102,7 @@ class MediaListSearchBottomSheet private constructor(
 
     private fun initClickSubscriptions() {
         fragment.searchBottomSheetTitle.clicks()
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribe {
                 bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
                     STATE_EXPANDED -> STATE_COLLAPSED
@@ -110,7 +111,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.search.clicks()
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribe {
                 fragment.searchView.clearFocus()
 
@@ -122,7 +123,7 @@ class MediaListSearchBottomSheet private constructor(
 
     private fun initSelectionSubscriptions() {
         fragment.languageSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors {
                 fragment.language = when {
                     it.firstOrNull() == fragment.getString(R.string.language_german) -> Language.GERMAN
@@ -132,7 +133,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.genreSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.genreData.value?.let { genreData ->
                     fragment.genres = selections.mapNotNull { selection -> genreData.find { it.name == selection } }
@@ -140,7 +141,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.excludedGenreSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.genreData.value?.let { genreData ->
                     fragment.excludedGenres = selections.mapNotNull { selection ->
@@ -150,7 +151,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.fskSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors { selections ->
                 fragment.fskConstraints = enumSetOf(selections.map {
                     ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
@@ -158,7 +159,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.tagSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.tagData.value?.let { tagData ->
                     fragment.tags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }
@@ -166,7 +167,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.excludedTagSelector.selectionChangeSubject
-            .autoDispose(fragment)
+            .autoDisposable(fragment.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.tagData.value?.let { tagData ->
                     fragment.excludedTags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }

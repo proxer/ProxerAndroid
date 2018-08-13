@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -20,7 +22,6 @@ import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -72,7 +73,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         adapter = EpisodeAdapter(savedInstanceState)
 
         adapter.languageClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (language, episode) ->
                 when (episode.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), id, episode.number,
@@ -101,7 +102,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 val currentPosition = layoutManager.findLastVisibleItemPosition()
 
@@ -112,7 +113,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
             }
 
         scrollToBottom.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 val indexBasedUserProgress = viewModel.data.value?.firstOrNull()?.userProgress?.minus(1) ?: 0
                 val currentPosition = layoutManager.findLastVisibleItemPosition()

@@ -18,6 +18,8 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -27,11 +29,13 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.schedule.ScheduleEntryAdapter.ViewHolder
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.calculateAndFormatDifference
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.below
@@ -114,7 +118,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         glide = null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val image by bindView<ImageView>(R.id.image)
         internal val title by bindView<TextView>(R.id.title)
@@ -145,16 +149,15 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             val margin = itemView.context.resources.getDimension(R.dimen.screen_horizontal_margin)
             val width = (DeviceUtils.getScreenWidth(itemView.context) - margin) / itemsPerPage
 
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
-
             itemView.layoutParams = RecyclerView.LayoutParams(width.toInt(), RecyclerView.LayoutParams.WRAP_CONTENT)
         }
 
         fun bind(item: CalendarEntry) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             ViewCompat.setTransitionName(image, "schedule_${item.id}")
 
             title.text = item.name

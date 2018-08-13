@@ -9,13 +9,17 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -54,7 +58,7 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
         super.swapDataAndNotifyWithDiffing(newData.distinctBy { it.id })
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
@@ -66,15 +70,12 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
         internal val english: ImageView by bindView(R.id.english)
         internal val german: ImageView by bindView(R.id.german)
 
-        init {
-            itemView.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    clickSubject.onNext(image to data[it])
-                }
-            }
-        }
-
         fun bind(item: MediaListEntry) {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
             ViewCompat.setTransitionName(image, "media_${item.id}")
 
             title.text = item.name

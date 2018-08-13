@@ -21,6 +21,8 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +37,6 @@ import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
@@ -134,7 +135,7 @@ class CreateConferenceFragment : BaseFragment() {
         }
 
         innerAdapter.removalSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe {
                 if (adapter.footer == null) {
                     adapter.footer = addParticipantFooter
@@ -158,7 +159,7 @@ class CreateConferenceFragment : BaseFragment() {
         cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
         addParticipantFooter.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 adapter.footer = addParticipantInputFooter
 
@@ -168,7 +169,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
 
         cancelParticipant.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 participantInput.text.clear()
 
@@ -178,7 +179,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
 
         acceptParticipant.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 if (validateAndAddUser()) {
                     messageInput.requestFocus()
@@ -187,14 +188,14 @@ class CreateConferenceFragment : BaseFragment() {
 
         participantInput.textChanges()
             .skipInitialValue()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 participantInputContainer.error = null
                 participantInputContainer.isErrorEnabled = false
             }
 
         participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
                     messageInput.requestFocus()
@@ -228,7 +229,7 @@ class CreateConferenceFragment : BaseFragment() {
             .paddingDp(4))
 
         emojiButton.clicks()
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { emojiPopup.toggle() }
 
         sendButton.clicks()
@@ -266,7 +267,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
             .retry()
             .observeOn(AndroidSchedulers.mainThread())
-            .autoDispose(viewLifecycleOwner)
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribeAndLogErrors { (topic, firstMessage, participants) ->
                 when (isGroup) {
                     true -> viewModel.createGroup(topic, firstMessage, participants)
@@ -277,14 +278,14 @@ class CreateConferenceFragment : BaseFragment() {
         if (isGroup) {
             topicInput.textChanges()
                 .skipInitialValue()
-                .autoDispose(viewLifecycleOwner)
+                .autoDisposable(viewLifecycleOwner.scope())
                 .subscribe {
                     topicInputContainer.isErrorEnabled = false
                     topicInputContainer.error = null
                 }
 
             topicInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
-                .autoDispose(viewLifecycleOwner)
+                .autoDisposable(viewLifecycleOwner.scope())
                 .subscribe {
                     if (it == EditorInfo.IME_ACTION_NEXT) {
                         if (innerAdapter.isEmpty()) {

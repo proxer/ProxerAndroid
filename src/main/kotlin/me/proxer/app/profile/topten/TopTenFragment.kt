@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -17,7 +19,6 @@ import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import kotlin.properties.Delegates
@@ -62,7 +63,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaAdapter = TopTenAdapter()
 
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category, view)
             }

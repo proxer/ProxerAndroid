@@ -3,6 +3,8 @@ package me.proxer.app.ucp.history
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeActivity
@@ -10,7 +12,6 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
@@ -48,7 +49,7 @@ class UcpHistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
         innerAdapter = UcpHistoryAdapter()
 
         innerAdapter.clickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (_, entry) ->
                 when (entry.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
@@ -59,7 +60,7 @@ class UcpHistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
             }
 
         innerAdapter.longClickSubject
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { (view, entry) ->
                 MediaActivity.navigateTo(requireActivity(), entry.entryId, entry.name, entry.category, view)
             }

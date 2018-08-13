@@ -24,6 +24,8 @@ import com.google.android.exoplayer2.upstream.TransferListener
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.client
@@ -31,7 +33,6 @@ import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.autoDispose
 import me.proxer.app.util.extension.postDelayedSafely
 import okhttp3.OkHttpClient
 
@@ -114,7 +115,7 @@ class StreamActivity : BaseActivity() {
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         window.decorView.systemUiVisibilityChanges()
-            .autoDispose(this)
+            .autoDisposable(this.scope())
             .subscribe { visibility ->
                 if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                     player.showControls()

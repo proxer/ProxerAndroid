@@ -8,18 +8,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeAdapter.ViewHolder
+import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -28,7 +32,7 @@ import me.proxer.library.util.ProxerUrls
 class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewHolder>() {
 
     private companion object {
-        private const val EXPANDED_ITEM_STATE = "anime_stream_expanded"
+        private const val EXPANDED_ITEM_STATE = "anime_stream_expanded_id"
     }
 
     var glide: GlideRequests? = null
@@ -36,10 +40,10 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
 
-    private var expandedItem: String?
+    private var expandedItemId: String?
 
     init {
-        expandedItem = when (savedInstanceState) {
+        expandedItemId = when (savedInstanceState) {
             null -> null
             else -> savedInstanceState.getString(EXPANDED_ITEM_STATE)
         }
@@ -63,9 +67,9 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         glide = null
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putString(EXPANDED_ITEM_STATE, expandedItem)
+    override fun saveInstanceState(outState: Bundle) = outState.putString(EXPANDED_ITEM_STATE, expandedItemId)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val nameContainer: ViewGroup by bindView(R.id.nameContainer)
         internal val name: TextView by bindView(R.id.name)
@@ -81,43 +85,6 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         internal val unsupported: TextView by bindView(R.id.unsupported)
 
         init {
-            nameContainer.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    val previousItemId = expandedItem
-                    val newItemId = data[it].id
-
-                    if (newItemId == previousItemId) {
-                        expandedItem = null
-                    } else {
-                        expandedItem = newItemId
-
-                        if (previousItemId != null) {
-                            notifyItemChanged(data.indexOfFirst { it.id == previousItemId })
-                        }
-                    }
-
-                    notifyItemChanged(it)
-                }
-            }
-
-            uploaderText.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    uploaderClickSubject.onNext(data[it])
-                }
-            }
-
-            translatorGroup.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    translatorGroupClickSubject.onNext(data[it])
-                }
-            }
-
-            play.setOnClickListener {
-                withSafeAdapterPosition(this) {
-                    playClickSubject.onNext(data[it])
-                }
-            }
-
             play.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
                 .icon(CommunityMaterial.Icon.cmd_play)
                 .sizeDp(28)
@@ -126,11 +93,13 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         }
 
         fun bind(item: AnimeStream) {
+            initListeners()
+
             name.text = item.hosterName
 
             glide?.defaultLoad(image, ProxerUrls.hosterImage(item.image))
 
-            if (expandedItem == item.id) {
+            if (expandedItemId == item.id) {
                 uploadInfoContainer.visibility = View.VISIBLE
             } else {
                 uploadInfoContainer.visibility = View.GONE
@@ -174,6 +143,41 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
             unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE
+        }
+
+        private fun initListeners() {
+            // Subtract 1 from the adapterPosition, since we have a header.
+            nameContainer.clicks()
+                .mapAdapterPosition({ adapterPosition - 1 }) { Triple(expandedItemId, data[it].id, it) }
+                .autoDisposable(this)
+                .subscribe { (previousItemId, newItemId, position) ->
+                    if (newItemId == previousItemId) {
+                        expandedItemId = null
+                    } else {
+                        expandedItemId = newItemId
+
+                        if (previousItemId != null) {
+                            notifyItemChanged(data.indexOfFirst { it.id == previousItemId })
+                        }
+                    }
+
+                    notifyItemChanged(position)
+                }
+
+            uploaderText.clicks()
+                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(uploaderClickSubject)
+
+            translatorGroup.clicks()
+                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(translatorGroupClickSubject)
+
+            play.clicks()
+                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(playClickSubject)
         }
     }
 }
