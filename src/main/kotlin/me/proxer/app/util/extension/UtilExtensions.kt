@@ -2,7 +2,6 @@
 
 package me.proxer.app.util.extension
 
-import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,27 +13,19 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.text.util.LinkifyCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.util.Linkify
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.dip
@@ -55,26 +46,6 @@ inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
 inline fun Fragment.dip(value: Int) = context?.dip(value)
     ?: throw IllegalStateException("context is null")
 
-inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable {
-    return this.color(ContextCompat.getColor(context, id))
-}
-
-inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
-    return this.colorRes(context, R.color.icon)
-}
-
-inline fun ImageView.setIconicsImage(
-    icon: IIcon,
-    sizeDp: Int,
-    paddingDp: Int = sizeDp / 4,
-    colorRes: Int = R.color.icon
-) {
-    setImageDrawable(IconicsDrawable(context, icon)
-        .sizeDp(sizeDp)
-        .paddingDp(paddingDp)
-        .colorRes(context, colorRes))
-}
-
 inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, vararg custom: Regex): Spannable {
     val spannable = this as? Spannable ?: SpannableString(this)
 
@@ -88,46 +59,6 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
     return spannable
 }
 
-inline fun TextView.setSimpleOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkClickListener { view, link ->
-        listener(view, link)
-
-        true
-    }
-}
-
-inline fun TextView.setSimpleOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkLongClickListener { view, link ->
-        listener(view, link)
-
-        true
-    }
-}
-
-inline fun TextView.setOnLinkClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
-    val listenerWrapper = BetterLinkMovementMethod.OnLinkClickListener(listener)
-
-    movementMethod.let {
-        if (it is BetterLinkMovementMethod) {
-            it.setOnLinkClickListener(listenerWrapper)
-        } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener(listenerWrapper)
-        }
-    }
-}
-
-inline fun TextView.setOnLinkLongClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
-    val listenerWrapper = BetterLinkMovementMethod.OnLinkLongClickListener(listener)
-
-    movementMethod.let {
-        if (it is BetterLinkMovementMethod) {
-            it.setOnLinkLongClickListener(listenerWrapper)
-        } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(listenerWrapper)
-        }
-    }
-}
-
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
     .transition(DrawableTransitionOptions.withCrossFade())
     .into(view)
@@ -136,10 +67,6 @@ inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
 
 inline fun <T : View> T.postDelayedSafely(crossinline callback: (T) -> Unit, delayMillis: Long) {
     postDelayed({ callback(this) }, delayMillis)
-}
-
-inline fun ViewGroup.enableLayoutAnimationsSafely() {
-    this.layoutTransition = LayoutTransition().apply { setAnimateParentHierarchy(false) }
 }
 
 inline fun <T : Enum<T>> Bundle.putEnumSet(key: String, set: EnumSet<T>) {
@@ -189,24 +116,6 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
             }
         }
     }
-}
-
-fun RecyclerView.LayoutManager.isAtCompleteTop() = when (this) {
-    is StaggeredGridLayoutManager -> findFirstCompletelyVisibleItemPositions(null).contains(0)
-    is LinearLayoutManager -> findFirstCompletelyVisibleItemPosition() == 0
-    else -> false
-}
-
-fun RecyclerView.LayoutManager.isAtTop() = when (this) {
-    is StaggeredGridLayoutManager -> findFirstVisibleItemPositions(null).contains(0)
-    is LinearLayoutManager -> findFirstVisibleItemPosition() == 0
-    else -> false
-}
-
-fun RecyclerView.LayoutManager.scrollToTop() = when (this) {
-    is StaggeredGridLayoutManager -> scrollToPositionWithOffset(0, 0)
-    is LinearLayoutManager -> scrollToPositionWithOffset(0, 0)
-    else -> Unit
 }
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {

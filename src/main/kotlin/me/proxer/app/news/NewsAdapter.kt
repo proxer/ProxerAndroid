@@ -2,6 +2,7 @@ package me.proxer.app.news
 
 import android.os.Bundle
 import android.support.v4.view.ViewCompat
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
@@ -82,7 +84,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val expand: ImageButton by bindView(R.id.expand)
-        internal val description: TextView by bindView(R.id.description)
+        internal val description: AppCompatTextView by bindView(R.id.description)
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
         internal val category: TextView by bindView(R.id.category)
@@ -98,7 +100,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             ViewCompat.setTransitionName(image, "news_${item.id}")
 
             title.text = item.subject
-            description.text = item.description.trim()
+            description.fastText = item.description.trim()
             category.text = item.category
             time.text = item.date.convertToRelativeReadableTime(time.context)
 

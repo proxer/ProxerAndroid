@@ -1,6 +1,7 @@
 package me.proxer.app.media.discussion
 
 import android.graphics.Typeface
+import android.support.v7.widget.AppCompatTextView
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -16,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.discussion.DiscussionAdapter.ViewHolder
+import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.entity.info.ForumDiscussion
 
@@ -39,7 +41,7 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val subject: TextView by bindView(R.id.subject)
-        internal val metaInfo: TextView by bindView(R.id.metaInfo)
+        internal val metaInfo: AppCompatTextView by bindView(R.id.metaInfo)
 
         fun bind(item: ForumDiscussion) {
             itemView.clicks()
@@ -51,7 +53,7 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
                 item.firstPostUsername, item.category)
 
             subject.text = item.subject
-            metaInfo.text = SpannableString(metaInfoText).apply {
+            metaInfo.fastText = SpannableString(metaInfoText).apply {
                 val usernameSpanStart = indexOf(item.firstPostUsername)
                 val usernameSpanEnd = usernameSpanStart + item.firstPostUsername.length
                 val categorySpanStart = indexOf(item.category)

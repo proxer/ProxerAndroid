@@ -1,5 +1,6 @@
 package me.proxer.app.chat.pub.room
 
+import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setSimpleOnLinkClickListener
@@ -38,7 +40,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
     inner class ViewHolder(view: View) : AutoDisposeViewHolder(view) {
 
         internal val nameView by bindView<TextView>(R.id.name)
-        internal val topic by bindView<TextView>(R.id.topic)
+        internal val topic by bindView<AppCompatTextView>(R.id.topic)
 
         init {
             topic.setSimpleOnLinkClickListener { _, link ->
@@ -59,7 +61,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 topic.text = item.topic
             } else {
                 topic.visibility = View.VISIBLE
-                topic.text = item.topic.trim().linkify(mentions = false)
+                topic.fastText = item.topic.trim().linkify(mentions = false)
             }
         }
     }
