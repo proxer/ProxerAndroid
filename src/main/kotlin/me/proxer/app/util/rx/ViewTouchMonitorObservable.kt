@@ -10,6 +10,9 @@ import io.reactivex.android.MainThreadDisposable
 import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 
+/**
+ * @author Ruben Gees
+ */
 class ViewTouchMonitorObservable(
     private val view: View,
     private val handled: Predicate<in MotionEvent>

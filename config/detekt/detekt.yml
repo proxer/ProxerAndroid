@@ -43,6 +43,7 @@ potential-bugs:
   UnsafeCast:
     active: false
 
+# TODO: Remove UnnecessaryParentheses once working correctly again.
 style:
   ExpressionBodySyntax:
     active: false
@@ -50,6 +51,8 @@ style:
     active: true
     values: 'FIXME:,STOPSHIP:'
   MagicNumber:
+    active: false
+  UnnecessaryParentheses:
     active: false
   UnusedPrivateMember:
     active: false

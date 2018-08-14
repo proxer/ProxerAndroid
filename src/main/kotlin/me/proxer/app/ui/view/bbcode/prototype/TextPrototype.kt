@@ -37,9 +37,8 @@ object TextPrototype : BBPrototype {
     const val TEXT_SIZE_ARGUMENT = "text_size"
     const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
 
-    private val VALID_LINK_PREDICATE = Predicate<String> {
-        it.startsWith("@") || PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches()
-    }
+    private val WEB_URL_REGEX = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
+    private val VALID_LINK_PREDICATE = Predicate<String> { it.startsWith("@") || WEB_URL_REGEX.matches(it) }
 
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
@@ -94,16 +93,12 @@ object TextPrototype : BBPrototype {
                 val baseActivity = BBUtils.findBaseActivity(parent.context) ?: return@subscribe
 
                 when {
-                    it.startsWith("@") -> {
-                        ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
-                    }
-                    PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches() -> {
-                        baseActivity.showPage(Utils.getAndFixUrl(it))
-                    }
+                    it.startsWith("@") -> ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
+                    WEB_URL_REGEX.matches(it) -> baseActivity.showPage(Utils.getAndFixUrl(it))
                 }
             }
 
-        view.linkLongClicks(Predicate { PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches() })
+        view.linkLongClicks(Predicate { WEB_URL_REGEX.matches(it) })
             .autoDisposable(ViewScopeProvider.from(parent))
             .subscribe {
                 val title = view.context.getString(R.string.clipboard_title)

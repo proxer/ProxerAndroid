@@ -8,6 +8,9 @@ import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
+/**
+ * @author Ruben Gees
+ */
 class TextViewLinkClickObservable(
     private val view: TextView,
     private val handled: Predicate<in String>
