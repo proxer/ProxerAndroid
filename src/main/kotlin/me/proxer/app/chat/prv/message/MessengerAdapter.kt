@@ -387,6 +387,8 @@ class MessengerAdapter(
             timeDisplayMap.putOrRemove(id)
 
             time.visibility = if (timeDisplayMap.containsKey(id)) View.VISIBLE else View.GONE
+
+            layoutManager?.requestSimpleAnimationsInNextLayout()
         }
 
         override fun onContainerLongClick(v: View, message: LocalMessage) = Unit
@@ -396,7 +398,7 @@ class MessengerAdapter(
         override fun applyMessage(message: LocalMessage) {
             val messageText = message.action.toAppString(text.context, message.username, message.message)
 
-            text.tree = BBParser.parseSimple(messageText).optimize()
+            text.tree = BBParser.parseSimple("[center]$messageText[/center]").optimize()
         }
     }
 

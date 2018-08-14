@@ -1,5 +1,6 @@
 package me.proxer.app.media.list
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Intent
 import android.os.Bundle
 import android.support.transition.TransitionManager
@@ -266,7 +267,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                .autoDisposable(this.scope())
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
                     if (it.menuItem().isActionViewExpanded) {
                         searchQuery = null
@@ -279,7 +280,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
             searchView.queryTextChangeEvents()
                 .skipInitialValue()
-                .autoDisposable(this.scope())
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
                     searchQuery = it.queryText().toString().trim()
 

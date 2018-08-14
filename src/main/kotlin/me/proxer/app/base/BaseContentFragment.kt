@@ -1,5 +1,6 @@
 package me.proxer.app.base
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -113,7 +114,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
         }
 
         errorButton.clicks()
-            .autoDisposable(viewLifecycleOwner.scope())
+            .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
             .subscribe {
                 when (action.message == R.string.error_captcha) {
                     true -> {

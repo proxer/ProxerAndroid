@@ -1,5 +1,6 @@
 package me.proxer.app.chat.prv.conference
 
+import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.RecyclerView
@@ -131,7 +132,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
             val searchView = searchItem.actionView as SearchView
 
             searchItem.actionViewEvents()
-                .autoDisposable(this.scope())
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
                     if (it.menuItem().isActionViewExpanded) {
                         searchQuery = null
@@ -144,7 +145,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                 .skipInitialValue()
                 .debounce(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(this.scope())
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
                     searchQuery = it.queryText().toString().trim()
 
