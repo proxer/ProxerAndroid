@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
@@ -74,17 +75,9 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         init {
             post.glide = glide
             post.enableEmotions = true
-            post.heightChangedListener = {
-                post.requestLayout()
-                layoutManager?.requestSimpleAnimationsInNextLayout()
-            }
 
             signature.glide = glide
             post.enableEmotions = true
-            signature.heightChangedListener = {
-                signature.requestLayout()
-                layoutManager?.requestSimpleAnimationsInNextLayout()
-            }
 
             thankYouIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
@@ -95,6 +88,13 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 .autoDisposable(this)
                 .subscribe(profileClickSubject)
 
+            Observable.merge(post.heightChanges.map { post }, signature.heightChanges.map { signature })
+                .autoDisposable(this)
+                .subscribe {
+                    it.requestLayout()
+                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                }
+
             ViewCompat.setTransitionName(image, "post_${item.id}")
 
             user.text = item.username
@@ -102,7 +102,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             thankYou.text = item.thankYouAmount.toString()
 
             post.userId = item.userId
-            post.setTree(item.parsedMessage)
+            post.tree = item.parsedMessage
 
             item.signature.let {
                 signature.userId = item.userId
@@ -110,11 +110,11 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 if (it == null) {
                     signatureDivider.visibility = View.GONE
                     signature.visibility = View.GONE
-                    signature.destroy()
+                    signature.tree = null
                 } else {
                     signatureDivider.visibility = View.VISIBLE
                     signature.visibility = View.VISIBLE
-                    signature.setTree(it)
+                    signature.tree = it
                 }
             }
 

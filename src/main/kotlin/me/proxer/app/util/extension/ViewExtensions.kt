@@ -13,11 +13,9 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.R
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 inline var AppCompatTextView.fastText: CharSequence
     get() = text
@@ -47,46 +45,6 @@ inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable 
 
 inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
     return this.colorRes(context, R.color.icon)
-}
-
-inline fun TextView.setSimpleOnLinkClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkClickListener { view, link ->
-        listener(view, link)
-
-        true
-    }
-}
-
-inline fun TextView.setSimpleOnLinkLongClickListener(crossinline listener: (view: TextView, link: String) -> Unit) {
-    setOnLinkLongClickListener { view, link ->
-        listener(view, link)
-
-        true
-    }
-}
-
-inline fun TextView.setOnLinkClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
-    val listenerWrapper = BetterLinkMovementMethod.OnLinkClickListener(listener)
-
-    movementMethod.let {
-        if (it is BetterLinkMovementMethod) {
-            it.setOnLinkClickListener(listenerWrapper)
-        } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkClickListener(listenerWrapper)
-        }
-    }
-}
-
-inline fun TextView.setOnLinkLongClickListener(noinline listener: (view: TextView, link: String) -> Boolean) {
-    val listenerWrapper = BetterLinkMovementMethod.OnLinkLongClickListener(listener)
-
-    movementMethod.let {
-        if (it is BetterLinkMovementMethod) {
-            it.setOnLinkLongClickListener(listenerWrapper)
-        } else {
-            movementMethod = BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(listenerWrapper)
-        }
-    }
 }
 
 inline fun ViewGroup.enableLayoutAnimationsSafely() {

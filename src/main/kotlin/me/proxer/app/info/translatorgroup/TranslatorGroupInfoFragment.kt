@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
+import linkClicks
+import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
-import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.TranslatorGroup
@@ -61,14 +65,20 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        link.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
+        link.linkClicks()
+            .map { Utils.getAndFixUrl(it).toOptional() }
+            .filterSome()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { showPage(it) }
 
-        link.setSimpleOnLinkLongClickListener { _, link ->
-            val title = getString(R.string.clipboard_title)
+        link.linkLongClicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                val title = getString(R.string.clipboard_title)
 
-            requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-            requireContext().toast(R.string.clipboard_status)
-        }
+                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                requireContext().toast(R.string.clipboard_status)
+            }
     }
 
     override fun showData(data: TranslatorGroup) {

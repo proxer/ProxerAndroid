@@ -1,7 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
@@ -12,12 +11,16 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.engine.GlideException
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -44,31 +47,33 @@ object ImagePrototype : AutoClosingPrototype {
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = children.flatMap { it.makeViews(context, args) }
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(parent, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
         val parsedUrl = Utils.parseAndFixUrl(url)
 
         val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
-        return listOf(AppCompatImageView(context).also { view: ImageView ->
+        return listOf(AppCompatImageView(parent.context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$parsedUrl")
 
             view.layoutParams = ViewGroup.MarginLayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
 
             args.glide?.let { loadImage(it, view, parsedUrl) }
 
-            if (context is Activity) {
-                view.setOnClickListener { _ ->
-                    if (view.getTag(R.id.error_tag) == true) {
-                        view.tag = null
+            (parent.context as? Activity)?.let { context ->
+                view.clicks()
+                    .autoDisposable(ViewScopeProvider.from(parent))
+                    .subscribe { _ ->
+                        if (view.getTag(R.id.error_tag) == true) {
+                            view.tag = null
 
-                        args.glide?.let { loadImage(it, view, parsedUrl) }
-                    } else if (view.drawable != null && parsedUrl != null) {
-                        ImageDetailActivity.navigateTo(context, parsedUrl, view)
+                            args.glide?.let { loadImage(it, view, parsedUrl) }
+                        } else if (view.drawable != null && parsedUrl != null) {
+                            ImageDetailActivity.navigateTo(context, parsedUrl, view)
+                        }
                     }
-                }
             }
         })
     }

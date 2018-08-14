@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import linkClicks
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
@@ -24,7 +27,6 @@ import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoomUser
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -63,17 +65,17 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
         internal val username: TextView by bindView(R.id.username)
         internal val status: TextView by bindView(R.id.status)
 
-        init {
-            status.setSimpleOnLinkClickListener { _, link ->
-                statusLinkClickSubject.onNext(Utils.getAndFixUrl(link))
-            }
-        }
-
         fun bind(item: ChatRoomUser) {
             itemView.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(participantClickSubject)
+
+            status.linkClicks()
+                .map { Utils.getAndFixUrl(it).toOptional() }
+                .filterSome()
+                .autoDisposable(this)
+                .subscribe(statusLinkClickSubject)
 
             ViewCompat.setTransitionName(image, "chat_room_user_${item.id}")
 

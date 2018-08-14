@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view
 
-import android.arch.lifecycle.LifecycleOwner
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
@@ -18,7 +17,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -87,23 +86,23 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         resetButton.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
         toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+    }
 
-        if (!isInEditMode) {
-            controlContainer.clicks().mergeWith(toggleButton.clicks())
-                .autoDisposable((context as LifecycleOwner).scope())
-                .subscribeAndLogErrors {
-                    isExtended = !isExtended
-                }
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
 
-            resetButton.clicks()
-                .autoDisposable((context as LifecycleOwner).scope())
-                .subscribeAndLogErrors {
-                    selection = mutableListOf()
+        controlContainer.clicks().mergeWith(toggleButton.clicks())
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe { isExtended = !isExtended }
 
-                    handleSelection()
-                    notifySelectionChangedListener()
-                }
-        }
+        resetButton.clicks()
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe {
+                selection = mutableListOf()
+
+                handleSelection()
+                notifySelectionChangedListener()
+            }
     }
 
     override fun onSaveInstanceState(): Parcelable = SavedState(super.onSaveInstanceState(), selection, isExtended)
@@ -162,8 +161,9 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         radioButton.text = item
         radioButton.isChecked = selection.contains(item)
+
         radioButton.clicks()
-            .autoDisposable((context as LifecycleOwner).scope())
+            .autoDisposable(ViewScopeProvider.from(this))
             .subscribeAndLogErrors {
                 selection.clear()
                 selection.add(item)
@@ -183,15 +183,17 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         checkBox.text = item
         checkBox.isChecked = selection.contains(item)
+
         checkBox.clicks()
-            .autoDisposable((context as LifecycleOwner).scope())
-            .subscribeAndLogErrors {
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe {
                 if (!selection.remove(item)) {
                     selection.add(item)
                 }
 
                 notifySelectionChangedListener()
             }
+
         return checkBox
     }
 

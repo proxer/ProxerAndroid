@@ -1,5 +1,6 @@
 package me.proxer.app.profile.about
 
+import android.arch.lifecycle.Lifecycle
 import android.content.ClipData
 import android.graphics.Color
 import android.os.Build
@@ -15,7 +16,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
+import linkClicks
+import linkLongClicks
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -25,8 +32,6 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
-import me.proxer.app.util.extension.setSimpleOnLinkLongClickListener
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserAbout
@@ -187,16 +192,23 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         contentView.setTextIsSelectable(true)
         contentView.isSaveEnabled = false
 
-        contentView.setSimpleOnLinkClickListener { _, link -> showPage(Utils.getAndFixUrl(link)) }
-        contentView.setSimpleOnLinkLongClickListener { _, link ->
-            val clipboardTitle = getString(R.string.clipboard_title)
-
-            requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, link)
-            requireContext().toast(R.string.clipboard_status)
-        }
-
         titleView.text = title
         contentView.text = content.linkify(mentions = false)
+
+        contentView.linkClicks()
+            .map { Utils.getAndFixUrl(it).toOptional() }
+            .filterSome()
+            .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+            .subscribe { showPage(it) }
+
+        contentView.linkLongClicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                val clipboardTitle = getString(R.string.clipboard_title)
+
+                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, it)
+                requireContext().toast(R.string.clipboard_status)
+            }
 
         return tableRow
     }

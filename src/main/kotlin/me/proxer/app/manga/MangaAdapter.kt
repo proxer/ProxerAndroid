@@ -18,7 +18,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
 import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
-import com.gojuno.koptional.Some
+import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -45,7 +45,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
-import touchesFixed
+import touchesMonitored
 import java.io.File
 import java.lang.Exception
 import kotlin.properties.Delegates
@@ -225,7 +225,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 }
             })
 
-            image.touchesFixed(Predicate { false })
+            image.touchesMonitored(Predicate { false })
                 .filter { it.actionMasked == MotionEvent.ACTION_DOWN }
                 .map {
                     val (viewX, viewY) = IntArray(2).apply { image.getLocationInWindow(this) }
@@ -239,8 +239,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .mapAdapterPosition({ adapterPosition }) { it }
                 .flatMap { position ->
                     Observable.just(lastTouchCoordinates.toOptional())
-                        .filter { it is Some }
-                        .map { Triple(image as View, (it as Some).value, position) }
+                        .filterSome()
+                        .map { Triple(image as View, it, position) }
                 }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

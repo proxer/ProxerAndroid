@@ -14,6 +14,10 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import com.google.android.flexbox.FlexboxLayout
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 
 /**
@@ -24,6 +28,8 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FlexboxLayout(context, attrs, defStyleAttr) {
+
+    val showAllEvents: PublishSubject<Unit> = PublishSubject.create()
 
     var maxLines: Int
 
@@ -75,7 +81,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
         return currentWidth + view.measuredWidth <= width || currentLine + 1 <= maxLines
     }
 
-    fun enableShowAllButton(listener: (View) -> Unit) {
+    fun enableShowAllButton() {
         if (isShowAllButtonEnabled) return
 
         val container = FrameLayout(context)
@@ -84,7 +90,11 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
         button.text = context.getString(R.string.fragment_media_info_show_all)
         button.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
         button.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-        button.setOnClickListener { listener(it) }
+
+        button.clicks()
+            .doOnNext { maxLines = Int.MAX_VALUE }
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribe(showAllEvents)
 
         container.layoutParams = FlexboxLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             isWrapBefore = true

@@ -425,11 +425,11 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 }
 
                 if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
-                    layout.enableShowAllButton {
-                        layout.maxLines = Int.MAX_VALUE
+                    layout.showAllEvents
+                        .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                        .subscribe { _ -> bindChips(layout, items, mapFunction, onClick) }
 
-                        bindChips(layout, items, mapFunction, onClick)
-                    }
+                    layout.enableShowAllButton()
 
                     break
                 } else {

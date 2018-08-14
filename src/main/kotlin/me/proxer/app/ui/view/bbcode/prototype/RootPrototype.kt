@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -11,6 +10,7 @@ import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeEmoticons
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToAllViews
 
@@ -22,12 +22,12 @@ object RootPrototype : BBPrototype {
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val views = super.makeViews(context, children, args)
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val views = super.makeViews(parent, children, args)
 
         val result = when (views.size) {
             0, 1 -> views
-            else -> listOf(LinearLayout(context).apply {
+            else -> listOf(LinearLayout(parent.context).apply {
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 

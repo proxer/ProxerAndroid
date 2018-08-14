@@ -5,6 +5,7 @@ import android.content.Context
 import android.support.annotation.ColorInt
 import android.support.annotation.Px
 import android.support.annotation.StyleRes
+import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
@@ -16,6 +17,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
@@ -26,6 +28,7 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_APPEARANCE_ARGU
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_COLOR_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_SIZE_ARGUMENT
 import org.jetbrains.anko.childrenSequence
+import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -35,6 +38,8 @@ class BBCodeView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+
+    val heightChanges: PublishSubject<Unit> = PublishSubject.create()
 
     @ColorInt
     var textColor: Int?
@@ -50,10 +55,18 @@ class BBCodeView @JvmOverloads constructor(
 
     var maxHeight: Int
 
-    var heightChangedListener: (() -> Unit)? = null
     var glide: GlideRequests? = null
     var userId: String? = null
     var enableEmotions = false
+
+    var tree by Delegates.observable<BBTree?>(null) { _, _, new ->
+        if (new == null) {
+            destroyWithRetainingViews()
+            removeAllViews()
+        } else if (ViewCompat.isAttachedToWindow(this)) {
+            refreshViews(new)
+        }
+    }
 
     init {
         if (isInEditMode) {
@@ -78,7 +91,7 @@ class BBCodeView @JvmOverloads constructor(
 
             maxHeight = typedArray.getDimensionPixelSize(R.styleable.BBCodeView_maxHeight, Int.MAX_VALUE)
 
-            typedArray.getString(R.styleable.BBCodeView_text)?.let { setTree(BBParser.parseSimple(it).optimize()) }
+            typedArray.getString(R.styleable.BBCodeView_text)?.let { tree = BBParser.parseSimple(it).optimize() }
 
             typedArray.recycle()
         } else {
@@ -102,13 +115,10 @@ class BBCodeView @JvmOverloads constructor(
         })
     }
 
-    fun setTree(tree: BBTree) {
-        refreshViews(tree)
-    }
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
 
-    fun destroy() {
-        destroyWithRetainingViews()
-        removeAllViews()
+        tree?.let { refreshViews(it) }
     }
 
     fun destroyWithRetainingViews() {
@@ -129,14 +139,14 @@ class BBCodeView @JvmOverloads constructor(
         args[SPOILER_TEXT_COLOR_ARGUMENT] = spoilerTextColor
 
         if (existingChild is BetterLinkGifAwareEmojiTextView && firstTreeChild?.prototype === TextPrototype) {
-            TextPrototype.applyOnView(existingChild, args + firstTreeChild.args)
+            TextPrototype.applyOnView(this, existingChild, args + firstTreeChild.args)
             RootPrototype.applyOnViews(listOf(existingChild), args + tree.args)
 
             existingChild.requestLayout()
         } else {
             removeAllViews()
 
-            tree.makeViews(context, args).forEach { this.addView(it) }
+            tree.makeViews(this, args).forEach { this.addView(it) }
         }
     }
 }

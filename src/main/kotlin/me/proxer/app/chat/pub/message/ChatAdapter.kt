@@ -306,7 +306,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         }
 
         internal open fun applyMessage(message: ParsedChatMessage) {
-            text.setTree(message.styledMessage)
+            text.tree = message.styledMessage
         }
 
         internal open fun applyTime(message: ParsedChatMessage) {

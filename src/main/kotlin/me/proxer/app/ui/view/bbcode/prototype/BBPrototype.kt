@@ -1,9 +1,9 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.view.View
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.trimEndSafely
@@ -33,8 +33,8 @@ interface BBPrototype {
 
     fun construct(code: String, parent: BBTree) = BBTree(this, parent)
 
-    fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = children.flatMap { it.makeViews(context, args) }
+    fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(parent, args) }
 
         val currentTextViews = mutableListOf<TextView>()
         val result = mutableListOf<View>()
@@ -52,7 +52,7 @@ interface BBPrototype {
                     if (mergedView.text.isBlank()) {
                         // Only add if it is not the first view.
                         if (shouldPadStart) {
-                            result.add(TextPrototype.makeView(context, args + BBArgs(text = "")))
+                            result.add(TextPrototype.makeView(parent, args + BBArgs(text = "")))
                         }
                     } else {
                         result.add(mergedView)
@@ -67,7 +67,7 @@ interface BBPrototype {
                 val isBetweenNonTextViews = index + 1 <= childViews.lastIndex && childViews[index + 1] !is TextView
 
                 if (isBetweenNonTextViews) {
-                    result.add(TextPrototype.makeView(context, args + BBArgs(text = "")))
+                    result.add(TextPrototype.makeView(parent, args + BBArgs(text = "")))
                 }
             }
         }

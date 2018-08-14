@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.graphics.Typeface.MONOSPACE
 import android.support.v4.content.ContextCompat
 import android.view.View
@@ -13,6 +12,7 @@ import android.widget.LinearLayout.VERTICAL
 import android.widget.TextView
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
 import org.jetbrains.anko.dip
@@ -25,8 +25,8 @@ object CodePrototype : AutoClosingPrototype {
     override val startRegex = Regex(" *code( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *code *", BBPrototype.REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = super.makeViews(context, children, args)
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = super.makeViews(parent, children, args)
 
         applyToViews(childViews) { view: TextView ->
             view.typeface = MONOSPACE
@@ -34,24 +34,24 @@ object CodePrototype : AutoClosingPrototype {
 
         return when (childViews.size) {
             0 -> childViews
-            1 -> listOf(FrameLayout(context).apply {
+            1 -> listOf(FrameLayout(parent.context).apply {
                 val fourDip = dip(4)
 
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(ContextCompat.getColor(context, R.color.selected))
+                setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected))
 
                 childViews.forEach { addView(it) }
             })
-            else -> listOf(LinearLayout(context).apply {
+            else -> listOf(LinearLayout(parent.context).apply {
                 val fourDip = dip(4)
 
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(ContextCompat.getColor(context, R.color.selected))
+                setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected))
 
                 childViews.forEach { addView(it) }
             })

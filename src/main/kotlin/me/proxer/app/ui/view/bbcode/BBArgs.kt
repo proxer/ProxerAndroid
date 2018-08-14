@@ -61,7 +61,7 @@ class BBArgs : LinkedHashMap<String, Any?> {
 
         if (size != other.size) return false
 
-        // Work around a bug in the SpannableStringBuilder (and possibly others) implementation.
+        // Work around a bug in the SpannableStringBuilder's (and possibly others) implementation.
         // See: https://stackoverflow.com/a/46403431/4279995.
         this.forEach { (key, value) ->
             other.forEach { (otherKey, otherValue) ->

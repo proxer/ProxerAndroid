@@ -1,7 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.ClipData
-import android.content.Context
 import android.os.Build
 import android.support.v4.util.PatternsCompat
 import android.support.v4.widget.TextViewCompat
@@ -11,18 +10,22 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.functions.Predicate
+import linkClicks
+import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.setOnLinkClickListener
-import me.proxer.app.util.extension.setOnLinkLongClickListener
 import org.jetbrains.anko.toast
 
 /**
@@ -34,6 +37,10 @@ object TextPrototype : BBPrototype {
     const val TEXT_SIZE_ARGUMENT = "text_size"
     const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
 
+    private val VALID_LINK_PREDICATE = Predicate<String> {
+        it.startsWith("@") || PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches()
+    }
+
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
 
@@ -41,15 +48,19 @@ object TextPrototype : BBPrototype {
         return BBTree(this, parent, args = BBArgs(text = code.toSpannableStringBuilder().linkify()))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        return listOf(makeView(context, args))
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        return listOf(makeView(parent, args))
     }
 
-    fun makeView(context: Context, args: BBArgs): TextView {
-        return applyOnView(BetterLinkGifAwareEmojiTextView(context), args)
+    fun makeView(parent: BBCodeView, args: BBArgs): TextView {
+        return applyOnView(parent, BetterLinkGifAwareEmojiTextView(parent.context), args)
     }
 
-    fun applyOnView(view: BetterLinkGifAwareEmojiTextView, args: BBArgs): BetterLinkGifAwareEmojiTextView {
+    fun applyOnView(
+        parent: BBCodeView,
+        view: BetterLinkGifAwareEmojiTextView,
+        args: BBArgs
+    ): BetterLinkGifAwareEmojiTextView {
         view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
         view.text = args.safeText
 
@@ -58,7 +69,7 @@ object TextPrototype : BBPrototype {
         }
 
         applyStyle(args, view)
-        setListeners(view)
+        setListeners(parent, view)
 
         return view
     }
@@ -76,37 +87,29 @@ object TextPrototype : BBPrototype {
         (args[TEXT_SIZE_ARGUMENT] as? Float)?.let { view.setTextSize(COMPLEX_UNIT_PX, it) }
     }
 
-    private fun setListeners(view: BetterLinkGifAwareEmojiTextView) {
-        view.setOnLinkClickListener { textView, link ->
-            val baseActivity = BBUtils.findBaseActivity(textView.context)
+    private fun setListeners(parent: BBCodeView, view: BetterLinkGifAwareEmojiTextView) {
+        view.linkClicks(VALID_LINK_PREDICATE)
+            .autoDisposable(ViewScopeProvider.from(parent))
+            .subscribe {
+                val baseActivity = BBUtils.findBaseActivity(parent.context) ?: return@subscribe
 
-            when {
-                baseActivity == null -> false
-                link.startsWith("@") -> {
-                    ProfileActivity.navigateTo(baseActivity, null, link.trim().drop(1))
-
-                    true
+                when {
+                    it.startsWith("@") -> {
+                        ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
+                    }
+                    PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches() -> {
+                        baseActivity.showPage(Utils.getAndFixUrl(it))
+                    }
                 }
-                PatternsCompat.AUTOLINK_WEB_URL.matcher(link).matches() -> {
-                    baseActivity.showPage(Utils.getAndFixUrl(link))
-
-                    true
-                }
-                else -> false
             }
-        }
 
-        view.setOnLinkLongClickListener { textView, link ->
-            if (PatternsCompat.AUTOLINK_WEB_URL.matcher(link).matches()) {
-                val title = textView.context.getString(R.string.clipboard_title)
+        view.linkLongClicks(Predicate { PatternsCompat.AUTOLINK_WEB_URL.matcher(it).matches() })
+            .autoDisposable(ViewScopeProvider.from(parent))
+            .subscribe {
+                val title = view.context.getString(R.string.clipboard_title)
 
-                textView.context.clipboardManager.primaryClip = ClipData.newPlainText(title, link)
-                textView.context.toast(R.string.clipboard_status)
-
-                true
-            } else {
-                false
+                parent.context.clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                parent.context.toast(R.string.clipboard_status)
             }
-        }
     }
 }

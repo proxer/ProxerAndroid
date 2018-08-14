@@ -1,8 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -19,14 +17,18 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder
 import de.number42.subsampling_pdf_decoder.PDFRegionDecoder
 import me.proxer.app.GlideRequests
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.applyToViews
@@ -56,15 +58,15 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = children.flatMap { it.makeViews(context, args) }
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(parent, args) }
 
         return when {
             childViews.isEmpty() -> childViews
             Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> applyToViews<TextView>(childViews) {
                 it.text = mutate(it.text.toSpannableStringBuilder(), args)
             }
-            else -> listOf(SubsamplingScaleImageView(context).also { view: SubsamplingScaleImageView ->
+            else -> listOf(SubsamplingScaleImageView(parent.context).also { view: SubsamplingScaleImageView ->
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
                 val parsedUrl = Utils.parseAndFixUrl(url)
 
@@ -77,15 +79,14 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
                 args.glide?.let { loadImage(it, view, parsedUrl) }
 
-                if (context is Activity) {
-                    view.setOnClickListener { _ ->
-                        if (view.getTag(R.id.error_tag) == true) {
-                            view.tag = null
+                view.clicks()
+                    .filter { view.getTag(R.id.error_tag) == true }
+                    .autoDisposable(ViewScopeProvider.from(parent))
+                    .subscribe { _ ->
+                        view.tag = null
 
-                            args.glide?.let { loadImage(it, view, parsedUrl) }
-                        }
+                        args.glide?.let { loadImage(it, view, parsedUrl) }
                     }
-                }
 
                 view.post {
                     if (width != null && width < view.width) {

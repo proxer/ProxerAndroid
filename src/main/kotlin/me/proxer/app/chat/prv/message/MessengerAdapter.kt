@@ -321,7 +321,7 @@ class MessengerAdapter(
         }
 
         internal open fun applyMessage(message: LocalMessage) {
-            text.setTree(message.styledMessage)
+            text.tree = message.styledMessage
         }
 
         internal open fun applyTime(message: LocalMessage) {
@@ -396,7 +396,7 @@ class MessengerAdapter(
         override fun applyMessage(message: LocalMessage) {
             val messageText = message.action.toAppString(text.context, message.username, message.message)
 
-            text.setTree(BBParser.parseSimple(messageText).optimize())
+            text.tree = BBParser.parseSimple(messageText).optimize()
         }
     }
 

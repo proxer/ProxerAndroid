@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode
 
-import android.content.Context
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ConditionalTextMutatorPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextMutatorPrototype
@@ -19,7 +18,7 @@ class BBTree(
 
     fun endsWith(code: String) = prototype.endRegex.matches(code)
 
-    fun makeViews(context: Context, args: BBArgs) = prototype.makeViews(context, children, this.args + args)
+    fun makeViews(parent: BBCodeView, args: BBArgs) = prototype.makeViews(parent, children, this.args + args)
 
     fun optimize(args: BBArgs = BBArgs()) = recursiveOptimize(args).first()
 

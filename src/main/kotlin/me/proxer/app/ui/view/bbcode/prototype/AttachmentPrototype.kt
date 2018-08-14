@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -8,6 +7,7 @@ import android.widget.TextView
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.applyToViews
@@ -26,8 +26,8 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
     override val startRegex = Regex(" *attachment( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *attachment *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = children.flatMap { it.makeViews(context, args) }
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(parent, args) }
 
         if (childViews.isEmpty()) {
             return childViews
@@ -37,10 +37,10 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
 
         return when {
             isImage(attachment) -> {
-                val parent = children.first().parent ?: throw IllegalArgumentException("parent is null")
+                val parentTree = children.first().parent ?: throw IllegalArgumentException("parent is null")
                 val url = constructUrl(args.safeUserId, attachment)
 
-                ImagePrototype.makeViews(context, listOf(TextPrototype.construct(url.toString(), parent)), args)
+                ImagePrototype.makeViews(parent, listOf(TextPrototype.construct(url.toString(), parentTree)), args)
             }
             else -> applyToViews<TextView>(childViews) {
                 it.text = mutate(it.text.toSpannableStringBuilder(), args)

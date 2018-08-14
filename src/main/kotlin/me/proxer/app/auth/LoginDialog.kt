@@ -21,6 +21,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
+import linkClicks
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
@@ -29,7 +30,6 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -85,10 +85,21 @@ class LoginDialog : BaseDialog() {
         }
 
         setupViews()
+        setupListeners()
         setupViewModel()
     }
 
     private fun setupViews() {
+        secret.transformationMethod = null
+
+        registrationInfo.compoundDrawablePadding = dip(12)
+        registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
+            .linkify(web = false, mentions = false, custom = *arrayOf(WEBSITE_REGEX))
+
+        registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
+    }
+
+    private fun setupListeners() {
         listOf(password, secret).forEach {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                 .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
@@ -103,21 +114,16 @@ class LoginDialog : BaseDialog() {
                 .subscribe { setError(container, null) }
         }
 
-        secret.transformationMethod = null
-
-        registrationInfo.compoundDrawablePadding = dip(12)
-        registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
-            .linkify(web = false, mentions = false, custom = *arrayOf(WEBSITE_REGEX))
-
-        registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
-
-        registrationInfo.setSimpleOnLinkClickListener { _, _ ->
-            showPage(ProxerUrls.webBase()
-                .newBuilder()
-                .addPathSegment("register")
-                .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
-                .build())
-        }
+        registrationInfo.linkClicks()
+            .map {
+                ProxerUrls.webBase()
+                    .newBuilder()
+                    .addPathSegment("register")
+                    .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
+                    .build()
+            }
+            .autoDisposable(dialogLifecycleOwner.scope())
+            .subscribe { showPage(it) }
     }
 
     private fun setupViewModel() {

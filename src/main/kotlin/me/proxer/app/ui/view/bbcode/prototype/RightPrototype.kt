@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.Context
 import android.text.Layout.Alignment.ALIGN_OPPOSITE
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
@@ -10,6 +9,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import me.proxer.app.ui.view.bbcode.BBArgs
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToAllViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
@@ -23,8 +23,8 @@ object RightPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     override val startRegex = Regex(" *right( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *right *", REGEX_OPTIONS)
 
-    override fun makeViews(context: Context, children: List<BBTree>, args: BBArgs): List<View> {
-        val childViews = children.flatMap { it.makeViews(context, args) }
+    override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
+        val childViews = children.flatMap { it.makeViews(parent, args) }
 
         return applyToAllViews(childViews) { view: View ->
             when (view) {

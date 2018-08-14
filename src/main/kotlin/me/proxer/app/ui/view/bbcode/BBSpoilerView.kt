@@ -56,7 +56,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
                     host.maxHeight = Int.MAX_VALUE
                 }
 
-                host.heightChangedListener?.invoke()
+                host.heightChanges.onNext(Unit)
             }
         }
 

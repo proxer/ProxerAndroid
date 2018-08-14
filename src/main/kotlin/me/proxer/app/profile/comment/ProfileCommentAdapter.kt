@@ -108,22 +108,11 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         private val maxHeight by unsafeLazy { comment.context.resources.displayMetrics.heightPixels / 4 }
 
         init {
+            comment.glide = glide
+
             image.visibility = View.GONE
 
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
-
-            comment.glide = glide
-            comment.heightChangedListener = {
-                withSafeAdapterPosition(this) {
-                    when (comment.maxHeight >= maxHeight) {
-                        true -> expansionMap.put(data[it].id, true)
-                        false -> expansionMap.remove(data[it].id)
-                    }
-
-                    handleExpansion(data[it].id, true)
-                }
-            }
-
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
         }
 
@@ -143,7 +132,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
             bindRatingRow(ratingOverallRow, ratingOverall, item.overallRating.toFloat() / 2.0f)
 
             comment.userId = item.authorId
-            comment.setTree(item.parsedContent)
+            comment.tree = item.parsedContent
 
             time.text = item.date.convertToRelativeReadableTime(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
@@ -162,6 +151,18 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(titleClickSubject)
+
+            comment.heightChanges
+                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .autoDisposable(this)
+                .subscribe {
+                    when (comment.maxHeight >= maxHeight) {
+                        true -> expansionMap.put(it, true)
+                        false -> expansionMap.remove(it)
+                    }
+
+                    handleExpansion(it, true)
+                }
         }
 
         private fun handleExpansion(itemId: String, animate: Boolean = false) {

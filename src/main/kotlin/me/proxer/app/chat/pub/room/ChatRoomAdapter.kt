@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import linkClicks
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
@@ -17,7 +20,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.app.util.extension.setSimpleOnLinkClickListener
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
 
@@ -42,17 +44,17 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
         internal val nameView by bindView<TextView>(R.id.name)
         internal val topic by bindView<AppCompatTextView>(R.id.topic)
 
-        init {
-            topic.setSimpleOnLinkClickListener { _, link ->
-                Utils.parseAndFixUrl(link)?.let { url -> linkClickSubject.onNext(url) }
-            }
-        }
-
         fun bind(item: ChatRoom) {
             itemView.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
+
+            topic.linkClicks()
+                .map { Utils.parseAndFixUrl(it).toOptional() }
+                .filterSome()
+                .autoDisposable(this)
+                .subscribe(linkClickSubject)
 
             nameView.text = item.name
 
