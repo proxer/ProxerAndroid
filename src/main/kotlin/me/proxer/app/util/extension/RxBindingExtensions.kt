@@ -4,8 +4,10 @@ import android.support.annotation.CheckResult
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import io.reactivex.Observable
 import io.reactivex.functions.Predicate
+import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.rx.TextViewLinkClickObservable
 import me.proxer.app.util.rx.TextViewLinkLongClickObservable
 import me.proxer.app.util.rx.ViewTouchMonitorObservable
@@ -23,4 +25,9 @@ inline fun TextView.linkClicks(handled: Predicate<String> = Predicate { true }):
 @CheckResult
 inline fun TextView.linkLongClicks(handled: Predicate<String> = Predicate { true }): Observable<String> {
     return TextViewLinkLongClickObservable(this, handled)
+}
+
+@CheckResult
+inline fun SubsamplingScaleImageView.events(): Observable<SubsamplingScaleImageViewEventObservable.Event> {
+    return SubsamplingScaleImageViewEventObservable(this)
 }

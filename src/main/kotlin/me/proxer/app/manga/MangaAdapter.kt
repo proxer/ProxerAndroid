@@ -23,6 +23,7 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.kotlin.autoDisposable
+import events
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,6 +43,7 @@ import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
@@ -205,25 +207,25 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .autoDisposable(this)
                 .subscribe(this::bind)
 
-            @Suppress("LabeledExpression")
-            image.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
-                override fun onImageLoaded() {
-                    image.setDoubleTapZoomScale(image.scale * 2.5f)
-                    image.maxScale = image.scale * 2.5f
-                }
+            image.events()
+                .publish()
+                .also { observable ->
+                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
+                        .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
+                        .flatMap { event ->
+                            Observable.just(Unit).mapAdapterPosition({ adapterPosition }) { event.error to it }
+                        }
+                        .autoDisposable(this)
+                        .subscribe { (error, position) -> handleImageLoadError(error, position) }
 
-                override fun onTileLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
+                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
+                        .autoDisposable(this)
+                        .subscribe {
+                            image.setDoubleTapZoomScale(image.scale * 2.5f)
+                            image.maxScale = image.scale * 2.5f
+                        }
                 }
-
-                override fun onImageLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
-                }
-
-                override fun onPreviewLoadError(error: Exception) = withSafeAdapterPosition(this@ViewHolder) {
-                    handleImageLoadError(error, it)
-                }
-            })
+                .connect()
 
             image.touchesMonitored(Predicate { false })
                 .filter { it.actionMasked == MotionEvent.ACTION_DOWN }

@@ -24,6 +24,7 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder
 import de.number42.subsampling_pdf_decoder.PDFRegionDecoder
+import events
 import me.proxer.app.GlideRequests
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
@@ -36,10 +37,10 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import okhttp3.HttpUrl
 import org.jetbrains.anko.longToast
 import java.io.File
-import java.lang.Exception
 
 /**
  * @author Ruben Gees
@@ -122,24 +123,21 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
                 view.setImage(ImageSource.uri(resource.absolutePath))
 
-                view.setOnImageEventListener(object : SubsamplingScaleImageView.DefaultOnImageEventListener() {
-                    override fun onImageLoaded() {
-                        view.setDoubleTapZoomScale(view.scale * 2.5f)
-                        view.maxScale = view.scale * 2.5f
-                    }
+                view.events()
+                    .publish()
+                    .also { observable ->
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe { handleLoadError(view) }
 
-                    override fun onTileLoadError(error: Exception) {
-                        handleLoadError(view)
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe {
+                                view.setDoubleTapZoomScale(view.scale * 2.5f)
+                                view.maxScale = view.scale * 2.5f
+                            }
                     }
-
-                    override fun onImageLoadError(error: Exception) {
-                        handleLoadError(view)
-                    }
-
-                    override fun onPreviewLoadError(error: Exception) {
-                        handleLoadError(view)
-                    }
-                })
+                    .connect()
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
