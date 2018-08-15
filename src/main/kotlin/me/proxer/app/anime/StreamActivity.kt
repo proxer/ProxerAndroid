@@ -26,6 +26,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
+import errors
 import kotterknife.bindView
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.client
@@ -35,6 +36,7 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.postDelayedSafely
 import okhttp3.OkHttpClient
+import preparedEvents
 
 /**
  * @author Ruben Gees
@@ -80,15 +82,17 @@ class StreamActivity : BaseActivity() {
 
             pausedInOnStop = false
         } else {
-            player.setOnPreparedListener {
-                player.start()
+            player.preparedEvents()
+                .autoDisposable(this.scope())
+                .subscribe {
+                    player.start()
 
-                if (previousPosition > 0) {
-                    player.seekTo(previousPosition)
+                    if (previousPosition > 0) {
+                        player.seekTo(previousPosition)
 
-                    previousPosition = -1
+                        previousPosition = -1
+                    }
                 }
-            }
         }
     }
 
@@ -97,8 +101,6 @@ class StreamActivity : BaseActivity() {
             pausedInOnStop = true
 
             player.pause()
-        } else {
-            player.setOnPreparedListener(null)
         }
 
         super.onStop()
@@ -176,31 +178,27 @@ class StreamActivity : BaseActivity() {
             })
         }
 
-        player.setOnErrorListener {
-            if (player.currentPosition > 0) {
-                previousPosition = player.currentPosition
-            }
+        player.errors()
+            .autoDisposable(this.scope())
+            .subscribe { error ->
+                if (player.currentPosition > 0) {
+                    previousPosition = player.currentPosition
+                }
 
-            ErrorUtils.handle(it).let {
-                MaterialDialog.Builder(this)
-                    .content(it.message)
-                    .positiveText(R.string.error_action_retry)
-                    .negativeText(R.string.error_action_finish)
-                    .onPositive { _, _ ->
-                        player.reset()
-                        player.setVideoURI(uri)
-                    }
-                    .onNegative { _, _ ->
-                        finish()
-                    }
-                    .cancelListener {
-                        finish()
-                    }
-                    .show()
+                ErrorUtils.handle(error).let { it ->
+                    MaterialDialog.Builder(this)
+                        .content(it.message)
+                        .positiveText(R.string.error_action_retry)
+                        .negativeText(R.string.error_action_finish)
+                        .onPositive { _, _ ->
+                            player.reset()
+                            player.setVideoURI(uri)
+                        }
+                        .onNegative { _, _ -> finish() }
+                        .cancelListener { finish() }
+                        .show()
+                }
             }
-
-            false
-        }
 
         player.setVideoURI(uri)
     }
