@@ -38,7 +38,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                         .filter(NotificationFilter.UNREAD)
                         .limit(Int.MAX_VALUE)
                         .buildSingle()
-                        .doOnSuccess { firstPageItemAmount = it.size }
+                        .doOnSuccess { items -> firstPageItemAmount = items.size }
                         .flatMap { unreadResult ->
                             readSingle().map { readResult -> unreadResult + readResult }
                         }
@@ -47,8 +47,8 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
             }
             .doOnSuccess {
                 if (page == 0) {
-                    it.firstOrNull()?.date?.let {
-                        StorageHelper.lastNotificationsDate = it
+                    it.firstOrNull()?.date?.let { date ->
+                        StorageHelper.lastNotificationsDate = date
                     }
                 }
             }
@@ -110,7 +110,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors({
-                    data.value = data.value?.filterNot { it == item }
+                    data.value = data.value?.filterNot { newItem -> newItem == item }
 
                     doItemDeletion()
                 }, {

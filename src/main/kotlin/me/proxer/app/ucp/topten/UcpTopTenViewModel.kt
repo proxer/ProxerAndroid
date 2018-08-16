@@ -30,8 +30,8 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
         get() = Single.fromCallable { Validators.validateLogin() }
             .flatMap { api.ucp().topTen().buildSingle() }
             .map {
-                val animeList = it.filter { it.category == Category.ANIME }
-                val mangaList = it.filter { it.category == Category.MANGA }
+                val animeList = it.filter { entry -> entry.category == Category.ANIME }
+                val mangaList = it.filter { entry -> entry.category == Category.MANGA }
 
                 ZippedTopTenResult(animeList, mangaList)
             }
@@ -65,8 +65,8 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
                 .map {
                     data.value.let { currentData ->
                         if (currentData != null) {
-                            val filteredAnimeEntries = currentData.animeEntries.filterNot { it == item }
-                            val filteredMangaEntries = currentData.mangaEntries.filterNot { it == item }
+                            val filteredAnimeEntries = currentData.animeEntries.filterNot { newItem -> newItem == item }
+                            val filteredMangaEntries = currentData.mangaEntries.filterNot { newItem -> newItem == item }
 
                             ZippedTopTenResult(filteredAnimeEntries, filteredMangaEntries)
                         } else {

@@ -135,7 +135,7 @@ class AnimeActivity : DrawerActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
             .autoDisposable(this.scope())
-            .subscribe {
+            .subscribe { _ ->
                 name?.let {
                     MediaActivity.navigateTo(this, id, it, Category.ANIME)
                 }

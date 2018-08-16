@@ -168,8 +168,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
                 selection.clear()
                 selection.add(item)
 
-                itemContainer.childrenSequence().forEach {
-                    if (it is RadioButton && it != radioButton) it.isChecked = false
+                itemContainer.childrenSequence().forEach { view ->
+                    if (view is RadioButton && view != radioButton) view.isChecked = false
                 }
 
                 notifySelectionChangedListener()

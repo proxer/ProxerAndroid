@@ -163,8 +163,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
-        viewModel.resolutionResult.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        viewModel.resolutionResult.observe(viewLifecycleOwner, Observer { result ->
+            result?.let {
                 if (it.intent.action == Intent.ACTION_VIEW) {
                     if (it.intent.type == "text/html") {
                         showPage(Utils.getAndFixUrl(it.intent.safeData.toString()))
@@ -174,9 +174,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
                         ?.apply {
-                            view.applyRecursively {
-                                if (it is TextView && it !is Button) {
-                                    it.movementMethod = LinkMovementMethod.getInstance()
+                            view.applyRecursively { view ->
+                                if (view is TextView && view !is Button) {
+                                    view.movementMethod = LinkMovementMethod.getInstance()
                                 }
                             }
                         }
@@ -184,8 +184,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
         })
 
-        viewModel.resolutionError.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        viewModel.resolutionError.observe(viewLifecycleOwner, Observer { errorAction ->
+            errorAction?.let {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
                     else -> multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
@@ -195,13 +195,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         })
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }

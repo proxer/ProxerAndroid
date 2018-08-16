@@ -252,8 +252,8 @@ class CreateConferenceFragment : BaseFragment() {
             }
             .doOnError {
                 when (it) {
-                    is InvalidInputException -> it.message?.let {
-                        multilineSnackbar(root, it)
+                    is InvalidInputException -> it.message?.let { message ->
+                        multilineSnackbar(root, message)
                     }
                     is TopicEmptyException -> {
                         topicInputContainer.isErrorEnabled = true
@@ -315,7 +315,7 @@ class CreateConferenceFragment : BaseFragment() {
         })
 
         viewModel.result.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 requireActivity().finish()
 
                 MessengerActivity.navigateTo(requireActivity(), it)
@@ -323,9 +323,12 @@ class CreateConferenceFragment : BaseFragment() {
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 multilineSnackbar(
-                    root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                    root,
+                    it.message,
+                    Snackbar.LENGTH_LONG,
+                    it.buttonMessage,
                     it.toClickListener(hostingActivity)
                 )
             }

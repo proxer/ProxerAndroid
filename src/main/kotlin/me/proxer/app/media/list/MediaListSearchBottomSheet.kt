@@ -81,8 +81,8 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.genreData.observe(fragment, Observer {
             if (it != null) {
-                fragment.genreSelector.items = it.map { it.name }
-                fragment.excludedGenreSelector.items = it.map { it.name }
+                fragment.genreSelector.items = it.map { tag -> tag.name }
+                fragment.excludedGenreSelector.items = it.map { tag -> tag.name }
 
                 fragment.genreSelector.visibility = View.VISIBLE
                 fragment.excludedGenreSelector.visibility = View.VISIBLE
@@ -91,8 +91,8 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.tagData.observe(fragment, Observer {
             if (it != null) {
-                fragment.tagSelector.items = it.map { it.name }
-                fragment.excludedTagSelector.items = it.map { it.name }
+                fragment.tagSelector.items = it.map { tag -> tag.name }
+                fragment.excludedTagSelector.items = it.map { tag -> tag.name }
 
                 fragment.tagSelector.visibility = View.VISIBLE
                 fragment.excludedTagSelector.visibility = View.VISIBLE

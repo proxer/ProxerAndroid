@@ -46,7 +46,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
             super.onActive()
 
             addSource(source) {
-                it?.let {
+                it?.let { _ ->
                     if (StorageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
                             MessengerWorker.enqueueMessageLoad(safeConference.id)
@@ -96,7 +96,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
             super.onActive()
 
             addSource(source) {
-                it?.let { this.value = it }
+                it?.let { _ -> this.value = it }
             }
         }
 

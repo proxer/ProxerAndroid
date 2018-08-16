@@ -41,11 +41,11 @@ class LogoutDialog : BaseDialog() {
         super.onDialogCreated(savedInstanceState)
 
         viewModel.data.observe(dialogLifecycleOwner, Observer {
-            it?.let { dismiss() }
+            it?.let { _ -> dismiss() }
         })
 
         viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 viewModel.error.value = null
 
                 requireContext().longToast(it.message)

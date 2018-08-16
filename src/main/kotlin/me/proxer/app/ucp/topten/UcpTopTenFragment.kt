@@ -84,7 +84,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         mangaRecyclerView.adapter = mangaAdapter
 
         viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 multilineSnackbar(
                     root, getString(R.string.error_topten_entry_removal, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)

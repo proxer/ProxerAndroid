@@ -50,8 +50,8 @@ class DailymotionStreamResolver : StreamResolver {
                     }
                 }
             }
-            .map {
-                val qualitiesJson = regex.find(it)?.value ?: throw StreamResolutionException()
+            .map { html ->
+                val qualitiesJson = regex.find(html)?.value ?: throw StreamResolutionException()
                 val qualityMap = moshi.adapter(QualityMap::class.java)
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
@@ -71,10 +71,9 @@ class DailymotionStreamResolver : StreamResolver {
                     }
                 }?.flatten()?.sortedByDescending { it.first }
 
-                Uri.parse(mp4Links?.firstOrNull()?.second
-                    ?: throw StreamResolutionException()).let {
-                    StreamResolutionResult(it, "video/mp4")
-                }
+                val uri = Uri.parse(mp4Links?.firstOrNull()?.second) ?: throw StreamResolutionException()
+
+                StreamResolutionResult(uri, "video/mp4")
             }
     }
 

@@ -38,7 +38,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         get() = api.chat().messages(chatRoomId)
             .messageId(data.value?.lastOrNull()?.id ?: "0")
             .buildSingle()
-            .map { it.map { it.toParsedMessage() } }
+            .map { it.map { message -> message.toParsedMessage() } }
 
     val sendMessageError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
     val draft = ResettingMutableLiveData<String?>()
@@ -180,9 +180,9 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         pollingDisposable?.dispose()
         pollingDisposable = Single.fromCallable { Validators.validateLogin() }
             .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
-            .map { it.map { it.toParsedMessage() } }
-            .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
-            .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
+            .map { it.map { message -> message.toParsedMessage() } }
+            .repeatWhen { it.concatMap { _ -> Flowable.timer(3, TimeUnit.SECONDS) } }
+            .retryWhen { it.concatMap { _ -> Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
             .let { if (!immediate) it.delaySubscription(3, TimeUnit.SECONDS) else it }
             .subscribeOn(Schedulers.io())
@@ -208,14 +208,14 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors({
-                    it.toNullable()?.let {
-                        sentMessageIds.add(it)
+                    it.toNullable()?.let { id ->
+                        sentMessageIds.add(id)
 
                         startPolling(true)
                         doSendMessages()
                     }
                 }, {
-                    data.value = data.value?.dropWhile { it.id.toLong() < 0 }
+                    data.value = data.value?.dropWhile { message -> message.id.toLong() < 0 }
                     sendMessageQueue.clear()
 
                     sendMessageError.value = ErrorUtils.handle(it)

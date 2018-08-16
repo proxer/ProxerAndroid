@@ -104,7 +104,7 @@ class LoginDialog : BaseDialog() {
             it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
                 .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
                 .autoDisposable(dialogLifecycleOwner.scope())
-                .subscribe { validateAndLogin() }
+                .subscribe { _ -> validateAndLogin() }
         }
 
         listOf(username to usernameContainer, password to passwordContainer).forEach { (input, container) ->
@@ -128,7 +128,7 @@ class LoginDialog : BaseDialog() {
 
     private fun setupViewModel() {
         viewModel.data.observe(dialogLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 StorageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
 
                 bus.post(LoginEvent())
@@ -138,7 +138,7 @@ class LoginDialog : BaseDialog() {
         })
 
         viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 viewModel.error.value = null
 
                 requireContext().longToast(it.message)

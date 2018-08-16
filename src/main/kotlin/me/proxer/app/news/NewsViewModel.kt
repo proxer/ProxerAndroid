@@ -21,8 +21,8 @@ class NewsViewModel : PagedContentViewModel<NewsArticle>() {
     override val dataSingle: Single<List<NewsArticle>>
         get() = super.dataSingle.doOnSuccess {
             if (page == 0) {
-                it.firstOrNull()?.date?.let {
-                    StorageHelper.lastNewsDate = it
+                it.firstOrNull()?.date?.let { date ->
+                    StorageHelper.lastNewsDate = date
                 }
             }
         }

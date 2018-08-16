@@ -51,7 +51,18 @@ class NewsWidgetUpdateService : JobIntentService() {
         darkWidgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, true) }
 
         disposable = api.notifications().news().buildSingle()
-            .map { it.map { SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date) } }
+            .map { news ->
+                news.map {
+                    SimpleNews(
+                        it.id,
+                        it.threadId,
+                        it.categoryId,
+                        it.subject,
+                        it.category,
+                        it.date
+                    )
+                }
+            }
             .subscribeAndLogErrors({ news ->
                 widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
                 darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }

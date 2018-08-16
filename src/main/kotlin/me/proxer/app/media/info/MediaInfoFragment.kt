@@ -146,7 +146,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showUnratedTags = !showUnratedTags
 
-                viewModel.data.value?.let { bindTags(it.first) }
+                viewModel.data.value?.let { (entry) -> bindTags(entry) }
             }
 
         spoilerTags.clicks()
@@ -154,17 +154,17 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showSpoilerTags = !showSpoilerTags
 
-                viewModel.data.value?.let { bindTags(it.first) }
+                viewModel.data.value?.let { (entry) -> bindTags(entry) }
             }
 
         viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 root.post { snackbar(root, R.string.fragment_set_user_info_success) }
             }
         })
 
         viewModel.userInfoUpdateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 multilineSnackbar(
                     root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)

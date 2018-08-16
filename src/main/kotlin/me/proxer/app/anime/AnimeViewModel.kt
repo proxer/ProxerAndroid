@@ -46,12 +46,12 @@ class AnimeViewModel(
             .flatMap { entrySingle() }
             .flatMap {
                 Singles.zip(Single.just(it), streamSingle(it)) { entry, streams ->
-                    AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map {
-                        val resolver = StreamResolverFactory.resolverFor(it.hosterName)
+                    AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map { stream ->
+                        val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
                         val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
                         val official = resolver?.official ?: false
 
-                        it.toAnimeStreamInfo(resolver != null, internalPlayerOnly, official)
+                        stream.toAnimeStreamInfo(resolver != null, internalPlayerOnly, official)
                     })
                 }
             }
@@ -119,7 +119,7 @@ class AnimeViewModel(
     private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
         .includeProxerStreams(true)
         .buildPartialErrorSingle(entry)
-        .map { it.filterNot { StreamResolverFactory.resolverFor(it.hosterName)?.ignore == true } }
+        .map { it.filterNot { stream -> StreamResolverFactory.resolverFor(stream.hosterName)?.ignore == true } }
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         userStateDisposable?.dispose()

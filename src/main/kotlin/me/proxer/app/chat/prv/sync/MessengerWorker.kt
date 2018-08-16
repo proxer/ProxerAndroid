@@ -76,9 +76,7 @@ class MessengerWorker : Worker() {
                 } else {
                     StorageHelper.incrementChatInterval()
 
-                    StorageHelper.chatInterval.let {
-                        doEnqueue(it)
-                    }
+                    doEnqueue(StorageHelper.chatInterval)
                 }
             }
         }
@@ -305,7 +303,7 @@ class MessengerWorker : Worker() {
     private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
         api.messenger().markConferenceAsRead(it.id.toString())
             .build()
-            .also { currentCall = it }
+            .also { call -> currentCall = call }
             .execute()
     }
 

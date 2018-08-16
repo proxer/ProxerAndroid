@@ -32,7 +32,7 @@ class ProfileCommentViewModel(
                     .buildSingle()
             }
             .observeOn(Schedulers.computation())
-            .map { it.map { it.toParsedUserComment() } }
+            .map { it.map { comment -> comment.toParsedUserComment() } }
 
     var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()

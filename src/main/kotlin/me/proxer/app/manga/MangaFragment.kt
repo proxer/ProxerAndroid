@@ -231,13 +231,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         recyclerView.adapter = adapter
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 snackbar(activityRoot, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            it?.let { _ ->
                 multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
             }

@@ -200,7 +200,7 @@ class MangaActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
             .autoDisposable(this.scope())
-            .subscribe {
+            .subscribe { _ ->
                 name?.let {
                     MediaActivity.navigateTo(this, id, name, Category.MANGA)
                 }

@@ -55,11 +55,11 @@ abstract class DrawerActivity : BaseActivity() {
         drawer = MaterialDrawerWrapper(this, toolbar, savedInstanceState, isRootActivity, isMainActivity).also {
             it.itemClickSubject
                 .autoDisposable(this.scope())
-                .subscribe { handleDrawerItemClick(it) }
+                .subscribe { item -> handleDrawerItemClick(item) }
 
             it.accountClickSubject
                 .autoDisposable(this.scope())
-                .subscribe { handleAccountItemClick(it) }
+                .subscribe { item -> handleAccountItemClick(item) }
         }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))

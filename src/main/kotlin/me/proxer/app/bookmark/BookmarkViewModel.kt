@@ -81,7 +81,7 @@ class BookmarkViewModel(category: Category?) : PagedContentViewModel<Bookmark>()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors({
-                    data.value = data.value?.filterNot { it == item }
+                    data.value = data.value?.filterNot { newItem -> newItem == item }
 
                     doItemDeletion()
                 }, {

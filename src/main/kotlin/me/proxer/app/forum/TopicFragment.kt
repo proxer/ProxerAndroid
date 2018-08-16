@@ -74,7 +74,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         innerAdapter.glide = GlideApp.with(this)
 
         viewModel.metaData.observe(viewLifecycleOwner, Observer {
-            it?.let { topic = it.subject }
+            it?.let { _ -> topic = it.subject }
         })
     }
 
