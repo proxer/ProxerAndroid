@@ -51,6 +51,7 @@ import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.io.File
 import java.util.Date
@@ -250,9 +251,9 @@ class MainApplication : Application() {
                 .fromAction {
                     val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
                     val logFile = File(logDir, LocalDate.now().toString() + ".log").also { it.createNewFile() }
-                    val currentTime = LocalDateTime.now().toString()
+                    val currentTime = LocalDateTime.now().format(DateTimeFormatter.ISO_TIME)
 
-                    logFile.appendText("$currentTime  ${if (tag != null) "$tag: " else ""}$message")
+                    logFile.appendText("$currentTime  ${if (tag != null) "$tag: " else ""}$message\n")
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
