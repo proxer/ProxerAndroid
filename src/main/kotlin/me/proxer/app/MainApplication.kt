@@ -183,12 +183,14 @@ class MainApplication : Application() {
             .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
             .loggingTag("API")
             .loginTokenManager(ProxerLoginTokenManager())
-            .client(OkHttpClient.Builder()
-                .retryOnConnectionFailure(false)
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .build())
+            .client(
+                OkHttpClient.Builder()
+                    .retryOnConnectionFailure(false)
+                    .connectTimeout(5, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+            )
             .build()
     }
 
@@ -246,14 +248,21 @@ class MainApplication : Application() {
 
     private class FileTree : Timber.Tree() {
 
+        private companion object {
+            private val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        }
+
         override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
             Completable
                 .fromAction {
                     val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
-                    val logFile = File(logDir, LocalDate.now().toString() + ".log").also { it.createNewFile() }
-                    val currentTime = LocalDateTime.now().format(DateTimeFormatter.ISO_TIME)
+                    val logFile = File(logDir, "${LocalDate.now()}.log").also { it.createNewFile() }
+                    val currentTime = LocalDateTime.now().format(FORMAT)
 
-                    logFile.appendText("$currentTime  ${if (tag != null) "$tag: " else ""}$message\n")
+                    val maybeTag = if (tag != null) "$tag: " else ""
+                    val maybeNewline = if (message.endsWith("\n")) "" else "\n"
+
+                    logFile.appendText("$currentTime  $maybeTag$message$maybeNewline")
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
