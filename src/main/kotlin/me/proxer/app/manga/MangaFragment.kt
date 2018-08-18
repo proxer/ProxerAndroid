@@ -3,6 +3,7 @@ package me.proxer.app.manga
 import android.arch.lifecycle.Observer
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -58,6 +59,8 @@ import kotlin.properties.Delegates
 class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     companion object {
+        private const val LAST_POSITION_STATE = "fragment_manga_last_position"
+
         fun newInstance() = MangaFragment().apply {
             arguments = bundleOf()
         }
@@ -100,6 +103,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             hostingActivity.episodeAmount = value
         }
 
+    private var lastPosition: Parcelable? = null
+
     private var isVertical by Delegates.notNull<Boolean>()
 
     private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
@@ -129,6 +134,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lastPosition = savedInstanceState?.getParcelable(LAST_POSITION_STATE)
 
         isVertical = PreferenceHelper.isVerticalReaderEnabled(requireContext())
 
@@ -180,15 +187,19 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
 
-            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
-                horizontalMargin, verticalMargin)
+            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(
+                horizontalMargin, verticalMargin,
+                horizontalMargin, verticalMargin
+            )
         }
 
         footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
 
-            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(horizontalMargin, verticalMargin,
-                horizontalMargin, verticalMargin)
+            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(
+                horizontalMargin, verticalMargin,
+                horizontalMargin, verticalMargin
+            )
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
@@ -238,8 +249,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let { _ ->
-                multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
+                multilineSnackbar(
+                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
             }
         })
     }
@@ -286,6 +299,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         super.onSaveInstanceState(outState)
 
         innerAdapter.saveInstanceState(outState)
+
+        outState.putParcelable(LAST_POSITION_STATE, recyclerView.safeLayoutManager.onSaveInstanceState())
     }
 
     override fun showData(data: MangaChapterInfo) {
@@ -306,6 +321,12 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         data.chapter.pages?.let { pages ->
             innerAdapter.swapDataAndNotifyWithDiffing(pages)
+        }
+
+        lastPosition?.let {
+            recyclerView.safeLayoutManager.onRestoreInstanceState(it)
+
+            lastPosition = null
         }
     }
 
