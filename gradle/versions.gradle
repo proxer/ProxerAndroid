@@ -16,7 +16,7 @@ ext {
 
     // Core plugins
     androidPluginVersion = '3.3.0-alpha06'
-    kotlinVersion = '1.2.60'
+    kotlinVersion = '1.2.61'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC7-3'
@@ -33,7 +33,7 @@ ext {
     lifecycleVersion = '1.1.1'
     roomVersion = '1.1.1'
     workVersion = '1.0.0-alpha07'
-    proxerLibVersion = 'c474189044'
+    proxerLibVersion = 'db66d5448f'
 
     // RxJava
     rxJavaVersion = '2.2.0'
