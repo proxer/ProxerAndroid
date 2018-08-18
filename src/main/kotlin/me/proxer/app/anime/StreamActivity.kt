@@ -44,7 +44,7 @@ import preparedEvents
 class StreamActivity : BaseActivity() {
 
     private companion object {
-        private const val PREVIOUS_POSITION_EXTRA = "previous_position"
+        private const val LAST_POSITION_EXTRA = "last_position"
     }
 
     private val uri
@@ -58,10 +58,10 @@ class StreamActivity : BaseActivity() {
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val player: VideoView by bindView(R.id.player)
 
-    private var previousPosition: Long
-        get() = intent.getLongExtra(PREVIOUS_POSITION_EXTRA, -1)
+    private var lastPosition: Long
+        get() = intent.getLongExtra(LAST_POSITION_EXTRA, -1)
         set(value) {
-            intent.putExtra(PREVIOUS_POSITION_EXTRA, value)
+            intent.putExtra(LAST_POSITION_EXTRA, value)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,18 +82,26 @@ class StreamActivity : BaseActivity() {
 
             pausedInOnStop = false
         } else {
+            if (lastPosition > 0) {
+                player.seekTo(lastPosition)
+
+                lastPosition = -1
+            }
+
             player.preparedEvents()
                 .autoDisposable(this.scope())
                 .subscribe {
                     player.start()
-
-                    if (previousPosition > 0) {
-                        player.seekTo(previousPosition)
-
-                        previousPosition = -1
-                    }
                 }
         }
+    }
+
+    override fun onPause() {
+        if (player.currentPosition > 0) {
+            lastPosition = player.currentPosition
+        }
+
+        super.onPause()
     }
 
     override fun onStop() {
@@ -113,8 +121,10 @@ class StreamActivity : BaseActivity() {
     }
 
     private fun setupUi() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
@@ -147,6 +157,7 @@ class StreamActivity : BaseActivity() {
                     .colorRes(android.R.color.white)
                     .sizeDp(24)
             )
+
             it.setPreviousDrawable(
                 IconicsDrawable(this, CommunityMaterial.Icon.cmd_rewind)
                     .colorRes(android.R.color.white)
@@ -160,11 +171,10 @@ class StreamActivity : BaseActivity() {
                 override fun onRewindClicked() = false
                 override fun onFastForwardClicked() = false
 
-                override fun onNextClicked() =
-                    when (player.currentPosition + 15000L >= player.duration) {
-                        true -> player.seekTo(player.duration)
-                        false -> player.seekTo(player.currentPosition + 15000L)
-                    }.run { true }
+                override fun onNextClicked() = when (player.currentPosition + 15000L >= player.duration) {
+                    true -> player.seekTo(player.duration)
+                    false -> player.seekTo(player.currentPosition + 15000L)
+                }.run { true }
 
                 override fun onPreviousClicked() = when (player.currentPosition - 15000L <= 0L) {
                     true -> player.seekTo(0L)
@@ -182,7 +192,7 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { error ->
                 if (player.currentPosition > 0) {
-                    previousPosition = player.currentPosition
+                    lastPosition = player.currentPosition
                 }
 
                 ErrorUtils.handle(error).let { it ->
@@ -212,15 +222,18 @@ class StreamActivity : BaseActivity() {
 
     private fun toggleFullscreen(fullscreen: Boolean) {
         window.decorView.systemUiVisibility = when {
-            fullscreen -> SYSTEM_UI_FLAG_LOW_PROFILE or SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or SYSTEM_UI_FLAG_FULLSCREEN or SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            fullscreen -> SYSTEM_UI_FLAG_LOW_PROFILE or
+                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_FULLSCREEN or
+                SYSTEM_UI_FLAG_HIDE_NAVIGATION
             else -> SYSTEM_UI_FLAG_VISIBLE
         }
     }
 
-    private class ExoMediaDataSourceFactoryProvider(referer: String?) :
-        ExoMedia.DataSourceFactoryProvider {
+    private class ExoMediaDataSourceFactoryProvider(referer: String?) : ExoMedia.DataSourceFactoryProvider {
 
         val exoMediaClient: OkHttpClient = when (referer) {
             null -> client
