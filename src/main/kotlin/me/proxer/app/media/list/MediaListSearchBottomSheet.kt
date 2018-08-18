@@ -52,12 +52,12 @@ class MediaListSearchBottomSheet private constructor(
 
         fragment.includeUnratedTags.checkedChanges()
             .skipInitialValue()
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe { fragment.tagRateFilter = if (it) TagRateFilter.ALL else TagRateFilter.RATED_ONLY }
 
         fragment.includeSpoilerTags.checkedChanges()
             .skipInitialValue()
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe { fragment.tagSpoilerFilter = if (it) TagSpoilerFilter.ALL else TagSpoilerFilter.NO_SPOILERS }
 
         val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
@@ -102,7 +102,7 @@ class MediaListSearchBottomSheet private constructor(
 
     private fun initClickSubscriptions() {
         fragment.searchBottomSheetTitle.clicks()
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe {
                 bottomSheetBehaviour.state = when (bottomSheetBehaviour.state) {
                     STATE_EXPANDED -> STATE_COLLAPSED
@@ -111,7 +111,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.search.clicks()
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe {
                 fragment.searchView.clearFocus()
 
@@ -123,7 +123,7 @@ class MediaListSearchBottomSheet private constructor(
 
     private fun initSelectionSubscriptions() {
         fragment.languageSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors {
                 fragment.language = when {
                     it.firstOrNull() == fragment.getString(R.string.language_german) -> Language.GERMAN
@@ -133,7 +133,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.genreSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.genreData.value?.let { genreData ->
                     fragment.genres = selections.mapNotNull { selection -> genreData.find { it.name == selection } }
@@ -141,7 +141,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.excludedGenreSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.genreData.value?.let { genreData ->
                     fragment.excludedGenres = selections.mapNotNull { selection ->
@@ -151,7 +151,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.fskSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
                 fragment.fskConstraints = enumSetOf(selections.map {
                     ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
@@ -159,7 +159,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.tagSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.tagData.value?.let { tagData ->
                     fragment.tags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }
@@ -167,7 +167,7 @@ class MediaListSearchBottomSheet private constructor(
             }
 
         fragment.excludedTagSelector.selectionChangeSubject
-            .autoDisposable(fragment.scope())
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
                 viewModel.tagData.value?.let { tagData ->
                     fragment.excludedTags = selections.mapNotNull { selection -> tagData.find { it.name == selection } }
