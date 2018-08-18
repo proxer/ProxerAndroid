@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
@@ -44,6 +43,7 @@ import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
+import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
@@ -126,15 +126,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
 
     private fun preload(links: Map<String, String?>, next: String) {
-        val target = object : SimpleTarget<File>() {
-            override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                val afterNext = links[next]
-
-                if (afterNext != null) {
-                    preload(links, afterNext)
-                }
-            }
-        }
+        val target = GlidePreloadTarget(links, next)
 
         preloadTargets += target
 
@@ -264,7 +256,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             }
         }
 
-        internal inner class GlideFileTarget : SimpleTarget<File>() {
+        internal inner class GlideFileTarget : OriginalSizeGlideTarget<File>() {
 
             override fun onResourceReady(resource: File, transition: Transition<in File>?) {
                 Single.fromCallable { ImageSource.uri(resource.path) }
@@ -279,6 +271,20 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 errorIndicator.visibility = View.VISIBLE
                 image.visibility = View.GONE
+            }
+        }
+    }
+
+    internal inner class GlidePreloadTarget(
+        private val links: Map<String, String?>,
+        private val next: String
+    ) : OriginalSizeGlideTarget<File>() {
+
+        override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+            val afterNext = links[next]
+
+            if (afterNext != null) {
+                preload(links, afterNext)
             }
         }
     }

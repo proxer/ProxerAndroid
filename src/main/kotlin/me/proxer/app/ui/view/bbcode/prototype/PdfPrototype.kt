@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -38,6 +37,7 @@ import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
+import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import okhttp3.HttpUrl
 import org.jetbrains.anko.longToast
 import java.io.File
@@ -116,34 +116,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
     private fun loadImage(glide: GlideRequests, view: SubsamplingScaleImageView, url: HttpUrl?) = glide
         .download(url.toString())
-        .into(object : SimpleTarget<File>() {
-            override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-                view.setBitmapDecoderFactory { PDFDecoder(0, resource, 8f) }
-                view.setRegionDecoderFactory { PDFRegionDecoder(0, resource, 8f) }
-
-                view.setImage(ImageSource.uri(resource.absolutePath))
-
-                view.events()
-                    .publish()
-                    .also { observable ->
-                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
-                            .autoDisposable(ViewScopeProvider.from(view))
-                            .subscribe { handleLoadError(view) }
-
-                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
-                            .autoDisposable(ViewScopeProvider.from(view))
-                            .subscribe {
-                                view.setDoubleTapZoomScale(view.scale * 2.5f)
-                                view.maxScale = view.scale * 2.5f
-                            }
-                    }
-                    .connect()
-            }
-
-            override fun onLoadFailed(errorDrawable: Drawable?) {
-                handleLoadError(view)
-            }
-        })
+        .into(GlidePdfTarget(view))
 
     private fun handleLoadError(view: SubsamplingScaleImageView) {
         view.setTag(R.id.error_tag, true)
@@ -152,6 +125,51 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             .iconColor(view.context)
             .sizeDp(32)
             .toBitmap()))
+    }
+
+    private class GlidePdfTarget(view: SubsamplingScaleImageView) : OriginalSizeGlideTarget<File>() {
+
+        private var view: SubsamplingScaleImageView? = view
+        private var regionDecoder: PDFRegionDecoder? = null
+
+        override fun onResourceReady(resource: File, transition: Transition<in File>?) {
+            view?.also { safeView ->
+                regionDecoder = PDFRegionDecoder(0, resource, 8f).also {
+                    safeView.setRegionDecoderFactory { it }
+                }
+
+                safeView.setBitmapDecoderFactory { PDFDecoder(0, resource, 8f) }
+
+                safeView.setImage(ImageSource.uri(resource.absolutePath))
+
+                safeView.events()
+                    .publish()
+                    .also { observable ->
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe { handleLoadError(safeView) }
+
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe {
+                                safeView.setDoubleTapZoomScale(safeView.scale * 2.5f)
+                                safeView.maxScale = safeView.scale * 2.5f
+                            }
+                    }
+                    .connect()
+            }
+        }
+
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            view?.also { handleLoadError(it) }
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            regionDecoder?.recycle()
+            regionDecoder = null
+
+            view = null
+        }
     }
 
     private class UriClickableSpan(private val uri: Uri) : ClickableSpan() {
