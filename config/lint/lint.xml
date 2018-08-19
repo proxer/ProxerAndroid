@@ -12,8 +12,6 @@
     <issue id="NoHardKeywords" severity="error" />
     <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
     <issue id="RequiredSize" severity="error" />
-    <issue id="SelectableText" severity="informational" />
-    <issue id="SyntheticAccessor" severity="informational" />
     <issue id="UnknownNullness" severity="error" />
     <issue id="UnpackedNativeCode" severity="error" />
     <issue id="UnusedIds" severity="error" />
