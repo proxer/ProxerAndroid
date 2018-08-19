@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <lint>
-    <!-- Enable disabled lint checks. -->
-    <issue id="ConvertToWebp" severity="error" />
-    <issue id="EasterEgg" severity="error" />
-    <issue id="KotlinPropertyAccess" severity="error" />
-    <issue id="LambdaLast" severity="error" />
-    <issue id="LogConditional" severity="error" />
-    <issue id="MangledCRLF" severity="error" />
-    <issue id="MinSdkTooLow" severity="warning" />
-    <issue id="NegativeMargin" severity="error" />
-    <issue id="NoHardKeywords" severity="error" />
-    <issue id="PermissionImpliesUnsupportedChromeOsHardware" severity="error" />
-    <issue id="RequiredSize" severity="error" />
-    <issue id="UnknownNullness" severity="error" />
-    <issue id="UnpackedNativeCode" severity="error" />
-    <issue id="UnusedIds" severity="error" />
-    <issue id="WrongThreadInterprocedural" severity="error" />
+    <!-- Disable expensive and/or irrelevant checks. -->
+    <issue id="DuplicateStrings" severity="ignore" />
+    <issue id="GoogleAppIndexingApiWarning" severity="ignore" />
+    <issue id="SelectableText" severity="ignore" />
+    <issue id="SyntheticAccessor" severity="ignore" />
 
-    <!-- False positive, ignore for now. -->
-    <issue id="PrivateResource" severity="informational" />
+    <!-- Disable checks not working properly. -->
+    <issue id="IconExpectedSize" severity="ignore" />
 
     <!-- Ignore errors about packages not contained in Android. These are safe. -->
     <issue id="InvalidPackage" severity="error">
@@ -31,4 +20,7 @@
     <issue id="GifUsage">
         <ignore regexp="res/drawable-nodpi/o_.*[.]gif" />
     </issue>
+
+    <!-- Enable all lint checks with error severity, except for those listed above. -->
+    <issue id="all" severity="error" />
 </lint>
