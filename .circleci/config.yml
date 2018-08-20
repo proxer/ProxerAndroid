@@ -21,6 +21,7 @@ jobs:
           command: ./gradlew build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
                                           -Pkotlin.incremental=false --max-workers 1 --console=plain
                                           -Dkotlin.compiler.execution.strategy="in-process"
+          no_output_timeout: 30m
       - store_artifacts:
           path: build/reports
           destination: reports
