@@ -2,14 +2,14 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.ClipData
 import android.os.Build
-import android.support.v4.util.PatternsCompat
-import android.support.v4.widget.TextViewCompat
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import androidx.core.util.PatternsCompat
+import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Predicate

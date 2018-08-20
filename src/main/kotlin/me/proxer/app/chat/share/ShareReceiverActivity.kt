@@ -2,7 +2,7 @@ package me.proxer.app.chat.share
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity

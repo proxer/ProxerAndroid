@@ -4,15 +4,15 @@ package me.proxer.app.util.extension
 
 import android.animation.LayoutTransition
 import android.content.Context
-import android.support.v4.content.ContextCompat
-import android.support.v4.text.PrecomputedTextCompat
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.AppCompatTextView
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
+import androidx.core.text.PrecomputedTextCompat
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.R

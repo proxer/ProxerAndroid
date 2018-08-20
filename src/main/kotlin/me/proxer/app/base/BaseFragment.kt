@@ -1,7 +1,7 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import kotterknife.KotterKnife
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri

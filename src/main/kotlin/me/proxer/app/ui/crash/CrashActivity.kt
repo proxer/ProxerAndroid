@@ -2,9 +2,9 @@ package me.proxer.app.ui.crash
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash
 import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.jakewharton.rxbinding2.view.clicks

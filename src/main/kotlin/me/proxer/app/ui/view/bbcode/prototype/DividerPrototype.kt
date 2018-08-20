@@ -1,9 +1,9 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.core.content.ContextCompat
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView

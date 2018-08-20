@@ -1,16 +1,16 @@
 package me.proxer.app
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
-import android.support.multidex.MultiDex
-import android.support.v7.app.AppCompatDelegate
 import android.webkit.WebView
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
+import androidx.room.Room
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import cat.ereza.customactivityoncrash.config.CaocConfig

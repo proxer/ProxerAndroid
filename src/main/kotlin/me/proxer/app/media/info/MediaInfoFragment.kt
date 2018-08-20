@@ -1,11 +1,7 @@
 package me.proxer.app.media.info
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Observer
 import android.graphics.Typeface
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +11,12 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial

@@ -1,6 +1,6 @@
 package me.proxer.app.util.converter
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.FskConstraint

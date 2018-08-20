@@ -1,9 +1,9 @@
 package me.proxer.app.chat.prv
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device

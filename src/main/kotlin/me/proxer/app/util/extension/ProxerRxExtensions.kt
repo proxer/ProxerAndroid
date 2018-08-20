@@ -1,8 +1,8 @@
 package me.proxer.app.util.extension
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents

@@ -1,12 +1,9 @@
 package me.proxer.app.profile.about
 
-import android.arch.lifecycle.Lifecycle
 import android.content.ClipData
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +13,9 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope

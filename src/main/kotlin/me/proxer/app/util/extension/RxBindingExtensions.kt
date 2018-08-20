@@ -1,9 +1,9 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-import android.support.annotation.CheckResult
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.CheckResult
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import io.reactivex.Observable

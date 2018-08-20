@@ -7,12 +7,12 @@
     android:focusableInTouchMode="true"
     tools:context=".profile.topten.TopTenFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -49,7 +49,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/colorAccent" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/animeRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -72,14 +72,14 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/colorAccent" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/mangaRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include layout="@layout/layout_error" />
 </FrameLayout>

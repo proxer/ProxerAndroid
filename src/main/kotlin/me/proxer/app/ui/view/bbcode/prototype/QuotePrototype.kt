@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -8,6 +7,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
+import androidx.core.content.ContextCompat
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs

@@ -1,16 +1,8 @@
 package me.proxer.app.manga
 
-import android.arch.lifecycle.Observer
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
@@ -20,7 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.uber.autodispose.android.lifecycle.scope

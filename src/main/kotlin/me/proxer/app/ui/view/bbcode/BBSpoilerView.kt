@@ -1,7 +1,6 @@
 package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.ViewCompat
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable

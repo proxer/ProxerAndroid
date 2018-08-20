@@ -1,8 +1,8 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import me.proxer.library.entity.ProxerIdItem
 

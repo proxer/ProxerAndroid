@@ -1,12 +1,12 @@
 package me.proxer.app.chat.pub.room.info
 
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional

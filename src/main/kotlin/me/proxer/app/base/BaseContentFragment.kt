@@ -1,13 +1,13 @@
 package me.proxer.app.base
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope

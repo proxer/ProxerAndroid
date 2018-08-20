@@ -3,9 +3,6 @@ package me.proxer.app.ui.view
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatCheckBox
-import android.support.v7.widget.AppCompatRadioButton
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.View
@@ -15,6 +12,9 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.core.view.ViewCompat
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider

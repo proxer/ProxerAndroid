@@ -2,7 +2,7 @@ package me.proxer.app.util.wrapper
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout

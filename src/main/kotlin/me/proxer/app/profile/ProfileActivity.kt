@@ -2,11 +2,11 @@ package me.proxer.app.profile
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil

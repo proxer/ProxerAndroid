@@ -4,7 +4,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.RemoteInput
+import androidx.core.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.messengerDao

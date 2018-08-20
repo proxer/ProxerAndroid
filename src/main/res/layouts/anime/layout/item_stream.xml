@@ -7,7 +7,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".anime.AnimeAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -67,7 +67,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="This hoster is unstable" />
 
-                <android.support.design.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,5 +90,5 @@
 
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

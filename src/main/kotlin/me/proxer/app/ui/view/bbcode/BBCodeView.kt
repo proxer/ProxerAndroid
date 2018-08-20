@@ -2,10 +2,6 @@ package me.proxer.app.ui.view.bbcode
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.annotation.ColorInt
-import android.support.annotation.Px
-import android.support.annotation.StyleRes
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
@@ -15,6 +11,10 @@ import android.view.View.MeasureSpec.getSize
 import android.view.View.MeasureSpec.makeMeasureSpec
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.annotation.ColorInt
+import androidx.annotation.Px
+import androidx.annotation.StyleRes
+import androidx.core.view.ViewCompat
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.subjects.PublishSubject

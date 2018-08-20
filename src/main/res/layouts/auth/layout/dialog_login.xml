@@ -24,13 +24,13 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_username_hint">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,16 +38,16 @@
                 android:imeOptions="actionNext"
                 android:inputType="text"
                 android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_password_hint"
             app:passwordToggleEnabled="true">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,14 +56,14 @@
                 android:imeOptions="actionGo"
                 android:inputType="textPassword"
                 android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_secret_hint">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/secret"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 android:maxLines="1"
                 android:visibility="gone"
                 tools:visibility="visible" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/registrationInfo"

@@ -2,7 +2,7 @@ package me.proxer.app.settings
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R

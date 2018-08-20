@@ -8,8 +8,8 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
 import me.proxer.app.util.extension.androidUri

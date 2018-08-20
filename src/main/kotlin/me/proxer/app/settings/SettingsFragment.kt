@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.prv.sync.MessengerWorker

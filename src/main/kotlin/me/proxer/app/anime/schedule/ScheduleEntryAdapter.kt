@@ -1,9 +1,6 @@
 package me.proxer.app.anime.schedule
 
 import android.graphics.Typeface.BOLD
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
 import android.text.SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
@@ -18,6 +15,9 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable

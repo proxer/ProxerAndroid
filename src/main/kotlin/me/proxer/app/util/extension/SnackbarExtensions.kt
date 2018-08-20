@@ -3,12 +3,12 @@
 package me.proxer.app.util.extension
 
 import android.app.Activity
-import android.support.design.widget.Snackbar
-import android.support.design.widget.Snackbar.LENGTH_LONG
-import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE

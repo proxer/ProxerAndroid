@@ -8,9 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.widget.EditText
+import androidx.recyclerview.widget.RecyclerView
 
 inline val RecyclerView.safeLayoutManager: RecyclerView.LayoutManager
     get() = layoutManager ?: throw IllegalStateException("layoutManager is null")

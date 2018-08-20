@@ -3,7 +3,7 @@ package me.proxer.app.ui.crash
 import android.app.Dialog
 import android.content.ClipData
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog

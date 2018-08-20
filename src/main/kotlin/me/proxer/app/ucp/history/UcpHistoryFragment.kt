@@ -1,8 +1,8 @@
 package me.proxer.app.ucp.history
 
 import android.os.Bundle
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp

@@ -1,10 +1,10 @@
 package me.proxer.app.chat.pub.room
 
-import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks

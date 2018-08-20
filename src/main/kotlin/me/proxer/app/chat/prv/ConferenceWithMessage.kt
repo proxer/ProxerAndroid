@@ -1,6 +1,6 @@
 package me.proxer.app.chat.prv
 
-import android.arch.persistence.room.Embedded
+import androidx.room.Embedded
 import me.proxer.library.enums.MessageAction
 
 /**

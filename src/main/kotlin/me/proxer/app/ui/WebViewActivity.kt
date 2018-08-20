@@ -3,11 +3,11 @@ package me.proxer.app.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import kotterknife.bindView
 import me.proxer.app.R
 import org.jetbrains.anko.startActivity

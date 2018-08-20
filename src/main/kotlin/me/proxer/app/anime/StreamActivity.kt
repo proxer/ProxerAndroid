@@ -2,9 +2,9 @@ package me.proxer.app.anime
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.devbrackets.android.exomedia.ExoMedia
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener

@@ -2,14 +2,14 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatImageView
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.load.engine.GlideException
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial

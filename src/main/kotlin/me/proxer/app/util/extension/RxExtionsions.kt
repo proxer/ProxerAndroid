@@ -3,7 +3,7 @@
 package me.proxer.app.util.extension
 
 import android.os.Looper
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
 import io.reactivex.Completable

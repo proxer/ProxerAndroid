@@ -1,17 +1,17 @@
 package me.proxer.app.chat.share
 
-import android.arch.lifecycle.Lifecycle
 import android.os.Bundle
-import android.support.transition.TransitionManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.support.v7.widget.StaggeredGridLayoutManager
-import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.transition.TransitionManager
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil

@@ -7,7 +7,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".media.discussion.DiscussionAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,5 +40,5 @@
                 tools:text="By RubyGee in News" />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

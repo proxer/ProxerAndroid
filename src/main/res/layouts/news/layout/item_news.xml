@@ -8,7 +8,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".news.NewsAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -106,5 +106,5 @@
                     tools:text="Anime and Managa" />
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

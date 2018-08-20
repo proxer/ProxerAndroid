@@ -1,7 +1,7 @@
 package me.proxer.app.chat.prv.conference
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

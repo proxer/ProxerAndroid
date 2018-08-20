@@ -7,7 +7,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".media.comment.CommentAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -316,5 +316,5 @@
                     tools:text="Finished" />
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

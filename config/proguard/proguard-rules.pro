@@ -14,10 +14,6 @@
     public static int wtf(...);
 }
 
-# Don't warn about classes referenced from dependencies.
--dontwarn android.arch.paging.PositionalDataSource
--dontwarn com.google.gson.reflect.TypeToken
-
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
@@ -32,6 +28,12 @@
 
 # ExoMedia
 -dontwarn com.devbrackets.android.exomedia.core.exoplayer.ExoMediaPlayer$DelegatedMediaDrmCallback
+
+# RxBinding
+-dontwarn com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEventObservable$Listener
+-dontwarn com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEventObservable
+-dontwarn com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionsObservable$Listener
+-dontwarn com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionsObservable
 
 # Moshi
 -keep @com.squareup.moshi.JsonQualifier interface *

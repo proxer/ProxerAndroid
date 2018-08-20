@@ -1,6 +1,6 @@
 package me.proxer.app.chat.prv.message
 
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.MediatorLiveData
 import com.gojuno.koptional.Some
 import com.gojuno.koptional.toOptional
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider

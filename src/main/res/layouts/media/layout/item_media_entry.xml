@@ -8,7 +8,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".media.list.MediaAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -143,5 +143,5 @@
 
             </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

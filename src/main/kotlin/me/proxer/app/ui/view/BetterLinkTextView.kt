@@ -2,10 +2,10 @@ package me.proxer.app.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.text.Spannable
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.appcompat.widget.AppCompatTextView
 import me.proxer.app.R
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 

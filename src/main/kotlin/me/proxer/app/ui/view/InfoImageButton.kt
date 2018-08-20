@@ -1,9 +1,9 @@
 package me.proxer.app.ui.view
 
 import android.content.Context
-import android.support.v7.widget.AppCompatImageButton
-import android.support.v7.widget.TooltipCompat
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.TooltipCompat
 
 /**
  * @author Ruben Gees

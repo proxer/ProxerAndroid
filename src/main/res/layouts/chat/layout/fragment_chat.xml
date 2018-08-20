@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         app:layout_dodgeInsetEdges="all">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="@dimen/item_margin">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,7 +36,7 @@
                 app:fastScrollVerticalThumbDrawable="@drawable/fastscroll_thumb"
                 app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:layout_above="@+id/inputContainer"
             android:animateLayoutChanges="true">
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/scrollToBottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,4 +69,4 @@
             android:visibility="gone"
             tools:visibility="visible" />
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

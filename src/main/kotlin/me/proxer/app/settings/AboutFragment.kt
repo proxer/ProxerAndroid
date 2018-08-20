@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem

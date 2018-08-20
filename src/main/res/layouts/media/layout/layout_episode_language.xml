@@ -40,7 +40,7 @@
         app:flexWrap="wrap"
         app:justifyContent="center" />
 
-    <android.support.v4.widget.Space
+    <androidx.legacy.widget.Space
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:layout_below="@+id/hosters" />

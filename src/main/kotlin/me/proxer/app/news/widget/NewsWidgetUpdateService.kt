@@ -6,9 +6,9 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.support.v4.app.JobIntentService
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.app.JobIntentService
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable

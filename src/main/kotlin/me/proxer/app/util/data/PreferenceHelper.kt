@@ -2,7 +2,7 @@ package me.proxer.app.util.data
 
 import android.content.Context
 import android.preference.PreferenceManager.getDefaultSharedPreferences
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 

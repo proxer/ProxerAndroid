@@ -16,9 +16,9 @@
 
 package me.proxer.app.base
 
-import android.support.v7.widget.BindAwareViewHolder
-import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
+import androidx.recyclerview.widget.BindAwareViewHolder
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.uber.autodispose.ScopeProvider
 import io.reactivex.Maybe
 import io.reactivex.subjects.MaybeSubject

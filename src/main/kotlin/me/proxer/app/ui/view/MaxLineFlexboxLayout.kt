@@ -2,8 +2,6 @@ package me.proxer.app.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -13,6 +11,8 @@ import android.view.View.MeasureSpec.makeMeasureSpec
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider

@@ -1,11 +1,11 @@
 package me.proxer.app.media.list
 
-import android.arch.lifecycle.Observer
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED
-import android.support.design.widget.BottomSheetBehavior.STATE_EXPANDED
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.checkedChanges
 import com.uber.autodispose.android.lifecycle.scope

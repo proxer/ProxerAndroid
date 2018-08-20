@@ -1,11 +1,11 @@
 package me.proxer.app.info.industry
 
 import android.app.Activity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.ShareCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity

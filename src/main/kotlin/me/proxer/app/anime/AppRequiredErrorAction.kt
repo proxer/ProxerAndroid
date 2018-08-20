@@ -1,6 +1,6 @@
 package me.proxer.app.anime
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import me.proxer.app.util.ErrorUtils
 
 /**

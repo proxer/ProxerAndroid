@@ -8,7 +8,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".info.industry.IndustryProjectAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foreground="?attr/selectableItemBackground"
@@ -88,5 +88,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="In progress" />
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

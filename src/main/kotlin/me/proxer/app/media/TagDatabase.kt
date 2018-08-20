@@ -1,8 +1,8 @@
 package me.proxer.app.media
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import me.proxer.app.util.converter.RoomConverters
 
 /**

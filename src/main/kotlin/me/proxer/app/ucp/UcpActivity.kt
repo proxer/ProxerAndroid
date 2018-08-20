@@ -2,10 +2,10 @@ package me.proxer.app.ucp
 
 import android.app.Activity
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R

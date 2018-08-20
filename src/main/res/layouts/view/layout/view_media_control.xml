@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.MediaControlView">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
 
             <include layout="@layout/layout_upload_info" />
 
-            <android.support.v7.widget.GridLayout
+            <androidx.gridlayout.widget.GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/item_margin"
@@ -83,7 +83,7 @@
                     app:layout_rowWeight="1"
                     tools:text="bookmark next" />
 
-            </android.support.v7.widget.GridLayout>
+            </androidx.gridlayout.widget.GridLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </merge>

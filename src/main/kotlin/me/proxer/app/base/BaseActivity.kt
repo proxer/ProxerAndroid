@@ -1,8 +1,8 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage

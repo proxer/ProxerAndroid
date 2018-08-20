@@ -7,7 +7,7 @@
     android:padding="@dimen/item_margin"
     tools:context=".profile.media.ProfileMediaAdapter">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -106,5 +106,5 @@
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/ic_japan" />
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>

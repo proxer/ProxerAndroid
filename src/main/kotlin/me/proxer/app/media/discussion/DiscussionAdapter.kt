@@ -1,7 +1,6 @@
 package me.proxer.app.media.discussion
 
 import android.graphics.Typeface
-import android.support.v7.widget.AppCompatTextView
 import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject

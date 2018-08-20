@@ -3,9 +3,9 @@ package me.proxer.app.ui
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope

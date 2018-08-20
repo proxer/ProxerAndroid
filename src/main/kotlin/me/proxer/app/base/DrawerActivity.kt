@@ -1,9 +1,9 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.v7.widget.Toolbar
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.AppBarLayout
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable

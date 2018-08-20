@@ -1,11 +1,7 @@
 package me.proxer.app.chat.prv.message
 
-import android.arch.lifecycle.Observer
 import android.content.ClipData
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +10,10 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.appcompat.view.ActionMode
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges

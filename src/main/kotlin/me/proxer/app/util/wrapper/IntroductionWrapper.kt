@@ -2,9 +2,9 @@ package me.proxer.app.util.wrapper
 
 import android.app.Activity
 import android.content.Context
-import android.support.v7.content.res.AppCompatResources
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option

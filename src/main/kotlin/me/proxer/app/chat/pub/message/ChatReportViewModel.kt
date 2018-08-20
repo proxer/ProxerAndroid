@@ -1,7 +1,7 @@
 package me.proxer.app.chat.pub.message
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

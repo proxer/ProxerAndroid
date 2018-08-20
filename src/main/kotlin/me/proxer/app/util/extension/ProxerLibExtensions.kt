@@ -3,7 +3,7 @@
 package me.proxer.app.util.extension
 
 import android.content.Context
-import android.support.v7.content.res.AppCompatResources
+import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R

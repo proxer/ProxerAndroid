@@ -1,6 +1,6 @@
 package me.proxer.app.media.list
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

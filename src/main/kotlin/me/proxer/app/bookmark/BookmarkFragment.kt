@@ -1,14 +1,14 @@
 package me.proxer.app.bookmark
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.StaggeredGridLayoutManager
-import android.support.v7.widget.StaggeredGridLayoutManager.VERTICAL
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable

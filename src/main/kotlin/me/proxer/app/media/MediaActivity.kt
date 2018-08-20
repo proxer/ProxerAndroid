@@ -1,16 +1,16 @@
 package me.proxer.app.media
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import androidx.core.app.ShareCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Observer
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity

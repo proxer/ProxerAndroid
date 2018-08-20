@@ -6,8 +6,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.v4.app.ShareCompat
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -17,6 +15,8 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
+import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ShareCompat
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil

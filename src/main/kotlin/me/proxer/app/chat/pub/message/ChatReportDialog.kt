@@ -1,17 +1,17 @@
 package me.proxer.app.chat.pub.message
 
 import android.app.Dialog
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding2.widget.editorActionEvents
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.android.lifecycle.scope

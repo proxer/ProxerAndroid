@@ -1,12 +1,12 @@
 package me.proxer.app.auth
 
 import android.app.Dialog
-import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import kotterknife.bindView
 import me.proxer.app.R

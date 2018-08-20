@@ -1,9 +1,9 @@
 package me.proxer.app.media
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import me.proxer.app.util.extension.readStringSafely
 import me.proxer.library.enums.TagSubType
 import me.proxer.library.enums.TagType

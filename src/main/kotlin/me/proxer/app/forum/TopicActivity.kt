@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ShareCompat
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.ShareCompat
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
