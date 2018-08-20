@@ -244,11 +244,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             // This happens on certain devices with certain images due to a buggy Skia library version.
             // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
             // use, show the error indicator.
+            Timber.e(error)
+
             if (requiresFallback[data[position].decodedName] == true) {
                 errorIndicator.visibility = View.VISIBLE
                 image.visibility = View.GONE
-
-                Timber.e(error)
             } else {
                 requiresFallback.put(data[position].decodedName, true)
 
