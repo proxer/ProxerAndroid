@@ -24,7 +24,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
-import com.squareup.leakcanary.RefWatcher
 import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
@@ -95,9 +94,6 @@ class MainApplication : Application() {
 
         var globalContext by Delegates.notNull<Context>()
             private set
-
-        var refWatcher by Delegates.notNull<RefWatcher>()
-            private set
     }
 
     override fun onCreate() {
@@ -107,7 +103,8 @@ class MainApplication : Application() {
             return
         }
 
-        refWatcher = LeakCanary.install(this)
+        LeakCanary.install(this)
+
         globalContext = this
 
         val hasExternalStorage = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED

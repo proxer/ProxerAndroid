@@ -7,7 +7,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import kotterknife.KotterKnife
-import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -91,12 +90,6 @@ abstract class BaseDialog : DialogFragment() {
         KotterKnife.reset(this)
 
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        refWatcher.watch(this)
     }
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit

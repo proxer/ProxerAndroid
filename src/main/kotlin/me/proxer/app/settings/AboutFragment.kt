@@ -19,7 +19,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.messengerDao
-import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
@@ -73,12 +72,6 @@ class AboutFragment : MaterialAboutFragment() {
         super.onCreate(savedInstanceState)
 
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        refWatcher.watch(this)
     }
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()

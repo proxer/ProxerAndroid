@@ -7,7 +7,6 @@ import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.R
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
@@ -74,12 +73,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
 
         super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        refWatcher.watch(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

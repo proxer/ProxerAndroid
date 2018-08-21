@@ -3,7 +3,6 @@ package me.proxer.app.base
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import kotterknife.KotterKnife
-import me.proxer.app.MainApplication.Companion.refWatcher
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -32,12 +31,6 @@ abstract class BaseFragment : Fragment() {
         KotterKnife.reset(this)
 
         super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        refWatcher.watch(this)
     }
 
     fun setLikelyUrl(url: HttpUrl): Boolean {
