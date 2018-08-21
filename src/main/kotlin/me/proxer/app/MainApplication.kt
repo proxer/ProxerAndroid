@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Environment
+import android.os.Looper
 import android.webkit.WebView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
@@ -28,6 +29,8 @@ import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.Completable
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -219,6 +222,9 @@ class MainApplication : Application() {
                 else -> Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), error)
             }
         }
+
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
+        RxAndroidPlugins.setMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
