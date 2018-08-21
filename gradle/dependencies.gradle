@@ -62,7 +62,7 @@ ext {
             exomedia                         : "com.github.brianwernick:exomedia:$exomediaVersion",
             materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
-            customtabsHelper                 : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
+            customtabsHelper                 : "com.github.rubengees:CustomTabsHelper:$customtabsHelperVersion",
             introduction                     : "com.github.rubengees:introduction:$introductionVersion",
             materialBadgeView                : "com.github.matrixxun:MaterialBadgeTextView:$materialBadgeViewVersion",
             aspectRatioImageView             : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
