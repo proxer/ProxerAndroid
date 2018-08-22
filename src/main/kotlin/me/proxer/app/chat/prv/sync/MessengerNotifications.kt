@@ -155,6 +155,7 @@ object MessengerNotifications {
         val icon = buildIndividualIcon(context, conference)
         val style = buildIndividualStyle(messages, conference, user, icon)
         val intent = TaskStackBuilder.create(context)
+            .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(MessengerActivity.getIntent(context, conference))
             .getPendingIntent(conference.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
