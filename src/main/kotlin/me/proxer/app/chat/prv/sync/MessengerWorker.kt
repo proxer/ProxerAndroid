@@ -138,23 +138,20 @@ class MessengerWorker : Worker() {
 
         StorageHelper.areConferencesSynchronized = true
 
-        if (newConferencesAndMessages.isNotEmpty() && !isStopped) {
+        val maxNewDate = newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date
+
+        return if (!isStopped && maxNewDate != null && maxNewDate > StorageHelper.lastChatMessageDate) {
             bus.post(SynchronizationEvent())
 
             if (canShowNotification(applicationContext)) {
                 showNotification(applicationContext)
             }
-        }
 
-        newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date?.let { mostRecentDate ->
-            if (mostRecentDate > StorageHelper.lastChatMessageDate) {
-                StorageHelper.lastChatMessageDate = mostRecentDate
-            }
-        }
+            StorageHelper.lastChatMessageDate = maxNewDate
 
-        return when (newConferencesAndMessages.isNotEmpty()) {
-            true -> SynchronizationResult.CHANGES
-            false -> SynchronizationResult.NO_CHANGES
+            SynchronizationResult.CHANGES
+        } else {
+            SynchronizationResult.NO_CHANGES
         }
     }
 
