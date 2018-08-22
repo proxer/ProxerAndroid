@@ -456,6 +456,9 @@
     <string name="fragment_manga_bookmark_next_chapter">Lesezeichen: Nächstes Kapitel</string>
     <string name="fragment_manga_bookmark_this_chapter">Lesezeichen: Dieses Kapitel</string>
     <string name="fragment_manga_toggle_orientation">Leserichtung ändern</string>
+    <string name="fragment_manga_low_memory">
+        Dein Gerät hat zu wenig Speicher. Eventuell werden Seiten nicht korrekt angezeigt
+    </string>
 
     <string name="fragment_translator_group_description">Beschreibung</string>
     <string name="fragment_translator_group_language">Sprache</string>

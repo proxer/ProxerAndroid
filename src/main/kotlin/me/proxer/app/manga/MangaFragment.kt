@@ -60,6 +60,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     companion object {
         private const val LAST_POSITION_STATE = "fragment_manga_last_position"
+        private const val LOW_MEMORY_STATE = "fragment_manga_low_memory"
 
         fun newInstance() = MangaFragment().apply {
             arguments = bundleOf()
@@ -103,8 +104,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             hostingActivity.episodeAmount = value
         }
 
+    private var hasLowMemory = false
     private var lastPosition: Parcelable? = null
-
     private var isVertical by Delegates.notNull<Boolean>()
 
     private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
@@ -122,6 +123,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private var gravityPagerSnapHelper: GravityPagerSnapHelper? = null
 
+    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
+    private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
+
     override val contentContainer: ViewGroup
         get() = recyclerView
 
@@ -129,13 +133,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
-    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
-    private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lastPosition = savedInstanceState?.getParcelable(LAST_POSITION_STATE)
+        hasLowMemory = savedInstanceState?.getByte(LOW_MEMORY_STATE) == 1.toByte()
 
         isVertical = PreferenceHelper.isVerticalReaderEnabled(requireContext())
 
@@ -172,6 +174,16 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                     } else {
                         recyclerView.smoothScrollToPosition(position + 1)
                     }
+                }
+            }
+
+        innerAdapter.lowMemorySubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                if (!hasLowMemory) {
+                    multilineSnackbar(activityRoot, R.string.fragment_manga_low_memory)
+
+                    hasLowMemory = true
                 }
             }
 
@@ -301,6 +313,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.saveInstanceState(outState)
 
         outState.putParcelable(LAST_POSITION_STATE, recyclerView.safeLayoutManager.onSaveInstanceState())
+        outState.putByte(LOW_MEMORY_STATE, if (hasLowMemory) 1 else 0)
     }
 
     override fun showData(data: MangaChapterInfo) {

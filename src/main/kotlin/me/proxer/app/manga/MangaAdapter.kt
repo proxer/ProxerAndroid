@@ -63,6 +63,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Triple<View, Pair<Float, Float>, Int>> = PublishSubject.create()
+    val lowMemorySubject: PublishSubject<Unit> = PublishSubject.create()
 
     var server by Delegates.notNull<String>()
     var entryId by Delegates.notNull<String>()
@@ -85,7 +86,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     override fun getItemId(position: Int) = data[position].decodedName.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
@@ -123,7 +126,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         holder.image.recycle()
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
+    override fun saveInstanceState(outState: Bundle) =
+        outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
 
     private fun preload(links: Map<String, String?>, next: String) {
         val target = GlidePreloadTarget(links, next)
@@ -138,7 +142,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
-        private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+        private val shortAnimationTime =
+            itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
@@ -246,13 +251,17 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             // use, show the error indicator.
             Timber.e(error)
 
-            if (requiresFallback[data[position].decodedName] == true) {
-                errorIndicator.visibility = View.VISIBLE
-                image.visibility = View.GONE
-            } else {
-                requiresFallback.put(data[position].decodedName, true)
+            when {
+                error is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
+                requiresFallback[data[position].decodedName] == true -> {
+                    errorIndicator.visibility = View.VISIBLE
+                    image.visibility = View.GONE
+                }
+                else -> {
+                    requiresFallback.put(data[position].decodedName, true)
 
-                bind(data[position])
+                    bind(data[position])
+                }
             }
         }
 
