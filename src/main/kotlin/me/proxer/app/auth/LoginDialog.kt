@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding2.widget.editorActionEvents
@@ -65,15 +66,12 @@ class LoginDialog : BaseDialog() {
         setLikelyUrl(ProxerUrls.webBase())
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-        .autoDismiss(false)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
+        .noAutoDismiss()
         .title(R.string.dialog_login_title)
-        .positiveText(R.string.dialog_login_positive)
-        .negativeText(R.string.cancel)
-        .onPositive { _, _ -> validateAndLogin() }
-        .onNegative { _, _ -> dismiss() }
-        .customView(R.layout.dialog_login, true)
-        .build()
+        .positiveButton(R.string.dialog_login_positive) { validateAndLogin() }
+        .negativeButton(R.string.cancel) { it.dismiss() }
+        .customView(R.layout.dialog_login, scrollable = true)
 
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)

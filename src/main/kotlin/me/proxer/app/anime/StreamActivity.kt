@@ -6,6 +6,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onCancel
 import com.devbrackets.android.exomedia.ExoMedia
 import com.devbrackets.android.exomedia.listener.VideoControlsButtonListener
 import com.devbrackets.android.exomedia.listener.VideoControlsVisibilityListener
@@ -196,16 +197,14 @@ class StreamActivity : BaseActivity() {
                 }
 
                 ErrorUtils.handle(error).let { it ->
-                    MaterialDialog.Builder(this)
-                        .content(it.message)
-                        .positiveText(R.string.error_action_retry)
-                        .negativeText(R.string.error_action_finish)
-                        .onPositive { _, _ ->
+                    MaterialDialog(this)
+                        .message(it.message)
+                        .positiveButton(R.string.error_action_retry) {
                             player.reset()
                             player.setVideoURI(uri)
                         }
-                        .onNegative { _, _ -> finish() }
-                        .cancelListener { finish() }
+                        .negativeButton(R.string.error_action_finish) { finish() }
+                        .onCancel { finish() }
                         .show()
                 }
             }

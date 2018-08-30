@@ -28,12 +28,10 @@ class AppRequiredDialog : BaseDialog() {
     private val name get() = requireArguments().getString(NAME_ARGUMENT)
     private val packageName get() = requireArguments().getString(PACKAGE_NAME_ARGUMENT)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-        .title(getString(R.string.dialog_app_required_title, name))
-        .content(getString(R.string.dialog_app_required_content, name))
-        .positiveText(R.string.dialog_app_required_positive)
-        .negativeText(R.string.cancel)
-        .onPositive { _, _ ->
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
+        .title(text = getString(R.string.dialog_app_required_title, name))
+        .message(text = getString(R.string.dialog_app_required_content, name))
+        .positiveButton(R.string.dialog_app_required_positive) {
             try {
                 requireContext().startActivity(Intent(Intent.ACTION_VIEW,
                     Uri.parse("market://details?id=$packageName")))
@@ -42,5 +40,5 @@ class AppRequiredDialog : BaseDialog() {
                     Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
             }
         }
-        .build()
+        .negativeButton(R.string.cancel)
 }

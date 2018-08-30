@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
@@ -28,14 +29,11 @@ class LogoutDialog : BaseDialog() {
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-        .autoDismiss(false)
-        .positiveText(R.string.dialog_logout_positive)
-        .negativeText(R.string.cancel)
-        .onPositive { _, _ -> viewModel.logout() }
-        .onNegative { _, _ -> dismiss() }
-        .customView(R.layout.dialog_logout, true)
-        .build()
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
+        .noAutoDismiss()
+        .positiveButton(R.string.dialog_logout_positive) { viewModel.logout() }
+        .negativeButton(R.string.cancel) { dismiss() }
+        .customView(R.layout.dialog_logout, scrollable = true)
 
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)

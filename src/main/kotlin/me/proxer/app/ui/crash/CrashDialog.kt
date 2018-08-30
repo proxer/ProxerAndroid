@@ -28,16 +28,15 @@ class CrashDialog : BaseDialog() {
     private val errorDetails: String
         get() = requireArguments().getSafeString(ERROR_DETAILS_ARGUMENT)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
+    @Suppress("DEPRECATION")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
         .title(R.string.dialog_crash_title)
-        .content(errorDetails)
-        .neutralText(R.string.dialog_crash_neutral)
-        .negativeText(R.string.dialog_crash_negative)
-        .onNeutral { _, _ ->
+        .message(text = errorDetails)
+        .neutralButton(R.string.dialog_crash_neutral) {
             requireContext().clipboardManager.primaryClip = ClipData
                 .newPlainText(getString(R.string.clipboard_crash_title), errorDetails)
 
             requireContext().toast(R.string.clipboard_status)
         }
-        .build()
+        .negativeButton(R.string.dialog_crash_negative)
 }

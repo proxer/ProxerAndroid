@@ -13,9 +13,6 @@ buildscript {
 
     dependencies {
         classpathDependencies.values().each { classpath it }
-
-        // TODO: Temporary solution to work around bugs in previous Jetifier versions. Remove once working.
-        classpath 'com.android.tools.build.jetifier:jetifier-processor:1.0.0-alpha10'
     }
 }
 

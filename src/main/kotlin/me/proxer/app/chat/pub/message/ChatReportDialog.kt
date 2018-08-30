@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding2.widget.editorActionEvents
@@ -49,15 +50,12 @@ class ChatReportDialog : BaseDialog() {
     private val messageId: String
         get() = requireArguments().getSafeString(MESSAGE_ID_ARGUMENT)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-        .autoDismiss(false)
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
+        .noAutoDismiss()
         .title(R.string.dialog_chat_report_title)
-        .positiveText(R.string.dialog_chat_report_positive)
-        .negativeText(R.string.cancel)
-        .onPositive { _, _ -> validateAndSendReport() }
-        .onNegative { _, _ -> dismiss() }
-        .customView(R.layout.dialog_chat_report, true)
-        .build()
+        .positiveButton(R.string.dialog_chat_report_positive) { validateAndSendReport() }
+        .negativeButton(R.string.cancel) { dismiss() }
+        .customView(R.layout.dialog_chat_report, scrollable = true)
 
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)

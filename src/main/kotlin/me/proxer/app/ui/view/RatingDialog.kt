@@ -22,23 +22,31 @@ class RatingDialog : BaseDialog() {
             .show(activity.supportFragmentManager, "rating_dialog")
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog.Builder(requireContext())
-        .title(getString(R.string.dialog_rating_title))
-        .content(getString(R.string.dialog_rating_content))
-        .positiveText(getString(R.string.dialog_rating_positive))
-        .neutralText(getString(R.string.dialog_rating_neutral))
-        .negativeText(getString(R.string.dialog_rating_negative))
-        .onPositive { _, _ ->
+    @Suppress("DEPRECATION")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
+        .title(R.string.dialog_rating_title)
+        .message(R.string.dialog_rating_content)
+        .positiveButton(R.string.dialog_rating_positive) {
             PreferenceHelper.setHasRated(requireContext())
 
             try {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=$APPLICATION_ID")))
+                requireContext().startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$APPLICATION_ID")
+                    )
+                )
             } catch (error: ActivityNotFoundException) {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$APPLICATION_ID")))
+                requireContext().startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=$APPLICATION_ID")
+                    )
+                )
             }
         }
-        .onNegative { _, _ -> PreferenceHelper.setHasRated(requireContext()) }
-        .build()
+        .neutralButton(R.string.dialog_rating_neutral)
+        .negativeButton(R.string.dialog_rating_negative) {
+            PreferenceHelper.setHasRated(requireContext())
+        }
 }
