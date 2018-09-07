@@ -41,8 +41,9 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
-        .inflate(R.layout.item_media_entry, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_media_entry, parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
@@ -80,22 +81,29 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episodes.text = episodes.context.getQuantityString(when (category) {
-                Category.ANIME -> R.plurals.media_episode_count
-                Category.MANGA -> R.plurals.media_chapter_count
-            }, item.episodeAmount)
+            episodes.text = episodes.context.getQuantityString(
+                when (category) {
+                    Category.ANIME -> R.plurals.media_episode_count
+                    Category.MANGA -> R.plurals.media_chapter_count
+                }, item.episodeAmount
+            )
 
-            item.languages.map { it.toGeneralLanguage() }.distinct().let { generalLanguages ->
-                english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
-                    true -> View.VISIBLE
-                    false -> View.GONE
-                }
+            item.languages
+                .asSequence()
+                .map { it.toGeneralLanguage() }
+                .distinct()
+                .toList()
+                .let { generalLanguages ->
+                    english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
+                        true -> View.VISIBLE
+                        false -> View.GONE
+                    }
 
-                german.visibility = when (generalLanguages.contains(Language.GERMAN)) {
-                    true -> View.VISIBLE
-                    false -> View.GONE
+                    german.visibility = when (generalLanguages.contains(Language.GERMAN)) {
+                        true -> View.VISIBLE
+                        false -> View.GONE
+                    }
                 }
-            }
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE

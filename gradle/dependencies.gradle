@@ -99,10 +99,6 @@ ext {
             leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
     ]
 
-    logReleaseImplementationDependencies = [
-            rxPermissions: "com.tbruyelle.rxpermissions2:rxpermissions:$rxPermissionsVersion@aar"
-    ]
-
     compileOnlyDependencies = [
             javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
     ]

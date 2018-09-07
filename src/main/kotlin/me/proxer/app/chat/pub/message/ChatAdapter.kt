@@ -56,7 +56,11 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
     val mentionsClickSubject: PublishSubject<String> = PublishSubject.create()
 
     val selectedMessages: List<ParsedChatMessage>
-        get() = data.filter { messageSelectionMap[it.id] == true }.sortedBy { it.date }
+        get() = data
+            .asSequence()
+            .filter { messageSelectionMap[it.id] == true }
+            .sortedBy { it.date }
+            .toList()
 
     val enqueuedMessageCount: Int
         get() = data.takeWhile { it.id.toLong() < 0 }.size
@@ -145,12 +149,15 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         val inflater = LayoutInflater.from(parent.context)
 
         return when (MessageType.from(viewType)) {
-            MessageType.TOP, MessageType.SINGLE -> MessageTitleViewHolder(inflater
-                .inflate(R.layout.item_message_single, parent, false))
-            MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(inflater
-                .inflate(R.layout.item_message, parent, false))
-            else -> MessageViewHolder(inflater
-                .inflate(R.layout.item_message_self, parent, false))
+            MessageType.TOP, MessageType.SINGLE -> MessageTitleViewHolder(
+                inflater.inflate(R.layout.item_message_single, parent, false)
+            )
+            MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(
+                inflater.inflate(R.layout.item_message, parent, false)
+            )
+            else -> MessageViewHolder(
+                inflater.inflate(R.layout.item_message_self, parent, false)
+            )
         }
     }
 
@@ -247,9 +254,11 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
-            sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
-                .sizeDp(16)
-                .iconColor(text.context))
+            sendStatus?.setImageDrawable(
+                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+                    .sizeDp(16)
+                    .iconColor(text.context)
+            )
         }
 
         internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
@@ -319,10 +328,14 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
         }
 
         internal open fun applySelection(message: ParsedChatMessage) {
-            container.setCardBackgroundColor(ContextCompat.getColorStateList(container.context, when {
-                messageSelectionMap[message.id] == true -> R.color.selected
-                else -> R.color.card_background
-            }))
+            container.setCardBackgroundColor(
+                ContextCompat.getColorStateList(
+                    container.context, when {
+                        messageSelectionMap[message.id] == true -> R.color.selected
+                        else -> R.color.card_background
+                    }
+                )
+            )
         }
 
         internal open fun applyTimeVisibility(message: ParsedChatMessage) {

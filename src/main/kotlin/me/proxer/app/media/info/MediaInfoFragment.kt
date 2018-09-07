@@ -205,8 +205,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         ratingContainer.visibility = View.VISIBLE
         rating.rating = result.rating / 2.0f
         ratingAmount.visibility = View.VISIBLE
-        ratingAmount.text = requireContext().resources.getQuantityString(R.plurals.fragment_media_info_rate_count,
-            result.ratingAmount, result.rating, result.ratingAmount)
+        ratingAmount.text = requireContext().resources.getQuantityString(
+            R.plurals.fragment_media_info_rate_count,
+            result.ratingAmount, result.rating, result.ratingAmount
+        )
     } else {
         ratingContainer.visibility = View.GONE
         ratingAmount.visibility = View.GONE
@@ -241,13 +243,21 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindStatus(result: Entry) {
-        infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_status_title),
-            result.state.toAppString(requireContext())))
+        infoTable.addView(
+            constructInfoTableRow(
+                requireContext().getString(R.string.fragment_media_info_status_title),
+                result.state.toAppString(requireContext())
+            )
+        )
     }
 
     private fun bindLicense(result: Entry) {
-        infoTable.addView(constructInfoTableRow(requireContext().getString(R.string.fragment_media_info_license_title),
-            result.license.toAppString(requireContext())))
+        infoTable.addView(
+            constructInfoTableRow(
+                requireContext().getString(R.string.fragment_media_info_license_title),
+                result.license.toAppString(requireContext())
+            )
+        )
     }
 
     private fun bindAdaption(result: Entry) {
@@ -267,8 +277,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                         contentView.clicks()
                             .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                             .subscribe {
-                                MediaActivity.navigateTo(requireActivity(), adaptionInfo.id, adaptionInfo.name,
-                                    adaptionInfo.medium?.toCategory())
+                                MediaActivity.navigateTo(
+                                    requireActivity(), adaptionInfo.id, adaptionInfo.name,
+                                    adaptionInfo.medium?.toCategory()
+                                )
                             }
                     }
                 })
@@ -297,15 +309,22 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             return
         }
 
-        bindChips(genres, result.genres.toList(),
+        bindChips(
+            genres,
+            result.genres.toList(),
             mapFunction = {
                 ProxerUtils.getApiEnumName(it)
                     ?: throw IllegalArgumentException("Unknown genre: $it")
             },
             onClick = {
-                showPage(ProxerUrls.wikiWeb(ProxerUtils.getApiEnumName(it)
-                    ?: throw IllegalArgumentException("Unknown genre: $it")))
-            })
+                showPage(
+                    ProxerUrls.wikiWeb(
+                        ProxerUtils.getApiEnumName(it)
+                            ?: throw IllegalArgumentException("Unknown genre: $it")
+                    )
+                )
+            }
+        )
     }
 
     private fun bindTags(result: Entry) {
@@ -334,23 +353,30 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             }
         }
 
-        bindChips(tags, filteredTags,
+        bindChips(
+            tags,
+            filteredTags,
             mapFunction = { it.name },
-            onClick = { multilineSnackbar(root, it.description) })
+            onClick = { multilineSnackbar(root, it.description) }
+        )
     }
 
     private fun updateUnratedButton() {
-        unratedTags.text = getString(when (showUnratedTags) {
-            true -> R.string.fragment_media_info_tags_unrated_hide
-            false -> R.string.fragment_media_info_tags_unrated_show
-        })
+        unratedTags.text = getString(
+            when (showUnratedTags) {
+                true -> R.string.fragment_media_info_tags_unrated_hide
+                false -> R.string.fragment_media_info_tags_unrated_show
+            }
+        )
     }
 
     private fun updateSpoilerButton() {
-        spoilerTags.text = getString(when (showSpoilerTags) {
-            true -> R.string.fragment_media_info_tags_spoiler_hide
-            false -> R.string.fragment_media_info_tags_spoiler_show
-        })
+        spoilerTags.text = getString(
+            when (showSpoilerTags) {
+                true -> R.string.fragment_media_info_tags_spoiler_hide
+                false -> R.string.fragment_media_info_tags_spoiler_show
+            }
+        )
     }
 
     private fun bindFskConstraints(result: Entry) {
@@ -379,16 +405,21 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         translatorGroupsTitle.visibility = View.GONE
         translatorGroups.visibility = View.GONE
     } else {
-        bindChips(translatorGroups, result.translatorGroups,
+        bindChips(
+            translatorGroups,
+            result.translatorGroups,
             mapFunction = { it.name },
-            onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) })
+            onClick = { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
+        )
     }
 
     private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
         industriesTitle.visibility = View.GONE
         industries.visibility = View.GONE
     } else {
-        bindChips(industries, result.industries,
+        bindChips(
+            industries,
+            result.industries,
             mapFunction = {
                 if (it.type == IndustryType.UNKNOWN) {
                     it.name
@@ -396,7 +427,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                     "${it.name} (${it.type.toAppString(requireContext())})"
                 }
             },
-            onClick = { IndustryActivity.navigateTo(requireActivity(), it.id, it.name) })
+            onClick = {
+                IndustryActivity.navigateTo(requireActivity(), it.id, it.name)
+            }
+        )
     }
 
     @Suppress("LabeledExpression")
@@ -410,7 +444,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             if (layout.width <= 0 || activity == null) return@post
             if (layout.childCount > 0) layout.removeAllViews()
 
-            for ((index, mappedItem) in items.map(mapFunction).withIndex()) {
+            for ((index, mappedItem) in items.asSequence().map(mapFunction).withIndex().toList()) {
                 val badge = MaterialBadgeTextView(layout.context)
 
                 badge.text = mappedItem

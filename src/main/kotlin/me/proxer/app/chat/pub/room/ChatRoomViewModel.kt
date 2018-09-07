@@ -28,7 +28,13 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
     override val dataSingle: Single<List<ChatRoom>>
         get() = api.chat().publicRooms().buildSingle()
             .let { if (StorageHelper.isLoggedIn) it.zipWith(api.chat().userRooms().buildSingle(), zipper) else it }
-            .map { it.distinctBy { room -> room.id }.sortedBy { room -> room.id } }
+            .map {
+                it
+                    .asSequence()
+                    .distinctBy { room -> room.id }
+                    .sortedBy { room -> room.id }
+                    .toList()
+            }
 
     init {
         disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))

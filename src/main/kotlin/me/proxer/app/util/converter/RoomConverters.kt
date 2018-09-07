@@ -26,11 +26,14 @@ class RoomConverters {
     }
 
     @TypeConverter
-    fun fromGenres(value: MutableSet<Genre>?) = value?.map { ProxerUtils.getApiEnumName(it) }
+    fun fromGenres(value: MutableSet<Genre>?) = value
+        ?.asSequence()
+        ?.map { ProxerUtils.getApiEnumName(it) }
         ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toGenres(value: String?) = value?.split(DELIMITER)
+        ?.asSequence()
         ?.filter { it.isNotBlank() }
         ?.map {
             ProxerUtils.toApiEnum(Genre::class.java, it)
@@ -39,11 +42,14 @@ class RoomConverters {
         ?.toSet()
 
     @TypeConverter
-    fun fromFskConstraints(value: MutableSet<FskConstraint>?) = value?.map { ProxerUtils.getApiEnumName(it) }
+    fun fromFskConstraints(value: MutableSet<FskConstraint>?) = value
+        ?.asSequence()
+        ?.map { ProxerUtils.getApiEnumName(it) }
         ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toFskConstraints(value: String?) = value?.split(DELIMITER)
+        ?.asSequence()
         ?.filter { it.isNotBlank() }
         ?.map {
             ProxerUtils.toApiEnum(FskConstraint::class.java, it)

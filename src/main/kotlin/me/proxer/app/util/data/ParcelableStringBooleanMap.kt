@@ -26,7 +26,7 @@ class ParcelableStringBooleanMap : Parcelable {
     constructor()
 
     internal constructor(source: Parcel) {
-        (0 until source.readInt()).forEach {
+        repeat(source.readInt()) {
             put(source.readStringSafely(), source.readInt() == 1)
         }
     }

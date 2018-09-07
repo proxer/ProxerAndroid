@@ -33,6 +33,7 @@ class ConferenceChooserTargetService : ChooserTargetService() {
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = messengerDao.getConferences()
+        .asSequence()
         .take(8)
         .map {
             val bundle = Bundle()
@@ -40,19 +41,25 @@ class ConferenceChooserTargetService : ChooserTargetService() {
             bundle.putParcelable(ARGUMENT_CONFERENCE, it)
             bundle.classLoader = LocalConference::class.java.classLoader
 
-            ChooserTarget(it.topic,
+            ChooserTarget(
+                it.topic,
                 constructIcon(it),
                 calculateScore(it.date),
                 ComponentName(packageName, ShareReceiverActivity::class.java.name),
                 bundleOf(ARGUMENT_CONFERENCE_WRAPPER to bundleOf(ARGUMENT_CONFERENCE to it))
             )
         }
+        .toList()
 
     @TargetApi(Build.VERSION_CODES.M)
     private fun constructIcon(conference: LocalConference) = when {
         conference.image.isBlank() -> Icon.createWithBitmap(constructEmptyIcon(conference))
-        else -> Icon.createWithBitmap(Utils.getCircleBitmapFromUrl(applicationContext,
-            ProxerUrls.userImage(conference.image)))
+        else -> Icon.createWithBitmap(
+            Utils.getCircleBitmapFromUrl(
+                applicationContext,
+                ProxerUrls.userImage(conference.image)
+            )
+        )
     }
 
     private fun constructEmptyIcon(conference: LocalConference) = IconicsDrawable(applicationContext)

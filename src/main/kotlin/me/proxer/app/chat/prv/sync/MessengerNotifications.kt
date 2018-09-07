@@ -44,6 +44,7 @@ object MessengerNotifications {
 
     fun showOrUpdate(context: Context, conferenceMap: LocalConferenceMap) {
         val notifications = conferenceMap.entries
+            .asSequence()
             .sortedBy { it.key.date }
             .map { (conference, messages) ->
                 conference.id.toInt() to when {
@@ -52,6 +53,7 @@ object MessengerNotifications {
                 }
             }
             .plus(ID to buildChatSummaryNotification(context, conferenceMap))
+            .toList()
 
         notifications.forEach { (id, notification) ->
             when (notification) {
@@ -64,10 +66,12 @@ object MessengerNotifications {
     fun showError(context: Context, error: Throwable) {
         val errorAction = ErrorUtils.handle(error)
 
-        NotificationUtils.showErrorNotification(context, ID, NotificationUtils.CHAT_CHANNEL,
+        NotificationUtils.showErrorNotification(
+            context, ID, NotificationUtils.CHAT_CHANNEL,
             context.getString(R.string.notification_chat_error_title),
             context.getString(errorAction.message),
-            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT))
+            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT)
+        )
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
@@ -82,8 +86,9 @@ object MessengerNotifications {
         val messageAmount = filteredConferenceMap.values.sumBy { it.size }
         val conferenceAmount = filteredConferenceMap.size
         val messageAmountText = context.getQuantityString(R.plurals.notification_chat_message_amount, messageAmount)
-        val conferenceAmountText = context.getQuantityString(R.plurals.notification_chat_conference_amount,
-            conferenceAmount)
+        val conferenceAmountText = context.getQuantityString(
+            R.plurals.notification_chat_conference_amount, conferenceAmount
+        )
 
         val title = "$messageAmountText $conferenceAmountText"
         val content = SpannableString(filteredConferenceMap.keys.joinToString(", ", transform = { it.topic }))
@@ -98,9 +103,11 @@ object MessengerNotifications {
             .setContentTitle(title)
             .setContentText(content)
             .setStyle(style)
-            .setContentIntent(TaskStackBuilder.create(context)
-                .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
-                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT))
+            .setContentIntent(
+                TaskStackBuilder.create(context)
+                    .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            )
             .setDefaults(Notification.DEFAULT_ALL)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -180,8 +187,11 @@ object MessengerNotifications {
 
                     val replyIntent = DirectReplyReceiver.getPendingIntent(context, conference.id)
 
-                    val actionReplyByRemoteInput = NotificationCompat.Action.Builder(R.mipmap.ic_launcher,
-                        context.getString(R.string.action_answer), replyIntent)
+                    val actionReplyByRemoteInput = NotificationCompat.Action.Builder(
+                        R.mipmap.ic_launcher,
+                        context.getString(R.string.action_answer),
+                        replyIntent
+                    )
                         .addRemoteInput(remoteInput)
                         .setAllowGeneratedReplies(true)
                         .build()
@@ -189,20 +199,26 @@ object MessengerNotifications {
                     addAction(actionReplyByRemoteInput)
                 }
             }
-            .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_chat_read_action),
-                MessengerNotificationReadReceiver.getPendingIntent(context, conference.id))
+            .addAction(
+                R.drawable.ic_stat_check,
+                context.getString(R.string.notification_chat_read_action),
+                MessengerNotificationReadReceiver.getPendingIntent(context, conference.id)
+            )
             .build()
     }
 
     private fun buildIndividualIcon(context: Context, conference: LocalConference) = when {
-        conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context,
-            ProxerUrls.userImage(conference.image))
+        conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(
+            context, ProxerUrls.userImage(conference.image)
+        )
 
         else -> IconicsDrawable(context)
-            .icon(when (conference.isGroup) {
-                true -> CommunityMaterial.Icon.cmd_account_multiple
-                false -> CommunityMaterial.Icon.cmd_account
-            })
+            .icon(
+                when (conference.isGroup) {
+                    true -> CommunityMaterial.Icon.cmd_account_multiple
+                    false -> CommunityMaterial.Icon.cmd_account
+                }
+            )
             .color(ContextCompat.getColor(context, R.color.colorPrimary))
             .sizeDp(96)
             .toBitmap()

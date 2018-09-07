@@ -79,12 +79,18 @@ class RelationAdapter : BaseAdapter<Relation, ViewHolder>() {
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episodes.text = episodes.context.getQuantityString(when (item.category) {
-                Category.ANIME -> R.plurals.media_episode_count
-                Category.MANGA -> R.plurals.media_chapter_count
-            }, item.episodeAmount)
+            episodes.text = episodes.context.getQuantityString(
+                when (item.category) {
+                    Category.ANIME -> R.plurals.media_episode_count
+                    Category.MANGA -> R.plurals.media_chapter_count
+                }, item.episodeAmount
+            )
 
-            val generalLanguages = item.languages.map { it.toGeneralLanguage() }.distinct()
+            val generalLanguages = item.languages
+                .asSequence()
+                .map { it.toGeneralLanguage() }
+                .distinct()
+                .toList()
 
             english.visibility = when (generalLanguages.contains(Language.ENGLISH)) {
                 true -> View.VISIBLE

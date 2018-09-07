@@ -48,10 +48,13 @@ class NotificationWorker : Worker() {
             WorkManager.getInstance().enqueueUniquePeriodicWork(
                 NAME, ExistingPeriodicWorkPolicy.REPLACE,
                 PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
-                    .setConstraints(Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build())
-                    .build())
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build()
+                    )
+                    .build()
+            )
         }
     }
 
@@ -102,8 +105,10 @@ class NotificationWorker : Worker() {
                 .build()
                 .also { currentCall = it }
                 .safeExecute()
+                .asSequence()
                 .filter { it.date.after(lastNewsDate) }
                 .sortedByDescending { it.date }
+                .toList()
         }
 
         newNews.firstOrNull()?.date?.let {

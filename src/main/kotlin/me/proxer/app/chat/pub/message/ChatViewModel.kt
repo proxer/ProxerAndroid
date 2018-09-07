@@ -79,19 +79,21 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
             }
             .doOnSuccess { if (pollingDisposable == null) startPolling() }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                currentFirstId = findFirstRemoteId(it) ?: "0"
+            .subscribeAndLogErrors(
+                {
+                    currentFirstId = findFirstRemoteId(it) ?: "0"
 
-                refreshError.value = null
-                error.value = null
-                data.value = it
-            }, {
-                if (data.value?.size ?: 0 > 0) {
-                    refreshError.value = ErrorUtils.handle(it)
-                } else {
-                    error.value = ErrorUtils.handle(it)
+                    refreshError.value = null
+                    error.value = null
+                    data.value = it
+                }, {
+                    if (data.value?.size ?: 0 > 0) {
+                        refreshError.value = ErrorUtils.handle(it)
+                    } else {
+                        error.value = ErrorUtils.handle(it)
+                    }
                 }
-            })
+            )
     }
 
     fun loadDraft() {
@@ -120,8 +122,16 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         StorageHelper.user?.let { user ->
             val firstId = data.value?.firstOrNull()?.id?.toLong()
             val nextId = if (firstId == null || firstId >= 0) -1 else firstId - 1
-            val message = ParsedChatMessage(nextId.toString(), user.id, user.name, user.image, text,
-                ChatMessageAction.NONE, Date())
+
+            val message = ParsedChatMessage(
+                nextId.toString(),
+                user.id,
+                user.name,
+                user.image,
+                text,
+                ChatMessageAction.NONE,
+                Date()
+            )
 
             data.value = listOf(message).plus(data.value ?: emptyList())
             sendMessageQueue.offer(message)
@@ -146,7 +156,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         newData: List<ParsedChatMessage>,
         currentId: String
     ): List<ParsedChatMessage> {
-        val messageIdsToDelete = newData.filter { it.action == ChatMessageAction.REMOVE_MESSAGE }
+        val messageIdsToDelete = newData
+            .filter { it.action == ChatMessageAction.REMOVE_MESSAGE }
             .flatMap { listOf(it.id, it.message) }
 
         val previousSentMessageIdAmount = sentMessageIds.size
@@ -158,12 +169,16 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
             when (existingData) {
                 null -> newData
                 else -> when (currentId) {
-                    "0" -> newData + existingData.dropWhile { it.id.toLong() < 0 }.filter { oldItem ->
-                        newData.none { newItem -> oldItem.id == newItem.id }
-                    }
-                    else -> existingData.dropWhile { it.id.toLong() < 0 }.filter { oldItem ->
-                        newData.none { newItem -> oldItem.id == newItem.id }
-                    } + newData
+                    "0" -> newData + existingData
+                        .asSequence()
+                        .dropWhile { it.id.toLong() < 0 }
+                        .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
+                        .toList()
+                    else -> existingData
+                        .asSequence()
+                        .dropWhile { it.id.toLong() < 0 }
+                        .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
+                        .toList() + newData
                 }
             }
         }
@@ -207,19 +222,21 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
                 .retryWhen(RxRetryWithDelay(2, 3000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    it.toNullable()?.let { id ->
-                        sentMessageIds.add(id)
+                .subscribeAndLogErrors(
+                    {
+                        it.toNullable()?.let { id ->
+                            sentMessageIds.add(id)
 
-                        startPolling(true)
-                        doSendMessages()
-                    }
-                }, {
-                    data.value = data.value?.dropWhile { message -> message.id.toLong() < 0 }
-                    sendMessageQueue.clear()
+                            startPolling(true)
+                            doSendMessages()
+                        }
+                    }, {
+                        data.value =
+                            data.value?.dropWhile { message -> message.id.toLong() < 0 }
+                        sendMessageQueue.clear()
 
-                    sendMessageError.value = ErrorUtils.handle(it)
-                })
+                        sendMessageError.value = ErrorUtils.handle(it)
+                    })
         }
     }
 

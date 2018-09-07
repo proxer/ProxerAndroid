@@ -57,7 +57,11 @@ class MessengerAdapter(
     val mentionsClickSubject: PublishSubject<String> = PublishSubject.create()
 
     val selectedMessages: List<LocalMessage>
-        get() = data.filter { messageSelectionMap[it.id.toString()] == true }.sortedBy { it.date }
+        get() = data
+            .asSequence()
+            .filter { messageSelectionMap[it.id.toString()] == true }
+            .sortedBy { it.date }
+            .toList()
 
     val enqueuedMessageCount: Int
         get() = data.takeWhile { it.id < 0 }.size
@@ -155,10 +159,12 @@ class MessengerAdapter(
             } else {
                 MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
             }
-            MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(inflater
-                .inflate(R.layout.item_message, parent, false))
-            MessageType.ACTION -> ActionViewHolder(inflater
-                .inflate(R.layout.item_message_action, parent, false))
+            MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(
+                inflater.inflate(R.layout.item_message, parent, false)
+            )
+            MessageType.ACTION -> ActionViewHolder(
+                inflater.inflate(R.layout.item_message_action, parent, false)
+            )
             else -> MessageViewHolder(inflater.inflate(R.layout.item_message_self, parent, false))
         }
     }
@@ -258,9 +264,11 @@ class MessengerAdapter(
         internal val sendStatus: ImageView? by bindOptionalView(R.id.sendStatus)
 
         init {
-            sendStatus?.setImageDrawable(IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
-                .sizeDp(16)
-                .iconColor(text.context))
+            sendStatus?.setImageDrawable(
+                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+                    .sizeDp(16)
+                    .iconColor(text.context)
+            )
         }
 
         internal open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
@@ -306,14 +314,14 @@ class MessengerAdapter(
         internal open fun onContainerLongClick(v: View, message: LocalMessage) {
             val id = message.id.toString()
 
-                if (!isSelecting) {
-                    isSelecting = true
+            if (!isSelecting) {
+                isSelecting = true
 
-                    messageSelectionMap.put(id, true)
-                    messageSelectionSubject.onNext(messageSelectionMap.size)
+                messageSelectionMap.put(id, true)
+                messageSelectionSubject.onNext(messageSelectionMap.size)
 
-                    applySelection(message)
-                }
+                applySelection(message)
+            }
         }
 
         internal open fun onContainerLongClickHandled(v: View): Boolean {
@@ -334,10 +342,14 @@ class MessengerAdapter(
         }
 
         internal open fun applySelection(message: LocalMessage) {
-            container.setCardBackgroundColor(ContextCompat.getColorStateList(container.context, when {
-                messageSelectionMap[message.id.toString()] == true -> R.color.selected
-                else -> R.color.card_background
-            }))
+            container.setCardBackgroundColor(
+                ContextCompat.getColorStateList(
+                    container.context, when {
+                        messageSelectionMap[message.id.toString()] == true -> R.color.selected
+                        else -> R.color.card_background
+                    }
+                )
+            )
         }
 
         internal open fun applyTimeVisibility(message: LocalMessage) {

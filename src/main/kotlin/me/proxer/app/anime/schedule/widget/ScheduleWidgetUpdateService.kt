@@ -64,18 +64,22 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         disposable = api.media().calendar().buildSingle()
             .map { entries ->
                 entries
+                    .asSequence()
                     .filter { it.date.convertToDateTime().dayOfMonth == LocalDate.now().dayOfMonth }
                     .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
+                    .toList()
             }
-            .subscribeAndLogErrors({ calendarEntries ->
-                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
-                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
-            }, { error ->
-                val action = ErrorUtils.handle(error)
+            .subscribeAndLogErrors(
+                { calendarEntries ->
+                    widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
+                    darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
+                }, { error ->
+                    val action = ErrorUtils.handle(error)
 
-                widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
-                darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
-            })
+                    widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
+                    darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
+                }
+            )
     }
 
     override fun onStopCurrentWork(): Boolean {
@@ -91,10 +95,12 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         calendarEntries: List<SimpleCalendarEntry>,
         dark: Boolean
     ) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_schedule_dark_list
-            false -> R.layout.layout_widget_schedule_list
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_schedule_dark_list
+                false -> R.layout.layout_widget_schedule_list
+            }
+        )
 
         val params = arrayOf(
             ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES_WRAPPER to bundleOf(
@@ -119,18 +125,22 @@ class ScheduleWidgetUpdateService : JobIntentService() {
 
         appWidgetManager.updateAppWidget(id, views)
 
-        workerQueue.postDelayed({
-            views.setScrollPosition(R.id.list, position)
+        workerQueue.postDelayed(
+            {
+                views.setScrollPosition(R.id.list, position)
 
-            appWidgetManager.partiallyUpdateAppWidget(id, views)
-        }, 100)
+                appWidgetManager.partiallyUpdateAppWidget(id, views)
+            }, 100
+        )
     }
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_schedule_dark_error
-            false -> R.layout.layout_widget_schedule_error
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_schedule_dark_error
+                false -> R.layout.layout_widget_schedule_error
+            }
+        )
 
         val errorIntent = errorAction.toIntent()
 
@@ -151,10 +161,12 @@ class ScheduleWidgetUpdateService : JobIntentService() {
     }
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_schedule_dark_loading
-            false -> R.layout.layout_widget_schedule_loading
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_schedule_dark_loading
+                false -> R.layout.layout_widget_schedule_loading
+            }
+        )
 
         bindBaseLayout(id, views)
 
@@ -175,10 +187,12 @@ class ScheduleWidgetUpdateService : JobIntentService() {
         views.setOnClickPendingIntent(R.id.title, pendingIntent)
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 
-        views.setImageViewBitmap(R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon.cmd_refresh)
-            .colorRes(android.R.color.white)
-            .sizeDp(32)
-            .paddingDp(8)
-            .toBitmap())
+        views.setImageViewBitmap(
+            R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon.cmd_refresh)
+                .colorRes(android.R.color.white)
+                .sizeDp(32)
+                .paddingDp(8)
+                .toBitmap()
+        )
     }
 }

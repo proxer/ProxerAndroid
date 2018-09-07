@@ -34,11 +34,13 @@ class MessengerNotificationReadReceiver : BroadcastReceiver() {
                 messengerDao.markConferenceAsRead(conferenceId)
 
                 val unreadMap = messengerDao.getUnreadConferences()
+                    .asSequence()
                     .associate {
                         it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
                             .asReversed()
                     }
                     .plus(messengerDao.getConference(conferenceId) to emptyList())
+                    .toMap()
 
                 MessengerNotifications.showOrUpdate(context, unreadMap)
             }

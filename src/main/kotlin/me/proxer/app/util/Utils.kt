@@ -64,10 +64,12 @@ object Utils {
 
     fun parseAndFixUrl(url: String) = when {
         url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
-        else -> HttpUrl.parse(when {
-            url.startsWith("//") -> "http:$url"
-            else -> "http://$url"
-        })
+        else -> HttpUrl.parse(
+            when {
+                url.startsWith("//") -> "http:$url"
+                else -> "http://$url"
+            }
+        )
     }
 
     fun getAndFixUrl(url: String) = parseAndFixUrl(url) ?: throw ProxerException(ErrorType.PARSING)
@@ -80,12 +82,14 @@ object Utils {
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {
         val browserActivityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.generic.com"))
-        val genericResolvedList = extractPackageNames(context.packageManager
-            .queryIntentActivities(browserActivityIntent, 0))
+        val genericResolvedList = extractPackageNames(
+            context.packageManager.queryIntentActivities(browserActivityIntent, 0)
+        )
 
         val specializedActivityIntent = Intent(Intent.ACTION_VIEW, url.androidUri())
-        val resolvedSpecializedList = extractPackageNames(context.packageManager
-            .queryIntentActivities(specializedActivityIntent, 0))
+        val resolvedSpecializedList = extractPackageNames(
+            context.packageManager.queryIntentActivities(specializedActivityIntent, 0)
+        )
 
         resolvedSpecializedList.removeAll(genericResolvedList)
 
@@ -93,6 +97,7 @@ object Utils {
     }
 
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>) = resolveInfo
+        .asSequence()
         .map { it.activityInfo.packageName }
         .toMutableSet()
 }

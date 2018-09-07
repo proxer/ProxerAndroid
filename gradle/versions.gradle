@@ -16,14 +16,14 @@ ext {
 
     // Core plugins
     androidPluginVersion = '3.3.0-alpha08'
-    kotlinVersion = '1.2.61'
+    kotlinVersion = '1.3-M2'
 
     // Utility plugins
     detektPluginVersion = '1.0.0.RC8'
     gradleVersionsPluginVersion = '0.20.0'
     androidCommandPluginVersion = '2.0.1'
-    ktlintPluginVersion = '5.0.0'
-    ktlintVersion = '0.27.0'
+    ktlintPluginVersion = '5.1.0'
+    ktlintVersion = '0.28.0'
 
     // Frameworks and compatibility libraries
     ankoVersion = '0.10.5'
@@ -35,19 +35,18 @@ ext {
     workVersion = '1.0.0-alpha08'
 
     // RxJava
-    rxJavaVersion = '2.2.1'
+    rxJavaVersion = '2.2.2'
     rxKotlinVersion = '2.3.0'
     rxAndroidVersion = '2.1.0'
     rxBindingVersion = '2.1.1'
     rxBusVersion = '2.0.0'
-    rxPermissionsVersion = '0.9.5'
     autoDisposeVersion = '0.8.0'
 
     // UI components
     recyclerviewVersion = "1.0.0-rc02"
     cardviewVersion = "1.0.0-rc02"
     gridlayoutVersion = "1.0.0-rc02"
-    materialDesignVersion = "1.0.0-rc02"
+    materialDesignVersion = "1.0.0-rc01"
     preferenceVersion = "1.0.0-rc02"
     supportPreferenceVersion = '2.3.2'
     iconicsVersion = '3.1.0-rc01'
@@ -61,7 +60,7 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-alpha05'
+    materialDialogsVersion = '2.0.0-alpha07'
     flexboxVersion = '1.1.0-beta1'
     emojiIosVersion = '7f7f35c3e7'
     emojiIosVersion = '7f7f35c3e7'

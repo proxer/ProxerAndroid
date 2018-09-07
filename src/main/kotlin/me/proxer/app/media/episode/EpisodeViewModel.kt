@@ -18,7 +18,9 @@ class EpisodeViewModel(private val entryId: String) : BaseViewModel<List<Episode
             .buildSingle()
             .map { info ->
                 info.episodes
+                    .asSequence()
                     .groupBy { it.number }
                     .map { EpisodeRow(info.category, info.userProgress, info.lastEpisode, it.value) }
+                    .toList()
             }
 }

@@ -26,20 +26,24 @@ internal object BBUtils {
     }
 }
 
-internal inline fun applyToAllViews(views: List<View>, crossinline operation: (View) -> Unit) = views.apply {
+internal inline fun applyToAllViews(views: List<View>, noinline operation: (View) -> Unit) = views.apply {
     flatMap { it.childrenRecursiveSequence().plus(it).toList() }
+        .asSequence()
         .filter { it.getTag(R.id.ignore_tag) == null }
         .onEach(operation)
+        .toList()
 }
 
 internal inline fun <reified T : View> applyToViews(
     views: List<View>,
-    crossinline operation: (T) -> Unit
+    noinline operation: (T) -> Unit
 ) = views.apply {
     flatMap { it.childrenRecursiveSequence().plus(it).toList() }
+        .asSequence()
         .filterIsInstance(T::class.java)
         .filter { it.getTag(R.id.ignore_tag) == null }
         .onEach(operation)
+        .toList()
 }
 
 internal inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder

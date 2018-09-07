@@ -49,7 +49,6 @@ import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
 import touchesMonitored
 import java.io.File
-import java.lang.Exception
 import kotlin.properties.Delegates
 
 /**
@@ -105,6 +104,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         if (preloadList.isNotEmpty()) {
             val preloadMap = preloadList
+                .asSequence()
                 .mapIndexed { index, url -> url to preloadList.getOrNull(index + 1) }
                 .associate { it }
 

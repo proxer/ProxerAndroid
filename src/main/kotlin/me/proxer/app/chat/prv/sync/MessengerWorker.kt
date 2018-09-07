@@ -85,13 +85,15 @@ class MessengerWorker : Worker() {
             WorkManager.getInstance().beginUniqueWork(
                 NAME, ExistingWorkPolicy.REPLACE,
                 OneTimeWorkRequestBuilder<MessengerWorker>()
-                    .setConstraints(Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build())
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build()
+                    )
                     .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
                     .setInputData(Data.Builder()
-                        .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
-                        .build())
+                                      .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
+                                      .build())
                     .build())
                 .enqueue()
         }
@@ -205,10 +207,14 @@ class MessengerWorker : Worker() {
         val sentMessages = sendMessages()
 
         val newConferencesAndMessages = try {
-            markConferencesAsRead(messengerDao.getConferencesToMarkAsRead()
-                .plus(sentMessages.map { messengerDao.findConference(it.conferenceId) })
-                .distinct()
-                .filterNotNull())
+            markConferencesAsRead(
+                messengerDao.getConferencesToMarkAsRead()
+                    .asSequence()
+                    .plus(sentMessages.map { messengerDao.findConference(it.conferenceId) })
+                    .distinct()
+                    .filterNotNull()
+                    .toList()
+            )
 
             fetchConferences().associate { conference ->
                 fetchNewMessages(conference).let { (messages, isFullyLoaded) ->
@@ -291,8 +297,13 @@ class MessengerWorker : Worker() {
                     }
                 }
 
-                throw ChatSendMessageException(ProxerException(ProxerException.ErrorType.SERVER,
-                    ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE, result), messageId)
+                throw ChatSendMessageException(
+                    ProxerException(
+                        ProxerException.ErrorType.SERVER,
+                        ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE,
+                        result
+                    ), messageId
+                )
             }
         }
     }
@@ -374,8 +385,11 @@ class MessengerWorker : Worker() {
         val mostRecentMessageIdBeforeUpdate = mostRecentMessage.id.toLong()
         val newMessages = mutableListOf<Message>()
 
-        var existingUnreadMessageAmount = messengerDao.getUnreadMessageAmountForConference(conference.id.toLong(),
-            conference.lastReadMessageId.toLong())
+        var existingUnreadMessageAmount = messengerDao.getUnreadMessageAmountForConference(
+            conference.id.toLong(),
+            conference.lastReadMessageId.toLong()
+        )
+
         var currentMessage: Message = mostRecentMessage
         var nextId = "0"
 
