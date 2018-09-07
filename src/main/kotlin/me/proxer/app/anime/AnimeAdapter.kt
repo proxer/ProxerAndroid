@@ -85,11 +85,13 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         internal val unsupported: TextView by bindView(R.id.unsupported)
 
         init {
-            play.setCompoundDrawablesWithIntrinsicBounds(IconicsDrawable(play.context)
-                .icon(CommunityMaterial.Icon.cmd_play)
-                .sizeDp(28)
-                .paddingDp(8)
-                .colorRes(android.R.color.white), null, null, null)
+            play.setCompoundDrawablesWithIntrinsicBounds(
+                IconicsDrawable(play.context)
+                    .icon(CommunityMaterial.Icon.cmd_play)
+                    .sizeDp(28)
+                    .paddingDp(8)
+                    .colorRes(android.R.color.white), null, null, null
+            )
         }
 
         fun bind(item: AnimeStream) {
@@ -148,7 +150,11 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         private fun initListeners() {
             // Subtract 1 from the adapterPosition, since we have a header.
             nameContainer.clicks()
-                .mapAdapterPosition({ adapterPosition - 1 }) { Triple(expandedItemId, data[it].id, it) }
+                .mapAdapterPosition({ adapterPosition }) {
+                    val resolvedPosition = positionResolver.resolve(it)
+
+                    Triple(expandedItemId, data[resolvedPosition].id, resolvedPosition)
+                }
                 .autoDisposable(this)
                 .subscribe { (previousItemId, newItemId, position) ->
                     if (newItemId == previousItemId) {
@@ -165,17 +171,17 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
                 }
 
             uploaderText.clicks()
-                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .subscribe(uploaderClickSubject)
 
             translatorGroup.clicks()
-                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .subscribe(translatorGroupClickSubject)
 
             play.clicks()
-                .mapAdapterPosition({ adapterPosition - 1 }) { data[it] }
+                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .subscribe(playClickSubject)
         }

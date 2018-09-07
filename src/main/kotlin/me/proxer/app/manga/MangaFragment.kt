@@ -169,10 +169,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                         }
                     }
                 } else {
+                    // Add one to the position to account for the header.
                     if (xCoordinate < parentWidth / 3) {
-                        recyclerView.smoothScrollToPosition(position - 1)
+                        recyclerView.smoothScrollToPosition(position - 1 + 1)
                     } else {
-                        recyclerView.smoothScrollToPosition(position + 1)
+                        recyclerView.smoothScrollToPosition(position + 1 + 1)
                     }
                 }
             }

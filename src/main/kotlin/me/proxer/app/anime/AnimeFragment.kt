@@ -19,7 +19,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
-import me.proxer.app.base.BaseAdapter
+import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
@@ -102,7 +102,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter = AnimeAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
-        innerAdapter.positionResolver = BaseAdapter.ContainerPositionResolver(adapter)
+        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
 
         innerAdapter.uploaderClickSubject
             .autoDisposable(this.scope())
@@ -188,8 +188,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             errorAction?.let {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
-                    else -> multilineSnackbar(root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                        it.toClickListener(hostingActivity))
+                    else -> multilineSnackbar(
+                        root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                        it.toClickListener(hostingActivity)
+                    )
                 }
             }
         })
@@ -202,8 +204,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let { _ ->
-                multilineSnackbar(root, getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
+                multilineSnackbar(
+                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
             }
         })
     }

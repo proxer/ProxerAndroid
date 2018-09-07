@@ -30,6 +30,7 @@ import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseFragment
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.message.MessengerActivity
@@ -124,6 +125,8 @@ class CreateConferenceFragment : BaseFragment() {
         innerAdapter = CreateConferenceParticipantAdapter(savedInstanceState)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
+        innerAdapter.positionResolver = ContainerPositionResolver(adapter)
+
         if (savedInstanceState == null) {
             initialParticipant?.let {
                 innerAdapter.add(it)
@@ -144,16 +147,22 @@ class CreateConferenceFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        addParticipantFooter = inflater.inflate(R.layout.item_create_conference_add_participant,
-            container, false) as ViewGroup
+        addParticipantFooter = inflater.inflate(
+            R.layout.item_create_conference_add_participant,
+            container, false
+        ) as ViewGroup
 
-        addParticipantInputFooter = inflater.inflate(R.layout.item_create_conference_add_participant_input,
-            container, false) as ViewGroup
+        addParticipantInputFooter = inflater.inflate(
+            R.layout.item_create_conference_add_participant_input,
+            container, false
+        ) as ViewGroup
 
-        addParticipantImage.setIconicsImage(when (isGroup) {
-            true -> CommunityMaterial.Icon.cmd_account_plus
-            false -> CommunityMaterial.Icon.cmd_account_multiple_plus
-        }, 96, 16)
+        addParticipantImage.setIconicsImage(
+            when (isGroup) {
+                true -> CommunityMaterial.Icon.cmd_account_plus
+                false -> CommunityMaterial.Icon.cmd_account_multiple_plus
+            }, 96, 16
+        )
 
         acceptParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_check, 48, 16)
         cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
@@ -223,10 +232,12 @@ class CreateConferenceFragment : BaseFragment() {
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-        sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
-            .colorRes(requireContext(), R.color.accent)
-            .sizeDp(32)
-            .paddingDp(4))
+        sendButton.setImageDrawable(
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+                .colorRes(requireContext(), R.color.accent)
+                .sizeDp(32)
+                .paddingDp(4)
+        )
 
         emojiButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -242,10 +253,12 @@ class CreateConferenceFragment : BaseFragment() {
 
                 when {
                     isGroup && topic.isBlank() -> throw TopicEmptyException()
-                    firstMessage.isBlank() -> throw InvalidInputException(requireContext()
-                        .getString(R.string.error_missing_message))
-                    participants.isEmpty() -> throw InvalidInputException(requireContext()
-                        .getString(R.string.error_missing_participants))
+                    firstMessage.isBlank() -> throw InvalidInputException(
+                        requireContext().getString(R.string.error_missing_message)
+                    )
+                    participants.isEmpty() -> throw InvalidInputException(
+                        requireContext().getString(R.string.error_missing_participants)
+                    )
                 }
 
                 Triple(topic, firstMessage, participants)
@@ -260,8 +273,10 @@ class CreateConferenceFragment : BaseFragment() {
                         topicInputContainer.error = requireContext().getString(R.string.error_input_empty)
                     }
                     else -> ErrorUtils.handle(it).let { action ->
-                        multilineSnackbar(root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
-                            action.toClickListener(hostingActivity))
+                        multilineSnackbar(
+                            root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
+                            action.toClickListener(hostingActivity)
+                        )
                     }
                 }
             }

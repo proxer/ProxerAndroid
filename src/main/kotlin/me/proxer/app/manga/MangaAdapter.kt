@@ -142,8 +142,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
-        private val shortAnimationTime =
-            itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+        private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
         internal val image: SubsamplingScaleImageView by bindView(R.id.image)
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
@@ -199,21 +198,19 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         @SuppressLint("ClickableViewAccessibility")
         private fun initListeners() {
-            itemView.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
-                .autoDisposable(this)
-                .subscribe(this::bind)
-
             image.events()
                 .publish()
                 .also { observable ->
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
                         .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
                         .flatMap { event ->
-                            Observable.just(Unit).mapAdapterPosition({ adapterPosition }) { event.error to it }
+                            Observable.just(Unit)
+                                .mapAdapterPosition({ adapterPosition }) { event.error to positionResolver.resolve(it) }
                         }
                         .autoDisposable(this)
-                        .subscribe { (error, position) -> handleImageLoadError(error, position) }
+                        .subscribe { (error, position) ->
+                            handleImageLoadError(error, position)
+                        }
 
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
                         .autoDisposable(this)
@@ -235,7 +232,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .subscribe { lastTouchCoordinates = it }
 
             image.clicks()
-                .mapAdapterPosition({ adapterPosition }) { it }
+                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
                 .flatMap { position ->
                     Observable.just(lastTouchCoordinates.toOptional())
                         .filterSome()
