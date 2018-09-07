@@ -92,8 +92,8 @@ class MessengerWorker : Worker() {
                     )
                     .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
                     .setInputData(Data.Builder()
-                                      .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
-                                      .build())
+                        .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
+                        .build())
                     .build())
                 .enqueue()
         }
