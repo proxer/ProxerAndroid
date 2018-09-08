@@ -28,7 +28,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.industry.IndustryActivity
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.media.MediaInfoViewModelProvider
+import me.proxer.app.media.MediaInfoViewModel
 import me.proxer.app.ui.view.MaxLineFlexboxLayout
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
@@ -40,7 +40,6 @@ import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEndAppString
 import me.proxer.app.util.extension.toStartAppString
 import me.proxer.app.util.extension.toTypeAppString
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
 import me.proxer.library.enums.Category
@@ -48,6 +47,8 @@ import me.proxer.library.enums.IndustryType
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -66,7 +67,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
 
-    override val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(requireActivity(), id) }
+    override val viewModel by sharedViewModel<MediaInfoViewModel> { parametersOf(id) }
 
     private val id: String
         get() = hostingActivity.id

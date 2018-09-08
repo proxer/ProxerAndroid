@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import androidx.transition.TransitionManager
+import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import com.jakewharton.rxbinding2.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -43,6 +44,8 @@ import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import org.jetbrains.anko.bundleOf
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.EnumSet
 import kotlin.properties.Delegates
 
@@ -73,9 +76,11 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     override val isSwipeToRefreshEnabled = false
     override val emptyDataMessage = R.string.error_no_data_search
 
-    override val viewModel by unsafeLazy {
-        MediaListViewModelProvider.get(this, sortCriteria, type, searchQuery, language,
-            genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter)
+    override val viewModel by viewModel<MediaListViewModel> {
+        parametersOf(
+            sortCriteria, type, searchQuery.toOptional(), language.toOptional(),
+            genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter
+        )
     }
 
     override val layoutManager by unsafeLazy {
@@ -113,7 +118,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         set(value) {
             requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
-            viewModel.searchQuery = value
+            viewModel.searchQuery = value.toOptional()
         }
 
     internal var language: Language?
@@ -121,7 +126,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         set(value) {
             requireArguments().putSerializable(LANGUAGE_ARGUMENT, language)
 
-            viewModel.language = value
+            viewModel.language = value.toOptional()
         }
 
     internal var genres: List<LocalTag>
@@ -330,8 +335,10 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         super.updateRecyclerViewPadding()
 
         if (innerAdapter.itemCount > 0 || adapter.footer == null) {
-            recyclerView.setPadding(recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
-                recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight)
+            recyclerView.setPadding(
+                recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
+                recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight
+            )
         }
     }
 

@@ -16,6 +16,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
+import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -31,7 +32,7 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
 
     override val emptyDataMessage = R.string.error_no_data_news
 
-    override val viewModel by unsafeLazy { NewsViewModelProvider.get(this) }
+    override val viewModel by viewModel<NewsViewModel>()
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()), VERTICAL)
@@ -51,8 +52,9 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         innerAdapter.imageClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, article) ->
-                ImageDetailActivity.navigateTo(requireActivity(),
-                    ProxerUrls.newsImage(article.id, article.image), view)
+                ImageDetailActivity.navigateTo(
+                    requireActivity(), ProxerUrls.newsImage(article.id, article.image), view
+                )
             }
     }
 

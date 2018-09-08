@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.gojuno.koptional.toOptional
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -23,6 +24,8 @@ import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import org.jetbrains.anko.bundleOf
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -42,8 +45,8 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val emptyDataMessage = R.string.error_no_data_user_media_list
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy {
-        UcpMediaListViewModelProvider.get(this, category, filter)
+    override val viewModel by viewModel<UcpMediaListViewModel> {
+        parametersOf(category, filter.toOptional())
     }
 
     override val layoutManager by unsafeLazy {

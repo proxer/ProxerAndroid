@@ -28,6 +28,8 @@ import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.jetbrains.anko.intentFor
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -110,7 +112,7 @@ class MediaActivity : ImageTabsActivity() {
             else -> 0
         }
 
-    private val viewModel by unsafeLazy { MediaInfoViewModelProvider.get(this, id) }
+    private val viewModel by viewModel<MediaInfoViewModel> { parametersOf(id) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

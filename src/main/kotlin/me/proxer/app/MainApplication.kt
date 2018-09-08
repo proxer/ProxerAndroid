@@ -51,6 +51,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import okhttp3.OkHttpClient
+import org.koin.android.ext.android.startKoin
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -104,6 +105,8 @@ class MainApplication : Application() {
         }
 
         LeakCanary.install(this)
+
+        startKoin(this, listOf(viewModelModule))
 
         globalContext = this
 

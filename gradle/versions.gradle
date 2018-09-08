@@ -27,6 +27,7 @@ ext {
 
     // Frameworks and compatibility libraries
     ankoVersion = '0.10.5'
+    koinVersion = '1.0.0-RC-2'
     multidexVersion = '2.0.0'
     appcompatVersion = "1.0.0-rc02"
     browserVersion = "1.0.0-rc02"

@@ -3,7 +3,6 @@ package me.proxer.app.media
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.toOptional
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -32,7 +31,6 @@ import me.proxer.library.entity.info.MediaUserInfo
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry, Optional<MediaUserInfo>>>() {
 
     override val dataSingle: Single<Pair<Entry, Optional<MediaUserInfo>>>
