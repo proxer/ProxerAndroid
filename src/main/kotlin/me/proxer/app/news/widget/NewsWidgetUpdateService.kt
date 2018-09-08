@@ -82,10 +82,12 @@ class NewsWidgetUpdateService : JobIntentService() {
     }
 
     private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_list
-            false -> R.layout.layout_widget_news_list
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_news_dark_list
+                false -> R.layout.layout_widget_news_list
+            }
+        )
 
         val params = arrayOf(
             NewsWidgetService.ARGUMENT_NEWS_WRAPPER to bundleOf(
@@ -110,10 +112,12 @@ class NewsWidgetUpdateService : JobIntentService() {
     }
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_error
-            false -> R.layout.layout_widget_news_error
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_news_dark_error
+                false -> R.layout.layout_widget_news_error
+            }
+        )
 
         val errorIntent = errorAction.toIntent()
 
@@ -134,10 +138,12 @@ class NewsWidgetUpdateService : JobIntentService() {
     }
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
-        val views = RemoteViews(applicationContext.packageName, when (dark) {
-            true -> R.layout.layout_widget_news_dark_loading
-            false -> R.layout.layout_widget_news_loading
-        })
+        val views = RemoteViews(
+            applicationContext.packageName, when (dark) {
+                true -> R.layout.layout_widget_news_dark_loading
+                false -> R.layout.layout_widget_news_loading
+            }
+        )
 
         bindBaseLayout(id, views)
 
@@ -157,10 +163,12 @@ class NewsWidgetUpdateService : JobIntentService() {
         views.setOnClickPendingIntent(R.id.title, pendingIntent)
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 
-        views.setImageViewBitmap(R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon.cmd_refresh)
-            .colorRes(android.R.color.white)
-            .sizeDp(32)
-            .paddingDp(8)
-            .toBitmap())
+        views.setImageViewBitmap(
+            R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon.cmd_refresh)
+                .colorRes(android.R.color.white)
+                .sizeDp(32)
+                .paddingDp(8)
+                .toBitmap()
+        )
     }
 }

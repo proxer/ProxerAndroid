@@ -155,8 +155,9 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                 val hostersView = languageContainer.findViewById<ViewGroup>(R.id.hosters)
 
                 languageView.text = language.toAppString(languageView.context)
-                languageView.setCompoundDrawablesWithIntrinsicBounds(language.toGeneralLanguage()
-                    .toAppDrawable(languageView.context), null, null, null)
+                languageView.setCompoundDrawablesWithIntrinsicBounds(
+                    language.toGeneralLanguage().toAppDrawable(languageView.context), null, null, null
+                )
 
                 languageContainer.clicks()
                     .mapAdapterPosition({ adapterPosition }) { language to data[it] }

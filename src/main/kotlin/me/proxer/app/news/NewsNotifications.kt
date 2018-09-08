@@ -51,9 +51,12 @@ object NewsNotifications {
 
                 title = current.subject.trim()
                 content = current.description.trim()
-                intent = PendingIntent.getActivity(context, ID,
+                intent = PendingIntent.getActivity(
+                    context,
+                    ID,
                     TopicActivity.getIntent(context, current.threadId, current.categoryId, current.subject),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
 
                 style = NotificationCompat.BigTextStyle(builder)
                     .bigText(content)
@@ -63,9 +66,12 @@ object NewsNotifications {
             else -> {
                 title = context.getString(R.string.notification_news_title)
                 content = newsAmount
-                intent = PendingIntent.getActivity(context, ID,
+                intent = PendingIntent.getActivity(
+                    context,
+                    ID,
                     MainActivity.getSectionIntent(context, DrawerItem.NEWS),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
 
                 style = NotificationCompat.InboxStyle().also {
                     news.forEach { newsArticle ->
@@ -87,8 +93,10 @@ object NewsNotifications {
             .setContentTitle(title)
             .setContentText(content)
             .setContentIntent(intent)
-            .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
-                NewsNotificationReadReceiver.getPendingIntent(context))
+            .addAction(
+                R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
+                NewsNotificationReadReceiver.getPendingIntent(context)
+            )
             .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

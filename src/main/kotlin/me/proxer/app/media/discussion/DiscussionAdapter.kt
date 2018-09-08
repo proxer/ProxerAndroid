@@ -49,8 +49,11 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
-            val metaInfoText = metaInfo.context.getString(R.string.fragment_discussion_meta_info,
-                item.firstPostUsername, item.category)
+            val metaInfoText = metaInfo.context.getString(
+                R.string.fragment_discussion_meta_info,
+                item.firstPostUsername,
+                item.category
+            )
 
             subject.text = item.subject
             metaInfo.fastText = SpannableString(metaInfoText).apply {

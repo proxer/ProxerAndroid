@@ -28,11 +28,13 @@ class Mp4UploadStreamResolver : StreamResolver {
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
         .flatMap {
-            client.newCall(Request.Builder()
-                .get()
-                .url(Utils.getAndFixUrl(it))
-                .header("User-Agent", GENERIC_USER_AGENT)
-                .build())
+            client.newCall(
+                Request.Builder()
+                    .get()
+                    .url(Utils.getAndFixUrl(it))
+                    .header("User-Agent", GENERIC_USER_AGENT)
+                    .build()
+            )
                 .toBodySingle()
         }
         .map {

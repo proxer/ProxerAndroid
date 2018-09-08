@@ -37,8 +37,10 @@ class UcpHistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val viewModel by unsafeLazy { UcpHistoryViewModelProvider.get(this) }
 
     override val layoutManager by lazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-            StaggeredGridLayoutManager.VERTICAL)
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
     }
 
     override var innerAdapter by Delegates.notNull<UcpHistoryAdapter>()
@@ -52,10 +54,13 @@ class UcpHistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
             .autoDisposable(this.scope())
             .subscribe { (_, entry) ->
                 when (entry.category) {
-                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toAnimeLanguage(), entry.name)
-                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toGeneralLanguage(), null, entry.name)
+                    Category.ANIME -> AnimeActivity.navigateTo(
+                        requireActivity(), entry.entryId, entry.episode, entry.language.toAnimeLanguage(), entry.name
+                    )
+                    Category.MANGA -> MangaActivity.navigateTo(
+                        requireActivity(), entry.entryId, entry.episode,
+                        entry.language.toGeneralLanguage(), null, entry.name
+                    )
                 }
             }
 

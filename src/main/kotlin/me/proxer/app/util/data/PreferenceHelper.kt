@@ -30,8 +30,8 @@ object PreferenceHelper {
     fun areBookmarksAutomatic(context: Context) = getDefaultSharedPreferences(context)
         .getBoolean(AUTO_BOOKMARK, false)
 
-    fun getStartPage(context: Context) = DrawerItem.fromIdOrDefault(getDefaultSharedPreferences(context)
-        .getSafeString(START_PAGE, "0").toLongOrNull()
+    fun getStartPage(context: Context) = DrawerItem.fromIdOrDefault(
+        getDefaultSharedPreferences(context).getSafeString(START_PAGE, "0").toLongOrNull()
     )
 
     fun setAgeRestrictedMediaAllowed(context: Context, allowed: Boolean) = getDefaultSharedPreferences(context).edit()

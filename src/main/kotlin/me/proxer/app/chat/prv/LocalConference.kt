@@ -71,6 +71,8 @@ data class LocalConference(
 
     override fun describeContents() = 0
 
-    fun toNonLocalConference() = Conference(id.toString(), topic, customTopic, participantAmount, image, imageType,
-        isGroup, isRead, date, unreadMessageAmount, lastReadMessageId)
+    fun toNonLocalConference() = Conference(
+        id.toString(), topic, customTopic, participantAmount, image, imageType,
+        isGroup, isRead, date, unreadMessageAmount, lastReadMessageId
+    )
 }

@@ -24,10 +24,12 @@ class MessengerActivity : DrawerActivity() {
         private const val INITIAL_MESSAGE_EXTRA = "initial_message"
 
         fun navigateTo(context: Activity, conference: LocalConference, initialMessage: String? = null) {
-            context.startActivity(context.intentFor<MessengerActivity>(
-                CONFERENCE_EXTRA to conference,
-                INITIAL_MESSAGE_EXTRA to initialMessage
-            ))
+            context.startActivity(
+                context.intentFor<MessengerActivity>(
+                    CONFERENCE_EXTRA to conference,
+                    INITIAL_MESSAGE_EXTRA to initialMessage
+                )
+            )
         }
 
         fun getIntent(context: Context, conference: LocalConference, initialMessage: String? = null): Intent {

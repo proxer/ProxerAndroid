@@ -151,8 +151,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         innerAdapter.titleClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
-                ProfileActivity.navigateTo(requireActivity(), item.userId, item.username, item.image,
-                    if (view.drawable != null && item.image.isNotBlank()) view else null)
+                ProfileActivity.navigateTo(
+                    requireActivity(), item.userId, item.username, item.image,
+                    if (view.drawable != null && item.image.isNotBlank()) view else null
+                )
             }
 
         innerAdapter.messageSelectionSubject
@@ -227,10 +229,12 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
                 layoutManager.scrollToPositionWithOffset(0, 0)
             }
 
-        sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
-            .colorRes(requireContext(), R.color.accent)
-            .sizeDp(32)
-            .paddingDp(4))
+        sendButton.setImageDrawable(
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+                .colorRes(requireContext(), R.color.accent)
+                .sizeDp(32)
+                .paddingDp(4)
+        )
 
         emojiButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -270,8 +274,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         viewModel.sendMessageError.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                multilineSnackbar(root, getString(R.string.error_chat_send_message, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
+                multilineSnackbar(
+                    root, getString(R.string.error_chat_send_message, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
             }
         })
 

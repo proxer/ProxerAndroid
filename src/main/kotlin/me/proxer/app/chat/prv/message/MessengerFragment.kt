@@ -218,10 +218,12 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
                 layoutManager.scrollToPositionWithOffset(0, 0)
             }
 
-        sendButton.setImageDrawable(IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
-            .colorRes(requireContext(), R.color.accent)
-            .sizeDp(32)
-            .paddingDp(4))
+        sendButton.setImageDrawable(
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+                .colorRes(requireContext(), R.color.accent)
+                .sizeDp(32)
+                .paddingDp(4)
+        )
 
         emojiButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope())

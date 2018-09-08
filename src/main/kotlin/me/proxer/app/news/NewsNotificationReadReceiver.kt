@@ -17,10 +17,13 @@ import java.util.Date
 class NewsNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
-        fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(context, 0,
+        fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
             Intent(context, NewsNotificationReadReceiver::class.java)
                 .addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES),
-            PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     override fun onReceive(context: Context, intent: Intent?) {

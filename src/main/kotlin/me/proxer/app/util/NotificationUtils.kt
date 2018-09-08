@@ -48,17 +48,22 @@ object NotificationUtils {
         content: String,
         intent: PendingIntent? = null
     ) {
-        NotificationManagerCompat.from(context).notify(id, NotificationCompat.Builder(context, channel)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .setBigContentTitle(title)
-                .bigText(content))
-            .setColor(ContextCompat.getColor(context, R.color.primary))
-            .setSmallIcon(R.drawable.ic_stat_proxer)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setContentIntent(intent)
-            .setAutoCancel(true)
-            .build())
+        NotificationManagerCompat.from(context).notify(
+            id,
+            NotificationCompat.Builder(context, channel)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(title)
+                        .bigText(content)
+                )
+                .setColor(ContextCompat.getColor(context, R.color.primary))
+                .setSmallIcon(R.drawable.ic_stat_proxer)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentIntent(intent)
+                .setAutoCancel(true)
+                .build()
+        )
     }
 }

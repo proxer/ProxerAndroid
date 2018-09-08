@@ -98,8 +98,10 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()),
-            StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()),
+            StaggeredGridLayoutManager.VERTICAL
+        )
         recyclerView.adapter = adapter
     }
 

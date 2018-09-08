@@ -139,8 +139,9 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
 
                 val iconicsIcon = if (icon == null) null else generateMessageStatusDrawable(previewText.context, icon)
 
-                previewText.text = item.message.messageAction.toAppString(previewText.context,
-                    item.message.username, processedFirstMessageText)
+                previewText.text = item.message.messageAction.toAppString(
+                    previewText.context, item.message.username, processedFirstMessageText
+                )
 
                 previewText.setCompoundDrawables(iconicsIcon, null, null, null)
             } else {

@@ -224,8 +224,9 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                     setSpan(StyleSpan(BOLD), indexOf(airingDateText), length, SPAN_INCLUSIVE_EXCLUSIVE)
                 }
             } else {
-                val airingUploadText = airingInfo.context.getString(R.string.fragment_schedule_airing_upload,
-                    airingDateText, uploadDateText)
+                val airingUploadText = airingInfo.context.getString(
+                    R.string.fragment_schedule_airing_upload, airingDateText, uploadDateText
+                )
 
                 airingInfo.text = SpannableString(airingUploadText).apply {
                     setSpan(StyleSpan(BOLD), indexOf(airingDateText), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
@@ -259,11 +260,15 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                     }
                 } else {
                     if (item.date.convertToDateTime().isBefore(now)) {
-                        status.text = status.context.getString(R.string.fragment_schedule_aired_remaining_time,
-                            Date().calculateAndFormatDifference(item.uploadDate))
+                        status.text = status.context.getString(
+                            R.string.fragment_schedule_aired_remaining_time,
+                            Date().calculateAndFormatDifference(item.uploadDate)
+                        )
                     } else {
-                        status.text = status.context.getString(R.string.fragment_schedule_remaining_time,
-                            Date().calculateAndFormatDifference(item.date))
+                        status.text = status.context.getString(
+                            R.string.fragment_schedule_remaining_time,
+                            Date().calculateAndFormatDifference(item.date)
+                        )
                     }
                 }
             }

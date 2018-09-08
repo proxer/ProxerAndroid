@@ -39,13 +39,15 @@ class AnimeActivity : DrawerActivity() {
             name: String? = null,
             episodeAmount: Int? = null
         ) {
-            context.startActivity(context.intentFor<AnimeActivity>(
-                ID_EXTRA to id,
-                EPISODE_EXTRA to episode,
-                LANGUAGE_EXTRA to language,
-                NAME_EXTRA to name,
-                EPISODE_AMOUNT_EXTRA to episodeAmount
-            ))
+            context.startActivity(
+                context.intentFor<AnimeActivity>(
+                    ID_EXTRA to id,
+                    EPISODE_EXTRA to episode,
+                    LANGUAGE_EXTRA to language,
+                    NAME_EXTRA to name,
+                    EPISODE_AMOUNT_EXTRA to episodeAmount
+                )
+            )
         }
     }
 

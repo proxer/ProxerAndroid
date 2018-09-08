@@ -132,10 +132,12 @@ class ExpandableSelectionView @JvmOverloads constructor(
         if (isExtended) {
             if (itemContainer.childCount <= 0) {
                 items.forEach { item ->
-                    itemContainer.addView(when (isSingleSelection) {
-                        true -> constructSingleSelectionView(item)
-                        false -> createMultiSelectionView(item)
-                    })
+                    itemContainer.addView(
+                        when (isSingleSelection) {
+                            true -> constructSingleSelectionView(item)
+                            false -> createMultiSelectionView(item)
+                        }
+                    )
                 }
             }
         } else {

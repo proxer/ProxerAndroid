@@ -88,8 +88,10 @@ object ImagePrototype : AutoClosingPrototype {
                 return false
             }
         })
-        .error(IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
-            .iconColor(view.context)
-            .sizeDp(32))
+        .error(
+            IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
+                .iconColor(view.context)
+                .sizeDp(32)
+        )
         .into(view)
 }

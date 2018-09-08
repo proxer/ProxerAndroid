@@ -73,10 +73,13 @@ class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            status.text = status.context.getString(when (item.category) {
-                Category.ANIME -> R.string.fragment_history_entry_status_anime
-                Category.MANGA -> R.string.fragment_history_entry_status_manga
-            }, item.episode)
+            status.text = status.context.getString(
+                when (item.category) {
+                    Category.ANIME -> R.string.fragment_history_entry_status_anime
+                    Category.MANGA -> R.string.fragment_history_entry_status_manga
+                },
+                item.episode
+            )
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }

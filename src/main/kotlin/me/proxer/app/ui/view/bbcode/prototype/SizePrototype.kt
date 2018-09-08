@@ -27,10 +27,16 @@ object SizePrototype : TextMutatorPrototype {
         val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
 
         return if (value?.endsWith("px") == true) {
-            BBTree(this, parent, args = BBArgs(custom = *arrayOf(
-                SIZE_ARGUMENT to value.substringBeforeLast("px").toFloat(),
-                SIZE_TYPE_ARGUMENT to SizeType.ABSOLUTE
-            )))
+            BBTree(
+                this,
+                parent,
+                args = BBArgs(
+                    custom = *arrayOf(
+                        SIZE_ARGUMENT to value.substringBeforeLast("px").toFloat(),
+                        SIZE_TYPE_ARGUMENT to SizeType.ABSOLUTE
+                    )
+                )
+            )
         } else {
             val size = when (value) {
                 "1" -> 0.4f
@@ -42,10 +48,16 @@ object SizePrototype : TextMutatorPrototype {
                 else -> throw IllegalArgumentException("Unknown size: $value")
             }
 
-            BBTree(this, parent, args = BBArgs(custom = *arrayOf(
-                SIZE_ARGUMENT to size,
-                SIZE_TYPE_ARGUMENT to SizeType.RELATIVE
-            )))
+            BBTree(
+                this,
+                parent,
+                args = BBArgs(
+                    custom = *arrayOf(
+                        SIZE_ARGUMENT to size,
+                        SIZE_TYPE_ARGUMENT to SizeType.RELATIVE
+                    )
+                )
+            )
         }
     }
 

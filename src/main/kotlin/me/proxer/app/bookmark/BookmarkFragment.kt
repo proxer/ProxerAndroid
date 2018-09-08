@@ -78,10 +78,14 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             .autoDisposable(this.scope())
             .subscribe {
                 when (it.category) {
-                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), it.entryId, it.episode,
-                        it.language.toAnimeLanguage(), it.name)
-                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), it.entryId, it.episode,
-                        it.language.toGeneralLanguage(), it.chapterName, it.name)
+                    Category.ANIME -> AnimeActivity.navigateTo(
+                        requireActivity(), it.entryId, it.episode,
+                        it.language.toAnimeLanguage(), it.name
+                    )
+                    Category.MANGA -> MangaActivity.navigateTo(
+                        requireActivity(), it.entryId, it.episode,
+                        it.language.toGeneralLanguage(), it.chapterName, it.name
+                    )
                 }
             }
 
@@ -107,8 +111,10 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
         viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
             it?.let { _ ->
-                multilineSnackbar(root, getString(R.string.error_bookmark_deletion, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity))
+                multilineSnackbar(
+                    root, getString(R.string.error_bookmark_deletion, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
             }
         })
     }

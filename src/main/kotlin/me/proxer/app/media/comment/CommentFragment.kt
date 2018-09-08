@@ -69,8 +69,10 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
         innerAdapter.profileClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, comment) ->
-                ProfileActivity.navigateTo(requireActivity(), comment.authorId, comment.author, comment.image,
-                    if (view.drawable != null && comment.image.isNotBlank()) view else null)
+                ProfileActivity.navigateTo(
+                    requireActivity(), comment.authorId, comment.author, comment.image,
+                    if (view.drawable != null && comment.image.isNotBlank()) view else null
+                )
             }
 
         setHasOptionsMenu(true)

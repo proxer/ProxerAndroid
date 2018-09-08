@@ -13,11 +13,15 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
-@Entity(tableName = "messages", foreignKeys = [(ForeignKey(
-    entity = LocalConference::class,
-    parentColumns = ["id"],
-    childColumns = ["conferenceId"]
-))], indices = [(Index("conferenceId"))])
+@Entity(
+    tableName = "messages",
+    foreignKeys = [(ForeignKey(
+        entity = LocalConference::class,
+        parentColumns = ["id"],
+        childColumns = ["conferenceId"]
+    ))],
+    indices = [(Index("conferenceId"))]
+)
 data class LocalMessage(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val conferenceId: Long,
@@ -32,6 +36,7 @@ data class LocalMessage(
     @Transient
     val styledMessage = BBParser.parseSimple(message).optimize()
 
-    fun toNonLocalMessage() = Message(id.toString(), conferenceId.toString(), userId, username, message, action, date,
-        device)
+    fun toNonLocalMessage() = Message(
+        id.toString(), conferenceId.toString(), userId, username, message, action, date, device
+    )
 }

@@ -44,17 +44,21 @@ import java.util.regex.Pattern.quote
  */
 object BBParser {
 
-    private val textOnlyPrototypes = setOf(BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype,
-        SizePrototype, ColorPrototype, LeftPrototype, CenterPrototype, RightPrototype, SuperscriptPrototype,
-        SubscriptPrototype)
+    private val textOnlyPrototypes = setOf(
+        BoldPrototype, ItalicPrototype, UnderlinePrototype, StrikethroughPrototype, SizePrototype, ColorPrototype,
+        LeftPrototype, CenterPrototype, RightPrototype, SuperscriptPrototype, SubscriptPrototype
+    )
 
     private val simplePrototypes = textOnlyPrototypes.plus(SpoilerPrototype)
 
-    private val defaultPrototypes = simplePrototypes.plus(setOf(QuotePrototype, UrlPrototype, QuotePrototype,
-        UrlPrototype, ImagePrototype, DividerPrototype, VideoPrototype, TablePrototype, TableRowPrototype,
-        TableCellPrototype, CodePrototype, HidePrototype, UnorderedListPrototype, OrderedListPrototype,
-        ListItemPrototype, MapPrototype, AttachmentPrototype, FacebookPrototype, TwitterPrototype, PollPrototype,
-        BreakPrototype, PdfPrototype))
+    private val defaultPrototypes = simplePrototypes.plus(
+        setOf(
+            QuotePrototype, UrlPrototype, QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype,
+            VideoPrototype, TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype, HidePrototype,
+            UnorderedListPrototype, OrderedListPrototype, ListItemPrototype, MapPrototype, AttachmentPrototype,
+            FacebookPrototype, TwitterPrototype, PollPrototype, BreakPrototype, PdfPrototype
+        )
+    )
 
     fun parseSimple(input: String): BBTree {
         return parse(input, simplePrototypes)

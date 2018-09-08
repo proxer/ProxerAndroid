@@ -166,7 +166,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         }
 
         private fun handleExpansion(itemId: String, animate: Boolean = false) {
-                ViewCompat.animate(expand).cancel()
+            ViewCompat.animate(expand).cancel()
 
             if (expansionMap.containsKey(itemId)) {
                 comment.maxHeight = Int.MAX_VALUE

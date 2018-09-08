@@ -32,9 +32,10 @@ class ProxerGlideModule : AppGlideModule() {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         val externalFilesDir = context.getExternalFilesDir(null)
 
-        builder.setDefaultRequestOptions(RequestOptions()
-            .disallowHardwareConfig()
-            .format(DecodeFormat.PREFER_RGB_565)
+        builder.setDefaultRequestOptions(
+            RequestOptions()
+                .disallowHardwareConfig()
+                .format(DecodeFormat.PREFER_RGB_565)
         )
 
         if (PreferenceHelper.shouldCacheExternally(context) && externalFilesDir != null) {

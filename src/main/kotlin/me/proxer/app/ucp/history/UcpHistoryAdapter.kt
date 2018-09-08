@@ -73,8 +73,11 @@ class UcpHistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            status.text = status.context.getString(R.string.fragment_ucp_history_entry_status, item.episode,
-                item.date.convertToRelativeReadableTime(status.context))
+            status.text = status.context.getString(
+                R.string.fragment_ucp_history_entry_status,
+                item.episode,
+                item.date.convertToRelativeReadableTime(status.context)
+            )
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }

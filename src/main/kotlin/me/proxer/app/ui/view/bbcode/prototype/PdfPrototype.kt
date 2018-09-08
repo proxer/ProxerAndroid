@@ -121,10 +121,14 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     private fun handleLoadError(view: SubsamplingScaleImageView) {
         view.setTag(R.id.error_tag, true)
 
-        view.setImage(ImageSource.bitmap(IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
-            .iconColor(view.context)
-            .sizeDp(32)
-            .toBitmap()))
+        view.setImage(
+            ImageSource.bitmap(
+                IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
+                    .iconColor(view.context)
+                    .sizeDp(32)
+                    .toBitmap()
+            )
+        )
     }
 
     private class GlidePdfTarget(view: SubsamplingScaleImageView) : OriginalSizeGlideTarget<File>() {

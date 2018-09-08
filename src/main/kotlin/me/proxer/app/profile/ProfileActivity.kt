@@ -130,8 +130,9 @@ class ProfileActivity : ImageTabsActivity() {
                         .fromAction {
                             messengerDao.findConferenceForUser(safeUsername).let { existingChat ->
                                 when (existingChat) {
-                                    null -> CreateConferenceActivity.navigateTo(this, false,
-                                        Participant(safeUsername, safeImage))
+                                    null -> CreateConferenceActivity.navigateTo(
+                                        this, false, Participant(safeUsername, safeImage)
+                                    )
                                     else -> MessengerActivity.navigateTo(this, existingChat)
                                 }
                             }
@@ -160,12 +161,14 @@ class ProfileActivity : ImageTabsActivity() {
         // If the image is not null, it means the user has none set.
         // If it is null, it means we just have'nt loaded it yet.
         if (image != null) {
-            headerImage.setImageDrawable(IconicsDrawable(headerImage.context)
-                .icon(CommunityMaterial.Icon.cmd_account)
-                .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
-                .paddingDp(32)
-                .backgroundColorRes(R.color.colorPrimaryLight)
-                .colorRes(headerImage.context, R.color.colorPrimary))
+            headerImage.setImageDrawable(
+                IconicsDrawable(headerImage.context)
+                    .icon(CommunityMaterial.Icon.cmd_account)
+                    .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
+                    .paddingDp(32)
+                    .backgroundColorRes(R.color.colorPrimaryLight)
+                    .colorRes(headerImage.context, R.color.colorPrimary)
+            )
         }
     }
 

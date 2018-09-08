@@ -26,8 +26,11 @@ class NewsWidgetViewsFactory(
 
         val result = RemoteViews(context.packageName, layout)
         val topicIntent = TopicActivity.getIntent(context, news.threadId, news.categoryId, news.subject)
-        val info = context.getString(R.string.widget_news_info,
-            news.date.convertToRelativeReadableTime(context), news.category)
+        val info = context.getString(
+            R.string.widget_news_info,
+            news.date.convertToRelativeReadableTime(context),
+            news.category
+        )
 
         result.setTextViewText(R.id.subject, news.subject)
         result.setTextViewText(R.id.info, info)

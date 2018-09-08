@@ -33,11 +33,13 @@ class AppRequiredDialog : BaseDialog() {
         .message(text = getString(R.string.dialog_app_required_content, name))
         .positiveButton(R.string.dialog_app_required_positive) {
             try {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=$packageName")))
+                requireContext().startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName"))
+                )
             } catch (error: ActivityNotFoundException) {
-                requireContext().startActivity(Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")))
+                requireContext().startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageName"))
+                )
             }
         }
         .negativeButton(R.string.cancel)

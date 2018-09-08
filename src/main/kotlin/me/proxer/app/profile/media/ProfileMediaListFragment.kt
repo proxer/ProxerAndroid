@@ -45,8 +45,10 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-            StaggeredGridLayoutManager.VERTICAL)
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
     }
 
     override val hostingActivity: ProfileActivity
@@ -92,10 +94,12 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, when (category) {
+        val menuResource = when (category) {
             Category.ANIME -> R.menu.fragment_user_media_list_anime
             Category.MANGA -> R.menu.fragment_user_media_list_manga
-        }, menu, true)
+        }
+
+        IconicsMenuInflaterUtil.inflate(inflater, context, menuResource, menu, true)
 
         when (filter) {
             UserMediaListFilterType.WATCHING -> menu.findItem(R.id.watching).isChecked = true

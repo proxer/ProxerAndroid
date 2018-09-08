@@ -17,8 +17,14 @@ object ActivityUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && imageView?.drawable != null) {
             intent.putExtra(TRANSITION_NAME_EXTRA, imageView.transitionName)
 
-            context.startActivity(intent, ActivityOptionsCompat
-                .makeSceneTransitionAnimation(context, imageView, imageView.transitionName).toBundle())
+            context.startActivity(
+                intent,
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    context,
+                    imageView,
+                    imageView.transitionName
+                ).toBundle()
+            )
         } else {
             context.startActivity(intent)
         }

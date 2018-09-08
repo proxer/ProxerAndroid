@@ -24,8 +24,9 @@ abstract class MessengerDao {
     @Transaction
     open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
         val (_, id, name) = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
-        val message = LocalMessage(calculateNextMessageToSendId(), conferenceId, id, name, text,
-            MessageAction.NONE, Date(), Device.MOBILE)
+        val message = LocalMessage(
+            calculateNextMessageToSendId(), conferenceId, id, name, text, MessageAction.NONE, Date(), Device.MOBILE
+        )
 
         insertMessage(message)
         markConferenceAsRead(conferenceId)
@@ -52,23 +53,25 @@ abstract class MessengerDao {
     abstract fun getConferences(): List<LocalConference>
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("SELECT * " +
-        "FROM conferences " +
-        "LEFT JOIN ( " +
-        "SELECT * FROM ( " +
-        "SELECT id AS messageId, " +
-        "conferenceId, " +
-        "userId, " +
-        "message AS messageText, " +
-        "username, " +
-        "`action` as messageAction from messages " +
-        "ORDER BY date, id) " +
-        "GROUP BY conferenceId) AS messages " +
-        "ON conferences.id = messages.conferenceId " +
-        "WHERE topic LIKE '%' " +
-        "|| :searchQuery " +
-        "|| '%' " +
-        "ORDER  BY date DESC")
+    @Query(
+        "SELECT * " +
+            "FROM conferences " +
+            "LEFT JOIN ( " +
+            "SELECT * FROM ( " +
+            "SELECT id AS messageId, " +
+            "conferenceId, " +
+            "userId, " +
+            "message AS messageText, " +
+            "username, " +
+            "`action` as messageAction from messages " +
+            "ORDER BY date, id) " +
+            "GROUP BY conferenceId) AS messages " +
+            "ON conferences.id = messages.conferenceId " +
+            "WHERE topic LIKE '%' " +
+            "|| :searchQuery " +
+            "|| '%' " +
+            "ORDER  BY date DESC"
+    )
     abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<ConferenceWithMessage>?>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
@@ -89,9 +92,11 @@ abstract class MessengerDao {
     @Query("SELECT * FROM conferences WHERE topic = :username LIMIT 1")
     abstract fun findConferenceForUser(username: String): LocalConference?
 
-    @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
-        "UNION ALL " +
-        "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)")
+    @Query(
+        "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
+            "UNION ALL " +
+            "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)"
+    )
     abstract fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
 
     @Query("SELECT COUNT(*) FROM messages WHERE conferenceId = :conferenceId AND id = :lastReadMessageId")

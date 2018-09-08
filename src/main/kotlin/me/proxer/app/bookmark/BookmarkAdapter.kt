@@ -78,10 +78,13 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
 
             ViewCompat.setTransitionName(image, "bookmark_${item.id}")
 
-            val availabilityIndicator = AppCompatResources.getDrawable(episode.context, when (item.isAvailable) {
-                true -> R.drawable.ic_circle_green
-                false -> R.drawable.ic_circle_red
-            })
+            val availabilityIndicator = AppCompatResources.getDrawable(
+                episode.context,
+                when (item.isAvailable) {
+                    true -> R.drawable.ic_circle_green
+                    false -> R.drawable.ic_circle_red
+                }
+            )
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)

@@ -24,10 +24,12 @@ class IndustryActivity : ImageTabsActivity() {
         private const val NAME_EXTRA = "name"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-            context.startActivity(context.intentFor<IndustryActivity>(
-                ID_EXTRA to id,
-                NAME_EXTRA to name
-            ))
+            context.startActivity(
+                context.intentFor<IndustryActivity>(
+                    ID_EXTRA to id,
+                    NAME_EXTRA to name
+                )
+            )
         }
     }
 
@@ -56,8 +58,9 @@ class IndustryActivity : ImageTabsActivity() {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
                     .from(this)
-                    .setText(getString(R.string.share_industry, it,
-                        "https://proxer.me/industry?id=$id"))
+                    .setText(
+                        getString(R.string.share_industry, it, "https://proxer.me/industry?id=$id")
+                    )
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()

@@ -45,8 +45,9 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chat_room_participant, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_chat_room_participant, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
@@ -82,11 +83,13 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
             username.text = item.name
 
             if (item.isModerator) {
-                username.setCompoundDrawablesWithIntrinsicBounds(null, null, IconicsDrawable(username.context)
-                    .icon(CommunityMaterial.Icon.cmd_star)
-                    .sizeDp(32)
-                    .paddingDp(8)
-                    .colorRes(username.context, R.color.colorAccent), null)
+                username.setCompoundDrawablesWithIntrinsicBounds(
+                    null, null, IconicsDrawable(username.context)
+                        .icon(CommunityMaterial.Icon.cmd_star)
+                        .sizeDp(32)
+                        .paddingDp(8)
+                        .colorRes(username.context, R.color.colorAccent), null
+                )
             } else {
                 username.setCompoundDrawables(null, null, null, null)
             }

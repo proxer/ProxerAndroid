@@ -89,10 +89,13 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            episodes.text = episodes.context.getQuantityString(when (item.category) {
-                Category.ANIME -> R.plurals.media_episode_count
-                Category.MANGA -> R.plurals.media_chapter_count
-            }, item.episodeAmount)
+            episodes.text = episodes.context.getQuantityString(
+                when (item.category) {
+                    Category.ANIME -> R.plurals.media_episode_count
+                    Category.MANGA -> R.plurals.media_chapter_count
+                },
+                item.episodeAmount
+            )
 
             if (item.rating > 0) {
                 ratingContainer.visibility = View.VISIBLE
@@ -127,18 +130,22 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             .icon(CommunityMaterial.Icon.cmd_thumb_up)
             .sizeDp(32)
             .paddingDp(4)
-            .colorRes(upvotesImage.context, when (userVoted) {
-                true -> R.color.md_green_500
-                false -> R.color.icon
-            })
+            .colorRes(
+                upvotesImage.context, when (userVoted) {
+                    true -> R.color.md_green_500
+                    false -> R.color.icon
+                }
+            )
 
         private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
             .icon(CommunityMaterial.Icon.cmd_thumb_down)
             .sizeDp(32)
             .paddingDp(4)
-            .colorRes(upvotesImage.context, when (userVoted) {
-                true -> R.color.md_red_500
-                false -> R.color.icon
-            })
+            .colorRes(
+                upvotesImage.context, when (userVoted) {
+                    true -> R.color.md_red_500
+                    false -> R.color.icon
+                }
+            )
     }
 }

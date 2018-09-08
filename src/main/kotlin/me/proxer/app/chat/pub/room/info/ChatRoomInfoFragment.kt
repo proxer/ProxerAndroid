@@ -49,8 +49,10 @@ class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>() {
         adapter.participantClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
-                ProfileActivity.navigateTo(requireActivity(), item.id, item.name, item.image,
-                    if (view.drawable != null && item.image.isNotBlank()) view else null)
+                ProfileActivity.navigateTo(
+                    requireActivity(), item.id, item.name, item.image,
+                    if (view.drawable != null && item.image.isNotBlank()) view else null
+                )
             }
 
         adapter.statusLinkClickSubject

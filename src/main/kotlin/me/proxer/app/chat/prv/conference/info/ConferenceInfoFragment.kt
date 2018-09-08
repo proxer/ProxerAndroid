@@ -53,8 +53,10 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         adapter.participantClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
-                ProfileActivity.navigateTo(requireActivity(), item.id, item.username, item.image,
-                    if (view.drawable != null && item.image.isNotBlank()) view else null)
+                ProfileActivity.navigateTo(
+                    requireActivity(), item.id, item.username, item.image,
+                    if (view.drawable != null && item.image.isNotBlank()) view else null
+                )
             }
 
         adapter.statusLinkClickSubject

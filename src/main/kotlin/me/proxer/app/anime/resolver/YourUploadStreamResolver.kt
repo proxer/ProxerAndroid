@@ -27,11 +27,13 @@ class YourUploadStreamResolver : StreamResolver {
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
         .flatMap { url ->
-            client.newCall(Request.Builder()
-                .get()
-                .url(url)
-                .header("User-Agent", GENERIC_USER_AGENT)
-                .build())
+            client.newCall(
+                Request.Builder()
+                    .get()
+                    .url(url)
+                    .header("User-Agent", GENERIC_USER_AGENT)
+                    .build()
+            )
                 .toBodySingle()
                 .map {
                     val regexResult = regex.find(it) ?: throw StreamResolutionException()
@@ -44,12 +46,14 @@ class YourUploadStreamResolver : StreamResolver {
                     fileUrl
                 }
                 .flatMap {
-                    client.newCall(Request.Builder()
-                        .head()
-                        .url(HttpUrl.parse(it) ?: throw IllegalStateException("url is null"))
-                        .header("Referer", url)
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
+                    client.newCall(
+                        Request.Builder()
+                            .head()
+                            .url(HttpUrl.parse(it) ?: throw IllegalStateException("url is null"))
+                            .header("Referer", url)
+                            .header("User-Agent", GENERIC_USER_AGENT)
+                            .build()
+                    )
                         .toSingle()
                 }
         }

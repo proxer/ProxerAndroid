@@ -152,13 +152,16 @@ class MaterialDrawerWrapper(
         ).apply {
             @Suppress("ConstantConditionIf")
             if (!BuildConfig.STORE) {
-                add(1, PrimaryDrawerItem()
-                    .withName(R.string.section_donate)
-                    .withIcon(CommunityMaterial.Icon.cmd_gift)
-                    .withSelectedTextColorRes(R.color.colorAccent)
-                    .withSelectedIconColorRes(R.color.colorAccent)
-                    .withSelectable(false)
-                    .withIdentifier(DrawerItem.DONATE.id))
+                add(
+                    1,
+                    PrimaryDrawerItem()
+                        .withName(R.string.section_donate)
+                        .withIcon(CommunityMaterial.Icon.cmd_gift)
+                        .withSelectedTextColorRes(R.color.colorAccent)
+                        .withSelectedIconColorRes(R.color.colorAccent)
+                        .withSelectable(false)
+                        .withIdentifier(DrawerItem.DONATE.id)
+                )
             }
         }.toList()
     }

@@ -76,8 +76,10 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-            StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
         recyclerView.adapter = adapter
     }
 

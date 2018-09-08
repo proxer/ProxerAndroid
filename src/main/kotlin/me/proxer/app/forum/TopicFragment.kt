@@ -61,8 +61,10 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
         innerAdapter.profileClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, post) ->
-                ProfileActivity.navigateTo(requireActivity(), post.userId, post.username, post.image,
-                    if (view.drawable != null && post.image.isNotBlank()) view else null)
+                ProfileActivity.navigateTo(
+                    requireActivity(), post.userId, post.username, post.image,
+                    if (view.drawable != null && post.image.isNotBlank()) view else null
+                )
             }
 
         setHasOptionsMenu(true)

@@ -34,11 +34,13 @@ class DailymotionStreamResolver : StreamResolver {
         return api.anime().link(id)
             .buildSingle()
             .flatMap { url ->
-                client.newCall(Request.Builder()
-                    .get()
-                    .url(Utils.getAndFixUrl(url))
-                    .header("User-Agent", GENERIC_USER_AGENT)
-                    .build())
+                client.newCall(
+                    Request.Builder()
+                        .get()
+                        .url(Utils.getAndFixUrl(url))
+                        .header("User-Agent", GENERIC_USER_AGENT)
+                        .build()
+                )
                     .toBodySingle()
             }
             .retryWhen { errors ->

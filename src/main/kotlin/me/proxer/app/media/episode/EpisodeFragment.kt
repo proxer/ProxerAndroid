@@ -76,10 +76,14 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
             .autoDisposable(this.scope())
             .subscribe { (language, episode) ->
                 when (episode.category) {
-                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), id, episode.number,
-                        language.toAnimeLanguage(), name, episode.episodeAmount)
-                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), id, episode.number,
-                        language.toGeneralLanguage(), episode.title, name, episode.episodeAmount)
+                    Category.ANIME -> AnimeActivity.navigateTo(
+                        requireActivity(), id, episode.number,
+                        language.toAnimeLanguage(), name, episode.episodeAmount
+                    )
+                    Category.MANGA -> MangaActivity.navigateTo(
+                        requireActivity(), id, episode.number,
+                        language.toGeneralLanguage(), episode.title, name, episode.episodeAmount
+                    )
                 }
             }
     }
@@ -147,10 +151,15 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         adapter.swapDataAndNotifyWithDiffing(data)
 
         if (adapter.isEmpty()) {
-            showError(ErrorAction(when (category) {
-                Category.ANIME, null -> R.string.error_no_data_episodes
-                Category.MANGA -> R.string.error_no_data_chapters
-            }, ACTION_MESSAGE_HIDE))
+            showError(
+                ErrorAction(
+                    when (category) {
+                        Category.ANIME, null -> R.string.error_no_data_episodes
+                        Category.MANGA -> R.string.error_no_data_chapters
+                    },
+                    ACTION_MESSAGE_HIDE
+                )
+            )
         }
     }
 }

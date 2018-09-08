@@ -55,8 +55,9 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(LayoutInflater.from(parent.context)
-        .inflate(R.layout.item_news, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false)
+    )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 

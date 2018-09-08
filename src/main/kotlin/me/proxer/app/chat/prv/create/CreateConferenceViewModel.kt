@@ -93,11 +93,14 @@ class CreateConferenceViewModel : ViewModel() {
 
     fun createGroup(topic: String, firstMessage: String, participants: List<Participant>) = createConference(api
         .messenger()
-        .createConferenceGroup(topic, firstMessage, participants.map { it.username }))
+        .createConferenceGroup(topic, firstMessage, participants.map { it.username })
+    )
 
-    fun createChat(firstMessage: String, participant: Participant) = createConference(api
-        .messenger()
-        .createConference(firstMessage, participant.username))
+    fun createChat(firstMessage: String, participant: Participant) = createConference(
+        api
+            .messenger()
+            .createConference(firstMessage, participant.username)
+    )
 
     private fun createConference(endpoint: Endpoint<String>) {
         creationDisposable?.dispose()

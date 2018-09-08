@@ -55,14 +55,16 @@ class MangaActivity : BaseActivity() {
             name: String? = null,
             episodeAmount: Int? = null
         ) {
-            context.startActivity(context.intentFor<MangaActivity>(
-                ID_EXTRA to id,
-                EPISODE_EXTRA to episode,
-                LANGUAGE_EXTRA to language,
-                CHAPTER_TITLE_EXTRA to chapterTitle,
-                NAME_EXTRA to name,
-                EPISODE_AMOUNT_EXTRA to episodeAmount
-            ))
+            context.startActivity(
+                context.intentFor<MangaActivity>(
+                    ID_EXTRA to id,
+                    EPISODE_EXTRA to episode,
+                    LANGUAGE_EXTRA to language,
+                    CHAPTER_TITLE_EXTRA to chapterTitle,
+                    NAME_EXTRA to name,
+                    EPISODE_AMOUNT_EXTRA to episodeAmount
+                )
+            )
         }
     }
 

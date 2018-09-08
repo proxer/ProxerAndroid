@@ -107,12 +107,14 @@ class BBCodeView @JvmOverloads constructor(
         val hSize = getSize(heightMeasureSpec)
         val hMode = getMode(heightMeasureSpec)
 
-        super.onMeasure(widthMeasureSpec, when (hMode) {
-            AT_MOST -> makeMeasureSpec(Math.min(hSize, maxHeight), AT_MOST)
-            EXACTLY -> makeMeasureSpec(Math.min(hSize, maxHeight), EXACTLY)
-            UNSPECIFIED -> makeMeasureSpec(maxHeight, AT_MOST)
-            else -> throw IllegalArgumentException("Illegal measurement mode: $hMode")
-        })
+        super.onMeasure(
+            widthMeasureSpec, when (hMode) {
+                AT_MOST -> makeMeasureSpec(Math.min(hSize, maxHeight), AT_MOST)
+                EXACTLY -> makeMeasureSpec(Math.min(hSize, maxHeight), EXACTLY)
+                UNSPECIFIED -> makeMeasureSpec(maxHeight, AT_MOST)
+                else -> throw IllegalArgumentException("Illegal measurement mode: $hMode")
+            }
+        )
     }
 
     override fun onAttachedToWindow() {

@@ -139,8 +139,11 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
             comment.tree = item.parsedContent
 
             time.text = item.date.convertToRelativeReadableTime(time.context)
-            progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode,
-                categoryCallback?.invoke() ?: Category.ANIME)
+            progress.text = item.mediaProgress.toEpisodeAppString(
+                progress.context,
+                item.episode,
+                categoryCallback?.invoke() ?: Category.ANIME
+            )
 
             handleExpansion(item.id)
             bindImage(item)
@@ -175,30 +178,30 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
         }
 
         private fun handleExpansion(itemId: String, animate: Boolean = false) {
-                ViewCompat.animate(expand).cancel()
+            ViewCompat.animate(expand).cancel()
 
             if (expansionMap.containsKey(itemId)) {
-                    comment.maxHeight = Int.MAX_VALUE
+                comment.maxHeight = Int.MAX_VALUE
 
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(180f)
-                        false -> expand.rotation = 180f
-                    }
-                } else {
-                    comment.maxHeight = maxHeight
-
-                    when (animate) {
-                        true -> ViewCompat.animate(expand).rotation(0f)
-                        false -> expand.rotation = 0f
-                    }
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(180f)
+                    false -> expand.rotation = 180f
                 }
+            } else {
+                comment.maxHeight = maxHeight
 
-                comment.post { bindExpandButton(maxHeight) }
-
-                if (animate) {
-                    comment.requestLayout()
-                    layoutManager?.requestSimpleAnimationsInNextLayout()
+                when (animate) {
+                    true -> ViewCompat.animate(expand).rotation(0f)
+                    false -> expand.rotation = 0f
                 }
+            }
+
+            comment.post { bindExpandButton(maxHeight) }
+
+            if (animate) {
+                comment.requestLayout()
+                layoutManager?.requestSimpleAnimationsInNextLayout()
+            }
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = if (rating <= 0) {

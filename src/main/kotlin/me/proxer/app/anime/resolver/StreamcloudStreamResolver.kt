@@ -27,11 +27,13 @@ class StreamcloudStreamResolver : StreamResolver {
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
         .flatMap { url ->
-            client.newCall(Request.Builder()
-                .get()
-                .url(url)
-                .header("User-Agent", GENERIC_USER_AGENT)
-                .build())
+            client.newCall(
+                Request.Builder()
+                    .get()
+                    .url(url)
+                    .header("User-Agent", GENERIC_USER_AGENT)
+                    .build()
+            )
                 .toBodySingle()
                 .map {
                     val formValues = FormBody.Builder().apply {
@@ -51,16 +53,19 @@ class StreamcloudStreamResolver : StreamResolver {
                     formValues
                 }
                 .flatMap {
-                    client.newCall(Request.Builder()
-                        .post(it)
-                        .url(url)
-                        .header("User-Agent", GENERIC_USER_AGENT)
-                        .build())
+                    client.newCall(
+                        Request.Builder()
+                            .post(it)
+                            .url(url)
+                            .header("User-Agent", GENERIC_USER_AGENT)
+                            .build()
+                    )
                         .toBodySingle()
                 }
                 .map {
-                    val result = Uri.parse(fileRegex.find(it)?.groupValues?.get(1)
-                        ?: throw StreamResolutionException())
+                    val result = Uri.parse(
+                        fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
+                    )
 
                     StreamResolutionResult(result, "video/mp4", url)
                 }

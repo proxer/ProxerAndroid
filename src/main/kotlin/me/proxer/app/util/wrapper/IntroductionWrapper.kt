@@ -31,8 +31,9 @@ object IntroductionWrapper {
                         image.setPadding(padding, padding, padding, padding)
                         image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
                     }
-                    1 -> image.setIconicsImage(CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2,
-                        android.R.color.white)
+                    1 -> image.setIconicsImage(
+                        CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2, android.R.color.white
+                    )
                 }
             }
         })

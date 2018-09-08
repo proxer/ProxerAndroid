@@ -40,11 +40,13 @@ import kotlin.properties.Delegates
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
-        private val LIBRARIES = arrayOf("android_job", "android_textview_linkbuilder", "anko", "customtabshelper",
+        private val LIBRARIES = arrayOf(
+            "android_job", "android_textview_linkbuilder", "anko", "customtabshelper",
             "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
             "materialbadgetextview", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi",
             "okhttp", "retrofit", "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview",
-            "tablayouthelper")
+            "tablayouthelper"
+        )
 
         private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
 
@@ -97,9 +99,11 @@ class AboutFragment : MaterialAboutFragment() {
 
     private fun buildInfoItems(context: Context) = listOf(
         ConvenienceBuilder.createAppTitleItem(context),
-        ConvenienceBuilder.createVersionActionItem(context,
+        ConvenienceBuilder.createVersionActionItem(
+            context,
             IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context),
-            getString(R.string.about_version_title), false),
+            getString(R.string.about_version_title), false
+        ),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_licenses_title)
             .subText(R.string.about_licenses_description)
@@ -169,8 +173,9 @@ class AboutFragment : MaterialAboutFragment() {
                     .fromAction {
                         messengerDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
                             when (existingConference) {
-                                null -> CreateConferenceActivity.navigateTo(requireActivity(), false,
-                                    Participant(DEVELOPER_PROXER_NAME))
+                                null -> CreateConferenceActivity.navigateTo(
+                                    requireActivity(), false, Participant(DEVELOPER_PROXER_NAME)
+                                )
                                 else -> MessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
                         }

@@ -38,8 +38,10 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
     override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this, userId, username) }
 
     override val layoutManager by lazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-            StaggeredGridLayoutManager.VERTICAL)
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
     }
 
     override val hostingActivity: ProfileActivity
@@ -62,10 +64,14 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
             .autoDisposable(this.scope())
             .subscribe { (_, entry) ->
                 when (entry.category) {
-                    Category.ANIME -> AnimeActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toAnimeLanguage(), entry.name)
-                    Category.MANGA -> MangaActivity.navigateTo(requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toGeneralLanguage(), null, entry.name)
+                    Category.ANIME -> AnimeActivity.navigateTo(
+                        requireActivity(), entry.entryId, entry.episode,
+                        entry.language.toAnimeLanguage(), entry.name
+                    )
+                    Category.MANGA -> MangaActivity.navigateTo(
+                        requireActivity(), entry.entryId, entry.episode,
+                        entry.language.toGeneralLanguage(), null, entry.name
+                    )
                 }
             }
 

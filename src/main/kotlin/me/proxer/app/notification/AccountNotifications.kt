@@ -36,10 +36,12 @@ object AccountNotifications {
     fun showError(context: Context, error: Throwable) {
         val errorAction = ErrorUtils.handle(error)
 
-        NotificationUtils.showErrorNotification(context, ID, PROFILE_CHANNEL,
+        NotificationUtils.showErrorNotification(
+            context, ID, PROFILE_CHANNEL,
             context.getString(R.string.notification_account_error_title),
             context.getString(errorAction.message),
-            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT))
+            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT)
+        )
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
@@ -60,9 +62,11 @@ object AccountNotifications {
             1 -> {
                 content = HtmlCompat.fromHtml(notifications.first().text)
 
-                intent = PendingIntent.getActivity(context, ID,
+                intent = PendingIntent.getActivity(
+                    context, ID,
                     Intent(Intent.ACTION_VIEW, notifications.first().contentLink.androidUri()),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
 
                 style = NotificationCompat.BigTextStyle(builder)
                     .bigText(content)
@@ -72,9 +76,11 @@ object AccountNotifications {
             else -> {
                 content = notificationAmount
 
-                intent = PendingIntent.getActivity(context, ID,
+                intent = PendingIntent.getActivity(
+                    context, ID,
                     NotificationActivity.getIntent(context),
-                    PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
 
                 style = NotificationCompat.InboxStyle().also {
                     notifications.forEach { notification ->
@@ -96,8 +102,10 @@ object AccountNotifications {
             .setContentTitle(title)
             .setContentText(content)
             .setContentIntent(intent)
-            .addAction(R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
-                AccountNotificationReadReceiver.getPendingIntent(context))
+            .addAction(
+                R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
+                AccountNotificationReadReceiver.getPendingIntent(context)
+            )
             .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)
             .setColor(ContextCompat.getColor(context, R.color.primary))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
