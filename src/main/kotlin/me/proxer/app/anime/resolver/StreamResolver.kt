@@ -10,7 +10,6 @@ interface StreamResolver {
     val name: String
     val ignore: Boolean get() = false
     val internalPlayerOnly: Boolean get() = false
-    val official: Boolean get() = false
 
     fun supports(name: String) = name.equals(this.name, true)
     fun resolve(id: String): Single<StreamResolutionResult>

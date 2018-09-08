@@ -363,9 +363,9 @@ inline val Page.decodedName: String
         ""
     }
 
-fun Stream.toAnimeStreamInfo(isSupported: Boolean, isInternalPlayerOnly: Boolean, isOfficial: Boolean) = AnimeStream(
-    id, hoster, hosterName, image, uploaderId, uploaderName, date, translatorGroupId, translatorGroupName,
-    isSupported, isInternalPlayerOnly, isOfficial
+fun Stream.toAnimeStreamInfo(isSupported: Boolean, isInternalPlayerOnly: Boolean) = AnimeStream(
+    id, hoster, hosterName, image, uploaderId, uploaderName, date, translatorGroupId, translatorGroupName, isOfficial,
+    isSupported, isInternalPlayerOnly
 )
 
 fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(

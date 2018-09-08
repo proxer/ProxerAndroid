@@ -12,7 +12,6 @@ import me.proxer.app.util.extension.buildSingle
 class AnimeOnDemandStreamResolver : StreamResolver {
 
     override val name = "Anime on demand"
-    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()

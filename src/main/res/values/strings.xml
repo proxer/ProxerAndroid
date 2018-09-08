@@ -446,7 +446,7 @@
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
     <string name="fragment_anime_stream_only_internal_player_warning">
-        Dieser Hoster funktioniert nur mit dem Proxer-Player
+        Dieser Hoster funktioniert nur mit dem ProxerMe Player
     </string>
     <string name="fragment_anime_stream_official_info">
         Dieser Hoster ist ein offizielles Angebot eines Publishers und unter Umständen kostenpflichtig

@@ -12,7 +12,6 @@ import me.proxer.app.util.extension.buildSingle
 class AmazonPrimeVideoStreamResolver : StreamResolver {
 
     override val name = "Amazon Prime Video"
-    override val official = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
