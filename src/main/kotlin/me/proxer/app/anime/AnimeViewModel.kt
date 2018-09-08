@@ -4,22 +4,30 @@ import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.rxkotlin.Singles
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainApplication.Companion.api
+import me.proxer.app.MainApplication.Companion.bus
+import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
+import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAnimeStreamInfo
 import me.proxer.app.util.extension.toMediaLanguage
@@ -44,8 +52,13 @@ class AnimeViewModel(
     override val dataSingle: Single<AnimeStreamInfo>
         get() = Single.fromCallable { validate() }
             .flatMap { entrySingle() }
+            .doOnSuccess {
+                if (it.isAgeRestricted && !PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)) {
+                    throw AgeConfirmationRequiredException()
+                }
+            }
             .flatMap {
-                Singles.zip(Single.just(it), streamSingle(it)) { entry, streams ->
+                Single.just(it).zipWith(streamSingle(it)) { entry, streams ->
                     AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map { stream ->
                         val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
                         val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
@@ -70,6 +83,19 @@ class AnimeViewModel(
 
     private var resolverDisposable: Disposable? = null
     private var userStateDisposable: Disposable? = null
+
+    init {
+        disposables += bus.register(AgeConfirmationEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                // TODO: Simplify once proguard does not crash on this.
+                val safeValue = error.value
+
+                if (safeValue != null && safeValue.buttonAction == ButtonAction.AGE_CONFIRMATION) {
+                    reload()
+                }
+            }
+    }
 
     override fun onCleared() {
         resolverDisposable?.dispose()
@@ -108,13 +134,19 @@ class AnimeViewModel(
     }
 
     fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
-    fun bookmark(episode: Int) = updateUserState(api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(),
-        Category.ANIME))
 
-    private fun entrySingle() = when (cachedEntryCore != null) {
-        true -> Single.just(cachedEntryCore)
-        false -> api.info().entryCore(entryId).buildSingle()
-    }.doOnSuccess { cachedEntryCore = it }
+    fun bookmark(episode: Int) = updateUserState(
+        api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(), Category.ANIME)
+    )
+
+    private fun entrySingle(): Single<EntryCore> {
+        val safeCachedEntryCore = cachedEntryCore
+
+        return when (safeCachedEntryCore != null) {
+            true -> Single.just(safeCachedEntryCore)
+            false -> api.info().entryCore(entryId).buildSingle()
+        }.doOnSuccess { cachedEntryCore = it }
+    }
 
     private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
         .includeProxerStreams(true)
