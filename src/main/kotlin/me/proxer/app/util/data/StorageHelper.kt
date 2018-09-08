@@ -74,11 +74,7 @@ object StorageHelper {
         }
     }
 
-    fun resetChatInterval() {
-        ensureInit()
-
-        safePut(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
-    }
+    fun resetChatInterval() = safePut(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
     fun putMessageDraft(id: String, draft: String) = safePut("$MESSAGE_DRAFT_PREFIX$id", draft)
 
