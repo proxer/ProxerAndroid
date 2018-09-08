@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/item_margin"
-    tools:context=".profile.media.ProfileMediaAdapter">
+    tools:context=".ucp.media.UcpMediaAdapter">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/root"
@@ -106,6 +106,15 @@
                 android:layout_margin="8dp"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/ic_japan" />
+
+            <me.proxer.app.ui.view.InfoImageButton
+                android:id="@+id/delete"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/state"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/fragment_bookmark_delete_content_description" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
