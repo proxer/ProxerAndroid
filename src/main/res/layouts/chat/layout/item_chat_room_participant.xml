@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    tools:context=".chat.pub.room.info.ChatRoomUserAdapter">
+    tools:context=".chat.pub.room.info.ChatRoomUserAdapter"
+    tools:ignore="Overdraw">
 
     <ImageView
         android:id="@+id/image"

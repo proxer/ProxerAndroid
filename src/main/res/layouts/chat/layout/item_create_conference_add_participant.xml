@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    tools:context=".chat.prv.create.CreateConferenceParticipantAdapter">
+    tools:context=".chat.prv.create.CreateConferenceParticipantAdapter"
+    tools:ignore="Overdraw">
 
     <ImageView
         android:id="@+id/image"
