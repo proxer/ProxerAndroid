@@ -5,7 +5,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
@@ -14,6 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserMediaListEntry
@@ -44,8 +47,10 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override val layoutManager by unsafeLazy {
-        StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
-            StaggeredGridLayoutManager.VERTICAL)
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
     }
 
     private val category: Category
@@ -72,6 +77,12 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
                 MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(), view)
             }
 
+        innerAdapter.deleteClickSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                viewModel.addItemToDelete(it)
+            }
+
         setHasOptionsMenu(true)
     }
 
@@ -79,13 +90,24 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let { _ ->
+                multilineSnackbar(
+                    root, getString(R.string.error_ucp_entry_deletion, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, when (category) {
-            Category.ANIME -> R.menu.fragment_user_media_list_anime
-            Category.MANGA -> R.menu.fragment_user_media_list_manga
-        }, menu, true)
+        IconicsMenuInflaterUtil.inflate(
+            inflater, context, when (category) {
+                Category.ANIME -> R.menu.fragment_user_media_list_anime
+                Category.MANGA -> R.menu.fragment_user_media_list_manga
+            }, menu, true
+        )
 
         when (filter) {
             UserMediaListFilterType.WATCHING -> menu.findItem(R.id.watching).isChecked = true

@@ -155,6 +155,7 @@
     <string name="error_set_user_info">Eintrag konnte nicht aktualisiert werden: %s</string>
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
     <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
+    <string name="error_ucp_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_chat_send_message">Die Nachricht konnte nicht versandt werden: %s</string>
 

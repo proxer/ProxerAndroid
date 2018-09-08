@@ -106,6 +106,15 @@
                 android:layout_margin="8dp"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/ic_japan" />
+
+            <me.proxer.app.ui.view.InfoImageButton
+                android:id="@+id/delete"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/state"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/fragment_bookmark_delete_content_description" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>

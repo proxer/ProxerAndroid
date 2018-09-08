@@ -3,12 +3,14 @@ package me.proxer.app.ucp.media
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -19,6 +21,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ucp.media.UcpMediaAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
@@ -33,6 +36,7 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Pair<ImageView, UserMediaListEntry>> = PublishSubject.create()
+    val deleteClickSubject: PublishSubject<UserMediaListEntry> = PublishSubject.create()
 
     init {
         setHasStableIds(true)
@@ -61,12 +65,14 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         internal val state: ImageView by bindView(R.id.state)
         internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         internal val rating: RatingBar by bindView(R.id.rating)
+        internal val delete: ImageButton by bindView(R.id.delete)
+
+        init {
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_bookmark_remove, 48)
+        }
 
         fun bind(item: UserMediaListEntry) {
-            itemView.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
-                .autoDisposable(this)
-                .subscribe(clickSubject)
+            initListeners()
 
             ViewCompat.setTransitionName(image, "ucp_media_${item.id}")
 
@@ -83,6 +89,18 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
             }
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
+        }
+
+        private fun initListeners() {
+            itemView.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteClickSubject)
         }
     }
 }
