@@ -1,3 +1,6 @@
+# Keep line numbers to make stacktraces readable.
+-keepattributes SourceFile,LineNumberTable
+
 # Keep fields in R which are accessed through reflection.
 -keepclasseswithmembers class **.R$* {
     public static final int define_*;
