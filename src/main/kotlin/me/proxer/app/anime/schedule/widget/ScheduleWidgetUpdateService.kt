@@ -69,17 +69,15 @@ class ScheduleWidgetUpdateService : JobIntentService() {
                     .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
                     .toList()
             }
-            .subscribeAndLogErrors(
-                { calendarEntries ->
-                    widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
-                    darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
-                }, { error ->
-                    val action = ErrorUtils.handle(error)
+            .subscribeAndLogErrors({ calendarEntries ->
+                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
+                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
+            }, { error ->
+                val action = ErrorUtils.handle(error)
 
-                    widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
-                    darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
-                }
-            )
+                widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
+                darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
+            })
     }
 
     override fun onStopCurrentWork(): Boolean {
