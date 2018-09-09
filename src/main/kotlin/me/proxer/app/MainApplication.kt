@@ -46,7 +46,6 @@ import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.threeten.bp.LocalDate
@@ -83,7 +82,6 @@ class MainApplication : Application() {
     }
 
     private val bus by inject<RxBus>()
-    private val api by inject<ProxerApi>()
 
     override fun onCreate() {
         super.onCreate()
