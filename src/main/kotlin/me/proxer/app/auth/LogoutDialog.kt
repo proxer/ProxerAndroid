@@ -12,8 +12,8 @@ import com.afollestad.materialdialogs.customview.customView
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.longToast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -24,7 +24,7 @@ class LogoutDialog : BaseDialog() {
         fun show(activity: FragmentActivity) = LogoutDialog().show(activity.supportFragmentManager, "logout_dialog")
     }
 
-    private val viewModel by unsafeLazy { LogoutViewModelProvider.get(this) }
+    private val viewModel by viewModel<LogoutViewModel>()
 
     private val content: TextView by bindView(R.id.content)
     private val progress: ProgressBar by bindView(R.id.progress)

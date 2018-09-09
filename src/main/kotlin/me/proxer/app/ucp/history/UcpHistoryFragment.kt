@@ -14,10 +14,10 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.UcpHistoryEntry
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -34,7 +34,7 @@ class UcpHistoryFragment : PagedContentFragment<UcpHistoryEntry>() {
     override val emptyDataMessage = R.string.error_no_data_history
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy { UcpHistoryViewModelProvider.get(this) }
+    override val viewModel by viewModel<UcpHistoryViewModel>()
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(

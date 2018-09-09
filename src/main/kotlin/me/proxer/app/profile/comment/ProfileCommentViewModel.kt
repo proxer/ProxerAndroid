@@ -1,6 +1,6 @@
 package me.proxer.app.profile.comment
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
+import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
@@ -13,11 +13,10 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ProfileCommentViewModel(
-    private val userId: String?,
-    private val username: String?,
-    category: Category?
+    private val userId: Optional<String>,
+    private val username: Optional<String>,
+    category: Optional<Category>
 ) : PagedViewModel<ParsedUserComment>() {
 
     override val itemsOnPage = 10
@@ -25,8 +24,8 @@ class ProfileCommentViewModel(
     override val dataSingle: Single<List<ParsedUserComment>>
         get() = Single.fromCallable { validate() }
             .flatMap {
-                api.user().comments(userId, username)
-                    .category(category)
+                api.user().comments(userId.toNullable(), username.toNullable())
+                    .category(category.toNullable())
                     .page(page)
                     .limit(itemsOnPage)
                     .buildSingle()

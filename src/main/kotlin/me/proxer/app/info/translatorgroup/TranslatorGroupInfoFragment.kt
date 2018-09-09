@@ -20,11 +20,12 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppDrawable
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.TranslatorGroup
 import me.proxer.library.enums.Country
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -37,7 +38,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         }
     }
 
-    override val viewModel by unsafeLazy { TranslatorGroupInfoViewModelProvider.get(this, id) }
+    override val viewModel by viewModel<TranslatorGroupInfoViewModel> { parametersOf(id) }
 
     override val hostingActivity: TranslatorGroupActivity
         get() = activity as TranslatorGroupActivity

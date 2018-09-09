@@ -2,7 +2,6 @@ package me.proxer.app.chat.prv.conference
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -20,7 +19,6 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWithMessage>>() {
 
     override val isLoginRequired = true

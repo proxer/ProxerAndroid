@@ -1,6 +1,5 @@
 package me.proxer.app.media.relation
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
@@ -13,7 +12,6 @@ import me.proxer.library.entity.info.Relation
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class RelationViewModel(private val entryId: String) : BaseContentViewModel<List<Relation>>() {
 
     override val endpoint: Endpoint<List<Relation>>

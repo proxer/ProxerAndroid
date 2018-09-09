@@ -1,37 +1,115 @@
 package me.proxer.app
 
 import com.gojuno.koptional.Optional
+import me.proxer.app.anime.AnimeViewModel
+import me.proxer.app.anime.schedule.ScheduleViewModel
+import me.proxer.app.auth.LoginViewModel
+import me.proxer.app.auth.LogoutViewModel
+import me.proxer.app.bookmark.BookmarkViewModel
+import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.conference.ConferenceViewModel
+import me.proxer.app.chat.prv.conference.info.ConferenceInfoViewModel
+import me.proxer.app.chat.prv.create.CreateConferenceViewModel
+import me.proxer.app.chat.prv.message.MessengerViewModel
+import me.proxer.app.chat.pub.message.ChatReportViewModel
+import me.proxer.app.chat.pub.message.ChatViewModel
+import me.proxer.app.chat.pub.room.ChatRoomViewModel
+import me.proxer.app.chat.pub.room.info.ChatRoomInfoViewModel
+import me.proxer.app.forum.TopicViewModel
+import me.proxer.app.info.industry.IndustryInfoViewModel
+import me.proxer.app.info.industry.IndustryProjectViewModel
+import me.proxer.app.info.translatorgroup.TranslatorGroupInfoViewModel
+import me.proxer.app.info.translatorgroup.TranslatorGroupProjectViewModel
+import me.proxer.app.manga.MangaViewModel
 import me.proxer.app.media.MediaInfoViewModel
+import me.proxer.app.media.comment.CommentViewModel
+import me.proxer.app.media.discussion.DiscussionViewModel
+import me.proxer.app.media.episode.EpisodeViewModel
 import me.proxer.app.media.list.MediaListViewModel
+import me.proxer.app.media.recommendation.RecommendationViewModel
+import me.proxer.app.media.relation.RelationViewModel
 import me.proxer.app.news.NewsViewModel
+import me.proxer.app.notification.NotificationViewModel
+import me.proxer.app.profile.about.ProfileAboutViewModel
+import me.proxer.app.profile.comment.ProfileCommentViewModel
+import me.proxer.app.profile.history.HistoryViewModel
+import me.proxer.app.profile.info.ProfileInfoViewModel
+import me.proxer.app.profile.media.ProfileMediaListViewModel
+import me.proxer.app.profile.topten.TopTenViewModel
+import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
+import me.proxer.app.ucp.overview.UcpOverviewViewModel
+import me.proxer.app.ucp.topten.UcpTopTenViewModel
+import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.CommentSortCriteria
+import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
-val viewModelModule = module {
+private val viewModelModule = module {
+    viewModel { LoginViewModel() }
+    viewModel { LogoutViewModel() }
+
     viewModel { NewsViewModel() }
+    viewModel { NotificationViewModel() }
+
+    viewModel { CreateConferenceViewModel() }
+    viewModel { (searchQuery: String) -> ConferenceViewModel(searchQuery) }
+    viewModel { (conferenceId: String) -> ConferenceInfoViewModel(conferenceId) }
+    viewModel { (initialConference: LocalConference) -> MessengerViewModel(initialConference) }
+    viewModel { ChatRoomViewModel() }
+    viewModel { ChatReportViewModel() }
+    viewModel { (chatRoomId: String) -> ChatViewModel(chatRoomId) }
+    viewModel { (chatRoomId: String) -> ChatRoomInfoViewModel(chatRoomId) }
+
+    viewModel { (category: Optional<Category>) -> BookmarkViewModel(category) }
 
     viewModel { parameterList ->
         MediaListViewModel(
-            parameterList.get(0),
-            parameterList.get(1),
-            parameterList.get(2),
-            parameterList.get(3),
-            parameterList.get(4),
-            parameterList.get(5),
-            parameterList.get(6),
-            parameterList.get(7),
-            parameterList.get(8),
-            parameterList.get(9),
-            parameterList.get(10)
+            parameterList[0], parameterList[1], parameterList[2], parameterList[3], parameterList[4], parameterList[5],
+            parameterList[6], parameterList[7], parameterList[8], parameterList[9], parameterList[10]
         )
     }
 
-    viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
+    viewModel { ScheduleViewModel() }
 
+    viewModel { UcpHistoryViewModel() }
+    viewModel { UcpOverviewViewModel() }
+    viewModel { UcpTopTenViewModel() }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileInfoViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> HistoryViewModel(userId, username) }
     viewModel { (category: Category, filter: Optional<UserMediaListFilterType>) ->
         UcpMediaListViewModel(category, filter)
     }
+
+    viewModel { parameterList ->
+        ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])
+    }
+
+    viewModel { (userId: Optional<String>, username: Optional<String>, category: Optional<Category>) ->
+        ProfileCommentViewModel(userId, username, category)
+    }
+
+    viewModel { (id: String) -> TopicViewModel(id) }
+
+    viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
+    viewModel { (entryId: String) -> EpisodeViewModel(entryId) }
+    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) -> CommentViewModel(entryId, sortCriteria) }
+    viewModel { (entryId: String) -> RelationViewModel(entryId) }
+    viewModel { (entryId: String) -> RecommendationViewModel(entryId) }
+    viewModel { (entryId: String) -> DiscussionViewModel(entryId) }
+
+    viewModel { (industryId: String) -> IndustryInfoViewModel(industryId) }
+    viewModel { (industryId: String) -> IndustryProjectViewModel(industryId) }
+    viewModel { (translatorGroupId: String) -> TranslatorGroupInfoViewModel(translatorGroupId) }
+    viewModel { (translatorGroupId: String) -> TranslatorGroupProjectViewModel(translatorGroupId) }
+
+    viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
+    viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
 }
+
+val modules = listOf(viewModelModule)

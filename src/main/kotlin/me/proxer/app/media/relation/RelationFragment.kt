@@ -16,9 +16,10 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.Relation
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -32,7 +33,7 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
         }
     }
 
-    override val viewModel by unsafeLazy { RelationViewModelProvider.get(this, id) }
+    override val viewModel by viewModel<RelationViewModel> { parametersOf(id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

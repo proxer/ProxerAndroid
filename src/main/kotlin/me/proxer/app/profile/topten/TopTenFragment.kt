@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
@@ -19,8 +20,9 @@ import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -34,7 +36,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel by unsafeLazy { TopTenViewModelProvider.get(this, userId, username) }
+    override val viewModel by viewModel<TopTenViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
 
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity

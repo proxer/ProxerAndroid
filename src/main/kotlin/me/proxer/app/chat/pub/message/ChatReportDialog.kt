@@ -23,9 +23,9 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.extension.safeText
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.longToast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -40,7 +40,7 @@ class ChatReportDialog : BaseDialog() {
         }.show(activity.supportFragmentManager, "chat_report_dialog")
     }
 
-    private val viewModel by unsafeLazy { ChatReportViewModelProvider.get(this) }
+    private val viewModel by viewModel<ChatReportViewModel>()
 
     private val messageInput: TextInputEditText by bindView(R.id.message)
     private val messageContainer: TextInputLayout by bindView(R.id.messageContainer)

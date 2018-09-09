@@ -12,9 +12,9 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.pub.message.ChatActivity
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatRoom
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -28,7 +28,7 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
         }
     }
 
-    override val viewModel by unsafeLazy { ChatRoomViewModelProvider.get(this) }
+    override val viewModel by viewModel<ChatRoomViewModel>()
 
     private var adapter by Delegates.notNull<ChatRoomAdapter>()
 

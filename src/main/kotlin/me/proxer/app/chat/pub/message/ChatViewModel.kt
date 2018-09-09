@@ -2,7 +2,6 @@ package me.proxer.app.chat.pub.message
 
 import com.gojuno.koptional.Some
 import com.gojuno.koptional.toOptional
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -29,7 +28,6 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatMessage>() {
 
     override val itemsOnPage = 50

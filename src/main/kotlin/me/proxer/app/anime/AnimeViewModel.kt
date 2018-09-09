@@ -1,6 +1,5 @@
 package me.proxer.app.anime
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,7 +39,6 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class AnimeViewModel(
     private val entryId: String,
     private val language: AnimeLanguage,

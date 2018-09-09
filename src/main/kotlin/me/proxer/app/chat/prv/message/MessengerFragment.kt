@@ -45,9 +45,10 @@ import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -61,7 +62,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    override val viewModel by unsafeLazy { MessengerViewModelProvider.get(this, conference) }
+    override val viewModel by viewModel<MessengerViewModel> { parametersOf(conference) }
 
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false

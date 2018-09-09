@@ -16,9 +16,10 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToDateTime
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.messenger.ConferenceInfo
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -32,7 +33,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
         }
     }
 
-    override val viewModel by unsafeLazy { ConferenceInfoViewModelProvider.get(this, id.toString()) }
+    override val viewModel by viewModel<ConferenceInfoViewModel> { parametersOf(id.toString()) }
 
     override val hostingActivity: ConferenceInfoActivity
         get() = activity as ConferenceInfoActivity

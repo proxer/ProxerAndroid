@@ -31,11 +31,11 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.longToast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -49,7 +49,7 @@ class LoginDialog : BaseDialog() {
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
 
-    private val viewModel by unsafeLazy { LoginViewModelProvider.get(this) }
+    private val viewModel by viewModel<LoginViewModel>()
 
     private val username: TextInputEditText by bindView(R.id.username)
     private val password: TextInputEditText by bindView(R.id.password)

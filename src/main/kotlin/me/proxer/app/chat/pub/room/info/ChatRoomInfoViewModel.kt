@@ -1,6 +1,5 @@
 package me.proxer.app.chat.pub.room.info
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ChatRoomInfoViewModel(private val chatRoomId: String) : BaseContentViewModel<List<ChatRoomUser>>() {
 
     override val endpoint: Endpoint<List<ChatRoomUser>>

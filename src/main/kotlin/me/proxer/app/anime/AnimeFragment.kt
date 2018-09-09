@@ -40,6 +40,8 @@ import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -53,7 +55,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
     }
 
-    override val viewModel by unsafeLazy { AnimeViewModelProvider.get(this, id, language, episode) }
+    override val viewModel by viewModel<AnimeViewModel> { parametersOf(id, language, episode) }
 
     override val hostingActivity: AnimeActivity
         get() = activity as AnimeActivity

@@ -15,8 +15,8 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -33,7 +33,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     override val isSwipeToRefreshEnabled = true
     override val emptyDataMessage = R.string.error_no_data_notifications
 
-    override val viewModel by unsafeLazy { NotificationViewModelProvider.get(this) }
+    override val viewModel by viewModel<NotificationViewModel>()
 
     override val layoutManager by lazy {
         LinearLayoutManager(context)

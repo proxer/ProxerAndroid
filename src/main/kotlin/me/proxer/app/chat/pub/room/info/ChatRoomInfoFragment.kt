@@ -13,9 +13,10 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.chat.ChatRoomUser
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -29,7 +30,7 @@ class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>() {
         }
     }
 
-    override val viewModel by unsafeLazy { ChatRoomInfoViewModelProvider.get(this, chatRoomId) }
+    override val viewModel by viewModel<ChatRoomInfoViewModel> { parametersOf(chatRoomId) }
 
     override val hostingActivity: ChatRoomInfoActivity
         get() = activity as ChatRoomInfoActivity

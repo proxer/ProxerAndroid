@@ -25,9 +25,10 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -44,7 +45,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy { EpisodeViewModelProvider.get(this, id) }
+    override val viewModel by viewModel<EpisodeViewModel> { parametersOf(id) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

@@ -106,7 +106,7 @@ class MainApplication : Application() {
 
         LeakCanary.install(this)
 
-        startKoin(this, listOf(viewModelModule))
+        startKoin(this, modules)
 
         globalContext = this
 

@@ -1,6 +1,6 @@
 package me.proxer.app.profile.media
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
+import com.gojuno.koptional.Optional
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
@@ -15,18 +15,17 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ProfileMediaListViewModel(
-    private val userId: String?,
-    private val username: String?,
+    private val userId: Optional<String>,
+    private val username: Optional<String>,
     category: Category,
-    filter: UserMediaListFilterType?
+    filter: Optional<UserMediaListFilterType>
 ) : PagedContentViewModel<UserMediaListEntry>() {
 
     override val itemsOnPage = 30
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
-        get() = api.user().mediaList(userId, username)
+        get() = api.user().mediaList(userId.toNullable(), username.toNullable())
             .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
             .category(category)
             .filter(filter)
@@ -35,7 +34,7 @@ class ProfileMediaListViewModel(
         if (old != new) reload()
     }
 
-    var filter by Delegates.observable(filter) { _, old, new ->
+    var filter by Delegates.observable(filter.toNullable()) { _, old, new ->
         if (old != new) reload()
     }
 }

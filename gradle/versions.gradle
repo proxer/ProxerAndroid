@@ -88,7 +88,6 @@ ext {
     jsr305Version = '3.0.2'
     javaxExtrasVersion = '0.1.0'
     javaxExtrasVersion = '0.1.0'
-    alfredVersion = '02d06fe449'
     rapidDecoderVersion = '7cdfca47fa'
     concealVersion = '2.0.2'
     betterLinkMovementMethodVersion = '2.2.0'

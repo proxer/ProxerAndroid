@@ -1,6 +1,5 @@
 package me.proxer.app.info.translatorgroup
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
@@ -12,7 +11,6 @@ import me.proxer.library.entity.list.TranslatorGroupProject
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class TranslatorGroupProjectViewModel(
     private val translatorGroupId: String
 ) : PagedContentViewModel<TranslatorGroupProject>() {

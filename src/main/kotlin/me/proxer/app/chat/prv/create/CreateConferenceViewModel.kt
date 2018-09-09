@@ -2,7 +2,6 @@ package me.proxer.app.chat.prv.create
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +24,6 @@ import me.proxer.library.api.Endpoint
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class CreateConferenceViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>()

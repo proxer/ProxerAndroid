@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.unsafeLazy
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -20,7 +21,7 @@ class NotificationDeletionConfirmationDialog : BaseDialog() {
             .show(activity.supportFragmentManager, "notification_deletion_confirmation_dialog")
     }
 
-    private val viewModel by unsafeLazy { NotificationViewModelProvider.get(requireTargetFragment()) }
+    private val viewModel by unsafeLazy { requireTargetFragment().viewModel<NotificationViewModel>().value }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
         .message(R.string.dialog_notification_deletion_confirmation_content)

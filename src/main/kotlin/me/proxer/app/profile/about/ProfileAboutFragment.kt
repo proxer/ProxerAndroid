@@ -33,12 +33,13 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppString
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -56,7 +57,9 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity
 
-    override val viewModel by unsafeLazy { ProfileAboutViewModelProvider.get(this, userId, username) }
+    override val viewModel by viewModel<ProfileAboutViewModel> {
+        parametersOf(userId.toOptional(), username.toOptional())
+    }
 
     private val userId: String?
         get() = hostingActivity.userId

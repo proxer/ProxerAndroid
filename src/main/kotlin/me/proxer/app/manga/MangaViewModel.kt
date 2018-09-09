@@ -1,6 +1,5 @@
 package me.proxer.app.manga
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -35,7 +34,6 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class MangaViewModel(
     private val entryId: String,
     private val language: Language,

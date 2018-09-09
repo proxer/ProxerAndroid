@@ -1,6 +1,5 @@
 package me.proxer.app.media.comment
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.MainApplication.Companion.api
@@ -13,7 +12,6 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class CommentViewModel(
     private val entryId: String,
     sortCriteria: CommentSortCriteria

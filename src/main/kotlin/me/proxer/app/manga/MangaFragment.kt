@@ -51,6 +51,8 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -67,7 +69,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         }
     }
 
-    override val viewModel by unsafeLazy { MangaViewModelProvider.get(this, id, language, episode) }
+    override val viewModel by viewModel<MangaViewModel> { parametersOf(id, language, episode) }
 
     override val hostingActivity: MangaActivity
         get() = activity as MangaActivity

@@ -1,7 +1,6 @@
 package me.proxer.app.forum
 
 import androidx.lifecycle.MutableLiveData
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,6 @@ import me.proxer.app.util.extension.toTopicMetaData
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class TopicViewModel(private val id: String) : PagedViewModel<ParsedPost>() {
 
     override val itemsOnPage = 10

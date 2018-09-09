@@ -13,10 +13,10 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -30,7 +30,7 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         }
     }
 
-    override val viewModel by unsafeLazy { ScheduleViewModelProvider.get(this) }
+    override val viewModel by viewModel<ScheduleViewModel>()
 
     private var adapter by Delegates.notNull<ScheduleAdapter>()
 

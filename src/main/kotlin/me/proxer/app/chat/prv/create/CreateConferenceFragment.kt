@@ -43,9 +43,9 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -62,7 +62,7 @@ class CreateConferenceFragment : BaseFragment() {
     override val hostingActivity: CreateConferenceActivity
         get() = activity as CreateConferenceActivity
 
-    private val viewModel by unsafeLazy { CreateConferenceViewModelProvider.get(this) }
+    private val viewModel by viewModel<CreateConferenceViewModel>()
 
     private val isGroup: Boolean
         get() = hostingActivity.isGroup

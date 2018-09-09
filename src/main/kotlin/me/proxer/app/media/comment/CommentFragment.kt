@@ -18,6 +18,8 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -37,7 +39,7 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
     override val isSwipeToRefreshEnabled = true
     override val pagingThreshold = 3
 
-    override val viewModel by unsafeLazy { CommentViewModelProvider.get(this, id, sortCriteria) }
+    override val viewModel by viewModel<CommentViewModel> { parametersOf(id, sortCriteria) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity

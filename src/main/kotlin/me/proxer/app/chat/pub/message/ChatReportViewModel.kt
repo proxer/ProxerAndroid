@@ -2,7 +2,6 @@ package me.proxer.app.chat.pub.message
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ChatReportViewModel : ViewModel() {
 
     val data = MutableLiveData<Unit?>()

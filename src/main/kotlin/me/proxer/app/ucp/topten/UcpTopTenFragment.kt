@@ -21,8 +21,8 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**
@@ -36,7 +36,7 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         }
     }
 
-    override val viewModel by unsafeLazy { UcpTopTenViewModelProvider.get(this) }
+    override val viewModel by viewModel<UcpTopTenViewModel>()
 
     private var animeAdapter by Delegates.notNull<UcpTopTenAdapter>()
     private var mangaAdapter by Delegates.notNull<UcpTopTenAdapter>()

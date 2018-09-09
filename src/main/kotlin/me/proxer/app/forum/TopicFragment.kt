@@ -20,6 +20,8 @@ import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -38,7 +40,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
     override val hostingActivity: TopicActivity
         get() = activity as TopicActivity
 
-    override val viewModel by unsafeLazy { TopicViewModelProvider.get(this, id) }
+    override val viewModel by viewModel<TopicViewModel> { parametersOf(id) }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
 

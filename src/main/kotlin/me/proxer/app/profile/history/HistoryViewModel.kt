@@ -1,6 +1,6 @@
 package me.proxer.app.profile.history
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
+import com.gojuno.koptional.Optional
 import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
@@ -12,15 +12,14 @@ import me.proxer.library.entity.user.UserHistoryEntry
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class HistoryViewModel(
-    private val userId: String?,
-    private val username: String?
+    private val userId: Optional<String>,
+    private val username: Optional<String>
 ) : PagedContentViewModel<UserHistoryEntry>() {
 
     override val itemsOnPage = 50
 
     override val endpoint: PagingLimitEndpoint<List<UserHistoryEntry>>
-        get() = api.user().history(userId, username)
+        get() = api.user().history(userId.toNullable(), username.toNullable())
             .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
 }

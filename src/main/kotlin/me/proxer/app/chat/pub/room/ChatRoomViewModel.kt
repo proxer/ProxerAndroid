@@ -1,6 +1,5 @@
 package me.proxer.app.chat.pub.room
 
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +17,6 @@ import me.proxer.library.entity.chat.ChatRoom
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
 
     private companion object {

@@ -3,7 +3,6 @@ package me.proxer.app.chat.prv.message
 import androidx.lifecycle.MediatorLiveData
 import com.gojuno.koptional.Some
 import com.gojuno.koptional.toOptional
-import com.hadisatrio.libs.android.viewmodelprovider.GeneratedProvider
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,7 +26,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 /**
  * @author Ruben Gees
  */
-@GeneratedProvider
 class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
 
     override val isLoginRequired = true

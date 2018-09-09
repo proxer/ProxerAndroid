@@ -8,6 +8,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import com.gojuno.koptional.toOptional
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -27,6 +28,8 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -45,7 +48,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     override val emptyDataMessage = R.string.error_no_data_bookmark
 
-    override val viewModel by unsafeLazy { BookmarkViewModelProvider.get(this, category) }
+    override val viewModel by viewModel<BookmarkViewModel> { parametersOf(category.toOptional()) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)

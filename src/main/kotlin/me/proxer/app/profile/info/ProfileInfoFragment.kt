@@ -17,9 +17,10 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserInfo
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -35,7 +36,9 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity
 
-    override val viewModel by unsafeLazy { ProfileInfoViewModelProvider.get(this, userId, username) }
+    override val viewModel by viewModel<ProfileInfoViewModel> {
+        parametersOf(userId.toOptional(), username.toOptional())
+    }
 
     private val userId: String?
         get() = hostingActivity.userId

@@ -15,6 +15,8 @@ import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.list.TranslatorGroupProject
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -31,7 +33,7 @@ class TranslatorGroupProjectFragment : PagedContentFragment<TranslatorGroupProje
     override val emptyDataMessage = R.string.error_no_data_projects
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy { TranslatorGroupProjectViewModelProvider.get(this, id) }
+    override val viewModel by viewModel<TranslatorGroupProjectViewModel> { parametersOf(id) }
 
     override val hostingActivity: TranslatorGroupActivity
         get() = activity as TranslatorGroupActivity

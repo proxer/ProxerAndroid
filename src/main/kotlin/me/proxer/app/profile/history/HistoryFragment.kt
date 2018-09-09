@@ -3,6 +3,7 @@ package me.proxer.app.profile.history
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.GlideApp
@@ -15,10 +16,11 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
 /**
@@ -35,7 +37,7 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
     override val emptyDataMessage = R.string.error_no_data_history
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by unsafeLazy { HistoryViewModelProvider.get(this, userId, username) }
+    override val viewModel by viewModel<HistoryViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(

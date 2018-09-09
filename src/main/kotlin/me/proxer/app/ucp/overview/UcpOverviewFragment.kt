@@ -19,10 +19,10 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -37,7 +37,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
         }
     }
 
-    override val viewModel by unsafeLazy { UcpOverviewViewModelProvider.get(this) }
+    override val viewModel by viewModel<UcpOverviewViewModel>()
 
     private val profileLink: TextView by bindView(R.id.profileLink)
     private val username: TextView by bindView(R.id.username)

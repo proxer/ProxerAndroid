@@ -24,13 +24,15 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter
-import me.proxer.app.chat.prv.conference.ConferenceViewModelProvider
+import me.proxer.app.chat.prv.conference.ConferenceViewModel
 import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -47,7 +49,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
         }
     }
 
-    override val viewModel by unsafeLazy { ConferenceViewModelProvider.get(this, searchQuery ?: "") }
+    override val viewModel by viewModel<ConferenceViewModel> { parametersOf(searchQuery ?: "") }
 
     override val hostingActivity: ShareReceiverActivity
         get() = activity as ShareReceiverActivity

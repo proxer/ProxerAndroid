@@ -38,6 +38,8 @@ import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.jetbrains.anko.bundleOf
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -54,7 +56,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         }
     }
 
-    override val viewModel by unsafeLazy { ConferenceViewModelProvider.get(this, searchQuery ?: "") }
+    override val viewModel by viewModel<ConferenceViewModel> { parametersOf(searchQuery ?: "") }
 
     private var adapter by Delegates.notNull<ConferenceAdapter>()
 
