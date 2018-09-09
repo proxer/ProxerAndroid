@@ -23,7 +23,6 @@ import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import linkClicks
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.data.StorageHelper

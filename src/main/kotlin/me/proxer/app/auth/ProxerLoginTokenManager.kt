@@ -1,13 +1,13 @@
 package me.proxer.app.auth
 
-import me.proxer.app.MainApplication.Companion.bus
+import com.rubengees.rxbus.RxBus
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 
 /**
  * @author Ruben Gees
  */
-class ProxerLoginTokenManager : LoginTokenManager {
+class ProxerLoginTokenManager(private val bus: RxBus) : LoginTokenManager {
 
     override fun provide() = StorageHelper.user?.token
     override fun persist(loginToken: String?) {

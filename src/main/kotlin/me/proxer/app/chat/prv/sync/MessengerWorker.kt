@@ -9,8 +9,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.State
 import androidx.work.WorkManager
 import androidx.work.Worker
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.bus
+import com.rubengees.rxbus.RxBus
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.MainApplication.Companion.messengerDatabase
 import me.proxer.app.chat.prv.LocalConference
@@ -27,24 +26,29 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
+import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.api.ProxerException
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.LinkedHashSet
 import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
  */
-class MessengerWorker : Worker() {
+class MessengerWorker : Worker(), KoinComponent {
 
-    companion object {
+    companion object : KoinComponent {
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
         const val CONFERENCES_ON_PAGE = 48
         const val MESSAGES_ON_PAGE = 30
+
+        private val bus by inject<RxBus>()
 
         fun enqueueSynchronizationIfPossible(context: Context) = if (canSchedule(context)) {
             enqueueSynchronization()
@@ -82,19 +86,20 @@ class MessengerWorker : Worker() {
         }
 
         private fun doEnqueue(startTime: Long? = null, conferenceId: Long? = null) {
-            WorkManager.getInstance().beginUniqueWork(
-                NAME, ExistingWorkPolicy.REPLACE,
-                OneTimeWorkRequestBuilder<MessengerWorker>()
-                    .setConstraints(
-                        Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build()
-                    )
-                    .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
-                    .setInputData(Data.Builder()
-                        .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
-                        .build())
-                    .build())
+            val workRequest = OneTimeWorkRequestBuilder<MessengerWorker>()
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
+                .setInputData(Data.Builder()
+                    .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
+                    .build()
+                )
+                .build()
+
+            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest)
                 .enqueue()
         }
 
@@ -107,6 +112,8 @@ class MessengerWorker : Worker() {
 
     private val conferenceId: Long
         get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
+
+    private val api by inject<ProxerApi>()
 
     private var currentCall: ProxerCall<*>? = null
 
@@ -308,12 +315,13 @@ class MessengerWorker : Worker() {
         }
     }
 
-    private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
-        api.messenger().markConferenceAsRead(it.id.toString())
-            .build()
-            .also { call -> currentCall = call }
-            .execute()
-    }
+    private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) =
+        conferenceToMarkAsRead.forEach {
+            api.messenger().markConferenceAsRead(it.id.toString())
+                .build()
+                .also { call -> currentCall = call }
+                .execute()
+        }
 
     private fun fetchConferences(): Collection<Conference> {
         val changedConferences = LinkedHashSet<Conference>()
@@ -341,8 +349,9 @@ class MessengerWorker : Worker() {
     }
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())
-            ?.toNonLocalMessage()
+        val mostRecentMessage =
+            messengerDao.findMostRecentMessageForConference(conference.id.toLong())
+                ?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
             null -> fetchForEmptyConference(conference)
@@ -427,7 +436,10 @@ class MessengerWorker : Worker() {
 
     private fun showNotification(context: Context) {
         val unreadMap = messengerDao.getUnreadConferences().associate {
-            it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
+            it to messengerDao.getMostRecentMessagesForConference(
+                it.id,
+                it.unreadMessageAmount
+            ).asReversed()
         }
 
         MessengerNotifications.showOrUpdate(context, unreadMap)

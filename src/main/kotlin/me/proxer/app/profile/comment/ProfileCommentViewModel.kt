@@ -3,7 +3,6 @@ package me.proxer.app.profile.comment
 import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toParsedUserComment

@@ -2,14 +2,13 @@ package me.proxer.app.chat.prv.create
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rubengees.rxbus.RxBus
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.Participant
@@ -20,15 +19,21 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.Endpoint
+import me.proxer.library.api.ProxerApi
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-class CreateConferenceViewModel : ViewModel() {
+class CreateConferenceViewModel : ViewModel(), KoinComponent {
 
     val isLoading = MutableLiveData<Boolean>()
     val result = ResettingMutableLiveData<LocalConference>()
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
+
+    private val bus by inject<RxBus>()
+    private val api by inject<ProxerApi>()
 
     private var newConferenceId: Long? = null
 

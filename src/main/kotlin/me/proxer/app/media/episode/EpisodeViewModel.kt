@@ -1,7 +1,6 @@
 package me.proxer.app.media.episode
 
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.buildSingle
 

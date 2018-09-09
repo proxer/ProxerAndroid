@@ -32,11 +32,6 @@ android {
         preDexLibraries !isCI()
     }
 
-    compileOptions {
-        sourceCompatibility javaVersion
-        targetCompatibility javaVersion
-    }
-
     defaultConfig {
         applicationId 'me.proxer.app'
         minSdkVersion rootProject.ext.minSdkVersion
@@ -46,6 +41,21 @@ android {
 
         vectorDrawables.useSupportLibrary true
         resConfigs 'de'
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs += getResSrcDirs()
+        }
+
+        it.each {
+            it.java.srcDirs += "src/$it.name/kotlin"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
     }
 
     signingConfigs {
@@ -159,14 +169,6 @@ android {
         exclude 'androidsupportmultidexversion.txt'
     }
 
-    sourceSets {
-        main {
-            main.java.srcDirs += 'src/main/kotlin'
-            debug.java.srcDirs += 'src/debug/kotlin'
-            res.srcDirs += getResSrcDirs()
-        }
-    }
-
     if (isCI()) {
         // We do not care for these build types on CI.
         // These do only add a large amount of build time while not providing a large benefit.
@@ -194,6 +196,7 @@ dependencies {
     releaseImplementationDependencies.values().each { storeReleaseImplementation it }
     compileOnlyDependencies.values().each { compileOnly it }
     kaptDependencies.values().each { kapt it }
+    testDependencies.values().each { testImplementation it }
 
     excludingImplementationDependencies.values().each { dependency ->
         implementation(dependency.dependency) {

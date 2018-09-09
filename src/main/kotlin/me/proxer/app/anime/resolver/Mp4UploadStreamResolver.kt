@@ -2,8 +2,6 @@ package me.proxer.app.anime.resolver
 
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.androidUri
@@ -15,7 +13,7 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class Mp4UploadStreamResolver : StreamResolver {
+class Mp4UploadStreamResolver : StreamResolver() {
 
     private companion object {
         private val itemRegex = Regex("'(${quote("|")}.*?)'.split\\(")

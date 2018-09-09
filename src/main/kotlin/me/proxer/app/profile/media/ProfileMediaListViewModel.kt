@@ -1,7 +1,6 @@
 package me.proxer.app.profile.media
 
 import com.gojuno.koptional.Optional
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.PreferenceHelper

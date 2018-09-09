@@ -1,7 +1,6 @@
 package me.proxer.app.media.relation
 
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.app.util.data.PreferenceHelper

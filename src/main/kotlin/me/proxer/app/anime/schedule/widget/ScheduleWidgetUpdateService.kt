@@ -15,7 +15,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable
 import me.proxer.app.MainActivity
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
@@ -24,8 +23,11 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
+import me.proxer.library.api.ProxerApi
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
+import org.koin.android.ext.android.inject
+import org.koin.standalone.KoinComponent
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -34,7 +36,7 @@ import java.util.Locale
 /**
  * @author Ruben Gees
  */
-class ScheduleWidgetUpdateService : JobIntentService() {
+class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
 
     companion object {
         private const val JOB_ID = 31253
@@ -45,6 +47,8 @@ class ScheduleWidgetUpdateService : JobIntentService() {
             enqueueWork(context, ScheduleWidgetUpdateService::class.java, JOB_ID, work)
         }
     }
+
+    private val api by inject<ProxerApi>()
 
     private val workerThread = HandlerThread("ScheduleWidget-Worker").apply { start() }
     private val workerQueue = Handler(workerThread.looper)

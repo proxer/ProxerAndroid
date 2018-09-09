@@ -1,10 +1,13 @@
 package me.proxer.app
 
 import com.gojuno.koptional.Optional
+import com.rubengees.rxbus.RxBus
+import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.AnimeViewModel
 import me.proxer.app.anime.schedule.ScheduleViewModel
 import me.proxer.app.auth.LoginViewModel
 import me.proxer.app.auth.LogoutViewModel
+import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.bookmark.BookmarkViewModel
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.ConferenceViewModel
@@ -40,13 +43,49 @@ import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
+import me.proxer.app.util.data.ExoMediaDataSourceFactoryProvider
+import me.proxer.app.util.data.HawkMoshiParser
+import me.proxer.library.api.ProxerApi
+import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
+import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
+
+private const val API_LOGGING_TAG = "API"
+
+private val applicationModules = module {
+    single { RxBus() }
+
+    single {
+        ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
+            .userAgent(USER_AGENT)
+            .apply { if (BuildConfig.LOG) customLogger { message -> Timber.tag(API_LOGGING_TAG).i(message) } }
+            .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
+            .loggingTag(API_LOGGING_TAG)
+            .loginTokenManager(ProxerLoginTokenManager(get()))
+            .client(
+                OkHttpClient.Builder()
+                    .retryOnConnectionFailure(false)
+                    .connectTimeout(5, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+            )
+            .build()
+    }
+
+    single { get<ProxerApi>().moshi() }
+    single { get<ProxerApi>().client() }
+    single { HawkMoshiParser(get()) }
+    single { (referer: String) -> ExoMediaDataSourceFactoryProvider(get(), referer) }
+}
 
 private val viewModelModule = module {
     viewModel { LoginViewModel() }
@@ -112,4 +151,4 @@ private val viewModelModule = module {
     viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
 }
 
-val modules = listOf(viewModelModule)
+val modules = listOf(applicationModules, viewModelModule)

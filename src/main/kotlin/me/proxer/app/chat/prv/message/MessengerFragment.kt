@@ -28,7 +28,6 @@ import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotterknife.bindView
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.chat.prv.LocalConference

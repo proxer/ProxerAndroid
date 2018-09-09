@@ -1,17 +1,18 @@
 package me.proxer.app.util.data
 
 import com.orhanobut.hawk.Hawk
-import com.orhanobut.hawk.Parser
 import me.proxer.app.MainApplication.Companion.globalContext
-import me.proxer.app.MainApplication.Companion.moshi
 import me.proxer.app.auth.LocalUser
-import java.lang.reflect.Type
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.Date
 
 /**
+ * TODO: Refactor to koin module.
+ *
  * @author Ruben Gees
  */
-object StorageHelper {
+object StorageHelper : KoinComponent {
 
     private const val USER = "user"
     private const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
@@ -26,10 +27,7 @@ object StorageHelper {
     private const val DEFAULT_CHAT_INTERVAL = 10_000L
     private const val MAX_CHAT_INTERVAL = 850_000L
 
-    private val jsonParser = object : Parser {
-        override fun <T : Any?> fromJson(content: String, type: Type) = moshi.adapter<T>(type).fromJson(content)
-        override fun toJson(body: Any) = moshi.adapter(body.javaClass).toJson(body)
-    }
+    private val jsonParser by inject<HawkMoshiParser>()
 
     var user: LocalUser?
         get() = safeGet(USER)

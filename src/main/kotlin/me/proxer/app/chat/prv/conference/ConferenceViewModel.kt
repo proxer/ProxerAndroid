@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.chat.prv.ConferenceWithMessage

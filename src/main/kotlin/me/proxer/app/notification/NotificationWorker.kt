@@ -7,25 +7,29 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.bus
+import com.rubengees.rxbus.RxBus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerCall
 import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
  */
-class NotificationWorker : Worker() {
+class NotificationWorker : Worker(), KoinComponent {
 
-    companion object {
+    companion object : KoinComponent {
         private const val NAME = "NotificationWorker"
+
+        private val bus by inject<RxBus>()
 
         fun enqueueIfPossible(context: Context) {
             val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
@@ -44,19 +48,19 @@ class NotificationWorker : Worker() {
 
         private fun enqueue(context: Context) {
             val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
+            val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
 
-            WorkManager.getInstance().enqueueUniquePeriodicWork(
-                NAME, ExistingPeriodicWorkPolicy.REPLACE,
-                PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
-                    .setConstraints(
-                        Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build()
-                    )
-                    .build()
-            )
+            WorkManager.getInstance().enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
         }
     }
+
+    private val api by inject<ProxerApi>()
 
     private var currentCall: ProxerCall<*>? = null
 

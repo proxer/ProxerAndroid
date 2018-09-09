@@ -2,7 +2,6 @@ package me.proxer.app.anime.resolver
 
 import android.content.Intent
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.util.Utils
@@ -12,7 +11,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class ViewsterStreamResolver : StreamResolver {
+class ViewsterStreamResolver : StreamResolver() {
 
     companion object {
         private const val VIEWSTER_PACKAGE = "com.viewster.androidapp"

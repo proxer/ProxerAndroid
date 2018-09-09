@@ -3,7 +3,6 @@ package me.proxer.app.anime.resolver
 import android.content.Intent
 import android.net.Uri
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
@@ -13,7 +12,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class CrunchyrollStreamResolver : StreamResolver {
+class CrunchyrollStreamResolver : StreamResolver() {
 
     private companion object {
         private const val CRUNCHYROLL_PACKAGE = "com.crunchyroll.crunchyroid"

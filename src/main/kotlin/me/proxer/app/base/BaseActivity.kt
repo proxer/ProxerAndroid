@@ -3,12 +3,14 @@ package me.proxer.app.base
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.rubengees.rxbus.RxBus
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -20,6 +22,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private companion object {
         private const val STATE = "activity_state"
     }
+
+    protected val bus by inject<RxBus>()
 
     private var currentNightMode by Delegates.notNull<Int>()
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()

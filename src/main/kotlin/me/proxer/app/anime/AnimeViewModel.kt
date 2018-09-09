@@ -7,8 +7,6 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory

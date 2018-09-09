@@ -1,6 +1,5 @@
 package me.proxer.app.ucp.overview
 
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseContentViewModel
 import me.proxer.library.api.Endpoint
 

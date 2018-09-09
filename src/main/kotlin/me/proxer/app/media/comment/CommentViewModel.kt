@@ -2,7 +2,6 @@ package me.proxer.app.media.comment
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toParsedComment

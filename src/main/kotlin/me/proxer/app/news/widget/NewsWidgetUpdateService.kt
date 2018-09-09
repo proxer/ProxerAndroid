@@ -13,7 +13,6 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable
 import me.proxer.app.MainActivity
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
@@ -21,13 +20,16 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
+import me.proxer.library.api.ProxerApi
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-class NewsWidgetUpdateService : JobIntentService() {
+class NewsWidgetUpdateService : JobIntentService(), KoinComponent {
 
     companion object {
         private const val JOB_ID = 31221
@@ -36,6 +38,8 @@ class NewsWidgetUpdateService : JobIntentService() {
             enqueueWork(context, NewsWidgetUpdateService::class.java, JOB_ID, work)
         }
     }
+
+    private val api by inject<ProxerApi>()
 
     private var disposable: Disposable? = null
 

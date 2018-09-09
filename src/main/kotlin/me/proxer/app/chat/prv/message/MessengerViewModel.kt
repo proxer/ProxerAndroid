@@ -9,7 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.chat.prv.LocalConference

@@ -97,4 +97,7 @@ ext {
     strictModeCompatVersion = '26.0.2'
     leakCanaryVersion = '1.6.1'
     timberVersion = '4.7.1'
+
+    // Test
+    jUnitVersion = '4.12'
 }

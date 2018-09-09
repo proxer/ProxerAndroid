@@ -1,7 +1,6 @@
 package me.proxer.app.anime.schedule
 
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.media.CalendarEntry

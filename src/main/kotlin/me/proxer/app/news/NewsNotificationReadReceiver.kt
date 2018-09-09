@@ -6,15 +6,17 @@ import android.content.Context
 import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.library.api.ProxerApi
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.Date
 
 /**
  * @author Ruben Gees
  */
-class NewsNotificationReadReceiver : BroadcastReceiver() {
+class NewsNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
 
     companion object {
         fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(
@@ -25,6 +27,8 @@ class NewsNotificationReadReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
+
+    private val api by inject<ProxerApi>()
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable

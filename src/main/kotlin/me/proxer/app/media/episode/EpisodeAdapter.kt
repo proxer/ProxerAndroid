@@ -10,21 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.GlideRequests
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.R
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -53,9 +46,6 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
     val languageClickSubject: PublishSubject<Pair<MediaLanguage, EpisodeRow>> = PublishSubject.create()
 
     private val expansionMap: ParcelableStringBooleanMap
-    private var isLoggedIn = StorageHelper.isLoggedIn
-
-    private var busDisposable: Disposable? = null
 
     init {
         expansionMap = when (savedInstanceState) {
@@ -73,23 +63,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
     override fun getItemId(position: Int) = data[position].number.toLong()
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        busDisposable = Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                isLoggedIn = when (it) {
-                    is LoginEvent -> true
-                    is LogoutEvent -> false
-                    else -> false
-                }
-
-                notifyDataSetChanged()
-            }
-    }
-
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        busDisposable?.dispose()
-        busDisposable = null
         glide = null
     }
 

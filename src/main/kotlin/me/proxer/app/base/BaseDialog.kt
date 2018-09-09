@@ -6,12 +6,14 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import com.rubengees.rxbus.RxBus
 import kotterknife.KotterKnife
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -28,6 +30,8 @@ abstract class BaseDialog : DialogFragment() {
             }
         }
     }
+
+    protected val bus by inject<RxBus>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
     private var lifecycleRegistry: LifecycleRegistry? = null

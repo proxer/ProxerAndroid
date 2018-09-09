@@ -1,16 +1,25 @@
 package me.proxer.app.anime.resolver
 
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
+import me.proxer.library.api.ProxerApi
+import okhttp3.OkHttpClient
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-interface StreamResolver {
+abstract class StreamResolver : KoinComponent {
 
-    val name: String
-    val ignore: Boolean get() = false
-    val internalPlayerOnly: Boolean get() = false
+    abstract val name: String
+    open val internalPlayerOnly: Boolean get() = false
+    open val ignore: Boolean get() = false
 
-    fun supports(name: String) = name.equals(this.name, true)
-    fun resolve(id: String): Single<StreamResolutionResult>
+    protected val api by inject<ProxerApi>()
+    protected val client by inject<OkHttpClient>()
+    protected val moshi by inject<Moshi>()
+
+    open fun supports(name: String) = name.equals(this.name, true)
+    abstract fun resolve(id: String): Single<StreamResolutionResult>
 }

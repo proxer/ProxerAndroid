@@ -13,8 +13,10 @@ import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.util.data.PreferenceHelper
+import okhttp3.OkHttpClient
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.io.InputStream
 
 /**
@@ -22,12 +24,14 @@ import java.io.InputStream
  */
 @GlideModule
 @Excludes(OkHttpLibraryGlideModule::class)
-class ProxerGlideModule : AppGlideModule() {
+class ProxerGlideModule : AppGlideModule(), KoinComponent {
 
     private companion object {
         private const val CACHE_SIZE = 1024L * 1024L * 250L
         private const val CACHE_DIR = "cache"
     }
+
+    private val client by inject<OkHttpClient>()
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         val externalFilesDir = context.getExternalFilesDir(null)

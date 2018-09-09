@@ -3,7 +3,6 @@ package me.proxer.app.profile.topten
 import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult

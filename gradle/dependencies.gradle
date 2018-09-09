@@ -104,8 +104,8 @@ ext {
     ]
 
     kaptDependencies = [
-            roomCompiler  : "android.arch.persistence.room:compiler:$roomVersion",
-            glideCompiler : "com.github.bumptech.glide:compiler:$glideVersion"
+            roomCompiler : "android.arch.persistence.room:compiler:$roomVersion",
+            glideCompiler: "com.github.bumptech.glide:compiler:$glideVersion"
     ]
 
     excludingImplementationDependencies = [
@@ -113,5 +113,10 @@ ext {
                     dependency: "com.orhanobut:hawk:$hawkVersion",
                     exclusions: ['gson'],
             ],
+    ]
+
+    testDependencies = [
+            jUnit   : "junit:junit:$jUnitVersion",
+            koinTest: "org.koin:koin-test:$koinVersion"
     ]
 }

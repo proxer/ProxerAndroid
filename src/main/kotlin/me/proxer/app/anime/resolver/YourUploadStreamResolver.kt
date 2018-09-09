@@ -2,8 +2,6 @@ package me.proxer.app.anime.resolver
 
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
@@ -16,7 +14,7 @@ import java.io.IOException
 /**
  * @author Ruben Gees
  */
-class YourUploadStreamResolver : StreamResolver {
+class YourUploadStreamResolver : StreamResolver() {
 
     private companion object {
         private val regex = Regex("file: '(.*?)'")

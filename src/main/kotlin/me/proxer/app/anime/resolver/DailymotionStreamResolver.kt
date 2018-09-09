@@ -4,9 +4,6 @@ import android.net.Uri
 import io.reactivex.Flowable
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.client
-import me.proxer.app.MainApplication.Companion.moshi
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
@@ -20,7 +17,7 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class DailymotionStreamResolver : StreamResolver {
+class DailymotionStreamResolver : StreamResolver() {
 
     private companion object {
         private val regex = Regex("\"qualities\":(${quote("{")}.+${quote("}")}${quote("]")}${quote("}")}),")

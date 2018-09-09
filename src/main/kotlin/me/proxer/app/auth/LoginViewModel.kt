@@ -5,24 +5,28 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.api
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
 import me.proxer.library.entity.user.User
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-class LoginViewModel : ViewModel() {
+class LoginViewModel : ViewModel(), KoinComponent {
 
     val data = MutableLiveData<User?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     val isLoading = MutableLiveData<Boolean?>()
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
+
+    private val api by inject<ProxerApi>()
 
     private var dataDisposable: Disposable? = null
 

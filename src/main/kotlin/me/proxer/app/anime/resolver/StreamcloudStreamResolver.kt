@@ -3,8 +3,6 @@ package me.proxer.app.anime.resolver
 import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
@@ -14,7 +12,7 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class StreamcloudStreamResolver : StreamResolver {
+class StreamcloudStreamResolver : StreamResolver() {
 
     private companion object {
         private val formRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")

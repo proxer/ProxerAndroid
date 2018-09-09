@@ -24,7 +24,6 @@ import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
-import com.squareup.moshi.Moshi
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.Completable
@@ -35,7 +34,6 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
-import me.proxer.app.auth.ProxerLoginTokenManager
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerDatabase
 import me.proxer.app.chat.prv.sync.MessengerNotifications
@@ -49,8 +47,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
-import okhttp3.OkHttpClient
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -58,7 +55,6 @@ import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.io.File
 import java.util.Date
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -70,22 +66,11 @@ class MainApplication : Application() {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
-        val bus = RxBus()
-
-        val moshi: Moshi
-            get() = api.moshi()
-
-        val client: OkHttpClient
-            get() = api.client()
-
         val messengerDao: MessengerDao
             get() = messengerDatabase.dao()
 
         val tagDao: TagDao
             get() = tagDatabase.dao()
-
-        var api by Delegates.notNull<ProxerApi>()
-            private set
 
         var messengerDatabase by Delegates.notNull<MessengerDatabase>()
             private set
@@ -96,6 +81,9 @@ class MainApplication : Application() {
         var globalContext by Delegates.notNull<Context>()
             private set
     }
+
+    private val bus by inject<RxBus>()
+    private val api by inject<ProxerApi>()
 
     override fun onCreate() {
         super.onCreate()
@@ -110,22 +98,14 @@ class MainApplication : Application() {
 
         globalContext = this
 
-        val hasExternalStorage = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
-
-        if (!PreferenceHelper.isCacheExternallySet(this)) {
-            PreferenceHelper.setCacheExternally(this, hasExternalStorage)
-        } else if (PreferenceHelper.shouldCacheExternally(this) && !hasExternalStorage) {
-            PreferenceHelper.setCacheExternally(this, false)
-        }
-
         NotificationUtils.createNotificationChannels(this)
 
         messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
         tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
 
         initBus()
-        initApi()
         initLibs()
+        initCache()
         initNightMode()
         enableStrictModeForDebug()
     }
@@ -179,24 +159,6 @@ class MainApplication : Application() {
             }
     }
 
-    private fun initApi() {
-        api = ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
-            .userAgent(USER_AGENT)
-            .apply { if (BuildConfig.LOG) customLogger { Timber.tag("API").i(it) } }
-            .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
-            .loggingTag("API")
-            .loginTokenManager(ProxerLoginTokenManager())
-            .client(
-                OkHttpClient.Builder()
-                    .retryOnConnectionFailure(false)
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .build()
-            )
-            .build()
-    }
-
     private fun initLibs() {
         CaocConfig.Builder.create()
             .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
@@ -228,6 +190,16 @@ class MainApplication : Application() {
 
         DrawerImageLoader.init(ConcreteDrawerImageLoader())
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
+    }
+
+    private fun initCache() {
+        val hasExternalStorage = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+
+        if (!PreferenceHelper.isCacheExternallySet(this)) {
+            PreferenceHelper.setCacheExternally(this, hasExternalStorage)
+        } else if (PreferenceHelper.shouldCacheExternally(this) && !hasExternalStorage) {
+            PreferenceHelper.setCacheExternally(this, false)
+        }
     }
 
     private fun enableStrictModeForDebug() {

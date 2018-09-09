@@ -19,9 +19,7 @@ import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_L
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_LOW_PROFILE
 import com.devbrackets.android.exomedia.ui.widget.VideoControls.SYSTEM_UI_FLAG_VISIBLE
 import com.devbrackets.android.exomedia.ui.widget.VideoView
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.TransferListener
+import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -29,14 +27,14 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import errors
 import kotterknife.bindView
-import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.data.ExoMediaDataSourceFactoryProvider
 import me.proxer.app.util.extension.postDelayedSafely
-import okhttp3.OkHttpClient
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import preparedEvents
 
 /**
@@ -53,6 +51,10 @@ class StreamActivity : BaseActivity() {
 
     private val referer: String?
         get() = intent.getStringExtra(StreamResolutionResult.REFERER_EXTRA)
+
+    private val exoMediaDataSourceFactoryProvider by inject<ExoMediaDataSourceFactoryProvider> {
+        parametersOf(referer.toOptional())
+    }
 
     private var pausedInOnStop = false
 
@@ -150,7 +152,7 @@ class StreamActivity : BaseActivity() {
     }
 
     private fun setupPlayer() {
-        ExoMedia.setDataSourceFactoryProvider(ExoMediaDataSourceFactoryProvider(referer))
+        ExoMedia.setDataSourceFactoryProvider(exoMediaDataSourceFactoryProvider)
 
         (player.videoControlsCore as? VideoControls)?.let {
             it.setNextDrawable(
@@ -229,27 +231,6 @@ class StreamActivity : BaseActivity() {
                 SYSTEM_UI_FLAG_FULLSCREEN or
                 SYSTEM_UI_FLAG_HIDE_NAVIGATION
             else -> SYSTEM_UI_FLAG_VISIBLE
-        }
-    }
-
-    private class ExoMediaDataSourceFactoryProvider(referer: String?) : ExoMedia.DataSourceFactoryProvider {
-
-        val exoMediaClient: OkHttpClient = when (referer) {
-            null -> client
-            else -> client.newBuilder()
-                .addInterceptor { chain ->
-                    val newRequest = chain.request().newBuilder().header("Referer", referer).build()
-
-                    chain.proceed(newRequest)
-                }
-                .build()
-        }
-
-        override fun provide(
-            userAgent: String,
-            listener: TransferListener<in DataSource>?
-        ): DataSource.Factory {
-            return OkHttpDataSourceFactory(exoMediaClient, GENERIC_USER_AGENT, listener)
         }
     }
 }

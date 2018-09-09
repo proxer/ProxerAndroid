@@ -2,8 +2,6 @@ package me.proxer.app.news
 
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint

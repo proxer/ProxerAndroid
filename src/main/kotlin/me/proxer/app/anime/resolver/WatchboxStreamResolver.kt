@@ -4,8 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
-import me.proxer.app.MainApplication.Companion.api
-import me.proxer.app.MainApplication.Companion.client
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
@@ -18,7 +16,7 @@ import kotlin.text.RegexOption.DOT_MATCHES_ALL
 /**
  * @author Ruben Gees
  */
-class WatchboxStreamResolver : StreamResolver {
+class WatchboxStreamResolver : StreamResolver() {
 
     private companion object {
         private const val WATCHBOX_PACKAGE = "com.rtli.clipfish"

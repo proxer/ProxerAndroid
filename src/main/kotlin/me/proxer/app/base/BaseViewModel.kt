@@ -2,6 +2,7 @@ package me.proxer.app.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rubengees.rxbus.RxBus
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -9,7 +10,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.bus
 import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
@@ -18,11 +18,14 @@ import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.library.api.ProxerApi
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-abstract class BaseViewModel<T> : ViewModel() {
+abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     open val data = MutableLiveData<T?>()
     open val error = MutableLiveData<ErrorUtils.ErrorAction?>()
@@ -30,6 +33,9 @@ abstract class BaseViewModel<T> : ViewModel() {
 
     protected open val isLoginRequired = false
     protected open val isAgeConfirmationRequired = false
+
+    protected val bus by inject<RxBus>()
+    protected val api by inject<ProxerApi>()
 
     protected var dataDisposable: Disposable? = null
     protected val disposables = CompositeDisposable()
