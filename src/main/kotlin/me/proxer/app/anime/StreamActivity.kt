@@ -83,7 +83,7 @@ class StreamActivity : BaseActivity() {
 
             pausedInOnStop = false
         } else {
-            if (lastPosition > 0) {
+            if (player.currentPosition <= 0 && lastPosition > 0) {
                 player.seekTo(lastPosition)
 
                 lastPosition = -1
