@@ -9,9 +9,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
@@ -34,6 +34,7 @@ class CreateConferenceViewModel : ViewModel(), KoinComponent {
 
     private val bus by inject<RxBus>()
     private val api by inject<ProxerApi>()
+    private val messengerDao by inject<MessengerDao>()
 
     private var newConferenceId: Long? = null
 

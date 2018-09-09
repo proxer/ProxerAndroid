@@ -7,14 +7,15 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.util.extension.getSafeCharSequence
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-class DirectReplyReceiver : BroadcastReceiver() {
+class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
 
     companion object {
         const val REMOTE_REPLY_EXTRA = "remote_reply"
@@ -29,6 +30,8 @@ class DirectReplyReceiver : BroadcastReceiver() {
             return PendingIntent.getBroadcast(context, conferenceId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }
+
+    private val messengerDao by inject<MessengerDao>()
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)

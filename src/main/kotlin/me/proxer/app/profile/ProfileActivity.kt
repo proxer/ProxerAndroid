@@ -12,12 +12,12 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.profile.about.ProfileAboutFragment
 import me.proxer.app.profile.comment.ProfileCommentFragment
 import me.proxer.app.profile.history.HistoryFragment
@@ -33,6 +33,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
+import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -92,6 +93,8 @@ class ProfileActivity : ImageTabsActivity() {
 
             loadImage()
         }
+
+    private val messengerDao by inject<MessengerDao>()
 
     override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 

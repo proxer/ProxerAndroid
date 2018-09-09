@@ -6,9 +6,9 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.tagDao
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.media.LocalTag
+import me.proxer.app.media.TagDao
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
@@ -23,6 +23,7 @@ import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import me.proxer.library.enums.TagType
+import org.koin.standalone.inject
 import org.threeten.bp.LocalDateTime
 import java.util.Date
 import java.util.EnumSet
@@ -77,6 +78,8 @@ class MediaListViewModel(
 
     val genreData = MutableLiveData<List<LocalTag>>()
     val tagData = MutableLiveData<List<LocalTag>>()
+
+    private val tagDao by inject<TagDao>()
 
     private var tagsDisposable: Disposable? = null
 

@@ -11,7 +11,6 @@ import android.webkit.WebView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
-import androidx.room.Room
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import cat.ereza.customactivityoncrash.config.CaocConfig
@@ -35,11 +34,8 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.chat.prv.sync.MessengerDao
-import me.proxer.app.chat.prv.sync.MessengerDatabase
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.chat.prv.sync.MessengerWorker
-import me.proxer.app.media.TagDao
-import me.proxer.app.media.TagDatabase
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.NotificationUtils
@@ -65,23 +61,12 @@ class MainApplication : Application() {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
-        val messengerDao: MessengerDao
-            get() = messengerDatabase.dao()
-
-        val tagDao: TagDao
-            get() = tagDatabase.dao()
-
-        var messengerDatabase by Delegates.notNull<MessengerDatabase>()
-            private set
-
-        var tagDatabase by Delegates.notNull<TagDatabase>()
-            private set
-
         var globalContext by Delegates.notNull<Context>()
             private set
     }
 
     private val bus by inject<RxBus>()
+    private val messengerDao by inject<MessengerDao>()
 
     override fun onCreate() {
         super.onCreate()
@@ -97,9 +82,6 @@ class MainApplication : Application() {
         globalContext = this
 
         NotificationUtils.createNotificationChannels(this)
-
-        messengerDatabase = Room.databaseBuilder(this, MessengerDatabase::class.java, "chat.db").build()
-        tagDatabase = Room.databaseBuilder(this, TagDatabase::class.java, "tags.db").build()
 
         initBus()
         initLibs()

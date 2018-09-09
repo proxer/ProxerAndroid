@@ -10,8 +10,6 @@ import androidx.work.State
 import androidx.work.WorkManager
 import androidx.work.Worker
 import com.rubengees.rxbus.RxBus
-import me.proxer.app.MainApplication.Companion.messengerDao
-import me.proxer.app.MainApplication.Companion.messengerDatabase
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.conference.ConferenceFragmentPingEvent
@@ -114,6 +112,8 @@ class MessengerWorker : Worker(), KoinComponent {
         get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
 
     private val api by inject<ProxerApi>()
+    private val messengerDatabase by inject<MessengerDatabase>()
+    private val messengerDao by inject<MessengerDao>()
 
     private var currentCall: ProxerCall<*>? = null
 

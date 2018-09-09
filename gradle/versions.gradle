@@ -100,4 +100,5 @@ ext {
 
     // Test
     jUnitVersion = '4.12'
+    mockkVersion = '1.8.7'
 }

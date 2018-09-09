@@ -10,13 +10,14 @@ import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.bundleOf
+import org.koin.android.ext.android.inject
 import java.util.Date
 
 /**
@@ -30,6 +31,8 @@ class ConferenceChooserTargetService : ChooserTargetService() {
         const val ARGUMENT_CONFERENCE_WRAPPER = "conference_wrapper" /* Hack for making it possible to share
                                                                         between processes. */
     }
+
+    private val messengerDao by inject<MessengerDao>()
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = messengerDao.getConferences()

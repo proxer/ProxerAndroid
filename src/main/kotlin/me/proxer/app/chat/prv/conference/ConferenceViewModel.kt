@@ -5,14 +5,15 @@ import androidx.lifecycle.Observer
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.chat.prv.ConferenceWithMessage
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
+import org.koin.standalone.inject
 import kotlin.properties.Delegates
 
 /**
@@ -33,6 +34,15 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
                 Single.never<List<ConferenceWithMessage>>()
             }
 
+    var searchQuery: String = searchQuery
+        set(value) {
+            field = value
+
+            source = messengerDao.getConferencesLiveData(value)
+        }
+
+    private val messengerDao by inject<MessengerDao>()
+
     private val sourceObserver = Observer { it: List<ConferenceWithMessage>? ->
         it?.let {
             val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
@@ -46,13 +56,6 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
             }
         }
     }
-
-    var searchQuery: String = searchQuery
-        set(value) {
-            field = value
-
-            source = messengerDao.getConferencesLiveData(value)
-        }
 
     private var source by Delegates.observable(messengerDao.getConferencesLiveData(searchQuery)) { _, old, new ->
         data.removeSource(old)

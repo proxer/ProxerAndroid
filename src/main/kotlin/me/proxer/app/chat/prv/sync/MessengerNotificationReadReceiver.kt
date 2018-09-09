@@ -6,13 +6,14 @@ import android.content.Context
 import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-class MessengerNotificationReadReceiver : BroadcastReceiver() {
+class MessengerNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
 
     companion object {
         private const val CONFERENCE_ID_EXTRA = "conference_id"
@@ -25,6 +26,8 @@ class MessengerNotificationReadReceiver : BroadcastReceiver() {
             return PendingIntent.getBroadcast(context, conferenceId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }
+
+    private val messengerDao by inject<MessengerDao>()
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1L)

@@ -117,6 +117,7 @@ ext {
 
     testDependencies = [
             jUnit   : "junit:junit:$jUnitVersion",
+            mockk   : "io.mockk:mockk:$mockkVersion",
             koinTest: "org.koin:koin-test:$koinVersion"
     ]
 }

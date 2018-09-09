@@ -9,10 +9,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.exception.ChatMessageException
@@ -21,6 +21,7 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
@@ -105,6 +106,8 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     val draft = ResettingMutableLiveData<String?>()
+
+    private val messengerDao by inject<MessengerDao>()
 
     private val safeConference: LocalConference
         get() = conference.value ?: throw IllegalArgumentException("Conference cannot be null")

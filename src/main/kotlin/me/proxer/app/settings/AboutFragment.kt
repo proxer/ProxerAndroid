@@ -18,11 +18,11 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.messengerDao
 import me.proxer.app.R
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
+import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
@@ -32,6 +32,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.jetbrains.anko.bundleOf
+import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -67,6 +68,8 @@ class AboutFragment : MaterialAboutFragment() {
             arguments = bundleOf()
         }
     }
+
+    private val messengerDao by inject<MessengerDao>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 

@@ -1,5 +1,6 @@
 package me.proxer.app
 
+import androidx.room.Room
 import com.gojuno.koptional.Optional
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.MainApplication.Companion.USER_AGENT
@@ -14,6 +15,7 @@ import me.proxer.app.chat.prv.conference.ConferenceViewModel
 import me.proxer.app.chat.prv.conference.info.ConferenceInfoViewModel
 import me.proxer.app.chat.prv.create.CreateConferenceViewModel
 import me.proxer.app.chat.prv.message.MessengerViewModel
+import me.proxer.app.chat.prv.sync.MessengerDatabase
 import me.proxer.app.chat.pub.message.ChatReportViewModel
 import me.proxer.app.chat.pub.message.ChatViewModel
 import me.proxer.app.chat.pub.room.ChatRoomViewModel
@@ -25,6 +27,7 @@ import me.proxer.app.info.translatorgroup.TranslatorGroupInfoViewModel
 import me.proxer.app.info.translatorgroup.TranslatorGroupProjectViewModel
 import me.proxer.app.manga.MangaViewModel
 import me.proxer.app.media.MediaInfoViewModel
+import me.proxer.app.media.TagDatabase
 import me.proxer.app.media.comment.CommentViewModel
 import me.proxer.app.media.discussion.DiscussionViewModel
 import me.proxer.app.media.episode.EpisodeViewModel
@@ -53,12 +56,15 @@ import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 private const val API_LOGGING_TAG = "API"
+private const val CHAT_DATABASE_NAME = "chat.db"
+private const val TAG_DATABASE_NAME = "tag.db"
 
 private val applicationModules = module {
     single { RxBus() }
@@ -83,6 +89,12 @@ private val applicationModules = module {
 
     single { get<ProxerApi>().moshi() }
     single { get<ProxerApi>().client() }
+
+    single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
+    single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }
+    single { get<MessengerDatabase>().dao() }
+    single { get<TagDatabase>().dao() }
+
     single { HawkMoshiParser(get()) }
     single { (referer: String) -> ExoMediaDataSourceFactoryProvider(get(), referer) }
 }

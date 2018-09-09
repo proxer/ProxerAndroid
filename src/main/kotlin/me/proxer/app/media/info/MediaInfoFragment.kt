@@ -120,7 +120,11 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private val description: TextView by bindView(R.id.description)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
@@ -217,7 +221,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindSynonyms(result: Entry) {
         result.synonyms.forEach {
-            infoTable.addView(constructInfoTableRow(it.toTypeAppString(requireContext()), it.name, true))
+            infoTable.addView(
+                constructInfoTableRow(
+                    it.toTypeAppString(requireContext()),
+                    it.name,
+                    true
+                )
+            )
         }
     }
 
@@ -265,12 +275,17 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         result.adaptionInfo.let { adaptionInfo ->
             if (adaptionInfo.id != "0") {
                 val title = getString(R.string.fragment_media_info_adaption_title)
-                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
+                val content =
+                    "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
 
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->
                         val selectableItemBackground = TypedValue().apply {
-                            requireContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
+                            requireContext().theme.resolveAttribute(
+                                R.attr.selectableItemBackground,
+                                this,
+                                true
+                            )
                         }
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
@@ -289,8 +304,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }
     }
 
-    private fun constructInfoTableRow(title: String, content: String, isSelectable: Boolean = false): View {
-        val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
+    private fun constructInfoTableRow(
+        title: String,
+        content: String,
+        isSelectable: Boolean = false
+    ): View {
+        val tableRow =
+            LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
         val titleView = tableRow.findViewById<TextView>(R.id.title)
         val contentView = tableRow.findViewById<TextView>(R.id.content)
 
@@ -395,7 +415,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                 image.clicks()
                     .autoDisposable(viewLifecycleOwner.scope())
-                    .subscribe { multilineSnackbar(root, constraint.toAppStringDescription(requireContext())) }
+                    .subscribe {
+                        multilineSnackbar(
+                            root,
+                            constraint.toAppStringDescription(requireContext())
+                        )
+                    }
 
                 fskConstraints.addView(image)
             }
@@ -450,7 +475,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                 badge.text = mappedItem
                 badge.setTypeface(null, Typeface.BOLD)
-                badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
+                badge.setTextColor(
+                    ContextCompat.getColorStateList(
+                        layout.context,
+                        android.R.color.white
+                    )
+                )
                 badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
 
                 if (onClick != null) {
@@ -476,9 +506,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
         userInfo.toNullable().let { nullableUserInfo ->
-            val noteColor = if (nullableUserInfo?.isNoted == true) R.color.colorAccent else R.color.icon
-            val favorColor = if (nullableUserInfo?.isTopTen == true) R.color.colorAccent else R.color.icon
-            val finishColor = if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
+            val noteColor =
+                if (nullableUserInfo?.isNoted == true) R.color.colorAccent else R.color.icon
+            val favorColor =
+                if (nullableUserInfo?.isTopTen == true) R.color.colorAccent else R.color.icon
+            val finishColor =
+                if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
 
             note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
             favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)
