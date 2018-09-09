@@ -7,7 +7,7 @@ import me.proxer.app.news.NewsViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
-import org.koin.android.viewmodel.ext.koin.viewModel
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val viewModelModule = module {

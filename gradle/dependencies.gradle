@@ -12,7 +12,7 @@ ext {
     implementationDependencies = [
             kotlinStdlib                     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             anko                             : "org.jetbrains.anko:anko-commons:$ankoVersion",
-            koin                             : "org.koin:koin-android-viewmodel:$koinVersion",
+            koin                             : "org.koin:koin-androidx-viewmodel:$koinVersion",
 
             multidex                         : "androidx.multidex:multidex:$multidexVersion",
             appcompat                        : "androidx.appcompat:appcompat:$appcompatVersion",
