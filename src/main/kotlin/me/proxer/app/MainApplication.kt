@@ -3,12 +3,9 @@ package me.proxer.app
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Environment
 import android.os.Looper
 import android.webkit.WebView
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
@@ -17,9 +14,6 @@ import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
@@ -37,6 +31,7 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
+import me.proxer.app.util.GlideDrawerImageLoader
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.TimberFileTree
 import me.proxer.app.util.data.PreferenceHelper
@@ -165,7 +160,7 @@ class MainApplication : Application() {
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
         RxAndroidPlugins.setMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
 
-        DrawerImageLoader.init(ConcreteDrawerImageLoader())
+        DrawerImageLoader.init(GlideDrawerImageLoader())
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
     }
 
@@ -199,21 +194,5 @@ class MainApplication : Application() {
 
             StrictModeCompat.setPolicies(threadPolicy, vmPolicy)
         }
-    }
-
-    private class ConcreteDrawerImageLoader : AbstractDrawerImageLoader() {
-        override fun set(image: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {
-            GlideApp.with(image)
-                .load(uri)
-                .centerCrop()
-                .placeholder(placeholder)
-                .into(image)
-        }
-
-        override fun cancel(imageView: ImageView) = GlideApp.with(imageView).clear(imageView)
-
-        override fun placeholder(context: Context, tag: String?): IconicsDrawable = IconicsDrawable(context)
-            .icon(CommunityMaterial.Icon.cmd_account)
-            .colorRes(android.R.color.white)
     }
 }
