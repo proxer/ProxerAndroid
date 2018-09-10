@@ -170,7 +170,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     if (it.intent.type == "text/html") {
                         showPage(Utils.getAndFixUrl(it.intent.safeData.toString()))
                     } else {
-                        requireContext().startActivity(it.intent.addReferer(requireContext()))
+                        requireContext().startActivity(it.intent.addReferer())
                     }
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))

@@ -3,6 +3,7 @@ package me.proxer.app.anime.schedule.widget
 import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.convertToDateTime
@@ -30,7 +31,7 @@ class ScheduleWidgetViewsFactory(
         val layout = if (dark) R.layout.layout_widget_schedule_dark_item else R.layout.layout_widget_schedule_item
         val entry = calendarEntries[position]
 
-        val result = RemoteViews(context.packageName, layout)
+        val result = RemoteViews(BuildConfig.APPLICATION_ID, layout)
         val entryIntent = MediaActivity.getIntent(context, entry.entryId, entry.name, Category.ANIME)
 
         val dateText = entry.date.convertToDateTime().format(HOUR_MINUTE_DATE_TIME_FORMATTER)

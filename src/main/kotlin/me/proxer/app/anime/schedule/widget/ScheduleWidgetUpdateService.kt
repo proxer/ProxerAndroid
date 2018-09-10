@@ -14,6 +14,7 @@ import androidx.core.app.JobIntentService
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable
+import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
@@ -98,7 +99,7 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
         dark: Boolean
     ) {
         val views = RemoteViews(
-            applicationContext.packageName, when (dark) {
+            BuildConfig.APPLICATION_ID, when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_list
                 false -> R.layout.layout_widget_schedule_list
             }
@@ -138,7 +139,7 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
         val views = RemoteViews(
-            applicationContext.packageName, when (dark) {
+            BuildConfig.APPLICATION_ID, when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_error
                 false -> R.layout.layout_widget_schedule_error
             }
@@ -164,7 +165,7 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
         val views = RemoteViews(
-            applicationContext.packageName, when (dark) {
+            BuildConfig.APPLICATION_ID, when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_loading
                 false -> R.layout.layout_widget_schedule_loading
             }

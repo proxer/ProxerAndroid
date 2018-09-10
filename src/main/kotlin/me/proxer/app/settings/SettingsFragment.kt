@@ -2,11 +2,13 @@ package me.proxer.app.settings
 
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
@@ -36,6 +38,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
     }
 
+    private val packageManager by inject<PackageManager>()
     private val preferenceHelper by inject<PreferenceHelper>()
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
@@ -88,9 +91,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 snackbar(view, R.string.fragment_settings_restart_message,
                     actionMessage = R.string.fragment_settings_restart_action,
                     actionCallback = View.OnClickListener {
-                        val packageManager = requireContext().packageManager
-                        val packageName = requireContext().packageName
-                        val intent = packageManager.getLaunchIntentForPackage(packageName)?.clearTop()
+                        val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
 
                         startActivity(intent)
                         System.exit(0)

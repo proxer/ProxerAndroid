@@ -3,6 +3,7 @@ package me.proxer.app.news.widget
 import android.content.Context
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.extension.convertToRelativeReadableTime
@@ -24,7 +25,7 @@ class NewsWidgetViewsFactory(
         val layout = if (dark) R.layout.layout_widget_news_dark_item else R.layout.layout_widget_news_item
         val news = news[position]
 
-        val result = RemoteViews(context.packageName, layout)
+        val result = RemoteViews(BuildConfig.APPLICATION_ID, layout)
         val topicIntent = TopicActivity.getIntent(context, news.threadId, news.categoryId, news.subject)
         val info = context.getString(
             R.string.widget_news_info,

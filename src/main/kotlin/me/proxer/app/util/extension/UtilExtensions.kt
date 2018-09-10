@@ -20,6 +20,7 @@ import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
+import me.proxer.app.BuildConfig
 import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
@@ -82,14 +83,14 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
     }
 }
 
-inline fun Intent.addReferer(context: Context): Intent {
+inline fun Intent.addReferer(): Intent {
     val referrerExtraName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         Intent.EXTRA_REFERRER
     } else {
         "android.intent.extra.REFERRER"
     }
 
-    putExtra(referrerExtraName, Uri.parse("android-app://" + context.packageName))
+    putExtra(referrerExtraName, Uri.parse("android-app://" + BuildConfig.APPLICATION_ID))
 
     return this
 }
@@ -112,7 +113,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
                     }
                 }
 
-                activity.startActivity(intent.addReferer(activity))
+                activity.startActivity(intent.addReferer())
             }
         }
     }
@@ -127,7 +128,7 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
         .setShowTitle(true)
         .build()
         .let {
-            it.intent.addReferer(activity)
+            it.intent.addReferer()
 
             CustomTabsHelperFragment.open(activity, it, url.androidUri()) { context, uri ->
                 WebViewActivity.navigateTo(context, uri.toString())

@@ -71,6 +71,7 @@ private const val TAG_DATABASE_NAME = "tag.db"
 
 private val applicationModules = module {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
+    single { androidContext().packageManager }
 
     single { RxBus() }
 
