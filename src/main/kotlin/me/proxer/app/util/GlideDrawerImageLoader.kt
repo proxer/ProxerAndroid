@@ -9,6 +9,9 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import me.proxer.app.GlideApp
 
+/**
+ * @author Ruben Gees
+ */
 class GlideDrawerImageLoader : AbstractDrawerImageLoader() {
 
     override fun set(image: ImageView, uri: Uri?, placeholder: Drawable?, tag: String?) {

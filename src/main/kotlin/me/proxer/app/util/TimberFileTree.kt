@@ -9,6 +9,9 @@ import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.io.File
 
+/**
+ * @author Ruben Gees
+ */
 class TimberFileTree(private val context: Context) : Timber.Tree() {
 
     private companion object {
