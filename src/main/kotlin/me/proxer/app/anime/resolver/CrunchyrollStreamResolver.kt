@@ -1,13 +1,14 @@
 package me.proxer.app.anime.resolver
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import io.reactivex.Single
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
@@ -21,11 +22,13 @@ class CrunchyrollStreamResolver : StreamResolver() {
 
     override val name = "Crunchyroll"
 
+    private val packageManager by inject<PackageManager>()
+
     override fun supports(name: String) = name.startsWith(this.name, true)
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
-            if (!Utils.isPackageInstalled(globalContext.packageManager, CRUNCHYROLL_PACKAGE)) {
+            if (!Utils.isPackageInstalled(packageManager, CRUNCHYROLL_PACKAGE)) {
                 throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
             }
         }

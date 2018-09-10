@@ -1,16 +1,17 @@
 package me.proxer.app.anime.resolver
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
+import org.koin.standalone.inject
 import kotlin.text.RegexOption.DOT_MATCHES_ALL
 
 /**
@@ -25,9 +26,11 @@ class WatchboxStreamResolver : StreamResolver() {
 
     override val name = "Watchbox"
 
+    private val packageManager by inject<PackageManager>()
+
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
-            if (!Utils.isPackageInstalled(globalContext.packageManager, WATCHBOX_PACKAGE)) {
+            if (!Utils.isPackageInstalled(packageManager, WATCHBOX_PACKAGE)) {
                 throw AppRequiredException(name, WATCHBOX_PACKAGE)
             }
         }

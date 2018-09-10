@@ -25,7 +25,6 @@ import com.rubengees.rxbus.RxBus
 import com.squareup.leakcanary.LeakCanary
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
-import io.reactivex.Completable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.UndeliverableException
@@ -39,16 +38,13 @@ import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.NotificationUtils
+import me.proxer.app.util.TimberFileTree
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.io.File
 import java.util.Date
 import kotlin.properties.Delegates
 
@@ -151,7 +147,7 @@ class MainApplication : Application() {
         WorkManager.initialize(this, Configuration.Builder().build())
 
         if (BuildConfig.LOG) {
-            Timber.plant(FileTree())
+            Timber.plant(TimberFileTree(this))
 
             if (BuildConfig.DEBUG) {
                 Timber.plant(Timber.DebugTree())
@@ -202,29 +198,6 @@ class MainApplication : Application() {
                 .build()
 
             StrictModeCompat.setPolicies(threadPolicy, vmPolicy)
-        }
-    }
-
-    private class FileTree : Timber.Tree() {
-
-        private companion object {
-            private val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        }
-
-        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-            Completable
-                .fromAction {
-                    val logDir = File(globalContext.getExternalFilesDir(null), "logs").also { it.mkdirs() }
-                    val logFile = File(logDir, "${LocalDate.now()}.log").also { it.createNewFile() }
-                    val currentTime = LocalDateTime.now().format(FORMAT)
-
-                    val maybeTag = if (tag != null) "$tag: " else ""
-                    val maybeNewline = if (message.endsWith("\n")) "" else "\n"
-
-                    logFile.appendText("$currentTime  $maybeTag$message$maybeNewline")
-                }
-                .subscribeOn(Schedulers.io())
-                .subscribe()
         }
     }
 
