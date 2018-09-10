@@ -27,7 +27,7 @@ ext {
 
     // Frameworks and compatibility libraries
     ankoVersion = '0.10.5'
-    koinVersion = '1.0.0-RC-2'
+    koinVersion = '1.0.0-RC-3'
     multidexVersion = '2.0.0'
     appcompatVersion = "1.0.0-rc02"
     browserVersion = "1.0.0-rc02"
@@ -61,10 +61,9 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-alpha07'
+    materialDialogsVersion = '2.0.0-alpha08'
     flexboxVersion = '1.1.0-beta1'
-    emojiIosVersion = '7f7f35c3e7'
-    emojiIosVersion = '7f7f35c3e7'
+    emojiIosVersion = '8c2d9d5973'
     exomediaVersion = '4.2.3'
     exoplayerVersion = '2.8.4'
     materialProgressBarVersion = '1.4.2'

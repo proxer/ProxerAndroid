@@ -57,7 +57,7 @@ ext {
             tabLayoutHelper                  : "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion",
             materialDialogs                  : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
             flexbox                          : "com.google.android:flexbox:$flexboxVersion",
-            emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
+            emojiIos                         : "com.github.akwizgran.Emoji:emoji-ios:$emojiIosVersion",
             exoplayer                        : "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion",
             exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
             exomedia                         : "com.github.brianwernick:exomedia:$exomediaVersion",
