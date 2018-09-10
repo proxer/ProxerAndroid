@@ -1,5 +1,6 @@
 package me.proxer.app
 
+import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.gojuno.koptional.Optional
@@ -154,7 +155,7 @@ private val viewModelModule = module {
         ProfileCommentViewModel(userId, username, category)
     }
 
-    viewModel { (id: String) -> TopicViewModel(id) }
+    viewModel { (id: String, resources: Resources) -> TopicViewModel(id, resources) }
 
     viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
     viewModel { (entryId: String) -> EpisodeViewModel(entryId) }

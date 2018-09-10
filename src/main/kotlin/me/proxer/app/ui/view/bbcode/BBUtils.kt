@@ -5,9 +5,13 @@ package me.proxer.app.ui.view.bbcode
 import android.content.Context
 import android.content.ContextWrapper
 import android.text.SpannableStringBuilder
+import android.text.util.Linkify
 import android.view.View
+import androidx.core.text.util.LinkifyCompat
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
+import okhttp3.HttpUrl
 import org.jetbrains.anko.childrenRecursiveSequence
 
 /**
@@ -25,6 +29,8 @@ internal object BBUtils {
         else -> null
     }
 }
+
+internal val MATCH_ALL_PATTERN = Regex(".*", BBPrototype.REGEX_OPTIONS).toPattern()
 
 internal inline fun applyToAllViews(views: List<View>, noinline operation: (View) -> Unit) = views.apply {
     flatMap { it.childrenRecursiveSequence().plus(it).toList() }
@@ -63,4 +69,12 @@ internal fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhit
         ?.let { delete(it + 1, length) }
         ?: apply { clear() }
     else -> this
+}
+
+internal inline fun SpannableStringBuilder.linkifyUrl(url: HttpUrl): SpannableStringBuilder {
+    val transformFilter = Linkify.TransformFilter { _, _ -> url.toString() }
+
+    LinkifyCompat.addLinks(this, MATCH_ALL_PATTERN, null, null, transformFilter)
+
+    return this
 }

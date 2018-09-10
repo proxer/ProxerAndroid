@@ -18,14 +18,12 @@ class BBTree(
 
     fun endsWith(code: String) = prototype.endRegex.matches(code)
 
-    fun makeViews(parent: BBCodeView, args: BBArgs) = prototype.makeViews(parent, children, this.args + args)
+    fun makeViews(parent: BBCodeView, args: BBArgs) = prototype.makeViews(parent, children, args + this.args)
 
     fun optimize(args: BBArgs = BBArgs()) = recursiveOptimize(args).first()
 
     private fun recursiveOptimize(args: BBArgs): List<BBTree> {
-        val newChildren = mergeChildren(children.flatMap { it.recursiveOptimize(args) })
-
-        val recursiveNewChildren by unsafeLazy { getRecursiveChildren(newChildren) }
+        val recursiveNewChildren by unsafeLazy { getRecursiveChildren(children) }
         val canOptimize = prototype !is ConditionalTextMutatorPrototype || prototype.canOptimize(recursiveNewChildren)
 
         if (prototype is TextMutatorPrototype && canOptimize) {
@@ -37,6 +35,8 @@ class BBTree(
                 }
             }
         }
+
+        val newChildren = mergeChildren(children.flatMap { it.recursiveOptimize(args) })
 
         return when {
             canOptimize && prototype is TextMutatorPrototype -> newChildren.map {

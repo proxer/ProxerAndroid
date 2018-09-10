@@ -133,7 +133,7 @@ class BBCodeView @JvmOverloads constructor(
         val existingChild = if (childCount == 1) this.childrenSequence().firstOrNull() else null
         val firstTreeChild = if (tree.children.size == 1) tree.children.firstOrNull() else null
 
-        val args = BBArgs(glide = glide, userId = userId, enableEmoticons = enableEmotions)
+        val args = BBArgs(resources = resources, glide = glide, userId = userId, enableEmoticons = enableEmotions)
 
         args[TEXT_COLOR_ARGUMENT] = textColor
         args[TEXT_SIZE_ARGUMENT] = textSize

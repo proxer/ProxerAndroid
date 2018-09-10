@@ -40,7 +40,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
     override val hostingActivity: TopicActivity
         get() = activity as TopicActivity
 
-    override val viewModel by viewModel<TopicViewModel> { parametersOf(id) }
+    override val viewModel by viewModel<TopicViewModel> { parametersOf(id, resources) }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
 

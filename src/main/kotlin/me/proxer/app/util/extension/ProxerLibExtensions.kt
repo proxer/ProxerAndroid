@@ -3,6 +3,7 @@
 package me.proxer.app.util.extension
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -391,13 +392,15 @@ fun Topic.toTopicMetaData() = TopicMetaData(
     categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked, post, subject
 )
 
-fun Post.toParsedPost(): ParsedPost {
-    val parsedMessage = BBParser.parse(message)
-    val parsedSignature = signature?.let { if (it.isNotBlank()) BBParser.parse(it) else null }
+fun Post.toParsedPost(resources: Resources): ParsedPost {
+    val parsedMessage = BBParser.parse(message).optimize(BBArgs(resources = resources, userId = userId))
+    val parsedSignature = signature?.let {
+        if (it.isNotBlank()) BBParser.parse(it).optimize(BBArgs(resources = resources, userId = userId)) else null
+    }
 
     return ParsedPost(
-        id, parentId, userId, username, image, date, parsedSignature?.optimize(BBArgs(userId = userId)),
-        modifiedById, modifiedByName, modifiedReason, parsedMessage.optimize(BBArgs(userId = userId)), thankYouAmount
+        id, parentId, userId, username, image, date, parsedSignature, modifiedById, modifiedByName, modifiedReason,
+        parsedMessage, thankYouAmount
     )
 }
 

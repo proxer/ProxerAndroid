@@ -25,7 +25,6 @@ import de.number42.subsampling_pdf_decoder.PDFDecoder
 import de.number42.subsampling_pdf_decoder.PDFRegionDecoder
 import events
 import me.proxer.app.GlideRequests
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
@@ -104,7 +103,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         val uri = Uri.parse(text.toString())
 
         return text.toSpannableStringBuilder().apply {
-            replace(0, length, globalContext.getString(R.string.view_bbcode_pdf_link))
+            replace(0, length, args.safeResources.getString(R.string.view_bbcode_pdf_link))
 
             setSpan(UriClickableSpan(uri), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
         }

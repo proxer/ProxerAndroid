@@ -1,11 +1,9 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.text.Spannable
 import android.text.SpannableStringBuilder
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
-import me.proxer.app.ui.view.bbcode.UrlClickableSpan
+import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.library.enums.Device
@@ -26,11 +24,9 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (url) {
             null -> text
-            else -> text.toSpannableStringBuilder().apply {
-                replace(0, length, globalContext.getString(R.string.view_bbcode_poll_link))
-
-                setSpan(UrlClickableSpan(url), 0, length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-            }
+            else -> text.toSpannableStringBuilder()
+                .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_poll_link))
+                .linkifyUrl(url)
         }
     }
 }

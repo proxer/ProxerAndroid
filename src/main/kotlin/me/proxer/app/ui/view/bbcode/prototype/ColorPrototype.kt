@@ -27,10 +27,7 @@ object ColorPrototype : TextMutatorPrototype {
             .let { it.getSpans(0, it.length, ForegroundColorSpan::class.java) }
             .firstOrNull()?.foregroundColor
 
-        return when (color) {
-            null -> BBTree(this, parent)
-            else -> BBTree(this, parent, args = BBArgs(custom = *arrayOf(COLOR_ARGUMENT to color)))
-        }
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(COLOR_ARGUMENT to color)))
     }
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {

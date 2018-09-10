@@ -1,7 +1,9 @@
 package me.proxer.app.ui.view.bbcode
 
+import android.content.res.Resources
 import android.text.Spanned
 import me.proxer.app.GlideRequests
+import java.lang.ref.WeakReference
 import java.util.LinkedHashMap
 
 /**
@@ -13,6 +15,7 @@ class BBArgs : LinkedHashMap<String, Any?> {
         private const val TEXT_ARGUMENT = "text"
         private const val GLIDE_ARGUMENT = "glide"
         private const val USER_ID_ARGUMENT = "userId"
+        private const val RESOURCES_ARGUMENT = "resources"
         private const val ENABLE_EMOTICONS_ARGUMENT = "enable_emoticons"
     }
 
@@ -22,22 +25,26 @@ class BBArgs : LinkedHashMap<String, Any?> {
             this[TEXT_ARGUMENT] = value
         }
 
-    val glide get() = this[GLIDE_ARGUMENT] as? GlideRequests
-    val userId get() = this[USER_ID_ARGUMENT] as? String
-    val enableEmoticons get() = this[ENABLE_EMOTICONS_ARGUMENT] as? Boolean ?: false
+    val resources get() = this[RESOURCES_ARGUMENT] as? Resources?
+    val glide get() = (this[GLIDE_ARGUMENT] as? WeakReference<*>)?.get() as? GlideRequests?
+    val userId get() = this[USER_ID_ARGUMENT] as? String?
+    val enableEmoticons get() = this[ENABLE_EMOTICONS_ARGUMENT] as? Boolean? ?: false
 
     val safeText get() = text ?: throw IllegalStateException("text is null")
+    val safeResources get() = resources ?: throw IllegalStateException("resources is null")
     val safeUserId get() = userId ?: throw IllegalStateException("userId is null")
 
     constructor(
         text: CharSequence? = null,
+        resources: Resources? = null,
         glide: GlideRequests? = null,
         userId: String? = null,
         enableEmoticons: Boolean? = null,
         vararg custom: Pair<String, Any?>
     ) {
         if (text != null) this[TEXT_ARGUMENT] = text
-        if (glide != null) this[GLIDE_ARGUMENT] = glide
+        if (resources != null) this[RESOURCES_ARGUMENT] = resources
+        if (glide != null) this[GLIDE_ARGUMENT] = WeakReference(glide)
         if (userId != null) this[USER_ID_ARGUMENT] = userId
         if (enableEmoticons != null) this[ENABLE_EMOTICONS_ARGUMENT] = enableEmoticons
 

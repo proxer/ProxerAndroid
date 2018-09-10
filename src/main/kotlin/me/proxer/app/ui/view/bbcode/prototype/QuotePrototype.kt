@@ -8,18 +8,20 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
 import androidx.core.content.ContextCompat
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
+import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
+import me.proxer.app.util.extension.linkify
 import org.jetbrains.anko.dip
 
 object QuotePrototype : AutoClosingPrototype {
 
     private val QUOTE_ATTRIBUTE_REGEX = Regex("quote *= *(.+?)( |$)", REGEX_OPTIONS)
+    private const val QUOTE_ARGUMENT = "quote"
 
     override val startRegex = Regex(" *quote( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)
@@ -27,19 +29,13 @@ object QuotePrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val quote = BBUtils.cutAttribute(code, QUOTE_ATTRIBUTE_REGEX)
 
-        if (quote != null) {
-            val quoteText = globalContext.getString(R.string.view_bbcode_quote, quote.trim())
-            val quoteTree = BoldPrototype.construct("", parent)
-
-            quoteTree.children.add(TextPrototype.construct(quoteText, quoteTree))
-            parent.children.add(quoteTree)
-        }
-
-        return BBTree(this, parent)
+        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(QUOTE_ARGUMENT to quote)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)
+        val quote = args[QUOTE_ARGUMENT] as String?
+        val result = mutableListOf<View>()
 
         val layout = when (childViews.size) {
             0 -> null
@@ -58,6 +54,17 @@ object QuotePrototype : AutoClosingPrototype {
             childViews.forEach { addView(it) }
         }
 
-        return if (layout != null) listOf(layout) else emptyList()
+        if (quote != null) {
+            val quoteText = args.safeResources.getString(R.string.view_bbcode_quote, quote.trim())
+            val boldQuoteText = BoldPrototype.mutate(quoteText.linkify().toSpannableStringBuilder(), args)
+
+            result += TextPrototype.makeView(parent, args + BBArgs(text = boldQuoteText))
+        }
+
+        if (layout != null) {
+            result += layout
+        }
+
+        return result
     }
 }

@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
@@ -11,8 +10,8 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
-import me.proxer.app.ui.view.bbcode.UrlClickableSpan
 import me.proxer.app.ui.view.bbcode.applyToAllViews
+import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
@@ -55,8 +54,6 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val url = args[URL_ARGUMENT] as HttpUrl
 
-        return text.apply {
-            setSpan(UrlClickableSpan(url), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
-        }
+        return text.linkifyUrl(url)
     }
 }

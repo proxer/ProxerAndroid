@@ -7,7 +7,6 @@ import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.View
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -40,7 +39,7 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val uri = Uri.parse("geo:0,0?q=$text$zoomUriPart")
 
         return text.toSpannableStringBuilder().apply {
-            replace(0, length, globalContext.getString(R.string.view_bbcode_map_link))
+            replace(0, length, args.safeResources.getString(R.string.view_bbcode_map_link))
 
             setSpan(UriClickableSpan(uri), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
         }

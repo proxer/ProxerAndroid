@@ -1,11 +1,9 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
-import me.proxer.app.ui.view.bbcode.UrlClickableSpan
+import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
@@ -24,11 +22,9 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (parsedUrl) {
             null -> text
-            else -> text.toSpannableStringBuilder().apply {
-                replace(0, length, globalContext.getString(R.string.view_bbcode_facebook_link))
-
-                setSpan(UrlClickableSpan(parsedUrl), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
-            }
+            else -> text.toSpannableStringBuilder()
+                .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_facebook_link))
+                .linkifyUrl(parsedUrl)
         }
     }
 }
