@@ -11,18 +11,19 @@ import me.proxer.app.R
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.PreferenceHelper.AGE_CONFIRMATION
-import me.proxer.app.util.data.PreferenceHelper.EXTERNAL_CACHE
-import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_ACCOUNT
-import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_CHAT
-import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_INTERVAL
-import me.proxer.app.util.data.PreferenceHelper.NOTIFICATIONS_NEWS
-import me.proxer.app.util.data.PreferenceHelper.THEME
+import me.proxer.app.util.data.PreferenceHelper.Companion.AGE_CONFIRMATION
+import me.proxer.app.util.data.PreferenceHelper.Companion.EXTERNAL_CACHE
+import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_ACCOUNT
+import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_CHAT
+import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_INTERVAL
+import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_NEWS
+import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.clearTop
+import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -34,6 +35,8 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             arguments = bundleOf()
         }
     }
+
+    private val preferenceHelper by inject<PreferenceHelper>()
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
@@ -77,7 +80,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         when (key) {
-            AGE_CONFIRMATION -> if (PreferenceHelper.isAgeRestrictedMediaAllowed(requireContext())) {
+            AGE_CONFIRMATION -> if (preferenceHelper.isAgeRestrictedMediaAllowed) {
                 (findPreference(AGE_CONFIRMATION) as TwoStatePreference).isChecked = true
             }
 
@@ -95,7 +98,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             }
 
             THEME -> {
-                AppCompatDelegate.setDefaultNightMode(PreferenceHelper.getNightMode(requireContext()))
+                AppCompatDelegate.setDefaultNightMode(preferenceHelper.nightMode)
 
                 requireActivity().recreate()
             }
@@ -103,21 +106,20 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {
                 updateIntervalNotification()
 
-                NotificationWorker.enqueueIfPossible(requireContext())
+                NotificationWorker.enqueueIfPossible()
             }
 
-            NOTIFICATIONS_CHAT -> MessengerWorker.enqueueSynchronizationIfPossible(requireContext())
+            NOTIFICATIONS_CHAT -> MessengerWorker.enqueueSynchronizationIfPossible()
 
             NOTIFICATIONS_INTERVAL -> {
-                NotificationWorker.enqueueIfPossible(requireContext())
-                MessengerWorker.enqueueSynchronizationIfPossible(requireContext())
+                NotificationWorker.enqueueIfPossible()
+                MessengerWorker.enqueueSynchronizationIfPossible()
             }
         }
     }
 
     private fun updateIntervalNotification() {
-        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = PreferenceHelper
-            .areNewsNotificationsEnabled(requireContext()) || PreferenceHelper
-            .areAccountNotificationsEnabled(requireContext())
+        findPreference(NOTIFICATIONS_INTERVAL).isEnabled = preferenceHelper.areNewsNotificationsEnabled ||
+            preferenceHelper.areAccountNotificationsEnabled
     }
 }

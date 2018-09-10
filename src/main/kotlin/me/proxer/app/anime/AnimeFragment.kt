@@ -29,7 +29,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.multilineSnackbar
@@ -91,7 +90,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     private var header by Delegates.notNull<MediaControlView>()
 
-    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
+    private val areBookmarksAutomatic by unsafeLazy { preferenceHelper.areBookmarksAutomatic }
 
     override val contentContainer: ViewGroup
         get() = recyclerView

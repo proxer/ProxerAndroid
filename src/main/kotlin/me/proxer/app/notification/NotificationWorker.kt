@@ -30,13 +30,14 @@ class NotificationWorker : Worker(), KoinComponent {
         private const val NAME = "NotificationWorker"
 
         private val bus by inject<RxBus>()
+        private val preferenceHelper by inject<PreferenceHelper>()
 
-        fun enqueueIfPossible(context: Context) {
-            val areNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(context) ||
-                PreferenceHelper.areAccountNotificationsEnabled(context)
+        fun enqueueIfPossible() {
+            val areNotificationsEnabled = preferenceHelper.areNewsNotificationsEnabled ||
+                preferenceHelper.areAccountNotificationsEnabled
 
             if (areNotificationsEnabled) {
-                enqueue(context)
+                enqueue()
             } else {
                 cancel()
             }
@@ -46,8 +47,8 @@ class NotificationWorker : Worker(), KoinComponent {
             WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        private fun enqueue(context: Context) {
-            val interval = PreferenceHelper.getNotificationsInterval(context) * 1000 * 60
+        private fun enqueue() {
+            val interval = preferenceHelper.notificationsInterval * 1000 * 60
             val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
                 .setConstraints(
                     Constraints.Builder()
@@ -77,8 +78,8 @@ class NotificationWorker : Worker(), KoinComponent {
             false -> null
         }
 
-        val areNewsNotificationsEnabled = PreferenceHelper.areNewsNotificationsEnabled(applicationContext)
-        val areAccountNotificationsEnabled = PreferenceHelper.areAccountNotificationsEnabled(applicationContext)
+        val areNewsNotificationsEnabled = preferenceHelper.areNewsNotificationsEnabled
+        val areAccountNotificationsEnabled = preferenceHelper.areAccountNotificationsEnabled
 
         if (!isStopped && areNewsNotificationsEnabled) {
             fetchNews(applicationContext, notificationInfo)

@@ -4,10 +4,8 @@ import com.gojuno.koptional.Optional
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
@@ -32,7 +30,7 @@ class UcpMediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
         get() = api.ucp().mediaList()
-            .includeHentai(PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn)
+            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && StorageHelper.isLoggedIn)
             .category(category)
             .filter(filter)
 

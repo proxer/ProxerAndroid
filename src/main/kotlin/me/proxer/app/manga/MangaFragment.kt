@@ -39,7 +39,6 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.convertToDateTime
@@ -125,7 +124,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private var gravityPagerSnapHelper: GravityPagerSnapHelper? = null
 
-    private val areBookmarksAutomatic by unsafeLazy { PreferenceHelper.areBookmarksAutomatic(requireContext()) }
+    private val areBookmarksAutomatic by unsafeLazy { preferenceHelper.areBookmarksAutomatic }
     private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
 
     override val contentContainer: ViewGroup
@@ -141,7 +140,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         lastPosition = savedInstanceState?.getParcelable(LAST_POSITION_STATE)
         hasLowMemory = savedInstanceState?.getByte(LOW_MEMORY_STATE) == 1.toByte()
 
-        isVertical = PreferenceHelper.isVerticalReaderEnabled(requireContext())
+        isVertical = preferenceHelper.isVerticalReaderEnabled
 
         innerAdapter = MangaAdapter(savedInstanceState, isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
@@ -287,7 +286,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             R.id.toggle_orientation -> {
                 isVertical = !isVertical
 
-                PreferenceHelper.setVerticalReaderEnabled(requireContext(), isVertical)
+                preferenceHelper.isVerticalReaderEnabled = isVertical
 
                 bindOrientationOptionsItem()
                 bindToolbar()

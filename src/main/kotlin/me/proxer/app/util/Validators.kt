@@ -1,6 +1,5 @@
 package me.proxer.app.util
 
-import android.content.Context
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.util.data.PreferenceHelper
@@ -9,7 +8,7 @@ import me.proxer.app.util.data.StorageHelper
 /**
  * @author Ruben Gees
  */
-object Validators {
+class Validators(private val preferenceHelper: PreferenceHelper) {
 
     fun validateLogin() {
         if (!StorageHelper.isLoggedIn) {
@@ -17,8 +16,8 @@ object Validators {
         }
     }
 
-    fun validateAgeConfirmation(context: Context) {
-        if (!PreferenceHelper.isAgeRestrictedMediaAllowed(context)) {
+    fun validateAgeConfirmation() {
+        if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
             throw AgeConfirmationRequiredException()
         }
     }

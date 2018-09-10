@@ -24,6 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected val bus by inject<RxBus>()
+    protected val preferenceHelper by inject<PreferenceHelper>()
 
     private var currentNightMode by Delegates.notNull<Int>()
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
@@ -37,12 +38,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        currentNightMode = PreferenceHelper.getNightMode(this)
+        currentNightMode = preferenceHelper.nightMode
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
     }
 
     override fun onResume() {
-        val newNightMode = PreferenceHelper.getNightMode(this)
+        val newNightMode = preferenceHelper.nightMode
 
         if (currentNightMode != newNightMode) {
             currentNightMode = newNightMode

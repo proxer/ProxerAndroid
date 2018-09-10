@@ -32,6 +32,7 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
     }
 
     private val client by inject<OkHttpClient>()
+    private val preferenceHelper by inject<PreferenceHelper>()
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         val externalFilesDir = context.getExternalFilesDir(null)
@@ -42,7 +43,7 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
                 .format(DecodeFormat.PREFER_RGB_565)
         )
 
-        if (PreferenceHelper.shouldCacheExternally(context) && externalFilesDir != null) {
+        if (preferenceHelper.shouldCacheExternally && externalFilesDir != null) {
             builder.setDiskCache(DiskLruCacheFactory(externalFilesDir.path, CACHE_DIR, CACHE_SIZE))
         }
     }

@@ -7,7 +7,6 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
 import me.proxer.app.base.BaseViewModel
@@ -18,8 +17,6 @@ import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.Validators
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
@@ -49,7 +46,7 @@ class AnimeViewModel(
         get() = Single.fromCallable { validate() }
             .flatMap { entrySingle() }
             .doOnSuccess {
-                if (it.isAgeRestricted && !PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)) {
+                if (it.isAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
                     throw AgeConfirmationRequiredException()
                 }
             }
@@ -150,7 +147,7 @@ class AnimeViewModel(
 
     private fun updateUserState(endpoint: Endpoint<Void>) {
         userStateDisposable?.dispose()
-        userStateDisposable = Single.fromCallable { Validators.validateLogin() }
+        userStateDisposable = Single.fromCallable { validators.validateLogin() }
             .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

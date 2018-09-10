@@ -10,13 +10,13 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.R
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import org.koin.standalone.KoinComponent
@@ -36,6 +36,8 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     protected val bus by inject<RxBus>()
     protected val api by inject<ProxerApi>()
+    protected val preferenceHelper by inject<PreferenceHelper>()
+    protected val validators by inject<Validators>()
 
     protected var dataDisposable: Disposable? = null
     protected val disposables = CompositeDisposable()
@@ -105,8 +107,8 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
     }
 
     open fun validate() {
-        if (isLoginRequired) Validators.validateLogin()
-        if (isAgeConfirmationRequired) Validators.validateAgeConfirmation(globalContext)
+        if (isLoginRequired) validators.validateLogin()
+        if (isAgeConfirmationRequired) validators.validateAgeConfirmation()
     }
 
     private fun isLoginErrorPresent() = error.value?.message == R.string.error_invalid_token

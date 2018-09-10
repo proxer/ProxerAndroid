@@ -1,5 +1,6 @@
 package me.proxer.app
 
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.gojuno.koptional.Optional
 import com.rubengees.rxbus.RxBus
@@ -46,8 +47,10 @@ import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
+import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ExoMediaDataSourceFactoryProvider
 import me.proxer.app.util.data.HawkMoshiParser
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.enums.AnimeLanguage
@@ -67,6 +70,8 @@ private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
 
 private val applicationModules = module {
+    single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
+
     single { RxBus() }
 
     single {
@@ -89,6 +94,9 @@ private val applicationModules = module {
 
     single { get<ProxerApi>().moshi() }
     single { get<ProxerApi>().client() }
+
+    single { PreferenceHelper(get()) }
+    single { Validators(get()) }
 
     single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
     single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }

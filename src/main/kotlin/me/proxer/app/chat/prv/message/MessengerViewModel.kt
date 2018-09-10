@@ -17,7 +17,6 @@ import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -76,7 +75,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     override val dataSingle: Single<List<LocalMessage>>
-        get() = Single.fromCallable { Validators.validateLogin() }
+        get() = Single.fromCallable { validators.validateLogin() }
             .flatMap {
                 when (page) {
                     0 -> messengerDao.markConferenceAsRead(safeConference.id)

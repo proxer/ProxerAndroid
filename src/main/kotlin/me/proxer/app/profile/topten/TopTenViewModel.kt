@@ -3,10 +3,8 @@ package me.proxer.app.profile.topten
 import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.user.TopTenEntry
@@ -22,7 +20,7 @@ class TopTenViewModel(
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {
-            val includeHentai = PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext) && StorageHelper.isLoggedIn
+            val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && StorageHelper.isLoggedIn
 
             return Singles.zip(
                 partialSingle(includeHentai, Category.ANIME),

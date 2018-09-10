@@ -66,6 +66,7 @@ class MainApplication : Application() {
     }
 
     private val bus by inject<RxBus>()
+    private val preferenceHelper by inject<PreferenceHelper>()
     private val messengerDao by inject<MessengerDao>()
 
     override fun onCreate() {
@@ -99,7 +100,7 @@ class MainApplication : Application() {
     }
 
     private fun initNightMode() {
-        val nightMode = PreferenceHelper.getNightMode(this)
+        val nightMode = preferenceHelper.nightMode
 
         // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
         // and creating an instance before the first inflation fixes that.
@@ -118,8 +119,8 @@ class MainApplication : Application() {
         bus.register(LoginEvent::class.java)
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
-                MessengerWorker.enqueueSynchronizationIfPossible(this)
-                NotificationWorker.enqueueIfPossible(this)
+                MessengerWorker.enqueueSynchronizationIfPossible()
+                NotificationWorker.enqueueIfPossible()
             }
 
         bus.register(LogoutEvent::class.java)
@@ -175,10 +176,10 @@ class MainApplication : Application() {
     private fun initCache() {
         val hasExternalStorage = Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
 
-        if (!PreferenceHelper.isCacheExternallySet(this)) {
-            PreferenceHelper.setCacheExternally(this, hasExternalStorage)
-        } else if (PreferenceHelper.shouldCacheExternally(this) && !hasExternalStorage) {
-            PreferenceHelper.setCacheExternally(this, false)
+        if (!preferenceHelper.isCacheExternallySet) {
+            preferenceHelper.shouldCacheExternally = hasExternalStorage
+        } else if (preferenceHelper.shouldCacheExternally && !hasExternalStorage) {
+            preferenceHelper.shouldCacheExternally = false
         }
     }
 

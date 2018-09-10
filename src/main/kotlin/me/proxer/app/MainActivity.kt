@@ -20,7 +20,6 @@ import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ui.view.RatingDialog
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
@@ -66,12 +65,12 @@ class MainActivity : DrawerActivity() {
         }, 50)
 
         if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
-            PreferenceHelper.incrementLaunches(this)
+            preferenceHelper.incrementLaunches()
 
             @Suppress("ConstantConditionIf")
             if (BuildConfig.STORE) {
-                PreferenceHelper.getLaunches(this).let { launches ->
-                    if (launches >= 3 && launches % 3 == 0 && !PreferenceHelper.hasRated(this)) {
+                preferenceHelper.launches.let { launches ->
+                    if (launches >= 3 && launches % 3 == 0 && !preferenceHelper.hasRated) {
                         RatingDialog.show(this)
                     }
                 }
@@ -98,7 +97,7 @@ class MainActivity : DrawerActivity() {
 
         if (!drawer.onBackPressed() && fragmentList.none { it is BackPressAware && it.onBackPressed() }) {
             if (isRootActivity) {
-                val startPage = PreferenceHelper.getStartPage(this)
+                val startPage = preferenceHelper.startPage
 
                 if (startPage != drawer.currentItem) {
                     drawer.select(startPage)
@@ -119,12 +118,12 @@ class MainActivity : DrawerActivity() {
                 data?.getParcelableArrayListExtra<Option>(OPTION_RESULT)?.forEach { option ->
                     when (option.position) {
                         1 -> {
-                            PreferenceHelper.setNewsNotificationsEnabled(this, option.isActivated)
-                            PreferenceHelper.setAccountNotificationsEnabled(this, option.isActivated)
+                            preferenceHelper.areNewsNotificationsEnabled = option.isActivated
+                            preferenceHelper.areAccountNotificationsEnabled = option.isActivated
 
-                            NotificationWorker.enqueueIfPossible(this)
+                            NotificationWorker.enqueueIfPossible()
                         }
-                        2 -> PreferenceHelper.setVerticalReaderEnabled(this, option.isActivated)
+                        2 -> preferenceHelper.isVerticalReaderEnabled = option.isActivated
                     }
                 }
             }
@@ -172,7 +171,7 @@ class MainActivity : DrawerActivity() {
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            val shouldIntroduce = PreferenceHelper.getLaunches(this) <= 0 &&
+            val shouldIntroduce = preferenceHelper.launches <= 0 &&
                 intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)
 
             if (shouldIntroduce) {
@@ -210,7 +209,7 @@ class MainActivity : DrawerActivity() {
             null -> {
                 val sectionExtra = intent.getSerializableExtra(SECTION_EXTRA) as? DrawerItem
 
-                sectionExtra ?: PreferenceHelper.getStartPage(this)
+                sectionExtra ?: preferenceHelper.startPage
             }
             else -> actionDrawerItem
         }

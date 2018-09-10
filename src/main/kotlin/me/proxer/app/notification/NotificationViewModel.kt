@@ -6,7 +6,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
@@ -25,7 +24,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
     override val itemsOnPage = 30
 
     override val dataSingle: Single<List<ProxerNotification>>
-        get() = Single.fromCallable { Validators.validateLogin() }
+        get() = Single.fromCallable { validators.validateLogin() }
             .flatMap {
                 when (page) {
                     0 -> api.notifications().notifications()

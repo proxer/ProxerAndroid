@@ -11,7 +11,6 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Validators
 import me.proxer.app.util.data.StorageHelper
 import org.koin.standalone.inject
 import kotlin.properties.Delegates
@@ -27,7 +26,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
 
     override val dataSingle: Single<List<ConferenceWithMessage>>
         get() = Single
-            .fromCallable { Validators.validateLogin() }
+            .fromCallable { validators.validateLogin() }
             .flatMap {
                 if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization()
 

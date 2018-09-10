@@ -45,6 +45,7 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
@@ -63,6 +64,7 @@ class CreateConferenceFragment : BaseFragment() {
         get() = activity as CreateConferenceActivity
 
     private val viewModel by viewModel<CreateConferenceViewModel>()
+    private val validators by inject<Validators>()
 
     private val isGroup: Boolean
         get() = hostingActivity.isGroup
@@ -245,7 +247,7 @@ class CreateConferenceFragment : BaseFragment() {
 
         sendButton.clicks()
             .map {
-                Validators.validateLogin()
+                validators.validateLogin()
 
                 val topic = topicInput.text.toString()
                 val firstMessage = messageInput.text.toString()

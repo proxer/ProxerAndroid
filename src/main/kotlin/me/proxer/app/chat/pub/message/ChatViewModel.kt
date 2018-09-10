@@ -9,7 +9,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -188,7 +187,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
 
     private fun startPolling(immediate: Boolean = false) {
         pollingDisposable?.dispose()
-        pollingDisposable = Single.fromCallable { Validators.validateLogin() }
+        pollingDisposable = Single.fromCallable { validators.validateLogin() }
             .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
             .map { it.map { message -> message.toParsedMessage() } }
             .repeatWhen { it.concatMap { _ -> Flowable.timer(3, TimeUnit.SECONDS) } }
@@ -212,7 +211,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         sendMessageDisposable?.dispose()
 
         sendMessageQueue.poll()?.let { item ->
-            sendMessageDisposable = Single.fromCallable { Validators.validateLogin() }
+            sendMessageDisposable = Single.fromCallable { validators.validateLogin() }
                 .flatMap { api.chat().sendMessage(chatRoomId, item.message).buildOptionalSingle() }
                 .retryWhen(RxRetryWithDelay(2, 3000))
                 .subscribeOn(Schedulers.io())

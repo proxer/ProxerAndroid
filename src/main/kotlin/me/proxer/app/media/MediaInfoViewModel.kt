@@ -8,15 +8,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.MainApplication.Companion.globalContext
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.Validators
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -35,7 +32,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
         get() = Single.fromCallable { validate() }
             .flatMap { api.info().entry(entryId).buildSingle() }
             .doOnSuccess {
-                if (it.isTrulyAgeRestricted && !PreferenceHelper.isAgeRestrictedMediaAllowed(globalContext)) {
+                if (it.isTrulyAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
                     throw AgeConfirmationRequiredException()
                 }
             }
@@ -89,7 +86,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
         userInfoUpdateDisposable = endpoint
             .buildOptionalSingle()
             .subscribeOn(Schedulers.io())
-            .flatMap { Single.fromCallable { it.apply { Validators.validateLogin() } } }
+            .flatMap { Single.fromCallable { it.apply { validators.validateLogin() } } }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors({ _ ->
                 userInfoUpdateError.value = null

@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import com.rubengees.rxbus.RxBus
 import kotterknife.KotterKnife
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -32,6 +33,7 @@ abstract class BaseDialog : DialogFragment() {
     }
 
     protected val bus by inject<RxBus>()
+    protected val preferenceHelper by inject<PreferenceHelper>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
     private var lifecycleRegistry: LifecycleRegistry? = null

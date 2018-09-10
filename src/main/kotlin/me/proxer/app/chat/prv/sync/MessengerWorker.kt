@@ -47,8 +47,9 @@ class MessengerWorker : Worker(), KoinComponent {
         const val MESSAGES_ON_PAGE = 30
 
         private val bus by inject<RxBus>()
+        private val preferenceHelper by inject<PreferenceHelper>()
 
-        fun enqueueSynchronizationIfPossible(context: Context) = if (canSchedule(context)) {
+        fun enqueueSynchronizationIfPossible() = if (canSchedule()) {
             enqueueSynchronization()
         } else {
             cancel()
@@ -65,8 +66,8 @@ class MessengerWorker : Worker(), KoinComponent {
         fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWork(NAME)
             .value?.firstOrNull()?.state == State.RUNNING
 
-        private fun reschedule(context: Context, synchronizationResult: SynchronizationResult) {
-            if (canSchedule(context) && synchronizationResult != SynchronizationResult.ERROR) {
+        private fun reschedule(synchronizationResult: SynchronizationResult) {
+            if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
                 if (synchronizationResult == SynchronizationResult.CHANGES || bus.post(MessengerFragmentPingEvent())) {
                     StorageHelper.resetChatInterval()
 
@@ -101,10 +102,10 @@ class MessengerWorker : Worker(), KoinComponent {
                 .enqueue()
         }
 
-        private fun canSchedule(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) ||
+        private fun canSchedule() = preferenceHelper.areChatNotificationsEnabled ||
             bus.post(ConferenceFragmentPingEvent()) || bus.post(MessengerFragmentPingEvent())
 
-        private fun canShowNotification(context: Context) = PreferenceHelper.areChatNotificationsEnabled(context) &&
+        private fun canShowNotification() = preferenceHelper.areChatNotificationsEnabled &&
             !bus.post(ConferenceFragmentPingEvent()) && !bus.post(MessengerFragmentPingEvent())
     }
 
@@ -137,7 +138,7 @@ class MessengerWorker : Worker(), KoinComponent {
             }
         }
 
-        reschedule(applicationContext, synchronizationResult)
+        reschedule(synchronizationResult)
 
         return if (synchronizationResult != SynchronizationResult.ERROR) Result.SUCCESS else Result.FAILURE
     }
@@ -152,7 +153,7 @@ class MessengerWorker : Worker(), KoinComponent {
         return if (!isStopped && maxNewDate != null && maxNewDate > StorageHelper.lastChatMessageDate) {
             bus.post(SynchronizationEvent())
 
-            if (canShowNotification(applicationContext)) {
+            if (canShowNotification()) {
                 showNotification(applicationContext)
             }
 
@@ -173,7 +174,7 @@ class MessengerWorker : Worker(), KoinComponent {
         }
 
         return if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
-            if (canShowNotification(applicationContext)) {
+            if (canShowNotification()) {
                 MessengerNotifications.showError(applicationContext, error)
             }
 

@@ -10,7 +10,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.data.PreferenceHelper
 
 /**
  * @author Ruben Gees
@@ -27,7 +26,7 @@ class RatingDialog : BaseDialog() {
         .title(R.string.dialog_rating_title)
         .message(R.string.dialog_rating_content)
         .positiveButton(R.string.dialog_rating_positive) {
-            PreferenceHelper.setHasRated(requireContext())
+            preferenceHelper.hasRated = true
 
             try {
                 requireContext().startActivity(
@@ -47,6 +46,6 @@ class RatingDialog : BaseDialog() {
         }
         .neutralButton(R.string.dialog_rating_neutral)
         .negativeButton(R.string.dialog_rating_negative) {
-            PreferenceHelper.setHasRated(requireContext())
+            preferenceHelper.hasRated = true
         }
 }
