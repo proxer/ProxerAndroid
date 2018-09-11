@@ -1,6 +1,7 @@
 package me.proxer.app.util.data
 
 import com.devbrackets.android.exomedia.ExoMedia
+import com.gojuno.koptional.Optional
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.TransferListener
@@ -12,14 +13,16 @@ import okhttp3.OkHttpClient
  */
 class ExoMediaDataSourceFactoryProvider(
     client: OkHttpClient,
-    referer: String?
+    referer: Optional<String>
 ) : ExoMedia.DataSourceFactoryProvider {
 
-    private val exoMediaClient: OkHttpClient = when (referer) {
+    private val exoMediaClient: OkHttpClient = when (
+        val nullableReferer = referer.toNullable()) {
         null -> client
         else -> client.newBuilder()
             .addInterceptor { chain ->
-                val newRequest = chain.request().newBuilder().header("Referer", referer).build()
+                val newRequest =
+                    chain.request().newBuilder().header("Referer", nullableReferer).build()
 
                 chain.proceed(newRequest)
             }

@@ -106,7 +106,7 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { (referer: String) -> ExoMediaDataSourceFactoryProvider(get(), referer) }
+    single { (referer: Optional<String>) -> ExoMediaDataSourceFactoryProvider(get(), referer) }
 }
 
 private val viewModelModule = module {
