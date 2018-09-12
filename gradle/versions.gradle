@@ -15,7 +15,7 @@ ext {
     gradleVersion = '4.10'
 
     // Core plugins
-    androidPluginVersion = '3.3.0-alpha08'
+    androidPluginVersion = '3.3.0-alpha10'
     kotlinVersion = '1.3-M2'
 
     // Utility plugins
@@ -61,7 +61,7 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-alpha08'
+    materialDialogsVersion = '2.0.0-alpha09'
     flexboxVersion = '1.1.0-beta1'
     emojiIosVersion = '8c2d9d5973'
     exomediaVersion = '4.2.3'
@@ -75,7 +75,7 @@ ext {
     gravitySnapHelperVersion = '1.5'
 
     // Utils
-    proxerLibVersion = '4.5.0'
+    proxerLibVersion = 'd6342a6459'
     threetenVersion = '1.1.0'
     hawkVersion = '2.0.1'
     glideVersion = '4.8.0'
