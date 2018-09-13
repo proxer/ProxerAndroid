@@ -68,6 +68,7 @@ class ChatContainerFragment : BaseFragment() {
     override fun onDestroyView() {
         tabLayoutHelper?.release()
         tabLayoutHelper = null
+        viewPager.adapter = null
 
         tabs.visibility = View.GONE
 

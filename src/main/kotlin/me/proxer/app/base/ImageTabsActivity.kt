@@ -75,6 +75,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
     override fun onDestroy() {
         tabLayoutHelper?.release()
         tabLayoutHelper = null
+        viewPager.adapter = null
 
         super.onDestroy()
     }

@@ -50,6 +50,7 @@ class UcpActivity : DrawerActivity() {
     override fun onDestroy() {
         tabLayoutHelper?.release()
         tabLayoutHelper = null
+        viewPager.adapter = null
 
         super.onDestroy()
     }
