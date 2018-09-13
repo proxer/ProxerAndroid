@@ -33,14 +33,18 @@ import me.proxer.app.util.extension.LocalConferenceMap
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.util.ProxerUrls
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-object MessengerNotifications {
+object MessengerNotifications : KoinComponent {
 
     private const val GROUP = "chat"
     private const val ID = 782373275
+
+    private val storageHelper by inject<StorageHelper>()
 
     fun showOrUpdate(context: Context, conferenceMap: LocalConferenceMap) {
         val notifications = conferenceMap.entries
@@ -96,7 +100,7 @@ object MessengerNotifications {
 
         val shouldAlert = conferenceMap.keys
             .map { it.date }
-            .maxBy { it }?.time ?: 0 > StorageHelper.lastChatMessageDate.time
+            .maxBy { it }?.time ?: 0 > storageHelper.lastChatMessageDate.time
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_proxer)
@@ -148,7 +152,7 @@ object MessengerNotifications {
         conference: LocalConference,
         messages: List<LocalMessage>
     ): Notification? {
-        val user = StorageHelper.user
+        val user = storageHelper.user
 
         if (messages.isEmpty() || user == null) {
             return null

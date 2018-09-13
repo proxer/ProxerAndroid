@@ -7,13 +7,13 @@ import me.proxer.library.api.LoginTokenManager
 /**
  * @author Ruben Gees
  */
-class ProxerLoginTokenManager(private val bus: RxBus) : LoginTokenManager {
+class ProxerLoginTokenManager(private val storageHelper: StorageHelper, private val bus: RxBus) : LoginTokenManager {
 
-    override fun provide() = StorageHelper.user?.token
+    override fun provide() = storageHelper.user?.token
     override fun persist(loginToken: String?) {
         when (loginToken) {
-            null -> if (StorageHelper.user?.token != loginToken) {
-                StorageHelper.user = null
+            null -> if (storageHelper.user?.token != loginToken) {
+                storageHelper.user = null
 
                 bus.post(LogoutEvent())
             }

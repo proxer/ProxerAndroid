@@ -29,7 +29,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeData
@@ -137,7 +136,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         header.episodeSwitchSubject
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
-                if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
+                if (areBookmarksAutomatic && it > episode && storageHelper.isLoggedIn) {
                     viewModel.bookmark(it)
                 }
 

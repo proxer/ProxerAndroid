@@ -18,7 +18,6 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ucp.UcpActivity
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -98,7 +97,7 @@ abstract class DrawerActivity : BaseActivity() {
         AccountItem.UCP -> UcpActivity.navigateTo(this)
     }
 
-    private fun showProfilePage() = StorageHelper.user?.let { (_, id, name, image) ->
+    private fun showProfilePage() = storageHelper.user?.let { (_, id, name, image) ->
         ProfileActivity.navigateTo(this, id, name, image, null)
     }
 }

@@ -41,7 +41,6 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 import java.util.Date
-import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
@@ -51,12 +50,10 @@ class MainApplication : Application() {
     companion object {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-
-        var globalContext by Delegates.notNull<Context>()
-            private set
     }
 
     private val bus by inject<RxBus>()
+    private val storageHelper by inject<StorageHelper>()
     private val preferenceHelper by inject<PreferenceHelper>()
     private val messengerDao by inject<MessengerDao>()
 
@@ -70,8 +67,6 @@ class MainApplication : Application() {
         LeakCanary.install(this)
 
         startKoin(this, modules)
-
-        globalContext = this
 
         NotificationUtils.createNotificationChannels(this)
 
@@ -122,10 +117,10 @@ class MainApplication : Application() {
 
                 MessengerWorker.cancel()
 
-                StorageHelper.lastChatMessageDate = Date(0L)
-                StorageHelper.lastNotificationsDate = Date(0L)
-                StorageHelper.areConferencesSynchronized = false
-                StorageHelper.resetChatInterval()
+                storageHelper.lastChatMessageDate = Date(0L)
+                storageHelper.lastNotificationsDate = Date(0L)
+                storageHelper.areConferencesSynchronized = false
+                storageHelper.resetChatInterval()
 
                 messengerDao.clear()
             }

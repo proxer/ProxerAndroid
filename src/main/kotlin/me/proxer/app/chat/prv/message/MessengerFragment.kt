@@ -36,7 +36,6 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
@@ -74,7 +73,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimary)
 
             innerAdapter.selectedMessages.let {
-                menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != StorageHelper.user?.id
+                menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != storageHelper.user?.id
             }
 
             return false
@@ -141,7 +140,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = MessengerAdapter(savedInstanceState, conference.isGroup)
+        innerAdapter = MessengerAdapter(savedInstanceState, conference.isGroup, storageHelper)
 
         innerAdapter.titleClickSubject
             .autoDisposable(this.scope())

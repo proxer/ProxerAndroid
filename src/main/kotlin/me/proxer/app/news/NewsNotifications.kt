@@ -14,13 +14,17 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.entity.notifications.NewsArticle
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-object NewsNotifications {
+object NewsNotifications : KoinComponent {
 
     private const val ID = 1357913213
+
+    private val storageHelper by inject<StorageHelper>()
 
     fun showOrUpdate(context: Context, news: Collection<NewsArticle>) {
         val notification = buildNewsNotification(context, news)
@@ -86,7 +90,7 @@ object NewsNotifications {
 
         val shouldAlert = news
             .map { it.date }
-            .maxBy { it }?.time ?: 0 > StorageHelper.lastNewsDate.time
+            .maxBy { it }?.time ?: 0 > storageHelper.lastNewsDate.time
 
         return builder.setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_stat_proxer)

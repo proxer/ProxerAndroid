@@ -41,7 +41,8 @@ import java.util.concurrent.Callable
  */
 class MessengerAdapter(
     savedInstanceState: Bundle?,
-    private val isGroup: Boolean
+    private val isGroup: Boolean,
+    private val storageHelper: StorageHelper
 ) : BaseAdapter<LocalMessage, MessageViewHolder>() {
 
     private companion object {
@@ -142,7 +143,7 @@ class MessengerAdapter(
                 }
             }
 
-            if (current.userId == StorageHelper.user?.id) {
+            if (current.userId == storageHelper.user?.id) {
                 result += 4 // Make the item a "self" item.
             }
         }

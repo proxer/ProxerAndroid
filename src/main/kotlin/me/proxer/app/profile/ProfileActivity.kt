@@ -26,7 +26,6 @@ import me.proxer.app.profile.media.ProfileMediaListFragment
 import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -116,7 +115,7 @@ class ProfileActivity : ImageTabsActivity() {
         }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        StorageHelper.user.let {
+        storageHelper.user.let {
             if (it == null || it.id != userId && !it.name.equals(username, true)) {
                 IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_profile, menu, true)
             }

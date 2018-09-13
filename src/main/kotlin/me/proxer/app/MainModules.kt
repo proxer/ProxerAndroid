@@ -5,6 +5,7 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.gojuno.koptional.Optional
 import com.rubengees.rxbus.RxBus
+import com.squareup.moshi.Moshi
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.AnimeViewModel
 import me.proxer.app.anime.schedule.ScheduleViewModel
@@ -52,6 +53,8 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.data.ExoMediaDataSourceFactoryProvider
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
+import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.enums.AnimeLanguage
@@ -82,7 +85,8 @@ private val applicationModules = module {
             .apply { if (BuildConfig.LOG) customLogger { message -> Timber.tag(API_LOGGING_TAG).i(message) } }
             .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
             .loggingTag(API_LOGGING_TAG)
-            .loginTokenManager(ProxerLoginTokenManager(get()))
+            .loginTokenManager(get())
+            .moshi(Moshi.Builder().build())
             .client(
                 OkHttpClient.Builder()
                     .retryOnConnectionFailure(false)
@@ -97,15 +101,17 @@ private val applicationModules = module {
     single { get<ProxerApi>().moshi() }
     single { get<ProxerApi>().client() }
 
+    single { StorageHelper(androidContext(), get()) }
     single { PreferenceHelper(get()) }
-    single { Validators(get()) }
+    single { Validators(get(), get()) }
 
     single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
     single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }
     single { get<MessengerDatabase>().dao() }
     single { get<TagDatabase>().dao() }
 
-    single { HawkMoshiParser(get()) }
+    single { HawkMoshiParser(Moshi.Builder().build()) }
+    single { ProxerLoginTokenManager(get(), get()) } bind LoginTokenManager::class
     single { (referer: Optional<String>) -> ExoMediaDataSourceFactoryProvider(get(), referer) }
 }
 

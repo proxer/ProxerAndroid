@@ -9,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.TagDao
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -105,7 +104,7 @@ class MediaListViewModel(
                         .doOnSuccess {
                             tagDao.replaceTags(it)
 
-                            StorageHelper.lastTagUpdateDate = Date()
+                            storageHelper.lastTagUpdateDate = Date()
                         }
                     else -> Single.just(cachedTags)
                 }
@@ -118,6 +117,6 @@ class MediaListViewModel(
             }
     }
 
-    private fun shouldUpdateTags() = StorageHelper.lastTagUpdateDate.convertToDateTime()
+    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.convertToDateTime()
         .isBefore(LocalDateTime.now().minusDays(15))
 }

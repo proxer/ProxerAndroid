@@ -11,7 +11,6 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.data.StorageHelper
 import org.koin.standalone.inject
 import kotlin.properties.Delegates
 
@@ -44,9 +43,9 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
 
     private val sourceObserver = Observer { it: List<ConferenceWithMessage>? ->
         it?.let {
-            val containsRelevantData = it.isNotEmpty() || StorageHelper.areConferencesSynchronized
+            val containsRelevantData = it.isNotEmpty() || storageHelper.areConferencesSynchronized
 
-            if (containsRelevantData && StorageHelper.isLoggedIn && error.value == null) {
+            if (containsRelevantData && storageHelper.isLoggedIn && error.value == null) {
                 dataDisposable?.dispose()
 
                 isLoading.value = false

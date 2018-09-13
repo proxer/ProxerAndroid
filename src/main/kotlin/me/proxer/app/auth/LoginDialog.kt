@@ -25,7 +25,6 @@ import kotterknife.bindView
 import linkClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
@@ -126,7 +125,7 @@ class LoginDialog : BaseDialog() {
     private fun setupViewModel() {
         viewModel.data.observe(dialogLifecycleOwner, Observer {
             it?.let { _ ->
-                StorageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
+                storageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
 
                 bus.post(LoginEvent())
 

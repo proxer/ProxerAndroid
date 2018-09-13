@@ -5,7 +5,6 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.user.TopTenEntry
 import me.proxer.library.enums.Category
@@ -20,7 +19,7 @@ class TopTenViewModel(
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() {
-            val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && StorageHelper.isLoggedIn
+            val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
 
             return Singles.zip(
                 partialSingle(includeHentai, Category.ANIME),

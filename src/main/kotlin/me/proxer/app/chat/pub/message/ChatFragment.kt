@@ -37,7 +37,6 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
@@ -77,7 +76,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimary)
 
             innerAdapter.selectedMessages.let {
-                val user = StorageHelper.user
+                val user = storageHelper.user
 
                 menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != user?.id && user != null
                 menu.findItem(R.id.report).isVisible = it.size == 1 && it.first().userId != user?.id && user != null
@@ -146,7 +145,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = ChatAdapter(savedInstanceState)
+        innerAdapter = ChatAdapter(savedInstanceState, storageHelper)
 
         innerAdapter.titleClickSubject
             .autoDisposable(this.scope())
@@ -336,7 +335,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     override fun isAtTop() = layoutManager.isAtTop()
 
     private fun updateInputVisibility() {
-        val isLoggedIn = StorageHelper.user != null
+        val isLoggedIn = storageHelper.user != null
 
         if (isReadOnly || !isLoggedIn) {
             emojiButton.visibility = View.GONE

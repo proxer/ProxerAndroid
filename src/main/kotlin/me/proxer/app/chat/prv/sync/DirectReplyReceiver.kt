@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getSafeCharSequence
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.standalone.KoinComponent
@@ -32,13 +33,16 @@ class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
     }
 
     private val messengerDao by inject<MessengerDao>()
+    private val storageHelper by inject<StorageHelper>()
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)
 
         Completable
             .fromAction {
-                messengerDao.insertMessageToSend(getMessageText(intent), conferenceId)
+                val safeUser = storageHelper.user ?: throw IllegalStateException("User cannot be null")
+
+                messengerDao.insertMessageToSend(safeUser, getMessageText(intent), conferenceId)
 
                 val unreadMap = messengerDao.getUnreadConferences()
                     .asSequence()

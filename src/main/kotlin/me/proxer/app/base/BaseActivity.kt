@@ -5,6 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -24,6 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected val bus by inject<RxBus>()
+    protected val storageHelper by inject<StorageHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
 
     private var currentNightMode by Delegates.notNull<Int>()

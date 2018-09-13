@@ -37,7 +37,7 @@ import org.jetbrains.anko.sp
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
+class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<ConferenceWithMessage> = PublishSubject.create()
@@ -116,7 +116,7 @@ class ConferenceAdapter : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
 
         private fun bindPreviewText(item: ConferenceWithMessage) {
             if (item.message != null) {
-                val messageFromUser = item.message.userId == StorageHelper.user?.id
+                val messageFromUser = item.message.userId == storageHelper.user?.id
 
                 val trimmedFirstMessageText = item.message.messageText
                     .replace("\r\n", " ")

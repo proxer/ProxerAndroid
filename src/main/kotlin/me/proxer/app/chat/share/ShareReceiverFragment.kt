@@ -76,7 +76,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = ConferenceAdapter()
+        adapter = ConferenceAdapter(storageHelper)
 
         adapter.clickSubject
             .debounce(50, TimeUnit.MILLISECONDS)

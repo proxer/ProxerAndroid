@@ -16,13 +16,17 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-object AccountNotifications {
+object AccountNotifications : KoinComponent {
 
     private const val ID = 759234852
+
+    private val storageHelper by inject<StorageHelper>()
 
     fun showOrUpdate(context: Context, notifications: Collection<ProxerNotification>) {
         val notification = buildNotification(context, notifications)
@@ -95,7 +99,7 @@ object AccountNotifications {
 
         val shouldAlert = notifications
             .map { it.date }
-            .maxBy { it }?.time ?: 0 > StorageHelper.lastNotificationsDate.time
+            .maxBy { it }?.time ?: 0 > storageHelper.lastNotificationsDate.time
 
         return builder.setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_stat_proxer)

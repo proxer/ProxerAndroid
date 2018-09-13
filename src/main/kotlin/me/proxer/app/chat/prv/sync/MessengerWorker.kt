@@ -47,6 +47,7 @@ class MessengerWorker : Worker(), KoinComponent {
         const val MESSAGES_ON_PAGE = 30
 
         private val bus by inject<RxBus>()
+        private val storageHelper by inject<StorageHelper>()
         private val preferenceHelper by inject<PreferenceHelper>()
 
         fun enqueueSynchronizationIfPossible() = if (canSchedule()) {
@@ -69,17 +70,17 @@ class MessengerWorker : Worker(), KoinComponent {
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
                 if (synchronizationResult == SynchronizationResult.CHANGES || bus.post(MessengerFragmentPingEvent())) {
-                    StorageHelper.resetChatInterval()
+                    storageHelper.resetChatInterval()
 
                     doEnqueue(3_000L)
                 } else if (bus.post(ConferenceFragmentPingEvent())) {
-                    StorageHelper.resetChatInterval()
+                    storageHelper.resetChatInterval()
 
                     doEnqueue(10_000L)
                 } else {
-                    StorageHelper.incrementChatInterval()
+                    storageHelper.incrementChatInterval()
 
-                    doEnqueue(StorageHelper.chatInterval)
+                    doEnqueue(storageHelper.chatInterval)
                 }
             }
         }
@@ -113,6 +114,7 @@ class MessengerWorker : Worker(), KoinComponent {
         get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
 
     private val api by inject<ProxerApi>()
+    private val storageHelper by inject<StorageHelper>()
     private val messengerDatabase by inject<MessengerDatabase>()
     private val messengerDao by inject<MessengerDao>()
 
@@ -123,7 +125,7 @@ class MessengerWorker : Worker(), KoinComponent {
     }
 
     override fun doWork(): Result {
-        if (!StorageHelper.isLoggedIn) return Result.FAILURE
+        if (!storageHelper.isLoggedIn) return Result.FAILURE
 
         val synchronizationResult = when (conferenceId) {
             0L -> try {
@@ -146,18 +148,18 @@ class MessengerWorker : Worker(), KoinComponent {
     private fun handleSynchronization(): SynchronizationResult {
         val newConferencesAndMessages = synchronize()
 
-        StorageHelper.areConferencesSynchronized = true
+        storageHelper.areConferencesSynchronized = true
 
         val maxNewDate = newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date
 
-        return if (!isStopped && maxNewDate != null && maxNewDate > StorageHelper.lastChatMessageDate) {
+        return if (!isStopped && maxNewDate != null && maxNewDate > storageHelper.lastChatMessageDate) {
             bus.post(SynchronizationEvent())
 
             if (canShowNotification()) {
                 showNotification(applicationContext)
             }
 
-            StorageHelper.lastChatMessageDate = maxNewDate
+            storageHelper.lastChatMessageDate = maxNewDate
 
             SynchronizationResult.CHANGES
         } else {
@@ -202,8 +204,8 @@ class MessengerWorker : Worker(), KoinComponent {
         val fetchedMessages = loadMoreMessages(conferenceId)
 
         fetchedMessages.maxBy { it.date }?.date?.let { mostRecentDate ->
-            if (mostRecentDate > StorageHelper.lastChatMessageDate) {
-                StorageHelper.lastChatMessageDate = mostRecentDate
+            if (mostRecentDate > storageHelper.lastChatMessageDate) {
+                storageHelper.lastChatMessageDate = mostRecentDate
             }
         }
 

@@ -80,7 +80,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = ConferenceAdapter()
+        adapter = ConferenceAdapter(storageHelper)
 
         adapter.clickSubject
             .autoDisposable(this.scope())

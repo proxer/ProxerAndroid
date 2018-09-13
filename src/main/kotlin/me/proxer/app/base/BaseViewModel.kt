@@ -17,6 +17,7 @@ import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import org.koin.standalone.KoinComponent
@@ -36,6 +37,7 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     protected val bus by inject<RxBus>()
     protected val api by inject<ProxerApi>()
+    protected val storageHelper by inject<StorageHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
     protected val validators by inject<Validators>()
 

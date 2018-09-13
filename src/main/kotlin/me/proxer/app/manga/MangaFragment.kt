@@ -39,7 +39,6 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
@@ -227,7 +226,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
-                if (areBookmarksAutomatic && it > episode && StorageHelper.isLoggedIn) {
+                if (areBookmarksAutomatic && it > episode && storageHelper.isLoggedIn) {
                     viewModel.bookmark(it)
                 }
 

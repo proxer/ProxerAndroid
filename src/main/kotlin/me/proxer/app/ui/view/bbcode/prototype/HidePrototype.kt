@@ -16,21 +16,25 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.data.StorageHelper
 import org.jetbrains.anko.dip
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
  */
-object HidePrototype : AutoClosingPrototype {
+object HidePrototype : AutoClosingPrototype, KoinComponent {
 
     override val startRegex = Regex(" *hide( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *hide *", REGEX_OPTIONS)
+
+    private val storageHelper by inject<StorageHelper>()
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)
 
         return when {
             childViews.isEmpty() -> childViews
-            !StorageHelper.isLoggedIn -> listOf(FrameLayout(parent.context).apply {
+            !storageHelper.isLoggedIn -> listOf(FrameLayout(parent.context).apply {
                 val text = parent.context.getString(R.string.view_bbcode_hide_login)
 
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)

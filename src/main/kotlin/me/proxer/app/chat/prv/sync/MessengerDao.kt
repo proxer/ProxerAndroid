@@ -7,25 +7,26 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
+import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
+import org.koin.standalone.KoinComponent
 import java.util.Date
 
 /**
  * @author Ruben Gees
  */
 @Dao
-abstract class MessengerDao {
+abstract class MessengerDao : KoinComponent {
 
     @Transaction
-    open fun insertMessageToSend(text: String, conferenceId: Long): LocalMessage {
-        val (_, id, name) = StorageHelper.user ?: throw IllegalStateException("User cannot be null")
+    open fun insertMessageToSend(user: LocalUser, text: String, conferenceId: Long): LocalMessage {
         val message = LocalMessage(
-            calculateNextMessageToSendId(), conferenceId, id, name, text, MessageAction.NONE, Date(), Device.MOBILE
+            calculateNextMessageToSendId(), conferenceId, user.id, user.name,
+            text, MessageAction.NONE, Date(), Device.MOBILE
         )
 
         insertMessage(message)

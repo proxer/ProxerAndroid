@@ -2,7 +2,6 @@ package me.proxer.app.profile.media
 
 import com.gojuno.koptional.Optional
 import me.proxer.app.base.PagedContentViewModel
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
@@ -23,7 +22,7 @@ class ProfileMediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
         get() = api.user().mediaList(userId.toNullable(), username.toNullable())
-            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && StorageHelper.isLoggedIn)
+            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
             .category(category)
             .filter(filter)
 

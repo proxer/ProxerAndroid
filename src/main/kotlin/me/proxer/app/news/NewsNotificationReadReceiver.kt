@@ -29,13 +29,14 @@ class NewsNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
     }
 
     private val api by inject<ProxerApi>()
+    private val storageHelper by inject<StorageHelper>()
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable
             .fromAction {
                 NewsNotifications.cancel(context)
 
-                StorageHelper.lastNewsDate = Date()
+                storageHelper.lastNewsDate = Date()
 
                 api.notifications().news()
                     .markAsRead(true)

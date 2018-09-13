@@ -16,7 +16,6 @@ import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.util.ProxerUrls
@@ -74,7 +73,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
     override fun showData(data: Int) {
         super.showData(data)
 
-        StorageHelper.user?.let { (_, id, name) ->
+        storageHelper.user?.let { (_, id, name) ->
             profileLink.text = ProxerUrls.userWeb(id).toString().linkify(mentions = false)
 
             username.text = name

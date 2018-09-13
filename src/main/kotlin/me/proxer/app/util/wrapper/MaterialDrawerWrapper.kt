@@ -24,6 +24,8 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.dip
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 
 /**
  * @author Ruben Gees
@@ -34,7 +36,7 @@ class MaterialDrawerWrapper(
     savedInstanceState: Bundle?,
     private val isRoot: Boolean,
     private val isMain: Boolean
-) {
+) : KoinComponent {
 
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
     val accountClickSubject: PublishSubject<AccountItem> = PublishSubject.create()
@@ -49,8 +51,10 @@ class MaterialDrawerWrapper(
             return DrawerItem.fromIdOrNull(idToUse)
         }
 
+    private val storageHelper by inject<StorageHelper>()
+
     private val accountItems
-        get() = StorageHelper.user.let {
+        get() = storageHelper.user.let {
             when (it) {
                 null -> listOf<IProfile<*>>(
                     ProfileDrawerItem()

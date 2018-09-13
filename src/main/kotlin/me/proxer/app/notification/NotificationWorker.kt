@@ -62,6 +62,7 @@ class NotificationWorker : Worker(), KoinComponent {
     }
 
     private val api by inject<ProxerApi>()
+    private val storageHelper by inject<StorageHelper>()
 
     private var currentCall: ProxerCall<*>? = null
 
@@ -70,7 +71,7 @@ class NotificationWorker : Worker(), KoinComponent {
     }
 
     override fun doWork() = try {
-        val notificationInfo = when (StorageHelper.isLoggedIn) {
+        val notificationInfo = when (storageHelper.isLoggedIn) {
             true -> api.notifications().notificationInfo()
                 .build()
                 .also { currentCall = it }
@@ -101,7 +102,7 @@ class NotificationWorker : Worker(), KoinComponent {
     }
 
     private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
-        val lastNewsDate = StorageHelper.lastNewsDate
+        val lastNewsDate = storageHelper.lastNewsDate
         val newNews = when (notificationInfo?.news) {
             0 -> emptyList()
             else -> api.notifications().news()
@@ -120,13 +121,13 @@ class NotificationWorker : Worker(), KoinComponent {
             if (!isStopped && it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
                 NewsNotifications.showOrUpdate(context, newNews)
 
-                StorageHelper.lastNewsDate = it
+                storageHelper.lastNewsDate = it
             }
         }
     }
 
     private fun fetchAccountNotifications(context: Context, notificationInfo: NotificationInfo) {
-        val lastNotificationsDate = StorageHelper.lastNotificationsDate
+        val lastNotificationsDate = storageHelper.lastNotificationsDate
         val newNotifications = when (notificationInfo.notifications) {
             0 -> emptyList()
             else -> api.notifications().notifications()
@@ -142,7 +143,7 @@ class NotificationWorker : Worker(), KoinComponent {
             if (!isStopped && it != lastNotificationsDate && !bus.post(AccountNotificationEvent())) {
                 AccountNotifications.showOrUpdate(context, newNotifications)
 
-                StorageHelper.lastNotificationsDate = it
+                storageHelper.lastNotificationsDate = it
             }
         }
     }

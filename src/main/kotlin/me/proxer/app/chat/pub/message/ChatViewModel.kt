@@ -10,7 +10,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -92,7 +91,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
 
     fun loadDraft() {
         draftDisposable?.dispose()
-        draftDisposable = Single.fromCallable { StorageHelper.getMessageDraft(chatRoomId).toOptional() }
+        draftDisposable = Single.fromCallable { storageHelper.getMessageDraft(chatRoomId).toOptional() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { it -> if (it is Some) draft.value = it.value }
@@ -103,9 +102,9 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         draftDisposable = Single
             .fromCallable {
                 if (draft.isBlank()) {
-                    StorageHelper.deleteMessageDraft(chatRoomId)
+                    storageHelper.deleteMessageDraft(chatRoomId)
                 } else {
-                    StorageHelper.putMessageDraft(chatRoomId, draft)
+                    storageHelper.putMessageDraft(chatRoomId, draft)
                 }
             }
             .subscribeOn(Schedulers.io())
@@ -113,7 +112,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
     }
 
     fun sendMessage(text: String) {
-        StorageHelper.user?.let { user ->
+        storageHelper.user?.let { user ->
             val firstId = data.value?.firstOrNull()?.id?.toLong()
             val nextId = if (firstId == null || firstId >= 0) -1 else firstId - 1
 

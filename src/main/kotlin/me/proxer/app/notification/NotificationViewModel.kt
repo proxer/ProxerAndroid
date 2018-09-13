@@ -7,7 +7,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.buildOptionalSingle
@@ -43,7 +42,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
             .doOnSuccess {
                 if (page == 0) {
                     it.firstOrNull()?.date?.let { date ->
-                        StorageHelper.lastNotificationsDate = date
+                        storageHelper.lastNotificationsDate = date
                     }
                 }
             }

@@ -15,7 +15,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isTrulyAgeRestricted
@@ -37,7 +36,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
                 }
             }
             .flatMap { entry ->
-                when (StorageHelper.isLoggedIn) {
+                when (storageHelper.isLoggedIn) {
                     true -> api.info().userInfo(entryId)
                         .buildOptionalSingle()
                         .map { entry to it }

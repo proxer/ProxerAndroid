@@ -7,7 +7,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -30,7 +29,7 @@ class UcpMediaListViewModel(
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
         get() = api.ucp().mediaList()
-            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && StorageHelper.isLoggedIn)
+            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
             .category(category)
             .filter(filter)
 

@@ -27,11 +27,12 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
 
     private val api by inject<ProxerApi>()
+    private val storageHelper by inject<StorageHelper>()
 
     private var dataDisposable: Disposable? = null
 
     init {
-        isTwoFactorAuthenticationEnabled.value = StorageHelper.isTwoFactorAuthenticationEnabled
+        isTwoFactorAuthenticationEnabled.value = storageHelper.isTwoFactorAuthenticationEnabled
     }
 
     override fun onCleared() {
@@ -58,7 +59,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     data.value = it
                 }, {
                     if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
-                        StorageHelper.isTwoFactorAuthenticationEnabled = true
+                        storageHelper.isTwoFactorAuthenticationEnabled = true
                         isTwoFactorAuthenticationEnabled.value = true
                     }
 

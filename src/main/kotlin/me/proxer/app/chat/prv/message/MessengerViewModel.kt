@@ -18,7 +18,6 @@ import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.standalone.inject
 
@@ -44,7 +43,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
             addSource(source) {
                 it?.let { _ ->
-                    if (StorageHelper.isLoggedIn) {
+                    if (storageHelper.isLoggedIn) {
                         if (it.isEmpty() && !hasReachedEnd) {
                             MessengerWorker.enqueueMessageLoad(safeConference.id)
                         } else {
@@ -138,7 +137,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     fun loadDraft() {
         draftDisposable?.dispose()
         draftDisposable = Single.fromCallable {
-            StorageHelper.getMessageDraft(safeConference.id.toString()).toOptional()
+            storageHelper.getMessageDraft(safeConference.id.toString()).toOptional()
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -150,9 +149,9 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         draftDisposable = Single
             .fromCallable {
                 if (draft.isBlank()) {
-                    StorageHelper.deleteMessageDraft(safeConference.id.toString())
+                    storageHelper.deleteMessageDraft(safeConference.id.toString())
                 } else {
-                    StorageHelper.putMessageDraft(safeConference.id.toString(), draft)
+                    storageHelper.putMessageDraft(safeConference.id.toString(), draft)
                 }
             }
             .subscribeOn(Schedulers.io())
@@ -160,8 +159,10 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     fun sendMessage(text: String) {
+        val safeUser = storageHelper.user ?: throw IllegalStateException("User cannot be null")
+
         disposables += Single
-            .fromCallable { messengerDao.insertMessageToSend(text, safeConference.id) }
+            .fromCallable { messengerDao.insertMessageToSend(safeUser, text, safeConference.id) }
             .doOnSuccess { if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization() }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()

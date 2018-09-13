@@ -40,7 +40,10 @@ import java.util.concurrent.Callable
 /**
  * @author Ruben Gees
  */
-class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, MessageViewHolder>() {
+class ChatAdapter(
+    savedInstanceState: Bundle?,
+    private val storageHelper: StorageHelper
+) : BaseAdapter<ParsedChatMessage, MessageViewHolder>() {
 
     private companion object {
         private const val IS_SELECTING_STATE = "chat_is_selecting"
@@ -71,8 +74,6 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
     private val timeDisplayMap: ParcelableStringBooleanMap
 
     private var isSelecting = false
-
-    private val user by lazy { StorageHelper.user }
 
     init {
         messageSelectionMap = when (savedInstanceState) {
@@ -138,7 +139,7 @@ class ChatAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedChatMessage, 
             }
         }
 
-        if (current.userId == user?.id) {
+        if (current.userId == storageHelper.user?.id) {
             result += 4 // Make the item a "self" item.
         }
 

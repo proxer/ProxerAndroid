@@ -8,7 +8,6 @@ import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseViewModel
-import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.chat.ChatRoom
 
@@ -23,7 +22,7 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
 
     override val dataSingle: Single<List<ChatRoom>>
         get() = api.chat().publicRooms().buildSingle()
-            .let { if (StorageHelper.isLoggedIn) it.zipWith(api.chat().userRooms().buildSingle(), zipper) else it }
+            .let { if (storageHelper.isLoggedIn) it.zipWith(api.chat().userRooms().buildSingle(), zipper) else it }
             .map {
                 it
                     .asSequence()
