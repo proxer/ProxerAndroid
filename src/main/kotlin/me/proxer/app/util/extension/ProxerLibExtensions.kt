@@ -21,6 +21,7 @@ import me.proxer.app.media.comment.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.util.Utils
 import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.entity.forum.Post
@@ -31,6 +32,7 @@ import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.entity.info.EntrySeasonInfo
 import me.proxer.library.entity.info.Synonym
 import me.proxer.library.entity.list.Tag
+import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
@@ -349,6 +351,15 @@ fun MessageAction.toAppString(context: Context, username: String, message: Strin
     MessageAction.SET_TOPIC -> context.getString(R.string.action_conference_set_topic, "@$username", message)
     MessageAction.NONE -> message
 }
+
+inline val Chapter.isOfficial: Boolean
+    get() = if (pages == null) {
+        val serverUrl = Utils.parseAndFixUrl(server)
+
+        serverUrl != null && serverUrl.host() in arrayOf("www.webtoons.com", "www.lezhin.com")
+    } else {
+        false
+    }
 
 inline val Entry.isTrulyAgeRestricted: Boolean
     get() = isAgeRestricted || medium == Medium.HMANGA || medium == Medium.HENTAI ||

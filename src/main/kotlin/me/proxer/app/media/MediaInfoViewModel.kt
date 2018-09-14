@@ -10,6 +10,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
+import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -31,8 +32,12 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
         get() = Single.fromCallable { validate() }
             .flatMap { api.info().entry(entryId).buildSingle() }
             .doOnSuccess {
-                if (it.isTrulyAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
-                    throw AgeConfirmationRequiredException()
+                if (it.isTrulyAgeRestricted) {
+                    if (!storageHelper.isLoggedIn) {
+                        throw AgeConfirmationRequiredException()
+                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
+                        throw NotLoggedInException()
+                    }
                 }
             }
             .flatMap { entry ->

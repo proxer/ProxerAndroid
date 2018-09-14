@@ -14,12 +14,14 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import me.proxer.app.BuildConfig
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeAdapter.ViewHolder
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.Utils
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
@@ -29,7 +31,10 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewHolder>() {
+class AnimeAdapter(
+    savedInstanceState: Bundle?,
+    private val storageHelper: StorageHelper
+) : BaseAdapter<AnimeStream, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_ITEM_STATE = "anime_stream_expanded_id"
@@ -39,6 +44,7 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
     val uploaderClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
+    val loginClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
 
     private var expandedItemId: String?
 
@@ -84,18 +90,10 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
         internal val play: Button by bindView(R.id.play)
         internal val unsupported: TextView by bindView(R.id.unsupported)
 
-        init {
-            play.setCompoundDrawablesWithIntrinsicBounds(
-                IconicsDrawable(play.context)
-                    .icon(CommunityMaterial.Icon.cmd_play)
-                    .sizeDp(28)
-                    .paddingDp(8)
-                    .colorRes(android.R.color.white), null, null, null
-            )
-        }
-
         fun bind(item: AnimeStream) {
-            initListeners()
+            val isLoginRequired = BuildConfig.STORE && !item.isOfficial && !storageHelper.isLoggedIn
+
+            initListeners(isLoginRequired)
 
             name.text = item.hosterName
 
@@ -115,39 +113,10 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
 
             dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
 
-            when {
-                item.isInternalPlayerOnly -> {
-                    info.visibility = View.VISIBLE
-
-                    info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
-
-                    info.setCompoundDrawablesWithIntrinsicBounds(
-                        IconicsDrawable(play.context)
-                            .icon(CommunityMaterial.Icon.cmd_alert)
-                            .sizeDp(26)
-                            .iconColor(info.context), null, null, null
-                    )
-                }
-                item.isOfficial -> {
-                    info.visibility = View.VISIBLE
-
-                    info.setText(R.string.fragment_anime_stream_official_info)
-
-                    info.setCompoundDrawablesWithIntrinsicBounds(
-                        IconicsDrawable(play.context)
-                            .icon(CommunityMaterial.Icon.cmd_information)
-                            .sizeDp(26)
-                            .iconColor(info.context), null, null, null
-                    )
-                }
-                else -> info.visibility = View.GONE
-            }
-
-            play.visibility = if (item.isSupported) View.VISIBLE else View.GONE
-            unsupported.visibility = if (item.isSupported) View.GONE else View.VISIBLE
+            bindInfoAndPlay(item, isLoginRequired)
         }
 
-        private fun initListeners() {
+        private fun initListeners(loginRequired: Boolean) {
             // Subtract 1 from the adapterPosition, since we have a header.
             nameContainer.clicks()
                 .mapAdapterPosition({ adapterPosition }) {
@@ -183,7 +152,66 @@ class AnimeAdapter(savedInstanceState: Bundle?) : BaseAdapter<AnimeStream, ViewH
             play.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
-                .subscribe(playClickSubject)
+                .apply { if (loginRequired) subscribe(loginClickSubject) else subscribe(playClickSubject) }
+        }
+
+        private fun bindInfoAndPlay(item: AnimeStream, isLoginRequired: Boolean) {
+            if (item.isSupported) {
+                play.visibility = View.VISIBLE
+                unsupported.visibility = View.GONE
+
+                if (isLoginRequired) {
+                    play.setText(R.string.error_action_login)
+                    play.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+
+                    info.visibility = View.VISIBLE
+                    info.setText(R.string.fragment_anime_stream_login_required_warning)
+                    info.setCompoundDrawablesWithIntrinsicBounds(
+                        generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
+                    )
+                } else {
+                    play.setText(R.string.fragment_anime_stream_play)
+                    play.setCompoundDrawablesWithIntrinsicBounds(
+                        generatePlayDrawable(), null, null, null
+                    )
+
+                    when {
+                        item.isOfficial -> {
+                            info.visibility = View.VISIBLE
+                            info.setText(R.string.fragment_anime_stream_official_info)
+                            info.setCompoundDrawablesWithIntrinsicBounds(
+                                generateInfoDrawable(CommunityMaterial.Icon.cmd_information), null, null, null
+                            )
+                        }
+                        item.isInternalPlayerOnly -> {
+                            info.visibility = View.VISIBLE
+                            info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
+                            info.setCompoundDrawablesWithIntrinsicBounds(
+                                generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
+                            )
+                        }
+                        else -> info.visibility = View.GONE
+                    }
+                }
+            } else {
+                play.visibility = View.GONE
+                unsupported.visibility = View.VISIBLE
+            }
+        }
+
+        private fun generatePlayDrawable(): IconicsDrawable {
+            return IconicsDrawable(play.context)
+                .icon(CommunityMaterial.Icon.cmd_play)
+                .sizeDp(28)
+                .paddingDp(8)
+                .colorRes(android.R.color.white)
+        }
+
+        private fun generateInfoDrawable(icon: CommunityMaterial.Icon): IconicsDrawable {
+            return IconicsDrawable(info.context)
+                .icon(icon)
+                .sizeDp(26)
+                .iconColor(info.context)
         }
     }
 }

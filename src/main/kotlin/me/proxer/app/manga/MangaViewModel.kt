@@ -1,13 +1,17 @@
 package me.proxer.app.manga
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
+import me.proxer.app.auth.LoginEvent
+import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
+import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
@@ -18,6 +22,7 @@ import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isAgeRestricted
+import me.proxer.app.util.extension.isOfficial
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
@@ -35,34 +40,37 @@ class MangaViewModel(
     episode: Int
 ) : BaseViewModel<MangaChapterInfo>() {
 
-    private companion object {
-        private val supportedExternalServers = arrayOf("www.webtoons.com", "www.lezhin.com")
-    }
-
-    override val isLoginRequired = BuildConfig.STORE
-
     override val dataSingle: Single<MangaChapterInfo>
         get() = Single.fromCallable { validate() }
             .flatMap<EntryCore> { entrySingle() }
             .doOnSuccess {
-                if (it.isAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
-                    throw AgeConfirmationRequiredException()
+                if (it.isAgeRestricted) {
+                    if (!storageHelper.isLoggedIn) {
+                        throw AgeConfirmationRequiredException()
+                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
+                        throw NotLoggedInException()
+                    }
                 }
             }
             .flatMap { entry ->
-                chapterSingle(entry).map { data ->
-                    if (data.chapter.pages == null) {
-                        val serverUrl = Utils.parseAndFixUrl(data.chapter.server)
-
-                        if (serverUrl != null && serverUrl.host() in supportedExternalServers) {
-                            throw PartialException(MangaLinkException(data.chapter.title, serverUrl), entry)
-                        } else {
-                            throw PartialException(MangaNotAvailableException(), entry)
+                chapterSingle(entry)
+                    .doOnSuccess {
+                        if (BuildConfig.STORE && !it.chapter.isOfficial && !storageHelper.isLoggedIn) {
+                            throw NotLoggedInException()
                         }
                     }
+                    .map { data ->
+                        if (data.chapter.isOfficial) {
+                            throw PartialException(
+                                MangaLinkException(data.chapter.title, Utils.getAndFixUrl(data.chapter.server)),
+                                entry
+                            )
+                        } else if (data.chapter.pages == null) {
+                            throw PartialException(MangaNotAvailableException(), entry)
+                        }
 
-                    data
-                }
+                        data
+                    }
             }
 
     val userStateData = ResettingMutableLiveData<Unit?>()
@@ -87,6 +95,10 @@ class MangaViewModel(
                     reload()
                 }
             }
+
+        disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { reload() }
     }
 
     override fun onCleared() {

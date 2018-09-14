@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
-                    android:text="@string/fragment_anime_stream_play" />
+                    tools:text="@string/fragment_anime_stream_play" />
 
                 <TextView
                     android:id="@+id/unsupported"

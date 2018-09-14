@@ -6,12 +6,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.zipWith
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.BuildConfig
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.AppRequiredException
+import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
@@ -40,14 +40,16 @@ class AnimeViewModel(
     episode: Int
 ) : BaseViewModel<AnimeStreamInfo>() {
 
-    override val isLoginRequired = BuildConfig.STORE
-
     override val dataSingle: Single<AnimeStreamInfo>
         get() = Single.fromCallable { validate() }
             .flatMap { entrySingle() }
             .doOnSuccess {
-                if (it.isAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
-                    throw AgeConfirmationRequiredException()
+                if (it.isAgeRestricted) {
+                    if (!storageHelper.isLoggedIn) {
+                        throw AgeConfirmationRequiredException()
+                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
+                        throw NotLoggedInException()
+                    }
                 }
             }
             .flatMap {

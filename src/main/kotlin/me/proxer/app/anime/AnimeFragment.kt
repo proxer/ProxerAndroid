@@ -15,10 +15,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
+import me.proxer.app.auth.LoginDialog
+import me.proxer.app.auth.LoginEvent
+import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
@@ -99,7 +104,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = AnimeAdapter(savedInstanceState)
+        innerAdapter = AnimeAdapter(savedInstanceState, storageHelper)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
@@ -121,6 +126,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.playClickSubject
             .autoDisposable(this.scope())
             .subscribe { viewModel.resolve(it.hosterName, it.id) }
+
+        innerAdapter.loginClickSubject
+            .autoDisposable(this.scope())
+            .subscribe { LoginDialog.show(hostingActivity) }
+
+        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(this.scope())
+            .subscribe { innerAdapter.notifyDataSetChanged() }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

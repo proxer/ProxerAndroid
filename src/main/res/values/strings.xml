@@ -445,6 +445,9 @@
     <string name="fragment_anime_bookmark_next_episode">Lesezeichen: Nächste Episode</string>
     <string name="fragment_anime_bookmark_this_episode">Lesezeichen: Diese Episode</string>
     <string name="fragment_anime_stream_play">Abspielen</string>
+    <string name="fragment_anime_stream_login_required_warning">
+        Dieser Hoster ist erst nach einer Anmeldung verfügbar
+    </string>
     <string name="fragment_anime_stream_only_internal_player_warning">
         Dieser Hoster funktioniert nur mit dem ProxerMe Player
     </string>
