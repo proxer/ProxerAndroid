@@ -26,8 +26,8 @@ ext {
     ktlintVersion = '0.28.0'
 
     // Frameworks and compatibility libraries
-    ankoVersion = '0.10.5'
-    koinVersion = '1.0.0-RC-3'
+    ankoVersion = '0.10.6'
+    koinVersion = '1.0.0'
     multidexVersion = '2.0.0'
     appcompatVersion = "1.0.0-rc02"
     browserVersion = "1.0.0-rc02"
@@ -47,7 +47,7 @@ ext {
     recyclerviewVersion = "1.0.0-rc02"
     cardviewVersion = "1.0.0-rc02"
     gridlayoutVersion = "1.0.0-rc02"
-    materialDesignVersion = "1.0.0-rc01"
+    materialDesignVersion = "1.0.0-rc02"
     preferenceVersion = "1.0.0-rc02"
     supportPreferenceVersion = '2.3.2'
     iconicsVersion = '3.1.0-rc01'
@@ -63,7 +63,7 @@ ext {
     tabLayoutHelperVersion = 'ebb8a7acec'
     materialDialogsVersion = '2.0.0-alpha09'
     flexboxVersion = '1.1.0-beta1'
-    emojiIosVersion = '8c2d9d5973'
+    emojiIosVersion = '2a238ccc16'
     exomediaVersion = '4.2.3'
     exoplayerVersion = '2.8.4'
     materialProgressBarVersion = '1.4.2'
