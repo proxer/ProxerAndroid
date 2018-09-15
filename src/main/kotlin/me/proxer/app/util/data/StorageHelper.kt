@@ -4,10 +4,9 @@ import android.content.Context
 import com.orhanobut.hawk.Converter
 import com.orhanobut.hawk.DataInfo
 import com.orhanobut.hawk.Hawk
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 import me.proxer.app.auth.LocalUser
 import org.koin.standalone.KoinComponent
+import timber.log.Timber
 import java.util.Date
 
 /**
@@ -111,31 +110,30 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         jsonParser: HawkMoshiParser
     ) {
         if (Hawk.contains(USER) && user == null) {
+            // On older versions of the App, the user is saved in an obfuscated format. Fix this by reading the previous
+            // format and saving in the proper format.
             Hawk.init(context)
                 .setConverter(MigrationConverter(jsonParser))
                 .build()
 
-            val brokenUser: MigrationLocalUser? = Hawk.get<MigrationLocalUser>("user")
+            val migrationUser: MigrationLocalUser? = Hawk.get(USER)
 
             Hawk.destroy()
             initHawk(context, jsonParser)
 
-            if (brokenUser != null) {
-                Hawk.put(USER, LocalUser(brokenUser.token, brokenUser.id, brokenUser.name, brokenUser.image))
+            if (migrationUser != null) {
+                user = LocalUser(migrationUser.token, migrationUser.id, migrationUser.name, migrationUser.image)
+            } else {
+                Timber.e("Could not migrate user")
             }
         }
     }
 
-    @JsonClass(generateAdapter = true)
-    internal class MigrationLocalUser(
-        @Json(name = "a") val token: String,
-        @Json(name = "b") val id: String,
-        @Json(name = "c") val name: String,
-        @Json(name = "d") val image: String
-    )
-
     private class MigrationConverter(private val jsonParser: HawkMoshiParser) : Converter {
-        override fun <T : Any?> toString(value: T) = throw NotImplementedError("toString should not be called")
+        override fun <T : Any?> toString(value: T): String {
+            // This should never be called
+            return ""
+        }
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : Any?> fromString(value: String, dataInfo: DataInfo?): T {

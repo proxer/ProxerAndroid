@@ -77,5 +77,3 @@
     **[] $VALUES;
     public *;
 }
-
--keepclassmembernames me.proxer.app.auth.LocalUser { *; }
