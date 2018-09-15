@@ -40,9 +40,16 @@
 
 # Moshi
 -keep @com.squareup.moshi.JsonQualifier interface *
+-keepnames @com.squareup.moshi.JsonClass class *
 
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
+}
+
+-if @com.squareup.moshi.JsonClass class *
+-keep class <1>JsonAdapter {
+    <init>(...);
+    <fields>;
 }
 
 # Retrofit
@@ -57,7 +64,6 @@
     @retrofit2.http.* <methods>;
 }
 
-
 # OkHttp
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
 
@@ -71,3 +77,5 @@
     **[] $VALUES;
     public *;
 }
+
+-keepclassmembernames me.proxer.app.auth.LocalUser { *; }

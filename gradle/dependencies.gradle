@@ -75,6 +75,7 @@ ext {
             glideOkHttp                      : "com.github.bumptech.glide:okhttp3-integration:$glideVersion",
             okHttp                           : "com.squareup.okhttp3:okhttp:$okHttpVersion",
             okio                             : "com.squareup.okio:okio:$okioVersion",
+            moshi                            : "com.squareup.moshi:moshi:$moshiVersion",
             easyHeaderFooterAdapter          : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
             kOptional                        : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
             kotterknife                      : "com.github.rubengees:kotterknife:$kotterknifeVersion",
@@ -105,12 +106,13 @@ ext {
 
     kaptDependencies = [
             roomCompiler : "android.arch.persistence.room:compiler:$roomVersion",
-            glideCompiler: "com.github.bumptech.glide:compiler:$glideVersion"
+            glideCompiler: "com.github.bumptech.glide:compiler:$glideVersion",
+            moshiComplier: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
     ]
 
     excludingImplementationDependencies = [
             hawk: [
-                    dependency: "com.orhanobut:hawk:$hawkVersion",
+                    dependency: "com.github.rubengees:hawk:$hawkVersion",
                     exclusions: ['gson'],
             ],
     ]

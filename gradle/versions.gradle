@@ -77,10 +77,11 @@ ext {
     // Utils
     proxerLibVersion = 'd6342a6459'
     threetenVersion = '1.1.0'
-    hawkVersion = '2.0.1'
+    hawkVersion = '7477ad465a'
     glideVersion = '4.8.0'
     okHttpVersion = '3.11.0'
     okioVersion = '2.0.0'
+    moshiVersion = '1.6.0'
     easyHeaderFooterAdapterVersion = '3.0.0'
     kOptionalVersion = '1.6.0'
     kotterknifeVersion = '2.0'

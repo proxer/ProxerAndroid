@@ -1,7 +1,11 @@
 package me.proxer.app.util.data
 
 import android.content.Context
+import com.orhanobut.hawk.Converter
+import com.orhanobut.hawk.DataInfo
 import com.orhanobut.hawk.Hawk
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 import me.proxer.app.auth.LocalUser
 import org.koin.standalone.KoinComponent
 import java.util.Date
@@ -27,9 +31,8 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
     }
 
     init {
-        if (!Hawk.isBuilt()) {
-            Hawk.init(context).setParser(jsonParser).build()
-        }
+        initHawk(context, jsonParser)
+        migrate(context, jsonParser)
     }
 
     var user: LocalUser?
@@ -96,4 +99,47 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
     fun deleteMessageDraft(id: String) = Hawk.delete("$MESSAGE_DRAFT_PREFIX$id")
+
+    private fun initHawk(context: Context, jsonParser: HawkMoshiParser) {
+        if (!Hawk.isBuilt()) {
+            Hawk.init(context).setParser(jsonParser).setConverter(null).build()
+        }
+    }
+
+    private fun migrate(
+        context: Context,
+        jsonParser: HawkMoshiParser
+    ) {
+        if (Hawk.contains(USER) && user == null) {
+            Hawk.init(context)
+                .setConverter(MigrationConverter(jsonParser))
+                .build()
+
+            val brokenUser: MigrationLocalUser? = Hawk.get<MigrationLocalUser>("user")
+
+            Hawk.destroy()
+            initHawk(context, jsonParser)
+
+            if (brokenUser != null) {
+                Hawk.put(USER, LocalUser(brokenUser.token, brokenUser.id, brokenUser.name, brokenUser.image))
+            }
+        }
+    }
+
+    @JsonClass(generateAdapter = true)
+    internal class MigrationLocalUser(
+        @Json(name = "a") val token: String,
+        @Json(name = "b") val id: String,
+        @Json(name = "c") val name: String,
+        @Json(name = "d") val image: String
+    )
+
+    private class MigrationConverter(private val jsonParser: HawkMoshiParser) : Converter {
+        override fun <T : Any?> toString(value: T) = throw NotImplementedError("toString should not be called")
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : Any?> fromString(value: String, dataInfo: DataInfo?): T {
+            return jsonParser.fromJson<MigrationLocalUser>(value, MigrationLocalUser::class.java) as T
+        }
+    }
 }
