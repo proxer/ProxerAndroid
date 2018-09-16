@@ -147,6 +147,7 @@ class AnimeViewModel(
         .buildPartialErrorSingle(entry)
         .map { it.filterNot { stream -> StreamResolverFactory.resolverFor(stream.hosterName)?.ignore == true } }
 
+    @Suppress("ForbiddenVoid")
     private fun updateUserState(endpoint: Endpoint<Void>) {
         userStateDisposable?.dispose()
         userStateDisposable = Single.fromCallable { validators.validateLogin() }

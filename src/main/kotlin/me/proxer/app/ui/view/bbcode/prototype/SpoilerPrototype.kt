@@ -15,14 +15,15 @@ object SpoilerPrototype : AutoClosingPrototype {
 
     const val SPOILER_TEXT_COLOR_ARGUMENT = "spoiler_text_color"
 
-    private val ATTRIBUTE_REGEX = Regex("spoiler *= *(.+?)$", REGEX_OPTIONS)
     private const val TITLE_ARGUMENT = "title"
+
+    private val attributeRegex = Regex("spoiler *= *(.+?)$", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *spoiler( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *spoiler *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val title = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
+        val title = BBUtils.cutAttribute(code, attributeRegex)
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(TITLE_ARGUMENT to title)))
     }

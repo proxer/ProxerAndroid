@@ -15,16 +15,17 @@ import me.proxer.app.util.Utils
  */
 object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
-    private val ATTRIBUTE_REGEX = Regex("type *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val TYPE_ARGUMENT = "type"
     private const val TYPE_YOUTUBE = "youtube"
     private const val TYPE_YOUTUBE_URL = "https://youtu.be/"
+
+    private val attributeRegex = Regex("type *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *video( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *video *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val type = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
+        val type = BBUtils.cutAttribute(code, attributeRegex)
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(TYPE_ARGUMENT to type)))
     }

@@ -56,8 +56,8 @@ import java.util.concurrent.TimeUnit
 class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     private companion object {
-        private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
-        private val DAY_TEXT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN)
+        private val hourMinuteDateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        private val dayTextDateTimeFormatter = DateTimeFormatter.ofPattern("EEEE", Locale.GERMAN)
     }
 
     var glide: GlideRequests? = null
@@ -215,11 +215,11 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             val itemDateTime = item.date.convertToDateTime()
             val itemUploadDateTime = item.uploadDate.convertToDateTime()
 
-            val airingDateText = HOUR_MINUTE_DATE_TIME_FORMATTER.format(itemDateTime)
-            val uploadDate = HOUR_MINUTE_DATE_TIME_FORMATTER.format(itemUploadDateTime)
+            val airingDateText = hourMinuteDateTimeFormatter.format(itemDateTime)
+            val uploadDate = hourMinuteDateTimeFormatter.format(itemUploadDateTime)
 
             val uploadDateText = when (itemUploadDateTime.toLocalDate() != itemDateTime.toLocalDate()) {
-                true -> itemUploadDateTime.format(DAY_TEXT_DATE_TIME_FORMATTER) + ", " + uploadDate
+                true -> itemUploadDateTime.format(dayTextDateTimeFormatter) + ", " + uploadDate
                 false -> uploadDate
             }
 

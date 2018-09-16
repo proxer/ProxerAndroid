@@ -117,30 +117,30 @@ object ErrorUtils : KoinComponent {
     const val CHAPTER_TITLE_DATA_KEY = "chapterTitle"
     const val LINK_DATA_KEY = "link"
 
-    private val API_ERRORS = arrayOf(
+    private val apiErrors = arrayOf(
         UNKNOWN_API, API_REMOVED, INVALID_API_CLASS, INVALID_API_FUNCTION, INSUFFICIENT_PERMISSIONS, FUNCTION_BLOCKED
     )
 
-    private val MAINTENANCE_ERRORS = arrayOf(SERVER_MAINTENANCE, API_MAINTENANCE)
+    private val maintenanceErrors = arrayOf(SERVER_MAINTENANCE, API_MAINTENANCE)
 
-    private val LOGIN_ERRORS = arrayOf(
+    private val loginErrors = arrayOf(
         INVALID_TOKEN, NOTIFICATIONS_LOGIN_REQUIRED, UCP_LOGIN_REQUIRED, INFO_LOGIN_REQUIRED, MESSAGES_LOGIN_REQUIRED,
         USER_2FA_SECRET_REQUIRED
     )
 
-    private val CLIENT_ERRORS = arrayOf(
+    private val clientErrors = arrayOf(
         NEWS, LOGIN_MISSING_CREDENTIALS, UCP_INVALID_CATEGORY, INFO_INVALID_TYPE, LOGIN_ALREADY_LOGGED_IN,
         LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN, LIST_INVALID_CATEGORY, LIST_INVALID_MEDIUM, MEDIA_INVALID_STYLE,
         ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT, LIST_INVALID_SUBJECT,
         CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU, CHAT_INVALID_INPUT
     )
 
-    private val INVALID_ID_ERRORS = arrayOf(
+    private val invalidIdErrors = arrayOf(
         USERINFO_INVALID_ID, UCP_INVALID_ID, INFO_INVALID_ID, MEDIA_INVALID_ENTRY, UCP_INVALID_EPISODE,
         MESSAGES_INVALID_CONFERENCE, LIST_INVALID_ID, FORUM_INVALID_ID, APPS_INVALID_ID
     )
 
-    private val UNSUPPORTED_ERRORS = arrayOf(
+    private val unsupportedErrors = arrayOf(
         USER, AUTH_INVALID_USER, AUTH_CODE_ALREADY_EXISTS, AUTH_CODE_DOES_NOT_EXIST, AUTH_CODE_REJECTED,
         AUTH_CODE_PENDING, AUTH_CODE_INVALID_NAME, AUTH_CODE_DUPLICATE
     )
@@ -184,7 +184,7 @@ object ErrorUtils : KoinComponent {
         val buttonMessage = when (innermostError) {
             is ProxerException -> when (innermostError.serverErrorType) {
                 IP_BLOCKED -> R.string.error_action_captcha
-                in LOGIN_ERRORS -> R.string.error_action_login
+                in loginErrors -> R.string.error_action_login
                 else -> ACTION_MESSAGE_DEFAULT
             }
             is NotLoggedInException -> R.string.error_action_login
@@ -196,7 +196,7 @@ object ErrorUtils : KoinComponent {
         val buttonAction = when (innermostError) {
             is ProxerException -> when (innermostError.serverErrorType) {
                 IP_BLOCKED -> CAPTCHA
-                in LOGIN_ERRORS -> LOGIN
+                in loginErrors -> LOGIN
                 else -> null
             }
             is NotLoggedInException -> LOGIN
@@ -245,12 +245,12 @@ object ErrorUtils : KoinComponent {
             CHAT_SEVEN_DAY_PROTECTION -> R.string.error_chat_seven_days
             CHAT_USER_ON_BLACKLIST -> R.string.error_chat_blacklist
             CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
-            in API_ERRORS -> R.string.error_api
-            in MAINTENANCE_ERRORS -> R.string.error_maintenance
-            in LOGIN_ERRORS -> R.string.error_login
-            in CLIENT_ERRORS -> R.string.error_client
-            in INVALID_ID_ERRORS -> R.string.error_invalid_id
-            in UNSUPPORTED_ERRORS -> R.string.error_unsupported_code
+            in apiErrors -> R.string.error_api
+            in maintenanceErrors -> R.string.error_maintenance
+            in loginErrors -> R.string.error_login
+            in clientErrors -> R.string.error_client
+            in invalidIdErrors -> R.string.error_invalid_id
+            in unsupportedErrors -> R.string.error_unsupported_code
             else -> R.string.error_unknown
         }
         IO -> when (error.cause) {

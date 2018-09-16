@@ -15,12 +15,12 @@ import java.util.Date
  */
 @Entity(
     tableName = "messages",
-    foreignKeys = [(ForeignKey(
+    foreignKeys = [ForeignKey(
         entity = LocalConference::class,
         parentColumns = ["id"],
         childColumns = ["conferenceId"]
-    ))],
-    indices = [(Index("conferenceId"))]
+    )],
+    indices = [Index("conferenceId")]
 )
 data class LocalMessage(
     @PrimaryKey(autoGenerate = true) val id: Long,

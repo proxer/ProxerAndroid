@@ -41,7 +41,7 @@ import kotlin.properties.Delegates
 class AboutFragment : MaterialAboutFragment() {
 
     companion object {
-        private val LIBRARIES = arrayOf(
+        private val libraries = arrayOf(
             "android_job", "android_textview_linkbuilder", "customtabshelper",
             "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
             "materialbadgetextview", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi",
@@ -49,20 +49,20 @@ class AboutFragment : MaterialAboutFragment() {
             "tablayouthelper"
         )
 
-        private val EXCLUDED_LIBRARIES = arrayOf("fastadapter", "materialize")
+        private val excludedLibraries = arrayOf("fastadapter", "materialize")
 
-        private val FACEBOOK_LINK = Utils.getAndFixUrl("https://facebook.com/Anime.Proxer.Me")
-        private val TWITTER_LINK = Utils.getAndFixUrl("https://twitter.com/proxerme")
-        private val YOUTUBE_LINK = Utils.getAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
-        private val DISCORD_LINK = Utils.getAndFixUrl("https://discord.gg/XwrEDmA")
-        private val REPOSITORY_LINK = Utils.getAndFixUrl("https://github.com/proxer/ProxerAndroid")
+        private val facebookLink = Utils.getAndFixUrl("https://facebook.com/Anime.Proxer.Me")
+        private val twitterLink = Utils.getAndFixUrl("https://twitter.com/proxerme")
+        private val youtubeLink = Utils.getAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
+        private val discordLink = Utils.getAndFixUrl("https://discord.gg/XwrEDmA")
+        private val repositoryLink = Utils.getAndFixUrl("https://github.com/proxer/ProxerAndroid")
 
-        private const val SUPPORT_ID = "374605"
-        private const val SUPPORT_CATEGORY = "anwendungen"
+        private const val supportId = "374605"
+        private const val supportCategory = "anwendungen"
 
-        private const val DEVELOPER_PROXER_NAME = "RubyGee"
-        private const val DEVELOPER_PROXER_ID = "121658"
-        private const val DEVELOPER_GITHUB_NAME = "rubengees"
+        private const val developerProxerName = "RubyGee"
+        private const val developerProxerId = "121658"
+        private const val developerGithubName = "rubengees"
 
         fun newInstance() = AboutFragment().apply {
             arguments = bundleOf()
@@ -117,8 +117,8 @@ class AboutFragment : MaterialAboutFragment() {
                     .withAboutVersionShown(false)
                     .withAboutIconShown(false)
                     .withAboutDescription(getString(R.string.about_licenses_activity_description))
-                    .withLibraries(*LIBRARIES)
-                    .withExcludedLibraries(*EXCLUDED_LIBRARIES)
+                    .withLibraries(*libraries)
+                    .withExcludedLibraries(*excludedLibraries)
                     .withFields(R.string::class.java.fields)
                     .withActivityStyle(getAboutLibrariesActivityStyle())
                     .withUiListener(NavigationBarLibsUIListener())
@@ -129,7 +129,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_source_code)
             .subText(R.string.about_source_code_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).iconColor(context))
-            .setOnClickAction { showPage(REPOSITORY_LINK) }
+            .setOnClickAction { showPage(repositoryLink) }
             .build()
     )
 
@@ -138,25 +138,25 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_facebook_title)
             .subText(R.string.about_facebook_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_facebook).iconColor(context))
-            .setOnClickAction { showPage(FACEBOOK_LINK) }
+            .setOnClickAction { showPage(facebookLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_twitter_title)
             .subText(R.string.about_twitter_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).iconColor(context))
-            .setOnClickAction { showPage(TWITTER_LINK) }
+            .setOnClickAction { showPage(twitterLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_youtube_title)
             .subText(R.string.about_youtube_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_youtube_play).iconColor(context))
-            .setOnClickAction { showPage(YOUTUBE_LINK) }
+            .setOnClickAction { showPage(youtubeLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_discord_title)
             .subText(R.string.about_discord_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_discord).iconColor(context))
-            .setOnClickAction { showPage(DISCORD_LINK) }
+            .setOnClickAction { showPage(discordLink) }
             .build()
     )
 
@@ -165,7 +165,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(R.string.about_support_forum_title)
             .subText(R.string.about_support_forum_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
-            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), SUPPORT_ID, SUPPORT_CATEGORY) }
+            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
@@ -174,10 +174,10 @@ class AboutFragment : MaterialAboutFragment() {
             .setOnClickAction {
                 Completable
                     .fromAction {
-                        messengerDao.findConferenceForUser(DEVELOPER_PROXER_NAME).let { existingConference ->
+                        messengerDao.findConferenceForUser(developerProxerName).let { existingConference ->
                             when (existingConference) {
                                 null -> CreateConferenceActivity.navigateTo(
-                                    requireActivity(), false, Participant(DEVELOPER_PROXER_NAME)
+                                    requireActivity(), false, Participant(developerProxerName)
                                 )
                                 else -> MessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
@@ -191,18 +191,18 @@ class AboutFragment : MaterialAboutFragment() {
     private fun buildDeveloperItems(context: Context) = listOf(
         MaterialAboutActionItem.Builder()
             .text(R.string.about_developer_github_title)
-            .subText(DEVELOPER_GITHUB_NAME)
+            .subText(developerGithubName)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
-            .setOnClickAction { showPage(Utils.getAndFixUrl("https://github.com/$DEVELOPER_GITHUB_NAME")) }
+            .setOnClickAction { showPage(Utils.getAndFixUrl("https://github.com/$developerGithubName")) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(getString(R.string.about_developer_proxer_title))
-            .subText(DEVELOPER_PROXER_NAME)
+            .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
                 setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
             })
             .setOnClickAction {
-                ProfileActivity.navigateTo(requireActivity(), DEVELOPER_PROXER_ID, DEVELOPER_PROXER_NAME, null)
+                ProfileActivity.navigateTo(requireActivity(), developerProxerId, developerProxerName, null)
             }
             .build()
     )

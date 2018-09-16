@@ -197,12 +197,14 @@ kapt {
 
 detekt {
     version = detektPluginVersion
+    parallel = true
 
-    profile('main') {
-        config = "$projectDir/config/detekt/detekt.yml"
-        input = "$projectDir/src/main/kotlin"
-        output = "$buildDir/reports/detekt"
-        parallel = true
+    config = files("$projectDir/config/detekt/detekt.yml")
+    input = files("$projectDir/src/main/kotlin")
+
+    reports {
+        xml.destination = file("$buildDir/reports/detekt/detekt.xml")
+        html.destination = file("$buildDir/reports/detekt/detekt.html")
     }
 }
 
@@ -219,10 +221,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
     }
-}
-
-gradle.projectsEvaluated {
-    check.dependsOn detektCheck
 }
 
 static getGitHash() {

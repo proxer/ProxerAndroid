@@ -43,7 +43,7 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
     companion object {
         private const val JOB_ID = 31253
 
-        private val DAY_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
+        private val dayDateTimeFormatter = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
 
         fun enqueueWork(context: Context, work: Intent) {
             enqueueWork(context, ScheduleWidgetUpdateService::class.java, JOB_ID, work)
@@ -185,7 +185,7 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
 
         val updatePendingIntent = PendingIntent.getBroadcast(applicationContext, 0, updateIntent, FLAG_UPDATE_CURRENT)
 
-        views.setTextViewText(R.id.day, LocalDate.now().format(DAY_DATE_TIME_FORMATTER))
+        views.setTextViewText(R.id.day, LocalDate.now().format(dayDateTimeFormatter))
         views.setOnClickPendingIntent(R.id.title, pendingIntent)
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 

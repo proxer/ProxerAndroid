@@ -42,8 +42,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginDialog : BaseDialog() {
 
     companion object {
-        private val WEBSITE_REGEX = Regex("Proxer \\b(.+?)\\b")
         private const val DEVICE_PARAMETER = "device"
+
+        private val websiteRegex = Regex("Proxer \\b(.+?)\\b")
 
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
     }
@@ -91,7 +92,7 @@ class LoginDialog : BaseDialog() {
 
         registrationInfo.compoundDrawablePadding = dip(12)
         registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
-            .linkify(web = false, mentions = false, custom = *arrayOf(WEBSITE_REGEX))
+            .linkify(web = false, mentions = false, custom = *arrayOf(websiteRegex))
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
     }

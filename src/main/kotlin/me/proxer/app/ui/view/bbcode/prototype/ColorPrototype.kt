@@ -14,14 +14,15 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
  */
 object ColorPrototype : TextMutatorPrototype {
 
-    private val ATTRIBUTE_REGEX = Regex("color *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val COLOR_ARGUMENT = "color"
+
+    private val attributeRegex = Regex("color *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *color *= *\"?.*?\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *color *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX) ?: ""
+        val value = BBUtils.cutAttribute(code, attributeRegex) ?: ""
 
         val color = "<font color='$value'>dummy</font>".parseAsHtml()
             .let { it.getSpans(0, it.length, ForegroundColorSpan::class.java) }

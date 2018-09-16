@@ -22,17 +22,17 @@ import okhttp3.HttpUrl
  */
 object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
-    private val ATTRIBUTE_REGEX = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val URL_ARGUMENT = "url"
 
-    private val INVALID_URL = HttpUrl.get("https://proxer.me/404")
+    private val attributeRegex = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
+    private val invalidUrl = HttpUrl.get("https://proxer.me/404")
 
     override val startRegex = Regex(" *url *= *.+?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val url = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)?.trim() ?: ""
-        val parsedUrl = Utils.parseAndFixUrl(url) ?: INVALID_URL
+        val url = BBUtils.cutAttribute(code, attributeRegex)?.trim() ?: ""
+        val parsedUrl = Utils.parseAndFixUrl(url) ?: invalidUrl
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(URL_ARGUMENT to parsedUrl)))
     }

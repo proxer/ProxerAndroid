@@ -15,16 +15,16 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
  */
 object SizePrototype : TextMutatorPrototype {
 
-    private val ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
-
     private const val SIZE_ARGUMENT = "size"
     private const val SIZE_TYPE_ARGUMENT = "sizeType"
+
+    private val attributeRegex = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *size *= *\"?([1-6]|\\d+px)\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *size *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX)
+        val value = BBUtils.cutAttribute(code, attributeRegex)
 
         return if (value?.endsWith("px") == true) {
             BBTree(

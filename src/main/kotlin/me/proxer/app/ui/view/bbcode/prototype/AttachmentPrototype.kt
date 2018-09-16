@@ -18,8 +18,8 @@ import me.proxer.library.util.ProxerUrls
  */
 object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
-    private val IMAGE_EXTENSIONS = arrayOf("png", "jpg", "jpeg", "gif")
-    private val WHITESPACE_REGEX = Regex("\\s")
+    private val imageExtensions = arrayOf("png", "jpg", "jpeg", "gif")
+    private val whitespaceRegex = Regex("\\s")
 
     override val startRegex = Regex(" *attachment( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *attachment *", REGEX_OPTIONS)
@@ -70,13 +70,13 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
     }
 
     private fun isImage(attachment: CharSequence) =
-        IMAGE_EXTENSIONS.any { attachment.endsWith(it, true) }
+        imageExtensions.any { attachment.endsWith(it, true) }
 
     private fun constructUrl(userId: String, attachment: CharSequence) =
         ProxerUrls.webBase().newBuilder()
             .addPathSegments(
                 "media/kunena/attachments/$userId/${attachment.replace(
-                    WHITESPACE_REGEX,
+                    whitespaceRegex,
                     ""
                 )}"
             )

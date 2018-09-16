@@ -20,7 +20,7 @@ class ScheduleWidgetViewsFactory(
 ) : RemoteViewsService.RemoteViewsFactory {
 
     private companion object {
-        private val HOUR_MINUTE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+        private val hourMinuteDateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     }
 
     override fun hasStableIds() = true
@@ -34,7 +34,7 @@ class ScheduleWidgetViewsFactory(
         val result = RemoteViews(BuildConfig.APPLICATION_ID, layout)
         val entryIntent = MediaActivity.getIntent(context, entry.entryId, entry.name, Category.ANIME)
 
-        val dateText = entry.date.convertToDateTime().format(HOUR_MINUTE_DATE_TIME_FORMATTER)
+        val dateText = entry.date.convertToDateTime().format(hourMinuteDateTimeFormatter)
         val episodeText = context.getString(R.string.fragment_schedule_episode, entry.episode.toString())
 
         result.setTextViewText(R.id.date, dateText)

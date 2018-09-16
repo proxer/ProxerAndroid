@@ -20,14 +20,15 @@ import me.proxer.app.util.extension.toast
  */
 object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
-    private val ZOOM_ATTRIBUTE_REGEX = Regex("zoom *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val ZOOM_ARGUMENT = "zoom"
+
+    private val zoomAttributeRegex = Regex("zoom *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *map( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *map *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val zoom = BBUtils.cutAttribute(code, ZOOM_ATTRIBUTE_REGEX)?.toIntOrNull()
+        val zoom = BBUtils.cutAttribute(code, zoomAttributeRegex)?.toIntOrNull()
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(ZOOM_ARGUMENT to zoom)))
     }

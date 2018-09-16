@@ -20,14 +20,15 @@ import me.proxer.app.util.extension.linkify
 
 object QuotePrototype : AutoClosingPrototype {
 
-    private val QUOTE_ATTRIBUTE_REGEX = Regex("quote *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val QUOTE_ARGUMENT = "quote"
+
+    private val quoteAttributeRegex = Regex("quote *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *quote( *=\"?.+?\"?)?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *quote *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val quote = BBUtils.cutAttribute(code, QUOTE_ATTRIBUTE_REGEX)
+        val quote = BBUtils.cutAttribute(code, quoteAttributeRegex)
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(QUOTE_ARGUMENT to quote)))
     }

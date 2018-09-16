@@ -38,8 +38,8 @@ object TextPrototype : BBPrototype {
     const val TEXT_SIZE_ARGUMENT = "text_size"
     const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
 
-    private val WEB_URL_REGEX = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
-    private val VALID_LINK_PREDICATE = Predicate<String> { it.startsWith("@") || WEB_URL_REGEX.matches(it) }
+    private val webUrlRegex = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
+    private val validLinkPredicate = Predicate<String> { it.startsWith("@") || webUrlRegex.matches(it) }
 
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
@@ -88,18 +88,18 @@ object TextPrototype : BBPrototype {
     }
 
     private fun setListeners(parent: BBCodeView, view: BetterLinkGifAwareEmojiTextView) {
-        view.linkClicks(VALID_LINK_PREDICATE)
+        view.linkClicks(validLinkPredicate)
             .autoDisposable(ViewScopeProvider.from(parent))
             .subscribe {
                 val baseActivity = BBUtils.findBaseActivity(parent.context) ?: return@subscribe
 
                 when {
                     it.startsWith("@") -> ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
-                    WEB_URL_REGEX.matches(it) -> baseActivity.showPage(Utils.getAndFixUrl(it))
+                    webUrlRegex.matches(it) -> baseActivity.showPage(Utils.getAndFixUrl(it))
                 }
             }
 
-        view.linkLongClicks(Predicate { WEB_URL_REGEX.matches(it) })
+        view.linkLongClicks(Predicate { webUrlRegex.matches(it) })
             .autoDisposable(ViewScopeProvider.from(parent))
             .subscribe {
                 val title = view.context.getString(R.string.clipboard_title)

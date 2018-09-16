@@ -48,14 +48,15 @@ import java.io.File
  */
 object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
-    private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
     private const val WIDTH_ARGUMENT = "width"
+
+    private val widthAttributeRegex = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *pdf( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *pdf *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
+        val width = BBUtils.cutAttribute(code, widthAttributeRegex)?.toIntOrNull()
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }

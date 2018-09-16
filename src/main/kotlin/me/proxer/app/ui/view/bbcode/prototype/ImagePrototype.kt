@@ -36,13 +36,13 @@ object ImagePrototype : AutoClosingPrototype {
 
     private const val WIDTH_ARGUMENT = "width"
 
-    private val WIDTH_ATTRIBUTE_REGEX = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
+    private val widthAttributeRegex = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
 
     override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
-        val width = BBUtils.cutAttribute(code, WIDTH_ATTRIBUTE_REGEX)?.toIntOrNull()
+        val width = BBUtils.cutAttribute(code, widthAttributeRegex)?.toIntOrNull()
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
     }
