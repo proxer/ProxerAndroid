@@ -18,7 +18,7 @@ jobs:
           echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
     - run:
         name: Run Build
-        command: ./gradlew build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+        command: ./gradlew check build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
           -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1 --console=plain
         no_output_timeout: 30m
     - store_artifacts:
