@@ -7,12 +7,13 @@ import android.content.ContextWrapper
 import android.text.SpannableStringBuilder
 import android.text.util.Linkify
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.text.util.LinkifyCompat
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
+import me.proxer.app.util.extension.recursiveChildren
 import okhttp3.HttpUrl
-import org.jetbrains.anko.childrenRecursiveSequence
 
 /**
  * @author Ruben Gees
@@ -33,23 +34,21 @@ internal object BBUtils {
 internal val MATCH_ALL_PATTERN = Regex(".*", BBPrototype.REGEX_OPTIONS).toPattern()
 
 internal inline fun applyToAllViews(views: List<View>, noinline operation: (View) -> Unit) = views.apply {
-    flatMap { it.childrenRecursiveSequence().plus(it).toList() }
-        .asSequence()
+    asSequence()
+        .flatMap { sequenceOf(it) + ((it as? ViewGroup)?.recursiveChildren ?: emptySequence()) }
         .filter { it.getTag(R.id.ignore_tag) == null }
-        .onEach(operation)
-        .toList()
+        .forEach(operation)
 }
 
 internal inline fun <reified T : View> applyToViews(
     views: List<View>,
     noinline operation: (T) -> Unit
 ) = views.apply {
-    flatMap { it.childrenRecursiveSequence().plus(it).toList() }
-        .asSequence()
+    asSequence()
+        .flatMap { sequenceOf(it) + ((it as? ViewGroup)?.recursiveChildren ?: emptySequence()) }
         .filterIsInstance(T::class.java)
         .filter { it.getTag(R.id.ignore_tag) == null }
-        .onEach(operation)
-        .toList()
+        .forEach(operation)
 }
 
 internal inline fun CharSequence.toSpannableStringBuilder() = this as? SpannableStringBuilder

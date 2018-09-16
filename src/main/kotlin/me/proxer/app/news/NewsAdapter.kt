@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -153,7 +152,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
                 }
             }
 
-            expand.doOnPreDraw {
+            expand.post {
                 if (description.lineCount <= 3) {
                     expand.isGone = true
                 } else {

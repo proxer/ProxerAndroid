@@ -25,7 +25,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.extension.safeText
-import org.jetbrains.anko.longToast
+import me.proxer.app.util.extension.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -85,7 +85,7 @@ class ChatReportDialog : BaseDialog() {
             it?.let { _ ->
                 viewModel.error.value = null
 
-                requireContext().longToast(it.message)
+                requireContext().toast(it.message)
             }
         })
 

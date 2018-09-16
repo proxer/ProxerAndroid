@@ -8,7 +8,6 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.ui.view.bbcode.trimEndSafely
 import me.proxer.app.ui.view.bbcode.trimStartSafely
-import org.jetbrains.anko.collections.forEachWithIndex
 import kotlin.text.RegexOption.DOT_MATCHES_ALL
 import kotlin.text.RegexOption.IGNORE_CASE
 
@@ -39,7 +38,7 @@ interface BBPrototype {
         val currentTextViews = mutableListOf<TextView>()
         val result = mutableListOf<View>()
 
-        childViews.forEachWithIndex { index, childView ->
+        childViews.withIndex().forEach { (index, childView) ->
             if (childView is TextView) {
                 currentTextViews.add(childView)
             } else {

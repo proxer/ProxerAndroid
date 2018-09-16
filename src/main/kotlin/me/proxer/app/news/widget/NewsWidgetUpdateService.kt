@@ -20,10 +20,10 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
-import org.jetbrains.anko.intentFor
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 

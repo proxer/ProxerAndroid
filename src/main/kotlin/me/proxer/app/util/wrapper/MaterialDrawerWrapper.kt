@@ -21,8 +21,8 @@ import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.dip
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.dip
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 

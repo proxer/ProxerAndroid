@@ -46,7 +46,7 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
-import org.jetbrains.anko.toast
+import me.proxer.app.util.extension.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates

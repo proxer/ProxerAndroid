@@ -11,7 +11,7 @@ import android.widget.LinearLayout.VERTICAL
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
-import org.jetbrains.anko.dip
+import me.proxer.app.util.extension.dip
 
 /**
  * @author Ruben Gees

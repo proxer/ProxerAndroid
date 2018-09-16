@@ -15,7 +15,7 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.data.StorageHelper
-import org.jetbrains.anko.dip
+import me.proxer.app.util.extension.dip
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 

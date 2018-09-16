@@ -7,7 +7,7 @@ import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.Participant
-import org.jetbrains.anko.intentFor
+import me.proxer.app.util.extension.intentFor
 
 /**
  * @author Ruben Gees

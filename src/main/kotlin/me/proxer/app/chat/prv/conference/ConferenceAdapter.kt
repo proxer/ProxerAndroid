@@ -30,12 +30,12 @@ import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.sp
 
 /**
  * @author Ruben Gees

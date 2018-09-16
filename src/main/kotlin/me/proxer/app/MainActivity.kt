@@ -22,10 +22,10 @@ import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.ui.view.RatingDialog
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
-import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees

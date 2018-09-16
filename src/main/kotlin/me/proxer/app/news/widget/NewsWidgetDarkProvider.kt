@@ -3,7 +3,7 @@ package me.proxer.app.news.widget
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import org.jetbrains.anko.intentFor
+import me.proxer.app.util.extension.intentFor
 
 /**
  * @author Ruben Gees

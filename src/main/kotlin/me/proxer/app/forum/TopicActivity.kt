@@ -14,10 +14,10 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.startActivity
 
 /**
  * @author Ruben Gees

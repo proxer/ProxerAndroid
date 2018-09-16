@@ -27,11 +27,11 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.intentFor
 import java.lang.ref.WeakReference
 
 /**

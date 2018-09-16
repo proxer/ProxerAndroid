@@ -26,7 +26,6 @@ ext {
     ktlintVersion = '0.28.0'
 
     // Frameworks and compatibility libraries
-    ankoVersion = '0.10.6'
     koinVersion = '1.0.0'
     multidexVersion = '2.0.0'
     appcompatVersion = "1.0.0-rc02"

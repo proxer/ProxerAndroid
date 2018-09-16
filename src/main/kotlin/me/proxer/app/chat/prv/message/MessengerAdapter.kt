@@ -30,13 +30,13 @@ import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
-import org.jetbrains.anko.dip
 import java.util.concurrent.Callable
 
 /**

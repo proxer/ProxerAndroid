@@ -30,10 +30,10 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
+import me.proxer.app.util.extension.toast
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.longToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -138,7 +138,7 @@ class LoginDialog : BaseDialog() {
             it?.let { _ ->
                 viewModel.error.value = null
 
-                requireContext().longToast(it.message)
+                requireContext().toast(it.message)
             }
         })
 

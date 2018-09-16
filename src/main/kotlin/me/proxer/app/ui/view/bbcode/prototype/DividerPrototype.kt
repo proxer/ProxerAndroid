@@ -9,7 +9,7 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import org.jetbrains.anko.dip
+import me.proxer.app.util.extension.dip
 
 /**
  * @author Ruben Gees

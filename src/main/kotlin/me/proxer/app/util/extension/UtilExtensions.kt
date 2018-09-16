@@ -28,7 +28,6 @@ import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.jetbrains.anko.dip
 import java.util.EnumSet
 
 val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()

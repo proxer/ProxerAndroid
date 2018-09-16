@@ -42,7 +42,7 @@ class AboutFragment : MaterialAboutFragment() {
 
     companion object {
         private val LIBRARIES = arrayOf(
-            "android_job", "android_textview_linkbuilder", "anko", "customtabshelper",
+            "android_job", "android_textview_linkbuilder", "customtabshelper",
             "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
             "materialbadgetextview", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi",
             "okhttp", "retrofit", "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview",

@@ -14,11 +14,11 @@ import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees

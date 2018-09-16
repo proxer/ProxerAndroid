@@ -2,7 +2,7 @@ package me.proxer.app.anime.resolver
 
 import android.content.Intent
 import android.net.Uri
-import org.jetbrains.anko.newTask
+import me.proxer.app.util.extension.newTask
 
 /**
  * @author Ruben Gees

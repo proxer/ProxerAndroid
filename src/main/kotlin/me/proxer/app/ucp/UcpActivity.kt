@@ -14,9 +14,9 @@ import me.proxer.app.ucp.history.UcpHistoryFragment
 import me.proxer.app.ucp.media.UcpMediaListFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
+import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
-import org.jetbrains.anko.startActivity
 
 /**
  * @author Ruben Gees

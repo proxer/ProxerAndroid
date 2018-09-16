@@ -24,10 +24,10 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
-import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.standalone.KoinComponent
 import org.threeten.bp.LocalDate

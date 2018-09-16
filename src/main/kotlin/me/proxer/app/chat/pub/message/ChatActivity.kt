@@ -9,7 +9,7 @@ import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoActivity
-import org.jetbrains.anko.intentFor
+import me.proxer.app.util.extension.intentFor
 
 /**
  * @author Ruben Gees

@@ -11,8 +11,8 @@ import com.bumptech.glide.request.transition.Transition
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
-import org.jetbrains.anko.dip
 import java.util.regex.Pattern.quote
 
 /**

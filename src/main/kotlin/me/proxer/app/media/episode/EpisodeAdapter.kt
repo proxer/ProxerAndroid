@@ -23,8 +23,10 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.episode.EpisodeAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -32,9 +34,6 @@ import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.collections.forEachWithIndex
-import org.jetbrains.anko.dip
 
 /**
  * @author Ruben Gees
@@ -71,11 +70,9 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
-        holder.languages.applyRecursively {
-            if (it is ImageView) {
-                glide?.clear(it)
-            }
-        }
+        holder.languages.recursiveChildren
+            .filterIsInstance(ImageView::class.java)
+            .forEach { glide?.clear(it) }
     }
 
     override fun areItemsTheSame(old: EpisodeRow, new: EpisodeRow) = old.number == new.number
@@ -126,7 +123,9 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                 }
             }
 
-            item.languageHosterList.forEachWithIndex { index, (language, hosterImages) ->
+            item.languageHosterList.withIndex().forEach { (index, languageAndHosterImages) ->
+                val (language, hosterImages) = languageAndHosterImages
+
                 val languageContainer = languages.getChildAt(index)
                 val languageView = languageContainer.findViewById<TextView>(R.id.language)
                 val hostersView = languageContainer.findViewById<ViewGroup>(R.id.hosters)

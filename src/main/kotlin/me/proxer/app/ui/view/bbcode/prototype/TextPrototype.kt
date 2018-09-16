@@ -27,7 +27,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
-import org.jetbrains.anko.toast
+import me.proxer.app.util.extension.toast
 
 /**
  * @author Ruben Gees

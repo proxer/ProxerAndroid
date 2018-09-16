@@ -25,9 +25,9 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.info.Industry
 import me.proxer.library.enums.Country
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

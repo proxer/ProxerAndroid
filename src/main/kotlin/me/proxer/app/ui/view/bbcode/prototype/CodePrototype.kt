@@ -15,7 +15,7 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.applyToViews
-import org.jetbrains.anko.dip
+import me.proxer.app.util.extension.dip
 
 /**
  * @author Ruben Gees

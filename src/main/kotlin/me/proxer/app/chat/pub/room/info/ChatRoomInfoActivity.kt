@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
-import org.jetbrains.anko.startActivity
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees

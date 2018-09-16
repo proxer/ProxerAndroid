@@ -15,8 +15,8 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.linkify
-import org.jetbrains.anko.dip
 
 object QuotePrototype : AutoClosingPrototype {
 

@@ -36,10 +36,10 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

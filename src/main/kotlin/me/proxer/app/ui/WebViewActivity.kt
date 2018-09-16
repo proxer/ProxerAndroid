@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotterknife.bindView
 import me.proxer.app.R
-import org.jetbrains.anko.startActivity
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees

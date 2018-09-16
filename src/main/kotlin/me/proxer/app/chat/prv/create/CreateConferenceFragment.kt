@@ -45,7 +45,6 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.jetbrains.anko.find
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
@@ -103,23 +102,23 @@ class CreateConferenceFragment : BaseFragment() {
     private val sendButton: ImageView by bindView(R.id.sendButton)
 
     private val addParticipantImage by lazy {
-        addParticipantFooter.find<ImageView>(R.id.image)
+        addParticipantFooter.findViewById<ImageView>(R.id.image)
     }
 
     private val participantInputContainer by lazy {
-        addParticipantInputFooter.find<TextInputLayout>(R.id.participantInputContainer)
+        addParticipantInputFooter.findViewById<TextInputLayout>(R.id.participantInputContainer)
     }
 
     private val participantInput by lazy {
-        addParticipantInputFooter.find<EditText>(R.id.participantInput)
+        addParticipantInputFooter.findViewById<EditText>(R.id.participantInput)
     }
 
     private val acceptParticipant by lazy {
-        addParticipantInputFooter.find<ImageButton>(R.id.accept)
+        addParticipantInputFooter.findViewById<ImageButton>(R.id.accept)
     }
 
     private val cancelParticipant by lazy {
-        addParticipantInputFooter.find<ImageButton>(R.id.cancel)
+        addParticipantInputFooter.findViewById<ImageButton>(R.id.cancel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

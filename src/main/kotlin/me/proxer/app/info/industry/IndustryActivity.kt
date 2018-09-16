@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
-import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees

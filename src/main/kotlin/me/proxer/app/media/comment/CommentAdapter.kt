@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -199,7 +198,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
                 }
             }
 
-            comment.doOnPreDraw { bindExpandButton(maxHeight) }
+            comment.post { bindExpandButton(maxHeight) }
 
             if (animate) {
                 comment.requestLayout()

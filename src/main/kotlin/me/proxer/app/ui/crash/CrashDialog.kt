@@ -11,7 +11,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.getSafeString
-import org.jetbrains.anko.toast
+import me.proxer.app.util.extension.toast
 
 /**
  * @author Ruben Gees

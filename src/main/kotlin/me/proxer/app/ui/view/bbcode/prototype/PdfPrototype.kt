@@ -37,10 +37,10 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.toast
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import okhttp3.HttpUrl
-import org.jetbrains.anko.longToast
 import java.io.File
 
 /**
@@ -185,7 +185,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             try {
                 widget.context.startActivity(Intent(Intent.ACTION_VIEW, uri))
             } catch (error: ActivityNotFoundException) {
-                widget.context.longToast(widget.context.getString(R.string.view_bbcode_pdf_no_activity_error))
+                widget.context.toast(widget.context.getString(R.string.view_bbcode_pdf_no_activity_error))
             }
         }
     }

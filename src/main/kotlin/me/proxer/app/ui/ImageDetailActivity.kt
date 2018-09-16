@@ -15,8 +15,8 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.extension.intentFor
 import okhttp3.HttpUrl
-import org.jetbrains.anko.intentFor
 
 /**
  * @author Ruben Gees

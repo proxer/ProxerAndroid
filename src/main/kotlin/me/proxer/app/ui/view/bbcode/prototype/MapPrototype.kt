@@ -13,7 +13,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import org.jetbrains.anko.longToast
+import me.proxer.app.util.extension.toast
 
 /**
  * @author Ruben Gees
@@ -51,7 +51,7 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
             try {
                 widget.context.startActivity(Intent(Intent.ACTION_VIEW, uri))
             } catch (error: ActivityNotFoundException) {
-                widget.context.longToast(widget.context.getString(R.string.view_bbcode_map_no_activity_error))
+                widget.context.toast(widget.context.getString(R.string.view_bbcode_map_no_activity_error))
             }
         }
     }

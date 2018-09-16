@@ -6,7 +6,7 @@ import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.LocalConference
-import org.jetbrains.anko.startActivity
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees

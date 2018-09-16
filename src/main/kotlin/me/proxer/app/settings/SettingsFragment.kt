@@ -21,10 +21,10 @@ import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_INTERVAL
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
+import me.proxer.app.util.extension.clearTop
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
-import org.jetbrains.anko.clearTop
 import org.koin.android.ext.android.inject
 
 /**

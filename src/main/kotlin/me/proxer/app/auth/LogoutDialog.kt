@@ -13,7 +13,7 @@ import com.afollestad.materialdialogs.customview.customView
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import org.jetbrains.anko.longToast
+import me.proxer.app.util.extension.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -47,7 +47,7 @@ class LogoutDialog : BaseDialog() {
             it?.let { _ ->
                 viewModel.error.value = null
 
-                requireContext().longToast(it.message)
+                requireContext().toast(it.message)
             }
         })
 

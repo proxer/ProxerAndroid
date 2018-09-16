@@ -40,12 +40,12 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.safeData
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
-import org.jetbrains.anko.applyRecursively
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -191,11 +191,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
                         ?.apply {
-                            view.applyRecursively { view ->
-                                if (view is TextView && view !is Button) {
-                                    view.movementMethod = LinkMovementMethod.getInstance()
-                                }
-                            }
+                            (view as ViewGroup).recursiveChildren
+                                .filterIsInstance(TextView::class.java)
+                                .filterNot { it -> it is Button }
+                                .forEach { it -> it.movementMethod = LinkMovementMethod.getInstance() }
                         }
                 }
             }

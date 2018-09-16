@@ -13,7 +13,7 @@ import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
-import org.jetbrains.anko.intentFor
+import me.proxer.app.util.extension.intentFor
 
 /**
  * @author Ruben Gees

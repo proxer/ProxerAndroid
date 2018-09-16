@@ -21,12 +21,12 @@ import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.media.recommendation.RecommendationFragment
 import me.proxer.app.media.relation.RelationFragment
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
-import org.jetbrains.anko.intentFor
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 

@@ -27,11 +27,11 @@ import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 
 /**
