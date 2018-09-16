@@ -81,7 +81,7 @@ android {
         debug {
             multiDexEnabled true
 
-            archivesBaseName = "app-${defaultConfig.versionName}"
+            versionNameSuffix = "-debug-${getGitHash()}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
         }
@@ -95,7 +95,6 @@ android {
                 proguardFile 'config/proguard/proguard-rules.pro'
             }
 
-            archivesBaseName = "app-${defaultConfig.versionName}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"false\")"
 
@@ -113,7 +112,7 @@ android {
                 proguardFile 'config/proguard/proguard-rules.pro'
             }
 
-            archivesBaseName = "app-${defaultConfig.versionName}"
+            versionNameSuffix = "-logRelease-${getGitHash()}"
             buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
             buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
 
@@ -145,6 +144,14 @@ android {
         exclude 'protobuf.meta'
         exclude 'build-data.properties'
         exclude 'androidsupportmultidexversion.txt'
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            project.logger.log(LogLevel.ERROR, variant.name)
+            project.logger.log(LogLevel.ERROR, variant.versionName)
+            outputFileName = "app-${variant.versionName}.apk"
+        }
     }
 
     if (isCI()) {
@@ -216,6 +223,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 gradle.projectsEvaluated {
     check.dependsOn detektCheck
+}
+
+static getGitHash() {
+    String gitRevParseCommand = "git rev-parse --verify --short HEAD"
+
+    return gitRevParseCommand.execute().text.trim()
 }
 
 static getResSrcDirs() {
