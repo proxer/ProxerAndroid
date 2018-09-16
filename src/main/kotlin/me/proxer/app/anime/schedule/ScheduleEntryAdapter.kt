@@ -69,9 +69,6 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     private var currentMinStatusLines = 2
     private val cachedViewHolders = Collections.newSetFromMap(WeakHashMap<ViewHolder, Boolean>())
 
-    private val airingInfoLock = Any()
-    private val statusLock = Any()
-
     init {
         setHasStableIds(true)
     }

@@ -10,7 +10,6 @@ import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
 import java.io.EOFException
 import java.io.IOException
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author Ruben Gees
@@ -24,8 +23,6 @@ class ProxerStreamResolver : StreamResolver() {
     override val name = "Proxer-Stream"
 
     override fun resolve(id: String): Single<StreamResolutionResult> {
-        val counter = AtomicInteger()
-
         return api.anime().link(id)
             .buildSingle()
             .flatMap { url ->

@@ -46,12 +46,8 @@ inline fun Context.dip(value: Int): Int = (value * resources.displayMetrics.dens
 inline fun Context.dip(value: Float): Int = (value * resources.displayMetrics.density).toInt()
 inline fun Context.sp(value: Int): Int = (value * resources.displayMetrics.scaledDensity).toInt()
 inline fun Context.sp(value: Float): Int = (value * resources.displayMetrics.scaledDensity).toInt()
-inline fun Context.px2dip(px: Int): Float = px.toFloat() / resources.displayMetrics.density
-inline fun Context.px2sp(px: Int): Float = px.toFloat() / resources.displayMetrics.scaledDensity
 
 inline fun View.dip(value: Int): Int = context.dip(value)
 inline fun View.dip(value: Float): Int = context.dip(value)
 inline fun View.sp(value: Int): Int = context.sp(value)
 inline fun View.sp(value: Float): Int = context.sp(value)
-inline fun View.px2dip(px: Int): Float = context.px2dip(px)
-inline fun View.px2sp(px: Int): Float = context.px2sp(px)
