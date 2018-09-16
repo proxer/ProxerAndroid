@@ -148,8 +148,6 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            project.logger.log(LogLevel.ERROR, variant.name)
-            project.logger.log(LogLevel.ERROR, variant.versionName)
             outputFileName = "app-${variant.versionName}.apk"
         }
     }
