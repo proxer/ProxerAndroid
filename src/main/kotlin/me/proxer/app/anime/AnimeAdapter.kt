@@ -14,7 +14,6 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
-import me.proxer.app.BuildConfig
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeAdapter.ViewHolder
@@ -91,7 +90,7 @@ class AnimeAdapter(
         internal val unsupported: TextView by bindView(R.id.unsupported)
 
         fun bind(item: AnimeStream) {
-            val isLoginRequired = BuildConfig.STORE && !item.isOfficial && !storageHelper.isLoggedIn
+            val isLoginRequired = !item.isOfficial && !storageHelper.isLoggedIn
 
             initListeners(isLoginRequired)
 

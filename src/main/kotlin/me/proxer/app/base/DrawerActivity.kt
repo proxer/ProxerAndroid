@@ -20,9 +20,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
-import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import kotlin.properties.Delegates
 
 /**
@@ -84,9 +81,8 @@ abstract class DrawerActivity : BaseActivity() {
         }
     }
 
-    protected open fun handleDrawerItemClick(item: MaterialDrawerWrapper.DrawerItem) = when (item) {
-        DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
-        else -> MainActivity.navigateToSection(this, item)
+    protected open fun handleDrawerItemClick(item: MaterialDrawerWrapper.DrawerItem) {
+        MainActivity.navigateToSection(this, item)
     }
 
     protected open fun handleAccountItemClick(item: MaterialDrawerWrapper.AccountItem) = when (item) {

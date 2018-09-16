@@ -6,7 +6,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.BuildConfig
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseViewModel
@@ -55,7 +54,7 @@ class MangaViewModel(
             .flatMap { entry ->
                 chapterSingle(entry)
                     .doOnSuccess {
-                        if (BuildConfig.STORE && !it.chapter.isOfficial && !storageHelper.isLoggedIn) {
+                        if (!it.chapter.isOfficial && !storageHelper.isLoggedIn) {
                             throw NotLoggedInException()
                         }
                     }

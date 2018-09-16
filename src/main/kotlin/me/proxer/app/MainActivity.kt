@@ -23,8 +23,6 @@ import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
-import me.proxer.library.enums.Device
-import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.intentFor
 
 /**
@@ -67,12 +65,9 @@ class MainActivity : DrawerActivity() {
         if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
             preferenceHelper.incrementLaunches()
 
-            @Suppress("ConstantConditionIf")
-            if (BuildConfig.STORE) {
-                preferenceHelper.launches.let { launches ->
-                    if (launches >= 3 && launches % 3 == 0 && !preferenceHelper.hasRated) {
-                        RatingDialog.show(this)
-                    }
+            preferenceHelper.launches.let { launches ->
+                if (launches >= 3 && launches % 3 == 0 && !preferenceHelper.hasRated) {
+                    RatingDialog.show(this)
                 }
             }
         }
@@ -156,7 +151,6 @@ class MainActivity : DrawerActivity() {
             DrawerItem.SCHEDULE -> setFragment(ScheduleFragment.newInstance(), R.string.section_schedule)
             DrawerItem.MANGA -> setFragment(MediaListFragment.newInstance(Category.MANGA), R.string.section_manga)
             DrawerItem.INFO -> setFragment(AboutFragment.newInstance(), R.string.section_info)
-            DrawerItem.DONATE -> showPage(ProxerUrls.donateWeb(Device.DEFAULT))
             DrawerItem.SETTINGS -> setFragment(SettingsFragment.newInstance(), R.string.section_settings)
         }
     }

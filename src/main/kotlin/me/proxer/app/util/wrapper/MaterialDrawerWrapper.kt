@@ -18,7 +18,6 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import io.reactivex.subjects.PublishSubject
-import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
@@ -138,7 +137,7 @@ class MaterialDrawerWrapper(
     }
 
     private val stickyDrawerItems by lazy {
-        mutableListOf<IDrawerItem<*, *>>(
+        listOf<IDrawerItem<*, *>>(
             PrimaryDrawerItem()
                 .withName(R.string.section_info)
                 .withIcon(CommunityMaterial.Icon.cmd_information_outline)
@@ -153,21 +152,7 @@ class MaterialDrawerWrapper(
                 .withSelectable(isMain)
                 .withSelectedIconColorRes(R.color.colorAccent)
                 .withIdentifier(DrawerItem.SETTINGS.id)
-        ).apply {
-            @Suppress("ConstantConditionIf")
-            if (!BuildConfig.STORE) {
-                add(
-                    1,
-                    PrimaryDrawerItem()
-                        .withName(R.string.section_donate)
-                        .withIcon(CommunityMaterial.Icon.cmd_gift)
-                        .withSelectedTextColorRes(R.color.colorAccent)
-                        .withSelectedIconColorRes(R.color.colorAccent)
-                        .withSelectable(false)
-                        .withIdentifier(DrawerItem.DONATE.id)
-                )
-            }
-        }.toList()
+        )
     }
 
     private val header: AccountHeader
@@ -312,8 +297,7 @@ class MaterialDrawerWrapper(
         SCHEDULE(4L),
         MANGA(5L),
         INFO(10L),
-        DONATE(11L),
-        SETTINGS(12L);
+        SETTINGS(11L);
 
         companion object {
             fun fromIdOrNull(id: Long?) = values().firstOrNull { it.id == id }

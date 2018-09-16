@@ -6,7 +6,6 @@
     <string name="section_anime">Anime</string>
     <string name="section_schedule">Anime-Wochenplan</string>
     <string name="section_chat">Chat</string>
-    <string name="section_donate" tools:ignore="UnusedResources">Spenden</string>
     <string name="section_manga">Manga</string>
     <string name="section_news">News</string>
     <string name="section_bookmarks">Lesezeichen</string>
