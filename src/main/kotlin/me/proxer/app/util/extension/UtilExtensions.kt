@@ -29,8 +29,9 @@ import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import java.util.EnumSet
+import java.util.regex.Pattern.quote
 
-val MENTIONS_REGEX = Regex("(@[^ \n]+)").toPattern()
+val MENTIONS_REGEX = Regex("@(?:.*?)(?:(?:(?! )(?!${quote(".")} )(?!${quote(".")}\n)(?!\n)).)*").toPattern()
 
 inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T> = when (collection.isEmpty()) {
     true -> EnumSet.noneOf(T::class.java)
@@ -49,7 +50,7 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
     val spannable = this as? Spannable ?: SpannableString(this)
 
     if (web) LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS)
-    if (mentions) LinkifyCompat.addLinks(spannable, MENTIONS_REGEX, "")
+    if (mentions) LinkifyCompat.addLinks(spannable, MENTIONS_REGEX, null)
 
     custom.forEach {
         LinkifyCompat.addLinks(spannable, it.toPattern(), "")
