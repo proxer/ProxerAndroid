@@ -1,6 +1,8 @@
 package me.proxer.app.util.data
 
+import android.annotation.SuppressLint
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.orhanobut.hawk.Converter
 import com.orhanobut.hawk.DataInfo
 import com.orhanobut.hawk.Hawk
@@ -24,6 +26,8 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
         private const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
         private const val MESSAGE_DRAFT_PREFIX = "message_draft_"
+        private const val LAUNCHES = "launches"
+        private const val RATED = "rated"
 
         private const val DEFAULT_CHAT_INTERVAL = 10_000L
         private const val MAX_CHAT_INTERVAL = 850_000L
@@ -31,7 +35,9 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
 
     init {
         initHawk(context, jsonParser)
-        migrate(context, jsonParser)
+
+        migrateUser(context, jsonParser)
+        migratePreferences(context)
     }
 
     var user: LocalUser?
@@ -85,10 +91,26 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
             Hawk.put(LAST_TAG_UPDATE_DATE, value.time)
         }
 
+    var launches: Int
+        get() = Hawk.get(LAUNCHES, 0)
+        private set(value) {
+            Hawk.put(LAUNCHES, value)
+        }
+
+    var hasRated: Boolean
+        get() = Hawk.get(RATED, false)
+        set(value) {
+            Hawk.put(RATED, value)
+        }
+
     fun incrementChatInterval() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
         if (it < MAX_CHAT_INTERVAL) {
             Hawk.put(CHAT_INTERVAL, (it * 1.5f).toLong())
         }
+    }
+
+    fun incrementLaunches() = Hawk.get(LAUNCHES, 0).let {
+        Hawk.put(LAUNCHES, it + 1)
     }
 
     fun resetChatInterval() = Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
@@ -105,7 +127,7 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         }
     }
 
-    private fun migrate(
+    private fun migrateUser(
         context: Context,
         jsonParser: HawkMoshiParser
     ) {
@@ -122,10 +144,34 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
             initHawk(context, jsonParser)
 
             if (migrationUser != null) {
-                user = LocalUser(migrationUser.token, migrationUser.id, migrationUser.name, migrationUser.image)
+                user = LocalUser(
+                    migrationUser.token,
+                    migrationUser.id,
+                    migrationUser.name,
+                    migrationUser.image
+                )
             } else {
                 Timber.e("Could not migrate user")
             }
+        }
+    }
+
+    @SuppressLint("ApplySharedPref")
+    private fun migratePreferences(context: Context) {
+        // On older versions of the App, this information is saved as an unencrypted preference. While not critical,
+        // these are not preferences and should be hidden from the user.
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        if (sharedPreferences.contains(LAUNCHES)) {
+            launches = sharedPreferences.getInt(LAUNCHES, 0)
+
+            sharedPreferences.edit().remove(LAUNCHES).commit()
+        }
+
+        if (sharedPreferences.contains(RATED)) {
+            hasRated = sharedPreferences.getBoolean(RATED, false)
+
+            sharedPreferences.edit().remove(RATED).commit()
         }
     }
 
@@ -137,7 +183,10 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : Any?> fromString(value: String, dataInfo: DataInfo?): T {
-            return jsonParser.fromJson<MigrationLocalUser>(value, MigrationLocalUser::class.java) as T
+            return jsonParser.fromJson<MigrationLocalUser>(
+                value,
+                MigrationLocalUser::class.java
+            ) as T
         }
     }
 }

@@ -8,6 +8,7 @@ import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 /**
  * @author Ruben Gees
  */
+@Suppress("UseDataClass")
 class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
 
     companion object {
@@ -20,8 +21,6 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
         const val NOTIFICATIONS_CHAT = "notifications_chat"
         const val NOTIFICATIONS_INTERVAL = "notifications_interval"
         const val MANGA_VERTICAL_READER = "manga_vertical_reader"
-        const val LAUNCHES = "launches"
-        const val RATED = "rated"
         const val EXTERNAL_CACHE = "external_cache"
     }
 
@@ -63,15 +62,6 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
             sharedPreferences.edit().putBoolean(MANGA_VERTICAL_READER, value).apply()
         }
 
-    val launches
-        get() = sharedPreferences.getInt(LAUNCHES, 0)
-
-    var hasRated
-        get() = sharedPreferences.getBoolean(RATED, false)
-        set(value) {
-            sharedPreferences.edit().putBoolean(RATED, value).apply()
-        }
-
     var shouldCacheExternally
         get() = sharedPreferences.getBoolean(EXTERNAL_CACHE, true)
         set(value) {
@@ -89,6 +79,4 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
             "2" -> AppCompatDelegate.MODE_NIGHT_NO
             else -> throw IllegalArgumentException("Invalid value")
         }
-
-    fun incrementLaunches() = sharedPreferences.edit().putInt(LAUNCHES, launches + 1).apply()
 }
