@@ -1,6 +1,7 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Build
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import androidx.core.content.getSystemService
 import androidx.core.util.PatternsCompat
 import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
@@ -24,7 +26,6 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import org.jetbrains.anko.toast
 
@@ -103,7 +104,7 @@ object TextPrototype : BBPrototype {
             .subscribe {
                 val title = view.context.getString(R.string.clipboard_title)
 
-                parent.context.clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                parent.context.getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
                 parent.context.toast(R.string.clipboard_status)
             }
     }

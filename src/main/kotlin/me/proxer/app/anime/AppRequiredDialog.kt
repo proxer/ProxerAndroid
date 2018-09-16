@@ -6,10 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees

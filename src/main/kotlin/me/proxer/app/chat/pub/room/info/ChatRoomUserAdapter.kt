@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.gojuno.koptional.rxjava2.filterSome
@@ -95,9 +97,9 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
             }
 
             if (item.status.isBlank()) {
-                status.visibility = View.GONE
+                status.isGone = true
             } else {
-                status.visibility = View.VISIBLE
+                status.isVisible = true
                 status.text = item.status.trim().linkify(mentions = false)
             }
 

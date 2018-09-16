@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.jakewharton.rxbinding2.view.clicks
@@ -110,7 +113,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         init {
             comment.glide = glide
 
-            image.visibility = View.GONE
+            image.isGone = true
 
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
@@ -184,7 +187,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
                 }
             }
 
-            comment.post { bindExpandButton(maxHeight) }
+            expand.doOnPreDraw { bindExpandButton(maxHeight) }
 
             if (animate) {
                 comment.requestLayout()
@@ -193,16 +196,16 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = when (rating <= 0) {
-            true -> container.visibility = View.GONE
+            true -> container.isGone = true
             false -> {
-                container.visibility = View.VISIBLE
+                container.isVisible = true
                 ratingBar.rating = rating
             }
         }
 
         private fun bindExpandButton(maxHeight: Int) = when (comment.height < maxHeight) {
-            true -> expand.visibility = View.GONE
-            false -> expand.visibility = View.VISIBLE
+            true -> expand.isGone = true
+            false -> expand.isVisible = true
         }
     }
 }

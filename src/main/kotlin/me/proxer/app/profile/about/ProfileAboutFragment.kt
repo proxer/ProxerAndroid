@@ -1,6 +1,7 @@
 package me.proxer.app.profile.about
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +16,9 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.lifecycle.Lifecycle
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
@@ -30,13 +34,11 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -127,15 +129,15 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         data.about.let {
             when (it.isNotBlank()) {
                 true -> about.loadData(constructHtmlSkeleton(it), "text/html", "utf-8")
-                false -> aboutContainer.visibility = View.GONE
+                false -> aboutContainer.isGone = true
             }
         }
 
         if (generalTable.childCount <= 0) {
-            generalContainer.visibility = View.GONE
+            generalContainer.isGone = true
         }
 
-        if (generalContainer.visibility == View.GONE && aboutContainer.visibility == View.GONE) {
+        if (generalContainer.isGone && aboutContainer.isGone) {
             showError(ErrorAction(R.string.error_no_data_profile_about, ACTION_MESSAGE_HIDE))
         }
     }
@@ -209,7 +211,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
             .subscribe {
                 val clipboardTitle = getString(R.string.clipboard_title)
 
-                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(clipboardTitle, it)
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
                 requireContext().toast(R.string.clipboard_status)
             }
 

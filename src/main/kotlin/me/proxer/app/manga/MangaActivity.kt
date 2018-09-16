@@ -17,6 +17,7 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
+import androidx.fragment.app.transaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -151,9 +152,9 @@ class MangaActivity : BaseActivity() {
         }
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MangaFragment.newInstance())
-                .commitNow()
+            supportFragmentManager.transaction(now = true) {
+                replace(R.id.container, MangaFragment.newInstance())
+            }
         }
     }
 

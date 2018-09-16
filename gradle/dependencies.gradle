@@ -21,6 +21,8 @@ ext {
             room                             : "androidx.room:room-runtime:$roomVersion",
             work                             : "android.arch.work:work-runtime-ktx:$workVersion",
             workFirebase                     : "android.arch.work:work-firebase:$workVersion",
+            ktx                              : "androidx.core:core-ktx:$ktxVersion",
+            ktxFragment                      : "androidx.fragment:fragment-ktx:$ktxVersion",
 
             rxJava                           : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
             rxKotlin                         : "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",

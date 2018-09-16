@@ -6,8 +6,9 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
+import android.view.WindowManager
+import androidx.core.content.getSystemService
 import me.proxer.app.R
-import me.proxer.app.util.extension.windowManager
 
 /**
  * @author Ruben Gees
@@ -18,9 +19,19 @@ object DeviceUtils {
 
     fun isLargeTablet(context: Context) = context.resources.getBoolean(R.bool.is_large_tablet)
 
-    fun getScreenWidth(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.x
+    fun getScreenWidth(context: Context) = Point()
+        .apply {
+            context.getSystemService<WindowManager>()?.defaultDisplay?.getSize(this)
+                ?: throw IllegalStateException("Could not get WindowManager")
+        }
+        .x
 
-    fun getScreenHeight(context: Context) = Point().apply { context.windowManager.defaultDisplay.getSize(this) }.y
+    fun getScreenHeight(context: Context) = Point()
+        .apply {
+            context.getSystemService<WindowManager>()?.defaultDisplay?.getSize(this)
+                ?: throw IllegalStateException("Could not get WindowManager")
+        }
+        .y
 
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources.getDimensionPixelSize(
         when (withItems) {

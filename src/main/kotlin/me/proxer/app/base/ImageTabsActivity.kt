@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
+import androidx.core.view.postDelayed
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.load.engine.GlideException
@@ -64,7 +65,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
                 override fun onTransitionEnd(transition: Transition?) {
                     window.sharedElementEnterTransition.removeListener(this)
 
-                    viewPager.postDelayed({ setupContent(savedInstanceState) }, 50)
+                    viewPager.postDelayed(50) { setupContent(savedInstanceState) }
                 }
             })
         } else {

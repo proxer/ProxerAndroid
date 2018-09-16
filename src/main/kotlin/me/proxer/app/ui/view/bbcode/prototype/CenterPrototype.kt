@@ -1,13 +1,13 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.text.Layout.Alignment.ALIGN_CENTER
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.AlignmentSpan
 import android.view.Gravity.CENTER
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.text.set
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -43,6 +43,6 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     }
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs) = text.apply {
-        setSpan(AlignmentSpan.Standard(ALIGN_CENTER), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+        this[0..length] = AlignmentSpan.Standard(ALIGN_CENTER)
     }
 }

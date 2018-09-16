@@ -2,12 +2,14 @@ package me.proxer.app.chat.pub.message
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
@@ -23,7 +25,6 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.extension.safeText
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.longToast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -89,8 +90,8 @@ class ChatReportDialog : BaseDialog() {
         })
 
         viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            inputContainer.visibility = if (it == true) View.GONE else View.VISIBLE
-            progress.visibility = if (it == true) View.VISIBLE else View.GONE
+            inputContainer.isGone = it == true
+            progress.isVisible = it == true
         })
     }
 

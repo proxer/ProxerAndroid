@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -108,12 +110,12 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 signature.userId = item.userId
 
                 if (it == null) {
-                    signatureDivider.visibility = View.GONE
-                    signature.visibility = View.GONE
+                    signatureDivider.isGone = true
+                    signature.isGone = true
                     signature.tree = null
                 } else {
-                    signatureDivider.visibility = View.VISIBLE
-                    signature.visibility = View.VISIBLE
+                    signatureDivider.isVisible = true
+                    signature.isVisible = true
                     signature.tree = it
                 }
             }

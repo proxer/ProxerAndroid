@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -90,26 +92,22 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun showData(data: T) {
-        contentContainer.visibility = View.VISIBLE
+        contentContainer.isVisible = true
     }
 
     protected open fun hideData() {
-        contentContainer.visibility = View.GONE
+        contentContainer.isGone = true
     }
 
     protected open fun showError(action: ErrorAction) {
-        errorContainer.visibility = View.VISIBLE
+        errorContainer.isVisible = true
         errorText.text = getString(action.message)
+        errorButton.isVisible = action.buttonMessage != ACTION_MESSAGE_HIDE
 
         errorButton.text = when (action.buttonMessage) {
             ACTION_MESSAGE_DEFAULT -> getString(R.string.error_action_retry)
             ACTION_MESSAGE_HIDE -> null
             else -> getString(action.buttonMessage)
-        }
-
-        errorButton.visibility = when (action.buttonMessage) {
-            ACTION_MESSAGE_HIDE -> View.GONE
-            else -> View.VISIBLE
         }
 
         errorButton.clicks()
@@ -127,6 +125,6 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun hideError() {
-        errorContainer.visibility = View.GONE
+        errorContainer.isGone = true
     }
 }

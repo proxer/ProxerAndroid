@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -99,9 +101,9 @@ class AnimeAdapter(
             glide?.defaultLoad(image, ProxerUrls.hosterImage(item.image))
 
             if (expandedItemId == item.id) {
-                uploadInfoContainer.visibility = View.VISIBLE
+                uploadInfoContainer.isVisible = true
             } else {
-                uploadInfoContainer.visibility = View.GONE
+                uploadInfoContainer.isGone = true
 
                 return
             }
@@ -156,14 +158,14 @@ class AnimeAdapter(
 
         private fun bindInfoAndPlay(item: AnimeStream, isLoginRequired: Boolean) {
             if (item.isSupported) {
-                play.visibility = View.VISIBLE
-                unsupported.visibility = View.GONE
+                play.isVisible = true
+                unsupported.isGone = true
 
                 if (isLoginRequired) {
                     play.setText(R.string.error_action_login)
                     play.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
 
-                    info.visibility = View.VISIBLE
+                    info.isVisible = true
                     info.setText(R.string.fragment_anime_stream_login_required_warning)
                     info.setCompoundDrawablesWithIntrinsicBounds(
                         generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
@@ -176,25 +178,25 @@ class AnimeAdapter(
 
                     when {
                         item.isOfficial -> {
-                            info.visibility = View.VISIBLE
+                            info.isVisible = true
                             info.setText(R.string.fragment_anime_stream_official_info)
                             info.setCompoundDrawablesWithIntrinsicBounds(
                                 generateInfoDrawable(CommunityMaterial.Icon.cmd_information), null, null, null
                             )
                         }
                         item.isInternalPlayerOnly -> {
-                            info.visibility = View.VISIBLE
+                            info.isVisible = true
                             info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
                             info.setCompoundDrawablesWithIntrinsicBounds(
                                 generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
                             )
                         }
-                        else -> info.visibility = View.GONE
+                        else -> info.isGone = true
                     }
                 }
             } else {
-                play.visibility = View.GONE
-                unsupported.visibility = View.VISIBLE
+                play.isGone = true
+                unsupported.isVisible = true
             }
         }
 

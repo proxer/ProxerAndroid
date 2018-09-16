@@ -3,6 +3,7 @@ package me.proxer.app.chat.prv.create
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.Participant
@@ -46,9 +47,9 @@ class CreateConferenceActivity : DrawerActivity() {
         setupToolbar()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CreateConferenceFragment.newInstance())
-                .commitNow()
+            supportFragmentManager.transaction(now = true) {
+                replace(R.id.container, CreateConferenceFragment.newInstance())
+            }
         }
     }
 

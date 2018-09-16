@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TableRow
+import androidx.core.view.updateLayoutParams
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -23,7 +24,7 @@ object TableRowPrototype : AutoClosingPrototype {
         val childViews = children.filter { it.prototype == TableCellPrototype }.flatMap { it.makeViews(parent, args) }
 
         for (child in childViews.dropLast(1)) {
-            (child.layoutParams as? ViewGroup.MarginLayoutParams)?.apply {
+            child.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 setMargins(0, 0, parent.dip(4), 0)
             }
         }

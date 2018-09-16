@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.util.Linkify
-import android.view.View
 import android.widget.ImageView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -65,10 +64,6 @@ inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Draw
     .into(view)
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
-
-inline fun <T : View> T.postDelayedSafely(crossinline callback: (T) -> Unit, delayMillis: Long) {
-    postDelayed({ callback(this) }, delayMillis)
-}
 
 inline fun <T : Enum<T>> Bundle.putEnumSet(key: String, set: EnumSet<T>) {
     putIntArray(key, set.map { it.ordinal }.toIntArray())

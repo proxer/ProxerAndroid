@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Build
-import android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import androidx.core.app.NotificationCompat
@@ -16,6 +15,7 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.text.set
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.MainActivity
@@ -141,7 +141,7 @@ object MessengerNotifications : KoinComponent {
                     }
 
                     it.addLine(SpannableString(sender + message.message).apply {
-                        setSpan(StyleSpan(Typeface.BOLD), 0, sender.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+                        this[0..sender.length] = StyleSpan(Typeface.BOLD)
                     })
                 }
             }

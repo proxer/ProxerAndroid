@@ -2,6 +2,7 @@ package me.proxer.app.chat.pub.room.info
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import org.jetbrains.anko.startActivity
@@ -35,9 +36,9 @@ class ChatRoomInfoActivity : DrawerActivity() {
         setupToolbar()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ChatRoomInfoFragment.newInstance())
-                .commitNow()
+            supportFragmentManager.transaction(now = true) {
+                replace(R.id.container, ChatRoomInfoFragment.newInstance())
+            }
         }
     }
 

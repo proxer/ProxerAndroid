@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.jakewharton.rxbinding2.view.clicks
@@ -150,11 +153,11 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
                 }
             }
 
-            description.post {
+            expand.doOnPreDraw {
                 if (description.lineCount <= 3) {
-                    expand.visibility = View.GONE
+                    expand.isGone = true
                 } else {
-                    expand.visibility = View.VISIBLE
+                    expand.isVisible = true
                 }
             }
 

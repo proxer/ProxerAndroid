@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.forEachIndexed
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -31,7 +35,6 @@ import me.proxer.library.util.ProxerUrls
 import org.jetbrains.anko.applyRecursively
 import org.jetbrains.anko.collections.forEachWithIndex
 import org.jetbrains.anko.dip
-import org.jetbrains.anko.forEachChildWithIndex
 
 /**
  * @author Ruben Gees
@@ -102,15 +105,15 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
             title.text = item.title ?: item.category.toEpisodeAppString(title.context, item.number)
 
             if (item.userProgress >= item.number) {
-                watched.visibility = View.VISIBLE
+                watched.isVisible = true
             } else {
-                watched.visibility = View.INVISIBLE
+                watched.isInvisible = true
             }
 
             if (expansionMap.containsKey(item.number.toString())) {
-                languages.visibility = View.VISIBLE
+                languages.isVisible = true
             } else {
-                languages.visibility = View.GONE
+                languages.isGone = true
 
                 return
             }
@@ -146,9 +149,9 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
             if (hosterImages == null || hosterImages.isEmpty()) {
                 hostersView.removeAllViews()
 
-                hostersView.visibility = View.GONE
+                hostersView.isGone = true
             } else {
-                hostersView.visibility = View.VISIBLE
+                hostersView.isVisible = true
 
                 if (hostersView.childCount != hosterImages.size) {
                     hostersView.removeAllViews()
@@ -164,7 +167,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                     }
                 }
 
-                hostersView.forEachChildWithIndex { index, imageView ->
+                hostersView.forEachIndexed { index, imageView ->
                     glide?.defaultLoad(imageView as ImageView, ProxerUrls.hosterImage(hosterImages[index]))
                 }
             }

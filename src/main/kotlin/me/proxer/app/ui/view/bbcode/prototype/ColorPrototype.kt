@@ -1,13 +1,13 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import androidx.core.text.parseAsHtml
+import androidx.core.text.set
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.util.compat.HtmlCompat
 
 /**
  * @author Ruben Gees
@@ -23,7 +23,7 @@ object ColorPrototype : TextMutatorPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val value = BBUtils.cutAttribute(code, ATTRIBUTE_REGEX) ?: ""
 
-        val color = HtmlCompat.fromHtml("<font color='$value'>dummy</font>")
+        val color = "<font color='$value'>dummy</font>".parseAsHtml()
             .let { it.getSpans(0, it.length, ForegroundColorSpan::class.java) }
             .firstOrNull()?.foregroundColor
 
@@ -36,7 +36,7 @@ object ColorPrototype : TextMutatorPrototype {
         return when (color) {
             null -> text
             else -> text.apply {
-                setSpan(ForegroundColorSpan(color), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                this[0..length] = ForegroundColorSpan(color)
             }
         }
     }

@@ -2,6 +2,7 @@ package me.proxer.app.util.data
 
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 
@@ -27,7 +28,7 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
     var isAgeRestrictedMediaAllowed
         get() = sharedPreferences.getBoolean(AGE_CONFIRMATION, false)
         set(value) {
-            sharedPreferences.edit().putBoolean(AGE_CONFIRMATION, value).apply()
+            sharedPreferences.edit { putBoolean(AGE_CONFIRMATION, value) }
         }
 
     val areBookmarksAutomatic
@@ -41,13 +42,13 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
     var areNewsNotificationsEnabled
         get() = sharedPreferences.getBoolean(NOTIFICATIONS_NEWS, false)
         set(value) {
-            sharedPreferences.edit().putBoolean(NOTIFICATIONS_NEWS, value).apply()
+            sharedPreferences.edit { putBoolean(NOTIFICATIONS_NEWS, value) }
         }
 
     var areAccountNotificationsEnabled
         get() = sharedPreferences.getBoolean(NOTIFICATIONS_ACCOUNT, false)
         set(value) {
-            sharedPreferences.edit().putBoolean(NOTIFICATIONS_ACCOUNT, value).apply()
+            sharedPreferences.edit { putBoolean(NOTIFICATIONS_ACCOUNT, value) }
         }
 
     val areChatNotificationsEnabled
@@ -59,13 +60,13 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
     var isVerticalReaderEnabled
         get() = sharedPreferences.getBoolean(MANGA_VERTICAL_READER, true)
         set(value) {
-            sharedPreferences.edit().putBoolean(MANGA_VERTICAL_READER, value).apply()
+            sharedPreferences.edit { putBoolean(MANGA_VERTICAL_READER, value) }
         }
 
     var shouldCacheExternally
         get() = sharedPreferences.getBoolean(EXTERNAL_CACHE, true)
         set(value) {
-            sharedPreferences.edit().putBoolean(EXTERNAL_CACHE, value).apply()
+            sharedPreferences.edit { putBoolean(EXTERNAL_CACHE, value) }
         }
 
     val isCacheExternallySet

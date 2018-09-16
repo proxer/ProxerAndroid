@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uber.autodispose.android.lifecycle.scope
@@ -15,7 +16,6 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 

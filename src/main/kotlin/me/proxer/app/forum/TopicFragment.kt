@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -19,7 +20,6 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates

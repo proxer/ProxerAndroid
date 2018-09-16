@@ -1,7 +1,6 @@
 package me.proxer.app.media.discussion
 
 import android.graphics.Typeface
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -9,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.set
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
@@ -62,8 +62,8 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
                 val categorySpanStart = indexOf(item.category)
                 val categorySpanEnd = categorySpanStart + item.category.length
 
-                this.setSpan(StyleSpan(Typeface.BOLD), usernameSpanStart, usernameSpanEnd, SPAN_INCLUSIVE_EXCLUSIVE)
-                this.setSpan(StyleSpan(Typeface.BOLD), categorySpanStart, categorySpanEnd, SPAN_INCLUSIVE_EXCLUSIVE)
+                this[usernameSpanStart..usernameSpanEnd] = StyleSpan(Typeface.BOLD)
+                this[categorySpanStart..categorySpanEnd] = StyleSpan(Typeface.BOLD)
             }
         }
     }

@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
@@ -43,7 +44,6 @@ import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.EnumSet

@@ -1,8 +1,7 @@
 package me.proxer.app.anime.schedule
 
-import android.graphics.Typeface.BOLD
+import android.graphics.Typeface
 import android.text.SpannableString
-import android.text.SpannableString.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -16,7 +15,12 @@ import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.set
 import androidx.core.view.ViewCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
@@ -38,7 +42,6 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.below
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Collections
@@ -65,6 +68,9 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
     private var currentMinAiringInfoLines = 2
     private var currentMinStatusLines = 2
     private val cachedViewHolders = Collections.newSetFromMap(WeakHashMap<ViewHolder, Boolean>())
+
+    private val airingInfoLock = Any()
+    private val statusLock = Any()
 
     init {
         setHasStableIds(true)
@@ -179,28 +185,28 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
         private fun bindRating(item: CalendarEntry) {
             if (item.rating > 0) {
-                ratingContainer.visibility = View.VISIBLE
+                ratingContainer.isVisible = true
                 rating.rating = item.rating / 2.0f
 
-                (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
+                airingInfo.updateLayoutParams<RelativeLayout.LayoutParams> {
                     bottomMargin = 0
 
-                    below(R.id.ratingContainer)
+                    addRule(RelativeLayout.BELOW, R.id.ratingContainer)
                 }
             } else {
-                ratingContainer.visibility = View.INVISIBLE
+                ratingContainer.isInvisible = true
 
                 ratingContainer.measure(
                     makeMeasureSpec(DeviceUtils.getScreenWidth(ratingContainer.context), AT_MOST),
                     makeMeasureSpec(0, UNSPECIFIED)
                 )
 
-                (airingInfo.layoutParams as RelativeLayout.LayoutParams).apply {
-                    val containerMargin = (ratingContainer.layoutParams as RelativeLayout.LayoutParams).topMargin
+                airingInfo.updateLayoutParams<RelativeLayout.LayoutParams> {
+                    val containerMargin = ratingContainer.marginTop
 
                     bottomMargin = ratingContainer.measuredHeight + containerMargin
 
-                    below(R.id.image)
+                    addRule(RelativeLayout.BELOW, R.id.image)
                 }
             }
         }
@@ -221,7 +227,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 val airingText = airingInfo.context.getString(R.string.fragment_schedule_airing, airingDateText)
 
                 airingInfo.text = SpannableString(airingText).apply {
-                    setSpan(StyleSpan(BOLD), indexOf(airingDateText), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                    this[indexOf(airingDateText)..length] = StyleSpan(Typeface.BOLD)
                 }
             } else {
                 val airingUploadText = airingInfo.context.getString(
@@ -229,8 +235,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 )
 
                 airingInfo.text = SpannableString(airingUploadText).apply {
-                    setSpan(StyleSpan(BOLD), indexOf(airingDateText), indexOf("\n"), SPAN_INCLUSIVE_EXCLUSIVE)
-                    setSpan(StyleSpan(BOLD), lastIndexOf(uploadDateText), length, SPAN_INCLUSIVE_EXCLUSIVE)
+                    this[indexOf(airingDateText)..indexOf("\n")] = StyleSpan(Typeface.BOLD)
+                    this[lastIndexOf(uploadDateText)..length] = StyleSpan(Typeface.BOLD)
                 }
             }
         }
@@ -247,7 +253,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         status.text = SpannableString(airedText).apply {
                             val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
 
-                            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                            this[0..length] = span
                         }
                     } else {
                         val uploadedText = status.context.getString(R.string.fragment_schedule_uploaded)
@@ -255,7 +261,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         status.text = SpannableString(uploadedText).apply {
                             val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
 
-                            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+                            this[0..length] = span
                         }
                     }
                 } else {

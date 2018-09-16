@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view.bbcode
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.AT_MOST
@@ -14,7 +13,9 @@ import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
 import androidx.annotation.StyleRes
+import androidx.core.content.withStyledAttributes
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.subjects.PublishSubject
@@ -27,7 +28,6 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_APPEARANCE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_COLOR_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_SIZE_ARGUMENT
-import org.jetbrains.anko.childrenSequence
 import kotlin.properties.Delegates
 
 /**
@@ -42,18 +42,18 @@ class BBCodeView @JvmOverloads constructor(
     val heightChanges: PublishSubject<Unit> = PublishSubject.create()
 
     @ColorInt
-    var textColor: Int?
+    var textColor: Int? = null
 
     @Px
-    var textSize: Float?
+    var textSize: Float? = null
 
     @StyleRes
-    var textAppearance: Int?
+    var textAppearance: Int? = null
 
     @ColorInt
-    var spoilerTextColor: Int?
+    var spoilerTextColor: Int? = null
 
-    var maxHeight: Int
+    var maxHeight: Int = Int.MAX_VALUE
 
     var glide: GlideRequests? = null
     var userId: String? = null
@@ -74,32 +74,23 @@ class BBCodeView @JvmOverloads constructor(
         }
 
         if (attrs != null) {
-            @SuppressLint("Recycle") // False positive.
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BBCodeView)
+            context.withStyledAttributes(attrs, R.styleable.BBCodeView) {
+                textSize = getDimension(R.styleable.BBCodeView_textSize, Float.MIN_VALUE)
+                    .let { if (it == Float.MIN_VALUE) null else it }
 
-            textSize = typedArray.getDimension(R.styleable.BBCodeView_textSize, Float.MIN_VALUE)
-                .let { if (it == Float.MIN_VALUE) null else it }
+                textAppearance = getResourceId(R.styleable.BBCodeView_textAppearance, Int.MIN_VALUE)
+                    .let { if (it == Int.MIN_VALUE) null else it }
 
-            textAppearance = typedArray.getResourceId(R.styleable.BBCodeView_textAppearance, Int.MIN_VALUE)
-                .let { if (it == Int.MIN_VALUE) null else it }
+                textColor = getColor(R.styleable.BBCodeView_textColor, Int.MIN_VALUE)
+                    .let { if (it == Int.MIN_VALUE) null else it }
 
-            textColor = typedArray.getColor(R.styleable.BBCodeView_textColor, Int.MIN_VALUE)
-                .let { if (it == Int.MIN_VALUE) null else it }
+                spoilerTextColor = getColor(R.styleable.BBCodeView_spoilerTextColor, Int.MIN_VALUE)
+                    .let { if (it == Int.MIN_VALUE) null else it }
 
-            spoilerTextColor = typedArray.getColor(R.styleable.BBCodeView_spoilerTextColor, Int.MIN_VALUE)
-                .let { if (it == Int.MIN_VALUE) null else it }
+                maxHeight = getDimensionPixelSize(R.styleable.BBCodeView_maxHeight, Int.MAX_VALUE)
 
-            maxHeight = typedArray.getDimensionPixelSize(R.styleable.BBCodeView_maxHeight, Int.MAX_VALUE)
-
-            typedArray.getString(R.styleable.BBCodeView_text)?.let { tree = BBParser.parseSimple(it).optimize() }
-
-            typedArray.recycle()
-        } else {
-            textColor = null
-            textSize = null
-            textAppearance = null
-            spoilerTextColor = null
-            maxHeight = Int.MAX_VALUE
+                getString(R.styleable.BBCodeView_text)?.let { tree = BBParser.parseSimple(it).optimize() }
+            }
         }
     }
 
@@ -130,7 +121,7 @@ class BBCodeView @JvmOverloads constructor(
     }
 
     private fun refreshViews(tree: BBTree) {
-        val existingChild = if (childCount == 1) this.childrenSequence().firstOrNull() else null
+        val existingChild = if (childCount == 1) children.firstOrNull() else null
         val firstTreeChild = if (tree.children.size == 1) tree.children.firstOrNull() else null
 
         val args = BBArgs(resources = resources, glide = glide, userId = userId, enableEmoticons = enableEmotions)

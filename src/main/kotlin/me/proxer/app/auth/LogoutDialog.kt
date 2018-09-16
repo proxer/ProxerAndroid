@@ -2,9 +2,10 @@ package me.proxer.app.auth
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
@@ -51,8 +52,8 @@ class LogoutDialog : BaseDialog() {
         })
 
         viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            content.visibility = if (it == true) View.GONE else View.VISIBLE
-            progress.visibility = if (it == true) View.VISIBLE else View.GONE
+            content.isGone = it == true
+            progress.isVisible = it == true
         })
     }
 }

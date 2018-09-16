@@ -8,6 +8,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.jakewharton.rxbinding2.view.clicks
@@ -96,13 +99,13 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
             topic.text = item.conference.topic
 
             if (item.message != null) {
-                (topic.layoutParams as RelativeLayout.LayoutParams).apply {
+                topic.updateLayoutParams<RelativeLayout.LayoutParams> {
                     bottomMargin = 0
 
                     addRule(RelativeLayout.CENTER_VERTICAL, 0)
                 }
             } else {
-                (topic.layoutParams as RelativeLayout.LayoutParams).apply {
+                topic.updateLayoutParams<RelativeLayout.LayoutParams> {
                     bottomMargin = previewTextContainer.context.dip(8)
 
                     addRule(RelativeLayout.CENTER_VERTICAL)
@@ -150,7 +153,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
             }
 
             if (item.conference.localIsRead) {
-                (previewTextContainer.layoutParams as RelativeLayout.LayoutParams).apply {
+                previewTextContainer.updateLayoutParams<RelativeLayout.LayoutParams> {
                     topMargin = previewTextContainer.context.dip(8)
                     bottomMargin = previewTextContainer.context.dip(8)
 
@@ -159,7 +162,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                     addRule(RelativeLayout.BELOW, R.id.topic)
                 }
             } else {
-                (previewTextContainer.layoutParams as RelativeLayout.LayoutParams).apply {
+                previewTextContainer.updateLayoutParams<RelativeLayout.LayoutParams> {
                     topMargin = 0
                     bottomMargin = 0
 
@@ -172,9 +175,9 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
         private fun bindNewMessages(item: ConferenceWithMessage) {
             if (item.conference.localIsRead) {
-                newMessages.visibility = View.GONE
+                newMessages.isGone = true
             } else {
-                newMessages.visibility = View.VISIBLE
+                newMessages.isVisible = true
 
                 newMessages.setBadgeCount(item.conference.unreadMessageAmount)
             }

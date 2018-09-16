@@ -9,6 +9,9 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -196,7 +199,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
                 }
             }
 
-            comment.post { bindExpandButton(maxHeight) }
+            comment.doOnPreDraw { bindExpandButton(maxHeight) }
 
             if (animate) {
                 comment.requestLayout()
@@ -205,15 +208,15 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
         }
 
         private fun bindRatingRow(container: ViewGroup, ratingBar: RatingBar, rating: Float) = if (rating <= 0) {
-            container.visibility = View.GONE
+            container.isGone = true
         } else {
-            container.visibility = View.VISIBLE
+            container.isVisible = true
             ratingBar.rating = rating
         }
 
         private fun bindExpandButton(maxHeight: Int) = when (comment.height < maxHeight) {
-            true -> expand.visibility = View.GONE
-            false -> expand.visibility = View.VISIBLE
+            true -> expand.isGone = true
+            false -> expand.isVisible = true
         }
 
         private fun bindImage(item: ParsedComment) {

@@ -8,6 +8,7 @@ import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.chat.prv.sync.MessengerWorker
@@ -23,7 +24,6 @@ import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.clearTop
 import org.koin.android.ext.android.inject
 

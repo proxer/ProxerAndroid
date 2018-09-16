@@ -3,7 +3,9 @@ package me.proxer.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.transaction
 import com.google.android.material.tabs.TabLayout
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -58,9 +60,9 @@ class MainActivity : DrawerActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
-        root.postDelayed({
+        root.postDelayed(50) {
             supportStartPostponedEnterTransition()
-        }, 50)
+        }
 
         if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
             storageHelper.incrementLaunches()
@@ -158,9 +160,9 @@ class MainActivity : DrawerActivity() {
     private fun setFragment(fragment: Fragment, newTitle: Int) {
         title = getString(newTitle)
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
-            .commitNow()
+        supportFragmentManager.transaction(now = true) {
+            replace(R.id.container, fragment)
+        }
     }
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {

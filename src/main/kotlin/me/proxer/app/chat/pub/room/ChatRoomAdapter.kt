@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding2.view.clicks
@@ -59,10 +61,10 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
             nameView.text = item.name
 
             if (item.topic.isBlank()) {
-                topic.visibility = View.GONE
+                topic.isGone = true
                 topic.text = item.topic
             } else {
-                topic.visibility = View.VISIBLE
+                topic.isVisible = true
                 topic.fastText = item.topic.trim().linkify(mentions = false)
             }
         }

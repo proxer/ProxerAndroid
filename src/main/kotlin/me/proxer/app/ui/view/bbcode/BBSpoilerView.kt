@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -19,7 +21,6 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
-import org.jetbrains.anko.childrenSequence
 
 /**
  * @author Ruben Gees
@@ -107,7 +108,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
     }
 
     private fun handleExpansion() {
-        decoration.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        decoration.isVisible = isExpanded
 
         toggleText.text = when {
             spoilerTitle != null -> spoilerTitle
@@ -123,7 +124,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
         toggleText.requestLayout()
 
         // Ugly workaround to fix issues with dynamic sized TextViews (e.g. in the chat).
-        if (isExpanded && container.childrenSequence().all { it is TextView }) {
+        if (isExpanded && children.all { it is TextView }) {
             decoration.layoutParams.width = WRAP_CONTENT
             container.layoutParams.width = WRAP_CONTENT
             container.requestLayout()

@@ -8,6 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
@@ -338,8 +341,8 @@ class MessengerAdapter(
         }
 
         internal open fun applySendStatus(message: LocalMessage) = when (message.id < 0) {
-            true -> sendStatus?.visibility = View.VISIBLE
-            false -> sendStatus?.visibility = View.GONE
+            true -> sendStatus?.isVisible = true
+            false -> sendStatus?.isGone = true
         }
 
         internal open fun applySelection(message: LocalMessage) {
@@ -354,14 +357,11 @@ class MessengerAdapter(
         }
 
         internal open fun applyTimeVisibility(message: LocalMessage) {
-            time.visibility = when (timeDisplayMap[message.id.toString()]) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
+            time.isVisible = timeDisplayMap[message.id.toString()] == true
         }
 
         internal open fun applyMargins(marginTop: Int, marginBottom: Int) {
-            (root.layoutParams as ViewGroup.MarginLayoutParams).apply {
+            root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = marginTop
                 bottomMargin = marginBottom
             }
@@ -376,7 +376,7 @@ class MessengerAdapter(
 
         init {
             // Messages in the private messages do not come with an avatar yet.
-            image.visibility = View.GONE
+            image.isGone = true
         }
 
         override fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
@@ -399,7 +399,7 @@ class MessengerAdapter(
 
             timeDisplayMap.putOrRemove(id)
 
-            time.visibility = if (timeDisplayMap.containsKey(id)) View.VISIBLE else View.GONE
+            time.isVisible = timeDisplayMap.containsKey(id)
 
             layoutManager?.requestSimpleAnimationsInNextLayout()
         }

@@ -1,11 +1,14 @@
 package me.proxer.app.ucp.overview
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -16,10 +19,8 @@ import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -65,7 +66,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
             .subscribe {
                 val title = getString(R.string.clipboard_title)
 
-                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
                 requireContext().toast(R.string.clipboard_status)
             }
     }

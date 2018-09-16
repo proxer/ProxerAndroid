@@ -11,6 +11,8 @@ import android.os.HandlerThread
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.JobIntentService
+import androidx.core.os.bundleOf
+import androidx.core.os.postDelayed
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable
@@ -25,7 +27,6 @@ import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
 import org.koin.android.ext.android.inject
 import org.koin.standalone.KoinComponent
@@ -128,13 +129,11 @@ class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
 
         appWidgetManager.updateAppWidget(id, views)
 
-        workerQueue.postDelayed(
-            {
-                views.setScrollPosition(R.id.list, position)
+        workerQueue.postDelayed(100) {
+            views.setScrollPosition(R.id.list, position)
 
-                appWidgetManager.partiallyUpdateAppWidget(id, views)
-            }, 100
-        )
+            appWidgetManager.partiallyUpdateAppWidget(id, views)
+        }
     }
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {

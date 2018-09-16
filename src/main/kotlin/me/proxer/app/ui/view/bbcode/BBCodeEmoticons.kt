@@ -2,9 +2,9 @@ package me.proxer.app.ui.view.bbcode
 
 import android.graphics.drawable.Drawable
 import android.text.Spannable
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.style.ImageSpan
 import android.widget.TextView
+import androidx.core.text.set
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.load.resource.gif.GifDrawable.LOOP_FOREVER
 import com.bumptech.glide.request.transition.Transition
@@ -111,8 +111,8 @@ object BBCodeEmoticons {
                 resource.setLoopCount(LOOP_FOREVER)
                 resource.start()
 
-                safeView.text = text.apply {
-                    setSpan(ImageSpan(resource), spanStart, spanEnd, SPAN_INCLUSIVE_EXCLUSIVE)
+                safeView.text = text.also {
+                    it[spanStart..spanEnd] = ImageSpan(resource)
                 }
             }
         }

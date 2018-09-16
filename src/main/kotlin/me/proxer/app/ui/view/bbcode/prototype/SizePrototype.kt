@@ -1,10 +1,10 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.CharacterStyle
 import android.text.style.RelativeSizeSpan
+import androidx.core.text.set
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
@@ -71,7 +71,7 @@ object SizePrototype : TextMutatorPrototype {
                 SizeType.ABSOLUTE -> AbsoluteSizeSpan(size.toInt(), true)
             }
 
-            setSpan(span, 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+            this[0..length] = span
         }
     }
 

@@ -1,12 +1,17 @@
 package me.proxer.app.info.industry
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -17,13 +22,11 @@ import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.info.Industry
 import me.proxer.library.enums.Country
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -79,7 +82,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
             .subscribe {
                 val title = getString(R.string.clipboard_title)
 
-                requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it)
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
                 requireContext().toast(R.string.clipboard_status)
             }
     }
@@ -91,23 +94,23 @@ class IndustryInfoFragment : BaseContentFragment<Industry>() {
         type.text = data.type.toAppString(requireContext())
 
         if (data.country == Country.NONE) {
-            languageRow.visibility = View.GONE
+            languageRow.isGone = true
         } else {
-            languageRow.visibility = View.VISIBLE
+            languageRow.isVisible = true
             language.setImageDrawable(data.country.toAppDrawable(requireContext()))
         }
 
         if (data.link?.toString().isNullOrBlank()) {
-            linkRow.visibility = View.GONE
+            linkRow.isGone = true
         } else {
-            linkRow.visibility = View.VISIBLE
+            linkRow.isVisible = true
             link.text = data.link.toString().linkify(mentions = false)
         }
 
         if (data.description.isBlank()) {
-            descriptionContainer.visibility = View.GONE
+            descriptionContainer.isGone = true
         } else {
-            descriptionContainer.visibility = View.VISIBLE
+            descriptionContainer.isVisible = true
             description.text = data.description
         }
     }

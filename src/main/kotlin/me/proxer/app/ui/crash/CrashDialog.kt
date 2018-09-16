@@ -2,14 +2,15 @@ package me.proxer.app.ui.crash
 
 import android.app.Dialog
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.getSafeString
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 
 /**
@@ -33,8 +34,9 @@ class CrashDialog : BaseDialog() {
         .title(R.string.dialog_crash_title)
         .message(text = errorDetails)
         .neutralButton(R.string.dialog_crash_neutral) {
-            requireContext().clipboardManager.primaryClip = ClipData
-                .newPlainText(getString(R.string.clipboard_crash_title), errorDetails)
+
+            requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                ClipData.newPlainText(getString(R.string.clipboard_crash_title), errorDetails)
 
             requireContext().toast(R.string.clipboard_status)
         }

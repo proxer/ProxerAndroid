@@ -1,6 +1,7 @@
 package me.proxer.app.base
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.rubengees.rxbus.RxBus
 import kotterknife.KotterKnife
@@ -10,7 +11,6 @@ import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.jetbrains.anko.bundleOf
 import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 

@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +46,6 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import org.jetbrains.anko.applyRecursively
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -276,15 +279,17 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         }
 
         if (adapter.header != null) {
-            contentContainer.visibility = View.VISIBLE
-            errorContainer.visibility = View.INVISIBLE
+            contentContainer.isVisible = true
+            errorContainer.isInvisible = true
 
-            errorInnerContainer.post {
-                val newCenter = root.height / 2f + header.height / 2f
-                val containerCenterCorrection = errorInnerContainer.height / 2f
+            errorInnerContainer.doOnLayout {
+                header.doOnLayout { _ ->
+                    val newCenter = root.height / 2f + header.height / 2f
+                    val containerCenterCorrection = errorInnerContainer.height / 2f
 
-                errorInnerContainer.y = newCenter - containerCenterCorrection
-                errorContainer.visibility = View.VISIBLE
+                    errorInnerContainer.y = newCenter - containerCenterCorrection
+                    errorContainer.isVisible = true
+                }
             }
         } else {
             errorContainer.translationY = 0f

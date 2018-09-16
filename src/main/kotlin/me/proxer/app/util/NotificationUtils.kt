@@ -8,8 +8,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import me.proxer.app.R
-import me.proxer.app.util.extension.notificationManager
 
 /**
  * @author Ruben Gees
@@ -26,7 +26,8 @@ object NotificationUtils {
             val profileTitle = context.getString(R.string.notification_channel_profile)
             val chatTitle = context.getString(R.string.notification_channel_chat)
 
-            context.notificationManager.createNotificationChannels(listOf(
+            context.getSystemService<NotificationManager>()?.createNotificationChannels(
+                listOf(
                 NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
                     description = context.getString(R.string.notification_channel_news_description)
                 },

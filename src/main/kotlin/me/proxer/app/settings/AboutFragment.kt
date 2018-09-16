@@ -6,6 +6,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
@@ -31,7 +32,6 @@ import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.jetbrains.anko.bundleOf
 import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 

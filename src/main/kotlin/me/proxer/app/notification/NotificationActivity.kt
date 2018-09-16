@@ -3,6 +3,7 @@ package me.proxer.app.notification
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.transaction
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import org.jetbrains.anko.intentFor
@@ -24,9 +25,9 @@ class NotificationActivity : DrawerActivity() {
         setupToolbar()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, NotificationFragment.newInstance())
-                .commitNow()
+            supportFragmentManager.transaction(now = true) {
+                replace(R.id.container, NotificationFragment.newInstance())
+            }
         }
     }
 

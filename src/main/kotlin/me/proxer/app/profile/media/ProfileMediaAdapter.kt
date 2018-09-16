@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.kotlin.autoDisposable
@@ -76,10 +78,10 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
             state.setImageDrawable(item.state.toAppDrawable(state.context).sizeDp(16))
 
             if (item.rating > 0) {
-                ratingContainer.visibility = View.VISIBLE
+                ratingContainer.isVisible = true
                 rating.rating = item.rating.toFloat() / 2.0f
             } else {
-                ratingContainer.visibility = View.GONE
+                ratingContainer.isGone = true
             }
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))

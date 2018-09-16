@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
+import androidx.core.view.postDelayed
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -32,11 +34,9 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.isAtTop
-import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
@@ -191,12 +191,12 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                 showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
             }
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayedSafely({ recyclerView ->
+            recyclerView.postDelayed(50) {
                 when {
                     wasEmpty -> recyclerView.safeLayoutManager.scrollToTop()
                     else -> recyclerView.smoothScrollToPosition(0)
                 }
-            }, 50)
+            }
         }
 
         isFirstData = false

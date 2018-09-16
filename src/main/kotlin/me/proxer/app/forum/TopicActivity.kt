@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ShareCompat
+import androidx.fragment.app.transaction
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -71,9 +72,9 @@ class TopicActivity : DrawerActivity() {
         setupToolbar()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, TopicFragment.newInstance())
-                .commitNow()
+            supportFragmentManager.transaction(now = true) {
+                replace(R.id.container, TopicFragment.newInstance())
+            }
         }
     }
 

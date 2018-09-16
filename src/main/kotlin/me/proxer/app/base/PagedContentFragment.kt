@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.view.postDelayed
+import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +23,6 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.postDelayedSafely
 import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -114,12 +115,12 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         if (innerAdapter.isEmpty()) {
             showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayedSafely({ recyclerView ->
+            recyclerView.postDelayed(50) {
                 when {
                     wasEmpty -> scrollToTop()
                     else -> recyclerView.smoothScrollToPosition(0)
                 }
-            }, 50)
+            }
         }
 
         isFirstData = false
@@ -152,7 +153,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     protected open fun scrollToTop() = layoutManager.scrollToTop()
 
     protected open fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
-        true -> recyclerView.setPadding(0, 0, 0, 0)
+        true -> recyclerView.setPadding(0)
         false -> {
             val horizontalPadding = DeviceUtils.getHorizontalMargin(requireContext())
             val verticalPadding = DeviceUtils.getVerticalMargin(requireContext())

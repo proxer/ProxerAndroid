@@ -1,6 +1,5 @@
 package me.proxer.app.ui.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
@@ -13,6 +12,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.core.content.withStyledAttributes
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
@@ -31,7 +31,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
 
     val showAllEvents: PublishSubject<Unit> = PublishSubject.create()
 
-    var maxLines: Int
+    var maxLines = Int.MAX_VALUE
 
     private var currentWidth: Int = 0
     private var currentLine: Int = 1
@@ -39,14 +39,9 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
 
     init {
         if (attrs != null) {
-            @SuppressLint("Recycle") // False positive
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.MaxLineFlexboxLayout)
-
-            maxLines = typedArray.getInt(R.styleable.MaxLineFlexboxLayout_maxLines, Int.MAX_VALUE)
-
-            typedArray.recycle()
-        } else {
-            maxLines = Int.MAX_VALUE
+            context.withStyledAttributes(attrs, R.styleable.MaxLineFlexboxLayout) {
+                maxLines = getInt(R.styleable.MaxLineFlexboxLayout_maxLines, Int.MAX_VALUE)
+            }
         }
     }
 

@@ -2,13 +2,14 @@ package me.proxer.app.auth
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
@@ -142,12 +143,12 @@ class LoginDialog : BaseDialog() {
         })
 
         viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            inputContainer.visibility = if (it == true) View.GONE else View.VISIBLE
-            progress.visibility = if (it == true) View.VISIBLE else View.GONE
+            inputContainer.isGone = it == true
+            progress.isVisible = it == true
         })
 
         viewModel.isTwoFactorAuthenticationEnabled.observe(dialogLifecycleOwner, Observer {
-            secret.visibility = if (it == true) View.VISIBLE else View.GONE
+            secret.isVisible = it == true
             secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
             password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO
         })

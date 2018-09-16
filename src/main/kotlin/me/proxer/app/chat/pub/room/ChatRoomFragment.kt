@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uber.autodispose.android.lifecycle.scope
@@ -13,7 +14,6 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.pub.message.ChatActivity
 import me.proxer.library.entity.chat.ChatRoom
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 

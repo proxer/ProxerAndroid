@@ -5,6 +5,7 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.setPadding
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
@@ -28,7 +29,7 @@ object IntroductionWrapper {
 
                 when (position) {
                     0 -> {
-                        image.setPadding(padding, padding, padding, padding)
+                        image.setPadding(padding)
                         image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
                     }
                     1 -> image.setIconicsImage(

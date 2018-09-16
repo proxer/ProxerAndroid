@@ -1,6 +1,7 @@
 package me.proxer.app.chat.pub.message
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,9 +9,15 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -37,15 +44,12 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -179,7 +183,9 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             .autoDisposable(this.scope())
             .subscribe {
                 getString(R.string.clipboard_title).let { title ->
-                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                    requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                        ClipData.newPlainText(title, it.toString())
+
                     requireContext().toast(R.string.clipboard_status)
                 }
             }
@@ -312,13 +318,13 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     override fun showData(data: List<ParsedChatMessage>) {
         super.showData(data)
 
-        inputContainer.visibility = View.VISIBLE
+        inputContainer.isVisible = true
     }
 
     override fun hideData() {
 
         if (innerAdapter.isEmpty()) {
-            inputContainer.visibility = View.GONE
+            inputContainer.isGone = true
         }
 
         super.hideData()
@@ -328,7 +334,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         super.showError(action)
 
         if (innerAdapter.isEmpty()) {
-            inputContainer.visibility = View.GONE
+            inputContainer.isGone = true
         }
     }
 
@@ -338,8 +344,8 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         val isLoggedIn = storageHelper.user != null
 
         if (isReadOnly || !isLoggedIn) {
-            emojiButton.visibility = View.GONE
-            sendButton.visibility = View.INVISIBLE
+            emojiButton.isGone = true
+            sendButton.isInvisible = true
 
             messageInput.isEnabled = false
 
@@ -348,8 +354,8 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
                 else -> getString(R.string.fragment_chat_login_required_message)
             }
         } else {
-            emojiButton.visibility = View.VISIBLE
-            sendButton.visibility = View.VISIBLE
+            emojiButton.isVisible = true
+            sendButton.isVisible = true
 
             messageInput.isEnabled = true
             messageInput.hint = getString(R.string.fragment_messenger_message)
@@ -366,7 +372,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         val title = getString(R.string.fragment_messenger_clip_title)
         val content = innerAdapter.selectedMessages.joinToString(separator = "\n", transform = { it.message })
 
-        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, content)
+        requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, content)
         requireContext().toast(R.string.clipboard_status)
 
         actionMode?.finish()
@@ -379,7 +385,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         messageInput.setSelection(messageInput.safeText.length)
         messageInput.requestFocus()
 
-        requireContext().inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+        requireContext().getSystemService<InputMethodManager>()?.showSoftInput(messageInput, SHOW_IMPLICIT)
 
         actionMode?.finish()
     }

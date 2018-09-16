@@ -1,7 +1,7 @@
 package me.proxer.app.anime.resolver
 
+import androidx.core.text.parseAsHtml
 import io.reactivex.Single
-import me.proxer.app.util.compat.HtmlCompat
 import me.proxer.app.util.extension.buildSingle
 
 /**
@@ -13,5 +13,5 @@ class MessageStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
-        .map { StreamResolutionResult(HtmlCompat.fromHtml(it).trim()) }
+        .map { StreamResolutionResult(it.trim().parseAsHtml()) }
 }

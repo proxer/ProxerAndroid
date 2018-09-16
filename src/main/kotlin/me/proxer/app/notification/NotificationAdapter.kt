@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.text.parseAsHtml
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.kotlin.autoDisposable
@@ -14,7 +15,6 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.notification.NotificationAdapter.ViewHolder
-import me.proxer.app.util.compat.HtmlCompat
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -59,7 +59,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
                 .autoDisposable(this)
                 .subscribe(deleteClickSubject)
 
-            text.text = HtmlCompat.fromHtml(item.text)
+            text.text = item.text.parseAsHtml()
             date.text = item.date.convertToRelativeReadableTime(date.context)
         }
     }

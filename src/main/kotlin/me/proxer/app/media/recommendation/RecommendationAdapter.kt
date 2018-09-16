@@ -8,6 +8,9 @@ import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
@@ -98,17 +101,17 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             )
 
             if (item.rating > 0) {
-                ratingContainer.visibility = View.VISIBLE
+                ratingContainer.isVisible = true
                 rating.rating = item.rating / 2.0f
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                episodes.updateLayoutParams<RelativeLayout.LayoutParams> {
                     addRule(RelativeLayout.ALIGN_BOTTOM, 0)
                     addRule(RelativeLayout.BELOW, R.id.state)
                 }
             } else {
-                ratingContainer.visibility = View.GONE
+                ratingContainer.isGone = true
 
-                (episodes.layoutParams as RelativeLayout.LayoutParams).apply {
+                episodes.updateLayoutParams<RelativeLayout.LayoutParams> {
                     addRule(RelativeLayout.ALIGN_BOTTOM, R.id.languageContainer)
                     addRule(RelativeLayout.BELOW, R.id.medium)
                 }

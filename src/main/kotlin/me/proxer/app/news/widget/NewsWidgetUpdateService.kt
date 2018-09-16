@@ -9,6 +9,7 @@ import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.JobIntentService
+import androidx.core.os.bundleOf
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.disposables.Disposable
@@ -22,7 +23,6 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.intentFor
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject

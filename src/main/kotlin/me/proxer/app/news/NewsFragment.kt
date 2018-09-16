@@ -2,6 +2,7 @@ package me.proxer.app.news
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import com.uber.autodispose.android.lifecycle.scope
@@ -15,7 +16,6 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 

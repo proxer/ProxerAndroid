@@ -2,6 +2,7 @@ package me.proxer.app.profile.history
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -18,7 +19,6 @@ import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates

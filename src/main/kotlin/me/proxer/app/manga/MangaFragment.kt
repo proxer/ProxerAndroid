@@ -1,5 +1,6 @@
 package me.proxer.app.manga
 
+import android.app.ActivityManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -13,6 +14,12 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +46,6 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.activityManager
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
@@ -48,7 +54,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -193,26 +198,34 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val horizontalMargin = DeviceUtils.getHorizontalMargin(requireContext(), true)
         val verticalMargin = DeviceUtils.getVerticalMargin(requireContext(), true)
 
         header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
 
-            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-                horizontalMargin, verticalMargin,
-                horizontalMargin, verticalMargin
-            )
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(
+                    horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin
+                )
+            }
         }
 
         footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
             textResolver = mediaControlTextResolver
 
-            (layoutParams as ViewGroup.MarginLayoutParams).setMargins(
-                horizontalMargin, verticalMargin,
-                horizontalMargin, verticalMargin
-            )
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(
+                    horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin
+                )
+            }
         }
 
         Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
@@ -273,7 +286,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
 
-        toolbar.post {
+        toolbar.doOnLayout {
             toolbar.findViewById<View>(R.id.toggle_orientation).rotation = if (isVertical) 0.0f else 90.0f
         }
 
@@ -380,15 +393,17 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         if (adapter.header != null) {
             bindHeaderAndFooterHeight()
 
-            contentContainer.visibility = View.VISIBLE
-            errorContainer.visibility = View.INVISIBLE
+            contentContainer.isVisible = true
+            errorContainer.isInvisible = true
 
-            errorInnerContainer.post {
-                val newCenter = root.height / 2f + header.height / 2f
-                val containerCenterCorrection = errorInnerContainer.height / 2f
+            errorInnerContainer.doOnLayout {
+                header.doOnLayout { _ ->
+                    val newCenter = root.height / 2f + header.height / 2f
+                    val containerCenterCorrection = errorInnerContainer.height / 2f
 
-                errorInnerContainer.y = newCenter - containerCenterCorrection
-                errorContainer.visibility = View.VISIBLE
+                    errorInnerContainer.y = newCenter - containerCenterCorrection
+                    errorContainer.isVisible = true
+                }
             }
         } else {
             errorContainer.translationY = 0f
@@ -432,7 +447,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             recyclerView.layoutManager = object : LinearLayoutManager(context) {
                 override fun getExtraLayoutSpace(state: RecyclerView.State): Int {
                     val isLowRamDevice = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
-                        requireContext().activityManager.isLowRamDevice
+                        requireContext().getSystemService<ActivityManager>()?.isLowRamDevice ?: true
 
                     return when {
                         isLowRamDevice -> 0
@@ -442,7 +457,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
         } else {
             recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
             gravityPagerSnapHelper = GravityPagerSnapHelper(Gravity.END).apply { attachToRecyclerView(recyclerView) }
         }
 
@@ -452,7 +466,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     private fun bindToolbar() {
-        toolbar.layoutParams = (toolbar.layoutParams as AppBarLayout.LayoutParams).apply {
+        toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
             scrollFlags = when (isVertical && viewModel.data.value != null && viewModel.error.value == null) {
                 true -> SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
                 false -> 0

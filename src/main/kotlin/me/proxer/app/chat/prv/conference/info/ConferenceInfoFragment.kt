@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.uber.autodispose.android.lifecycle.scope
@@ -17,7 +18,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.library.entity.messenger.ConferenceInfo
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates

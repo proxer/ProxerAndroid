@@ -7,11 +7,11 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.text.parseAsHtml
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.PROFILE_CHANNEL
-import me.proxer.app.util.compat.HtmlCompat
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.androidUri
@@ -64,7 +64,7 @@ object AccountNotifications : KoinComponent {
 
         when (notifications.size) {
             1 -> {
-                content = HtmlCompat.fromHtml(notifications.first().text)
+                content = notifications.first().text.parseAsHtml()
 
                 intent = PendingIntent.getActivity(
                     context, ID,
@@ -88,7 +88,7 @@ object AccountNotifications : KoinComponent {
 
                 style = NotificationCompat.InboxStyle().also {
                     notifications.forEach { notification ->
-                        it.addLine(HtmlCompat.fromHtml(notification.text))
+                        it.addLine(notification.text.parseAsHtml())
                     }
 
                     it.setBigContentTitle(title)

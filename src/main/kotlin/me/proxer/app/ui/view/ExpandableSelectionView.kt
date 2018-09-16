@@ -15,6 +15,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
+import androidx.core.view.isGone
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
@@ -24,7 +26,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.jetbrains.anko.childrenSequence
 import kotlin.properties.Delegates
 
 /**
@@ -81,7 +82,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         }
 
         if (isSingleSelection) {
-            resetButton.visibility = View.GONE
+            resetButton.isGone = true
         }
 
         resetButton.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
@@ -144,8 +145,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
             itemContainer.removeAllViews()
         }
 
-        if (isSingleSelection && itemContainer.childrenSequence().none { it is RadioButton && it.isChecked }) {
-            (itemContainer.childrenSequence().firstOrNull() as? RadioButton)?.let {
+        if (isSingleSelection && children.none { it is RadioButton && it.isChecked }) {
+            (children.firstOrNull() as? RadioButton)?.let {
                 it.isChecked = true
                 it.jumpDrawablesToCurrentState()
             }
@@ -153,7 +154,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private fun handleSelection() {
-        itemContainer.childrenSequence().forEach {
+        children.forEach {
             if (it is CheckBox) it.isChecked = selection.contains(it.text.toString())
         }
     }
@@ -170,7 +171,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
                 selection.clear()
                 selection.add(item)
 
-                itemContainer.childrenSequence().forEach { view ->
+                children.forEach { view ->
                     if (view is RadioButton && view != radioButton) view.isChecked = false
                 }
 

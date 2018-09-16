@@ -2,6 +2,7 @@ package me.proxer.app.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -14,7 +15,6 @@ import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.jetbrains.anko.bundleOf
 import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 

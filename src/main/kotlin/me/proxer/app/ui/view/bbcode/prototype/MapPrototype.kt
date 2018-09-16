@@ -3,10 +3,10 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.View
+import androidx.core.text.set
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBTree
@@ -41,7 +41,7 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
         return text.toSpannableStringBuilder().apply {
             replace(0, length, args.safeResources.getString(R.string.view_bbcode_map_link))
 
-            setSpan(UriClickableSpan(uri), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+            this[0..length] = UriClickableSpan(uri)
         }
     }
 

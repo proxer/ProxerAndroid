@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +45,6 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.find
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -317,7 +318,7 @@ class CreateConferenceFragment : BaseFragment() {
 
             topicInput.requestFocus()
         } else {
-            topicContainer.visibility = View.GONE
+            topicContainer.isGone = true
 
             if (innerAdapter.itemCount <= 0) {
                 addParticipantInputFooter.requestFocus()

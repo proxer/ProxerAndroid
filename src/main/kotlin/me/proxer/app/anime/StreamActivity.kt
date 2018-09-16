@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.devbrackets.android.exomedia.ExoMedia
@@ -32,7 +35,6 @@ import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ExoMediaDataSourceFactoryProvider
-import me.proxer.app.util.extension.postDelayedSafely
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import preparedEvents
@@ -135,13 +137,13 @@ class StreamActivity : BaseActivity() {
                 if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                     player.showControls()
 
-                    toolbar.postDelayedSafely({
-                        it.visibility = View.VISIBLE
-                    }, 50)
+                    toolbar.postDelayed(50) {
+                        toolbar.isVisible = true
+                    }
                 } else {
-                    toolbar.postDelayedSafely({
-                        it.visibility = View.GONE
-                    }, 50)
+                    toolbar.postDelayed(50) {
+                        toolbar.isGone = true
+                    }
                 }
             }
 

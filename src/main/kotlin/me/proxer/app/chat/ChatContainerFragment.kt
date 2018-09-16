@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -16,7 +19,6 @@ import me.proxer.app.base.BaseFragment
 import me.proxer.app.chat.prv.conference.ConferenceFragment
 import me.proxer.app.chat.pub.room.ChatRoomFragment
 import me.proxer.app.util.extension.unsafeLazy
-import org.jetbrains.anko.bundleOf
 
 /**
  * @author Ruben Gees
@@ -55,7 +57,7 @@ class ChatContainerFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tabs.visibility = View.VISIBLE
+        tabs.isVisible = true
         viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
 
         tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
@@ -70,7 +72,7 @@ class ChatContainerFragment : BaseFragment() {
         tabLayoutHelper = null
         viewPager.adapter = null
 
-        tabs.visibility = View.GONE
+        tabs.isGone = true
 
         super.onDestroyView()
     }

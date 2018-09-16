@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
@@ -182,8 +184,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
             }
 
-            errorIndicator.visibility = View.GONE
-            image.visibility = View.VISIBLE
+            errorIndicator.isGone = true
+            image.isVisible = true
 
             glide?.clear(glideTarget)
             glideTarget = GlideFileTarget()
@@ -251,8 +253,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             when {
                 error is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 requiresFallback[data[position].decodedName] == true -> {
-                    errorIndicator.visibility = View.VISIBLE
-                    image.visibility = View.GONE
+                    errorIndicator.isVisible = true
+                    image.isGone = true
                 }
                 else -> {
                     requiresFallback.put(data[position].decodedName, true)
@@ -275,8 +277,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
-                errorIndicator.visibility = View.VISIBLE
-                image.visibility = View.GONE
+                errorIndicator.isVisible = true
+                image.isGone = true
             }
         }
     }

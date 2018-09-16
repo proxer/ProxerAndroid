@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.message
 
 import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -11,6 +12,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
+import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -36,14 +41,11 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.clipboardManager
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.inputMethodManager
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.setIconicsImage
-import org.jetbrains.anko.bundleOf
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -169,7 +171,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             .autoDisposable(this.scope())
             .subscribe {
                 getString(R.string.clipboard_title).let { title ->
-                    requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, it.toString())
+                    requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                        ClipData.newPlainText(title, it.toString())
+
                     requireContext().toast(R.string.clipboard_status)
                 }
             }
@@ -296,12 +300,12 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             recyclerView.scrollToPosition(conference.unreadMessageAmount - 1)
         }
 
-        inputContainer.visibility = View.VISIBLE
+        inputContainer.isVisible = true
     }
 
     override fun hideData() {
         if (innerAdapter.isEmpty()) {
-            inputContainer.visibility = View.GONE
+            inputContainer.isGone = true
         }
 
         super.hideData()
@@ -311,7 +315,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         super.showError(action)
 
         if (innerAdapter.isEmpty()) {
-            inputContainer.visibility = View.GONE
+            inputContainer.isGone = true
         }
     }
 
@@ -327,7 +331,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         val title = getString(R.string.fragment_messenger_clip_title)
         val content = innerAdapter.selectedMessages.joinToString(separator = "\n", transform = { it.message })
 
-        requireContext().clipboardManager.primaryClip = ClipData.newPlainText(title, content)
+        requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+            ClipData.newPlainText(title, content)
+
         requireContext().toast(R.string.clipboard_status)
 
         actionMode?.finish()
@@ -340,7 +346,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         messageInput.setSelection(messageInput.safeText.length)
         messageInput.requestFocus()
 
-        requireContext().inputMethodManager.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
+        requireContext().getSystemService<InputMethodManager>()
+            ?.showSoftInput(messageInput, InputMethodManager.SHOW_IMPLICIT)
 
         actionMode?.finish()
     }

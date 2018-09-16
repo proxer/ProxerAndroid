@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
+import androidx.core.os.bundleOf
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import me.proxer.app.R
@@ -16,7 +17,6 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
-import org.jetbrains.anko.bundleOf
 import org.koin.android.ext.android.inject
 import java.util.Date
 

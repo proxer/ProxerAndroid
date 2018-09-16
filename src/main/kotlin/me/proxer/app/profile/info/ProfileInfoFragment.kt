@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -18,7 +20,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.user.UserInfo
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -92,7 +93,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         rank.text = rankToString(totalPoints)
 
         if (data.status.isBlank()) {
-            statusContainer.visibility = View.GONE
+            statusContainer.isGone = true
         } else {
             val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(requireContext())
 

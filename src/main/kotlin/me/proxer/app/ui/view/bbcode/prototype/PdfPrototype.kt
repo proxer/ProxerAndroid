@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import android.text.Spannable.SPAN_INCLUSIVE_EXCLUSIVE
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.View
@@ -13,6 +12,9 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
+import androidx.core.text.set
+import androidx.core.view.doOnLayout
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -88,9 +90,11 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                         args.glide?.let { loadImage(it, view, parsedUrl) }
                     }
 
-                view.post {
+                view.doOnLayout {
                     if (width != null && width < view.width) {
-                        view.layoutParams.width = width
+                        view.updateLayoutParams {
+                            this.width = width
+                        }
 
                         view.requestLayout()
                     }
@@ -105,7 +109,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         return text.toSpannableStringBuilder().apply {
             replace(0, length, args.safeResources.getString(R.string.view_bbcode_pdf_link))
 
-            setSpan(UriClickableSpan(uri), 0, length, SPAN_INCLUSIVE_EXCLUSIVE)
+            this[0..length] = UriClickableSpan(uri)
         }
     }
 

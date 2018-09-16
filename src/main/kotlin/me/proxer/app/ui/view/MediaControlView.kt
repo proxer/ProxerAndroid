@@ -3,11 +3,12 @@ package me.proxer.app.ui.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -43,42 +44,42 @@ class MediaControlView(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     var uploader by Delegates.observable<Uploader?>(null) { _, _, new ->
         if (new == null) {
-            uploaderRow.visibility = View.GONE
+            uploaderRow.isGone = true
         } else {
-            uploaderRow.visibility = View.VISIBLE
+            uploaderRow.isVisible = true
             uploaderText.text = new.name
         }
     }
 
     var translatorGroup by Delegates.observable<SimpleTranslatorGroup?>(null) { _, _, new ->
         if (new == null) {
-            translatorRow.visibility = View.GONE
+            translatorRow.isGone = true
         } else {
-            translatorRow.visibility = View.VISIBLE
+            translatorRow.isVisible = true
             translatorGroupText.text = new.name
         }
     }
 
     var dateTime by Delegates.observable<LocalDateTime?>(null) { _, _, new ->
         if (new == null) {
-            dateRow.visibility = View.GONE
+            dateRow.isGone = true
         } else {
-            dateRow.visibility = View.VISIBLE
+            dateRow.isVisible = true
             dateText.text = Utils.dateFormatter.format(new)
         }
     }
 
     var episodeInfo by Delegates.observable(SimpleEpisodeInfo(Int.MAX_VALUE, 1)) { _, _, new ->
         if (new.current <= 1) {
-            previous.visibility = View.GONE
+            previous.isGone = true
         } else {
-            previous.visibility = View.VISIBLE
+            previous.isVisible = true
         }
 
         if (new.current >= new.amount) {
-            next.visibility = View.GONE
+            next.isGone = true
         } else {
-            next.visibility = View.VISIBLE
+            next.isVisible = true
         }
 
         bookmarkNext.text = when {

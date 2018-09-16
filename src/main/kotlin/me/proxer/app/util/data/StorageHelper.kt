@@ -1,7 +1,7 @@
 package me.proxer.app.util.data
 
-import android.annotation.SuppressLint
 import android.content.Context
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.orhanobut.hawk.Converter
 import com.orhanobut.hawk.DataInfo
@@ -156,7 +156,6 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         }
     }
 
-    @SuppressLint("ApplySharedPref")
     private fun migratePreferences(context: Context) {
         // On older versions of the App, this information is saved as an unencrypted preference. While not critical,
         // these are not preferences and should be hidden from the user.
@@ -165,13 +164,13 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         if (sharedPreferences.contains(LAUNCHES)) {
             launches = sharedPreferences.getInt(LAUNCHES, 0)
 
-            sharedPreferences.edit().remove(LAUNCHES).commit()
+            sharedPreferences.edit(commit = true) { remove(LAUNCHES) }
         }
 
         if (sharedPreferences.contains(RATED)) {
             hasRated = sharedPreferences.getBoolean(RATED, false)
 
-            sharedPreferences.edit().remove(RATED).commit()
+            sharedPreferences.edit(commit = true) { remove(RATED) }
         }
     }
 

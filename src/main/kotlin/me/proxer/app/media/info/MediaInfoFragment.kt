@@ -12,6 +12,9 @@ import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.gojuno.koptional.Optional
@@ -46,7 +49,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.IndustryType
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
-import org.jetbrains.anko.bundleOf
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -120,11 +122,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private val description: TextView by bindView(R.id.description)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_media_info, container, false)
     }
 
@@ -164,7 +162,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
         viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
             it?.let { _ ->
-                root.post { snackbar(root, R.string.fragment_set_user_info_success) }
+                snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
@@ -207,27 +205,21 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindRating(result: Entry) = if (result.rating > 0) {
-        ratingContainer.visibility = View.VISIBLE
+        ratingContainer.isVisible = true
         rating.rating = result.rating / 2.0f
-        ratingAmount.visibility = View.VISIBLE
+        ratingAmount.isVisible = true
         ratingAmount.text = requireContext().resources.getQuantityString(
             R.plurals.fragment_media_info_rate_count,
             result.ratingAmount, result.rating, result.ratingAmount
         )
     } else {
-        ratingContainer.visibility = View.GONE
-        ratingAmount.visibility = View.GONE
+        ratingContainer.isGone = true
+        ratingAmount.isGone = true
     }
 
     private fun bindSynonyms(result: Entry) {
         result.synonyms.forEach {
-            infoTable.addView(
-                constructInfoTableRow(
-                    it.toTypeAppString(requireContext()),
-                    it.name,
-                    true
-                )
-            )
+            infoTable.addView(constructInfoTableRow(it.toTypeAppString(requireContext()), it.name, true))
         }
     }
 
@@ -246,7 +238,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             if (seasons.size >= 2) {
                 seasonEndView.text = seasons[1].toEndAppString(requireContext())
             } else {
-                seasonEndView.visibility = View.GONE
+                seasonEndView.isGone = true
             }
 
             infoTable.addView(tableRow)
@@ -281,11 +273,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->
                         val selectableItemBackground = TypedValue().apply {
-                            requireContext().theme.resolveAttribute(
-                                R.attr.selectableItemBackground,
-                                this,
-                                true
-                            )
+                            requireContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
                         }
 
                         contentView.setBackgroundResource(selectableItemBackground.resourceId)
@@ -294,8 +282,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                             .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                             .subscribe {
                                 MediaActivity.navigateTo(
-                                    requireActivity(), adaptionInfo.id, adaptionInfo.name,
-                                    adaptionInfo.medium?.toCategory()
+                                    requireActivity(),
+                                    adaptionInfo.id, adaptionInfo.name, adaptionInfo.medium?.toCategory()
                                 )
                             }
                     }
@@ -304,13 +292,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }
     }
 
-    private fun constructInfoTableRow(
-        title: String,
-        content: String,
-        isSelectable: Boolean = false
-    ): View {
-        val tableRow =
-            LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
+    private fun constructInfoTableRow(title: String, content: String, isSelectable: Boolean = false): View {
+        val tableRow = LayoutInflater.from(context).inflate(R.layout.layout_media_info_row, infoTable, false)
         val titleView = tableRow.findViewById<TextView>(R.id.title)
         val contentView = tableRow.findViewById<TextView>(R.id.content)
 
@@ -324,8 +307,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindGenres(result: Entry) {
         if (result.genres.isEmpty()) {
-            genresTitle.visibility = View.GONE
-            genres.visibility = View.GONE
+            genresTitle.isGone = true
+            genres.isGone = true
 
             return
         }
@@ -350,9 +333,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindTags(result: Entry) {
         if (result.tags.isEmpty()) {
-            tagsTitle.visibility = View.GONE
-            unratedTags.visibility = View.GONE
-            spoilerTags.visibility = View.GONE
+            tagsTitle.isGone = true
+            unratedTags.isGone = true
+            spoilerTags.isGone = true
         } else {
             updateSpoilerButton()
             updateUnratedButton()
@@ -404,8 +387,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         fskConstraints.removeAllViews()
 
         if (result.fskConstraints.isEmpty()) {
-            fskConstraintsTitle.visibility = View.GONE
-            fskConstraints.visibility = View.GONE
+            fskConstraintsTitle.isGone = true
+            fskConstraints.isGone = true
         } else {
             result.fskConstraints.forEach { constraint ->
                 val image = LayoutInflater.from(context)
@@ -416,10 +399,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 image.clicks()
                     .autoDisposable(viewLifecycleOwner.scope())
                     .subscribe {
-                        multilineSnackbar(
-                            root,
-                            constraint.toAppStringDescription(requireContext())
-                        )
+                        multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
                     }
 
                 fskConstraints.addView(image)
@@ -428,8 +408,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindTranslatorGroups(result: Entry) = if (result.translatorGroups.isEmpty()) {
-        translatorGroupsTitle.visibility = View.GONE
-        translatorGroups.visibility = View.GONE
+        translatorGroupsTitle.isGone = true
+        translatorGroups.isGone = true
     } else {
         bindChips(
             translatorGroups,
@@ -440,8 +420,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
     }
 
     private fun bindIndustries(result: Entry) = if (result.industries.isEmpty()) {
-        industriesTitle.visibility = View.GONE
-        industries.visibility = View.GONE
+        industriesTitle.isGone = true
+        industries.isGone = true
     } else {
         bindChips(
             industries,
@@ -475,12 +455,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                 badge.text = mappedItem
                 badge.setTypeface(null, Typeface.BOLD)
-                badge.setTextColor(
-                    ContextCompat.getColorStateList(
-                        layout.context,
-                        android.R.color.white
-                    )
-                )
+                badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
                 badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
 
                 if (onClick != null) {
@@ -506,12 +481,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
         userInfo.toNullable().let { nullableUserInfo ->
-            val noteColor =
-                if (nullableUserInfo?.isNoted == true) R.color.colorAccent else R.color.icon
-            val favorColor =
-                if (nullableUserInfo?.isTopTen == true) R.color.colorAccent else R.color.icon
-            val finishColor =
-                if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
+            val noteColor = if (nullableUserInfo?.isNoted == true) R.color.colorAccent else R.color.icon
+            val favorColor = if (nullableUserInfo?.isTopTen == true) R.color.colorAccent else R.color.icon
+            val finishColor = if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
 
             note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
             favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)

@@ -1,7 +1,8 @@
 package me.proxer.app.media.list
 
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnLayout
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
@@ -70,10 +71,10 @@ class MediaListSearchBottomSheet private constructor(
         fragment.languageSelector.items = languageItems
         fragment.fskSelector.items = fskItems
 
-        fragment.searchBottomSheetTitle.post {
+        fragment.searchBottomSheetTitle.doOnLayout {
             if (fragment.view != null) {
                 bottomSheetBehaviour.peekHeight = fragment.searchBottomSheetTitle.height + fragment.dip(10)
-                fragment.searchBottomSheet.visibility = View.VISIBLE
+                fragment.searchBottomSheet.isVisible = true
             }
         }
 
@@ -84,8 +85,8 @@ class MediaListSearchBottomSheet private constructor(
                 fragment.genreSelector.items = it.map { tag -> tag.name }
                 fragment.excludedGenreSelector.items = it.map { tag -> tag.name }
 
-                fragment.genreSelector.visibility = View.VISIBLE
-                fragment.excludedGenreSelector.visibility = View.VISIBLE
+                fragment.genreSelector.isVisible = true
+                fragment.excludedGenreSelector.isVisible = true
             }
         })
 
@@ -94,8 +95,8 @@ class MediaListSearchBottomSheet private constructor(
                 fragment.tagSelector.items = it.map { tag -> tag.name }
                 fragment.excludedTagSelector.items = it.map { tag -> tag.name }
 
-                fragment.tagSelector.visibility = View.VISIBLE
-                fragment.excludedTagSelector.visibility = View.VISIBLE
+                fragment.tagSelector.isVisible = true
+                fragment.excludedTagSelector.isVisible = true
             }
         })
     }
