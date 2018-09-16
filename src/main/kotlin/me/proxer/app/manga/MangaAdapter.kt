@@ -155,7 +155,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             image.setDoubleTapZoomDuration(shortAnimationTime)
             image.isExifInterfaceEnabled = false
 
-            errorIndicator.setIconicsImage(CommunityMaterial.Icon.cmd_refresh, 64)
+            errorIndicator.setIconicsImage(CommunityMaterial.Icon2.cmd_refresh, 64)
         }
 
         fun bind(item: Page) {

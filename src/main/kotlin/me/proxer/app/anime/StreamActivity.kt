@@ -164,7 +164,7 @@ class StreamActivity : BaseActivity() {
             )
 
             it.setPreviousDrawable(
-                IconicsDrawable(this, CommunityMaterial.Icon.cmd_rewind)
+                IconicsDrawable(this, CommunityMaterial.Icon2.cmd_rewind)
                     .colorRes(android.R.color.white)
                     .sizeDp(24)
             )

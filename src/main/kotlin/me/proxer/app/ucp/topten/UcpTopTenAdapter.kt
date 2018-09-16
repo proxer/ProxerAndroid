@@ -58,7 +58,7 @@ class UcpTopTenAdapter : BaseAdapter<UcpTopTenEntry, ViewHolder>() {
         internal val removeButton: ImageButton by bindView(R.id.deleteButton)
 
         init {
-            removeButton.setIconicsImage(CommunityMaterial.Icon.cmd_star_off, 48)
+            removeButton.setIconicsImage(CommunityMaterial.Icon2.cmd_star_off, 48)
         }
 
         fun bind(item: UcpTopTenEntry) {

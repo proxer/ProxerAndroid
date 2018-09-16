@@ -104,7 +104,7 @@ class AboutFragment : MaterialAboutFragment() {
         ConvenienceBuilder.createAppTitleItem(context),
         ConvenienceBuilder.createVersionActionItem(
             context,
-            IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context),
+            IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).iconColor(context),
             getString(R.string.about_version_title), false
         ),
         MaterialAboutActionItem.Builder()
@@ -143,13 +143,13 @@ class AboutFragment : MaterialAboutFragment() {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_twitter_title)
             .subText(R.string.about_twitter_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_twitter).iconColor(context))
             .setOnClickAction { showPage(twitterLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_youtube_title)
             .subText(R.string.about_youtube_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_youtube_play).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_youtube).iconColor(context))
             .setOnClickAction { showPage(youtubeLink) }
             .build(),
         MaterialAboutActionItem.Builder()

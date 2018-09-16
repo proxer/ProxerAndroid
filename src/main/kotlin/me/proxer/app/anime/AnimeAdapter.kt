@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -181,7 +182,7 @@ class AnimeAdapter(
                             info.isVisible = true
                             info.setText(R.string.fragment_anime_stream_official_info)
                             info.setCompoundDrawablesWithIntrinsicBounds(
-                                generateInfoDrawable(CommunityMaterial.Icon.cmd_information), null, null, null
+                                generateInfoDrawable(CommunityMaterial.Icon2.cmd_information), null, null, null
                             )
                         }
                         item.isInternalPlayerOnly -> {
@@ -202,13 +203,13 @@ class AnimeAdapter(
 
         private fun generatePlayDrawable(): IconicsDrawable {
             return IconicsDrawable(play.context)
-                .icon(CommunityMaterial.Icon.cmd_play)
+                .icon(CommunityMaterial.Icon2.cmd_play)
                 .sizeDp(28)
                 .paddingDp(8)
                 .colorRes(android.R.color.white)
         }
 
-        private fun generateInfoDrawable(icon: CommunityMaterial.Icon): IconicsDrawable {
+        private fun generateInfoDrawable(icon: IIcon): IconicsDrawable {
             return IconicsDrawable(info.context)
                 .icon(icon)
                 .sizeDp(26)

@@ -90,7 +90,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                     null,
                     null,
                     IconicsDrawable(username.context)
-                        .icon(CommunityMaterial.Icon.cmd_star)
+                        .icon(CommunityMaterial.Icon2.cmd_star)
                         .sizeDp(32)
                         .paddingDp(8)
                         .colorRes(username.context, R.color.colorAccent),

@@ -115,7 +115,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
             image.isGone = true
 
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
-            upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
+            upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedUserComment) {

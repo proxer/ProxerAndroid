@@ -93,14 +93,14 @@ class MaterialDrawerWrapper(
         listOf<IDrawerItem<*, *>>(
             PrimaryDrawerItem()
                 .withName(R.string.section_news)
-                .withIcon(CommunityMaterial.Icon.cmd_newspaper)
+                .withIcon(CommunityMaterial.Icon2.cmd_newspaper)
                 .withSelectedTextColorRes(R.color.colorAccent)
                 .withSelectedIconColorRes(R.color.colorAccent)
                 .withSelectable(isMain)
                 .withIdentifier(DrawerItem.NEWS.id),
             PrimaryDrawerItem()
                 .withName(R.string.section_chat)
-                .withIcon(CommunityMaterial.Icon.cmd_message_text)
+                .withIcon(CommunityMaterial.Icon2.cmd_message_text)
                 .withSelectedTextColorRes(R.color.colorAccent)
                 .withSelectable(isMain)
                 .withSelectedIconColorRes(R.color.colorAccent)
@@ -114,7 +114,7 @@ class MaterialDrawerWrapper(
                 .withIdentifier(DrawerItem.BOOKMARKS.id),
             PrimaryDrawerItem()
                 .withName(R.string.section_anime)
-                .withIcon(CommunityMaterial.Icon.cmd_television)
+                .withIcon(CommunityMaterial.Icon2.cmd_television)
                 .withSelectedTextColorRes(R.color.colorAccent)
                 .withSelectable(isMain)
                 .withSelectedIconColorRes(R.color.colorAccent)
@@ -140,14 +140,14 @@ class MaterialDrawerWrapper(
         listOf<IDrawerItem<*, *>>(
             PrimaryDrawerItem()
                 .withName(R.string.section_info)
-                .withIcon(CommunityMaterial.Icon.cmd_information_outline)
+                .withIcon(CommunityMaterial.Icon2.cmd_information_outline)
                 .withSelectedTextColorRes(R.color.colorAccent)
                 .withSelectable(isMain)
                 .withSelectedIconColorRes(R.color.colorAccent)
                 .withIdentifier(DrawerItem.INFO.id),
             PrimaryDrawerItem()
                 .withName(R.string.section_settings)
-                .withIcon(CommunityMaterial.Icon.cmd_settings)
+                .withIcon(CommunityMaterial.Icon2.cmd_settings)
                 .withSelectedTextColorRes(R.color.colorAccent)
                 .withSelectable(isMain)
                 .withSelectedIconColorRes(R.color.colorAccent)

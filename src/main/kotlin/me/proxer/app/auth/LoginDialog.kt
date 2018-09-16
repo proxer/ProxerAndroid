@@ -185,7 +185,7 @@ class LoginDialog : BaseDialog() {
     }
 
     private fun generateInfoDrawable() = IconicsDrawable(requireContext())
-        .icon(CommunityMaterial.Icon.cmd_information_outline)
+        .icon(CommunityMaterial.Icon2.cmd_information_outline)
         .iconColor(requireContext())
         .sizeDp(20)
 }

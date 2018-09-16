@@ -110,7 +110,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     private val emojiPopup by lazy {
         val popup = EmojiPopup.Builder.fromRootView(root)
             .setOnEmojiPopupShownListener {
-                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_keyboard))
+                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon2.cmd_keyboard))
             }
             .setOnEmojiPopupDismissListener {
                 emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
@@ -222,7 +222,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             }
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
                 .colorRes(requireContext(), R.color.accent)
                 .sizeDp(32)
                 .paddingDp(4)

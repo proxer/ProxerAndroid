@@ -50,12 +50,12 @@ ext {
     materialDesignVersion = "1.0.0-rc02"
     preferenceVersion = "1.0.0-rc02"
     supportPreferenceVersion = '2.3.2'
-    iconicsVersion = '3.1.0-rc01'
-    communityMaterialTypefaceVersion = '2.0.46.1'
+    iconicsVersion = '3.1.0-rc02'
+    communityMaterialTypefaceVersion = '2.7.94.1'
     materialDrawerVersion = 'v6.1.0-rc01'
-    aboutLibrariesVersion = '6.2.0-rc01'
+    aboutLibrariesVersion = '6.2.0-rc02'
     materializeVersion = '1.2.0-rc01'
-    fastadapterVersion = '3.3.0-rc01'
+    fastadapterVersion = '3.3.0-rc02'
     crossfaderVersion = '1.6.0-rc01'
     materialAboutVersion = '2.3.0'
     subsamplingScaleImageViewVersion = 'e9398dce15'

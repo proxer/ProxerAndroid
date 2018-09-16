@@ -130,7 +130,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
         }
 
         private fun generateUpvotesImage(userVoted: Boolean = false) = IconicsDrawable(upvotesImage.context)
-            .icon(CommunityMaterial.Icon.cmd_thumb_up)
+            .icon(CommunityMaterial.Icon2.cmd_thumb_up)
             .sizeDp(32)
             .paddingDp(4)
             .colorRes(
@@ -141,7 +141,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             )
 
         private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
-            .icon(CommunityMaterial.Icon.cmd_thumb_down)
+            .icon(CommunityMaterial.Icon2.cmd_thumb_down)
             .sizeDp(32)
             .paddingDp(4)
             .colorRes(

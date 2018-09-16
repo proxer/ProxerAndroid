@@ -7,6 +7,7 @@ import android.content.res.Resources
 import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post
@@ -166,11 +167,12 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String =
     )
 }
 
+@Suppress("USELESS_CAST")
 fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context)
     .iconColor(context)
     .icon(
         when (this) {
-            MediaState.PRE_AIRING -> CommunityMaterial.Icon.cmd_radio_tower
+            MediaState.PRE_AIRING -> CommunityMaterial.Icon2.cmd_radio_tower as IIcon
             MediaState.FINISHED -> CommunityMaterial.Icon.cmd_book
             MediaState.AIRING -> CommunityMaterial.Icon.cmd_book_open_variant
             MediaState.CANCELLED -> CommunityMaterial.Icon.cmd_close

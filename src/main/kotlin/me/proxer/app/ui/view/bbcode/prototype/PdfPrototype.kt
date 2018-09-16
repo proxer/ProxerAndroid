@@ -127,7 +127,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
         view.setImage(
             ImageSource.bitmap(
-                IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
+                IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh)
                     .iconColor(view.context)
                     .sizeDp(32)
                     .toBitmap()

@@ -486,7 +486,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             val finishColor = if (nullableUserInfo?.isFinished == true) R.color.colorAccent else R.color.icon
 
             note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
-            favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)
+            favor.setIconicsImage(CommunityMaterial.Icon2.cmd_star, 24, 0, favorColor)
             finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0, finishColor)
         }
     }
