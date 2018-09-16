@@ -14,6 +14,7 @@ import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees
@@ -25,11 +26,9 @@ class MessengerActivity : DrawerActivity() {
         private const val INITIAL_MESSAGE_EXTRA = "initial_message"
 
         fun navigateTo(context: Activity, conference: LocalConference, initialMessage: String? = null) {
-            context.startActivity(
-                context.intentFor<MessengerActivity>(
-                    CONFERENCE_EXTRA to conference,
-                    INITIAL_MESSAGE_EXTRA to initialMessage
-                )
+            context.startActivity<MessengerActivity>(
+                CONFERENCE_EXTRA to conference,
+                INITIAL_MESSAGE_EXTRA to initialMessage
             )
         }
 

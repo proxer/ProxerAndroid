@@ -27,7 +27,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
@@ -56,15 +56,13 @@ class MangaActivity : BaseActivity() {
             name: String? = null,
             episodeAmount: Int? = null
         ) {
-            context.startActivity(
-                context.intentFor<MangaActivity>(
-                    ID_EXTRA to id,
-                    EPISODE_EXTRA to episode,
-                    LANGUAGE_EXTRA to language,
-                    CHAPTER_TITLE_EXTRA to chapterTitle,
-                    NAME_EXTRA to name,
-                    EPISODE_AMOUNT_EXTRA to episodeAmount
-                )
+            context.startActivity<MangaActivity>(
+                ID_EXTRA to id,
+                EPISODE_EXTRA to episode,
+                LANGUAGE_EXTRA to language,
+                CHAPTER_TITLE_EXTRA to chapterTitle,
+                NAME_EXTRA to name,
+                EPISODE_AMOUNT_EXTRA to episodeAmount
             )
         }
     }

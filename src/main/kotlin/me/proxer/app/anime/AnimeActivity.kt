@@ -14,7 +14,7 @@ import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -40,14 +40,12 @@ class AnimeActivity : DrawerActivity() {
             name: String? = null,
             episodeAmount: Int? = null
         ) {
-            context.startActivity(
-                context.intentFor<AnimeActivity>(
-                    ID_EXTRA to id,
-                    EPISODE_EXTRA to episode,
-                    LANGUAGE_EXTRA to language,
-                    NAME_EXTRA to name,
-                    EPISODE_AMOUNT_EXTRA to episodeAmount
-                )
+            context.startActivity<AnimeActivity>(
+                ID_EXTRA to id,
+                EPISODE_EXTRA to episode,
+                LANGUAGE_EXTRA to language,
+                NAME_EXTRA to name,
+                EPISODE_AMOUNT_EXTRA to episodeAmount
             )
         }
     }

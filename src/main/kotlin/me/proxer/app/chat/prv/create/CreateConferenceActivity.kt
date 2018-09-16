@@ -8,6 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees
@@ -19,11 +20,9 @@ class CreateConferenceActivity : DrawerActivity() {
         private const val INITIAL_PARTICIPANT_EXTRA = "initial_participant"
 
         fun navigateTo(context: Activity, isGroup: Boolean = false, initialParticipant: Participant? = null) {
-            context.startActivity(
-                context.intentFor<CreateConferenceActivity>(
-                    IS_GROUP_EXTRA to isGroup,
-                    INITIAL_PARTICIPANT_EXTRA to initialParticipant
-                )
+            context.startActivity<CreateConferenceActivity>(
+                IS_GROUP_EXTRA to isGroup,
+                INITIAL_PARTICIPANT_EXTRA to initialParticipant
             )
         }
 

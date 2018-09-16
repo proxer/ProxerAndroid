@@ -9,7 +9,7 @@ import com.uber.autodispose.kotlin.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoActivity
-import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees
@@ -22,12 +22,10 @@ class ChatActivity : DrawerActivity() {
         private const val CHAT_ROOM_IS_READ_ONLY_EXTRA = "chat_room_is_read_only"
 
         fun navigateTo(context: Activity, chatRoomId: String, chatRoomName: String, chatRoomIsReadOnly: Boolean) {
-            context.startActivity(
-                context.intentFor<ChatActivity>(
-                    CHAT_ROOM_ID_EXTRA to chatRoomId,
-                    CHAT_ROOM_NAME_EXTRA to chatRoomName,
-                    CHAT_ROOM_IS_READ_ONLY_EXTRA to chatRoomIsReadOnly
-                )
+            context.startActivity<ChatActivity>(
+                CHAT_ROOM_ID_EXTRA to chatRoomId,
+                CHAT_ROOM_NAME_EXTRA to chatRoomName,
+                CHAT_ROOM_IS_READ_ONLY_EXTRA to chatRoomIsReadOnly
             )
         }
     }

@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
-import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -24,11 +24,9 @@ class IndustryActivity : ImageTabsActivity() {
         private const val NAME_EXTRA = "name"
 
         fun navigateTo(context: Activity, id: String, name: String? = null) {
-            context.startActivity(
-                context.intentFor<IndustryActivity>(
-                    ID_EXTRA to id,
-                    NAME_EXTRA to name
-                )
+            context.startActivity<IndustryActivity>(
+                ID_EXTRA to id,
+                NAME_EXTRA to name
             )
         }
     }
