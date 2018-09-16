@@ -1,7 +1,6 @@
 package me.proxer.app.anime.resolver
 
 import android.net.Uri
-import io.reactivex.Flowable
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
@@ -40,15 +39,7 @@ class DailymotionStreamResolver : StreamResolver() {
                 )
                     .toBodySingle()
             }
-            .retryWhen { errors ->
-                errors.flatMap<Unit> {
-                    if (counter.getAndIncrement() < 3 && it is IOException && it.cause is EOFException) {
-                        Flowable.just(Unit)
-                    } else {
-                        Flowable.error(it)
-                    }
-                }
-            }
+            .retry(3) { it is IOException && it.cause is EOFException }
             .map { html ->
                 val qualitiesJson = regex.find(html)?.value ?: throw StreamResolutionException()
                 val qualityMap = moshi.adapter(QualityMap::class.java)

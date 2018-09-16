@@ -137,7 +137,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
-            .subscribe { innerAdapter.notifyDataSetChanged() }
+            .subscribe { adapter.notifyItemRangeChanged(1, innerAdapter.itemCount + 1) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

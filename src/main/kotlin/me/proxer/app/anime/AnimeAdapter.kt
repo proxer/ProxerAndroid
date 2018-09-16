@@ -77,6 +77,14 @@ class AnimeAdapter(
 
     override fun saveInstanceState(outState: Bundle) = outState.putString(EXPANDED_ITEM_STATE, expandedItemId)
 
+    override fun swapDataAndNotifyWithDiffing(newData: List<AnimeStream>) {
+        if (data.isNotEmpty()) {
+            expandedItemId = null
+        }
+
+        super.swapDataAndNotifyWithDiffing(newData)
+    }
+
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val nameContainer: ViewGroup by bindView(R.id.nameContainer)

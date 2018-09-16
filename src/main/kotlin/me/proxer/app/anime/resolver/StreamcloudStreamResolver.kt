@@ -8,6 +8,8 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.FormBody
 import okhttp3.Request
+import java.io.EOFException
+import java.io.IOException
 
 /**
  * @author Ruben Gees
@@ -60,6 +62,7 @@ class StreamcloudStreamResolver : StreamResolver() {
                     )
                         .toBodySingle()
                 }
+                .retry(3) { it is IOException && it.cause is EOFException }
                 .map {
                     val result = Uri.parse(
                         fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()
