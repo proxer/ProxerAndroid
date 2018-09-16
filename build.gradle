@@ -147,8 +147,10 @@ android {
     }
 
     applicationVariants.all { variant ->
+        def suffix = variant.buildType.name == "release" ? "-release" : ""
+
         variant.outputs.all {
-            outputFileName = "app-${variant.versionName}.apk"
+            outputFileName = "app-${variant.versionName}${suffix}.apk"
         }
     }
 
