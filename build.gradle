@@ -133,8 +133,8 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/*.kotlin_builtins'
         exclude 'META-INF/*.kotlin_module'
+        exclude 'META-INF/*.version'
         exclude 'META-INF/rxkotlin.properties'
         exclude 'META-INF/proguard/**'
         exclude 'kotlin/**'
