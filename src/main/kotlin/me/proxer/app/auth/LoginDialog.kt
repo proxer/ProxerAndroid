@@ -31,9 +31,7 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.toast
-import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
-import me.proxer.library.util.ProxerUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -42,8 +40,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class LoginDialog : BaseDialog() {
 
     companion object {
-        private const val DEVICE_PARAMETER = "device"
-
         private val websiteRegex = Regex("Proxer \\b(.+?)\\b")
 
         fun show(activity: AppCompatActivity) = LoginDialog().show(activity.supportFragmentManager, "login_dialog")
@@ -63,7 +59,7 @@ class LoginDialog : BaseDialog() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setLikelyUrl(ProxerUrls.webBase())
+        setLikelyUrl(ProxerUrls.registerWeb())
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
@@ -113,13 +109,7 @@ class LoginDialog : BaseDialog() {
         }
 
         registrationInfo.linkClicks()
-            .map {
-                ProxerUrls.webBase()
-                    .newBuilder()
-                    .addPathSegment("register")
-                    .setQueryParameter(DEVICE_PARAMETER, ProxerUtils.getApiEnumName(Device.DEFAULT))
-                    .build()
-            }
+            .map { ProxerUrls.registerWeb() }
             .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe { showPage(it) }
     }

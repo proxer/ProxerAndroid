@@ -56,9 +56,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
                     .from(this)
-                    .setText(
-                        getString(R.string.share_translator_group, it, "https://proxer.me/translatorgroups?id=$id")
-                    )
+                    .setText(getString(R.string.share_translator_group, it, ProxerUrls.translatorGroupWeb(id)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()

@@ -28,33 +28,27 @@ class RoomConverters {
     @TypeConverter
     fun fromGenres(value: MutableSet<Genre>?) = value
         ?.asSequence()
-        ?.map { ProxerUtils.getApiEnumName(it) }
+        ?.map { ProxerUtils.getSafeApiEnumName(it) }
         ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toGenres(value: String?) = value?.split(DELIMITER)
         ?.asSequence()
         ?.filter { it.isNotBlank() }
-        ?.map {
-            ProxerUtils.toApiEnum(Genre::class.java, it)
-                ?: throw IllegalArgumentException("enum is null: $it")
-        }
+        ?.map { ProxerUtils.toSafeApiEnum(Genre::class.java, it) }
         ?.toSet()
 
     @TypeConverter
     fun fromFskConstraints(value: MutableSet<FskConstraint>?) = value
         ?.asSequence()
-        ?.map { ProxerUtils.getApiEnumName(it) }
+        ?.map { ProxerUtils.getSafeApiEnumName(it) }
         ?.joinToString(DELIMITER)
 
     @TypeConverter
     fun toFskConstraints(value: String?) = value?.split(DELIMITER)
         ?.asSequence()
         ?.filter { it.isNotBlank() }
-        ?.map {
-            ProxerUtils.toApiEnum(FskConstraint::class.java, it)
-                ?: throw IllegalArgumentException("enum is null: $it")
-        }
+        ?.map { ProxerUtils.toSafeApiEnum(FskConstraint::class.java, it) }
         ?.toSet()
 
     @TypeConverter
@@ -64,56 +58,56 @@ class RoomConverters {
     fun toTimestamp(date: Date?) = date?.time
 
     @TypeConverter
-    fun fromLanguage(value: Language?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromLanguage(value: Language?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toLanguage(value: String?) = value?.let { ProxerUtils.toApiEnum(Language::class.java, it) }
+    fun toLanguage(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(Language::class.java, it) }
 
     @TypeConverter
-    fun fromMedium(value: Medium?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromMedium(value: Medium?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toMedium(value: String?) = value?.let { ProxerUtils.toApiEnum(Medium::class.java, it) }
+    fun toMedium(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(Medium::class.java, it) }
 
     @TypeConverter
-    fun fromMediaState(value: MediaState?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromMediaState(value: MediaState?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toMediaState(value: String?) = value?.let { ProxerUtils.toApiEnum(MediaState::class.java, it) }
+    fun toMediaState(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(MediaState::class.java, it) }
 
     @TypeConverter
-    fun fromCategory(value: Category?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromCategory(value: Category?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toCategory(value: String?) = value?.let { ProxerUtils.toApiEnum(Category::class.java, it) }
+    fun toCategory(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(Category::class.java, it) }
 
     @TypeConverter
-    fun fromLicense(value: License?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromLicense(value: License?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toLicense(value: String?) = value?.let { ProxerUtils.toApiEnum(License::class.java, it) }
+    fun toLicense(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(License::class.java, it) }
 
     @TypeConverter
-    fun fromMessageAction(value: MessageAction?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromMessageAction(value: MessageAction?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toMessageAction(value: String?) = value?.let { ProxerUtils.toApiEnum(MessageAction::class.java, it) }
+    fun toMessageAction(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(MessageAction::class.java, it) }
 
     @TypeConverter
-    fun fromDevice(value: Device?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromDevice(value: Device?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toDevice(value: String?) = value?.let { ProxerUtils.toApiEnum(Device::class.java, it) }
+    fun toDevice(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(Device::class.java, it) }
 
     @TypeConverter
-    fun fromTagType(value: TagType?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromTagType(value: TagType?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toTagType(value: String?) = value?.let { ProxerUtils.toApiEnum(TagType::class.java, it) }
+    fun toTagType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(TagType::class.java, it) }
 
     @TypeConverter
-    fun fromTagSubType(value: TagSubType?) = value?.let { ProxerUtils.getApiEnumName(it) }
+    fun fromTagSubType(value: TagSubType?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toTagSubType(value: String?) = value?.let { ProxerUtils.toApiEnum(TagSubType::class.java, it) }
+    fun toTagSubType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(TagSubType::class.java, it) }
 }

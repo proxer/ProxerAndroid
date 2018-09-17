@@ -31,6 +31,7 @@ import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
+import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 import java.lang.ref.WeakReference
 
@@ -165,7 +166,8 @@ class MangaActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> name?.let {
-                val link = "https://proxer.me/chapter/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
+                val link = ProxerUrls.mangaWeb(id, episode, language)
+
                 val text = chapterTitle.let { title ->
                     when {
                         title.isNullOrBlank() -> getString(R.string.share_manga, episode, it, link)

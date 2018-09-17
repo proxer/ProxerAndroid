@@ -136,7 +136,7 @@ class MediaActivity : ImageTabsActivity() {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
                     .from(this)
-                    .setText(getString(R.string.share_media, it, "https://proxer.me/info/$id"))
+                    .setText(getString(R.string.share_media, it, ProxerUrls.infoWeb(id)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()

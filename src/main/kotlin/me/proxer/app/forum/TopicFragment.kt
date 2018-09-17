@@ -95,7 +95,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
 
                 if (url != null) {
                     val mobileUrl = url.newBuilder()
-                        .setQueryParameter("device", ProxerUtils.getApiEnumName(Device.MOBILE))
+                        .setQueryParameter("device", ProxerUtils.getSafeApiEnumName(Device.MOBILE))
                         .build()
 
                     showPage(mobileUrl, true)

@@ -18,6 +18,7 @@ import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
@@ -89,7 +90,7 @@ class TopicActivity : DrawerActivity() {
             R.id.action_share -> topic?.let {
                 val url = when {
                     intent.action == Intent.ACTION_VIEW -> intent.dataString
-                    else -> "https://proxer.me/forum/$categoryId/$id"
+                    else -> ProxerUrls.forumWeb(categoryId, id).toString()
                 }
 
                 ShareCompat.IntentBuilder

@@ -56,9 +56,7 @@ class IndustryActivity : ImageTabsActivity() {
             R.id.action_share -> name?.let {
                 ShareCompat.IntentBuilder
                     .from(this)
-                    .setText(
-                        getString(R.string.share_industry, it, "https://proxer.me/industry?id=$id")
-                    )
+                    .setText(getString(R.string.share_industry, it, ProxerUrls.industryWeb(id)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()

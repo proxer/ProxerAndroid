@@ -27,6 +27,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
+import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 
 /**
@@ -51,16 +52,16 @@ object ImagePrototype : AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(parent, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-        val parsedUrl = Utils.parseAndFixUrl(url)
+        val proxyUrl = Utils.parseAndFixUrl(url)?.let { ProxerUrls.proxyImage(it) }
 
-        val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
+        val width = if (proxyUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
         return listOf(AppCompatImageView(parent.context).also { view: ImageView ->
-            ViewCompat.setTransitionName(view, "bb_image_$parsedUrl")
+            ViewCompat.setTransitionName(view, "bb_image_$proxyUrl")
 
             view.layoutParams = ViewGroup.MarginLayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
 
-            args.glide?.let { loadImage(it, view, parsedUrl) }
+            args.glide?.let { loadImage(it, view, proxyUrl) }
 
             (parent.context as? Activity)?.let { context ->
                 view.clicks()
@@ -69,9 +70,9 @@ object ImagePrototype : AutoClosingPrototype {
                         if (view.getTag(R.id.error_tag) == true) {
                             view.tag = null
 
-                            args.glide?.let { loadImage(it, view, parsedUrl) }
-                        } else if (view.drawable != null && parsedUrl != null) {
-                            ImageDetailActivity.navigateTo(context, parsedUrl, view)
+                            args.glide?.let { loadImage(it, view, proxyUrl) }
+                        } else if (view.drawable != null && proxyUrl != null) {
+                            ImageDetailActivity.navigateTo(context, proxyUrl, view)
                         }
                     }
             }

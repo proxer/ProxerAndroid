@@ -18,6 +18,7 @@ import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
+import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
 
 /**
@@ -118,11 +119,9 @@ class AnimeActivity : DrawerActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> name?.let {
-                val link = "https://proxer.me/watch/$id/$episode/${ProxerUtils.getApiEnumName(language)}"
-
                 ShareCompat.IntentBuilder
                     .from(this)
-                    .setText(getString(R.string.share_anime, episode, it, link))
+                    .setText(getString(R.string.share_anime, episode, it, ProxerUrls.animeWeb(id, episode, language)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))
                     .startChooser()

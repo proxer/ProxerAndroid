@@ -317,16 +317,10 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             genres,
             result.genres.toList(),
             mapFunction = {
-                ProxerUtils.getApiEnumName(it)
-                    ?: throw IllegalArgumentException("Unknown genre: $it")
+                ProxerUtils.getSafeApiEnumName(it)
             },
             onClick = {
-                showPage(
-                    ProxerUrls.wikiWeb(
-                        ProxerUtils.getApiEnumName(it)
-                            ?: throw IllegalArgumentException("Unknown genre: $it")
-                    )
-                )
+                showPage(ProxerUrls.wikiWeb(ProxerUtils.getSafeApiEnumName(it)))
             }
         )
     }
