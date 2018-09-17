@@ -70,7 +70,7 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setIconicsImage(CommunityMaterial.Icon.cmd_bookmark_remove, 48)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 48)
         }
 
         fun bind(item: UserMediaListEntry) {

@@ -259,7 +259,7 @@ class ChatAdapter(
 
         init {
             sendStatus?.setImageDrawable(
-                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock)
+                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock_outline)
                     .sizeDp(16)
                     .iconColor(text.context)
             )

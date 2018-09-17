@@ -134,7 +134,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
                 val icon = when (messageFromUser) {
                     true -> when (item.message.messageId < 0) {
-                        true -> CommunityMaterial.Icon.cmd_clock
+                        true -> CommunityMaterial.Icon.cmd_clock_outline
                         false -> CommunityMaterial.Icon.cmd_check
                     }
                     false -> null
