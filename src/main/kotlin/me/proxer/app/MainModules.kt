@@ -56,6 +56,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
+import me.proxer.library.api.ProxerApi.Builder.LoggingConstraints
 import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -83,7 +84,19 @@ private val applicationModules = module {
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
             .userAgent(USER_AGENT)
             .apply { if (BuildConfig.LOG) customLogger { message -> Timber.tag(API_LOGGING_TAG).i(message) } }
-            .loggingStrategy(if (BuildConfig.DEBUG) LoggingStrategy.ALL else LoggingStrategy.NONE)
+            .loggingStrategy(
+                when {
+                    BuildConfig.DEBUG -> LoggingStrategy.ALL
+                    BuildConfig.LOG -> LoggingStrategy.API
+                    else -> LoggingStrategy.NONE
+                }
+            )
+            .loggingConstraints(
+                when {
+                    BuildConfig.DEBUG -> LoggingConstraints.NONE
+                    else -> LoggingConstraints.URL_ONLY
+                }
+            )
             .loggingTag(API_LOGGING_TAG)
             .loginTokenManager(get())
             .moshi(Moshi.Builder().build())
