@@ -2,7 +2,6 @@ package me.proxer.app.anime
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +45,7 @@ import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -191,10 +191,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                 } else {
                     multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
                         ?.apply {
-                            (view as ViewGroup).recursiveChildren
+                            (this.view as ViewGroup).recursiveChildren
                                 .filterIsInstance(TextView::class.java)
                                 .filterNot { it -> it is Button }
-                                .forEach { it -> it.movementMethod = LinkMovementMethod.getInstance() }
+                                .forEach { it -> it.movementMethod = BetterLinkMovementMethod.getInstance() }
                         }
                 }
             }

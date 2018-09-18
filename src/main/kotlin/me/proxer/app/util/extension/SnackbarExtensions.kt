@@ -47,7 +47,7 @@ inline fun Activity.multilineSnackbar(
     actionCallback: View.OnClickListener? = null,
     maxLines: Int = 5
 ) = snackbar(root, message, duration, actionMessage, actionCallback).apply {
-    (view as ViewGroup).recursiveChildren
+    (this.view as ViewGroup).recursiveChildren
         .filterIsInstance(TextView::class.java)
         .filterNot { it is Button }
         .forEach { it.maxLines = maxLines }
