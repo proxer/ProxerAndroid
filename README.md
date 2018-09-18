@@ -1,9 +1,15 @@
-# Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
+# ![](art/proxer-logo-title.png) Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
 
 ### What is this?
 
-Proxer.Me Android is a client for the german Anime & Manga page [Proxer.Me](https://proxer.me/).<br>
-It features major functionalities including an anime player for various hosters and languages, a mobile-friendly vertical manga reader, offline synchronized chat and much more.
+Proxer.Me Android is the official mobile client for the german Anime & Manga page [Proxer.Me](https://proxer.me).<br>
+It features major functionalities including an anime player for various hosters and languages, a mobile-friendly manga reader, offline synchronized chat and much more.
+
+### Downloads
+
+| ![](art/logo/play-logo.png) Google Play Store                           | ![](art/logo/proxer-logo.png) Proxer App Store | ![](art/logo/github-logo.png) Github                                |
+|-------------------------------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------|
+| [Download](https://play.google.com/store/apps/details?id=me.proxer.app) | [Download](https://proxer.me/apps/info/3)      | [Download](https://github.com/proxer/ProxerAndroid/releases/latest) |
 
 ### How to use it?
 
@@ -68,25 +74,21 @@ gradlew.bat assembleDebug
 
 ### Screenshots
 
-|       News        |       Anime List        |       Manga List        |
-| :---------------: | :---------------------: | :---------------------: |
-| ![](art/news.png) | ![](art/anime-list.png) | ![](art/manga-list.png) |
+| News                          | Anime List                          | Manga Reader                          |
+|-------------------------------|-------------------------------------|---------------------------------------|
+| ![](art/screenshot/news.png) | ![](art/screenshot/anime-list.png) | ![](art/screenshot/manga-reader.png) |
 
-|       Media Detail        |    Manga Reader
-| :-----------------------: | :----------------:
-| ![](art/media-detail.png) | ![](art/manga.png)
+| Media Detail                          | Instant Chat                             | Public Chat                          |
+|---------------------------------------|------------------------------------------|--------------------------------------|
+| ![](art/screenshot/media-detail.png) | ![](art/screenshot/conference-list.png) | ![](art/screenshot/public-chat.png) |
 
-|     Anime Stream List      |      Anime Player       |
-| :------------------------: | :---------------------: |
-| ![](art/anime-streams.png) | ![](art/anime-play.png) |
+| Anime Stream List                      | Anime Player                        |
+|----------------------------------------|-------------------------------------|
+| ![](art/screenshot/anime-streams.png) | ![](art/screenshot/anime-play.png) |
 
-|   Instant Chat    |       Conference List        |      Conference Detail       |
-| :---------------: | :--------------------------: | :--------------------------: |
-| ![](art/chat.png) | ![](art/conference-list.png) | ![](art/conference-info.png) |
-
-|       Profile        | Profile Settings |       Profile History        |
-| :------------------: | :--------------: | :--------------------------: |
-| ![](art/profile.png) | ![](art/ucp.png) | ![](art/profile-history.png) |
+| Profile Overview                 | Profile Top Ten                     | Profile Media List                |
+|----------------------------------|-------------------------------------|-----------------------------------|
+| ![](art/screenshot/profile.png) | ![](art/screenshot/ucp-topten.png) | ![](art/screenshot/ucp-list.png) |
 
 ### Contributions and contributors
 
