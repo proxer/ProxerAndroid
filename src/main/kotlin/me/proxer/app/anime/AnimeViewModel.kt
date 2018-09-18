@@ -57,8 +57,9 @@ class AnimeViewModel(
                     AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map { stream ->
                         val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
                         val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
+                        val isOfficial = resolver?.isOfficial == true || stream.isOfficial
 
-                        stream.toAnimeStreamInfo(resolver != null, internalPlayerOnly)
+                        stream.toAnimeStreamInfo(resolver != null, isOfficial, internalPlayerOnly)
                     })
                 }
             }
