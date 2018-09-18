@@ -1,4 +1,4 @@
-# ![](art/proxer-logo-title.png) Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
+# ![](art/logo/proxer-logo-title.png) Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
 
 ### What is this?
 
@@ -11,27 +11,31 @@ It features major functionalities including an anime player for various hosters 
 |-------------------------------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------|
 | [Download](https://play.google.com/store/apps/details?id=me.proxer.app) | [Download](https://proxer.me/apps/info/3)      | [Download](https://github.com/proxer/ProxerAndroid/releases/latest) |
 
-### How to use it?
-
-Build the project and install it on your device or download the [latest release](https://github.com/proxer/ProxerAndroid/releases) and install it on your device.
-
 #### Building yourself
 
-Assuming that you know how to use [Git](https://git-scm.com/), have the [Android SDK](https://developer.android.com/sdk/index.html) and the [Java SDK](http://www.oracle.com/technetwork/java/javase/overview/index.html) installed, run the following commands:
+After having installed the following tools: 
+
+- [Git](https://git-scm.com/download)
+- [JDK](https://oracle.com/technetwork/java/javase/downloads/index.html)
+- [Android SDK](https://developer.android.com/studio/#downloads)
+
+You can run these commands:
 
 - `git clone https://github.com/proxer/ProxerAndroid`
 - `cd ProxerAndroid`
 
-This app needs an API-key to work. You can request one from the admins at Proxer. You then need to create a `secrets.properties` file in the root of the project with the following contents:
+This app needs an API-key to work. You can request one from the administrators at Proxer.
+You then need to create a `secrets.properties` file in the root of the project with the following contents:
 
 ```
 PROXER_API_KEY = YourApiKey
 ```
 
-This app offers two variants to build: `debug` and `release`.<br>
-It is strongly recommended to use the `release` variant as it is faster and does not log data.
+This app offers three variants to build: `debug`, `release` and `logRelease`.<br>
+It is strongly recommended to use the `release` variant as it is faster and does not sensitive log data.
 
-Before building, [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key) for signing the app if you have none yet.<br>
+Before building, [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key)
+for signing the app if you have none yet.<br>
 Add these fields to your `secrets.properties` file:
 
 ```
@@ -74,20 +78,20 @@ gradlew.bat assembleDebug
 
 ### Screenshots
 
-| News                          | Anime List                          | Manga Reader                          |
-|-------------------------------|-------------------------------------|---------------------------------------|
+| News                         | Anime List                         | Manga Reader                         |
+|------------------------------|------------------------------------|--------------------------------------|
 | ![](art/screenshot/news.png) | ![](art/screenshot/anime-list.png) | ![](art/screenshot/manga-reader.png) |
 
-| Media Detail                          | Instant Chat                             | Public Chat                          |
-|---------------------------------------|------------------------------------------|--------------------------------------|
+| Media Detail                         | Instant Chat                            | Public Chat                         |
+|--------------------------------------|-----------------------------------------|-------------------------------------|
 | ![](art/screenshot/media-detail.png) | ![](art/screenshot/conference-list.png) | ![](art/screenshot/public-chat.png) |
 
-| Anime Stream List                      | Anime Player                        |
-|----------------------------------------|-------------------------------------|
+| Anime Stream List                     | Anime Player                       |
+|---------------------------------------|------------------------------------|
 | ![](art/screenshot/anime-streams.png) | ![](art/screenshot/anime-play.png) |
 
-| Profile Overview                 | Profile Top Ten                     | Profile Media List                |
-|----------------------------------|-------------------------------------|-----------------------------------|
+| Profile Overview                | Profile Top Ten                    | Profile Media List               |
+|---------------------------------|------------------------------------|----------------------------------|
 | ![](art/screenshot/profile.png) | ![](art/screenshot/ucp-topten.png) | ![](art/screenshot/ucp-list.png) |
 
 ### Contributions and contributors
