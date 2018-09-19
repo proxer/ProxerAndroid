@@ -61,7 +61,7 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-alpha11'
+    materialDialogsVersion = '2.0.0-alpha09'
     flexboxVersion = '1.1.0-beta1'
     emojiIosVersion = '2a238ccc16'
     exomediaVersion = '4.2.3'
