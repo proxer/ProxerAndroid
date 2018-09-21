@@ -46,9 +46,9 @@ class AnimeViewModel(
             .doOnSuccess {
                 if (it.isAgeRestricted) {
                     if (!storageHelper.isLoggedIn) {
-                        throw AgeConfirmationRequiredException()
-                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
                         throw NotLoggedInException()
+                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
+                        throw AgeConfirmationRequiredException()
                     }
                 }
             }
