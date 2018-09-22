@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding2.view.clicks
-import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -76,11 +75,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         internal val time: TextView by bindView(R.id.time)
         internal val previewTextContainer: ViewGroup by bindView(R.id.previewTextContainer)
         internal val previewText: TextView by bindView(R.id.previewText)
-        internal val newMessages: MaterialBadgeTextView by bindView(R.id.newMessages)
-
-        init {
-            newMessages.setBackgroundColor(ContextCompat.getColor(newMessages.context, R.color.colorAccent))
-        }
+        internal val newMessages: Chip by bindView(R.id.newMessages)
 
         fun bind(item: ConferenceWithMessage) {
             itemView.clicks()
@@ -178,8 +173,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                 newMessages.isGone = true
             } else {
                 newMessages.isVisible = true
-
-                newMessages.setBadgeCount(item.conference.unreadMessageAmount)
+                newMessages.text = item.conference.unreadMessageAmount.toString()
             }
         }
 

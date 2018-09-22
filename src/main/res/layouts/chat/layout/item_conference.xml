@@ -84,15 +84,15 @@
                     android:id="@+id/previewText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="4dp"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     tools:text="A message" />
             </FrameLayout>
 
-            <com.matrixxun.starry.badgetextview.MaterialBadgeTextView
+            <com.google.android.material.chip.Chip
                 android:id="@+id/newMessages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,6 +105,10 @@
                 android:layout_marginBottom="8dp"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                app:chipBackgroundColor="@color/colorAccent"
+                app:chipEndPadding="2dp"
+                app:chipMinHeight="24dp"
+                app:chipStartPadding="0dp"
                 tools:text="2" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

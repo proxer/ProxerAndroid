@@ -1,6 +1,5 @@
 package me.proxer.app.media.info
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -19,9 +17,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
-import com.matrixxun.starry.badgetextview.MaterialBadgeTextView
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
@@ -445,20 +443,17 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             if (layout.childCount > 0) layout.removeAllViews()
 
             for ((index, mappedItem) in items.asSequence().map(mapFunction).withIndex().toList()) {
-                val badge = MaterialBadgeTextView(layout.context)
+                val chip = LayoutInflater.from(layout.context).inflate(R.layout.item_chip, layout, false) as Chip
 
-                badge.text = mappedItem
-                badge.setTypeface(null, Typeface.BOLD)
-                badge.setTextColor(ContextCompat.getColorStateList(layout.context, android.R.color.white))
-                badge.setBackgroundColor(ContextCompat.getColor(badge.context, R.color.colorAccent))
+                chip.text = mappedItem
 
                 if (onClick != null) {
-                    badge.clicks()
+                    chip.clicks()
                         .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                         .subscribe { _ -> onClick.invoke(items[index]) }
                 }
 
-                if (layout is MaxLineFlexboxLayout && !layout.canAddView(badge)) {
+                if (layout is MaxLineFlexboxLayout && !layout.canAddView(chip)) {
                     layout.showAllEvents
                         .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                         .subscribe { _ -> bindChips(layout, items, mapFunction, onClick) }
@@ -467,7 +462,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
                     break
                 } else {
-                    layout.addView(badge)
+                    layout.addView(chip)
                 }
             }
         }

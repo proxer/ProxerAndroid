@@ -44,9 +44,8 @@ class AboutFragment : MaterialAboutFragment() {
         private val libraries = arrayOf(
             "android_job", "android_textview_linkbuilder", "customtabshelper",
             "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
-            "materialbadgetextview", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi",
-            "okhttp", "retrofit", "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview",
-            "tablayouthelper"
+            "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp", "retrofit",
+            "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview", "tablayouthelper"
         )
 
         private val excludedLibraries = arrayOf("fastadapter", "materialize")
