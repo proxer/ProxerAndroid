@@ -45,7 +45,7 @@ class MainActivity : DrawerActivity() {
 
     override val contentView = R.layout.activity_main
 
-    override val isRootActivity get() = !intent.hasExtra(SECTION_EXTRA) && intent.action != Intent.ACTION_VIEW
+    override val isRootActivity get() = intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)
     override val isMainActivity = true
 
     val tabs: TabLayout by bindView(R.id.tabs)
@@ -64,7 +64,7 @@ class MainActivity : DrawerActivity() {
             supportStartPostponedEnterTransition()
         }
 
-        if (intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)) {
+        if (intent.action == Intent.ACTION_MAIN && savedInstanceState == null) {
             storageHelper.incrementLaunches()
 
             storageHelper.launches.let { launches ->
@@ -167,8 +167,7 @@ class MainActivity : DrawerActivity() {
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            val shouldIntroduce = storageHelper.launches <= 0 &&
-                intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)
+            val shouldIntroduce = storageHelper.launches <= 0 && intent.action == Intent.ACTION_MAIN
 
             if (shouldIntroduce) {
                 IntroductionWrapper.introduce(this)
