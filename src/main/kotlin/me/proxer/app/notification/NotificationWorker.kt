@@ -7,6 +7,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
@@ -24,7 +25,10 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-class NotificationWorker : Worker(), KoinComponent {
+class NotificationWorker(
+    context: Context,
+    workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
 
     companion object : KoinComponent {
         private const val NAME = "NotificationWorker"

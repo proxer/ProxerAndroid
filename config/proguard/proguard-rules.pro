@@ -72,6 +72,11 @@
 # Okio
 -dontwarn okio.**
 
+# Workaround missing rule in WorkManager library: https://issuetracker.google.com/issues/116296569
+-keepclassmembers class * extends androidx.work.Worker {
+        public <init>(android.content.Context,androidx.work.WorkerParameters);
+}
+
 # ProxerLib
 -keep enum me.proxer.library.** {
     **[] $VALUES;

@@ -9,6 +9,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.State
 import androidx.work.WorkManager
 import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
@@ -37,7 +38,10 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-class MessengerWorker : Worker(), KoinComponent {
+class MessengerWorker(
+    context: Context,
+    workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
 
     companion object : KoinComponent {
         private const val NAME = "MessengerWorker"
