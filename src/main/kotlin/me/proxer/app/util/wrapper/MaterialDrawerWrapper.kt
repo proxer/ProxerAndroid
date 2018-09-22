@@ -222,6 +222,7 @@ class MaterialDrawerWrapper(
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?) = AccountHeaderBuilder()
         .withActivity(context)
         .withCompactStyle(true)
+        .withTextColorRes(R.color.textColorPrimaryDark)
         .withHeaderBackground(R.color.colorPrimary)
         .withSavedInstance(savedInstanceState)
         .withProfiles(accountItems)

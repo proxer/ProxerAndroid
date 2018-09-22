@@ -32,6 +32,9 @@
     <color name="material_drawer_selected" tools:ignore="UnusedResources,MissingDefaultResource">
         #FF424242
     </color>
+    <color name="material_drawer_selected_legacy" tools:ignore="UnusedResources,MissingDefaultResource">
+        #FF424242
+    </color>
     <color name="material_drawer_divider" tools:ignore="UnusedResources,MissingDefaultResource">
         @color/divider
     </color>
