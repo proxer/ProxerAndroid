@@ -592,7 +592,7 @@
     <string name="preference_auto_bookmark_off">
         Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt
     </string>
-    <string name="preference_external_cache_title">Speicherort für Bilder</string>
+    <string name="preference_external_cache_title">Bilder extern speichern</string>
     <string name="preference_external_cache_summary_off">
         Bilder werden auf dem internen Speicher zwischengespeichert
     </string>
