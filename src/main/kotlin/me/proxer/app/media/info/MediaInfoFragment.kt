@@ -318,7 +318,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 ProxerUtils.getSafeApiEnumName(it)
             },
             onClick = {
-                showPage(ProxerUrls.wikiWeb(ProxerUtils.getSafeApiEnumName(it)))
+                showPage(ProxerUrls.wikiWeb(ProxerUtils.getSafeApiEnumName(it).replace(' ', '_')))
             }
         )
     }
