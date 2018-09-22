@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 5
-    appVersionPatch = 1
+    appVersionPatch = 2
 
     minSdkVersion = 16
     targetSdkVersion = 28
@@ -26,14 +26,14 @@ ext {
     ktlintVersion = '0.28.0'
 
     // Frameworks and compatibility libraries
-    koinVersion = '1.0.0'
+    koinVersion = '1.0.1-alpha-1'
     multidexVersion = '2.0.0'
-    appcompatVersion = "1.0.0-rc02"
-    browserVersion = "1.0.0-rc02"
-    lifecycleVersion = "2.0.0-rc01"
+    appcompatVersion = "1.0.0"
+    browserVersion = "1.0.0"
+    lifecycleVersion = "2.0.0"
     roomVersion = "2.0.0-rc01"
     workVersion = '1.0.0-alpha08'
-    ktxVersion = "1.0.0-rc02"
+    ktxVersion = "1.0.0"
 
     // RxJava
     rxJavaVersion = '2.2.2'
@@ -44,11 +44,11 @@ ext {
     autoDisposeVersion = '0.8.0'
 
     // UI components
-    recyclerviewVersion = "1.0.0-rc02"
-    cardviewVersion = "1.0.0-rc02"
-    gridlayoutVersion = "1.0.0-rc02"
-    materialDesignVersion = "1.0.0-rc02"
-    preferenceVersion = "1.0.0-rc02"
+    recyclerviewVersion = "1.0.0"
+    cardviewVersion = "1.0.0"
+    gridlayoutVersion = "1.0.0"
+    materialDesignVersion = "1.0.0"
+    preferenceVersion = "1.0.0"
     supportPreferenceVersion = '2.3.2'
     iconicsVersion = '3.1.0-rc02'
     communityMaterialTypefaceVersion = '2.7.94.1'
@@ -61,7 +61,7 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-alpha09'
+    materialDialogsVersion = '2.0.0-alpha12'
     flexboxVersion = '1.1.0-beta1'
     emojiIosVersion = '2a238ccc16'
     exomediaVersion = '4.2.3'
