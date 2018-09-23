@@ -152,6 +152,11 @@ object ErrorUtils : KoinComponent {
 
         return when (innermostError) {
             is ProxerException -> getMessageForProxerException(innermostError)
+            is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
+                404 -> R.string.error_video_deleted
+                in 400 until 600 -> R.string.error_video_unknown
+                else -> R.string.error_unknown
+            }
             is SocketTimeoutException -> R.string.error_timeout
             is SSLPeerUnverifiedException -> R.string.error_ssl
             is IOException -> R.string.error_io
@@ -160,11 +165,6 @@ object ErrorUtils : KoinComponent {
             is StreamResolutionException -> R.string.error_stream_resolution
             is MangaNotAvailableException -> R.string.error_manga_not_available
             is MangaLinkException -> R.string.error_manga_link
-            is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
-                404 -> R.string.error_video_deleted
-                in 400 until 600 -> R.string.error_video_unknown
-                else -> R.string.error_unknown
-            }
             else -> R.string.error_unknown
         }
     }

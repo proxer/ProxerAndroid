@@ -9,30 +9,29 @@
     tools:context=".anime.StreamActivity"
     tools:ignore="Overdraw">
 
-    <RelativeLayout
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        app:controller_layout_id="@layout/layout_exoplayer_controls"
+        app:fastforward_increment="30000"
+        app:rewind_increment="30000"
+        app:show_buffering="true" />
 
-        <com.devbrackets.android.exomedia.ui.widget.VideoView
-            android:id="@+id/player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:useDefaultControls="true"
-            app:useTextureViewBacking="true" />
+    <FrameLayout
+        android:id="@+id/toolbarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:clipToPadding="false"
+        android:fitsSystemWindows="true">
 
-        <FrameLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:clipToPadding="false"
-            android:fitsSystemWindows="true">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/exomedia_default_controls_text_background"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-        </FrameLayout>
-    </RelativeLayout>
+            android:background="@color/half_transparent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
