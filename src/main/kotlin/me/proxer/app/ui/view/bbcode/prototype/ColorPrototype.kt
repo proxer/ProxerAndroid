@@ -21,6 +21,7 @@ object ColorPrototype : TextMutatorPrototype {
     override val startRegex = Regex(" *color *= *\"?.*?\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *color *", REGEX_OPTIONS)
 
+    @Suppress("UnnecessaryLet")
     override fun construct(code: String, parent: BBTree): BBTree {
         val value = BBUtils.cutAttribute(code, attributeRegex) ?: ""
 

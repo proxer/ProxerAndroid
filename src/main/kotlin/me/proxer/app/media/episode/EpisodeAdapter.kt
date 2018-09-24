@@ -118,7 +118,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
             if (languages.childCount != item.languageHosterList.size) {
                 languages.removeAllViews()
 
-                for (i in 0 until item.languageHosterList.size) {
+                repeat(item.languageHosterList.size) {
                     View.inflate(languages.context, R.layout.layout_episode_language, languages)
                 }
             }
@@ -155,7 +155,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                 if (hostersView.childCount != hosterImages.size) {
                     hostersView.removeAllViews()
 
-                    for (i in 0 until hosterImages.size) {
+                    repeat(hosterImages.size) {
                         val inflater = LayoutInflater.from(hostersView.context)
                         val imageView = inflater.inflate(R.layout.layout_image, hostersView, false).apply {
                             layoutParams.width = dip(28)

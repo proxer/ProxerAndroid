@@ -53,5 +53,3 @@ style:
     active: false
   OptionalUnit:
     active: false
-  UnusedPrivateMember:
-    active: false

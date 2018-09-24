@@ -95,7 +95,8 @@
         app:layout_constraintBottom_toTopOf="@+id/exo_ffwd"
         app:layout_constraintEnd_toStartOf="@id/exo_duration"
         app:layout_constraintStart_toEndOf="@+id/exo_position"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedIds" />
 
     <TextView
         android:id="@+id/exo_duration"
