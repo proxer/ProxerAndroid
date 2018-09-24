@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
@@ -98,7 +97,6 @@ class AnimeAdapter(
 
         internal val info: TextView by bindView(R.id.info)
         internal val play: Button by bindView(R.id.play)
-        internal val unsupported: TextView by bindView(R.id.unsupported)
 
         fun bind(item: AnimeStream) {
             val isLoginRequired = !item.isOfficial && !storageHelper.isLoggedIn
@@ -112,7 +110,7 @@ class AnimeAdapter(
             if (expandedItemId == item.id) {
                 uploadInfoContainer.isVisible = true
             } else {
-                uploadInfoContainer.isGone = true
+                uploadInfoContainer.isVisible = false
 
                 return
             }
@@ -168,7 +166,6 @@ class AnimeAdapter(
         private fun bindInfoAndPlay(item: AnimeStream, isLoginRequired: Boolean) {
             if (item.isSupported) {
                 play.isVisible = true
-                unsupported.isGone = true
 
                 if (isLoginRequired) {
                     play.setText(R.string.error_action_login)
@@ -200,12 +197,15 @@ class AnimeAdapter(
                                 generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
                             )
                         }
-                        else -> info.isGone = true
+                        else -> info.isVisible = false
                     }
                 }
             } else {
-                play.isGone = true
-                unsupported.isVisible = true
+                info.isVisible = true
+                info.setText(R.string.error_unsupported_hoster)
+                info.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+
+                play.isVisible = false
             }
         }
 
