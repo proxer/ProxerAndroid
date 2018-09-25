@@ -102,8 +102,15 @@ class ExpandableSelectionView @JvmOverloads constructor(
                 selection = mutableListOf()
 
                 handleSelection()
-                notifySelectionChangedListener()
+
+                selectionChangeSubject.onNext(selection)
             }
+
+        if (isSingleSelection) {
+            initSingleSelectionListeners()
+        } else {
+            initMultiSelectionListeners()
+        }
     }
 
     override fun onSaveInstanceState(): Parcelable = SavedState(super.onSaveInstanceState(), selection, isExtended)
@@ -132,51 +139,41 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         if (isExtended) {
             if (itemContainer.childCount <= 0) {
-                items.forEach { item ->
-                    itemContainer.addView(
-                        when (isSingleSelection) {
-                            true -> constructSingleSelectionView(item)
-                            false -> createMultiSelectionView(item)
-                        }
-                    )
+                items
+                    .map { if (isSingleSelection) createSingleSelectionView(it) else createMultiSelectionView(it) }
+                    .forEach { itemContainer.addView(it) }
+
+                if (ViewCompat.isAttachedToWindow(this)) {
+                    if (isSingleSelection) initSingleSelectionListeners() else initMultiSelectionListeners()
                 }
             }
         } else {
             itemContainer.removeAllViews()
         }
 
-        if (isSingleSelection && children.none { it is RadioButton && it.isChecked }) {
-            (children.firstOrNull() as? RadioButton)?.let {
-                it.isChecked = true
-                it.jumpDrawablesToCurrentState()
-            }
+        if (isSingleSelection) {
+            itemContainer.children
+                .filterIsInstance(RadioButton::class.java)
+                .filter { it.isChecked.not() }
+                .firstOrNull()
+                ?.apply {
+                    isChecked = true
+                    jumpDrawablesToCurrentState()
+                }
         }
     }
 
     private fun handleSelection() {
-        children.forEach {
-            if (it is CheckBox) it.isChecked = selection.contains(it.text.toString())
-        }
+        itemContainer.children
+            .filterIsInstance(CheckBox::class.java)
+            .forEach { it.isChecked = selection.contains(it.text.toString()) }
     }
 
-    private fun constructSingleSelectionView(item: String): View {
+    private fun createSingleSelectionView(item: String): View {
         val radioButton = AppCompatRadioButton(context)
 
         radioButton.text = item
         radioButton.isChecked = selection.contains(item)
-
-        radioButton.clicks()
-            .autoDisposable(ViewScopeProvider.from(this))
-            .subscribeAndLogErrors {
-                selection.clear()
-                selection.add(item)
-
-                children.forEach { view ->
-                    if (view is RadioButton && view != radioButton) view.isChecked = false
-                }
-
-                notifySelectionChangedListener()
-            }
 
         return radioButton
     }
@@ -187,21 +184,38 @@ class ExpandableSelectionView @JvmOverloads constructor(
         checkBox.text = item
         checkBox.isChecked = selection.contains(item)
 
-        checkBox.clicks()
-            .autoDisposable(ViewScopeProvider.from(this))
-            .subscribe {
-                if (!selection.remove(item)) {
-                    selection.add(item)
-                }
-
-                notifySelectionChangedListener()
-            }
-
         return checkBox
     }
 
-    private fun notifySelectionChangedListener() {
-        selectionChangeSubject.onNext(selection)
+    private fun initSingleSelectionListeners() {
+        items.zip(itemContainer.children.toList()).forEach { (item, view) ->
+            view.clicks()
+                .autoDisposable(ViewScopeProvider.from(this))
+                .subscribeAndLogErrors { _ ->
+                    selection.clear()
+                    selection.add(item)
+
+                    itemContainer.children
+                        .filterIsInstance(RadioButton::class.java)
+                        .forEach { if (it != view) it.isChecked = false }
+
+                    selectionChangeSubject.onNext(selection)
+                }
+        }
+    }
+
+    private fun initMultiSelectionListeners() {
+        items.zip(itemContainer.children.toList()).forEach { (item, view) ->
+            view.clicks()
+                .autoDisposable(ViewScopeProvider.from(this))
+                .subscribeAndLogErrors {
+                    if (!selection.remove(item)) {
+                        selection.add(item)
+                    }
+
+                    selectionChangeSubject.onNext(selection)
+                }
+        }
     }
 
     internal class SavedState : BaseSavedState {
