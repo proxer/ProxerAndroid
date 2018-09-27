@@ -18,7 +18,7 @@
         app:controller_layout_id="@layout/layout_exoplayer_controls"
         app:fastforward_increment="30000"
         app:rewind_increment="30000"
-        app:show_buffering="true" />
+        app:show_buffering="always" />
 
     <FrameLayout
         android:layout_width="match_parent"
