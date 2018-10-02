@@ -17,6 +17,11 @@
     public static int wtf(...);
 }
 
+# Support preference
+-keepclassmembernames class androidx.preference.PreferenceManager {
+    void setNoCommit(boolean);
+}
+
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
@@ -74,11 +79,10 @@
 
 # Workaround missing rule in WorkManager library: https://issuetracker.google.com/issues/116296569
 -keepclassmembers class * extends androidx.work.Worker {
-        public <init>(android.content.Context,androidx.work.WorkerParameters);
+    public <init>(android.content.Context,androidx.work.WorkerParameters);
 }
 
 # ProxerLib
--keep enum me.proxer.library.** {
-    **[] $VALUES;
-    public *;
+-keepclassmembers enum me.proxer.library.** {
+    <fields>;
 }
