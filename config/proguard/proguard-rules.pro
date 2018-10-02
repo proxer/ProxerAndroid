@@ -18,7 +18,7 @@
 }
 
 # Support preference
--keepclassmembernames class androidx.preference.PreferenceManager {
+-keepclassmembers class androidx.preference.PreferenceManager {
     void setNoCommit(boolean);
 }
 
