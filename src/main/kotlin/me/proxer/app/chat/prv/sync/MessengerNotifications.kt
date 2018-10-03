@@ -71,11 +71,15 @@ object MessengerNotifications : KoinComponent {
     fun showError(context: Context, error: Throwable) {
         val errorAction = ErrorUtils.handle(error)
 
+        val intent = errorAction.toIntent()?.let {
+            PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
         NotificationUtils.showErrorNotification(
             context, ID, NotificationUtils.CHAT_CHANNEL,
             context.getString(R.string.notification_chat_error_title),
             context.getString(errorAction.message),
-            PendingIntent.getActivity(context, 0, errorAction.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT)
+            intent
         )
     }
 
