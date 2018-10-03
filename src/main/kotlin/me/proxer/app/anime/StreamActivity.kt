@@ -37,8 +37,8 @@ import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
-import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
+import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
@@ -62,7 +62,7 @@ class StreamActivity : BaseActivity() {
         get() = intent.getStringExtra(StreamResolutionResult.REFERER_EXTRA)
 
     private val player by unsafeLazy {
-        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory(DefaultBandwidthMeter())
+        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
         val player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
 
@@ -180,7 +180,7 @@ class StreamActivity : BaseActivity() {
             toggleFullscreen(it == View.GONE)
         }
 
-        player.addListener(object : Player.DefaultEventListener() {
+        player.addListener(object : Player.EventListener {
             override fun onPlayerError(error: ExoPlaybackException) {
                 if (player.currentPosition > 0) {
                     lastPosition = player.currentPosition
