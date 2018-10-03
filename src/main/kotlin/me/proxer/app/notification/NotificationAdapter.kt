@@ -38,6 +38,12 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
 
+    override fun getItemId(position: Int): Long {
+        var result = data[position].id.hashCode()
+        result = 31 * result + data[position].date.hashCode()
+        return result.toLong()
+    }
+
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val text: TextView by bindView(R.id.text)
