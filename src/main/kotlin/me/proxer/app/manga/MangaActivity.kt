@@ -211,8 +211,8 @@ class MangaActivity : BaseActivity() {
     }
 
     private fun updateTitle() {
-        title = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
-        supportActionBar?.subtitle = name
+        title = name
+        supportActionBar?.subtitle = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
     }
 
     private fun defaultUiFlags(): Int {

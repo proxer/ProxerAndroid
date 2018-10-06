@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@android:color/black"
     android:keepScreenOn="true"
     tools:context=".anime.StreamActivity"
@@ -20,18 +21,11 @@
         app:rewind_increment="30000"
         app:show_buffering="always" />
 
-    <FrameLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:clipToPadding="false"
-        android:fitsSystemWindows="true">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/half_transparent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    </FrameLayout>
+        android:background="@color/half_transparent"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

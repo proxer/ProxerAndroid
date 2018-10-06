@@ -143,7 +143,7 @@ class AnimeActivity : DrawerActivity() {
     }
 
     private fun updateTitle() {
-        title = Category.ANIME.toEpisodeAppString(this, episode)
-        supportActionBar?.subtitle = name
+        title = name
+        supportActionBar?.subtitle = Category.ANIME.toEpisodeAppString(this, episode)
     }
 }

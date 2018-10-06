@@ -11,9 +11,10 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
+import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isGone
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
@@ -37,12 +38,14 @@ import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotterknife.bindView
-import me.proxer.app.R
 import me.proxer.app.MainApplication.Companion.USER_AGENT
+import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.library.enums.Category
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 
@@ -51,7 +54,10 @@ import org.koin.android.ext.android.inject
  */
 class StreamActivity : BaseActivity() {
 
-    private companion object {
+    companion object {
+        const val NAME_EXTRA = "name"
+        const val EPISODE_EXTRA = "epsiode"
+
         private const val LAST_POSITION_EXTRA = "last_position"
     }
 
@@ -60,6 +66,12 @@ class StreamActivity : BaseActivity() {
 
     private val referer: String?
         get() = intent.getStringExtra(StreamResolutionResult.REFERER_EXTRA)
+
+    private val name: String?
+        get() = intent.getStringExtra(NAME_EXTRA)
+
+    private val episode: Int?
+        get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
 
     private val player by unsafeLazy {
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
@@ -89,6 +101,7 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    private val root: ViewGroup by bindView(R.id.root)
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val playerView: PlayerView by bindView(R.id.player)
 
@@ -152,10 +165,19 @@ class StreamActivity : BaseActivity() {
     }
 
     private fun setupUi() {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+            val newInsets = ViewCompat.onApplyWindowInsets(root, insets)
+
+            if (newInsets.isConsumed) {
+                return@setOnApplyWindowInsetsListener newInsets
+            }
+
+            ViewCompat.dispatchApplyWindowInsets(toolbar, newInsets)
+
+            if (newInsets.isConsumed) newInsets.consumeSystemWindowInsets() else newInsets
+        }
+
+        toggleFullscreen(true)
 
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
@@ -165,7 +187,7 @@ class StreamActivity : BaseActivity() {
                     toolbar.isVisible = true
                 } else {
                     playerView.hideController()
-                    toolbar.isGone = true
+                    toolbar.isVisible = false
                 }
             }
 
@@ -226,8 +248,9 @@ class StreamActivity : BaseActivity() {
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
 
+        title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = null
+        supportActionBar?.subtitle = Category.ANIME.toEpisodeAppString(this, episode)
     }
 
     private fun toggleFullscreen(fullscreen: Boolean) {
