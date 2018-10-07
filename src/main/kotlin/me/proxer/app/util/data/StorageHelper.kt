@@ -7,6 +7,7 @@ import com.orhanobut.hawk.Converter
 import com.orhanobut.hawk.DataInfo
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
+import me.proxer.app.util.extension.permitDisk
 import org.koin.standalone.KoinComponent
 import timber.log.Timber
 import java.util.Date
@@ -34,18 +35,22 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
     }
 
     init {
-        initHawk(context, jsonParser)
+        permitDisk {
+            initHawk(context, jsonParser)
 
-        migrateUser(context, jsonParser)
-        migratePreferences(context)
+            migrateUser(context, jsonParser)
+            migratePreferences(context)
+        }
     }
 
     var user: LocalUser?
         get() = Hawk.get(USER)
         set(value) {
-            when (value) {
-                null -> Hawk.delete(USER)
-                else -> Hawk.put(USER, value)
+            permitDisk {
+                when (value) {
+                    null -> Hawk.delete(USER)
+                    else -> Hawk.put(USER, value)
+                }
             }
         }
 
@@ -55,25 +60,25 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
     var isTwoFactorAuthenticationEnabled: Boolean
         get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)
         set(value) {
-            Hawk.put(TWO_FACTOR_AUTHENTICATION, value)
+            permitDisk { Hawk.put(TWO_FACTOR_AUTHENTICATION, value) }
         }
 
     var lastNewsDate: Date
         get() = Date(Hawk.get(LAST_NEWS_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_NEWS_DATE, value.time)
+            permitDisk { Hawk.put(LAST_NEWS_DATE, value.time) }
         }
 
     var lastNotificationsDate: Date
         get() = Date(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_NOTIFICATIONS_DATE, value.time)
+            permitDisk { Hawk.put(LAST_NOTIFICATIONS_DATE, value.time) }
         }
 
     var lastChatMessageDate: Date
         get() = Date(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_CHAT_MESSAGE_DATE, value.time)
+            permitDisk { Hawk.put(LAST_CHAT_MESSAGE_DATE, value.time) }
         }
 
     val chatInterval: Long
@@ -82,19 +87,19 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
     var areConferencesSynchronized: Boolean
         get() = Hawk.get(CONFERENCES_SYNCHRONIZED, false)
         set(value) {
-            Hawk.put(CONFERENCES_SYNCHRONIZED, value)
+            permitDisk { Hawk.put(CONFERENCES_SYNCHRONIZED, value) }
         }
 
     var lastTagUpdateDate: Date
         get() = Date(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_TAG_UPDATE_DATE, value.time)
+            permitDisk { Hawk.put(LAST_TAG_UPDATE_DATE, value.time) }
         }
 
     var launches: Int
         get() = Hawk.get(LAUNCHES, 0)
         private set(value) {
-            Hawk.put(LAUNCHES, value)
+            permitDisk { Hawk.put(LAUNCHES, value) }
         }
 
     var hasRated: Boolean
@@ -103,23 +108,27 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
             Hawk.put(RATED, value)
         }
 
-    fun incrementChatInterval() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
-        if (it < MAX_CHAT_INTERVAL) {
-            Hawk.put(CHAT_INTERVAL, (it * 1.5f).toLong())
+    fun incrementChatInterval() = permitDisk {
+        Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
+            if (it < MAX_CHAT_INTERVAL) {
+                Hawk.put(CHAT_INTERVAL, (it * 1.5f).toLong())
+            }
         }
     }
 
-    fun incrementLaunches() = Hawk.get(LAUNCHES, 0).let {
-        Hawk.put(LAUNCHES, it + 1)
+    fun incrementLaunches() = permitDisk {
+        Hawk.get(LAUNCHES, 0).let {
+            Hawk.put(LAUNCHES, it + 1)
+        }
     }
 
-    fun resetChatInterval() = Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+    fun resetChatInterval() = permitDisk { Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL) }
 
-    fun putMessageDraft(id: String, draft: String) = Hawk.put("$MESSAGE_DRAFT_PREFIX$id", draft)
+    fun putMessageDraft(id: String, draft: String) = permitDisk { Hawk.put("$MESSAGE_DRAFT_PREFIX$id", draft) }
 
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
-    fun deleteMessageDraft(id: String) = Hawk.delete("$MESSAGE_DRAFT_PREFIX$id")
+    fun deleteMessageDraft(id: String) = permitDisk { Hawk.delete("$MESSAGE_DRAFT_PREFIX$id") }
 
     private fun initHawk(context: Context, jsonParser: HawkMoshiParser) {
         if (!Hawk.isBuilt()) {

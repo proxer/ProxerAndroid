@@ -173,17 +173,14 @@ class MainApplication : Application() {
         if (BuildConfig.DEBUG) {
             val threadPolicy = StrictModeCompat.ThreadPolicy.Builder()
                 .detectAll()
+                .permitDiskReads()
+                .penaltyDeath()
                 .penaltyLog()
                 .build()
 
             val vmPolicy = StrictModeCompat.VmPolicy.Builder()
-                .detectContentUriWithoutPermission()
-                .detectLeakedRegistrationObjects()
-                .detectLeakedClosableObjects()
-                .detectLeakedSqlLiteObjects()
-                .detectCleartextNetwork()
-                .detectFileUriExposure()
-                .detectActivityLeaks()
+                .detectAll()
+                .penaltyDeath()
                 .penaltyLog()
                 .build()
 

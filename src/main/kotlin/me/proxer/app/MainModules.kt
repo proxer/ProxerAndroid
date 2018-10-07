@@ -49,6 +49,7 @@ import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
+import me.proxer.app.util.TaggedSocketFactory
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
@@ -102,6 +103,7 @@ private val applicationModules = module {
             .client(
                 OkHttpClient.Builder()
                     .retryOnConnectionFailure(false)
+                    .socketFactory(TaggedSocketFactory())
                     .connectTimeout(5, TimeUnit.SECONDS)
                     .writeTimeout(10, TimeUnit.SECONDS)
                     .readTimeout(10, TimeUnit.SECONDS)
