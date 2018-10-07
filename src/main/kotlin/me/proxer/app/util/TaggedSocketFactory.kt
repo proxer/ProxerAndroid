@@ -1,6 +1,6 @@
 package me.proxer.app.util
 
-import androidx.core.net.TrafficStatsCompat
+import android.net.TrafficStats
 import java.net.InetAddress
 import java.net.Socket
 import javax.net.SocketFactory
@@ -14,12 +14,12 @@ class TaggedSocketFactory : SocketFactory() {
 
     override fun createSocket(): Socket {
         return delegate.createSocket()
-            .also { _ -> TrafficStatsCompat.setThreadStatsTag(1) }
+            .also { _ -> TrafficStats.setThreadStatsTag(1) }
     }
 
     override fun createSocket(host: String?, port: Int): Socket {
         return delegate.createSocket(host, port)
-            .also { _ -> TrafficStatsCompat.setThreadStatsTag(1) }
+            .also { _ -> TrafficStats.setThreadStatsTag(1) }
     }
 
     override fun createSocket(
@@ -29,12 +29,12 @@ class TaggedSocketFactory : SocketFactory() {
         localPort: Int
     ): Socket {
         return delegate.createSocket(host, port, localHost, localPort)
-            .also { _ -> TrafficStatsCompat.setThreadStatsTag(1) }
+            .also { _ -> TrafficStats.setThreadStatsTag(1) }
     }
 
     override fun createSocket(host: InetAddress?, port: Int): Socket {
         return delegate.createSocket(host, port)
-            .also { _ -> TrafficStatsCompat.setThreadStatsTag(1) }
+            .also { _ -> TrafficStats.setThreadStatsTag(1) }
     }
 
     override fun createSocket(
@@ -44,6 +44,6 @@ class TaggedSocketFactory : SocketFactory() {
         localPort: Int
     ): Socket {
         return delegate.createSocket(address, port, localAddress, localPort)
-            .also { _ -> TrafficStatsCompat.setThreadStatsTag(1) }
+            .also { _ -> TrafficStats.setThreadStatsTag(1) }
     }
 }
