@@ -439,7 +439,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         onClick: ((T) -> Unit)? = null
     ) {
         layout.post {
-            if (layout.width <= 0 || activity == null) return@post
+            if (layout.width <= 0 || view == null) return@post
             if (layout.childCount > 0) layout.removeAllViews()
 
             for ((index, mappedItem) in items.asSequence().map(mapFunction).withIndex().toList()) {
