@@ -32,6 +32,7 @@ import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
+import timber.log.Timber
 import java.util.LinkedHashSet
 import java.util.concurrent.TimeUnit
 
@@ -172,6 +173,8 @@ class MessengerWorker(
     }
 
     private fun handleSynchronizationError(error: Throwable): SynchronizationResult {
+        Timber.e(error)
+
         if (!isStopped) {
             when (error) {
                 is ChatException -> bus.post(MessengerErrorEvent(error))
@@ -191,6 +194,8 @@ class MessengerWorker(
     }
 
     private fun handleLoadMoreMessagesError(error: Throwable): SynchronizationResult {
+        Timber.e(error)
+
         if (!isStopped) {
             when (error) {
                 is ChatException -> bus.post(MessengerErrorEvent(error))
@@ -287,6 +292,8 @@ class MessengerWorker(
                     .execute()
             } catch (error: ProxerException) {
                 if (error.cause?.stackTrace?.find { it.methodName.contains("read") } != null) {
+                    Timber.w("Error while sending message. Removing it to avoid sending duplicate.")
+
                     // The message was sent, but we did not receive a proper api answer due to slow network, return
                     // non-null to handle it like the non-empty result case.
                     "error"

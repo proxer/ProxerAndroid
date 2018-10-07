@@ -20,6 +20,7 @@ import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -96,6 +97,8 @@ class NotificationWorker(
 
         Result.SUCCESS
     } catch (error: Throwable) {
+        Timber.e(error)
+
         if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
             AccountNotifications.showError(applicationContext, error)
 
