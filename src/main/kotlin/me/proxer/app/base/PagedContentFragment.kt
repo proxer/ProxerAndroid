@@ -116,9 +116,11 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
             recyclerView.postDelayed(50) {
-                when {
-                    wasEmpty -> scrollToTop()
-                    else -> recyclerView.smoothScrollToPosition(0)
+                if (view != null) {
+                    when {
+                        wasEmpty -> scrollToTop()
+                        else -> recyclerView.smoothScrollToPosition(0)
+                    }
                 }
             }
         }

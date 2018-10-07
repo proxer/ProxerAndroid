@@ -192,9 +192,11 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
             }
         } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
             recyclerView.postDelayed(50) {
-                when {
-                    wasEmpty -> recyclerView.safeLayoutManager.scrollToTop()
-                    else -> recyclerView.smoothScrollToPosition(0)
+                if (view != null) {
+                    when {
+                        wasEmpty -> recyclerView.safeLayoutManager.scrollToTop()
+                        else -> recyclerView.smoothScrollToPosition(0)
+                    }
                 }
             }
         }

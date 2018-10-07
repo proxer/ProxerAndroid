@@ -175,7 +175,7 @@ class CreateConferenceFragment : BaseFragment() {
                 adapter.footer = addParticipantInputFooter
 
                 addParticipantFooter.post {
-                    addParticipantInputFooter.requestFocus()
+                    if (view != null) addParticipantInputFooter.requestFocus()
                 }
             }
 
