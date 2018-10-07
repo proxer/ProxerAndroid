@@ -5,92 +5,125 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.app.JobIntentService
 import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import io.reactivex.disposables.Disposable
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.intentFor
-import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
-import org.koin.android.ext.android.inject
+import me.proxer.library.api.ProxerCall
 import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.util.Locale
 
 /**
  * @author Ruben Gees
  */
-class ScheduleWidgetUpdateService : JobIntentService(), KoinComponent {
+class ScheduleWidgetUpdateWorker(
+    context: Context,
+    workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
 
     companion object {
-        private const val JOB_ID = 31253
+        private const val NAME = "ScheduleWidgetUpdateWorker"
 
         private val dayDateTimeFormatter = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
 
-        fun enqueueWork(context: Context, work: Intent) {
-            enqueueWork(context, ScheduleWidgetUpdateService::class.java, JOB_ID, work)
+        fun enqueueWork() {
+            val workRequest = OneTimeWorkRequestBuilder<ScheduleWidgetUpdateWorker>()
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+
+            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
     }
 
     private val api by inject<ProxerApi>()
 
+    private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
+
+    private val widgetIds by unsafeLazy {
+        appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, ScheduleWidgetProvider::class.java))
+    }
+
+    private val darkWidgetIds by unsafeLazy {
+        appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, ScheduleWidgetDarkProvider::class.java))
+    }
+
     private val workerThread = HandlerThread("ScheduleWidget-Worker").apply { start() }
     private val workerQueue = Handler(workerThread.looper)
-    private var disposable: Disposable? = null
 
-    override fun onHandleWork(intent: Intent) {
-        val componentName = ComponentName(applicationContext, ScheduleWidgetProvider::class.java)
-        val darkComponentName = ComponentName(applicationContext, ScheduleWidgetDarkProvider::class.java)
+    private var currentCall: ProxerCall<*>? = null
 
-        val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
-        val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
-        val darkWidgetIds = appWidgetManager.getAppWidgetIds(darkComponentName)
-
+    override fun doWork(): Result {
         widgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, false) }
         darkWidgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, true) }
 
-        disposable = api.media().calendar().buildSingle()
-            .map { entries ->
-                entries
+        return try {
+            val calendarEntries = if (!isStopped) {
+                api.media().calendar()
+                    .build()
+                    .also { currentCall = it }
+                    .safeExecute()
                     .asSequence()
                     .filter { it.date.convertToDateTime().dayOfMonth == LocalDate.now().dayOfMonth }
                     .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
                     .toList()
+            } else {
+                emptyList()
             }
-            .subscribeAndLogErrors({ calendarEntries ->
+
+            if (!isStopped) {
                 widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
                 darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
-            }, { error ->
+            }
+
+            Result.SUCCESS
+        } catch (error: Throwable) {
+            Timber.e(error)
+
+            if (!isStopped) {
                 val action = ErrorUtils.handle(error)
 
                 widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
                 darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
-            })
+            }
+
+            return Result.FAILURE
+        }
     }
 
-    override fun onStopCurrentWork(): Boolean {
-        disposable?.dispose()
-        disposable = null
-
-        return false
+    override fun onStopped(cancelled: Boolean) {
+        currentCall?.cancel()
+        currentCall = null
     }
 
     private fun bindListLayout(

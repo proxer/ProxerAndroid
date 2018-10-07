@@ -320,20 +320,12 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <service
-            android:name=".news.widget.NewsWidgetUpdateService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
-        <service
             android:name=".anime.schedule.widget.ScheduleWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <service
             android:name=".anime.schedule.widget.ScheduleWidgetDarkService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <service
-            android:name=".anime.schedule.widget.ScheduleWidgetUpdateService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver
             android:name=".news.widget.NewsWidgetProvider"

@@ -5,85 +5,109 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.app.JobIntentService
 import androidx.core.os.bundleOf
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
-import io.reactivex.disposables.Disposable
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.intentFor
-import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.api.ProxerApi
+import me.proxer.library.api.ProxerCall
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
+import timber.log.Timber
 
 /**
  * @author Ruben Gees
  */
-class NewsWidgetUpdateService : JobIntentService(), KoinComponent {
+class NewsWidgetUpdateWorker(
+    context: Context,
+    workerParams: WorkerParameters
+) : Worker(context, workerParams), KoinComponent {
 
     companion object {
-        private const val JOB_ID = 31221
+        private const val NAME = "NewsWidgetUpdateWorker"
 
-        fun enqueueWork(context: Context, work: Intent) {
-            enqueueWork(context, NewsWidgetUpdateService::class.java, JOB_ID, work)
+        fun enqueueWork() {
+            val workRequest = OneTimeWorkRequestBuilder<NewsWidgetUpdateWorker>()
+                .setConstraints(
+                    Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+
+            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
     }
 
     private val api by inject<ProxerApi>()
 
-    private var disposable: Disposable? = null
+    private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
 
-    override fun onHandleWork(intent: Intent) {
-        val componentName = ComponentName(applicationContext, NewsWidgetProvider::class.java)
-        val darkComponentName = ComponentName(applicationContext, NewsWidgetDarkProvider::class.java)
+    private val widgetIds by unsafeLazy {
+        appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, NewsWidgetProvider::class.java))
+    }
 
-        val appWidgetManager = AppWidgetManager.getInstance(applicationContext)
-        val widgetIds = appWidgetManager.getAppWidgetIds(componentName)
-        val darkWidgetIds = appWidgetManager.getAppWidgetIds(darkComponentName)
+    private val darkWidgetIds by unsafeLazy {
+        appWidgetManager.getAppWidgetIds(ComponentName(applicationContext, NewsWidgetDarkProvider::class.java))
+    }
 
+    private var currentCall: ProxerCall<*>? = null
+
+    override fun doWork(): Result {
         widgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, false) }
         darkWidgetIds.forEach { id -> bindLoadingLayout(appWidgetManager, id, true) }
 
-        disposable = api.notifications().news().buildSingle()
-            .map { news ->
-                news.map {
-                    SimpleNews(
-                        it.id,
-                        it.threadId,
-                        it.categoryId,
-                        it.subject,
-                        it.category,
-                        it.date
-                    )
-                }
+        return try {
+            val news = if (!isStopped) {
+                api.notifications().news()
+                    .build()
+                    .also { currentCall = it }
+                    .safeExecute()
+                    .map { SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date) }
+            } else {
+                emptyList()
             }
-            .subscribeAndLogErrors({ news ->
+
+            if (!isStopped) {
                 widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
                 darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }
-            }, { error ->
+            }
+
+            Result.SUCCESS
+        } catch (error: Throwable) {
+            Timber.e(error)
+
+            if (!isStopped) {
                 val action = ErrorUtils.handle(error)
 
                 widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, false) }
                 darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
-            })
+            }
+
+            return Result.FAILURE
+        }
     }
 
-    override fun onStopCurrentWork(): Boolean {
-        disposable?.dispose()
-        disposable = null
-
-        return false
+    override fun onStopped(cancelled: Boolean) {
+        currentCall?.cancel()
+        currentCall = null
     }
 
     private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
