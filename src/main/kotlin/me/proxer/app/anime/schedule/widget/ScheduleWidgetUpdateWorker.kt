@@ -153,7 +153,17 @@ class ScheduleWidgetUpdateWorker(
         val detailIntent = applicationContext.intentFor<MediaActivity>()
         val detailPendingIntent = PendingIntent.getActivity(applicationContext, 0, detailIntent, FLAG_UPDATE_CURRENT)
 
-        val position = calendarEntries.indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
+        val position = calendarEntries
+            .indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
+            .let {
+                when (it < 0) {
+                    true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.convertToDateTime())) {
+                        true -> calendarEntries.lastIndex
+                        false -> 0
+                    }
+                    false -> it
+                }
+            }
 
         bindBaseLayout(id, views)
 

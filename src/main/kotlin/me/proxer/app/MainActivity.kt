@@ -35,12 +35,14 @@ class MainActivity : DrawerActivity() {
     companion object {
         private const val TITLE_STATE = "title"
         private const val SECTION_EXTRA = "section"
+        private const val SECTION_ACTION_PREFIX = "me.proxer.app.intent.action."
 
         fun navigateToSection(context: Context, section: DrawerItem) = context
             .startActivity(getSectionIntent(context, section))
 
-        fun getSectionIntent(context: Context, section: DrawerItem) = context
+        fun getSectionIntent(context: Context, section: DrawerItem): Intent = context
             .intentFor<MainActivity>(SECTION_EXTRA to section)
+            .setAction(SECTION_ACTION_PREFIX + section.name)
     }
 
     override val contentView = R.layout.activity_main
