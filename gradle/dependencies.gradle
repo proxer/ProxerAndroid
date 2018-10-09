@@ -63,7 +63,7 @@ ext {
             exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
             materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
-            customtabsHelper                 : "com.github.rubengees:CustomTabsHelper:$customtabsHelperVersion",
+            customtabsHelper                 : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
             introduction                     : "com.github.rubengees:introduction:$introductionVersion",
             aspectRatioImageView             : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
             gravitySnapHelper                : "com.github.rubensousa:gravitysnaphelper:$gravitySnapHelperVersion",
