@@ -34,44 +34,9 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         get() = safeConference.isFullyLoaded
         set(value) = Unit
 
-    override val data = object : MediatorLiveData<List<LocalMessage>>() {
-
-        private val source by lazy { messengerDao.getMessagesLiveDataForConference(safeConference.id) }
-
-        override fun onActive() {
-            super.onActive()
-
-            addSource(source) {
-                it?.let { _ ->
-                    if (storageHelper.isLoggedIn) {
-                        if (it.isEmpty() && !hasReachedEnd) {
-                            MessengerWorker.enqueueMessageLoad(safeConference.id)
-                        } else {
-                            if (error.value == null) {
-                                dataDisposable?.dispose()
-
-                                page = it.size.div(itemsOnPage)
-
-                                isLoading.value = false
-                                error.value = null
-                                this.value = it
-
-                                Completable.fromAction { messengerDao.markConferenceAsRead(safeConference.id) }
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribeAndLogErrors()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        override fun onInactive() {
-            removeSource(source)
-
-            super.onInactive()
-        }
-    }
+    override val data = MediatorLiveData<List<LocalMessage>>()
+    val conference = MediatorLiveData<LocalConference>()
+    val draft = ResettingMutableLiveData<String?>()
 
     override val dataSingle: Single<List<LocalMessage>>
         get() = Single.fromCallable { validators.validateLogin() }
@@ -84,26 +49,37 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                 Single.never<List<LocalMessage>>()
             }
 
-    val conference = object : MediatorLiveData<LocalConference>() {
+    private val dataSource = { it: List<LocalMessage>? ->
+        it?.also {
+            if (storageHelper.isLoggedIn) {
+                if (it.isEmpty() && !hasReachedEnd) {
+                    MessengerWorker.enqueueMessageLoad(safeConference.id)
+                } else {
+                    if (error.value == null) {
+                        dataDisposable?.dispose()
 
-        private val source by lazy { messengerDao.getConferenceLiveData(safeConference.id) }
+                        page = it.size.div(itemsOnPage)
 
-        override fun onActive() {
-            super.onActive()
+                        isLoading.value = false
+                        error.value = null
+                        data.value = it
 
-            addSource(source) {
-                it?.let { _ -> this.value = it }
+                        Completable.fromAction { messengerDao.markConferenceAsRead(safeConference.id) }
+                            .subscribeOn(Schedulers.io())
+                            .subscribeAndLogErrors()
+                    }
+                }
             }
         }
 
-        override fun onInactive() {
-            removeSource(source)
-
-            super.onInactive()
-        }
+        Unit
     }
 
-    val draft = ResettingMutableLiveData<String?>()
+    private val conferenceSource = { it: LocalConference? ->
+        it?.also { conference.value = it }
+
+        Unit
+    }
 
     private val messengerDao by inject<MessengerDao>()
 
@@ -114,6 +90,15 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
     init {
         conference.value = initialConference
+
+        data.addSource(
+            messengerDao.getMessagesLiveDataForConference(initialConference.id),
+            dataSource
+        )
+        conference.addSource(
+            messengerDao.getConferenceLiveData(initialConference.id),
+            conferenceSource
+        )
 
         disposables += bus.register(MessengerErrorEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())

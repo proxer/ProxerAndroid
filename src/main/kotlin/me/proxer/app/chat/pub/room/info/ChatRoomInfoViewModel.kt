@@ -45,8 +45,8 @@ class ChatRoomInfoViewModel(private val chatRoomId: String) : BaseContentViewMod
 
     private fun startPolling() {
         pollingDisposable = dataSingle
-            .repeatWhen { it.concatMap { _ -> Flowable.timer(10, TimeUnit.SECONDS) } }
-            .retryWhen { it.concatMap { _ -> Flowable.timer(10, TimeUnit.SECONDS) } }
+            .repeatWhen { it.concatMap { Flowable.timer(10, TimeUnit.SECONDS) } }
+            .retryWhen { it.concatMap { Flowable.timer(10, TimeUnit.SECONDS) } }
             .delaySubscription(10, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

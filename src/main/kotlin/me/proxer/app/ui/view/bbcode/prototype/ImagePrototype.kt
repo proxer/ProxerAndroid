@@ -66,7 +66,7 @@ object ImagePrototype : AutoClosingPrototype {
             (parent.context as? Activity)?.let { context ->
                 view.clicks()
                     .autoDisposable(ViewScopeProvider.from(parent))
-                    .subscribe { _ ->
+                    .subscribe {
                         if (view.getTag(R.id.error_tag) == true) {
                             view.tag = null
 

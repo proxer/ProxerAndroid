@@ -332,7 +332,7 @@ class CreateConferenceFragment : BaseFragment() {
         })
 
         viewModel.result.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 requireActivity().finish()
 
                 MessengerActivity.navigateTo(requireActivity(), it)
@@ -340,7 +340,7 @@ class CreateConferenceFragment : BaseFragment() {
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 multilineSnackbar(
                     root,
                     it.message,

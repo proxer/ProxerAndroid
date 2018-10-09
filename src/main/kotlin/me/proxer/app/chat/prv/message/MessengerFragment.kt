@@ -195,7 +195,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
 
         viewModel.conference.observe(viewLifecycleOwner, Observer {
-            it?.let { _ -> conference = it }
+            it?.let { conference = it }
         })
 
         recyclerView.scrollEvents()

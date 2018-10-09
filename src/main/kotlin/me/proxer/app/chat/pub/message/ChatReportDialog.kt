@@ -78,11 +78,11 @@ class ChatReportDialog : BaseDialog() {
             .subscribe { setError(messageContainer, null) }
 
         viewModel.data.observe(dialogLifecycleOwner, Observer {
-            it?.let { _ -> dismiss() }
+            it?.let { dismiss() }
         })
 
         viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 viewModel.error.value = null
 
                 requireContext().toast(it.message)

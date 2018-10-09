@@ -159,13 +159,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             }
 
         viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 snackbar(root, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userInfoUpdateError.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 multilineSnackbar(
                     root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
@@ -450,13 +450,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
                 if (onClick != null) {
                     chip.clicks()
                         .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                        .subscribe { _ -> onClick.invoke(items[index]) }
+                        .subscribe { onClick.invoke(items[index]) }
                 }
 
                 if (layout is MaxLineFlexboxLayout && !layout.canAddView(chip)) {
                     layout.showAllEvents
                         .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                        .subscribe { _ -> bindChips(layout, items, mapFunction, onClick) }
+                        .subscribe { bindChips(layout, items, mapFunction, onClick) }
 
                     layout.enableShowAllButton()
 

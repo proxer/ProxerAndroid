@@ -92,7 +92,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
             .subscribeOn(Schedulers.io())
             .flatMap { Single.fromCallable { it.apply { validators.validateLogin() } } }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({ _ ->
+            .subscribeAndLogErrors({
                 userInfoUpdateError.value = null
                 userInfoUpdateData.value = Unit
 

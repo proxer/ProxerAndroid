@@ -191,7 +191,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         items.zip(itemContainer.children.toList()).forEach { (item, view) ->
             view.clicks()
                 .autoDisposable(ViewScopeProvider.from(this))
-                .subscribeAndLogErrors { _ ->
+                .subscribeAndLogErrors {
                     selection.clear()
                     selection.add(item)
 

@@ -82,7 +82,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             .subscribe { viewModel.loadIfPossible() }
 
         viewModel.refreshError.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 multilineSnackbar(
                     root, getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
                     it.buttonMessage, it.toClickListener(hostingActivity)

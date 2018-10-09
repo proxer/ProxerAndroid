@@ -268,13 +268,13 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         recyclerView.adapter = adapter
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 snackbar(activityRoot, R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 multilineSnackbar(
                     root, getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
@@ -397,7 +397,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             errorContainer.isInvisible = true
 
             errorInnerContainer.doOnLayout {
-                header.doOnLayout { _ ->
+                header.doOnLayout {
                     val newCenter = root.height / 2f + header.height / 2f
                     val containerCenterCorrection = errorInnerContainer.height / 2f
 

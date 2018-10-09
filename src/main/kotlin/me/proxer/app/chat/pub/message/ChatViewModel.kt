@@ -189,8 +189,8 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         pollingDisposable = Single.fromCallable { validators.validateLogin() }
             .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
             .map { it.map { message -> message.toParsedMessage() } }
-            .repeatWhen { it.concatMap { _ -> Flowable.timer(3, TimeUnit.SECONDS) } }
-            .retryWhen { it.concatMap { _ -> Flowable.timer(3, TimeUnit.SECONDS) } }
+            .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
+            .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .map { newData -> mergeNewDataWithExistingData(newData, "0") }
             .let { if (!immediate) it.delaySubscription(3, TimeUnit.SECONDS) else it }
             .subscribeOn(Schedulers.io())

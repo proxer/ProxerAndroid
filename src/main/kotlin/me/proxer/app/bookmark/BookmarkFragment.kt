@@ -113,7 +113,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         innerAdapter.glide = GlideApp.with(this)
 
         viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
-            it?.let { _ ->
+            it?.let {
                 multilineSnackbar(
                     root, getString(R.string.error_bookmark_deletion, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)

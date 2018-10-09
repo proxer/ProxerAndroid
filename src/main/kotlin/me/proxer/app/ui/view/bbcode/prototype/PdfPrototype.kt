@@ -85,7 +85,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                 view.clicks()
                     .filter { view.getTag(R.id.error_tag) == true }
                     .autoDisposable(ViewScopeProvider.from(parent))
-                    .subscribe { _ ->
+                    .subscribe {
                         view.tag = null
 
                         args.glide?.let { loadImage(it, view, parsedUrl) }
