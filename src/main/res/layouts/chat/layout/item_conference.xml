@@ -103,6 +103,8 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                android:clickable="false"
+                android:focusable="false"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 app:chipBackgroundColor="@color/colorAccent"
