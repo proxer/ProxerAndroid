@@ -14,7 +14,7 @@ import androidx.core.content.getSystemService
 import androidx.core.util.PatternsCompat
 import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import io.reactivex.functions.Predicate
 import linkClicks
 import linkLongClicks

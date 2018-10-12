@@ -10,7 +10,7 @@ import androidx.core.view.isGone
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import linkClicks
 import me.proxer.app.R

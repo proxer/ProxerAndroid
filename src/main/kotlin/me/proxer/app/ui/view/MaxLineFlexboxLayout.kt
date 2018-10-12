@@ -16,7 +16,7 @@ import androidx.core.content.withStyledAttributes
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 

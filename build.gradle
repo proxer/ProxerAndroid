@@ -1,4 +1,5 @@
 import groovy.io.FileType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     apply from: 'gradle/versions.gradle'
@@ -217,7 +218,7 @@ wrapper {
     gradleVersion rootProject.ext.gradleVersion
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs = ["-Xjsr305=strict"]
     }

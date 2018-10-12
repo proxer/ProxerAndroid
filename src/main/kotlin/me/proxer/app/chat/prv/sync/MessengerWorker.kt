@@ -69,8 +69,8 @@ class MessengerWorker(
             WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWork(NAME)
-            .value?.firstOrNull()?.state == State.RUNNING
+        fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(NAME).value
+            ?.all { it.state == State.RUNNING } ?: false
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {

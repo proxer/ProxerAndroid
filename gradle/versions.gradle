@@ -32,7 +32,7 @@ ext {
     browserVersion = "1.0.0"
     lifecycleVersion = "2.0.0"
     roomVersion = "2.1.0-alpha01"
-    workVersion = '1.0.0-alpha09'
+    workVersion = '1.0.0-alpha10'
     ktxVersion = "1.0.0"
 
     // RxJava
@@ -41,7 +41,7 @@ ext {
     rxAndroidVersion = '2.1.0'
     rxBindingVersion = '2.2.0'
     rxBusVersion = '2.0.0'
-    autoDisposeVersion = '0.8.0'
+    autoDisposeVersion = '1.0.0'
 
     // UI components
     recyclerviewVersion = "1.0.0"

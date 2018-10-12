@@ -19,7 +19,7 @@ import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.kotlin.autoDisposable
+import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
