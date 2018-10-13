@@ -38,13 +38,17 @@ inline fun <reified T : Enum<T>> enumSetOf(collection: Collection<T>): EnumSet<T
     false -> EnumSet.copyOf(collection)
 }
 
+inline fun <reified T : Enum<T>> enumSetOf(vararg items: T): EnumSet<T> = when (items.isEmpty()) {
+    true -> EnumSet.noneOf(T::class.java)
+    false -> EnumSet.copyOf(items.toSet())
+}
+
 inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
 
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
     .getQuantityString(id, quantity, quantity)
 
-inline fun Fragment.dip(value: Int) = context?.dip(value)
-    ?: throw IllegalStateException("context is null")
+inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
 
 inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, vararg custom: Regex): Spannable {
     val spannable = this as? Spannable ?: SpannableString(this)

@@ -49,6 +49,7 @@ import me.proxer.library.enums.Language
 import me.proxer.library.enums.License
 import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.enums.MediaState
+import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.Medium
 import me.proxer.library.enums.MessageAction
 import me.proxer.library.enums.RelationshipStatus
@@ -352,6 +353,10 @@ fun MessageAction.toAppString(context: Context, username: String, message: Strin
     MessageAction.SET_LEADER -> context.getString(R.string.action_conference_set_leader, "@$username", "@$message")
     MessageAction.SET_TOPIC -> context.getString(R.string.action_conference_set_topic, "@$username", message)
     MessageAction.NONE -> message
+}
+
+fun MediaType.isAgeRestricted(): Boolean {
+    return this == MediaType.ALL_WITH_HENTAI || this == MediaType.HENTAI || this == MediaType.HMANGA
 }
 
 inline val Chapter.isOfficial: Boolean

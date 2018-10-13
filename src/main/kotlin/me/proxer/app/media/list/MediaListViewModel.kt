@@ -5,16 +5,20 @@ import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.TagDao
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.convertToDateTime
+import me.proxer.app.util.extension.enumSetOf
+import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParcelableTag
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
+import me.proxer.library.entity.list.Tag
 import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.MediaSearchSortCriteria
@@ -48,7 +52,7 @@ class MediaListViewModel(
     override val itemsOnPage = 30
 
     override val isLoginRequired: Boolean
-        get() = type == MediaType.HENTAI || type == MediaType.HMANGA
+        get() = type.isAgeRestricted()
 
     override val isAgeConfirmationRequired: Boolean
         get() = isLoginRequired
@@ -72,7 +76,16 @@ class MediaListViewModel(
     }
 
     var type by Delegates.observable(type) { _, old, new ->
-        if (old != new) reload()
+        if (old != new) {
+            reload()
+
+            if (
+                (old.isAgeRestricted() && new.isAgeRestricted().not()) ||
+                (old.isAgeRestricted().not() && new.isAgeRestricted())
+            ) {
+                loadTags()
+            }
+        }
     }
 
     val genreData = MutableLiveData<List<LocalTag>>()
@@ -99,7 +112,7 @@ class MediaListViewModel(
             .fromCallable { tagDao.getTags() }
             .flatMap { cachedTags ->
                 when {
-                    shouldUpdateTags() || cachedTags.isEmpty() -> api.list().tagList().buildSingle()
+                    shouldUpdateTags() || cachedTags.isEmpty() -> tagSingle()
                         .map { remoteTags -> remoteTags.map { it.toParcelableTag() } }
                         .doOnSuccess {
                             tagDao.replaceTags(it)
@@ -109,14 +122,35 @@ class MediaListViewModel(
                     else -> Single.just(cachedTags)
                 }
             }
+            .map {
+                val tagsToFilter = when (type) {
+                    MediaType.HENTAI, MediaType.HMANGA -> enumSetOf(TagType.TAG, TagType.H_TAG)
+                    else -> enumSetOf(TagType.TAG)
+                }
+
+                val genreTags = it.filter { tag -> tag.type == TagType.GENRE }
+                val entryTags = it.filter { tag -> tag.type in tagsToFilter }
+
+                TagContainer(genreTags, entryTags)
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors { tags ->
-                genreData.value = tags.filter { it.type == TagType.GENRE }
-                tagData.value = tags.filter { it.type == TagType.TAG }
+                genreData.value = tags.genreTags
+                tagData.value = tags.entryTags
             }
+    }
+
+    private fun tagSingle(): Single<List<Tag>> {
+        return Single.zip(
+            api.list().tagList().buildSingle(),
+            api.list().tagList().type(TagType.H_TAG).buildSingle(),
+            BiFunction { first: List<Tag>, second: List<Tag> -> first + second }
+        )
     }
 
     private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.convertToDateTime()
         .isBefore(LocalDateTime.now().minusDays(15))
+
+    private class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)
 }
