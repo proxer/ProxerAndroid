@@ -80,8 +80,8 @@ class MediaListViewModel(
             reload()
 
             if (
-                (old.isAgeRestricted() && new.isAgeRestricted().not()) ||
-                (old.isAgeRestricted().not() && new.isAgeRestricted())
+                old.isAgeRestricted() && new.isAgeRestricted().not() ||
+                old.isAgeRestricted().not() && new.isAgeRestricted()
             ) {
                 loadTags()
             }
@@ -152,5 +152,5 @@ class MediaListViewModel(
     private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.convertToDateTime()
         .isBefore(LocalDateTime.now().minusDays(15))
 
-    private class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)
+    private data class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)
 }
