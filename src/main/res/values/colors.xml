@@ -37,6 +37,8 @@
     <color name="background_dark">#303030</color>
     <color name="card_background">#FFFFFF</color>
     <color name="card_background_dark">#424242</color>
+    <color name="widget_background">#FAFAFA</color>
+    <color name="widget_background_dark">#303030</color>
 
     <color name="about_libraries_card_dark" tools:ignore="UnusedResources">@color/cardview_dark_background</color>
     <color name="about_libraries_dividerLight_openSource_dark" tools:ignore="UnusedResources">@color/divider</color>
