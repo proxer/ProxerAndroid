@@ -14,6 +14,7 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isGone
@@ -51,13 +52,19 @@ class ExpandableSelectionView @JvmOverloads constructor(
             title.text = value
         }
 
-    var items by Delegates.observable(listOf<String>()) { _, old, new ->
+    var items by Delegates.observable(emptyList<Item>()) { _, old, new ->
         if (old != new && isExtended) {
             itemContainer.removeAllViews()
 
             handleExtension()
         }
     }
+
+    var simpleItems
+        get() = items.map { (value, _) -> value }
+        set(value) {
+            items = value.map { Item(it, null) }
+        }
 
     var selection by Delegates.observable(mutableListOf<String>()) { _, old, new ->
         if (old != new) handleSelection()
@@ -169,26 +176,30 @@ class ExpandableSelectionView @JvmOverloads constructor(
             .forEach { it.isChecked = selection.contains(it.text.toString()) }
     }
 
-    private fun createSingleSelectionView(item: String): View {
+    private fun createSingleSelectionView(item: Item): View {
         val radioButton = AppCompatRadioButton(context)
 
-        radioButton.text = item
-        radioButton.isChecked = selection.contains(item)
+        radioButton.text = item.value
+        radioButton.isChecked = selection.contains(item.value)
+
+        TooltipCompat.setTooltipText(radioButton, item.description)
 
         return radioButton
     }
 
-    private fun createMultiSelectionView(item: String): View {
+    private fun createMultiSelectionView(item: Item): View {
         val checkBox = AppCompatCheckBox(context)
 
-        checkBox.text = item
-        checkBox.isChecked = selection.contains(item)
+        checkBox.text = item.value
+        checkBox.isChecked = selection.contains(item.value)
+
+        TooltipCompat.setTooltipText(checkBox, item.description)
 
         return checkBox
     }
 
     private fun initSingleSelectionListeners() {
-        items.zip(itemContainer.children.toList()).forEach { (item, view) ->
+        simpleItems.zip(itemContainer.children.toList()).forEach { (item, view) ->
             view.clicks()
                 .autoDisposable(ViewScopeProvider.from(this))
                 .subscribeAndLogErrors {
@@ -205,7 +216,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private fun initMultiSelectionListeners() {
-        items.zip(itemContainer.children.toList()).forEach { (item, view) ->
+        simpleItems.zip(itemContainer.children.toList()).forEach { (item, view) ->
             view.clicks()
                 .autoDisposable(ViewScopeProvider.from(this))
                 .subscribeAndLogErrors {
@@ -217,6 +228,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
                 }
         }
     }
+
+    data class Item(val value: String, val description: String?)
 
     internal class SavedState : BaseSavedState {
 

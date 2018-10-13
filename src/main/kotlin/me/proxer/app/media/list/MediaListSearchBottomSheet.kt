@@ -12,12 +12,14 @@ import com.jakewharton.rxbinding2.widget.checkedChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
+import me.proxer.app.ui.view.ExpandableSelectionView
 import me.proxer.app.util.extension.ProxerLibExtensions
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.enableLayoutAnimationsSafely
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toAppStringDescription
 import me.proxer.library.enums.FskConstraint
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.TagRateFilter
@@ -61,14 +63,20 @@ class MediaListSearchBottomSheet private constructor(
             .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe { fragment.tagSpoilerFilter = if (it) TagSpoilerFilter.ALL else TagSpoilerFilter.NO_SPOILERS }
 
-        val fskItems = FskConstraint.values().map { it.toAppString(fragment.requireContext()) }
+        val fskItems = FskConstraint.values().map {
+            ExpandableSelectionView.Item(
+                it.toAppString(fragment.requireContext()),
+                it.toAppStringDescription(fragment.requireContext())
+            )
+        }
+
         val languageItems = listOf(
             fragment.getString(R.string.fragment_media_list_all_languages),
             fragment.getString(R.string.language_german),
             fragment.getString(R.string.language_english)
         )
 
-        fragment.languageSelector.items = languageItems
+        fragment.languageSelector.simpleItems = languageItems
         fragment.fskSelector.items = fskItems
 
         fragment.searchBottomSheetTitle.doOnLayout {
@@ -82,8 +90,10 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.genreData.observe(fragment, Observer {
             if (it != null) {
-                fragment.genreSelector.items = it.map { tag -> tag.name }
-                fragment.excludedGenreSelector.items = it.map { tag -> tag.name }
+                val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
+
+                fragment.genreSelector.items = items
+                fragment.excludedGenreSelector.items = items
 
                 fragment.genreSelector.isVisible = true
                 fragment.excludedGenreSelector.isVisible = true
@@ -92,8 +102,10 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.tagData.observe(fragment, Observer {
             if (it != null) {
-                fragment.tagSelector.items = it.map { tag -> tag.name }
-                fragment.excludedTagSelector.items = it.map { tag -> tag.name }
+                val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
+
+                fragment.tagSelector.items = items
+                fragment.excludedTagSelector.items = items
 
                 fragment.tagSelector.isVisible = true
                 fragment.excludedTagSelector.isVisible = true
