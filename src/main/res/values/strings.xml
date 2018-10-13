@@ -692,6 +692,8 @@
 
     <string name="action_show_in_browser">Im Browser anzeigen</string>
 
+    <string name="action_cast">An Gast Gerät senden</string>
+
     <string name="rank_10">Schnupperninja</string>
     <string name="rank_100">Anwärter</string>
     <string name="rank_200">Akademie Schüler</string>

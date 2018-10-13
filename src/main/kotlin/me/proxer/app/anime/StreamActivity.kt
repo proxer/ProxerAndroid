@@ -3,6 +3,7 @@ package me.proxer.app.anime
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -22,6 +23,7 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
@@ -31,9 +33,16 @@ import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.cast.MediaInfo
+import com.google.android.gms.cast.MediaMetadata
+import com.google.android.gms.cast.MediaQueueItem
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -43,6 +52,7 @@ import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.permitSlowCalls
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -81,6 +91,52 @@ class StreamActivity : BaseActivity() {
         player
     }
 
+    private val castMediaQueueItem by unsafeLazy {
+        val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_TV_SHOW).apply {
+            if (name != null) putString(MediaMetadata.KEY_SERIES_TITLE, name)
+            if (episode != null) putInt(MediaMetadata.KEY_EPISODE_NUMBER, episode as Int)
+        }
+
+        val mediaInfo = MediaInfo.Builder(uri.toString())
+            .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
+            .setContentType(MimeTypes.VIDEO_UNKNOWN)
+            .setMetadata(mediaMetadata)
+            .build()
+
+        MediaQueueItem.Builder(mediaInfo).build()
+    }
+
+    private val castPlayer by unsafeLazy {
+        val context = permitSlowCalls { CastContext.getSharedInstance(this) }
+        val result = CastPlayer(context)
+
+        result.setSessionAvailabilityListener(object : CastPlayer.SessionAvailabilityListener {
+            override fun onCastSessionAvailable() {
+                player.playWhenReady = false
+                playerView.player = result
+
+                result.seekTo(result.currentPosition)
+                result.loadItem(castMediaQueueItem, 0L)
+
+                playerView.controllerHideOnTouch = false
+                playerView.controllerShowTimeoutMs = 0
+                playerView.showController()
+            }
+
+            override fun onCastSessionUnavailable() {
+                player.playWhenReady = true
+                playerView.player = player
+
+                player.seekTo(result.currentPosition)
+
+                playerView.controllerHideOnTouch = true
+                playerView.controllerShowTimeoutMs = PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+            }
+        })
+
+        result
+    }
+
     private val client by unsafeLazy {
         val client = inject<OkHttpClient>()
 
@@ -97,6 +153,23 @@ class StreamActivity : BaseActivity() {
                         it.proceed(requestWithReferer)
                     }
                     .build()
+            }
+        }
+    }
+
+    private val errorListener = object : Player.EventListener {
+        override fun onPlayerError(error: ExoPlaybackException) {
+            updateLastPosition()
+
+            ErrorUtils.handle(error).let { it ->
+                MaterialDialog(this@StreamActivity)
+                    .message(it.message)
+                    .positiveButton(R.string.error_action_retry) {
+                        preparePlayer()
+                    }
+                    .negativeButton(R.string.error_action_finish) { finish() }
+                    .onCancel { finish() }
+                    .show()
             }
         }
     }
@@ -126,6 +199,21 @@ class StreamActivity : BaseActivity() {
         setupToolbar()
         setupPlayer()
         preparePlayer()
+
+        // Call lazy getter to init cast player
+        castPlayer
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+
+        menuInflater.inflate(R.menu.activity_stream, menu)
+
+        permitSlowCalls {
+            CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
+        }
+
+        return true
     }
 
     override fun onResume() {
@@ -147,9 +235,7 @@ class StreamActivity : BaseActivity() {
     override fun onPause() {
         wasPlaying = player.playWhenReady == true && player.playbackState == Player.STATE_READY
 
-        if (player.currentPosition > 0) {
-            lastPosition = player.currentPosition
-        }
+        updateLastPosition()
 
         player.playWhenReady = false
 
@@ -160,6 +246,9 @@ class StreamActivity : BaseActivity() {
 
     override fun onDestroy() {
         player.release()
+        castPlayer.release()
+
+        castPlayer.setSessionAvailabilityListener(null)
 
         super.onDestroy()
     }
@@ -202,24 +291,8 @@ class StreamActivity : BaseActivity() {
             toggleFullscreen(it == View.GONE)
         }
 
-        player.addListener(object : Player.EventListener {
-            override fun onPlayerError(error: ExoPlaybackException) {
-                if (player.currentPosition > 0) {
-                    lastPosition = player.currentPosition
-                }
-
-                ErrorUtils.handle(error).let { it ->
-                    MaterialDialog(this@StreamActivity)
-                        .message(it.message)
-                        .positiveButton(R.string.error_action_retry) {
-                            preparePlayer()
-                        }
-                        .negativeButton(R.string.error_action_finish) { finish() }
-                        .onCancel { finish() }
-                        .show()
-                }
-            }
-        })
+        player.addListener(errorListener)
+        castPlayer.addListener(errorListener)
 
         playerView.player = player
     }
@@ -262,6 +335,17 @@ class StreamActivity : BaseActivity() {
                 SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 SYSTEM_UI_FLAG_FULLSCREEN
             else -> SYSTEM_UI_FLAG_VISIBLE
+        }
+    }
+
+    private fun updateLastPosition() {
+        val newPosition = when (playerView.player) {
+            is CastPlayer -> castPlayer.currentPosition
+            else -> player.currentPosition
+        }
+
+        if (newPosition >= 0) {
+            lastPosition = newPosition
         }
     }
 }

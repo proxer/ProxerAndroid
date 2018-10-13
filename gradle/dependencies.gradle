@@ -13,6 +13,8 @@ ext {
             kotlinStdlib                     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
             koin                             : "org.koin:koin-androidx-viewmodel:$koinVersion",
 
+            cast                             : "com.google.android.gms:play-services-cast-framework:$castVersion",
+
             multidex                         : "androidx.multidex:multidex:$multidexVersion",
             appcompat                        : "androidx.appcompat:appcompat:$appcompatVersion",
             browser                          : "androidx.browser:browser:$browserVersion",
@@ -60,6 +62,7 @@ ext {
             flexbox                          : "com.google.android:flexbox:$flexboxVersion",
             emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
             exoplayer                        : "com.google.android.exoplayer:exoplayer:$exoplayerVersion",
+            exoplayerCast                    : "com.google.android.exoplayer:extension-cast:$exoplayerVersion",
             exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
             materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
             materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",

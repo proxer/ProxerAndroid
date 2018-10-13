@@ -34,6 +34,7 @@ ext {
     roomVersion = "2.1.0-alpha01"
     workVersion = '1.0.0-alpha10'
     ktxVersion = "1.0.0"
+    castVersion = "16.0.3"
 
     // RxJava
     rxJavaVersion = '2.2.3'
