@@ -46,11 +46,22 @@ android {
 
     sourceSets {
         main {
+            java.srcDirs += "src/main/kotlin"
             res.srcDirs += getResSrcDirs()
         }
 
-        it.each {
-            it.java.srcDirs += "src/$it.name/kotlin"
+        debug {
+            java.srcDirs += "src/debug/kotlin"
+        }
+
+        release {
+            java.srcDirs += "src/release/kotlin"
+        }
+
+        logRelease {
+            setRoot "src/release"
+
+            java.srcDirs = release.java.srcDirs
         }
     }
 

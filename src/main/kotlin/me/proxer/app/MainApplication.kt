@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import cat.ereza.customactivityoncrash.config.CaocConfig
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
@@ -75,6 +74,8 @@ class MainApplication : Application() {
         initCache()
         initNightMode()
         enableStrictModeForDebug()
+
+        FlavorInitializer.initialize(this)
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -127,10 +128,6 @@ class MainApplication : Application() {
     }
 
     private fun initLibs() {
-        CaocConfig.Builder.create()
-            .backgroundMode(CaocConfig.BACKGROUND_MODE_CRASH)
-            .apply()
-
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
 

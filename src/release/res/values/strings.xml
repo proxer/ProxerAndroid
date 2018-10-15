@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_crash">Absturz</string>
+
+    <string name="activity_crash_text">Die App ist leider abgestürzt. Sende den Fehler bitte an @RubyGee oder einen
+        anderen Techniker um bei der Beseitigung zu helfen!
+    </string>
+    <string name="activity_crash_report">Fehlerbericht</string>
+    <string name="activity_crash_restart">Neustart</string>
+
+    <string name="dialog_crash_title">Fehlerbericht</string>
+    <string name="dialog_crash_neutral">Kopieren</string>
+    <string name="dialog_crash_negative">Schließen</string>
+
+    <string name="clipboard_crash_title">ProxerMe Fehlerbericht</string>
+</resources>

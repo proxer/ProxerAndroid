@@ -66,7 +66,8 @@ class CrashActivity : BaseActivity() {
             .subscribe {
                 CustomActivityOnCrash.restartApplicationWithIntent(
                     this,
-                    CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)), config
+                    CreateConferenceActivity.getIntent(this, false, Participant(DEVELOPER_PROXER_NAME)),
+                    config
                 )
             }
 
