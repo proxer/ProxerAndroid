@@ -149,6 +149,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
     override fun hideError() {
         adapter.footer = null
+
+        updateRecyclerViewPadding()
     }
 
     protected open fun isAtTop() = layoutManager.isAtCompleteTop()

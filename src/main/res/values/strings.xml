@@ -157,6 +157,7 @@
     <string name="error_ucp_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_chat_send_message">Die Nachricht konnte nicht versandt werden: %s</string>
+    <string name="error_undo">Dia Aktion konnte nicht rückgängig gemacht werden: %s</string>
 
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>
@@ -361,6 +362,7 @@
 
     <string name="fragment_ucp_topten_delete_content_description">Diesen Eintrag löschen</string>
 
+    <string name="fragment_bookmark_delete_message">Lesezeichen gelöscht</string>
     <string name="fragment_bookmark_delete_content_description">Löschen</string>
 
     <string name="fragment_profile_points_anime">Anime</string>
@@ -667,6 +669,7 @@
     <string name="action_reply">Antworten</string>
     <string name="action_delete_all">Alle löschen</string>
     <string name="action_report">Melden</string>
+    <string name="action_undo">Rückgängig</string>
 
     <string name="action_filter_all">Alles</string>
     <string name="action_filter_anime_series">Serien</string>

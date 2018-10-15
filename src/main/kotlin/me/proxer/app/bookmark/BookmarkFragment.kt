@@ -120,6 +120,25 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 )
             }
         })
+
+        viewModel.undoData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, R.string.fragment_bookmark_delete_message,
+                    Snackbar.LENGTH_LONG, R.string.action_undo,
+                    View.OnClickListener { viewModel.undo() }
+                )
+            }
+        })
+
+        viewModel.undoError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                multilineSnackbar(
+                    root, getString(R.string.error_undo, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
