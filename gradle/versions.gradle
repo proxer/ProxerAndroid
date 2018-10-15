@@ -62,7 +62,7 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-beta3'
+    materialDialogsVersion = '2.0.0-beta4'
     flexboxVersion = '1.1.0'
     emojiIosVersion = '2a238ccc16'
     exoplayerVersion = '2.9.0'
@@ -75,7 +75,7 @@ ext {
 
     // Utils
     proxerLibVersion = '4.5.2'
-    threetenVersion = '1.1.0'
+    threetenVersion = '1.1.1'
     hawkVersion = '7477ad465a'
     glideVersion = '4.8.0'
     okHttpVersion = '3.11.0'
