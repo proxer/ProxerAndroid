@@ -47,7 +47,6 @@ android {
     sourceSets {
         main {
             java.srcDirs += "src/main/kotlin"
-            res.srcDirs += getResSrcDirs()
         }
 
         debug {
@@ -239,17 +238,6 @@ static getGitHash() {
     String gitRevParseCommand = "git rev-parse --verify --short HEAD"
 
     return gitRevParseCommand.execute().text.trim()
-}
-
-static getResSrcDirs() {
-    String layoutsPath = 'src/main/res/layouts'
-    Set<String> result = []
-
-    new File(layoutsPath).eachFile(FileType.DIRECTORIES) {
-        result.add("$layoutsPath/$it.name")
-    }
-
-    return result
 }
 
 static String getFromSecrets(String key) {
