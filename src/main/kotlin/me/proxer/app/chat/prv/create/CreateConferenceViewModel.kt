@@ -95,9 +95,10 @@ class CreateConferenceViewModel : ViewModel(), KoinComponent {
         super.onCleared()
     }
 
-    fun createGroup(topic: String, firstMessage: String, participants: List<Participant>) = createConference(api
-        .messenger()
-        .createConferenceGroup(topic, firstMessage, participants.map { it.username })
+    fun createGroup(topic: String, firstMessage: String, participants: List<Participant>) = createConference(
+        api
+            .messenger()
+            .createConferenceGroup(topic, firstMessage, participants.map { it.username })
     )
 
     fun createChat(firstMessage: String, participant: Participant) = createConference(

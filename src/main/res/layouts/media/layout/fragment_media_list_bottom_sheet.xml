@@ -38,11 +38,11 @@
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginStart="4dp"
                 android:layout_marginLeft="4dp"
-                android:text="@string/fragment_media_list_search" />
+                android:text="@string/fragment_media_list_search"
+                android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
         </LinearLayout>
 

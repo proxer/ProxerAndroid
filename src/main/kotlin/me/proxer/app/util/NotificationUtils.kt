@@ -28,16 +28,16 @@ object NotificationUtils {
 
             context.getSystemService<NotificationManager>()?.createNotificationChannels(
                 listOf(
-                NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
-                    description = context.getString(R.string.notification_channel_news_description)
-                },
-                NotificationChannel(PROFILE_CHANNEL, profileTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
-                    description = context.getString(R.string.notification_channel_profile_description)
-                },
-                NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
-                    description = context.getString(R.string.notification_channel_chat_description)
-                }
-            ))
+                    NotificationChannel(NEWS_CHANNEL, newsTitle, NotificationManager.IMPORTANCE_LOW).apply {
+                        description = context.getString(R.string.notification_channel_news_description)
+                    },
+                    NotificationChannel(PROFILE_CHANNEL, profileTitle, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                        description = context.getString(R.string.notification_channel_profile_description)
+                    },
+                    NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
+                        description = context.getString(R.string.notification_channel_chat_description)
+                    }
+                ))
         }
     }
 

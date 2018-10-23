@@ -5,9 +5,9 @@
     android:layout_width="0dp"
     android:layout_height="match_parent"
     android:layout_weight="1"
+    android:background="?attr/selectableItemBackground"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
-    android:background="?attr/selectableItemBackground"
     tools:context=".media.episode.EpisodeAdapter"
     tools:ignore="Overdraw"
     tools:layout_width="match_parent">
