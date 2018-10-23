@@ -55,7 +55,7 @@
             android:layout_marginRight="8dp"
             android:gravity="center_horizontal"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="@color/widget_textColorSecondary"
             tools:ignore="UnusedAttribute"
             tools:text="Error :/" />
 

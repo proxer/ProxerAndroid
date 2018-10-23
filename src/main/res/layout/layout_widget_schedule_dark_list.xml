@@ -61,7 +61,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/divider_dark"
+        android:divider="@color/widget_divider_dark"
         android:dividerHeight="1dp"
         android:scrollbarThumbVertical="@drawable/fastscroll_thumb_idle_dark"
         android:scrollbarTrackVertical="@drawable/fastscroll_track_dark"

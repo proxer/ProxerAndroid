@@ -14,7 +14,7 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="@color/widget_textColorPrimary"
         tools:text="12:00" />
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="@color/widget_textColorSecondary"
             tools:text="Series" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@color/textColorTertiary"
+            android:textColor="@color/widget_textColorTertiary"
             tools:text="Episode 5" />
     </LinearLayout>
 </LinearLayout>
