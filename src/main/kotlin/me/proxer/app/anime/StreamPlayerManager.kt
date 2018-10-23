@@ -172,8 +172,7 @@ class StreamPlayerManager(
     }
 
     fun pause() {
-        wasPlaying = currentPlayer.playWhenReady == true && currentPlayer.playbackState ==
-            Player.STATE_READY
+        wasPlaying = currentPlayer.playWhenReady == true && currentPlayer.playbackState == Player.STATE_READY
         lastPosition = currentPlayer.currentPosition
 
         localPlayer.playWhenReady = false
@@ -207,8 +206,13 @@ class StreamPlayerManager(
 
     private fun buildCastMediaSource(name: String?, episode: Int?, uri: Uri): MediaQueueItem {
         val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_TV_SHOW).apply {
-            if (name != null) putString(MediaMetadata.KEY_SERIES_TITLE, name)
-            if (episode != null) putInt(MediaMetadata.KEY_EPISODE_NUMBER, episode)
+            if (name != null) {
+                putString(MediaMetadata.KEY_TITLE, name)
+            }
+
+            if (episode != null) {
+                putInt(MediaMetadata.KEY_EPISODE_NUMBER, episode)
+            }
         }
 
         val mediaInfo = MediaInfo.Builder(uri.toString())
@@ -221,21 +225,14 @@ class StreamPlayerManager(
     }
 
     private fun buildLocalMediaSource(client: OkHttpClient, uri: Uri): MediaSource {
-        val okHttpDataSource =
-            OkHttpDataSourceFactory(client, MainApplication.USER_AGENT, DefaultBandwidthMeter())
+        val okHttpDataSource = OkHttpDataSourceFactory(client, MainApplication.USER_AGENT, DefaultBandwidthMeter())
         val streamType = Util.inferContentType(uri.lastPathSegment)
 
         return when (streamType) {
-            C.TYPE_SS -> SsMediaSource.Factory(
-                DefaultSsChunkSource.Factory(okHttpDataSource),
-                okHttpDataSource
-            )
+            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(okHttpDataSource), okHttpDataSource)
                 .createMediaSource(uri)
 
-            C.TYPE_DASH -> DashMediaSource.Factory(
-                DefaultDashChunkSource.Factory(okHttpDataSource),
-                okHttpDataSource
-            )
+            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(okHttpDataSource), okHttpDataSource)
                 .createMediaSource(uri)
 
             C.TYPE_HLS -> HlsMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
