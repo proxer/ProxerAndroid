@@ -76,6 +76,8 @@ class MainApplication : Application() {
         enableStrictModeForDebug()
 
         FlavorInitializer.initialize(this)
+
+        initGlobalErrorHandler()
     }
 
     override fun attachBaseContext(base: Context?) {
@@ -163,6 +165,16 @@ class MainApplication : Application() {
             preferenceHelper.shouldCacheExternally = hasExternalStorage
         } else if (preferenceHelper.shouldCacheExternally && !hasExternalStorage) {
             preferenceHelper.shouldCacheExternally = false
+        }
+    }
+
+    private fun initGlobalErrorHandler() {
+        val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
+
+        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
+            Timber.e(error)
+
+            oldHandler?.uncaughtException(thread, error)
         }
     }
 
