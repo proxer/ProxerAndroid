@@ -139,7 +139,7 @@ class StreamPlayerManager(
     private var isResumed = false
     private var isFirstStart = true
 
-    private var currentPlayer by Delegates.observable<Player>(localPlayer) { _, old, new ->
+    var currentPlayer by Delegates.observable<Player>(localPlayer) { _, old, new ->
         old.playWhenReady = false
         new.playWhenReady = isResumed
 
@@ -147,6 +147,7 @@ class StreamPlayerManager(
 
         playerReadySubject.onNext(new)
     }
+        private set
 
     init {
         localPlayer.addListener(errorListener)

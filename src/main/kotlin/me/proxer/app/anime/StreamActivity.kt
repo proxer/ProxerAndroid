@@ -3,7 +3,9 @@ package me.proxer.app.anime
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
@@ -15,6 +17,7 @@ import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
@@ -23,6 +26,10 @@ import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.cast.framework.CastState
+import com.google.android.gms.cast.framework.CastStateListener
+import com.google.android.gms.cast.framework.IntroductoryOverlay
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -59,6 +66,15 @@ class StreamActivity : BaseActivity() {
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val playerView: PlayerView by bindView(R.id.player)
 
+    private var mediaRouteButton: MenuItem? = null
+    private var introductoryOverlay: IntroductoryOverlay? = null
+
+    private val castStateListener = CastStateListener { newState ->
+        if (newState != CastState.NO_DEVICES_AVAILABLE && !storageHelper.wasCastIntroductoryOverlayShown) {
+            showIntroductoryOverlay()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,14 +85,7 @@ class StreamActivity : BaseActivity() {
         playerManager.playerReadySubject
             .autoDisposable(this.scope())
             .subscribe {
-                if (it is CastPlayer) {
-                    playerView.controllerHideOnTouch = false
-                    playerView.controllerShowTimeoutMs = 0
-                    playerView.showController()
-                } else {
-                    playerView.controllerHideOnTouch = true
-                    playerView.controllerShowTimeoutMs = PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
-                }
+                toggleStableControls(it is CastPlayer)
 
                 playerView.player = it
             }
@@ -99,7 +108,7 @@ class StreamActivity : BaseActivity() {
         menuInflater.inflate(R.menu.activity_stream, menu)
 
         permitSlowCalls {
-            CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
+            mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
         }
 
         return true
@@ -108,12 +117,16 @@ class StreamActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
+        CastContext.getSharedInstance(this).addCastStateListener(castStateListener)
+
         playerManager.resume()
 
         volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     override fun onPause() {
+        CastContext.getSharedInstance(this).removeCastStateListener(castStateListener)
+
         playerManager.pause()
 
         volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
@@ -122,6 +135,9 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        introductoryOverlay?.remove()
+        introductoryOverlay = null
+
         playerView.player = null
 
         super.onDestroy()
@@ -177,6 +193,44 @@ class StreamActivity : BaseActivity() {
                 SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 SYSTEM_UI_FLAG_FULLSCREEN
             else -> SYSTEM_UI_FLAG_VISIBLE
+        }
+    }
+
+    private fun toggleStableControls(stable: Boolean) {
+        if (stable) {
+            playerView.controllerHideOnTouch = false
+            playerView.controllerShowTimeoutMs = 0
+            playerView.showController()
+        } else {
+            playerView.controllerHideOnTouch = true
+            playerView.controllerShowTimeoutMs = PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+        }
+    }
+
+    private fun showIntroductoryOverlay() {
+        val safeIntroductoryOverlay = introductoryOverlay
+        val safeMediaRouteButton = mediaRouteButton
+
+        if (safeIntroductoryOverlay != null) {
+            safeIntroductoryOverlay.remove()
+
+            introductoryOverlay = null
+        } else if (safeMediaRouteButton != null && safeMediaRouteButton.isVisible) {
+            toggleStableControls(true)
+
+            Handler().postDelayed(50) {
+                storageHelper.wasCastIntroductoryOverlayShown = true
+
+                introductoryOverlay = IntroductoryOverlay.Builder(this, safeMediaRouteButton)
+                    .setTitleText(R.string.activity_stream_cast_introduction)
+                    .setOnOverlayDismissedListener {
+                        toggleStableControls(playerManager.currentPlayer is CastPlayer)
+
+                        introductoryOverlay = null
+                    }
+                    .build()
+                    .apply { show() }
+            }
         }
     }
 }

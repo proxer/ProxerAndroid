@@ -25,6 +25,7 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         private const val CHAT_INTERVAL = "chat_interval"
         private const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
         private const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
+        private const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         private const val MESSAGE_DRAFT_PREFIX = "message_draft_"
         private const val LAUNCHES = "launches"
         private const val RATED = "rated"
@@ -89,6 +90,12 @@ class StorageHelper(context: Context, jsonParser: HawkMoshiParser) : KoinCompone
         get() = Date(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
         set(value) {
             Hawk.put(LAST_TAG_UPDATE_DATE, value.time)
+        }
+
+    var wasCastIntroductoryOverlayShown: Boolean
+        get() = Hawk.get(CAST_INTRODUCTORY_OVERLAY_SHOWN, false)
+        set(value) {
+            Hawk.put(CAST_INTRODUCTORY_OVERLAY_SHOWN, value)
         }
 
     var launches: Int

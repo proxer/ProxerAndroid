@@ -282,17 +282,9 @@
         <item quantity="other">%d Episoden</item>
     </plurals>
 
-    <string name="fragment_schedule_episode">Episode %s</string>
-    <string name="fragment_schedule_aired">Ausgestrahlt</string>
-    <string name="fragment_schedule_uploaded">Auf Proxer (geschätzt)</string>
-    <string name="fragment_schedule_remaining_time">Ausstrahlung in %s</string>
-    <string name="fragment_schedule_aired_remaining_time">Auf Proxer in %s (geschätzt)</string>
-    <string name="fragment_schedule_airing">Ausstrahlung: %s</string>
-    <string name="fragment_schedule_airing_upload">Ausstrahlung: %1$s
-        \nAuf Proxer: %2$s
-    </string>
-
     <string name="cancel">Abbrechen</string>
+
+    <string name="activity_stream_cast_introduction">Tippe hier, um auf dein Google Cast Gerät zu streamen</string>
 
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
@@ -420,6 +412,16 @@
     </plurals>
 
     <string name="fragment_set_user_info_success">Eintrag wurde aktualisiert</string>
+
+    <string name="fragment_schedule_episode">Episode %s</string>
+    <string name="fragment_schedule_aired">Ausgestrahlt</string>
+    <string name="fragment_schedule_uploaded">Auf Proxer (geschätzt)</string>
+    <string name="fragment_schedule_remaining_time">Ausstrahlung in %s</string>
+    <string name="fragment_schedule_aired_remaining_time">Auf Proxer in %s (geschätzt)</string>
+    <string name="fragment_schedule_airing">Ausstrahlung: %s</string>
+    <string name="fragment_schedule_airing_upload">Ausstrahlung: %1$s
+        \nAuf Proxer: %2$s
+    </string>
 
     <string name="fragment_topten_anime">Anime</string>
     <string name="fragment_topten_manga">Manga</string>
