@@ -62,6 +62,10 @@ class StreamPlayerManager(
 
         override fun onCastSessionUnavailable() {
             currentPlayer = localPlayer
+
+            if (!isResumed) {
+                wasPlaying = false
+            }
         }
     }
 
