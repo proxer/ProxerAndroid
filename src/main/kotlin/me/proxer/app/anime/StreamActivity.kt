@@ -40,6 +40,8 @@ import me.proxer.app.util.extension.permitSlowCalls
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
+import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 
@@ -58,6 +60,12 @@ class StreamActivity : BaseActivity() {
 
     private val episode: Int?
         get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
+
+    private val isProxerStream: Boolean
+        get() = intent.dataString
+            ?.let { HttpUrl.parse(it) }
+            ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
+            ?: false
 
     private val client by inject<OkHttpClient>()
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client) }
@@ -107,8 +115,10 @@ class StreamActivity : BaseActivity() {
 
         menuInflater.inflate(R.menu.activity_stream, menu)
 
-        permitSlowCalls {
-            mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
+        if (isProxerStream) {
+            permitSlowCalls {
+                mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
+            }
         }
 
         return true

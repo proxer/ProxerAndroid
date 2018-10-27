@@ -222,7 +222,7 @@ class StreamPlayerManager(
 
         val mediaInfo = MediaInfo.Builder(uri.toString())
             .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-            .setContentType(MimeTypes.VIDEO_UNKNOWN)
+            .setContentType(MimeTypes.VIDEO_MP4)
             .setMetadata(mediaMetadata)
             .build()
 
