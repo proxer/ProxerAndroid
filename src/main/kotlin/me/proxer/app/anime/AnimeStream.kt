@@ -16,6 +16,7 @@ data class AnimeStream(
     val translatorGroupId: String?,
     val translatorGroupName: String?,
     val isOfficial: Boolean,
+    val isPublic: Boolean,
     val isSupported: Boolean,
     val isInternalPlayerOnly: Boolean
 )

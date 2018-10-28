@@ -99,7 +99,7 @@ class AnimeAdapter(
         internal val play: Button by bindView(R.id.play)
 
         fun bind(item: AnimeStream) {
-            val isLoginRequired = !item.isOfficial && !storageHelper.isLoggedIn
+            val isLoginRequired = !item.isPublic && !storageHelper.isLoggedIn
 
             initListeners(isLoginRequired)
 
