@@ -51,6 +51,7 @@ import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.TaggedSocketFactory
 import me.proxer.app.util.Validators
+import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -125,6 +126,8 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(Moshi.Builder().build()) }
+    single { HawkInitializer(get()) }
+
     single { ProxerLoginTokenManager(get(), get()) } bind LoginTokenManager::class
 }
 

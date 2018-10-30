@@ -10,7 +10,7 @@ import com.squareup.moshi.JsonClass
  * @author Ruben Gees
  */
 @JsonClass(generateAdapter = true)
-internal data class MigrationLocalUser(
+internal data class StorageMigration0To1LocalUser(
     @Json(name = "a") val token: String,
     @Json(name = "b") val id: String,
     @Json(name = "c") val name: String,
