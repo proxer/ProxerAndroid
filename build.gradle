@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
     apply from: 'gradle/versions.gradle'
@@ -220,7 +221,7 @@ detekt {
 
 ktlint {
     version = ktlintVersion
-    reporters = ["CHECKSTYLE"]
+    reporters = [ReporterType.CHECKSTYLE]
 }
 
 wrapper {
