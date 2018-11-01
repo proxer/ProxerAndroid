@@ -10,7 +10,6 @@ import me.proxer.app.util.extension.buildSingle
 class MessageStreamResolver : StreamResolver() {
 
     override val name = "Nachricht"
-    override val isOfficial = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()

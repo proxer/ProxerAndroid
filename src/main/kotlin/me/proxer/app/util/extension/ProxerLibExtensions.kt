@@ -384,7 +384,7 @@ inline val Page.decodedName: String
         ""
     }
 
-fun Stream.toAnimeStreamInfo(isSupported: Boolean, isOfficial: Boolean, isInternalPlayerOnly: Boolean) = AnimeStream(
+fun Stream.toAnimeStreamInfo(isSupported: Boolean, isInternalPlayerOnly: Boolean) = AnimeStream(
     id, hoster, hosterName, image, uploaderId, uploaderName, date, translatorGroupId, translatorGroupName,
     isOfficial, isPublic, isSupported, isInternalPlayerOnly
 )

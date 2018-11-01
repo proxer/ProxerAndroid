@@ -14,7 +14,6 @@ abstract class StreamResolver : KoinComponent {
 
     abstract val name: String
     open val internalPlayerOnly: Boolean get() = false
-    open val isOfficial: Boolean get() = false
     open val ignore: Boolean get() = false
 
     protected val api by inject<ProxerApi>()
