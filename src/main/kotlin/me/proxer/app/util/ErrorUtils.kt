@@ -31,6 +31,7 @@ import me.proxer.library.api.ProxerException.ErrorType.TIMEOUT
 import me.proxer.library.api.ProxerException.ErrorType.UNKNOWN
 import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_EPISODE
 import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_INVALID_STREAM
+import me.proxer.library.api.ProxerException.ServerErrorType.ANIME_LOGIN_REQUIRED
 import me.proxer.library.api.ProxerException.ServerErrorType.API_MAINTENANCE
 import me.proxer.library.api.ProxerException.ServerErrorType.API_REMOVED
 import me.proxer.library.api.ProxerException.ServerErrorType.APPS_INVALID_ID
@@ -52,7 +53,9 @@ import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_SEVEN_DAY_PROT
 import me.proxer.library.api.ProxerException.ServerErrorType.CHAT_USER_ON_BLACKLIST
 import me.proxer.library.api.ProxerException.ServerErrorType.ERRORLOG_INVALID_INPUT
 import me.proxer.library.api.ProxerException.ServerErrorType.FORUM_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.FORUM_INVALID_PERMISSIONS
 import me.proxer.library.api.ProxerException.ServerErrorType.FUNCTION_BLOCKED
+import me.proxer.library.api.ProxerException.ServerErrorType.INFO_DELETE_COMMENT_INVALID_INPUT
 import me.proxer.library.api.ProxerException.ServerErrorType.INFO_ENTRY_ALREADY_IN_LIST
 import me.proxer.library.api.ProxerException.ServerErrorType.INFO_EXCEEDED_MAXIMUM_ENTRIES
 import me.proxer.library.api.ProxerException.ServerErrorType.INFO_INVALID_ID
@@ -91,6 +94,7 @@ import me.proxer.library.api.ProxerException.ServerErrorType.SERVER_MAINTENANCE
 import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_CATEGORY
 import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_EPISODE
 import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_ID
+import me.proxer.library.api.ProxerException.ServerErrorType.UCP_INVALID_SETTINGS
 import me.proxer.library.api.ProxerException.ServerErrorType.UCP_LOGIN_REQUIRED
 import me.proxer.library.api.ProxerException.ServerErrorType.UNKNOWN_API
 import me.proxer.library.api.ProxerException.ServerErrorType.USER
@@ -125,14 +129,15 @@ object ErrorUtils : KoinComponent {
 
     private val loginErrors = arrayOf(
         INVALID_TOKEN, NOTIFICATIONS_LOGIN_REQUIRED, UCP_LOGIN_REQUIRED, INFO_LOGIN_REQUIRED, MESSAGES_LOGIN_REQUIRED,
-        USER_2FA_SECRET_REQUIRED
+        USER_2FA_SECRET_REQUIRED, ANIME_LOGIN_REQUIRED
     )
 
     private val clientErrors = arrayOf(
         NEWS, LOGIN_MISSING_CREDENTIALS, UCP_INVALID_CATEGORY, INFO_INVALID_TYPE, LOGIN_ALREADY_LOGGED_IN,
         LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN, LIST_INVALID_CATEGORY, LIST_INVALID_MEDIUM, MEDIA_INVALID_STYLE,
         ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT, LIST_INVALID_SUBJECT,
-        CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU, CHAT_INVALID_INPUT
+        CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU, CHAT_INVALID_INPUT,
+        INFO_DELETE_COMMENT_INVALID_INPUT, UCP_INVALID_SETTINGS
     )
 
     private val invalidIdErrors = arrayOf(
@@ -238,13 +243,14 @@ object ErrorUtils : KoinComponent {
             USER_2FA_SECRET_REQUIRED -> R.string.error_login_two_factor_authentication
             USER_ACCOUNT_EXPIRED -> R.string.error_account_expired
             USER_ACCOUNT_BLOCKED -> R.string.error_account_blocked
-            USER_INSUFFICIENT_PERMISSIONS -> when (!storageHelper.isLoggedIn) {
-                true -> R.string.error_insufficient_permissions
-                false -> R.string.error_insufficient_permissions_logged_in
+            USER_INSUFFICIENT_PERMISSIONS -> when (storageHelper.isLoggedIn) {
+                true -> R.string.error_insufficient_permissions_logged_in
+                false -> R.string.error_insufficient_permissions
             }
             CHAT_SEVEN_DAY_PROTECTION -> R.string.error_chat_seven_days
             CHAT_USER_ON_BLACKLIST -> R.string.error_chat_blacklist
             CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
+            FORUM_INVALID_PERMISSIONS -> R.string.error_forum_no_permissions
             in apiErrors -> R.string.error_api
             in maintenanceErrors -> R.string.error_maintenance
             in loginErrors -> R.string.error_login

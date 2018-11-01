@@ -95,6 +95,7 @@
     </string>
     <string name="error_chat_blacklist">Du bist aktuell vom Chat ausgeschlossen</string>
     <string name="error_chat_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Chat</string>
+    <string name="error_forum_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Thread</string>
 
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
