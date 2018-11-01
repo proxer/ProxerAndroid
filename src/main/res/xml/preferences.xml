@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Preference
+        android:enabled="false"
+        android:key="profile"
+        android:summary="@string/preference_profile_summary"
+        android:title="@string/section_profile_settings" />
+
     <PreferenceCategory android:title="@string/preference_category_general_title">
         <SwitchPreference
             android:defaultValue="false"

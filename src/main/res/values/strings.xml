@@ -580,6 +580,7 @@
     <string name="category_anime_episode_number">Episode %d</string>
     <string name="category_manga_episode_number">Kapitel %d</string>
 
+    <string name="preference_profile_summary">Ändere Einstellungen deines Profils auf Proxer</string>
     <string name="preference_category_general_title">Allgemein</string>
     <string name="preference_age_confirmation_title">Altersbeschränkte Inhalte</string>
     <string name="preference_age_confirmation_summary_off">Altersbeschränkte Inhalte werden nicht angezeigt</string>
@@ -631,8 +632,7 @@
 
     <string name="about_version_title">Version</string>
     <string name="about_licenses_title">Lizenzen</string>
-    <string name="about_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
-    </string>
+    <string name="about_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden</string>
     <string name="about_licenses_activity_title">Lizenzen</string>
     <string name="about_licenses_activity_description" tools:ignore="TypographyQuotes">
         <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>,

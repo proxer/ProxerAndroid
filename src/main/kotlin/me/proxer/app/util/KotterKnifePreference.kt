@@ -11,8 +11,8 @@ object KotterKnifePreference {
     fun reset(target: Any) = LazyRegistry.reset(target)
 }
 
-fun <V : Preference> PreferenceFragmentCompat.bindPreference(key: CharSequence)
-    : ReadOnlyProperty<PreferenceFragmentCompat, V> = required(key, preferenceFinder)
+fun <V : Preference> PreferenceFragmentCompat.bindPreference(key: CharSequence):
+    ReadOnlyProperty<PreferenceFragmentCompat, V> = required(key, preferenceFinder)
 
 private val PreferenceFragmentCompat.preferenceFinder: PreferenceFragmentCompat.(CharSequence) -> Preference?
     get() = { findPreference(it) }
