@@ -20,6 +20,7 @@ import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.comment.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
+import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.Utils
@@ -37,6 +38,7 @@ import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
+import me.proxer.library.entity.ucp.UcpSettings
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.CalendarDay
@@ -390,6 +392,12 @@ fun Stream.toAnimeStreamInfo(isSupported: Boolean, isOfficial: Boolean, isIntern
 fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(
     id.toLong(), topic, customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date,
     unreadMessageAmount, lastReadMessageId, isFullyLoaded
+)
+
+fun UcpSettings.toLocalSettings() = LocalUcpSettings(
+    profileVisibility, topTenVisibility, animeVisibility, mangaVisibility, commentVisibility, forumVisibility,
+    friendVisibility, friendRequestConstraint, aboutVisibility, historyVisibility, guestBookVisibility,
+    guestBookEntryConstraint, galleryVisibility, articleVisibility, isHideTags, isShowAds, adInterval
 )
 
 fun Message.toLocalMessage() = LocalMessage(

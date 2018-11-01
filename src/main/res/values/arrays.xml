@@ -42,4 +42,20 @@
         <item>120</item>
         <item>480</item>
     </string-array>
+
+    <string-array name="ucp_settings_constraint_titles">
+        <item>@string/ucp_settings_constraint_default</item>
+        <item>@string/ucp_settings_constraint_friend</item>
+        <item>@string/ucp_settings_constraint_logged_in_users</item>
+        <item>@string/ucp_settings_constraint_everyone</item>
+        <item>@string/ucp_settings_constraint_private</item>
+    </string-array>
+
+    <string-array name="ucp_settings_constraint_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>

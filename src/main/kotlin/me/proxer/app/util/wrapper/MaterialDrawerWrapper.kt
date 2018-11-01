@@ -78,6 +78,10 @@ class MaterialDrawerWrapper(
                         .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
                         .withIdentifier(AccountItem.NOTIFICATIONS.id),
                     ProfileSettingDrawerItem()
+                        .withName(R.string.section_profile_settings)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_settings)
+                        .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
+                    ProfileSettingDrawerItem()
                         .withName(R.string.section_ucp)
                         .withIcon(CommunityMaterial.Icon.cmd_account_key)
                         .withIdentifier(AccountItem.UCP.id),
@@ -312,7 +316,8 @@ class MaterialDrawerWrapper(
         USER(102L),
         LOGOUT(103L),
         NOTIFICATIONS(104L),
-        UCP(105L);
+        UCP(105L),
+        PROFILE_SETTINGS(106L);
 
         companion object {
             fun fromIdOrNull(id: Long?) = values().firstOrNull { it.id == id }

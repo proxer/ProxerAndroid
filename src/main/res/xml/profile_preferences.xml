@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Datenschutz">
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="profile"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_profile" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="topten"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_topten" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="anime"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_anime" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="manga"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_manga" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="comment"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_comment" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="forum"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_forum" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="friend"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_friend" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="friend_request"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_friend_request" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="about"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_about" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="history"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_history" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="guest_book"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_guest_book" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="guest_book_entry"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_guest_book_entry" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="gallery"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_gallery" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_constraint_titles"
+            android:entryValues="@array/ucp_settings_constraint_values"
+            android:key="article"
+            android:persistent="false"
+            android:summary="%s"
+            android:title="@string/profile_preference_article" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

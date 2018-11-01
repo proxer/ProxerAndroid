@@ -3,6 +3,7 @@ package me.proxer.app.util.data
 import android.content.Context
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
+import me.proxer.app.ucp.settings.LocalUcpSettings
 import org.koin.standalone.KoinComponent
 import java.util.Date
 
@@ -13,6 +14,7 @@ class StorageHelper(context: Context, initializer: HawkInitializer) : KoinCompon
 
     internal companion object {
         internal const val USER = "user"
+        internal const val UCP_SETTINGS = "ucp_settings"
         internal const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
         internal const val LAST_NEWS_DATE = "last_news_date"
         internal const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
@@ -40,6 +42,12 @@ class StorageHelper(context: Context, initializer: HawkInitializer) : KoinCompon
                 null -> Hawk.delete(USER)
                 else -> Hawk.put(USER, value)
             }
+        }
+
+    var ucpSettings: LocalUcpSettings
+        get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
+        set(value) {
+            Hawk.put(UCP_SETTINGS, value)
         }
 
     val isLoggedIn: Boolean
@@ -111,6 +119,8 @@ class StorageHelper(context: Context, initializer: HawkInitializer) : KoinCompon
     fun incrementLaunches() = Hawk.get(LAUNCHES, 0).let {
         Hawk.put(LAUNCHES, it + 1)
     }
+
+    fun resetUcpSettings() = Hawk.delete(UCP_SETTINGS)
 
     fun resetChatInterval() = Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 

@@ -18,6 +18,7 @@
     <string name="section_settings">Einstellungen</string>
 
     <string name="section_notifications">Benachrichtigungen</string>
+    <string name="section_profile_settings">Profileinstellungen</string>
 
     <string name="section_ucp_overview">Übersicht</string>
     <string name="section_ucp_top_ten">Favoriten</string>
@@ -613,6 +614,21 @@
     <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
     <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>
 
+    <string name="profile_preference_profile">Sichtbarkeit des Profils</string>
+    <string name="profile_preference_topten">Profil - TopTen</string>
+    <string name="profile_preference_anime">Profil - Anime</string>
+    <string name="profile_preference_manga">Profil - Manga</string>
+    <string name="profile_preference_comment">Profil - Kommentare</string>
+    <string name="profile_preference_forum">Profil - Forum</string>
+    <string name="profile_preference_friend">Profil - Freunde</string>
+    <string name="profile_preference_friend_request">Freundschaftsanfragen stellen</string>
+    <string name="profile_preference_about">Profil - About</string>
+    <string name="profile_preference_history">Profil - Chronik</string>
+    <string name="profile_preference_guest_book">Profil - Pinnwand</string>
+    <string name="profile_preference_guest_book_entry">Pinnwand - Recht zum Posten</string>
+    <string name="profile_preference_gallery">Profil - Galerie</string>
+    <string name="profile_preference_article">Profil - Artikel</string>
+
     <string name="about_version_title">Version</string>
     <string name="about_licenses_title">Lizenzen</string>
     <string name="about_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden
@@ -747,6 +763,12 @@
     <string name="interval_often">Oft (Alle 30 Minuten)</string>
     <string name="interval_moderate">Moderat (Alle 2 Stunden)</string>
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
+
+    <string name="ucp_settings_constraint_default">Standard</string>
+    <string name="ucp_settings_constraint_friend">Freunde</string>
+    <string name="ucp_settings_constraint_logged_in_users">Angemeldete User</string>
+    <string name="ucp_settings_constraint_everyone">Alle</string>
+    <string name="ucp_settings_constraint_private">Nur ich</string>
 
     <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_days_ago">

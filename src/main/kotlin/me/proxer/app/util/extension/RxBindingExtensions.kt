@@ -4,9 +4,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.CheckResult
+import androidx.preference.Preference
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import io.reactivex.Observable
 import io.reactivex.functions.Predicate
+import me.proxer.app.util.rx.PreferenceChangeObservable
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.rx.TextViewLinkClickObservable
 import me.proxer.app.util.rx.TextViewLinkLongClickObservable
@@ -25,6 +27,10 @@ inline fun TextView.linkClicks(handled: Predicate<String> = Predicate { true }):
 @CheckResult
 inline fun TextView.linkLongClicks(handled: Predicate<String> = Predicate { true }): Observable<String> {
     return TextViewLinkLongClickObservable(this, handled)
+}
+
+inline fun Preference.changes(handled: Predicate<String> = Predicate { true }): Observable<String> {
+    return PreferenceChangeObservable(this, handled)
 }
 
 @CheckResult

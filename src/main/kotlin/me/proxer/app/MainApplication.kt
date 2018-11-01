@@ -124,6 +124,7 @@ class MainApplication : Application() {
                 storageHelper.lastNotificationsDate = Date(0L)
                 storageHelper.areConferencesSynchronized = false
                 storageHelper.resetChatInterval()
+                storageHelper.resetUcpSettings()
 
                 messengerDao.clear()
             }

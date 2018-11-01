@@ -5,7 +5,6 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +22,11 @@ inline fun Activity.snackbar(
     actionCallback: View.OnClickListener? = null
 ) = Snackbar.make(root, message, duration).apply {
     when (actionMessage) {
-        ACTION_MESSAGE_DEFAULT -> setAction(R.string.error_action_retry, actionCallback)
+        ACTION_MESSAGE_DEFAULT -> {
+            val multilineActionMessage = getString(R.string.error_action_retry).replace(" ", "\n")
+
+            setAction(multilineActionMessage, actionCallback)
+        }
         ACTION_MESSAGE_HIDE -> setAction(null, null)
         else -> setAction(actionMessage, actionCallback)
     }
@@ -49,7 +52,6 @@ inline fun Activity.multilineSnackbar(
 ) = snackbar(root, message, duration, actionMessage, actionCallback).apply {
     (this.view as ViewGroup).recursiveChildren
         .filterIsInstance(TextView::class.java)
-        .filterNot { it is Button }
         .forEach { it.maxLines = maxLines }
 }
 

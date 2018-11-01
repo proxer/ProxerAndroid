@@ -48,6 +48,7 @@ import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
+import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.TaggedSocketFactory
 import me.proxer.app.util.Validators
@@ -161,6 +162,7 @@ private val viewModelModule = module {
     viewModel { UcpHistoryViewModel() }
     viewModel { UcpOverviewViewModel() }
     viewModel { UcpTopTenViewModel() }
+    viewModel { UcpSettingsViewModel() }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileInfoViewModel(userId, username) }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }

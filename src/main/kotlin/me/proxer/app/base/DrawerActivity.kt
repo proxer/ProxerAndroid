@@ -18,6 +18,7 @@ import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ucp.UcpActivity
+import me.proxer.app.ucp.settings.UcpSettingsActivity
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
 import kotlin.properties.Delegates
@@ -91,6 +92,7 @@ abstract class DrawerActivity : BaseActivity() {
         AccountItem.USER -> showProfilePage()
         AccountItem.NOTIFICATIONS -> NotificationActivity.navigateTo(this)
         AccountItem.UCP -> UcpActivity.navigateTo(this)
+        AccountItem.PROFILE_SETTINGS -> UcpSettingsActivity.navigateTo(this)
     }
 
     private fun showProfilePage() = storageHelper.user?.let { (_, id, name, image) ->
