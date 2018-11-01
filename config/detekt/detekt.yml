@@ -33,7 +33,7 @@ exceptions:
 
 naming:
   FunctionMaxLength:
-    maximumFunctionNameLength: 35
+    maximumFunctionNameLength: 40
 
 performance:
   SpreadOperator:

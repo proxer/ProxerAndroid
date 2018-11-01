@@ -9,6 +9,9 @@ import com.google.android.gms.cast.framework.media.CastMediaOptions
 import com.google.android.gms.cast.framework.media.NotificationOptions
 import com.google.android.gms.common.annotation.KeepName
 
+/**
+ * @author Ruben Gees
+ */
 @KeepName
 @Suppress("unused")
 class CastOptionsProvider : OptionsProvider {
