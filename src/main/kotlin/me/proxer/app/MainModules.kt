@@ -9,6 +9,7 @@ import com.squareup.moshi.Moshi
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.AnimeViewModel
 import me.proxer.app.anime.schedule.ScheduleViewModel
+import me.proxer.app.auth.LoginHandler
 import me.proxer.app.auth.LoginViewModel
 import me.proxer.app.auth.LogoutViewModel
 import me.proxer.app.auth.ProxerLoginTokenManager
@@ -130,6 +131,7 @@ private val applicationModules = module {
     single { HawkInitializer(get()) }
 
     single { ProxerLoginTokenManager(get(), get()) } bind LoginTokenManager::class
+    single { LoginHandler(get(), get(), get(), get()) }
 }
 
 private val viewModelModule = module {
