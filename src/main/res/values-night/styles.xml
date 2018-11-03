@@ -7,5 +7,5 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Dark" />
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />
 </resources>
