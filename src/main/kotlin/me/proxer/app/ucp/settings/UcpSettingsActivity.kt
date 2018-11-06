@@ -3,7 +3,7 @@ package me.proxer.app.ucp.settings
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
@@ -69,7 +69,7 @@ class UcpSettingsActivity : DrawerActivity() {
             .subscribe { finish() }
 
         if (savedInstanceState == null) {
-            supportFragmentManager.transaction(now = true) {
+            supportFragmentManager.commitNow {
                 replace(R.id.container, UcpSettingsFragment.newInstance())
             }
         }

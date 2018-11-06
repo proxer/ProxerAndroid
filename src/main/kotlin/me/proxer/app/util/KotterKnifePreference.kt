@@ -14,6 +14,7 @@ object KotterKnifePreference {
 fun <V : Preference> PreferenceFragmentCompat.bindPreference(key: CharSequence):
     ReadOnlyProperty<PreferenceFragmentCompat, V> = required(key, preferenceFinder)
 
+@Suppress("unused")
 private val PreferenceFragmentCompat.preferenceFinder: PreferenceFragmentCompat.(CharSequence) -> Preference?
     get() = { findPreference(it) }
 

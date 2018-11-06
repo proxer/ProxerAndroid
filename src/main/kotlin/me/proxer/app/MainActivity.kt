@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commitNow
 import com.google.android.material.tabs.TabLayout
 import com.rubengees.introduction.IntroductionActivity.OPTION_RESULT
 import com.rubengees.introduction.IntroductionBuilder
@@ -162,7 +162,7 @@ class MainActivity : DrawerActivity() {
     private fun setFragment(fragment: Fragment, newTitle: Int) {
         title = getString(newTitle)
 
-        supportFragmentManager.transaction(now = true) {
+        supportFragmentManager.commitNow {
             replace(R.id.container, fragment)
         }
     }

@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ShareCompat
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commitNow
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -104,7 +104,7 @@ class AnimeActivity : DrawerActivity() {
         updateTitle()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.transaction(now = true) {
+            supportFragmentManager.commitNow {
                 replace(R.id.container, AnimeFragment.newInstance())
             }
         }

@@ -30,7 +30,7 @@ import me.proxer.app.base.AutoDisposeViewHolder.ViewHolderEvent.BIND
 import me.proxer.app.base.AutoDisposeViewHolder.ViewHolderEvent.UNBIND
 
 /**
- * Example implementation of a [ViewHolder] implementation that implements
+ * Example implementation of a [androidx.recyclerview.widget.RecyclerView.ViewHolder] implementation that implements
  * [LifecycleScopeProvider]. This could be useful for cases where you have subscriptions that should be
  * disposed upon unbinding or otherwise aren't overwritten in future binds.
  */

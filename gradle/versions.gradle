@@ -28,12 +28,13 @@ ext {
     // Frameworks and compatibility libraries
     koinVersion = '1.0.2-alpha-7'
     multidexVersion = '2.0.0'
-    appcompatVersion = "1.0.0"
+    appcompatVersion = "1.0.1"
     browserVersion = "1.0.0"
     lifecycleVersion = "2.0.0"
     roomVersion = "2.1.0-alpha02"
     workVersion = '1.0.0-alpha10'
-    ktxVersion = "1.0.0"
+    coreKtxVersion = "1.0.1"
+    fragmentKtxVersion = "1.1.0-alpha01"
     castVersion = "16.1.0"
 
     // RxJava
@@ -50,7 +51,7 @@ ext {
     gridlayoutVersion = "1.0.0"
     materialDesignVersion = "1.1.0-alpha01"
     constraintLayoutVersion = "2.0.0-alpha2"
-    preferenceVersion = "1.0.0"
+    preferenceVersion = "1.1.0-alpha01"
     supportPreferenceVersion = '2.3.2'
     iconicsVersion = '3.1.0'
     communityMaterialTypefaceVersion = '2.7.94.1'
@@ -99,5 +100,5 @@ ext {
 
     // Test
     jUnitVersion = '4.12'
-    mockkVersion = '1.8.10'
+    mockkVersion = '1.8.12'
 }

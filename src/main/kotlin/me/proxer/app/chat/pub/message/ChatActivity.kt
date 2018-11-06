@@ -2,7 +2,7 @@ package me.proxer.app.chat.pub.message
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commitNow
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -45,7 +45,7 @@ class ChatActivity : DrawerActivity() {
         setupToolbar()
 
         if (savedInstanceState == null) {
-            supportFragmentManager.transaction(now = true) {
+            supportFragmentManager.commitNow {
                 replace(R.id.container, ChatFragment.newInstance())
             }
         }

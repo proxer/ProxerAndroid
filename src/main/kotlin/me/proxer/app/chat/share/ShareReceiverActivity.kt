@@ -3,7 +3,7 @@ package me.proxer.app.chat.share
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commitNow
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
@@ -44,7 +44,7 @@ class ShareReceiverActivity : BaseActivity() {
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
                 if (savedInstanceState == null) {
-                    supportFragmentManager.transaction(now = true) {
+                    supportFragmentManager.commitNow {
                         replace(R.id.container, ShareReceiverFragment.newInstance())
                     }
                 }

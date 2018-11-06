@@ -64,7 +64,7 @@ class ChatReportDialog : BaseDialog() {
         if (savedInstanceState == null) {
             messageInput.requestFocus()
 
-            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
 
         messageInput.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
