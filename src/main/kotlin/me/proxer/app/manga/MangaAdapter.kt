@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.target.Target
@@ -87,9 +86,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     override fun getItemId(position: Int) = data[position].decodedName.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false)
-        )
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
@@ -128,11 +125,10 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         holder.image.recycle()
     }
 
-    override fun saveInstanceState(outState: Bundle) =
-        outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
 
-    private fun preload(links: Map<String, String?>, next: String) {
-        val target = GlidePreloadTarget(links, next)
+    private fun preload(links: Map<String, String?>, next: String, failures: Int = 0) {
+        val target = GlidePreloadTarget(links, next, failures)
 
         preloadTargets += target
 
@@ -184,7 +180,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
             }
 
-            errorIndicator.isGone = true
+            errorIndicator.isVisible = false
             image.isVisible = true
 
             glide?.clear(glideTarget)
@@ -200,6 +196,13 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         @SuppressLint("ClickableViewAccessibility")
         private fun initListeners() {
+            // Rebind on itemView clicks.
+            // This only emits if the image is not visible, which is the case if an error occurred.
+            itemView.clicks()
+                .mapAdapterPosition({ positionResolver.resolve(adapterPosition) }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(this::bind)
+
             image.events()
                 .publish()
                 .also { observable ->
@@ -254,7 +257,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 error is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 requiresFallback[data[position].decodedName] == true -> {
                     errorIndicator.isVisible = true
-                    image.isGone = true
+                    image.isVisible = false
                 }
                 else -> {
                     requiresFallback.put(data[position].decodedName, true)
@@ -278,14 +281,15 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 errorIndicator.isVisible = true
-                image.isGone = true
+                image.isVisible = false
             }
         }
     }
 
     internal inner class GlidePreloadTarget(
         private val links: Map<String, String?>,
-        private val next: String
+        private val next: String,
+        private val failures: Int
     ) : OriginalSizeGlideTarget<File>() {
 
         override fun onResourceReady(resource: File, transition: Transition<in File>?) {
@@ -293,6 +297,12 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             if (afterNext != null) {
                 preload(links, afterNext)
+            }
+        }
+
+        override fun onLoadFailed(errorDrawable: Drawable?) {
+            if (failures <= 2) {
+                preload(links, next, failures + 1)
             }
         }
     }
