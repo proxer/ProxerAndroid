@@ -1,7 +1,6 @@
 package me.proxer.app.news
 
 import android.os.Bundle
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
@@ -9,8 +8,8 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.forum.TopicActivity
+import me.proxer.app.newbase.paged.NewBasePagedFragment
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.unsafeLazy
@@ -22,7 +21,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class NewsFragment : PagedContentFragment<NewsArticle>() {
+class NewsFragment : NewBasePagedFragment<NewsArticle>() {
 
     companion object {
         fun newInstance() = NewsFragment().apply {
@@ -52,14 +51,8 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
         innerAdapter.imageClickSubject
             .autoDisposable(this.scope())
             .subscribe { (view, article) ->
-                ImageDetailActivity.navigateTo(
-                    requireActivity(), ProxerUrls.newsImage(article.id, article.image), view
-                )
+                ImageDetailActivity.navigateTo(requireActivity(), ProxerUrls.newsImage(article.id, article.image), view)
             }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
     }

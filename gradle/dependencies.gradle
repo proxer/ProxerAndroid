@@ -22,6 +22,7 @@ ext {
             room                             : "androidx.room:room-runtime:$roomVersion",
             work                             : "android.arch.work:work-runtime-ktx:$workVersion",
             workFirebase                     : "android.arch.work:work-firebase:$workVersion",
+            paging                           : "androidx.paging:paging-runtime-ktx:$pagingVersion",
             ktx                              : "androidx.core:core-ktx:$coreKtxVersion",
             ktxFragment                      : "androidx.fragment:fragment-ktx:$fragmentKtxVersion",
 

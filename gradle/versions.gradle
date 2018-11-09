@@ -33,6 +33,7 @@ ext {
     lifecycleVersion = "2.0.0"
     roomVersion = "2.1.0-alpha02"
     workVersion = '1.0.0-alpha11'
+    pagingVersion = "2.1.0-beta01"
     coreKtxVersion = "1.0.1"
     fragmentKtxVersion = "1.1.0-alpha01"
     castVersion = "16.1.0"

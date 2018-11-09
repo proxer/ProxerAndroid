@@ -12,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.jakewharton.rxbinding2.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.autoDisposable
@@ -21,7 +20,8 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
-import me.proxer.app.base.BaseAdapter
+import me.proxer.app.newbase.paged.NewBasePagedListAdapter
+import me.proxer.app.news.NewsAdapter.ViewHolder
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
@@ -35,7 +35,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAdapter.ViewHolder>() {
+class NewsAdapter(savedInstanceState: Bundle?) : NewBasePagedListAdapter<NewsArticle, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "news_expansion_map"
@@ -45,7 +45,6 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
     val clickSubject: PublishSubject<NewsArticle> = PublishSubject.create()
     val imageClickSubject: PublishSubject<Pair<ImageView, NewsArticle>> = PublishSubject.create()
 
-    private var layoutManager: LayoutManager? = null
     private val expansionMap: ParcelableStringBooleanMap
 
     init {
@@ -61,28 +60,21 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false)
     )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        layoutManager = recyclerView.layoutManager
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getSafeItem(position))
 
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        layoutManager = null
+        super.onDetachedFromRecyclerView(recyclerView)
+
         glide = null
     }
 
-    override fun areContentsTheSame(old: NewsArticle, new: NewsArticle) = old.date == new.date &&
-        old.category == new.category &&
-        old.image == new.image &&
-        old.subject == new.subject &&
-        old.description == new.description
-
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(EXPANDED_STATE, expansionMap)
+    override fun saveInstanceState(outState: Bundle) {
+        outState.putParcelable(EXPANDED_STATE, expansionMap)
+    }
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
@@ -114,17 +106,17 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
         private fun initListeners() {
             itemView.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapAdapterPosition({ positionResolver(adapterPosition) }) { getSafeItem(it) }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
             image.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapAdapterPosition({ positionResolver(adapterPosition) }) { image to getSafeItem(it) }
                 .autoDisposable(this)
                 .subscribe(imageClickSubject)
 
             expand.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .mapAdapterPosition({ positionResolver(adapterPosition) }) { getSafeItem(it).id }
                 .autoDisposable(this)
                 .subscribe {
                     expansionMap.putOrRemove(it)
