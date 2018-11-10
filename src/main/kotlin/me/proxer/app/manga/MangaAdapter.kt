@@ -221,6 +221,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                         .autoDisposable(this)
                         .subscribe {
                             image.setDoubleTapZoomScale(image.scale * 2.5f)
+                            image.setScaleAndCenter(image.minScale, image.center)
                             image.maxScale = image.scale * 2.5f
                         }
                 }
@@ -273,10 +274,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 Single.fromCallable { ImageSource.uri(resource.path) }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeAndLogErrors { source ->
-                        image.setImage(source)
-                        image.setScaleAndCenter(image.minScale, image.center)
-                    }
+                    .subscribeAndLogErrors { source -> image.setImage(source) }
             }
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
