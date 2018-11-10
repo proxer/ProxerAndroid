@@ -3,8 +3,8 @@ ext {
             androidPlugin             : "com.android.tools.build:gradle:$androidPluginVersion",
             kotlinPlugin              : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
 
-            detektPlugin              : "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion",
-            ktlintPlugin              : "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:$ktlintPluginVersion",
+            detektPlugin              : "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion",
+            ktlintPlugin              : "org.jlleitschuh.gradle:ktlint-gradle:$ktlintPluginVersion",
             gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion",
             gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion",
     ]

@@ -126,7 +126,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             expand.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }
                 .autoDisposable(this)
-                .subscribe { it ->
+                .subscribe {
                     expansionMap.putOrRemove(it)
 
                     handleExpansion(it, true)

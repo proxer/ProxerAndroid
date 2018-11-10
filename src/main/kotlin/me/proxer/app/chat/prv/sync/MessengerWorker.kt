@@ -6,7 +6,7 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.State
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -69,8 +69,8 @@ class MessengerWorker(
             WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = WorkManager.getInstance().getStatusesForUniqueWorkLiveData(NAME).value
-            ?.all { it.state == State.RUNNING } ?: false
+        fun isRunning() = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME).value
+            ?.all { it.state == WorkInfo.State.RUNNING } ?: false
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
@@ -125,7 +125,7 @@ class MessengerWorker(
 
     private var currentCall: ProxerCall<*>? = null
 
-    override fun onStopped(cancelled: Boolean) {
+    override fun onStopped() {
         currentCall?.cancel()
     }
 

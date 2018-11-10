@@ -1,6 +1,6 @@
 package me.proxer.app.chat.pub.message
 
-import com.gojuno.koptional.Some
+import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -92,9 +92,10 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
     fun loadDraft() {
         draftDisposable?.dispose()
         draftDisposable = Single.fromCallable { storageHelper.getMessageDraft(chatRoomId).toOptional() }
+            .filterSome()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { it -> if (it is Some) draft.value = it.value }
+            .subscribe { draft.value = it }
     }
 
     fun updateDraft(draft: String) {

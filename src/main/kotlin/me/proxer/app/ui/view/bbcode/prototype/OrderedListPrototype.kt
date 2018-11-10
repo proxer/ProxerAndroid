@@ -30,6 +30,7 @@ object OrderedListPrototype : AutoClosingPrototype {
             layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
             orientation = VERTICAL
 
+            @Suppress("ExplicitItLambdaParameter") // TODO: False positive. Remove once fixed.
             childViews.forEachIndexed { index, it ->
                 addView(LinearLayout(parent.context).apply {
                     layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)

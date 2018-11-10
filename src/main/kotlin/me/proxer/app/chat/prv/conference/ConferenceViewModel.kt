@@ -41,8 +41,8 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
 
     private val messengerDao by inject<MessengerDao>()
 
-    private val sourceObserver = Observer { it: List<ConferenceWithMessage>? ->
-        it?.let {
+    private val sourceObserver = Observer<List<ConferenceWithMessage>?> {
+        if (it != null) {
             val containsRelevantData = it.isNotEmpty() || storageHelper.areConferencesSynchronized
 
             if (containsRelevantData && storageHelper.isLoggedIn && error.value == null) {

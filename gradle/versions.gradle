@@ -12,27 +12,27 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.0-rc-1'
 
     // Core plugins
-    androidPluginVersion = '3.4.0-alpha02'
+    androidPluginVersion = '3.4.0-alpha03'
     kotlinVersion = '1.3.0'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0.RC9.2'
+    detektPluginVersion = '1.0.0-RC10'
     gradleVersionsPluginVersion = '0.20.0'
     androidCommandPluginVersion = '2.0.1'
-    ktlintPluginVersion = '6.2.1'
+    ktlintPluginVersion = '6.3.0'
     ktlintVersion = '0.29.0'
 
     // Frameworks and compatibility libraries
-    koinVersion = '1.0.2-alpha-7'
+    koinVersion = '1.0.2'
     multidexVersion = '2.0.0'
-    appcompatVersion = "1.0.1"
+    appcompatVersion = "1.0.2"
     browserVersion = "1.0.0"
     lifecycleVersion = "2.0.0"
     roomVersion = "2.1.0-alpha02"
-    workVersion = '1.0.0-alpha10'
+    workVersion = '1.0.0-alpha11'
     coreKtxVersion = "1.0.1"
     fragmentKtxVersion = "1.1.0-alpha01"
     castVersion = "16.1.0"
@@ -64,10 +64,10 @@ ext {
     subsamplingScaleImageViewVersion = 'e9398dce15'
     subsamplingPdfDecoderVersion = 'ad07ddf671'
     tabLayoutHelperVersion = 'ebb8a7acec'
-    materialDialogsVersion = '2.0.0-beta4'
+    materialDialogsVersion = '2.0.0-beta5'
     flexboxVersion = '1.1.0'
     emojiIosVersion = '2a238ccc16'
-    exoplayerVersion = '2.9.0'
+    exoplayerVersion = '2.9.1'
     materialProgressBarVersion = '1.6.0'
     materialRatingBarVersion = '1.3.1'
     customtabsHelperVersion = '1.0.6'
@@ -82,7 +82,7 @@ ext {
     glideVersion = '4.8.0'
     okHttpVersion = '3.11.0'
     okioVersion = '2.1.0'
-    moshiVersion = '1.7.0'
+    moshiVersion = '1.8.0'
     easyHeaderFooterAdapterVersion = '3.0.0'
     kOptionalVersion = '1.6.0'
     kotterknifeVersion = '2.0'

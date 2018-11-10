@@ -1,7 +1,7 @@
 package me.proxer.app.chat.prv.message
 
 import androidx.lifecycle.MediatorLiveData
-import com.gojuno.koptional.Some
+import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -49,36 +49,30 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                 Single.never<List<LocalMessage>>()
             }
 
-    private val dataSource = { it: List<LocalMessage>? ->
-        it?.also {
-            if (storageHelper.isLoggedIn) {
-                if (it.isEmpty() && !hasReachedEnd) {
-                    MessengerWorker.enqueueMessageLoad(safeConference.id)
-                } else {
-                    if (error.value == null) {
-                        dataDisposable?.dispose()
+    private val dataSource: (List<LocalMessage>?) -> Unit = {
+        if (it != null && storageHelper.isLoggedIn) {
+            if (it.isEmpty() && !hasReachedEnd) {
+                MessengerWorker.enqueueMessageLoad(safeConference.id)
+            } else {
+                if (error.value == null) {
+                    dataDisposable?.dispose()
 
-                        page = it.size.div(itemsOnPage)
+                    page = it.size.div(itemsOnPage)
 
-                        isLoading.value = false
-                        error.value = null
-                        data.value = it
+                    isLoading.value = false
+                    error.value = null
+                    data.value = it
 
-                        Completable.fromAction { messengerDao.markConferenceAsRead(safeConference.id) }
-                            .subscribeOn(Schedulers.io())
-                            .subscribeAndLogErrors()
-                    }
+                    Completable.fromAction { messengerDao.markConferenceAsRead(safeConference.id) }
+                        .subscribeOn(Schedulers.io())
+                        .subscribeAndLogErrors()
                 }
             }
         }
-
-        Unit
     }
 
-    private val conferenceSource = { it: LocalConference? ->
-        it?.also { conference.value = it }
-
-        Unit
+    private val conferenceSource: (LocalConference?) -> Unit = {
+        if (it != null) conference.value = it
     }
 
     private val messengerDao by inject<MessengerDao>()
@@ -91,14 +85,8 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     init {
         conference.value = initialConference
 
-        data.addSource(
-            messengerDao.getMessagesLiveDataForConference(initialConference.id),
-            dataSource
-        )
-        conference.addSource(
-            messengerDao.getConferenceLiveData(initialConference.id),
-            conferenceSource
-        )
+        data.addSource(messengerDao.getMessagesLiveDataForConference(initialConference.id), dataSource)
+        conference.addSource(messengerDao.getConferenceLiveData(initialConference.id), conferenceSource)
 
         disposables += bus.register(MessengerErrorEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
@@ -121,12 +109,12 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
     fun loadDraft() {
         draftDisposable?.dispose()
-        draftDisposable = Single.fromCallable {
-            storageHelper.getMessageDraft(safeConference.id.toString()).toOptional()
-        }
+        draftDisposable = Single
+            .fromCallable { storageHelper.getMessageDraft(safeConference.id.toString()).toOptional() }
+            .filterSome()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { it -> if (it is Some) draft.value = it.value }
+            .subscribe { draft.value = it }
     }
 
     fun updateDraft(draft: String) {

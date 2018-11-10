@@ -105,7 +105,7 @@ class NewsWidgetUpdateWorker(
         }
     }
 
-    override fun onStopped(cancelled: Boolean) {
+    override fun onStopped() {
         currentCall?.cancel()
         currentCall = null
     }

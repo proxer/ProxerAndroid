@@ -71,7 +71,7 @@ class NotificationWorker(
 
     private var currentCall: ProxerCall<*>? = null
 
-    override fun onStopped(cancelled: Boolean) {
+    override fun onStopped() {
         currentCall?.cancel()
     }
 

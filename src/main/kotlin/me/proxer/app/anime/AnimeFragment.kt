@@ -198,8 +198,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                         ?.apply {
                             (this.view as ViewGroup).recursiveChildren
                                 .filterIsInstance(TextView::class.java)
-                                .filterNot { it -> it is Button }
-                                .forEach { it -> it.movementMethod = BetterLinkMovementMethod.getInstance() }
+                                .filterNot { it is Button }
+                                .forEach { it.movementMethod = BetterLinkMovementMethod.getInstance() }
                         }
                 }
             }

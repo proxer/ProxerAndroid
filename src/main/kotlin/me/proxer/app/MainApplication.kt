@@ -8,8 +8,6 @@ import android.os.Looper
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
-import androidx.work.Configuration
-import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
@@ -92,8 +90,6 @@ class MainApplication : Application() {
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
-
-        WorkManager.initialize(this, Configuration.Builder().build())
 
         if (BuildConfig.LOG) {
             Timber.plant(TimberFileTree(this))
