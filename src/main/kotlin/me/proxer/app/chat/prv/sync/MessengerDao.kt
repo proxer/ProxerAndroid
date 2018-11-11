@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.sync
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PositionalDataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -73,7 +74,7 @@ abstract class MessengerDao : KoinComponent {
             "|| '%' " +
             "ORDER  BY date DESC"
     )
-    abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<ConferenceWithMessage>?>
+    abstract fun getConferencesDataSourceFactory(searchQuery: String): PositionalDataSource<ConferenceWithMessage>
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>

@@ -136,7 +136,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
         disposables += Single
             .fromCallable { messengerDao.insertMessageToSend(safeUser, text, safeConference.id) }
-            .doOnSuccess { if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization() }
+            .doOnSuccess { if (MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization() }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()
     }

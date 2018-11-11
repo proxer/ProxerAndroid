@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.rubengees.rxbus.RxBus
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.R
@@ -40,12 +41,15 @@ abstract class NewBaseViewModel<T> : ViewModel(), KoinComponent {
 
     init {
         disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { if (isLoginRequired || isLoginErrorPresent()) invalidate() }
 
         disposables += bus.register(CaptchaSolvedEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { if (isCaptchaErrorPresent()) invalidate() }
 
         disposables += bus.register(AgeConfirmationEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { if (isAgeConfirmationRequired) invalidate() }
     }
 

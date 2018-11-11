@@ -67,7 +67,7 @@ abstract class NewBaseContentFragment<T> : BaseFragment() {
             }
         })
 
-        viewModel.networkState.observe(this, Observer {
+        viewModel.networkState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 NetworkState.Idle -> {
                     progress.isRefreshing = false

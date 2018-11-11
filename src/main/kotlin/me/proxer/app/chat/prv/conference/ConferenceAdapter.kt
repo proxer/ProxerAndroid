@@ -23,9 +23,9 @@ import kotterknife.bindView
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
-import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
+import me.proxer.app.newbase.paged.NewBasePagedListAdapter
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
@@ -40,7 +40,9 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
+class ConferenceAdapter(
+    private val storageHelper: StorageHelper
+) : NewBasePagedListAdapter<ConferenceWithMessage, ViewHolder>(ConferenceItemCallback) {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<ConferenceWithMessage> = PublishSubject.create()
@@ -49,13 +51,13 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         setHasStableIds(true)
     }
 
-    override fun getItemId(position: Int): Long = data[position].conference.id
+    override fun getItemId(position: Int): Long = getSafeItem(position).conference.id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_conference, parent, false))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getSafeItem(position))
 
     override fun onViewRecycled(holder: ViewHolder) {
         glide?.clear(holder.image)
@@ -63,10 +65,6 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         glide = null
-    }
-
-    override fun areItemsTheSame(old: ConferenceWithMessage, new: ConferenceWithMessage): Boolean {
-        return old.conference.id == new.conference.id
     }
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
@@ -80,7 +78,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
         fun bind(item: ConferenceWithMessage) {
             itemView.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapAdapterPosition({ positionResolver(adapterPosition) }) { getSafeItem(it) }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

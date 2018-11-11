@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.sync
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.Constraints
 import androidx.work.Data
@@ -46,13 +47,16 @@ class MessengerWorker(
 ) : Worker(context, workerParams), KoinComponent {
 
     companion object : KoinComponent {
+
         const val CONFERENCES_ON_PAGE = 48
         const val MESSAGES_ON_PAGE = 30
 
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
-        private val isRunning = Transformations.map(WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME)) {
+        private val isRunning: LiveData<Boolean> = Transformations.map(
+            WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME)
+        ) {
             it.all { info -> info.state == WorkInfo.State.RUNNING }
         }
 
@@ -74,7 +78,9 @@ class MessengerWorker(
             WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = isRunning.value ?: false
+        fun isRunning(): Boolean {
+            return isRunning.value ?: false
+        }
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
@@ -327,7 +333,8 @@ class MessengerWorker(
                         ProxerException.ErrorType.SERVER,
                         ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE,
                         result
-                    ), messageId
+                    ),
+                    messageId
                 )
             }
         }
@@ -367,9 +374,8 @@ class MessengerWorker(
     }
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val mostRecentMessage =
-            messengerDao.findMostRecentMessageForConference(conference.id.toLong())
-                ?.toNonLocalMessage()
+        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())
+            ?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
             null -> fetchForEmptyConference(conference)
@@ -454,10 +460,7 @@ class MessengerWorker(
 
     private fun showNotification(context: Context) {
         val unreadMap = messengerDao.getUnreadConferences().associate {
-            it to messengerDao.getMostRecentMessagesForConference(
-                it.id,
-                it.unreadMessageAmount
-            ).asReversed()
+            it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
         }
 
         MessengerNotifications.showOrUpdate(context, unreadMap)

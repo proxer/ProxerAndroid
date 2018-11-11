@@ -1,17 +1,13 @@
 package me.proxer.app.chat.prv.conference
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.transition.TransitionManager
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
@@ -20,30 +16,24 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
+import me.proxer.app.chat.prv.sync.MessengerWorker
+import me.proxer.app.newbase.paged.NewBasePagedFragment
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.doAfterAnimations
-import me.proxer.app.util.extension.isAtTop
-import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 
 /**
  * @author Ruben Gees
  */
-class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
+class ConferenceFragment : NewBasePagedFragment<ConferenceWithMessage>() {
 
     companion object {
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
@@ -53,55 +43,53 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         }
     }
 
+    override val isSwipeToRefreshEnabled = false
+
+    override val emptyDataMessage: Int
+        get() = when (searchQuery.isNullOrBlank()) {
+            true -> R.string.error_no_data_conferences
+            false -> R.string.error_no_data_search
+        }
+
     override val viewModel by viewModel<ConferenceViewModel> { parametersOf(searchQuery ?: "") }
 
-    private var adapter by Delegates.notNull<ConferenceAdapter>()
+    override val layoutManager by unsafeLazy {
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()),
+            StaggeredGridLayoutManager.VERTICAL
+        )
+    }
 
-    override val contentContainer: ViewGroup
-        get() = recyclerView
-
-    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
-    private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+    override val innerAdapter = ConferenceAdapter(storageHelper)
 
     private var searchQuery: String?
         get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
             requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
-            shouldScrollToTop = true
-
             viewModel.searchQuery = value ?: ""
         }
 
-    private var shouldScrollToTop = false
+    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = ConferenceAdapter(storageHelper)
+        innerAdapter.glide = GlideApp.with(this)
 
-        adapter.clickSubject
+        innerAdapter.clickSubject
             .autoDisposable(this.scope())
             .subscribe { (conference) -> MessengerActivity.navigateTo(requireActivity(), conference) }
 
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_conferences, container, false)
-    }
+    override fun onStart() {
+        super.onStart()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter.glide = GlideApp.with(this)
-
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(
-            DeviceUtils.calculateSpanAmount(requireActivity()),
-            StaggeredGridLayoutManager.VERTICAL
-        )
-        recyclerView.adapter = adapter
+        if (!MessengerWorker.isRunning()) {
+            MessengerWorker.enqueueSynchronization()
+        }
     }
 
     override fun onResume() {
@@ -112,13 +100,6 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         bus.register(ConferenceFragmentPingEvent::class.java)
             .autoDisposable(this.scope())
             .subscribe()
-    }
-
-    override fun onDestroyView() {
-        recyclerView.layoutManager = null
-        recyclerView.adapter = null
-
-        super.onDestroyView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -150,10 +131,12 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                     }
                 }
 
-            if (searchQuery.isNullOrBlank().not()) {
-                searchItem.expandActionView()
-                searchView.setQuery(searchQuery, false)
-                searchView.clearFocus()
+            searchQuery?.let {
+                if (it.isNotBlank()) {
+                    searchItem.expandActionView()
+                    searchView.setQuery(it, false)
+                    searchView.clearFocus()
+                }
             }
         }
 
@@ -167,40 +150,5 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun showData(data: List<ConferenceWithMessage>) {
-        super.showData(data)
-
-        val wasAtFirstPosition = recyclerView.isAtTop()
-
-        adapter.swapDataAndNotifyWithDiffing(data)
-
-        when {
-            adapter.isEmpty() -> when (searchQuery.isNullOrBlank()) {
-                true -> showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
-                false -> showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
-            }
-            shouldScrollToTop -> recyclerView.scrollToTop()
-            wasAtFirstPosition -> recyclerView.doAfterAnimations { recyclerView.smoothScrollToPosition(0) }
-        }
-
-        shouldScrollToTop = false
-    }
-
-    override fun hideData() {
-        adapter.swapDataAndNotifyWithDiffing(emptyList())
-
-        recyclerView.scrollToTop()
-
-        super.hideData()
-    }
-
-    override fun showError(action: ErrorAction) {
-        super.showError(action)
-
-        if (adapter.isEmpty()) {
-            recyclerView.scrollToTop()
-        }
     }
 }

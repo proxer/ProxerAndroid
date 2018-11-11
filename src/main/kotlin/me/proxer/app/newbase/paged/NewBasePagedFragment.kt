@@ -87,7 +87,7 @@ abstract class NewBasePagedFragment<T> : NewBaseContentFragment<PagedList<T>>() 
     override fun showError(action: ErrorAction) {
         if (adapter.footer == null) {
             adapter.footer = LayoutInflater.from(context).inflate(R.layout.layout_error, root, false).apply {
-                layoutParams.height = when (innerAdapter.itemCount <= 0) {
+                layoutParams.height = when (viewModel.data.value?.loadedCount ?: 0 <= 0) {
                     true -> ViewGroup.LayoutParams.MATCH_PARENT
                     false -> ViewGroup.LayoutParams.WRAP_CONTENT
                 }
