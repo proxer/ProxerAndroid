@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
@@ -32,6 +33,7 @@ import me.proxer.app.media.LocalTag
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.ui.view.ExpandableSelectionView
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.getEnumSet
 import me.proxer.app.util.extension.putEnumSet
 import me.proxer.app.util.extension.toCategory
@@ -331,6 +333,30 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         return searchBottomSheetManager.onBackPressed()
     }
 
+    override fun showData(data: List<MediaListEntry>) {
+        super.showData(data)
+
+        setContentFooterIfNeeded()
+    }
+
+    override fun hideData() {
+        adapter.footer = null
+
+        super.hideData()
+    }
+
+    override fun showError(action: ErrorUtils.ErrorAction) {
+        super.showError(action)
+
+        adapter.footer?.updatePadding(bottom = searchBottomSheetTitle.height)
+    }
+
+    override fun hideError() {
+        super.hideError()
+
+        setContentFooterIfNeeded()
+    }
+
     private fun setInitialType() {
         if (requireActivity().intent.action == Intent.ACTION_VIEW) {
             if (category == Category.ANIME) {
@@ -356,6 +382,17 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             when (requireActivity().intent.data?.pathSegments?.getOrNull(2) ?: 2) {
                 "rating" -> sortCriteria = MediaSearchSortCriteria.RATING
                 "clicks" -> sortCriteria = MediaSearchSortCriteria.CLICKS
+            }
+        }
+    }
+
+    private fun setContentFooterIfNeeded() {
+        if (adapter.footer == null) {
+            adapter.footer = View(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    searchBottomSheetTitle.height
+                )
             }
         }
     }

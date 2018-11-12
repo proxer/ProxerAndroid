@@ -112,7 +112,11 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         }
     }
 
-    override fun hideData() = innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
+    override fun hideData() {
+        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
+
+        recyclerView.safeLayoutManager.scrollToTop()
+    }
 
     override fun showError(action: ErrorAction) {
         if (adapter.footer == null) {

@@ -191,8 +191,10 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
     }
 
     override fun hideData() {
-        super.hideData()
-
         adapter.swapDataAndNotifyWithDiffing(emptyList())
+
+        recyclerView.safeLayoutManager.scrollToTop()
+
+        super.hideData()
     }
 }

@@ -322,7 +322,6 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     }
 
     override fun hideData() {
-
         if (innerAdapter.isEmpty()) {
             inputContainer.isGone = true
         }
