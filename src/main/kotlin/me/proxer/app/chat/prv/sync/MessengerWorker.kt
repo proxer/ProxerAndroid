@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.sync
 
 import android.content.Context
+import androidx.lifecycle.Transformations
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
@@ -45,11 +46,15 @@ class MessengerWorker(
 ) : Worker(context, workerParams), KoinComponent {
 
     companion object : KoinComponent {
+        const val CONFERENCES_ON_PAGE = 48
+        const val MESSAGES_ON_PAGE = 30
+
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
-        const val CONFERENCES_ON_PAGE = 48
-        const val MESSAGES_ON_PAGE = 30
+        private val isRunning = Transformations.map(WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME)) {
+            it.all { info -> info.state == WorkInfo.State.RUNNING }
+        }
 
         private val bus by inject<RxBus>()
         private val storageHelper by inject<StorageHelper>()
@@ -69,8 +74,7 @@ class MessengerWorker(
             WorkManager.getInstance().cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME).value
-            ?.all { it.state == WorkInfo.State.RUNNING } ?: false
+        fun isRunning() = isRunning.value ?: false
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
