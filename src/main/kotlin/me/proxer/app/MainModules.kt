@@ -51,12 +51,13 @@ import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
-import me.proxer.app.util.TaggedSocketFactory
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.http.TaggedSocketFactory
+import me.proxer.app.util.http.Tls12SocketFactory
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerApi.Builder.LoggingConstraints
@@ -66,24 +67,52 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
+import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
+import okhttp3.TlsVersion
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import timber.log.Timber
+import java.security.KeyStore
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 private const val API_LOGGING_TAG = "API"
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
 
-private val applicationModules = module {
+private val applicationModules = module(createOnStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
     single { RxBus() }
 
     single {
+        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+            init(null as KeyStore?)
+        }
+
+        trustManagerFactory.trustManagers
+            .find { trustManager -> trustManager is X509TrustManager } as X509TrustManager
+    }
+
+    single {
+        val connectionSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)
+            .build()
+
+        val client = OkHttpClient.Builder()
+            .retryOnConnectionFailure(false)
+            .connectionSpecs(listOf(connectionSpec))
+            .socketFactory(TaggedSocketFactory())
+            .sslSocketFactory(Tls12SocketFactory(get()), get())
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()
+
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
             .userAgent(USER_AGENT)
             .apply { if (BuildConfig.LOG) customLogger { message -> Timber.tag(API_LOGGING_TAG).i(message) } }
@@ -103,15 +132,7 @@ private val applicationModules = module {
             .loggingTag(API_LOGGING_TAG)
             .loginTokenManager(get())
             .moshi(Moshi.Builder().build())
-            .client(
-                OkHttpClient.Builder()
-                    .retryOnConnectionFailure(false)
-                    .socketFactory(TaggedSocketFactory())
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
-                    .build()
-            )
+            .client(client)
             .build()
     }
 

@@ -2,6 +2,7 @@ package me.proxer.app
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Environment
 import android.os.Looper
@@ -9,6 +10,8 @@ import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.security.ProviderInstaller
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
@@ -55,6 +58,7 @@ class MainApplication : Application() {
         NotificationUtils.createNotificationChannels(this)
 
         initGlobalErrorHandler()
+        initSecurity()
         initLibs()
         initCache()
         initNightMode()
@@ -71,20 +75,30 @@ class MainApplication : Application() {
         }
     }
 
-    private fun initNightMode() {
-        val nightMode = preferenceHelper.nightMode
+    private fun initGlobalErrorHandler() {
+        val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
 
-        // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
-        // and creating an instance before the first inflation fixes that.
-        // See: https://issuetracker.google.com/issues/37124582
-        if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
-            try {
-                WebView(this)
-            } catch (ignored: Throwable) {
-            }
+        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
+            Timber.e(error)
+
+            oldHandler?.uncaughtException(thread, error)
         }
+    }
 
-        AppCompatDelegate.setDefaultNightMode(nightMode)
+    private fun initSecurity() {
+        ProviderInstaller.installIfNeededAsync(this, object : ProviderInstaller.ProviderInstallListener {
+            override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
+                GoogleApiAvailability.getInstance().apply {
+                    Timber.e("Error installing security patches with error code $errorCode")
+
+                    if (isUserResolvableError(errorCode)) {
+                        showErrorNotification(this@MainApplication, errorCode)
+                    }
+                }
+            }
+
+            override fun onProviderInstalled() = Unit
+        })
     }
 
     private fun initLibs() {
@@ -124,14 +138,20 @@ class MainApplication : Application() {
         }
     }
 
-    private fun initGlobalErrorHandler() {
-        val oldHandler = Thread.getDefaultUncaughtExceptionHandler()
+    private fun initNightMode() {
+        val nightMode = preferenceHelper.nightMode
 
-        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
-            Timber.e(error)
-
-            oldHandler?.uncaughtException(thread, error)
+        // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
+        // and creating an instance before the first inflation fixes that.
+        // See: https://issuetracker.google.com/issues/37124582
+        if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
+            try {
+                WebView(this)
+            } catch (ignored: Throwable) {
+            }
         }
+
+        AppCompatDelegate.setDefaultNightMode(nightMode)
     }
 
     private fun enableStrictModeForDebug() {

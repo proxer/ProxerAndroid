@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.http
 
 import android.net.TrafficStats
 import java.net.InetAddress
