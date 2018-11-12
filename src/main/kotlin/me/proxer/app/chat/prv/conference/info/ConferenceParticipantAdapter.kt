@@ -27,6 +27,7 @@ import me.proxer.app.chat.prv.conference.info.ConferenceParticipantAdapter.ViewH
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.messenger.ConferenceParticipant
@@ -113,6 +114,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

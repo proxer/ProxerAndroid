@@ -40,6 +40,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -135,6 +136,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         glide
             ?.downloadOnly()
             ?.load(next)
+            ?.logErrors()
             ?.into(target)
     }
 
@@ -190,6 +192,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 glide
                     ?.downloadOnly()
                     ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                    ?.logErrors()
                     ?.into(target)
             }
         }

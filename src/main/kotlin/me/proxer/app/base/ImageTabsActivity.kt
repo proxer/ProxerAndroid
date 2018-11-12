@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.postDelayed
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
@@ -25,7 +24,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.ActivityUtils
-import me.proxer.app.util.wrapper.SimpleGlideRequestListener
+import me.proxer.app.util.extension.logErrors
 import okhttp3.HttpUrl
 
 /**
@@ -123,13 +122,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
         } else {
             GlideApp.with(this)
                 .load(headerImageUrl.toString())
-                .listener(object : SimpleGlideRequestListener<Drawable?> {
-                    override fun onLoadFailed(error: GlideException?): Boolean {
-                        supportStartPostponedEnterTransition()
-
-                        return false
-                    }
-                })
+                .logErrors()
                 .into(object : ImageViewTarget<Drawable>(headerImage) {
                     override fun setResource(resource: Drawable?) {
                         headerImage.setImageDrawable(resource)
@@ -137,6 +130,10 @@ abstract class ImageTabsActivity : DrawerActivity() {
                         if (resource != null) {
                             supportStartPostponedEnterTransition()
                         }
+                    }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        supportStartPostponedEnterTransition()
                     }
                 })
         }

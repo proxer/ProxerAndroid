@@ -16,6 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.logErrors
 import okhttp3.HttpUrl
 
 /**
@@ -49,6 +50,7 @@ class ImageDetailActivity : BaseActivity() {
 
         GlideApp.with(this)
             .load(url)
+            .logErrors()
             .into(object : ImageViewTarget<Drawable>(image) {
                 override fun setResource(resource: Drawable?) {
                     image.setImageDrawable(resource)

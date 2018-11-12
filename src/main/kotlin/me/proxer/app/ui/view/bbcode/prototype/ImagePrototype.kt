@@ -26,6 +26,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -94,5 +95,6 @@ object ImagePrototype : AutoClosingPrototype {
                 .iconColor(view.context)
                 .sizeDp(32)
         )
+        .logErrors()
         .into(view)
 }

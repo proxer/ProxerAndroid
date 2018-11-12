@@ -20,6 +20,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceParticipantAdapter.ViewHolder
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
@@ -97,6 +98,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

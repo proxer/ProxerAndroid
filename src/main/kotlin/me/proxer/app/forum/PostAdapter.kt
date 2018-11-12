@@ -24,6 +24,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
@@ -130,6 +131,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

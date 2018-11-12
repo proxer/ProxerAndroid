@@ -17,17 +17,21 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.BuildConfig
 import me.proxer.app.BuildConfig.APPLICATION_ID
+import me.proxer.app.GlideRequest
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import timber.log.Timber
 import java.util.EnumSet
 import java.util.regex.Pattern.quote
 
@@ -65,7 +69,16 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
 
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
     .transition(DrawableTransitionOptions.withCrossFade())
+    .logErrors()
     .into(view)
+
+inline fun <T> GlideRequest<T>.logErrors(): GlideRequest<T> = this.addListener(object : SimpleGlideRequestListener<T> {
+    override fun onLoadFailed(error: GlideException?): Boolean {
+        if (error != null) Timber.e(error)
+
+        return false
+    }
+})
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
 

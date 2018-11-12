@@ -34,6 +34,7 @@ import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
@@ -379,6 +380,7 @@ class ChatAdapter(
                 glide?.load(ProxerUrls.userImage(message.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

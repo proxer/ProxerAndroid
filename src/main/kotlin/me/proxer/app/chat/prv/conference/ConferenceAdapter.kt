@@ -31,6 +31,7 @@ import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
@@ -195,6 +196,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                 glide?.load(ProxerUrls.userImage(item.conference.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

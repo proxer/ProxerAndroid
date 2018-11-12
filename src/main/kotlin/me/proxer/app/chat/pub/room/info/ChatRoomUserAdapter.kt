@@ -27,6 +27,7 @@ import me.proxer.app.chat.pub.room.info.ChatRoomUserAdapter.ViewHolder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.chat.ChatRoomUser
@@ -109,6 +110,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }

@@ -28,6 +28,7 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.getSafeParcelable
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -225,6 +226,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
                     ?.circleCrop()
+                    ?.logErrors()
                     ?.into(image)
             }
         }
