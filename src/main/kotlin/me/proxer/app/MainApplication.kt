@@ -138,6 +138,7 @@ class MainApplication : Application() {
         if (BuildConfig.DEBUG) {
             val threadPolicy = StrictModeCompat.ThreadPolicy.Builder()
                 .detectAll()
+                .permitCustomSlowCalls()
                 .permitDiskWrites()
                 .permitDiskReads()
                 .penaltyDeath()
