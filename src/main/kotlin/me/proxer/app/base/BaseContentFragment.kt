@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -96,7 +95,10 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun hideData() {
-        contentContainer.isGone = true
+        // Post hiding to let all components finish layout and properly save state.
+        contentContainer.post {
+            if (view != null) contentContainer.isVisible = false
+        }
     }
 
     protected open fun showError(action: ErrorAction) {
@@ -125,6 +127,9 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun hideError() {
-        errorContainer.isGone = true
+        // Post hiding to let all components finish layout and properly save state.
+        errorContainer.post {
+            if (view != null) errorContainer.isVisible = false
+        }
     }
 }

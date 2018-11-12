@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.core.view.postDelayed
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -66,8 +65,6 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
-
-    private var isFirstData = true
 
     private var searchQuery: String?
         get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
@@ -180,39 +177,22 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         super.showData(data)
 
         val wasAtFirstPosition = recyclerView.safeLayoutManager.isAtTop()
-        val wasEmpty = adapter.isEmpty()
 
         adapter.swapDataAndNotifyWithDiffing(data)
 
-        if (adapter.isEmpty()) {
-            if (searchQuery.isNullOrBlank()) {
-                showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
-            } else {
-                showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
+        when {
+            adapter.isEmpty() -> when (searchQuery.isNullOrBlank()) {
+                true -> showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
+                false -> showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
             }
-        } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayed(50) {
-                if (view != null) {
-                    when {
-                        wasEmpty -> recyclerView.safeLayoutManager.scrollToTop()
-                        else -> recyclerView.smoothScrollToPosition(0)
-                    }
-                }
-            }
+            wasAtFirstPosition -> recyclerView.smoothScrollToPosition(0)
+            data.isEmpty() -> recyclerView.safeLayoutManager.scrollToTop()
         }
-
-        isFirstData = false
     }
 
     override fun hideData() {
         super.hideData()
 
         adapter.swapDataAndNotifyWithDiffing(emptyList())
-    }
-
-    override fun showError(action: ErrorAction) {
-        super.showError(action)
-
-        isFirstData = false
     }
 }

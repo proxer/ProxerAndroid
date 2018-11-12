@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.view.postDelayed
-import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -17,12 +15,12 @@ import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
-import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -59,8 +57,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
     override val errorButton: Button
         get() = errorContainer.findViewById(R.id.errorButton)
-
-    private var isFirstData = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
@@ -105,27 +101,15 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showData(data: List<T>) {
-        updateRecyclerViewPadding()
-
         val wasAtFirstPosition = isAtTop()
-        val wasEmpty = innerAdapter.isEmpty()
 
         innerAdapter.swapDataAndNotifyWithDiffing(data)
 
-        if (innerAdapter.isEmpty()) {
-            showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-        } else if (!isFirstData && (wasAtFirstPosition || wasEmpty)) {
-            recyclerView.postDelayed(50) {
-                if (view != null) {
-                    when {
-                        wasEmpty -> scrollToTop()
-                        else -> recyclerView.smoothScrollToPosition(0)
-                    }
-                }
-            }
+        when {
+            innerAdapter.isEmpty() -> showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
+            wasAtFirstPosition -> recyclerView.smoothScrollToPosition(0)
+            data.isEmpty() -> recyclerView.safeLayoutManager.scrollToTop()
         }
-
-        isFirstData = false
     }
 
     override fun hideData() = innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
@@ -140,29 +124,13 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             }
         }
 
-        updateRecyclerViewPadding()
-
-        isFirstData = false
-
         super.showError(action)
     }
 
     override fun hideError() {
         adapter.footer = null
-
-        updateRecyclerViewPadding()
     }
 
     protected open fun isAtTop() = layoutManager.isAtCompleteTop()
     protected open fun scrollToTop() = layoutManager.scrollToTop()
-
-    protected open fun updateRecyclerViewPadding() = when (innerAdapter.itemCount <= 0 && adapter.footer != null) {
-        true -> recyclerView.setPadding(0)
-        false -> {
-            val horizontalPadding = DeviceUtils.getHorizontalMargin(requireContext())
-            val verticalPadding = DeviceUtils.getVerticalMargin(requireContext())
-
-            recyclerView.setPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding)
-        }
-    }
 }

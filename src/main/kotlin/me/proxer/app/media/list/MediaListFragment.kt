@@ -331,17 +331,6 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         return searchBottomSheetManager.onBackPressed()
     }
 
-    override fun updateRecyclerViewPadding() {
-        super.updateRecyclerViewPadding()
-
-        if (innerAdapter.itemCount > 0 || adapter.footer == null) {
-            recyclerView.setPadding(
-                recyclerView.paddingLeft, recyclerView.paddingTop, recyclerView.paddingRight,
-                recyclerView.paddingBottom + searchBottomSheetTitle.measuredHeight
-            )
-        }
-    }
-
     private fun setInitialType() {
         if (requireActivity().intent.action == Intent.ACTION_VIEW) {
             if (category == Category.ANIME) {
