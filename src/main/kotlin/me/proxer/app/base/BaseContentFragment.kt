@@ -95,10 +95,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun hideData() {
-        // Post hiding to let all components finish layout and properly save state.
-        contentContainer.post {
-            if (view != null) contentContainer.isVisible = false
-        }
+        contentContainer.isVisible = false
     }
 
     protected open fun showError(action: ErrorAction) {
@@ -127,9 +124,6 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     }
 
     protected open fun hideError() {
-        // Post hiding to let all components finish layout and properly save state.
-        errorContainer.post {
-            if (view != null) errorContainer.isVisible = false
-        }
+        errorContainer.isVisible = false
     }
 }

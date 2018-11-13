@@ -51,20 +51,41 @@ inline fun ViewGroup.enableLayoutAnimationsSafely() {
     this.layoutTransition = LayoutTransition().apply { setAnimateParentHierarchy(false) }
 }
 
-fun RecyclerView.LayoutManager.isAtCompleteTop() = when (this) {
-    is StaggeredGridLayoutManager -> findFirstCompletelyVisibleItemPositions(null).contains(0)
-    is LinearLayoutManager -> findFirstCompletelyVisibleItemPosition() == 0
+fun RecyclerView.isAtCompleteTop() = when (val layoutManager = this.safeLayoutManager) {
+    is StaggeredGridLayoutManager -> layoutManager.findFirstCompletelyVisibleItemPositions(null).contains(0)
+    is LinearLayoutManager -> layoutManager.findFirstCompletelyVisibleItemPosition() == 0
     else -> false
 }
 
-fun RecyclerView.LayoutManager.isAtTop() = when (this) {
-    is StaggeredGridLayoutManager -> findFirstVisibleItemPositions(null).contains(0)
-    is LinearLayoutManager -> findFirstVisibleItemPosition() == 0
+fun RecyclerView.isAtTop() = when (val layoutManager = this.safeLayoutManager) {
+    is StaggeredGridLayoutManager -> layoutManager.findFirstVisibleItemPositions(null).contains(0)
+    is LinearLayoutManager -> layoutManager.findFirstVisibleItemPosition() == 0
     else -> false
 }
 
-fun RecyclerView.LayoutManager.scrollToTop() = when (this) {
-    is StaggeredGridLayoutManager -> scrollToPositionWithOffset(0, 0)
-    is LinearLayoutManager -> scrollToPositionWithOffset(0, 0)
-    else -> Unit
+fun RecyclerView.scrollToTop() {
+    // The various #scrollToPosition methods of RecyclerView and LayoutManagers have various edge cases, in which
+    // they do not work reliably. Reset the layout manager to force scroll to position 0.
+    val previousLayoutManager = safeLayoutManager
+
+    layoutManager = null
+    layoutManager = previousLayoutManager
+
+    when (val layoutManager = this.safeLayoutManager) {
+        is StaggeredGridLayoutManager -> layoutManager.scrollToPositionWithOffset(0, 0)
+        is LinearLayoutManager -> layoutManager.scrollToPositionWithOffset(0, 0)
+    }
+}
+
+fun RecyclerView.doAfterAnimations(action: () -> Unit) {
+    post {
+        if (isAnimating) {
+            val safeItemAnimator = itemAnimator
+                ?: throw IllegalStateException("RecyclerView is reporting isAnimating as true, but no itemAnimator is set")
+
+            safeItemAnimator.isRunning { doAfterAnimations(action) }
+        } else {
+            action()
+        }
+    }
 }

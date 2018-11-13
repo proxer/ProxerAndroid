@@ -45,6 +45,7 @@ import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.safeText
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -241,7 +242,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
                         messageInput.safeText.clear()
 
-                        scrollToTop()
+                        recyclerView.scrollToTop()
                     }
                 }
             }
@@ -319,7 +320,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    override fun isAtTop() = layoutManager.isAtTop()
+    override fun isAtTop() = recyclerView.isAtTop()
 
     private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
         .icon(iconicRes)

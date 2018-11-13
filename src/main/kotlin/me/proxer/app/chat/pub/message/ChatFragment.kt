@@ -49,6 +49,7 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeText
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -254,7 +255,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
                         messageInput.safeText.clear()
 
-                        scrollToTop()
+                        recyclerView.scrollToTop()
                     }
                 }
             }
@@ -337,7 +338,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         }
     }
 
-    override fun isAtTop() = layoutManager.isAtTop()
+    override fun isAtTop() = recyclerView.isAtTop()
 
     private fun updateInputVisibility() {
         val isLoggedIn = storageHelper.user != null

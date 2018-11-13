@@ -20,7 +20,6 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -32,8 +31,8 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.doAfterAnimations
 import me.proxer.app.util.extension.isAtTop
-import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,8 +57,6 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     private var adapter by Delegates.notNull<ConferenceAdapter>()
 
-    private var pingDisposable: Disposable? = null
-
     override val contentContainer: ViewGroup
         get() = recyclerView
 
@@ -71,8 +68,12 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         set(value) {
             requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
+            shouldScrollToTop = true
+
             viewModel.searchQuery = value ?: ""
         }
+
+    private var shouldScrollToTop = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,14 +109,9 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
         MessengerNotifications.cancel(requireContext())
 
-        pingDisposable = bus.register(ConferenceFragmentPingEvent::class.java).subscribe()
-    }
-
-    override fun onPause() {
-        pingDisposable?.dispose()
-        pingDisposable = null
-
-        super.onPause()
+        bus.register(ConferenceFragmentPingEvent::class.java)
+            .autoDisposable(this.scope())
+            .subscribe()
     }
 
     override fun onDestroyView() {
@@ -154,9 +150,9 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                     }
                 }
 
-            searchQuery?.let {
+            if (searchQuery.isNullOrBlank().not()) {
                 searchItem.expandActionView()
-                searchView.setQuery(it, false)
+                searchView.setQuery(searchQuery, false)
                 searchView.clearFocus()
             }
         }
@@ -176,7 +172,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
     override fun showData(data: List<ConferenceWithMessage>) {
         super.showData(data)
 
-        val wasAtFirstPosition = recyclerView.safeLayoutManager.isAtTop()
+        val wasAtFirstPosition = recyclerView.isAtTop()
 
         adapter.swapDataAndNotifyWithDiffing(data)
 
@@ -185,16 +181,26 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
                 true -> showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
                 false -> showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
             }
-            wasAtFirstPosition -> recyclerView.smoothScrollToPosition(0)
-            data.isEmpty() -> recyclerView.safeLayoutManager.scrollToTop()
+            shouldScrollToTop -> recyclerView.scrollToTop()
+            wasAtFirstPosition -> recyclerView.doAfterAnimations { recyclerView.smoothScrollToPosition(0) }
         }
+
+        shouldScrollToTop = false
     }
 
     override fun hideData() {
         adapter.swapDataAndNotifyWithDiffing(emptyList())
 
-        recyclerView.safeLayoutManager.scrollToTop()
+        recyclerView.scrollToTop()
 
         super.hideData()
+    }
+
+    override fun showError(action: ErrorAction) {
+        super.showError(action)
+
+        if (adapter.isEmpty()) {
+            recyclerView.scrollToTop()
+        }
     }
 }

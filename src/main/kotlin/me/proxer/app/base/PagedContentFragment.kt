@@ -17,10 +17,10 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.doAfterAnimations
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
@@ -107,15 +107,14 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         when {
             innerAdapter.isEmpty() -> showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-            wasAtFirstPosition -> recyclerView.smoothScrollToPosition(0)
-            data.isEmpty() -> recyclerView.safeLayoutManager.scrollToTop()
+            wasAtFirstPosition -> recyclerView.doAfterAnimations { recyclerView.smoothScrollToPosition(0) }
         }
     }
 
     override fun hideData() {
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
-        recyclerView.safeLayoutManager.scrollToTop()
+        recyclerView.scrollToTop()
     }
 
     override fun showError(action: ErrorAction) {
@@ -128,6 +127,10 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
             }
         }
 
+        if (innerAdapter.isEmpty()) {
+            recyclerView.scrollToTop()
+        }
+
         super.showError(action)
     }
 
@@ -135,6 +138,5 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         adapter.footer = null
     }
 
-    protected open fun isAtTop() = layoutManager.isAtCompleteTop()
-    protected open fun scrollToTop() = layoutManager.scrollToTop()
+    protected open fun isAtTop() = recyclerView.isAtCompleteTop()
 }
