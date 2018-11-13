@@ -60,8 +60,6 @@ import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.Tls12SocketFactory
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerApi.Builder.LoggingConstraints
-import me.proxer.library.api.ProxerApi.Builder.LoggingStrategy
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -70,6 +68,8 @@ import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.TlsVersion
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -99,6 +99,13 @@ private val applicationModules = module(createOnStart = true) {
     }
 
     single {
+        val logging = when {
+            BuildConfig.LOG -> HttpLoggingInterceptor { message -> Timber.i(message) }.apply {
+                level = if (BuildConfig.DEBUG) Level.HEADERS else Level.BASIC
+            }
+            else -> null
+        }
+
         val connectionSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
             .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)
             .build()
@@ -111,24 +118,11 @@ private val applicationModules = module(createOnStart = true) {
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+            .apply { if (logging != null) addInterceptor(logging) }
             .build()
 
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
             .userAgent(USER_AGENT)
-            .apply { if (BuildConfig.LOG) customLogger { message -> Timber.tag(API_LOGGING_TAG).i(message) } }
-            .loggingStrategy(
-                when {
-                    BuildConfig.DEBUG -> LoggingStrategy.ALL
-                    BuildConfig.LOG -> LoggingStrategy.API
-                    else -> LoggingStrategy.NONE
-                }
-            )
-            .loggingConstraints(
-                when {
-                    BuildConfig.DEBUG -> LoggingConstraints.NONE
-                    else -> LoggingConstraints.URL_ONLY
-                }
-            )
             .loggingTag(API_LOGGING_TAG)
             .loginTokenManager(get())
             .moshi(Moshi.Builder().build())

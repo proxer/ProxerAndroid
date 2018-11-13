@@ -36,12 +36,12 @@ import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.permitSlowCalls
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 
@@ -63,7 +63,7 @@ class StreamActivity : BaseActivity() {
 
     private val isProxerStream: Boolean
         get() = intent.dataString
-            ?.let { HttpUrl.parse(it) }
+            ?.let { Utils.parseAndFixUrl(it) }
             ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
             ?: false
 
