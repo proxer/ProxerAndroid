@@ -118,7 +118,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showError(action: ErrorAction) {
-        if (adapter.footer == null) {
+        // Assign error footer if not existing or another footer.
+        if (adapter.footer?.findViewById<View>(R.id.errorContainer) == null) {
             adapter.footer = LayoutInflater.from(context).inflate(R.layout.layout_error, root, false).apply {
                 layoutParams.height = when (innerAdapter.itemCount <= 0) {
                     true -> ViewGroup.LayoutParams.MATCH_PARENT
