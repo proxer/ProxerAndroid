@@ -41,6 +41,7 @@ import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.safeData
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
@@ -248,7 +249,10 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     override fun hideData() {
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
+
         adapter.header = null
+
+        recyclerView.scrollToTop()
 
         super.hideData()
     }

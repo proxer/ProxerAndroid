@@ -49,6 +49,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
+import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -363,6 +364,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
         adapter.header = null
         adapter.footer = null
+
+        recyclerView.scrollToTop()
 
         super.hideData()
     }
