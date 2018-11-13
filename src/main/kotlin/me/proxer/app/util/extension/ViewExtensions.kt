@@ -80,8 +80,8 @@ fun RecyclerView.scrollToTop() {
 fun RecyclerView.doAfterAnimations(action: () -> Unit) {
     post {
         if (isAnimating) {
-            val safeItemAnimator = itemAnimator
-                ?: throw IllegalStateException("RecyclerView is reporting isAnimating as true, but no itemAnimator is set")
+            val safeItemAnimator = itemAnimator ?: throw IllegalStateException("RecyclerView is reporting" +
+                "isAnimating as true, but no itemAnimator is set")
 
             safeItemAnimator.isRunning { doAfterAnimations(action) }
         } else {

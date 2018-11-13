@@ -22,11 +22,8 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
             .setQueryParameter("device", ProxerUtils.getSafeApiEnumName(Device.MOBILE))
             .build()
 
-        return when (url) {
-            null -> text
-            else -> text.toSpannableStringBuilder()
-                .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_poll_link))
-                .linkifyUrl(url)
-        }
+        return text.toSpannableStringBuilder()
+            .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_poll_link))
+            .linkifyUrl(url)
     }
 }
