@@ -30,7 +30,6 @@ import me.proxer.app.MainApplication
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.permitSlowCalls
 import okhttp3.OkHttpClient
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
@@ -249,7 +248,7 @@ class StreamPlayerManager(
     }
 
     private fun buildCastPlayer(context: Activity): CastPlayer {
-        val castContext = permitSlowCalls { CastContext.getSharedInstance(context) }
+        val castContext = CastContext.getSharedInstance(context)
 
         return CastPlayer(castContext).apply {
             setSessionAvailabilityListener(castSessionAvailabilityListener)

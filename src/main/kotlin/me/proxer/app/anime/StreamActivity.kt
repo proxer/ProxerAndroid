@@ -37,7 +37,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.permitSlowCalls
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -116,9 +115,7 @@ class StreamActivity : BaseActivity() {
         menuInflater.inflate(R.menu.activity_stream, menu)
 
         if (isProxerStream) {
-            permitSlowCalls {
-                mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
-            }
+            mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
         }
 
         return true
