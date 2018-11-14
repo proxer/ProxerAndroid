@@ -25,6 +25,8 @@ import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.MainApplication
 import me.proxer.app.anime.resolver.StreamResolutionResult
@@ -37,10 +39,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class StreamPlayerManager(
-    context: Activity,
-    rawClient: OkHttpClient
-) {
+class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
 
     private companion object {
         private const val WAS_PLAYING_EXTRA = "was_playing"
@@ -54,9 +53,11 @@ class StreamPlayerManager(
 
     private val castSessionAvailabilityListener = object : CastPlayer.SessionAvailabilityListener {
         override fun onCastSessionAvailable() {
-            castPlayer.loadItem(castMediaSource, localPlayer.currentPosition)
+            if (castPlayer != null) {
+                castPlayer.loadItem(castMediaSource, localPlayer.currentPosition)
 
-            currentPlayer = castPlayer
+                currentPlayer = castPlayer
+            }
         }
 
         override fun onCastSessionUnavailable() {
@@ -95,12 +96,12 @@ class StreamPlayerManager(
                 activity.application.unregisterActivityLifecycleCallbacks(this)
 
                 localPlayer.release()
-                castPlayer.release()
+                castPlayer?.release()
 
                 localPlayer.removeListener(errorListener)
-                castPlayer.removeListener(errorListener)
+                castPlayer?.removeListener(errorListener)
 
-                castPlayer.setSessionAvailabilityListener(null)
+                castPlayer?.setSessionAvailabilityListener(null)
             }
         }
     }
@@ -154,7 +155,7 @@ class StreamPlayerManager(
 
     init {
         localPlayer.addListener(errorListener)
-        castPlayer.addListener(errorListener)
+        castPlayer?.addListener(errorListener)
 
         localPlayer.prepare(localMediaSource)
 
@@ -247,11 +248,17 @@ class StreamPlayerManager(
         }
     }
 
-    private fun buildCastPlayer(context: Activity): CastPlayer {
-        val castContext = CastContext.getSharedInstance(context)
+    private fun buildCastPlayer(context: Activity): CastPlayer? {
+        val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
 
-        return CastPlayer(castContext).apply {
-            setSessionAvailabilityListener(castSessionAvailabilityListener)
+        return if (availabilityResult == ConnectionResult.SUCCESS) {
+            val castContext = CastContext.getSharedInstance(context)
+
+            CastPlayer(castContext).apply {
+                setSessionAvailabilityListener(castSessionAvailabilityListener)
+            }
+        } else {
+            null
         }
     }
 

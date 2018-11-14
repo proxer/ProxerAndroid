@@ -30,6 +30,8 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
 import com.google.android.gms.cast.framework.CastStateListener
 import com.google.android.gms.cast.framework.IntroductoryOverlay
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -124,7 +126,7 @@ class StreamActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        CastContext.getSharedInstance(this).addCastStateListener(castStateListener)
+        getSafeCastContext()?.addCastStateListener(castStateListener)
 
         playerManager.resume()
 
@@ -132,7 +134,7 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onPause() {
-        CastContext.getSharedInstance(this).removeCastStateListener(castStateListener)
+        getSafeCastContext()?.removeCastStateListener(castStateListener)
 
         playerManager.pause()
 
@@ -238,6 +240,16 @@ class StreamActivity : BaseActivity() {
                     .build()
                     .apply { show() }
             }
+        }
+    }
+
+    private fun getSafeCastContext(): CastContext? {
+        val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+
+        return if (availabilityResult == ConnectionResult.SUCCESS) {
+            CastContext.getSharedInstance(this)
+        } else {
+            null
         }
     }
 }
