@@ -9,7 +9,7 @@ import okhttp3.Response
 class HttpsUpgradeInterceptor : Interceptor {
 
     private companion object {
-        private val UPGRADABLE_HOSTS = listOf(
+        private val upgradableHosts = listOf(
             "www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com", "www.yourupload.com"
         )
     }
@@ -20,7 +20,7 @@ class HttpsUpgradeInterceptor : Interceptor {
         val newRequest = if (currentRequest.isHttps.not()) {
             val currentHost = currentRequest.url().host()
 
-            if (UPGRADABLE_HOSTS.any { it.equals(currentHost, ignoreCase = true) }) {
+            if (upgradableHosts.any { it.equals(currentHost, ignoreCase = true) }) {
                 currentRequest.newBuilder()
                     .url(
                         currentRequest.url().newBuilder()
