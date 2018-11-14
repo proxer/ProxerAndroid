@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -53,7 +54,17 @@ object ImagePrototype : AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(parent, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-        val proxyUrl = Utils.parseAndFixUrl(url)?.let { ProxerUrls.proxyImage(it) }
+        val proxyUrl = Utils.parseAndFixUrl(url)
+            ?.let { ProxerUrls.proxyImage(it) }
+            ?.let {
+                // Use cleartext http for devices below Android Lollipop,
+                // since the proxy does only support very modern TLS.
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    it.newBuilder().scheme("http").build()
+                } else {
+                    it
+                }
+            }
 
         val width = if (proxyUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 
