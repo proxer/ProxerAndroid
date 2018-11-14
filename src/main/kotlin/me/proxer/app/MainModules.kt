@@ -57,8 +57,8 @@ import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
+import me.proxer.app.util.http.ModernTlsSocketFactory
 import me.proxer.app.util.http.TaggedSocketFactory
-import me.proxer.app.util.http.Tls12SocketFactory
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.enums.AnimeLanguage
@@ -68,7 +68,6 @@ import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
-import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.koin.android.ext.koin.androidContext
@@ -107,15 +106,11 @@ private val applicationModules = module(createOnStart = true) {
             else -> null
         }
 
-        val connectionSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-            .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)
-            .build()
-
         val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(false)
-            .connectionSpecs(listOf(connectionSpec, ConnectionSpec.CLEARTEXT))
+            .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
-            .sslSocketFactory(Tls12SocketFactory(get()), get())
+            .sslSocketFactory(ModernTlsSocketFactory(get()), get())
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
