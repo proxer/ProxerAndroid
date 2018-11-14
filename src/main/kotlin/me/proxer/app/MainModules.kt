@@ -56,6 +56,7 @@ import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.Tls12SocketFactory
 import me.proxer.library.api.LoginTokenManager
@@ -112,12 +113,13 @@ private val applicationModules = module(createOnStart = true) {
 
         val client = OkHttpClient.Builder()
             .retryOnConnectionFailure(false)
-            .connectionSpecs(listOf(connectionSpec))
+            .connectionSpecs(listOf(connectionSpec, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
             .sslSocketFactory(Tls12SocketFactory(get()), get())
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+            .addInterceptor(HttpsUpgradeInterceptor())
             .apply { if (logging != null) addInterceptor(logging) }
             .build()
 

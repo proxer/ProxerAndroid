@@ -27,8 +27,6 @@ object Utils {
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-    private val hostsToUpdate = listOf("www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com")
-
     fun findActivity(currentContext: Context): Activity? = when (currentContext) {
         is Activity -> currentContext
         is ContextWrapper -> findActivity(currentContext.baseContext)
@@ -64,17 +62,15 @@ object Utils {
         null
     }
 
-    fun parseAndFixUrl(url: String) = upgradeToHttps(
-        when {
-            url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
-            else -> HttpUrl.parse(
-                when {
-                    url.startsWith("//") -> "http:$url"
-                    else -> "http://$url"
-                }
-            )
-        }
-    )
+    fun parseAndFixUrl(url: String) = when {
+        url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
+        else -> HttpUrl.parse(
+            when {
+                url.startsWith("//") -> "http:$url"
+                else -> "http://$url"
+            }
+        )
+    }
 
     fun getAndFixUrl(url: String) = parseAndFixUrl(url) ?: throw ProxerException(ErrorType.PARSING)
 
@@ -98,18 +94,6 @@ object Utils {
         resolvedSpecializedList.removeAll(genericResolvedList)
 
         return resolvedSpecializedList
-    }
-
-    private fun upgradeToHttps(url: HttpUrl?): HttpUrl? {
-        return if (url != null && url.scheme() == "http") {
-            if (hostsToUpdate.any { it.equals(url.host(), ignoreCase = true) }) {
-                url.newBuilder().scheme("https").build()
-            } else {
-                url
-            }
-        } else {
-            url
-        }
     }
 
     private fun extractPackageNames(resolveInfo: List<ResolveInfo>) = resolveInfo

@@ -21,6 +21,7 @@ class YourUploadStreamResolver : StreamResolver() {
     }
 
     override val name = "YourUpload"
+    override val internalPlayerOnly = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
@@ -56,10 +57,10 @@ class YourUploadStreamResolver : StreamResolver() {
                     )
                         .toSingle()
                 }
-        }
-        .map {
-            val url = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
+                .map {
+                    val result = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
 
-            StreamResolutionResult(url.androidUri(), "video/mp4")
+                    StreamResolutionResult(result.androidUri(), "video/mp4", parsedUrl.toString())
+                }
         }
 }
