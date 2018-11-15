@@ -220,12 +220,15 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                             handleImageLoadError(error, position)
                         }
 
-                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
+                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Ready }
                         .autoDisposable(this)
                         .subscribe {
-                            image.setDoubleTapZoomScale(image.scale * 2.5f)
-                            image.setScaleAndCenter(image.minScale, image.center)
-                            image.maxScale = image.scale * 2.5f
+                            val newMaxScale = image.minScale * 2.5f
+
+                            image.setDoubleTapZoomScale(newMaxScale)
+                            image.maxScale = newMaxScale
+
+                            image.resetScaleAndCenter()
                         }
                 }
                 .connect()
