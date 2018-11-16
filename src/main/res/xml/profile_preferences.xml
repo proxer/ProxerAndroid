@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Datenschutz">
+    <PreferenceCategory android:title="@string/profile_preference_ads_category_title">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="banner_ads_enabled"
+            android:summaryOff="@string/profile_preference_banner_ads_summary_off"
+            android:summaryOn="@string/profile_preference_banner_ads_summary_on"
+            android:title="@string/profile_preference_banner_ads_title" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <ListPreference
+            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
+            android:defaultValue="0"
+            android:entries="@array/ucp_settings_video_ads_interval_titles"
+            android:entryValues="@array/ucp_settings_video_ads_interval_values"
+            android:key="video_ads_interval"
+            android:persistent="false"
+            android:title="@string/profile_preference_video_ads_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/profile_preference_privacy_category_title">
 
         <!--suppress AndroidUnknownAttribute -->
         <ListPreference

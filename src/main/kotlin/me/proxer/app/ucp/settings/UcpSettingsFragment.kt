@@ -14,6 +14,7 @@ import me.proxer.app.util.bindPreference
 import me.proxer.library.enums.UcpSettingConstraint
 import me.proxer.library.util.ProxerUtils
 import net.xpece.android.support.preference.ListPreference
+import net.xpece.android.support.preference.SwitchPreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -30,6 +31,8 @@ class UcpSettingsFragment : XpPreferenceFragment() {
 
     private val viewModel by sharedViewModel<UcpSettingsViewModel>()
 
+    private val bannerAdsEnabled by bindPreference<SwitchPreference>("banner_ads_enabled")
+    private val videoAdsInterval by bindPreference<ListPreference>("video_ads_interval")
     private val profile by bindPreference<ListPreference>("profile")
     private val topten by bindPreference<ListPreference>("topten")
     private val anime by bindPreference<ListPreference>("anime")
@@ -56,6 +59,32 @@ class UcpSettingsFragment : XpPreferenceFragment() {
             showData(it)
         })
 
+        bannerAdsEnabled.changes<Boolean>()
+            .autoDisposable(this.scope())
+            .subscribe {
+                val currentSettings = viewModel.data.value
+
+                if (currentSettings != null) {
+                    val newSettings = currentSettings.copy(shouldShowAds = it)
+
+                    viewModel.update(newSettings)
+                }
+            }
+
+        videoAdsInterval.changes<String>()
+            .autoDisposable(this.scope())
+            .subscribe {
+                val currentSettings = viewModel.data.value
+
+                if (currentSettings != null) {
+                    val newSettings = currentSettings.copy(adInterval = it.toInt())
+
+                    viewModel.update(newSettings)
+                }
+
+                updateVideoAdsIntervalSummary()
+            }
+
         initPreference(profile) { settings, constraint -> settings.copy(profileVisibility = constraint) }
         initPreference(topten) { settings, constraint -> settings.copy(topTenVisibility = constraint) }
         initPreference(anime) { settings, constraint -> settings.copy(animeVisibility = constraint) }
@@ -79,6 +108,8 @@ class UcpSettingsFragment : XpPreferenceFragment() {
     }
 
     private fun showData(ucpSettings: LocalUcpSettings) {
+        bannerAdsEnabled.isChecked = ucpSettings.shouldShowAds
+        videoAdsInterval.setValue(normalizeAdInterval(ucpSettings.adInterval).toString())
         profile.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.profileVisibility))
         topten.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.topTenVisibility))
         anime.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.animeVisibility))
@@ -93,12 +124,14 @@ class UcpSettingsFragment : XpPreferenceFragment() {
         guestBookEntry.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.guestBookEntryConstraint))
         gallery.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.galleryVisibility))
         article.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.articleVisibility))
+
+        updateVideoAdsIntervalSummary()
     }
 
     private fun initPreference(
         preference: Preference,
         copyCallback: (LocalUcpSettings, UcpSettingConstraint) -> LocalUcpSettings
-    ) = preference.changes()
+    ) = preference.changes<String>()
         .autoDisposable(this.scope())
         .subscribe {
             val currentSettings = viewModel.data.value
@@ -110,4 +143,21 @@ class UcpSettingsFragment : XpPreferenceFragment() {
                 viewModel.update(newSettings)
             }
         }
+
+    private fun normalizeAdInterval(source: Int): Int {
+        return resources.getStringArray(R.array.ucp_settings_video_ads_interval_values)
+            .map { it.toInt() }
+            .sortedDescending()
+            .find { source >= it }
+            ?: 0
+    }
+
+    private fun updateVideoAdsIntervalSummary() {
+        val value = videoAdsInterval.value ?: "0"
+        val index = resources.getStringArray(R.array.ucp_settings_video_ads_interval_values).indexOf(value)
+        val keyword = resources.getStringArray(R.array.ucp_settings_video_ads_interval_titles)[index]
+        val newSummary = getString(R.string.profile_preference_video_ads_summary, keyword.toLowerCase())
+
+        videoAdsInterval.summary = newSummary
+    }
 }

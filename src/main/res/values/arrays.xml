@@ -58,4 +58,20 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <string-array name="ucp_settings_video_ads_interval_titles">
+        <item>@string/ucp_settings_interval_never</item>
+        <item>@string/ucp_settings_interval_always</item>
+        <item>@string/ucp_settings_interval_often</item>
+        <item>@string/ucp_settings_interval_sometimes</item>
+        <item>@string/ucp_settings_interval_rarely</item>
+    </string-array>
+
+    <string-array name="ucp_settings_video_ads_interval_values">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
 </resources>

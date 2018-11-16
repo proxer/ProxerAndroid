@@ -590,7 +590,7 @@
     <string name="preference_auto_bookmark_summary_on">
         Lesezeichen werden beim Wechseln des Kapitels oder der Episode automatisch gesetzt
     </string>
-    <string name="preference_auto_bookmark_off">
+    <string name="preference_auto_bookmark_summary_off">
         Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt
     </string>
     <string name="preference_external_cache_title">Bilder extern speichern</string>
@@ -616,6 +616,18 @@
     <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
     <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>
 
+    <string name="profile_preference_ads_category_title">Werbung</string>
+    <string name="profile_preference_banner_ads_title">Bannerwerbung</string>
+    <string name="profile_preference_banner_ads_summary_off">
+        Bannerwerbung wird nicht angezeigt.
+        Beachte allerdings, dass es Stellen in der App geben kann, an denen immer Werbung angezeigt wird
+    </string>
+    <string name="profile_preference_banner_ads_summary_on">
+        Bannerwerbung wird angezeigt. Danke für die Unterstützung!
+    </string>
+    <string name="profile_preference_video_ads_title">Videowerbung</string>
+    <string name="profile_preference_video_ads_summary">Videowerbung vor Proxer-Streams wird %s angezeigt</string>
+    <string name="profile_preference_privacy_category_title">Datenschutz</string>
     <string name="profile_preference_profile">Sichtbarkeit des Profils</string>
     <string name="profile_preference_topten">Profil - TopTen</string>
     <string name="profile_preference_anime">Profil - Anime</string>
@@ -764,6 +776,12 @@
     <string name="interval_often">Oft (Alle 30 Minuten)</string>
     <string name="interval_moderate">Moderat (Alle 2 Stunden)</string>
     <string name="interval_seldom">Selten (Alle 8 Stunden)</string>
+
+    <string name="ucp_settings_interval_never">Nie</string>
+    <string name="ucp_settings_interval_always">Immer</string>
+    <string name="ucp_settings_interval_often">Häufig</string>
+    <string name="ucp_settings_interval_sometimes">Manchmal</string>
+    <string name="ucp_settings_interval_rarely">Selten</string>
 
     <string name="ucp_settings_constraint_default">Standard</string>
     <string name="ucp_settings_constraint_friend">Freunde</string>

@@ -31,7 +31,7 @@ inline fun TextView.linkLongClicks(handled: Predicate<String> = Predicate { true
 }
 
 @CheckResult
-inline fun Preference.changes(handled: Predicate<String> = Predicate { true }): Observable<String> {
+inline fun <T> Preference.changes(handled: Predicate<T> = Predicate { true }): Observable<T> {
     return PreferenceChangeObservable(this, handled)
 }
 

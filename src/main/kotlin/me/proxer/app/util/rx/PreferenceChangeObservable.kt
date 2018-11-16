@@ -10,12 +10,12 @@ import me.proxer.app.util.extension.checkMainThread
 /**
  * @author Ruben Gees
  */
-class PreferenceChangeObservable(
+class PreferenceChangeObservable<T>(
     private val preference: Preference,
-    private val handled: Predicate<in String>
-) : Observable<String>() {
+    private val handled: Predicate<in T>
+) : Observable<T>() {
 
-    override fun subscribeActual(observer: Observer<in String>) {
+    override fun subscribeActual(observer: Observer<in T>) {
         if (!observer.checkMainThread()) {
             return
         }
@@ -27,14 +27,15 @@ class PreferenceChangeObservable(
         preference.onPreferenceChangeListener = listener
     }
 
-    internal class Listener(
+    internal class Listener<T>(
         private val preference: Preference,
-        private val handled: Predicate<in String>,
-        private val observer: Observer<in String>
+        private val handled: Predicate<in T>,
+        private val observer: Observer<in T>
     ) : MainThreadDisposable(), Preference.OnPreferenceChangeListener {
 
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-            newValue as String
+            @Suppress("UNCHECKED_CAST")
+            newValue as T
 
             return if (!isDisposed) {
                 try {

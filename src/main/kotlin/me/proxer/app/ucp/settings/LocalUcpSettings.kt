@@ -25,9 +25,9 @@ data class LocalUcpSettings(
     @Json(name = "guestBookEntryConstraint") val guestBookEntryConstraint: UcpSettingConstraint,
     @Json(name = "galleryVisibility") val galleryVisibility: UcpSettingConstraint,
     @Json(name = "articleVisibility") val articleVisibility: UcpSettingConstraint,
-    @Json(name = "isHideTags") val isHideTags: Boolean,
-    @Json(name = "isShowAds") val isShowAds: Boolean,
-    @Json(name = "adInterval") val adInterval: Int
+    @Json(name = "hide_tags") val shouldHideTags: Boolean,
+    @Json(name = "voluntary_banner_ads_enabled") val shouldShowAds: Boolean,
+    @Json(name = "voluntary_video_ads_interval") val adInterval: Int
 ) {
 
     companion object {
@@ -40,6 +40,6 @@ data class LocalUcpSettings(
     fun toNonLocalSettings() = UcpSettings(
         profileVisibility, topTenVisibility, animeVisibility, mangaVisibility, commentVisibility, forumVisibility,
         friendVisibility, friendRequestConstraint, aboutVisibility, historyVisibility, guestBookVisibility,
-        guestBookEntryConstraint, galleryVisibility, articleVisibility, isHideTags, isShowAds, adInterval
+        guestBookEntryConstraint, galleryVisibility, articleVisibility, shouldHideTags, shouldShowAds, adInterval
     )
 }
