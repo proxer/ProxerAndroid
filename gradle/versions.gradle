@@ -80,7 +80,7 @@ ext {
     threetenVersion = '1.1.1'
     hawkVersion = 'c6b8d3a82c'
     glideVersion = '4.8.0'
-    okHttpVersion = '3.12.0-SNAPSHOT'
+    okHttpVersion = '3.12.0'
     okioVersion = '2.1.0'
     moshiVersion = '1.8.0'
     easyHeaderFooterAdapterVersion = '3.0.0'
