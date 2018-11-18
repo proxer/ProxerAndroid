@@ -1,37 +1,69 @@
 package me.proxer.app.util
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeParseException
 import timber.log.Timber
 import java.io.File
+import java.util.concurrent.Executors
 
 /**
  * @author Ruben Gees
  */
-class TimberFileTree(private val context: Context) : Timber.Tree() {
+class TimberFileTree(context: Context) : Timber.Tree() {
 
     private companion object {
-        private val FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         private const val LOGS_DIRECTORY = "logs"
+        private const val ROTATION_THRESHOLD = 7L
+
+        private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        private val executor = Executors.newSingleThreadExecutor()
     }
 
+    private val resolvedLogsDirectory = File(context.getExternalFilesDir(null), LOGS_DIRECTORY)
+        .also { it.mkdirs() }
+
+    @SuppressLint("CheckResult", "LogNotTimber")
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         Completable
-            .fromAction {
-                val logDir = File(context.getExternalFilesDir(null), LOGS_DIRECTORY).also { it.mkdirs() }
-                val logFile = File(logDir, "${LocalDate.now()}.log").also { it.createNewFile() }
-                val currentTime = LocalDateTime.now().format(FORMAT)
+            .fromAction { internalLog(tag, message) }
+            .subscribeOn(Schedulers.from(executor))
+            .subscribe({}, {
+                Log.e(TimberFileTree::class.java.name, "Failure while logging to file", it)
+            })
+    }
 
-                val maybeTag = if (tag != null) "$tag: " else ""
-                val maybeNewline = if (message.endsWith("\n")) "" else "\n"
+    @SuppressLint("LogNotTimber")
+    private fun internalLog(tag: String?, message: String) {
+        val currentLogFiles = resolvedLogsDirectory.listFiles()
+        val currentDateTime = LocalDateTime.now()
+        val rotationThresholdDate = currentDateTime.toLocalDate().minusDays(ROTATION_THRESHOLD)
 
-                logFile.appendText("$currentTime  $maybeTag$message$maybeNewline")
+        for (currentLogFile in currentLogFiles) {
+            val fileDate = try {
+                LocalDate.parse(currentLogFile.nameWithoutExtension)
+            } catch (error: DateTimeParseException) {
+                Log.e(TimberFileTree::class.java.name, "Invalid log file $currentLogFile found, deleting")
+
+                null
             }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+
+            if (fileDate == null || fileDate.isBefore(rotationThresholdDate)) {
+                currentLogFile.deleteRecursively()
+            }
+        }
+
+        val logFile = File(resolvedLogsDirectory, "${LocalDate.now()}.log").also { it.createNewFile() }
+
+        val currentDateTimeText = currentDateTime.format(dateTimeFormatter)
+        val maybeTag = if (tag != null) "$tag: " else ""
+
+        logFile.appendText("$currentDateTimeText  $maybeTag${message.trim()}\n")
     }
 }
