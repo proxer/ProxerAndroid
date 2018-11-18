@@ -65,6 +65,10 @@ android {
 
             java.srcDirs = release.java.srcDirs
         }
+
+        test {
+            java.srcDirs += "src/test/kotlin"
+        }
     }
 
     compileOptions {
