@@ -20,7 +20,6 @@ import me.proxer.app.chat.prv.conference.info.ConferenceInfoViewModel
 import me.proxer.app.chat.prv.create.CreateConferenceViewModel
 import me.proxer.app.chat.prv.message.MessengerViewModel
 import me.proxer.app.chat.prv.sync.MessengerDatabase
-import me.proxer.app.chat.pub.message.ChatReportViewModel
 import me.proxer.app.chat.pub.message.ChatViewModel
 import me.proxer.app.chat.pub.room.ChatRoomViewModel
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoViewModel
@@ -46,6 +45,7 @@ import me.proxer.app.profile.history.HistoryViewModel
 import me.proxer.app.profile.info.ProfileInfoViewModel
 import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
+import me.proxer.app.settings.status.ServerStatusViewModel
 import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
@@ -209,6 +209,8 @@ private val viewModelModule = module {
 
     viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
     viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
+
+    viewModel { ServerStatusViewModel() }
 }
 
 val modules = listOf(applicationModules, viewModelModule)

@@ -76,7 +76,7 @@ ext {
     gravitySnapHelperVersion = '2.0'
 
     // Utils
-    proxerLibVersion = 'e1445ddf90'
+    proxerLibVersion = '5a7269fd6a'
     threetenVersion = '1.1.1'
     hawkVersion = 'c6b8d3a82c'
     glideVersion = '4.8.0'
@@ -91,6 +91,7 @@ ext {
     rapidDecoderVersion = '7cdfca47fa'
     concealVersion = '2.0.2'
     betterLinkMovementMethodVersion = '2.2.0'
+    jsoupVersion = '1.11.3'
 
     // Debugging
     customActivityOnCrashVersion = '2.2.0'

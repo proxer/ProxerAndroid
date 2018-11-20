@@ -16,6 +16,7 @@
     <string name="section_logout">Abmelden</string>
     <string name="section_info">Info</string>
     <string name="section_settings">Einstellungen</string>
+    <string name="section_server_status">Serverstatus</string>
 
     <string name="section_notifications">Benachrichtigungen</string>
     <string name="section_profile_settings">Profileinstellungen</string>
@@ -654,6 +655,8 @@
         Source Bibliotheken eingesetzt.]]></string>
     <string name="about_source_code">Quellcode</string>
     <string name="about_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
+    <string name="about_server_status">Serverstatus</string>
+    <string name="about_server_status_description">Übersicht über ordnungsgemäße Funktion von Proxer</string>
     <string name="about_social_media_title">Soziale Medien</string>
     <string name="about_facebook_title">Facebook</string>
     <string name="about_facebook_description">Abonniere Proxer.Me auf Facebook</string>

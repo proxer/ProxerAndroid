@@ -298,6 +298,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".settings.status.ServerStatusActivity" />
         <activity android:name=".ui.WebViewActivity" />
 
         <service

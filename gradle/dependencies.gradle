@@ -84,6 +84,7 @@ ext {
             kotterknife                      : "com.github.rubengees:kotterknife:$kotterknifeVersion",
             rapidDecoder                     : "com.github.suckgamony.RapidDecoder:library:$rapidDecoderVersion",
             betterLinkMovementMethod         : "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion",
+            jsoup                            : "org.jsoup:jsoup:$jsoupVersion",
 
             strictModeCompat                 : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
             timber                           : "com.jakewharton.timber:timber:$timberVersion",

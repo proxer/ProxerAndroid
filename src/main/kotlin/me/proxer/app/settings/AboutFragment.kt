@@ -26,6 +26,7 @@ import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
@@ -129,6 +130,12 @@ class AboutFragment : MaterialAboutFragment() {
             .subText(R.string.about_source_code_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).iconColor(context))
             .setOnClickAction { showPage(repositoryLink) }
+            .build(),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_server_status)
+            .subText(R.string.about_server_status_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_server).iconColor(context))
+            .setOnClickAction { ServerStatusActivity.navigateTo(requireActivity()) }
             .build()
     )
 
