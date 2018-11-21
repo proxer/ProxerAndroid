@@ -2,18 +2,17 @@ package me.proxer.app.settings.status
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commitNow
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.startActivity
 
 /**
  * @author Ruben Gees
  */
-class ServerStatusActivity : AppCompatActivity() {
+class ServerStatusActivity : BaseActivity() {
 
     companion object {
         fun navigateTo(context: Activity) = context.startActivity<ServerStatusActivity>()
@@ -36,13 +35,5 @@ class ServerStatusActivity : AppCompatActivity() {
                 replace(R.id.container, ServerStatusFragment.newInstance())
             }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 }

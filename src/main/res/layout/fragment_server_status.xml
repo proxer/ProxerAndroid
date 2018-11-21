@@ -8,15 +8,38 @@
     android:focusableInTouchMode="true"
     tools:context=".settings.status.ServerStatusFragment">
 
-    <FrameLayout
-        android:id="@+id/contentContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/progress"
+        <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/screen_horizontal_margin"
+                android:layout_marginTop="@dimen/screen_vertical_margin"
+                android:layout_marginRight="@dimen/screen_horizontal_margin"
+                app:cardCornerRadius="1dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:id="@+id/overallStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:drawablePadding="4dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    tools:text="Everything works" />
+
+            </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -31,9 +54,11 @@
                 app:fastScrollHorizontalThumbDrawable="@drawable/fastscroll_thumb"
                 app:fastScrollHorizontalTrackDrawable="@drawable/fastscroll_track"
                 app:fastScrollVerticalThumbDrawable="@drawable/fastscroll_thumb"
-                app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track"
+                tools:listitem="@layout/item_server_status" />
 
-        <include layout="@layout/layout_error" />
-    </FrameLayout>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/layout_error" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

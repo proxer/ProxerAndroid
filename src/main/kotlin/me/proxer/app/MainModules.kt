@@ -20,6 +20,7 @@ import me.proxer.app.chat.prv.conference.info.ConferenceInfoViewModel
 import me.proxer.app.chat.prv.create.CreateConferenceViewModel
 import me.proxer.app.chat.prv.message.MessengerViewModel
 import me.proxer.app.chat.prv.sync.MessengerDatabase
+import me.proxer.app.chat.pub.message.ChatReportViewModel
 import me.proxer.app.chat.pub.message.ChatViewModel
 import me.proxer.app.chat.pub.room.ChatRoomViewModel
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoViewModel

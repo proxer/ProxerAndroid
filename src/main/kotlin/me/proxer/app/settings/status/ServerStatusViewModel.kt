@@ -32,6 +32,7 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
 
     private fun constructRequest() = Request.Builder()
         .url(url)
+        .addHeader("Connection", "close")
         .build()
 
     private fun scrape(document: Document): List<ServerStatus> {
@@ -42,11 +43,12 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
             .filter { (first, second) -> isNameNode(first) && isOnlineNode(second) }
             .map { (first, second) -> first as TextNode to second as Element }
             .map { (nameNode, onlineNode) ->
-                val trimmedName = nameNode.text().removeSuffix(":").removeSuffix(" *:").trim()
+                val trimmedName = nameNode.text().trim().removeSuffix(":").removeSuffix(" *")
+                val number = trimmedName.removePrefix("Server ").substringBefore(' ').toIntOrNull() ?: -1
 
                 val type = when {
-                    trimmedName.contains("stream") -> ServerType.STREAM
-                    trimmedName.contains("manga") -> ServerType.MANGA
+                    trimmedName.contains("stream", ignoreCase = true) -> ServerType.STREAM
+                    trimmedName.contains("manga", ignoreCase = true) -> ServerType.MANGA
                     else -> ServerType.MAIN
                 }
 
@@ -55,8 +57,9 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
                     else -> false
                 }
 
-                ServerStatus(trimmedName, type, online)
+                ServerStatus(trimmedName, number, type, online)
             }
+            .sortedWith(compareBy { it.number })
     }
 
     private fun isNameNode(node: Node) = node is TextNode && node.text().contains("server", ignoreCase = true)

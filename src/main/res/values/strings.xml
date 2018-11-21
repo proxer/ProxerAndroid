@@ -374,6 +374,13 @@
     <string name="fragment_about_skype">Skype</string>
     <string name="fragment_about_deviantart">Deviantart</string>
 
+    <string name="fragment_server_status_overall_online">
+        Alle Server sind online. Proxer sollte in vollem Umfang funktionieren
+    </string>
+    <string name="fragment_server_status_overall_offline">
+        Ein oder mehrere Server sind ausgefallen. Es kann zu Störungen kommen
+    </string>
+
     <string name="fragment_settings_restart_message">Diese Einstellung wird erst nach einem Neustart aktiv</string>
     <string name="fragment_settings_restart_action">Neustart</string>
 
@@ -656,7 +663,7 @@
     <string name="about_source_code">Quellcode</string>
     <string name="about_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
     <string name="about_server_status">Serverstatus</string>
-    <string name="about_server_status_description">Übersicht über ordnungsgemäße Funktion von Proxer</string>
+    <string name="about_server_status_description">Übersicht über die ordnungsgemäße Funktion von Proxer</string>
     <string name="about_social_media_title">Soziale Medien</string>
     <string name="about_facebook_title">Facebook</string>
     <string name="about_facebook_description">Abonniere Proxer.Me auf Facebook</string>
