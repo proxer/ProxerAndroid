@@ -31,6 +31,7 @@ class Mp4UploadStreamResolver : StreamResolver() {
                     .get()
                     .url(Utils.getAndFixUrl(it))
                     .header("User-Agent", GENERIC_USER_AGENT)
+                    .header("Connection", "close")
                     .build()
             )
                 .toBodySingle()

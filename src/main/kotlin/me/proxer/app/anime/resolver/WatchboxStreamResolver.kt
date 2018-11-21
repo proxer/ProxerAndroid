@@ -41,6 +41,7 @@ class WatchboxStreamResolver : StreamResolver() {
                     .get()
                     .url(Utils.getAndFixUrl(url))
                     .header("User-Agent", USER_AGENT)
+                    .header("Connection", "close")
                     .build()
             )
                 .toBodySingle()

@@ -8,8 +8,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
-import java.io.EOFException
-import java.io.IOException
 import java.util.regex.Pattern.quote
 
 /**
@@ -32,11 +30,11 @@ class DailymotionStreamResolver : StreamResolver() {
                         .get()
                         .url(Utils.getAndFixUrl(url))
                         .header("User-Agent", GENERIC_USER_AGENT)
+                        .header("Connection", "close")
                         .build()
                 )
                     .toBodySingle()
             }
-            .retry(3) { it is IOException && it.cause is EOFException }
             .map { html ->
                 val qualitiesJson = regex.find(html)?.value ?: throw StreamResolutionException()
                 val qualityMap = moshi.adapter(QualityMap::class.java)

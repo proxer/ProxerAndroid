@@ -199,7 +199,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
                 rawClient.newBuilder()
                     .addInterceptor {
                         val requestWithReferer = it.request().newBuilder()
-                            .addHeader("Referer", referer)
+                            .header("Referer", referer)
                             .build()
 
                         it.proceed(requestWithReferer)

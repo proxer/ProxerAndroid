@@ -8,8 +8,6 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.FormBody
 import okhttp3.Request
-import java.io.EOFException
-import java.io.IOException
 
 /**
  * @author Ruben Gees
@@ -32,6 +30,7 @@ class StreamcloudStreamResolver : StreamResolver() {
                     .get()
                     .url(url)
                     .header("User-Agent", GENERIC_USER_AGENT)
+                    .header("Connection", "close")
                     .build()
             )
                 .toBodySingle()
@@ -58,11 +57,11 @@ class StreamcloudStreamResolver : StreamResolver() {
                             .post(it)
                             .url(url)
                             .header("User-Agent", GENERIC_USER_AGENT)
+                            .header("Connection", "close")
                             .build()
                     )
                         .toBodySingle()
                 }
-                .retry(3) { it is IOException && it.cause is EOFException }
                 .map {
                     val result = Uri.parse(
                         fileRegex.find(it)?.groupValues?.get(1) ?: throw StreamResolutionException()

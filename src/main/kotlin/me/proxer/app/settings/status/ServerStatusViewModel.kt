@@ -32,7 +32,7 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
 
     private fun constructRequest() = Request.Builder()
         .url(url)
-        .addHeader("Connection", "close")
+        .header("Connection", "close")
         .build()
 
     private fun scrape(document: Document): List<ServerStatus> {

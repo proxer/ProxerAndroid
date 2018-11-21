@@ -8,8 +8,6 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
-import java.io.EOFException
-import java.io.IOException
 
 /**
  * @author Ruben Gees
@@ -31,6 +29,7 @@ class ProxerStreamResolver : StreamResolver() {
                         .get()
                         .url(Utils.getAndFixUrl(url))
                         .header("User-Agent", USER_AGENT)
+                        .header("Connection", "close")
                         .build()
                 )
                     .toBodySingle()
@@ -43,6 +42,5 @@ class ProxerStreamResolver : StreamResolver() {
                         StreamResolutionResult(result, type)
                     }
             }
-            .retry(3) { it is IOException && it.cause is EOFException }
     }
 }
