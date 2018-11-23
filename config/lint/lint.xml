@@ -21,6 +21,12 @@
         <ignore regexp="res/drawable-nodpi/o_.*[.]gif" />
     </issue>
 
+    <!-- Ignore false positive about jsoup trusting all certificates. -->
+    <!-- This is just a development tool, disabled by default and we do not even use the HTTP stack of Jsoup. -->
+    <issue id="TrustAllX509TrustManager">
+        <ignore regexp=".*org.jsoup.*" />
+    </issue>
+
     <!-- Enable all lint checks with error severity, except for those listed above. -->
     <issue id="all" severity="error" />
 </lint>

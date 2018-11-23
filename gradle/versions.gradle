@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = '5.0-rc-4'
+    gradleVersion = '5.0-rc-5'
 
     // Core plugins
     androidPluginVersion = '3.4.0-alpha04'
@@ -38,7 +38,7 @@ ext {
     castVersion = "16.1.0"
 
     // RxJava
-    rxJavaVersion = '2.2.3'
+    rxJavaVersion = '2.2.4'
     rxKotlinVersion = '2.3.0'
     rxAndroidVersion = '2.1.0'
     rxBindingVersion = '2.2.0'
