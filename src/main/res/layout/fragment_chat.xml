@@ -52,6 +52,7 @@
                 android:visibility="gone"
                 app:backgroundTint="@color/card_background"
                 app:fabSize="mini"
+                app:tint="@color/icon"
                 app:useCompatPadding="true"
                 tools:src="@drawable/ic_japan"
                 tools:visibility="visible" />

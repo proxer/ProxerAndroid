@@ -213,7 +213,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = R.color.textColorPrimary)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
 
         scrollToBottom.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
