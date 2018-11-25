@@ -375,7 +375,7 @@ class ChatAdapter(
             title.requestLayout()
 
             if (message.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.colorAccent)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondaryColor)
             } else {
                 glide?.load(ProxerUrls.userImage(message.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

@@ -99,6 +99,8 @@ class UcpSettingsFragment : XpPreferenceFragment() {
         initPreference(guestBookEntry) { settings, constraint -> settings.copy(guestBookEntryConstraint = constraint) }
         initPreference(gallery) { settings, constraint -> settings.copy(galleryVisibility = constraint) }
         initPreference(article) { settings, constraint -> settings.copy(articleVisibility = constraint) }
+
+        listView.isFocusable = false
     }
 
     override fun onDestroyView() {

@@ -183,7 +183,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                 val icon = IconicsDrawable(image.context)
                     .sizeDp(96)
                     .paddingDp(16)
-                    .colorRes(image.context, R.color.colorAccent)
+                    .colorRes(image.context, R.color.secondaryColor)
 
                 if (item.conference.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)

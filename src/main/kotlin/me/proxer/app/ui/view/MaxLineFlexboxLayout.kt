@@ -84,7 +84,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
 
         button.text = context.getString(R.string.fragment_media_info_show_all)
         button.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
-        button.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+        button.setTextColor(ContextCompat.getColor(context, R.color.secondaryColor))
 
         button.clicks()
             .doOnNext { maxLines = Int.MAX_VALUE }

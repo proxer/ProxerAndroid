@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.App" parent="Base.Theme.App">
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/primaryColor</item>
     </style>
 
     <style name="Theme.App.Transparent" parent="Theme.App">

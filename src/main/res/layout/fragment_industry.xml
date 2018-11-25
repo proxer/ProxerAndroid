@@ -134,7 +134,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_industry_description"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/secondaryColor" />
 
                         <TextView
                             android:id="@+id/description"

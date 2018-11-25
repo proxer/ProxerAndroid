@@ -2,5 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <tools:solid android:color="@color/colorPrimary" />
+    <tools:solid android:color="@color/primaryColor" />
 </shape>

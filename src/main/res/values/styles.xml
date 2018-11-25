@@ -2,9 +2,10 @@
 <resources>
 
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
 
         <item name="windowActionModeOverlay">true</item>
@@ -16,14 +17,15 @@
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
 
-        <item name="asp_preferenceIconTint">@color/colorAccent</item>
+        <item name="asp_preferenceIconTint">@color/secondaryColor</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
     </style>
 
     <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
     </style>
 
     <style name="Theme.App.NoBackground" parent="Theme.App">
@@ -38,7 +40,7 @@
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
-        <item name="background">@color/colorPrimaryLight</item>
+        <item name="background">@color/primaryLightColor</item>
     </style>
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />

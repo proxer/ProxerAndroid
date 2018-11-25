@@ -78,7 +78,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimary)
+            Utils.setStatusBarColorIfPossible(activity, R.color.primaryColor)
 
             innerAdapter.selectedMessages.let {
                 val user = storageHelper.user
@@ -113,7 +113,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, R.color.colorPrimaryDark)
+            Utils.setStatusBarColorIfPossible(activity, R.color.primaryDarkColor)
         }
     }
 

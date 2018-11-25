@@ -113,7 +113,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_translator_group_description"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/secondaryColor" />
 
                         <TextView
                             android:id="@+id/description"

@@ -49,7 +49,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progress.setColorSchemeResources(R.color.colorPrimary)
+        progress.setColorSchemeResources(R.color.primaryColor)
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()

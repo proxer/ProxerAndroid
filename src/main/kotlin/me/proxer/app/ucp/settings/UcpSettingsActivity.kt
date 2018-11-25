@@ -81,7 +81,7 @@ class UcpSettingsActivity : DrawerActivity() {
     }
 
     private fun setupUI() {
-        progress.setColorSchemeResources(R.color.colorPrimary)
+        progress.setColorSchemeResources(R.color.primaryColor)
 
         progress.refreshes()
             .autoDisposable(this.scope())

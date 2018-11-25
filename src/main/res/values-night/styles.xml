@@ -2,9 +2,10 @@
 <resources>
 
     <style name="Theme.App.AboutFragment" parent="Theme.Mal.Dark">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
     </style>
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />

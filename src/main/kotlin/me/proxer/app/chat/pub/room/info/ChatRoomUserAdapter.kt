@@ -91,7 +91,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                         .icon(CommunityMaterial.Icon2.cmd_star)
                         .sizeDp(32)
                         .paddingDp(8)
-                        .colorRes(username.context, R.color.colorAccent), null
+                        .colorRes(username.context, R.color.secondaryColor), null
                 )
             } else {
                 username.setCompoundDrawables(null, null, null, null)
@@ -105,7 +105,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
             }
 
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.colorAccent)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.secondaryColor)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
