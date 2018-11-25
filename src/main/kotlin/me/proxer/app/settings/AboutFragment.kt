@@ -1,11 +1,14 @@
 package me.proxer.app.settings
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import com.danielstone.materialaboutlibrary.ConvenienceBuilder
 import com.danielstone.materialaboutlibrary.MaterialAboutFragment
@@ -19,6 +22,7 @@ import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
@@ -31,6 +35,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toast
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.koin.android.ext.android.inject
@@ -102,11 +107,17 @@ class AboutFragment : MaterialAboutFragment() {
 
     private fun buildInfoItems(context: Context) = listOf(
         ConvenienceBuilder.createAppTitleItem(context),
-        ConvenienceBuilder.createVersionActionItem(
-            context,
-            IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).iconColor(context),
-            getString(R.string.about_version_title), false
-        ),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_version_title)
+            .subText(BuildConfig.VERSION_NAME)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).iconColor(context))
+            .setOnClickAction {
+                val title = getString(R.string.clipboard_title)
+                val clipData = ClipData.newPlainText(title, BuildConfig.VERSION_NAME)
+
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip = clipData
+                requireContext().toast(R.string.clipboard_status)
+            }.build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_licenses_title)
             .subText(R.string.about_licenses_description)
