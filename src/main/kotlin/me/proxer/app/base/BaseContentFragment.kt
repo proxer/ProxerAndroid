@@ -56,17 +56,17 @@ abstract class BaseContentFragment<T> : BaseFragment() {
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.refresh() }
 
-        viewModel.data.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                null -> hideData()
-                else -> showData(it)
-            }
-        })
-
         viewModel.error.observe(viewLifecycleOwner, Observer {
             when (it) {
                 null -> hideError()
                 else -> showError(it)
+            }
+        })
+
+        viewModel.data.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                null -> hideData()
+                else -> showData(it)
             }
         })
 

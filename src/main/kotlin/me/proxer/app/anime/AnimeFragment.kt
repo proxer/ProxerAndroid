@@ -247,16 +247,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.saveInstanceState(outState)
     }
 
-    override fun hideData() {
-        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
-
-        adapter.header = null
-
-        recyclerView.scrollToTop()
-
-        super.hideData()
-    }
-
     override fun showData(data: AnimeStreamInfo) {
         super.showData(data)
 
@@ -270,6 +260,18 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         if (data.streams.isEmpty()) {
             showError(ErrorAction(R.string.error_no_data_anime, ACTION_MESSAGE_HIDE))
+        }
+    }
+
+    override fun hideData() {
+        innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
+
+        recyclerView.scrollToTop()
+
+        if (viewModel.error.value?.data?.get(ErrorUtils.ENTRY_DATA_KEY) !is EntryCore) {
+            adapter.header = null
+
+            super.hideData()
         }
     }
 
@@ -301,6 +303,14 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
         } else {
             errorContainer.translationY = 0f
+        }
+    }
+
+    override fun hideError() {
+        super.hideError()
+
+        if (viewModel.data.value == null) {
+            adapter.header = null
         }
     }
 }

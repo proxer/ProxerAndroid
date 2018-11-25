@@ -362,12 +362,15 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         bindToolbar()
 
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
-        adapter.header = null
-        adapter.footer = null
 
         recyclerView.scrollToTop()
 
-        super.hideData()
+        if (viewModel.error.value?.data?.get(ErrorUtils.ENTRY_DATA_KEY) !is EntryCore) {
+            adapter.header = null
+            adapter.footer = null
+
+            super.hideData()
+        }
     }
 
     override fun showError(action: ErrorUtils.ErrorAction) {
@@ -410,6 +413,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
         } else {
             errorContainer.translationY = 0f
+        }
+    }
+
+    override fun hideError() {
+        super.hideError()
+
+        if (viewModel.data.value == null) {
+            adapter.header = null
         }
     }
 
