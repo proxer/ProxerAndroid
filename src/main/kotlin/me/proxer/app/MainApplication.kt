@@ -161,7 +161,7 @@ class MainApplication : Application() {
                 .permitCustomSlowCalls()
                 .permitDiskWrites()
                 .permitDiskReads()
-                .penaltyDeath()
+                .penaltyDialog()
                 .penaltyLog()
                 .build()
 
