@@ -8,10 +8,10 @@
     <color name="secondaryLightColor">#C21414</color>
 
     <!-- For backwards compatibility to some libraries. -->
-    <color name="colorPrimary">@color/primaryColor</color>
-    <color name="colorPrimaryLight">@color/primaryLightColor</color>
-    <color name="colorPrimaryDark">@color/primaryDarkColor</color>
-    <color name="colorAccent">@color/secondaryColor</color>
+    <color name="colorPrimary" tools:ignore="UnusedResources">@color/primaryColor</color>
+    <color name="colorPrimaryLight" tools:ignore="UnusedResources">@color/primaryLightColor</color>
+    <color name="colorPrimaryDark" tools:ignore="UnusedResources">@color/primaryDarkColor</color>
+    <color name="colorAccent" tools:ignore="UnusedResources">@color/secondaryColor</color>
 
     <color name="textColorPrimary">#DE000000</color>
     <color name="textColorPrimaryDark">#FFFFFF</color>
