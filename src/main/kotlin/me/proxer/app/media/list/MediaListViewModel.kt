@@ -25,7 +25,7 @@ import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import me.proxer.library.enums.TagType
-import org.koin.standalone.inject
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import java.util.Date
 import java.util.EnumSet

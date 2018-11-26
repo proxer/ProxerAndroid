@@ -16,7 +16,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.unsafeLazy
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.viewModel
 
 /**
  * @author Ruben Gees

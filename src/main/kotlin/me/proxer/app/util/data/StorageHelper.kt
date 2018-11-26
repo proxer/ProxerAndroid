@@ -6,7 +6,7 @@ import com.orhanobut.hawk.Hawk
 import io.reactivex.Observable
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.ucp.settings.LocalUcpSettings
-import org.koin.standalone.KoinComponent
+import org.koin.core.KoinComponent
 import java.util.Date
 
 /**

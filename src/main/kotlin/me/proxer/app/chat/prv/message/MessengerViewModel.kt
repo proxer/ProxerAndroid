@@ -19,7 +19,7 @@ import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.koin.standalone.inject
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

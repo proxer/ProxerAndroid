@@ -9,8 +9,8 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

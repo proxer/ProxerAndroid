@@ -31,8 +31,8 @@ import me.proxer.library.api.ProxerCall
 import me.proxer.library.api.ProxerException
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 import java.util.LinkedHashSet
 import java.util.concurrent.TimeUnit

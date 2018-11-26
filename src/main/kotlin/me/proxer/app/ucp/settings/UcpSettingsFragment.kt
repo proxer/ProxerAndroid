@@ -17,7 +17,7 @@ import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.PreferenceCategory
 import net.xpece.android.support.preference.SwitchPreference
 import net.xpece.android.support.preference.XpPreferenceFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.sharedViewModel
 
 /**
  * @author Ruben Gees

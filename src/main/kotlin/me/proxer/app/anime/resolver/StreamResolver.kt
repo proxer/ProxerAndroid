@@ -4,8 +4,8 @@ import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import me.proxer.library.api.ProxerApi
 import okhttp3.OkHttpClient
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

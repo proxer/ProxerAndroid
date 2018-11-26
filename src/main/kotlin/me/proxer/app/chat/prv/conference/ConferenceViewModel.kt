@@ -11,7 +11,7 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
-import org.koin.standalone.inject
+import org.koin.core.inject
 import kotlin.properties.Delegates
 
 /**

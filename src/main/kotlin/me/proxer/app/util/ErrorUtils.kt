@@ -106,8 +106,8 @@ import me.proxer.library.api.ProxerException.ServerErrorType.USER_INSUFFICIENT_P
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.net.ssl.SSLPeerUnverifiedException

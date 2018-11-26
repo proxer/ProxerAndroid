@@ -11,7 +11,7 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.HttpUrl
 import okhttp3.Request
-import org.koin.standalone.inject
+import org.koin.core.inject
 import kotlin.text.RegexOption.DOT_MATCHES_ALL
 
 /**

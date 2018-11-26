@@ -16,8 +16,8 @@ import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import me.proxer.app.util.data.PreferenceHelper
 import okhttp3.OkHttpClient
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.io.InputStream
 
 /**

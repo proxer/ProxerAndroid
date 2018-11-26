@@ -7,7 +7,7 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
-import org.koin.standalone.inject
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

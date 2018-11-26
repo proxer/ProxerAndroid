@@ -16,8 +16,8 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

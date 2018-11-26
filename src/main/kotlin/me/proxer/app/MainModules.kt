@@ -77,8 +77,9 @@ import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.bind
+import org.koin.dsl.module
 import timber.log.Timber
 import java.io.File
 import java.security.KeyStore
@@ -101,7 +102,7 @@ private const val API_TOKEN_HEADER = "proxer-api-token"
 
 private val headersToRedact = listOf("proxer-api-key", "set-cookie")
 
-private val applicationModules = module(createOnStart = true) {
+private val applicationModules = module(createdAtStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 

@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
-import org.koin.standalone.inject
+import org.koin.core.inject
 
 /**
  * @author Ruben Gees

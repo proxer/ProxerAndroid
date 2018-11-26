@@ -13,7 +13,7 @@ import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import org.koin.standalone.KoinComponent
+import org.koin.core.KoinComponent
 import java.util.Date
 
 /**

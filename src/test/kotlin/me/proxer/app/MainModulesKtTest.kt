@@ -1,11 +1,11 @@
 package me.proxer.app
 
-import android.content.Context
 import io.mockk.mockk
 import org.junit.Test
-import org.koin.dsl.module.module
+import org.koin.android.ext.koin.useAndroidContext
+import org.koin.core.KoinApplication
 import org.koin.test.KoinTest
-import org.koin.test.checkModules
+import org.koin.test.check.checkModules
 
 /**
  * @author Ruben Gees
@@ -14,10 +14,9 @@ class MainModulesKtTest : KoinTest {
 
     @Test
     fun `koin modules`() {
-        val contextMockModule = module {
-            single { mockk<Context>() }
-        }
-
-        checkModules(modules + contextMockModule)
+        KoinApplication.create()
+            .useAndroidContext(mockk())
+            .loadModules(modules)
+            .checkModules()
     }
 }
