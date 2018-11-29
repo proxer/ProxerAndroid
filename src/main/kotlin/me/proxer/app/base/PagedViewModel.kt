@@ -30,8 +30,8 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
             .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
             .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
             .subscribeOn(Schedulers.io())
-            .doAfterSuccess { if (!isRefreshing) page++ }
             .doAfterTerminate { isRefreshing = false }
+            .doAfterSuccess { if (!isRefreshing) page++ }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 refreshError.value = null
