@@ -10,9 +10,12 @@ buildscript {
         google()
         gradlePluginPortal()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://storage.googleapis.com/r8-releases/raw' }
     }
 
     dependencies {
+        classpath 'com.android.tools:r8:1.3.42'
+
         classpathDependencies.values().each { classpath it }
     }
 }
