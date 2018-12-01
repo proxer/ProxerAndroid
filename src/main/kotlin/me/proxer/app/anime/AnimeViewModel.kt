@@ -26,6 +26,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toAnimeStreamInfo
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
+import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -142,10 +143,11 @@ class AnimeViewModel(
         }.doOnSuccess { cachedEntryCore = it }
     }
 
-    private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
+    private fun streamSingle(entry: EntryCore): Single<List<Stream>> = api.anime().streams(entryId, episode, language)
         .includeProxerStreams(true)
         .buildPartialErrorSingle(entry)
         .map { it.filterNot { stream -> StreamResolverFactory.resolverFor(stream.hosterName)?.ignore == true } }
+        .map { it.groupBy { stream -> stream.hoster }.map { (_, streams) -> streams.shuffled().first() } }
 
     @Suppress("ForbiddenVoid")
     private fun updateUserState(endpoint: Endpoint<Void>) {
