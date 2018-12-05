@@ -64,6 +64,13 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
+
+        if (
+            Environment.isExternalStorageEmulated() ||
+            Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED
+        ) {
+            externalCache.isVisible = false
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,10 +97,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                     AgeConfirmationDialog.show(activity as AppCompatActivity)
                 }
             }
-
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            externalCache.isVisible = false
-        }
 
         updateProfilePreference()
         updateIntervalNotificationPreference()

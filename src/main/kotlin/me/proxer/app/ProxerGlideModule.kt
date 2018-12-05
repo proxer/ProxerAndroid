@@ -1,6 +1,7 @@
 package me.proxer.app
 
 import android.content.Context
+import android.os.Environment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.Registry
@@ -35,7 +36,10 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
     private val preferenceHelper by inject<PreferenceHelper>()
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
-        val externalFilesDir = context.getExternalFilesDir(null)
+        val cacheDir = when (!Environment.isExternalStorageEmulated() && preferenceHelper.shouldCacheExternally) {
+            true -> context.externalCacheDir ?: context.cacheDir
+            false -> context.cacheDir
+        }
 
         builder.setDefaultRequestOptions(
             RequestOptions()
@@ -43,9 +47,7 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
                 .format(DecodeFormat.PREFER_RGB_565)
         )
 
-        if (preferenceHelper.shouldCacheExternally && externalFilesDir != null) {
-            builder.setDiskCache(DiskLruCacheFactory(externalFilesDir.path, CACHE_DIR, CACHE_SIZE))
-        }
+        builder.setDiskCache(DiskLruCacheFactory(cacheDir.path, CACHE_DIR, CACHE_SIZE))
     }
 
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
