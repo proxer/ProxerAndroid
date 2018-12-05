@@ -21,7 +21,6 @@ ext {
             lifecycle                        : "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
             room                             : "androidx.room:room-runtime:$roomVersion",
             work                             : "android.arch.work:work-runtime-ktx:$workVersion",
-            workFirebase                     : "android.arch.work:work-firebase:$workVersion",
             ktx                              : "androidx.core:core-ktx:$coreKtxVersion",
             ktxFragment                      : "androidx.fragment:fragment-ktx:$fragmentKtxVersion",
 

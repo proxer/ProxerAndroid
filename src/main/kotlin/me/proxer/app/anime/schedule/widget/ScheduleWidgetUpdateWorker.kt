@@ -15,6 +15,7 @@ import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.Result
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -106,7 +107,7 @@ class ScheduleWidgetUpdateWorker(
                 darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
             }
 
-            Result.SUCCESS
+            Result.success()
         } catch (error: Throwable) {
             Timber.e(error)
 
@@ -117,7 +118,7 @@ class ScheduleWidgetUpdateWorker(
                 darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, action, true) }
             }
 
-            return Result.FAILURE
+            return Result.failure()
         }
     }
 

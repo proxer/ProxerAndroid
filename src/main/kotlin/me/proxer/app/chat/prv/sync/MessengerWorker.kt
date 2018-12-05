@@ -7,6 +7,7 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.Result
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.Worker
@@ -134,7 +135,7 @@ class MessengerWorker(
     }
 
     override fun doWork(): Result {
-        if (!storageHelper.isLoggedIn) return Result.FAILURE
+        if (!storageHelper.isLoggedIn) return Result.failure()
 
         val synchronizationResult = when (conferenceId) {
             0L -> try {
@@ -151,7 +152,7 @@ class MessengerWorker(
 
         reschedule(synchronizationResult)
 
-        return if (synchronizationResult != SynchronizationResult.ERROR) Result.SUCCESS else Result.FAILURE
+        return if (synchronizationResult != SynchronizationResult.ERROR) Result.success() else Result.failure()
     }
 
     private fun handleSynchronization(): SynchronizationResult {
