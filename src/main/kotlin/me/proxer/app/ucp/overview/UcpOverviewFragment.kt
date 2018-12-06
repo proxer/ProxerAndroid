@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
+import com.gojuno.koptional.Optional
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -27,7 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 /**
  * @author Ruben Gees
  */
-class UcpOverviewFragment : BaseContentFragment<Int>() {
+class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
 
     companion object {
         private const val DATE_FORMAT = "%.1f"
@@ -71,7 +72,7 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
             }
     }
 
-    override fun showData(data: Int) {
+    override fun showData(data: Optional<Int>) {
         super.showData(data)
 
         storageHelper.user?.let { (_, id, name) ->
@@ -80,9 +81,9 @@ class UcpOverviewFragment : BaseContentFragment<Int>() {
             username.text = name
             userId.text = id
 
-            episodesRow.text = data.toString()
+            episodesRow.text = (data.toNullable() ?: 0).toString()
 
-            val minutes = data * 20
+            val minutes = data.toNullable() ?: 0 * 20
             val hours = minutes / 60f
             val days = hours / 24f
 
