@@ -61,13 +61,13 @@ abstract class DrawerActivity : BaseActivity() {
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
-            .subscribe { drawer.refreshHeader() }
+            .subscribe { drawer.refreshHeader(this) }
     }
 
     override fun onResume() {
         super.onResume()
 
-        drawer.refreshHeader()
+        drawer.refreshHeader(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -1,11 +1,13 @@
 package me.proxer.app.util.wrapper
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
+import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -51,113 +53,6 @@ class MaterialDrawerWrapper(
         }
 
     private val storageHelper by inject<StorageHelper>()
-
-    private val accountItems
-        get() = storageHelper.user.let {
-            when (it) {
-                null -> listOf<IProfile<*>>(
-                    ProfileDrawerItem()
-                        .withName(R.string.section_guest)
-                        .withIcon(R.mipmap.ic_launcher)
-                        .withSelectedTextColorRes(R.color.secondaryColor)
-                        .withIdentifier(AccountItem.GUEST.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_login)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                        .withIdentifier(AccountItem.LOGIN.id)
-                )
-                else -> listOf<IProfile<*>>(
-                    ProfileDrawerItem()
-                        .withName(it.name)
-                        .withEmail(R.string.section_user_subtitle)
-                        .withIcon(ProxerUrls.userImage(it.image).toString())
-                        .withSelectedTextColorRes(R.color.secondaryColor)
-                        .withIdentifier(AccountItem.USER.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_notifications)
-                        .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
-                        .withIdentifier(AccountItem.NOTIFICATIONS.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_profile_settings)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_settings)
-                        .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_ucp)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                        .withIdentifier(AccountItem.UCP.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_logout)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_remove)
-                        .withIdentifier(AccountItem.LOGOUT.id)
-                )
-            }
-        }
-
-    private val drawerItems by lazy {
-        listOf<IDrawerItem<*, *>>(
-            PrimaryDrawerItem()
-                .withName(R.string.section_news)
-                .withIcon(CommunityMaterial.Icon2.cmd_newspaper)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withIdentifier(DrawerItem.NEWS.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_chat)
-                .withIcon(CommunityMaterial.Icon2.cmd_message_text)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.CHAT.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_bookmarks)
-                .withIcon(CommunityMaterial.Icon.cmd_bookmark)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.BOOKMARKS.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_anime)
-                .withIcon(CommunityMaterial.Icon2.cmd_television)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.ANIME.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_schedule)
-                .withIcon(CommunityMaterial.Icon.cmd_calendar)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.SCHEDULE.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_manga)
-                .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.MANGA.id)
-        )
-    }
-
-    private val stickyDrawerItems by lazy {
-        listOf<IDrawerItem<*, *>>(
-            PrimaryDrawerItem()
-                .withName(R.string.section_info)
-                .withIcon(CommunityMaterial.Icon2.cmd_information_outline)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.INFO.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_settings)
-                .withIcon(CommunityMaterial.Icon2.cmd_settings)
-                .withSelectedTextColorRes(R.color.secondaryColor)
-                .withSelectable(isMain)
-                .withSelectedIconColorRes(R.color.secondaryColor)
-                .withIdentifier(DrawerItem.SETTINGS.id)
-        )
-    }
 
     private val header: AccountHeader
     private val drawer: Drawer
@@ -213,14 +108,25 @@ class MaterialDrawerWrapper(
         }
     }
 
-    fun refreshHeader() {
-        header.profiles = accountItems
-        drawer.recyclerView.adapter?.notifyDataSetChanged()
-        miniDrawer?.createItems()
+    fun refreshHeader(context: Context) {
+        val oldProfiles = header.profiles
+        val newProfiles = generateAccountItems(context)
+
+        if (
+            oldProfiles.size != newProfiles.size ||
+            oldProfiles.withIndex().any { (index, item) ->
+                item.identifier != newProfiles[index].identifier ||
+                    item.name.text != newProfiles[index].name.text
+            }
+        ) {
+            header.profiles = generateAccountItems(context)
+            drawer.recyclerView.adapter?.notifyDataSetChanged()
+            miniDrawer?.createItems()
+        }
     }
 
     fun disableSelectability() {
-        (drawerItems + stickyDrawerItems).forEach { it.withSelectable(false) }
+        drawer.drawerItems.forEach { it.withSelectable(false) }
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?) = AccountHeaderBuilder()
@@ -229,7 +135,7 @@ class MaterialDrawerWrapper(
         .withTextColorRes(R.color.textColorPrimaryDark)
         .withHeaderBackground(R.color.primaryColor)
         .withSavedInstance(savedInstanceState)
-        .withProfiles(accountItems)
+        .withProfiles(generateAccountItems(context))
         .withOnAccountHeaderListener { _, profile, _ -> onAccountItemClick(profile) }
         .build()
 
@@ -241,8 +147,8 @@ class MaterialDrawerWrapper(
     ) = DrawerBuilder(context)
         .withToolbar(toolbar)
         .withAccountHeader(accountHeader)
-        .withDrawerItems(drawerItems)
-        .withStickyDrawerItems(stickyDrawerItems)
+        .withDrawerItems(generateDrawerItems())
+        .withStickyDrawerItems(generateStickyDrawerItems())
         .withShowDrawerOnFirstLaunch(true)
         .withTranslucentStatusBar(true)
         .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
@@ -291,6 +197,125 @@ class MaterialDrawerWrapper(
         accountClickSubject.onNext(it)
 
         false
+    }
+
+    private fun generateAccountItems(context: Context): List<IProfile<*>> {
+        return storageHelper.user.let {
+            when (it) {
+                null -> listOf(
+                    ProfileDrawerItem()
+                        .withName(R.string.section_guest)
+                        .withIcon(R.mipmap.ic_launcher)
+                        .withSelectedTextColorRes(R.color.secondaryColor)
+                        .withIdentifier(AccountItem.GUEST.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_login)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                        .withIdentifier(AccountItem.LOGIN.id)
+                )
+                else -> listOf(
+                    ProfileDrawerItem()
+                        .withName(it.name)
+                        .withEmail(R.string.section_user_subtitle)
+                        .apply {
+                            if (it.image.isBlank()) {
+                                withIcon(
+                                    IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
+                                        .sizeDp(48)
+                                        .backgroundColorRes(R.color.primaryColor)
+                                        .colorRes(android.R.color.white)
+                                )
+                            } else {
+                                withIcon(ProxerUrls.userImage(it.image).toString())
+                            }
+                        }
+                        .withSelectedTextColorRes(R.color.secondaryColor)
+                        .withIdentifier(AccountItem.USER.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_notifications)
+                        .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
+                        .withIdentifier(AccountItem.NOTIFICATIONS.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_profile_settings)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_settings)
+                        .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_ucp)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                        .withIdentifier(AccountItem.UCP.id),
+                    ProfileSettingDrawerItem()
+                        .withName(R.string.section_logout)
+                        .withIcon(CommunityMaterial.Icon.cmd_account_remove)
+                        .withIdentifier(AccountItem.LOGOUT.id)
+                )
+            }
+        }
+    }
+
+    private fun generateDrawerItems(): List<IDrawerItem<*, *>> {
+        return listOf<IDrawerItem<*, *>>(
+            PrimaryDrawerItem()
+                .withName(R.string.section_news)
+                .withIcon(CommunityMaterial.Icon2.cmd_newspaper)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withIdentifier(DrawerItem.NEWS.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_chat)
+                .withIcon(CommunityMaterial.Icon2.cmd_message_text)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.CHAT.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_bookmarks)
+                .withIcon(CommunityMaterial.Icon.cmd_bookmark)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.BOOKMARKS.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_anime)
+                .withIcon(CommunityMaterial.Icon2.cmd_television)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.ANIME.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_schedule)
+                .withIcon(CommunityMaterial.Icon.cmd_calendar)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.SCHEDULE.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_manga)
+                .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.MANGA.id)
+        )
+    }
+
+    private fun generateStickyDrawerItems(): List<IDrawerItem<*, *>> {
+        return listOf<IDrawerItem<*, *>>(
+            PrimaryDrawerItem()
+                .withName(R.string.section_info)
+                .withIcon(CommunityMaterial.Icon2.cmd_information_outline)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.INFO.id),
+            PrimaryDrawerItem()
+                .withName(R.string.section_settings)
+                .withIcon(CommunityMaterial.Icon2.cmd_settings)
+                .withSelectedTextColorRes(R.color.secondaryColor)
+                .withSelectable(isMain)
+                .withSelectedIconColorRes(R.color.secondaryColor)
+                .withIdentifier(DrawerItem.SETTINGS.id)
+        )
     }
 
     enum class DrawerItem(val id: Long) {
