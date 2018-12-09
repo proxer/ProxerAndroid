@@ -255,7 +255,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
                         messageInput.safeText.clear()
 
-                        recyclerView.scrollToTop()
+                        // Scroll to top without animation. If at top, a smooth scroll is started.
+                        if (!isAtTop()) {
+                            recyclerView.scrollToTop()
+                        }
                     }
                 }
             }

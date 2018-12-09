@@ -31,7 +31,6 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.extension.doAfterAnimations
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
@@ -55,6 +54,13 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     override val viewModel by viewModel<ConferenceViewModel> { parametersOf(searchQuery ?: "") }
 
+    private val layoutManager by unsafeLazy {
+        StaggeredGridLayoutManager(
+            DeviceUtils.calculateSpanAmount(requireActivity()),
+            StaggeredGridLayoutManager.VERTICAL
+        )
+    }
+
     private var adapter by Delegates.notNull<ConferenceAdapter>()
 
     override val contentContainer: ViewGroup
@@ -62,6 +68,30 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
+
+    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onChanged() = scrollToTopIfRequested()
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) = scrollToTopIfRequested()
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) = scrollToTopIfRequested()
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) = scrollToTopIfRequested()
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) = scrollToTopIfRequested()
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            if (shouldScrollToTop) {
+                scrollToTopIfRequested()
+            } else if (recyclerView.isAtTop() && positionStart == 0) {
+                recyclerView.smoothScrollToPosition(0)
+            }
+        }
+
+        private fun scrollToTopIfRequested() {
+            if (shouldScrollToTop) {
+                recyclerView.scrollToTop()
+
+                shouldScrollToTop = false
+            }
+        }
+    }
 
     private var searchQuery: String?
         get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
@@ -95,12 +125,10 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter.glide = GlideApp.with(this)
+        adapter.registerAdapterDataObserver(adapterDataObserver)
 
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = StaggeredGridLayoutManager(
-            DeviceUtils.calculateSpanAmount(requireActivity()),
-            StaggeredGridLayoutManager.VERTICAL
-        )
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
     }
 
@@ -115,6 +143,8 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
     }
 
     override fun onDestroyView() {
+        adapter.unregisterAdapterDataObserver(adapterDataObserver)
+
         recyclerView.layoutManager = null
         recyclerView.adapter = null
 
@@ -172,35 +202,19 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
     override fun showData(data: List<ConferenceWithMessage>) {
         super.showData(data)
 
-        val wasAtFirstPosition = recyclerView.isAtTop()
-
         adapter.swapDataAndNotifyWithDiffing(data)
 
-        when {
-            adapter.isEmpty() -> when (searchQuery.isNullOrBlank()) {
+        if (adapter.isEmpty()) {
+            when (searchQuery.isNullOrBlank()) {
                 true -> showError(ErrorAction(R.string.error_no_data_conferences, ACTION_MESSAGE_HIDE))
                 false -> showError(ErrorAction(R.string.error_no_data_search, ACTION_MESSAGE_HIDE))
             }
-            shouldScrollToTop -> recyclerView.scrollToTop()
-            wasAtFirstPosition -> recyclerView.doAfterAnimations { recyclerView.smoothScrollToPosition(0) }
         }
-
-        shouldScrollToTop = false
     }
 
     override fun hideData() {
         adapter.swapDataAndNotifyWithDiffing(emptyList())
 
-        recyclerView.scrollToTop()
-
         super.hideData()
-    }
-
-    override fun showError(action: ErrorAction) {
-        super.showError(action)
-
-        if (adapter.isEmpty()) {
-            recyclerView.scrollToTop()
-        }
     }
 }

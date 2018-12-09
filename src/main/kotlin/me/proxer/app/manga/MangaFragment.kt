@@ -49,7 +49,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
-import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -362,8 +361,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         bindToolbar()
 
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
-
-        recyclerView.scrollToTop()
 
         if (viewModel.error.value?.data?.get(ErrorUtils.ENTRY_DATA_KEY) !is EntryCore) {
             adapter.header = null

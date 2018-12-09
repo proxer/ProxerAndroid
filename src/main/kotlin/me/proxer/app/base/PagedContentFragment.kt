@@ -21,7 +21,6 @@ import me.proxer.app.util.extension.doAfterAnimations
 import me.proxer.app.util.extension.endScrolls
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.scrollToTop
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -58,6 +57,16 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     override val errorButton: Button
         get() = errorContainer.findViewById(R.id.errorButton)
 
+    private val adapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            if (isAtTop() && positionStart == 0) {
+                recyclerView.doAfterAnimations {
+                    recyclerView.smoothScrollToPosition(0)
+                }
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_paged, container, false)
     }
@@ -67,6 +76,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
         adapter = EasyHeaderFooterAdapter(innerAdapter)
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
+        innerAdapter.registerAdapterDataObserver(adapterDataObserver)
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = layoutManager
@@ -88,6 +98,8 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun onDestroyView() {
+        innerAdapter.unregisterAdapterDataObserver(adapterDataObserver)
+
         recyclerView.layoutManager = null
         recyclerView.adapter = null
 
@@ -101,20 +113,15 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
     }
 
     override fun showData(data: List<T>) {
-        val wasAtFirstPosition = isAtTop()
-
         innerAdapter.swapDataAndNotifyWithDiffing(data)
 
-        when {
-            innerAdapter.isEmpty() -> showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
-            wasAtFirstPosition -> recyclerView.doAfterAnimations { recyclerView.smoothScrollToPosition(0) }
+        if (innerAdapter.isEmpty()) {
+            showError(ErrorAction(emptyDataMessage, ACTION_MESSAGE_HIDE))
         }
     }
 
     override fun hideData() {
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
-
-        recyclerView.scrollToTop()
     }
 
     override fun showError(action: ErrorAction) {
@@ -126,10 +133,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                     false -> ViewGroup.LayoutParams.WRAP_CONTENT
                 }
             }
-        }
-
-        if (innerAdapter.isEmpty()) {
-            recyclerView.scrollToTop()
         }
 
         super.showError(action)
