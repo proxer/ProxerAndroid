@@ -1,6 +1,7 @@
 package me.proxer.app.util.http
 
 import okhttp3.TlsVersion
+import timber.log.Timber
 import java.net.InetAddress
 import java.net.Socket
 import java.security.NoSuchAlgorithmException
@@ -16,8 +17,14 @@ class ModernTlsSocketFactory(trustManager: X509TrustManager) : SSLSocketFactory(
 
     private val delegate = try {
         SSLContext.getInstance(TlsVersion.TLS_1_3.javaName())
-    } catch (e: NoSuchAlgorithmException) {
-        SSLContext.getInstance(TlsVersion.TLS_1_2.javaName())
+    } catch (error: NoSuchAlgorithmException) {
+        try {
+            SSLContext.getInstance(TlsVersion.TLS_1_2.javaName())
+        } catch (error: NoSuchAlgorithmException) {
+            Timber.e(error, "Error while enabling TLS 1.2")
+
+            throw error
+        }
     }.let {
         it.init(null, arrayOf(trustManager), null)
 

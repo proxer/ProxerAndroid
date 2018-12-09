@@ -147,7 +147,8 @@ class MainApplication : Application() {
         if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
             try {
                 WebView(this)
-            } catch (ignored: Throwable) {
+            } catch (error: Throwable) {
+                Timber.e(error, "Error initializing night mode")
             }
         }
 

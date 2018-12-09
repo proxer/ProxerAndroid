@@ -49,7 +49,7 @@ class TimberFileTree(context: Context) : Timber.Tree() {
             val fileDate = try {
                 LocalDate.parse(currentLogFile.nameWithoutExtension)
             } catch (error: DateTimeParseException) {
-                Log.e(TimberFileTree::class.java.name, "Invalid log file $currentLogFile found, deleting")
+                Log.e(TimberFileTree::class.java.name, "Invalid log file $currentLogFile found, deleting", error)
 
                 null
             }

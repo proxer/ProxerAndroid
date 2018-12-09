@@ -58,6 +58,7 @@ import me.proxer.library.enums.RelationshipStatus
 import me.proxer.library.enums.Season
 import me.proxer.library.enums.SynonymType
 import me.proxer.library.enums.UserMediaProgress
+import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
 object ProxerLibExtensions {
@@ -380,7 +381,7 @@ inline val EntryCore.isAgeRestricted: Boolean
 inline val Page.decodedName: String
     get() = try {
         URLDecoder.decode(name, "UTF-8")
-    } catch (error: Throwable) {
+    } catch (error: UnsupportedEncodingException) {
         ""
     }
 

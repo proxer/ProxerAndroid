@@ -28,6 +28,9 @@ complexity:
     active: false
 
 exceptions:
+  SwallowedException:
+    ignoredExceptionTypes: 'ActivityNotFoundException,NoSuchAlgorithmException,NumberFormatException,
+                            PackageManager.NameNotFoundException,UnsupportedEncodingException'
   TooGenericExceptionCaught:
     active: false
 

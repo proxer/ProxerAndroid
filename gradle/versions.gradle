@@ -19,7 +19,7 @@ ext {
     kotlinVersion = '1.3.11'
 
     // Utility plugins
-    detektPluginVersion = '1.0.0-RC10'
+    detektPluginVersion = '1.0.0-RC12'
     gradleVersionsPluginVersion = '0.20.0'
     androidCommandPluginVersion = '2.0.1'
     ktlintPluginVersion = '6.3.1'
@@ -76,7 +76,7 @@ ext {
     gravitySnapHelperVersion = '2.0'
 
     // Utils
-    proxerLibVersion = '5a7269fd6a'
+    proxerLibVersion = '5d87c70275'
     threetenVersion = '1.1.1'
     hawkVersion = 'c6b8d3a82c'
     glideVersion = '4.8.0'
