@@ -1,12 +1,7 @@
 package me.proxer.app.util.extension
 
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.toOptional
-import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
-import io.reactivex.Observable
 import io.reactivex.Single
 import me.proxer.app.exception.PartialException
 import me.proxer.library.api.Endpoint
@@ -105,26 +100,3 @@ fun Call.toBodySingle(): Single<String> = Single.create { emitter ->
         }
     }
 }
-
-fun RecyclerView.endScrolls(threshold: Int = 5): Observable<Unit> = scrollEvents()
-    .filter {
-        safeLayoutManager.let {
-            val pastVisibleItems = when (it) {
-                is StaggeredGridLayoutManager -> {
-                    val visibleItemPositions = IntArray(it.spanCount).apply {
-                        it.findFirstVisibleItemPositions(this)
-                    }
-
-                    when (visibleItemPositions.isNotEmpty()) {
-                        true -> visibleItemPositions[0]
-                        false -> 0
-                    }
-                }
-                is LinearLayoutManager -> it.findFirstVisibleItemPosition()
-                else -> 0
-            }
-
-            it.itemCount > 0 && it.childCount + pastVisibleItems >= it.itemCount - threshold
-        }
-    }
-    .map { Unit }
