@@ -7,7 +7,7 @@ import me.proxer.library.api.Endpoint
 /**
  * @author Ruben Gees
  */
-abstract class BaseContentViewModel<T> : BaseViewModel<T>() {
+abstract class BaseContentViewModel<T : Any> : BaseViewModel<T>() {
 
     override val dataSingle: Single<T>
         get() = Single.fromCallable { validate() }

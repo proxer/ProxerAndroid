@@ -76,7 +76,7 @@ ext {
     gravitySnapHelperVersion = '2.0'
 
     // Utils
-    proxerLibVersion = '5d87c70275'
+    proxerLibVersion = 'fe90e8f29a'
     threetenVersion = '1.1.1'
     hawkVersion = 'c6b8d3a82c'
     glideVersion = '4.8.0'

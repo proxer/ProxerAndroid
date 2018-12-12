@@ -121,7 +121,7 @@ class MangaViewModel(
         api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(), Category.MANGA)
     )
 
-    private fun entrySingle() = when (cachedEntryCore != null) {
+    private fun entrySingle(): Single<EntryCore> = when (cachedEntryCore != null) {
         true -> Single.just(cachedEntryCore)
         false -> api.info().entryCore(entryId).buildSingle()
     }
