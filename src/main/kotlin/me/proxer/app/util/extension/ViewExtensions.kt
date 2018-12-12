@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.text.PrecomputedTextCompat
+import androidx.core.view.postDelayed
 import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -70,11 +71,10 @@ fun RecyclerView.scrollToTop() = when (val layoutManager = safeLayoutManager) {
 }
 
 fun RecyclerView.doAfterAnimations(action: () -> Unit) {
-    post {
+    postDelayed(10) {
         if (isAnimating) {
             val safeItemAnimator = itemAnimator ?: throw IllegalStateException(
-                "RecyclerView is reporting" +
-                    "isAnimating as true, but no itemAnimator is set"
+                "RecyclerView is reporting isAnimating as true, but no itemAnimator is set"
             )
 
             safeItemAnimator.isRunning { doAfterAnimations(action) }

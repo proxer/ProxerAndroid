@@ -31,6 +31,7 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.doAfterAnimations
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
@@ -74,7 +75,14 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) = scrollToTopIfRequested()
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) = scrollToTopIfRequested()
         override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) = scrollToTopIfRequested()
-        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) = scrollToTopIfRequested()
+
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            if (shouldScrollToTop) {
+                scrollToTopIfRequested()
+            } else if (recyclerView.isAtTop() && toPosition == 0) {
+                recyclerView.smoothScrollToPosition(0)
+            }
+        }
 
         override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
             if (shouldScrollToTop) {
@@ -86,7 +94,9 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
         private fun scrollToTopIfRequested() {
             if (shouldScrollToTop) {
-                recyclerView.scrollToTop()
+                recyclerView.doAfterAnimations {
+                    recyclerView.scrollToTop()
+                }
 
                 shouldScrollToTop = false
             }
