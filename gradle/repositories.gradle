@@ -1,6 +1,7 @@
 repositories {
     maven {
         url "https://dl.google.com/dl/android/maven2"
+        mavenContent { releasesOnly() }
         content {
             includeGroupByRegex "androidx.*"
             includeGroupByRegex "android\\.arch.*"
@@ -10,6 +11,7 @@ repositories {
     }
 
     jcenter {
+        mavenContent { releasesOnly() }
         content {
             excludeGroupByRegex "androidx.*"
             excludeGroupByRegex "android\\.arch.*"
@@ -21,6 +23,7 @@ repositories {
 
     maven {
         url "https://jitpack.io"
+        mavenContent { releasesOnly() }
         content { includeGroupByRegex "com\\.github.*" }
     }
 
