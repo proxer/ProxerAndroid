@@ -36,3 +36,32 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+      - persist_to_workspace:
+          root: ~/app
+          paths: .
+
+  publish:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:10.2.1
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Publish in Telegram Group
+          command: curl
+            -F chat_id="$TELEGRAM_CHAT_ID"
+            -F document=@$(find ./build/outputs/apk/logRelease/ -type f -name "*.apk")
+            https://api.telegram.org/bot$TELEGRAM_BOT_ID/sendDocument
+
+workflows:
+  version: 2
+  build-and-publish:
+    jobs:
+      - build
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
