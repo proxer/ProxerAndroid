@@ -5,16 +5,17 @@ static getGitHash() {
 }
 
 static String getFromSecrets(String key) {
-    if (isCI()) {
-        return "dummy"
-    }
-
     Properties result = new Properties()
 
     try {
         result.load(new FileInputStream(new File("secrets.properties")))
     } catch (Exception ignored) {
-        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
+        if (isCI()) {
+            return "dummy"
+        } else {
+            throw new GradleException("Please add a secrets.properties file with a value for $key " +
+                    "to perform this action.")
+        }
     }
 
     if (!result.containsKey(key)) {

@@ -83,9 +83,7 @@ android {
     }
 
     buildTypes {
-        boolean shouldSign = shouldSign() && !isCI()
-
-        if (!shouldSign) {
+        if (!shouldSign() && !isCI()) {
             logger.warn("This build will not be signed because it is missing the keystore info. Please add " +
                     "values for \"RELEASE_STORE_FILE\", \"RELEASE_STORE_PASSWORD\", \"RELEASE_KEY_ALIAS\" and " +
                     "\"RELEASE_KEY_PASSWORD\" to your secrets.properties file if you want the apk to be signed.")
@@ -111,7 +109,7 @@ android {
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"false\")"
 
-            if (shouldSign) {
+            if (shouldSign()) {
                 signingConfig signingConfigs.release
             }
         }
@@ -129,7 +127,7 @@ android {
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
 
-            if (shouldSign) {
+            if (shouldSign()) {
                 signingConfig signingConfigs.release
             }
         }

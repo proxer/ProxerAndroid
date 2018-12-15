@@ -3,31 +3,35 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-    - image: circleci/android:api-28-alpha
+      - image: circleci/android:api-28-alpha
     environment:
       _JAVA_OPTIONS: "-Xms512m -Xmx2048M -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
                       -Djava.util.concurrent.ForkJoinPool.common.parallelism=1"
       TERM: dumb
     steps:
-    - checkout
-    - restore_cache:
-        key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
-    - run:
-        name: Create Licences
-        command: echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license &&
-          echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
-    - run:
-        name: Run Build
-        command: ./gradlew check build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-          -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1 --console=plain
-        no_output_timeout: 30m
-    - store_artifacts:
-        path: build/reports
-        destination: reports
-    - store_artifacts:
-        path: build/outputs
-        destination: outputs
-    - save_cache:
-        paths:
-        - ~/.gradle
-        key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+      - run:
+          name: Create Licences
+          command: echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license &&
+            echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
+      - run:
+          name: Create Secrets
+          command: echo $KEYSTORE | base64 -d > keystore.jks &&
+            echo $SECRETS | base64 -d > secrets.properties
+      - run:
+          name: Run Build
+          command: ./gradlew check build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1 --console=plain
+          no_output_timeout: 30m
+      - store_artifacts:
+          path: build/reports
+          destination: reports
+      - store_artifacts:
+          path: build/outputs
+          destination: outputs
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
