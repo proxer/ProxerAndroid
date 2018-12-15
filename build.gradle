@@ -2,32 +2,27 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
-    apply from: 'gradle/versions.gradle'
-    apply from: 'gradle/dependencies.gradle'
-
-    repositories {
-        jcenter()
-        google()
-        gradlePluginPortal()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        maven { url 'https://storage.googleapis.com/r8-releases/raw' }
-    }
+    apply from: "${projectDir}/gradle/versions.gradle"
+    apply from: "${projectDir}/gradle/repositories.gradle"
 
     dependencies {
-        classpath 'com.android.tools:r8:1.3.42'
-
-        classpathDependencies.values().each { classpath it }
+        // Manually set the R8 and D8 version, to get latest improvements fast.
+        classpath "com.android.tools:r8:1.3.45"
     }
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "org.jetbrains.kotlin.kapt"
 
-apply plugin: 'com.github.ben-manes.versions'
-apply plugin: 'org.jlleitschuh.gradle.ktlint'
-apply plugin: 'io.gitlab.arturbosch.detekt'
-apply plugin: 'com.novoda.android-command'
+    id "io.gitlab.arturbosch.detekt"
+    id "org.jlleitschuh.gradle.ktlint"
+    id "com.github.ben-manes.versions"
+    id "com.novoda.android-command"
+}
+
+apply from: "${projectDir}/gradle/utils.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -37,14 +32,14 @@ android {
     }
 
     defaultConfig {
-        applicationId 'me.proxer.app'
+        applicationId "me.proxer.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode appVersionMajor * 1000000 + appVersionMinor * 10000 + appVersionPatch * 100
         versionName "$appVersionMajor.$appVersionMinor.$appVersionPatch"
 
         vectorDrawables.useSupportLibrary true
-        resConfigs 'de'
+        resConfigs "de"
     }
 
     sourceSets {
@@ -79,10 +74,10 @@ android {
     signingConfigs {
         if (shouldSign()) {
             release {
-                storeFile file(getFromSecrets('RELEASE_STORE_FILE'))
-                storePassword getFromSecrets('RELEASE_STORE_PASSWORD')
-                keyAlias getFromSecrets('RELEASE_KEY_ALIAS')
-                keyPassword getFromSecrets('RELEASE_KEY_PASSWORD')
+                storeFile file(getFromSecrets("RELEASE_STORE_FILE"))
+                storePassword getFromSecrets("RELEASE_STORE_PASSWORD")
+                keyAlias getFromSecrets("RELEASE_KEY_ALIAS")
+                keyPassword getFromSecrets("RELEASE_KEY_PASSWORD")
             }
         }
     }
@@ -91,17 +86,17 @@ android {
         boolean shouldSign = shouldSign() && !isCI()
 
         if (!shouldSign) {
-            logger.warn('This build will not be signed because it is missing the keystore info. Please add ' +
-                    'values for "RELEASE_STORE_FILE", "RELEASE_STORE_PASSWORD", "RELEASE_KEY_ALIAS" and ' +
-                    '"RELEASE_KEY_PASSWORD" to your secrets.properties file if you want the apk to be signed.')
+            logger.warn("This build will not be signed because it is missing the keystore info. Please add " +
+                    "values for \"RELEASE_STORE_FILE\", \"RELEASE_STORE_PASSWORD\", \"RELEASE_KEY_ALIAS\" and " +
+                    "\"RELEASE_KEY_PASSWORD\" to your secrets.properties file if you want the apk to be signed.")
         }
 
         debug {
             multiDexEnabled true
 
             versionNameSuffix = "-debug-${getGitHash()}"
-            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
+            buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
+            buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
         }
 
         release {
@@ -110,11 +105,11 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile 'config/proguard/proguard-rules.pro'
+                proguardFile "config/proguard/proguard-rules.pro"
             }
 
-            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"false\")"
+            buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
+            buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"false\")"
 
             if (shouldSign) {
                 signingConfig signingConfigs.release
@@ -127,12 +122,12 @@ android {
                 removeUnusedResources true
                 obfuscate true
                 optimizeCode true
-                proguardFile 'config/proguard/proguard-rules.pro'
+                proguardFile "config/proguard/proguard-rules.pro"
             }
 
             versionNameSuffix = "-logRelease-${getGitHash()}"
-            buildConfigField 'String', 'PROXER_API_KEY', "\"${getFromSecrets('PROXER_API_KEY')}\""
-            buildConfigField 'boolean', 'LOG', "Boolean.parseBoolean(\"true\")"
+            buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
+            buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
 
             if (shouldSign) {
                 signingConfig signingConfigs.release
@@ -151,17 +146,17 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/*.kotlin_module'
-        exclude 'META-INF/*.version'
-        exclude 'META-INF/rxkotlin.properties'
-        exclude 'META-INF/proguard/**'
-        exclude 'kotlin/**'
-        exclude 'third_party/**'
-        exclude 'jsr305_annotations/**'
-        exclude 'error_prone/**'
-        exclude 'protobuf.meta'
-        exclude 'build-data.properties'
-        exclude 'androidsupportmultidexversion.txt'
+        exclude "META-INF/*.kotlin_module"
+        exclude "META-INF/*.version"
+        exclude "META-INF/rxkotlin.properties"
+        exclude "META-INF/proguard/**"
+        exclude "kotlin/**"
+        exclude "third_party/**"
+        exclude "jsr305_annotations/**"
+        exclude "error_prone/**"
+        exclude "protobuf.meta"
+        exclude "build-data.properties"
+        exclude "androidsupportmultidexversion.txt"
     }
 
     applicationVariants.all { variant ->
@@ -183,29 +178,12 @@ android {
     }
 }
 
-repositories {
-    jcenter()
-    google()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-}
+apply from: "${projectDir}/gradle/repositories.gradle"
+apply from: "${projectDir}/gradle/dependencies.gradle"
 
-dependencies {
-    implementationDependencies.values().each { implementation it }
-    debugImplementationDependencies.values().each { debugImplementation it }
-    releaseImplementationDependencies.values().each { releaseImplementation it }
-    releaseImplementationDependencies.values().each { logReleaseImplementation it }
-    compileOnlyDependencies.values().each { compileOnly it }
-    kaptDependencies.values().each { kapt it }
-    testDependencies.values().each { testImplementation it }
-
-    excludingImplementationDependencies.values().each { dependency ->
-        implementation(dependency.dependency) {
-            dependency.exclusions.each {
-                exclude module: it
-            }
-        }
+tasks.withType(KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict", "-progressive"]
     }
 }
 
@@ -233,56 +211,4 @@ ktlint {
 
 wrapper {
     gradleVersion rootProject.ext.gradleVersion
-}
-
-tasks.withType(KotlinCompile).all {
-    kotlinOptions {
-        freeCompilerArgs = ["-Xjsr305=strict", "-progressive"]
-    }
-}
-
-static getGitHash() {
-    String gitRevParseCommand = "git rev-parse --verify --short HEAD"
-
-    return gitRevParseCommand.execute().text.trim()
-}
-
-static String getFromSecrets(String key) {
-    if (isCI()) {
-        return 'dummy'
-    }
-
-    Properties result = new Properties()
-
-    try {
-        result.load(new FileInputStream(new File('secrets.properties')))
-    } catch (Exception ignored) {
-        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
-    }
-
-    if (!result.containsKey(key)) {
-        throw new GradleException("Please include a value for $key in your secrets.properties " +
-                "file to perform this action.")
-    }
-
-    return result[key]
-}
-
-static boolean shouldSign() {
-    Properties result = new Properties()
-
-    try {
-        result.load(new FileInputStream(new File('secrets.properties')))
-    } catch (Exception ignored) {
-        return false
-    }
-
-    return result.containsKey('RELEASE_STORE_FILE') && result.containsKey('RELEASE_STORE_PASSWORD') &&
-            result.containsKey('RELEASE_KEY_ALIAS') && result.containsKey('RELEASE_KEY_PASSWORD')
-}
-
-static boolean isCI() {
-    Object isCI = System.getenv('CI')
-
-    return isCI != null && isCI.toBoolean()
 }

@@ -175,6 +175,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             airingInfoDisposable?.dispose()
             airingInfoDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(this)
                 .subscribe(AiringInfoUpdateConsumer(item))
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))

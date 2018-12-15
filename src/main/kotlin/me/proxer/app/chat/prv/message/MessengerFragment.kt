@@ -31,7 +31,6 @@ import com.uber.autodispose.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
@@ -131,8 +130,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override var innerAdapter by Delegates.notNull<MessengerAdapter>()
-
-    private var pingDisposable: Disposable? = null
 
     private val scrollToBottom: FloatingActionButton by bindView(R.id.scrollToBottom)
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
@@ -273,20 +270,15 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         MessengerNotifications.cancel(requireContext())
 
-        pingDisposable = bus.register(MessengerFragmentPingEvent::class.java).subscribe()
+        bus.register(MessengerFragmentPingEvent::class.java)
+            .autoDisposable(this.scope())
+            .subscribe()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         innerAdapter.saveInstanceState(outState)
-    }
-
-    override fun onPause() {
-        pingDisposable?.dispose()
-        pingDisposable = null
-
-        super.onPause()
     }
 
     override fun onDestroyView() {

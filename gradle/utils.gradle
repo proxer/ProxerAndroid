@@ -1,0 +1,52 @@
+static getGitHash() {
+    String gitRevParseCommand = "git rev-parse --verify --short HEAD"
+
+    return gitRevParseCommand.execute().text.trim()
+}
+
+static String getFromSecrets(String key) {
+    if (isCI()) {
+        return "dummy"
+    }
+
+    Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File("secrets.properties")))
+    } catch (Exception ignored) {
+        throw new GradleException("Please add a secrets.properties file with a value for $key to perform this action.")
+    }
+
+    if (!result.containsKey(key)) {
+        throw new GradleException("Please include a value for $key in your secrets.properties " +
+                "file to perform this action.")
+    }
+
+    return result[key]
+}
+
+static boolean shouldSign() {
+    Properties result = new Properties()
+
+    try {
+        result.load(new FileInputStream(new File("secrets.properties")))
+    } catch (Exception ignored) {
+        return false
+    }
+
+    return result.containsKey("RELEASE_STORE_FILE") && result.containsKey("RELEASE_STORE_PASSWORD") &&
+            result.containsKey("RELEASE_KEY_ALIAS") && result.containsKey("RELEASE_KEY_PASSWORD")
+}
+
+static boolean isCI() {
+    Object isCI = System.getenv("CI")
+
+    return isCI != null && isCI.toBoolean()
+}
+
+ext {
+    getGitHash = this.&getGitHash
+    getFromSecrets = this.&getFromSecrets
+    shouldSign = this.&shouldSign
+    isCI = this.&isCI
+}

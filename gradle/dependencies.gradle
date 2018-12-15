@@ -1,128 +1,104 @@
-ext {
-    classpathDependencies = [
-            androidPlugin             : "com.android.tools.build:gradle:$androidPluginVersion",
-            kotlinPlugin              : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
-            detektPlugin              : "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion",
-            ktlintPlugin              : "org.jlleitschuh.gradle:ktlint-gradle:$ktlintPluginVersion",
-            gradleVersionsPlugin      : "com.github.ben-manes:gradle-versions-plugin:$gradleVersionsPluginVersion",
-            gradleAndroidCommandPlugin: "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion",
-    ]
+    implementation "com.google.android.gms:play-services-cast-framework:$castVersion"
 
-    implementationDependencies = [
-            kotlinStdlib                     : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
-            koin                             : "org.koin:koin-androidx-viewmodel:$koinVersion",
+    implementation "androidx.multidex:multidex:$multidexVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.browser:browser:$browserVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "android.arch.work:work-runtime-ktx:$workVersion"
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
 
-            cast                             : "com.google.android.gms:play-services-cast-framework:$castVersion",
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBindingVersion"
+    implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion"
+    implementation "com.github.rubengees:rxbus:$rxBusVersion"
+    implementation "com.uber.autodispose:autodispose-ktx:$autoDisposeVersion"
+    implementation "com.uber.autodispose:autodispose-android-archcomponents-ktx:$autoDisposeVersion"
 
-            multidex                         : "androidx.multidex:multidex:$multidexVersion",
-            appcompat                        : "androidx.appcompat:appcompat:$appcompatVersion",
-            browser                          : "androidx.browser:browser:$browserVersion",
-            lifecycle                        : "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion",
-            room                             : "androidx.room:room-runtime:$roomVersion",
-            work                             : "android.arch.work:work-runtime-ktx:$workVersion",
-            ktx                              : "androidx.core:core-ktx:$coreKtxVersion",
-            ktxFragment                      : "androidx.fragment:fragment-ktx:$fragmentKtxVersion",
+    implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
+    implementation "androidx.cardview:cardview:$cardviewVersion"
+    implementation "androidx.gridlayout:gridlayout:$gridlayoutVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "com.google.android.material:material:$materialComponentsVersion"
+    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "net.xpece.android:support-preference:$supportPreferenceVersion"
+    implementation "net.xpece.android:support-spinner:$supportPreferenceVersion"
+    implementation "com.mikepenz:iconics-core:$iconicsVersion@aar"
+    implementation "com.mikepenz:iconics-views:$iconicsVersion@aar"
+    implementation "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar"
+    implementation "com.github.mikepenz:MaterialDrawer:$materialDrawerVersion@aar"
+    implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar"
+    implementation "com.mikepenz:materialize:$materializeVersion@aar"
+    implementation "com.mikepenz:fastadapter:$fastadapterVersion@aar"
+    implementation "com.mikepenz:fastadapter-extensions-expandable:$fastadapterVersion@aar"
+    implementation "com.mikepenz:crossfader:$crossfaderVersion@aar"
+    implementation "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion"
+    implementation "com.github.rubengees:subsampling-scale-image-view:$subsamplingScaleImageViewVersion"
+    implementation "com.github.num42:subsampling-pdf-decoder:$subsamplingPdfDecoderVersion"
+    implementation "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion"
+    implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
+    implementation "com.google.android:flexbox:$flexboxVersion"
+    implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
+    implementation "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion"
+    implementation "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion"
+    implementation "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion"
+    implementation "com.github.rubengees:introduction:$introductionVersion"
+    implementation "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion"
+    implementation "com.github.rubensousa:gravitysnaphelper:$gravitySnapHelperVersion"
 
-            rxJava                           : "io.reactivex.rxjava2:rxjava:$rxJavaVersion",
-            rxKotlin                         : "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion",
-            rxAndroid                        : "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion",
-            rxBinding                        : "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBindingVersion",
-            rxBindingV4                      : "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBindingVersion",
-            rxBindingV7                      : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBindingVersion",
-            rxBindingDesign                  : "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBindingVersion",
-            rxBindingRecyclerView            : "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxBindingVersion",
-            rxBus                            : "com.github.rubengees:rxbus:$rxBusVersion",
-            autoDispose                      : "com.uber.autodispose:autodispose-ktx:$autoDisposeVersion",
-            autoDisposeArchitectureComponents: "com.uber.autodispose:autodispose-android-archcomponents-ktx:$autoDisposeVersion",
+    implementation "com.github.proxer:ProxerLibJava:$proxerLibVersion"
+    implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.okio:okio:$okioVersion"
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion"
+    implementation "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion"
+    implementation "com.github.rubengees:kotterknife:$kotterknifeVersion"
+    implementation "com.github.suckgamony.RapidDecoder:library:$rapidDecoderVersion"
+    implementation "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion"
+    implementation "org.jsoup:jsoup:$jsoupVersion"
 
-            recyclerView                     : "androidx.recyclerview:recyclerview:$recyclerviewVersion",
-            cardView                         : "androidx.cardview:cardview:$cardviewVersion",
-            gridLayout                       : "androidx.gridlayout:gridlayout:$gridlayoutVersion",
-            constraintLayout                 : "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion",
-            materialDesign                   : "com.google.android.material:material:$materialDesignVersion",
-            preference                       : "androidx.preference:preference:$preferenceVersion",
-            supportPreference                : "net.xpece.android:support-preference:$supportPreferenceVersion",
-            supportPreferenceSpinner         : "net.xpece.android:support-spinner:$supportPreferenceVersion",
-            iconics                          : "com.mikepenz:iconics-core:$iconicsVersion@aar",
-            iconicsViews                     : "com.mikepenz:iconics-views:$iconicsVersion@aar",
-            communityMaterialTypeface        : "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar",
-            materialDrawer                   : "com.github.mikepenz:MaterialDrawer:$materialDrawerVersion@aar",
-            aboutLibraries                   : "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar",
-            materialize                      : "com.mikepenz:materialize:$materializeVersion@aar",
-            fastadapter                      : "com.mikepenz:fastadapter:$fastadapterVersion@aar",
-            fastadapterExpandable            : "com.mikepenz:fastadapter-extensions-expandable:$fastadapterVersion@aar",
-            crossfader                       : "com.mikepenz:crossfader:$crossfaderVersion@aar",
-            materialAbout                    : "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion",
-            subsamplingScaleImageView        : "com.github.rubengees:subsampling-scale-image-view:$subsamplingScaleImageViewVersion",
-            subsamplingPdfDecoder            : "com.github.num42:subsampling-pdf-decoder:$subsamplingPdfDecoderVersion",
-            tabLayoutHelper                  : "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion",
-            materialDialogs                  : "com.afollestad.material-dialogs:core:$materialDialogsVersion",
-            flexbox                          : "com.google.android:flexbox:$flexboxVersion",
-            emojiIos                         : "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion",
-            exoplayer                        : "com.google.android.exoplayer:exoplayer:$exoplayerVersion",
-            exoplayerCast                    : "com.google.android.exoplayer:extension-cast:$exoplayerVersion",
-            exoplayerIntegration             : "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion",
-            materialProgressBar              : "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion",
-            materialRatingBar                : "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion",
-            customtabsHelper                 : "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion",
-            introduction                     : "com.github.rubengees:introduction:$introductionVersion",
-            aspectRatioImageView             : "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion",
-            gravitySnapHelper                : "com.github.rubensousa:gravitysnaphelper:$gravitySnapHelperVersion",
+    implementation "com.kirich1409:strict-mode-compat:$strictModeCompatVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion"
 
-            proxerLib                        : "com.github.proxer:ProxerLibJava:$proxerLibVersion",
-            threeten                         : "com.jakewharton.threetenabp:threetenabp:$threetenVersion",
-            glide                            : "com.github.bumptech.glide:glide:$glideVersion",
-            glideOkHttp                      : "com.github.bumptech.glide:okhttp3-integration:$glideVersion",
-            okHttp                           : "com.squareup.okhttp3:okhttp:$okHttpVersion",
-            okHttpLogging                    : "com.squareup.okhttp3:logging-interceptor:$okHttpVersion",
-            okio                             : "com.squareup.okio:okio:$okioVersion",
-            moshi                            : "com.squareup.moshi:moshi:$moshiVersion",
-            easyHeaderFooterAdapter          : "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion",
-            kOptional                        : "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion",
-            kotterknife                      : "com.github.rubengees:kotterknife:$kotterknifeVersion",
-            rapidDecoder                     : "com.github.suckgamony.RapidDecoder:library:$rapidDecoderVersion",
-            betterLinkMovementMethod         : "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion",
-            jsoup                            : "org.jsoup:jsoup:$jsoupVersion",
+    // Needed for Android < 5.
+    implementation "com.google.code.findbugs:jsr305:$jsr305Version"
+    implementation "com.uber.javaxextras:javax-extras:$javaxExtrasVersion"
 
-            strictModeCompat                 : "com.kirich1409:strict-mode-compat:$strictModeCompatVersion",
-            timber                           : "com.jakewharton.timber:timber:$timberVersion",
+    implementation("com.github.rubengees:hawk:$hawkVersion") {
+        exclude module: "gson"
+    }
 
-            // Needed for Android < 5.
-            jsr305                           : "com.google.code.findbugs:jsr305:$jsr305Version",
-            javaxExtras                      : "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
-    ]
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
 
-    debugImplementationDependencies = [
-            leakCanary        : "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion",
-            leakCanaryFragment: "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
-    ]
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    releaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
 
-    releaseImplementationDependencies = [
-            leakCanaryNoOp       : "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion",
-            customActivityOnCrash: "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
-    ]
+    logReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    logReleaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
 
-    compileOnlyDependencies = [
-            javaxExtras: "com.uber.javaxextras:javax-extras:$javaxExtrasVersion",
-    ]
+    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
-    kaptDependencies = [
-            roomCompiler : "android.arch.persistence.room:compiler:$roomVersion",
-            glideCompiler: "com.github.bumptech.glide:compiler:$glideVersion",
-            moshiComplier: "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
-    ]
-
-    excludingImplementationDependencies = [
-            hawk: [
-                    dependency: "com.github.rubengees:hawk:$hawkVersion",
-                    exclusions: ['gson'],
-            ],
-    ]
-
-    testDependencies = [
-            jUnit   : "junit:junit:$jUnitVersion",
-            mockk   : "io.mockk:mockk:$mockkVersion",
-            koinTest: "org.koin:koin-test:$koinVersion"
-    ]
+    testImplementation "junit:junit:$jUnitVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.koin:koin-test:$koinVersion"
 }

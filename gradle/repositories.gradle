@@ -1,0 +1,36 @@
+repositories {
+    maven {
+        url "https://dl.google.com/dl/android/maven2"
+        content {
+            includeGroupByRegex "androidx.*"
+            includeGroupByRegex "android\\.arch.*"
+            includeGroupByRegex "com\\.android\\.tools.*"
+            includeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
+        }
+    }
+
+    jcenter {
+        content {
+            excludeGroupByRegex "androidx.*"
+            excludeGroupByRegex "android\\.arch.*"
+            excludeGroupByRegex "com\\.android\\.tools.*"
+            excludeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
+            excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko).*"
+        }
+    }
+
+    maven {
+        url "https://jitpack.io"
+        content { includeGroupByRegex "com\\.github.*" }
+    }
+
+    maven {
+        url "https://dl.bintray.com/kotlin/kotlin-eap"
+        content { includeGroupByRegex "org\\.jetbrains\\.kotlin.*" }
+    }
+
+    maven {
+        url "https://storage.googleapis.com/r8-releases/raw"
+        content { includeGroupByRegex "com\\.android\\.tools.*" }
+    }
+}

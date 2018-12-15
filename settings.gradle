@@ -1,1 +1,55 @@
+pluginManagement {
+    apply from: "gradle/versions.gradle"
+
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2"
+            content {
+                excludeModule("com.android.tools.build", "gradle")
+                excludeModule("com.novoda", "gradle-android-command-plugin")
+            }
+        }
+
+        maven {
+            url "https://dl.google.com/dl/android/maven2"
+            content { includeModule("com.android.tools.build", "gradle") }
+        }
+
+        jcenter {
+            content { includeModule("com.novoda", "gradle-android-command-plugin") }
+        }
+
+        maven {
+            url "https://dl.bintray.com/kotlin/kotlin-eap"
+            content { includeGroupByRegex "org\\.jetbrains\\.kotlin.*" }
+        }
+
+        maven {
+            url 'https://storage.googleapis.com/r8-releases/raw'
+            content { includeGroupByRegex "com\\.android\\.tools.*" }
+        }
+    }
+
+    // This is pain.
+    // We need to wait for two things to get rid of this:
+    // 1) Having all plugins published with a plugin marker.
+    // 2) Being able to have variable expansion in the plugins block.
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "com.android.application") {
+                useModule("com.android.tools.build:gradle:${androidPluginVersion}")
+            } else if (requested.id.id == "com.novoda.android-command") {
+                useModule("com.novoda:gradle-android-command-plugin:${androidCommandPluginVersion}")
+            } else if (requested.id.id.startsWith("org.jetbrains.kotlin")) {
+                useVersion kotlinVersion
+            } else {
+                def pluginName = requested.id.name.split('-').collect { it.capitalize() }.join().uncapitalize()
+                def version = gradle.rootProject.properties[pluginName + "PluginVersion"]
+
+                useVersion version
+            }
+        }
+    }
+}
+
 rootProject.name = 'ProxerAndroid'
