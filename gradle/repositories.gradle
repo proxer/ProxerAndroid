@@ -33,4 +33,9 @@ repositories {
         url "https://storage.googleapis.com/r8-releases/raw"
         content { includeGroupByRegex "com\\.android\\.tools.*" }
     }
+
+    maven {
+        url 'http://oss.sonatype.org/content/repositories/snapshots'
+        mavenContent { snapshotsOnly() }
+    }
 }
