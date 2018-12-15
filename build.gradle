@@ -164,16 +164,6 @@ android {
             outputFileName = "app-${variant.versionName}${suffix}.apk"
         }
     }
-
-    if (isCI()) {
-        // We do not care for these build types on CI.
-        // These do only add a large amount of build time while not providing a large benefit.
-        variantFilter { variant ->
-            if (variant.buildType.name == "logRelease") {
-                setIgnore(true)
-            }
-        }
-    }
 }
 
 apply from: "${projectDir}/gradle/repositories.gradle"
