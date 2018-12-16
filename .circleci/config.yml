@@ -1,3 +1,7 @@
+_free_space: &free_space
+  name: Free space
+  command: ./gradlew --stop
+
 version: 2
 jobs:
   build:
@@ -24,37 +28,53 @@ jobs:
 
       - run:
           name: Run static code analysis
-          command: ./gradlew detekt ktlintCheck
+          command: ./gradlew detekt ktlintCheck -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
       - run:
           name: Assemble debug
-          command: ./gradlew assembleDebug -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew assembleDebug -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
       - run:
           name: Assemble logRelease
-          command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
       - run:
           name: Assemble release
-          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
       - run:
           name: Run lint
-          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
       - run:
           name: Run tests
-          command: ./gradlew test -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew test -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
       - run:
+          <<: *free_space
+      - run:
           name: Build and Bundle
-          command: ./gradlew build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+          command: ./gradlew build bundle -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+            -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          <<: *free_space
 
       - run:
           name: Clean build cache
