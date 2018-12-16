@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: app-{{ checksum ".circleci/config.yml" }}
+          key: app-{{ checksum ".circleci/config.yml" }}-{{ checksum "gradle/versions.gradle" }}
       - run:
           name: Create Licences
           command: echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license &&
@@ -30,6 +30,9 @@ jobs:
           command: ./gradlew assembleDebug -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
+      - run:
+          name: Test
+          command: ./gradlew --stop
       - run:
           name: Assemble logRelease
           command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
@@ -56,6 +59,9 @@ jobs:
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
 
+      - run:
+          name: Clean build cache
+          command: find ~/.gradle -type d -name 'build-cache*' | xargs rm -r
       - store_artifacts:
           path: build/reports
           destination: reports
@@ -65,7 +71,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: app-{{ checksum  ".circleci/config.yml" }}
+          key: app-{{ checksum  ".circleci/config.yml" }}-{{ checksum "gradle/versions.gradle" }}
       - persist_to_workspace:
           root: ~/app
           paths: .
