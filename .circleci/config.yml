@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+          key: app-{{ checksum ".circleci/config.yml" }}
       - run:
           name: Create Licences
           command: echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-license &&
@@ -21,11 +21,35 @@ jobs:
           name: Create Secrets
           command: echo $KEYSTORE | base64 -d > keystore.jks &&
             echo $SECRETS | base64 -d > secrets.properties
+
       - run:
-          name: Run Build
-          command: ./gradlew check build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
-            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1 --console=plain
+          name: Run static code analysis
+          command: ./gradlew detekt ktlintCheck
+      - run:
+          name: Assemble debug
+          command: ./gradlew assembleDebug -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
           no_output_timeout: 30m
+      - run:
+          name: Assemble logRelease
+          command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
+          no_output_timeout: 30m
+      - run:
+          name: Assemble release
+          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
+          no_output_timeout: 30m
+      - run:
+          name: Build and Bundle
+          command: ./gradlew build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
+          no_output_timeout: 30m
+
       - store_artifacts:
           path: build/reports
           destination: reports
@@ -35,7 +59,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "gradle/versions.gradle" }}-{{ checksum  ".circleci/config.yml" }}
+          key: app-{{ checksum  ".circleci/config.yml" }}
       - persist_to_workspace:
           root: ~/app
           paths: .
