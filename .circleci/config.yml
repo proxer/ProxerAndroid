@@ -31,9 +31,6 @@ jobs:
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
       - run:
-          name: Test
-          command: ./gradlew --stop
-      - run:
           name: Assemble logRelease
           command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
