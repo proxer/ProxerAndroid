@@ -55,7 +55,7 @@ jobs:
           <<: *free_space
       - run:
           name: Run lint
-          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Pkotlin.incremental=false
+          command: ./gradlew lint -Dorg.gradle.parallel=false -Pkotlin.incremental=false
             -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --console=plain --stacktrace
       - run:
@@ -98,7 +98,7 @@ jobs:
           at: ~/app
       - run:
           name: Publish in Telegram Group
-          command:
+          command: .circleci/publish_to_telegram.sh
 
 workflows:
   version: 2
