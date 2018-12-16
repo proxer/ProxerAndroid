@@ -87,7 +87,9 @@ jobs:
           key: app-{{ checksum  ".circleci/config.yml" }}-{{ checksum "gradle/versions.gradle" }}
       - persist_to_workspace:
           root: ~/app
-          paths: ./build/outputs/apk/logRelease
+          paths:
+            - .circleci
+            - ./build/outputs/apk/logRelease
 
   publish:
     working_directory: ~/app
