@@ -30,25 +30,31 @@ jobs:
           command: ./gradlew assembleDebug -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
-          no_output_timeout: 30m
       - run:
           name: Assemble logRelease
           command: ./gradlew assembleLogRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
-          no_output_timeout: 30m
       - run:
           name: Assemble release
           command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
-          no_output_timeout: 30m
+      - run:
+          name: Run lint
+          command: ./gradlew assembleRelease -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
+      - run:
+          name: Run tests
+          command: ./gradlew test -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
+            -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
+            --build-cache --console=plain --stacktrace
       - run:
           name: Build and Bundle
           command: ./gradlew build bundle -Dorg.gradle.parallel=false -Dorg.gradle.daemon=false
             -Pkotlin.incremental=false -Dkotlin.compiler.execution.strategy="in-process" --max-workers 1
             --build-cache --console=plain --stacktrace
-          no_output_timeout: 30m
 
       - store_artifacts:
           path: build/reports
@@ -74,10 +80,11 @@ jobs:
       - run:
           name: Publish in Telegram Group
           command: curl
+            -s -S
             -F chat_id="$TELEGRAM_CHAT_ID"
             -F caption="$(git log -1 --pretty=format:'%s')"
             -F document=@$(find ./build/outputs/apk/logRelease/ -type f -name "*.apk")
-            https://api.telegram.org/bot$TELEGRAM_BOT_ID/sendDocument
+            https://api.telegram.org/bot$TELEGRAM_BOT_ID/sendDocument > /dev/null
 
 workflows:
   version: 2
