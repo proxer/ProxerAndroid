@@ -3,10 +3,8 @@ package me.proxer.app.settings
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -17,7 +15,6 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
-import com.mikepenz.aboutlibraries.LibsConfiguration
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import io.reactivex.Completable
@@ -133,7 +130,6 @@ class AboutFragment : MaterialAboutFragment() {
                     .withFields(R.string::class.java.fields)
                     .withActivityTheme(R.style.Theme_App)
                     .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                    .withUiListener(NavigationBarLibsUIListener())
                     .withActivityTitle(getString(R.string.about_licenses_activity_title))
                     .start(requireActivity())
             }.build(),
@@ -227,20 +223,5 @@ class AboutFragment : MaterialAboutFragment() {
 
     private fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
         customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
-    }
-
-    private fun getAboutLibrariesActivityStyle() =
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
-            Configuration.UI_MODE_NIGHT_YES -> Libs.ActivityStyle.DARK
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> Libs.ActivityStyle.LIGHT_DARK_TOOLBAR
-            else -> throw IllegalArgumentException("Unknown mode")
-        }
-
-    private class NavigationBarLibsUIListener : LibsConfiguration.LibsUIListener {
-        override fun preOnCreateView(view: View) = view
-        override fun postOnCreateView(view: View) = view.apply {
-            Utils.setNavigationBarColorIfPossible(Utils.findActivity(context), R.color.primary)
-        }
     }
 }

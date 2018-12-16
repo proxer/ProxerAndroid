@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.App" parent="Base.Theme.App">
-        <item name="material_drawer_selected">@color/surface</item>
-        <item name="material_drawer_selected_legacy">@color/surface</item>
-    </style>
-
     <style name="Theme.App.AboutFragment" parent="Theme.Mal.Dark" />
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Dark" />

@@ -349,7 +349,7 @@ class MessengerAdapter(
             container.setCardBackgroundColor(
                 ContextCompat.getColorStateList(
                     container.context, when {
-                        messageSelectionMap[message.id.toString()] == true -> R.color.selected
+                        messageSelectionMap[message.id.toString()] == true -> R.color.selected_surface
                         else -> R.color.surface
                     }
                 )

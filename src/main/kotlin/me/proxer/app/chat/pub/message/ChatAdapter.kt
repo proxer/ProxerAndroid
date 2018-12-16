@@ -336,7 +336,7 @@ class ChatAdapter(
             container.setCardBackgroundColor(
                 ContextCompat.getColorStateList(
                     container.context, when {
-                        messageSelectionMap[message.id] == true -> R.color.selected
+                        messageSelectionMap[message.id] == true -> R.color.selected_surface
                         else -> R.color.surface
                     }
                 )

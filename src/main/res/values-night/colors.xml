@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <color name="secondary">#C21414</color>
-    <color name="secondary_light">#FC533E</color>
-    <color name="secondary_dark">#890000</color>
+    <color name="secondary_light" tools:ignore="UnusedResources">#FC533E</color>
+    <color name="secondary_dark" tools:ignore="UnusedResources">#890000</color>
 
     <color name="background">#303030</color>
     <color name="on_background">#FFFFFF</color>
+    <color name="selected_background">#424242</color>
+
     <color name="surface">#424242</color>
     <color name="on_surface">#FFFFFF</color>
-    <color name="selected">#5C5C5C</color>
+    <color name="selected_surface">#5C5C5C</color>
 
     <color name="divider">#1FFFFFFF</color>
-    <color name="icon_focused">#FFFFFF</color>
+    <color name="icon_focused" tools:ignore="UnusedResources">#FFFFFF</color>
     <color name="icon_unfocused">#B3FFFFFF</color>
 
     <color name="fastscroll_track">#1FFFFFFF</color>

@@ -5,18 +5,22 @@
     <color name="primary_light">#C14535</color>
     <color name="primary_dark">#570000</color>
     <color name="on_primary">#FFFFFF</color>
+
     <color name="secondary">#8A0E0E</color>
-    <color name="secondary_light">#C14535</color>
-    <color name="secondary_dark">#570000</color>
+    <color name="secondary_light" tools:ignore="UnusedResources">#C14535</color>
+    <color name="secondary_dark" tools:ignore="UnusedResources">#570000</color>
+    <color name="on_secondary">#FFFFFF</color>
 
     <color name="background">#FAFAFA</color>
     <color name="on_background">#000000</color>
+    <color name="selected_background">#E8E8E8</color>
+
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#000000</color>
-    <color name="selected">#E8E8E8</color>
+    <color name="selected_surface">#E8E8E8</color>
 
     <color name="divider">#1F000000</color>
-    <color name="icon_focused">#DE000000</color>
+    <color name="icon_focused" tools:ignore="UnusedResources">#DE000000</color>
     <color name="icon_unfocused">#8A000000</color>
 
     <color name="link">@color/secondary</color>

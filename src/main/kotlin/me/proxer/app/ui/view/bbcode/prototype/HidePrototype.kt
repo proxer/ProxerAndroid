@@ -53,7 +53,7 @@ object HidePrototype : AutoClosingPrototype, KoinComponent {
                 orientation = VERTICAL
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected))
+                setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected_surface))
 
                 childViews.forEach { addView(it) }
             })

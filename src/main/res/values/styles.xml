@@ -4,13 +4,19 @@
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorAccent">@color/secondary</item>
         <item name="colorOnPrimary">@color/on_primary</item>
+
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
-        <item name="colorControlNormal">@color/on_primary</item>
+
         <item name="android:windowBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+
+        <item name="colorControlNormal">@color/on_primary</item>
+        <item name="colorAccent">@color/secondary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -33,8 +39,8 @@
         <item name="material_drawer_primary_text">?android:attr/textColorPrimary</item>
         <item name="material_drawer_primary_icon">@color/icon_unfocused</item>
         <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
-        <item name="material_drawer_selected">@color/selected</item>
-        <item name="material_drawer_selected_legacy">@color/selected</item>
+        <item name="material_drawer_selected">@color/selected_background</item>
+        <item name="material_drawer_selected_legacy">@color/selected_background</item>
         <item name="material_drawer_divider">@color/divider</item>
     </style>
 

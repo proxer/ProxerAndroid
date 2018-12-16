@@ -2,7 +2,6 @@ package me.proxer.app.util
 
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -27,24 +26,10 @@ object Utils {
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-    fun findActivity(currentContext: Context): Activity? = when (currentContext) {
-        is Activity -> currentContext
-        is ContextWrapper -> findActivity(currentContext.baseContext)
-        else -> null
-    }
-
     fun setStatusBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.apply {
                 window?.statusBarColor = ContextCompat.getColor(activity, color)
-            }
-        }
-    }
-
-    fun setNavigationBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.apply {
-                window?.navigationBarColor = ContextCompat.getColor(activity, color)
             }
         }
     }

@@ -50,7 +50,7 @@ object QuotePrototype : AutoClosingPrototype {
             layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
             setPadding(fourDip, fourDip, fourDip, fourDip)
-            setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected))
+            setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected_surface))
 
             childViews.forEach { addView(it) }
         }
