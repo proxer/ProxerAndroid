@@ -47,6 +47,18 @@ inline fun <reified T : Enum<T>> enumSetOf(vararg items: T): EnumSet<T> = when (
     false -> EnumSet.copyOf(items.toSet())
 }
 
+inline fun <K : Any, V : Any> Map<K?, V>.filterKeysNotNull(): Map<K, V> {
+    val destination = HashMap<K, V>()
+
+    for (element in this) {
+        val (key, value) = element
+
+        if (key != null) destination[key] = value
+    }
+
+    return destination
+}
+
 inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafetyMode.NONE, initializer)
 
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources

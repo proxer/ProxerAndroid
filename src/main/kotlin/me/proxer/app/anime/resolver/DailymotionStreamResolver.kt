@@ -1,12 +1,14 @@
 package me.proxer.app.anime.resolver
 
-import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.filterKeysNotNull
 import me.proxer.app.util.extension.toBodySingle
+import okhttp3.HttpUrl
 import okhttp3.Request
 import java.util.regex.Pattern.quote
 
@@ -40,23 +42,26 @@ class DailymotionStreamResolver : StreamResolver() {
                 val qualityMap = moshi.adapter(QualityMap::class.java)
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
-                val mp4Links = qualityMap?.qualities?.mapNotNull { qualityEntry ->
-                    val quality = try {
-                        qualityEntry.key.toInt()
-                    } catch (exception: NumberFormatException) {
-                        null
-                    }
-
-                    qualityEntry.value.mapNotNull {
-                        if (it["type"] == "video/mp4" && it["url"]?.isNotBlank() == true) {
-                            quality to it["url"]
-                        } else {
+                val mp4Links = qualityMap?.qualities
+                    ?.mapKeys { (rawQuality) ->
+                        try {
+                            rawQuality.toInt()
+                        } catch (exception: NumberFormatException) {
                             null
                         }
                     }
-                }?.flatten()?.sortedByDescending { it.first }
+                    ?.filterKeysNotNull()
+                    ?.mapNotNull { (quality, urlInfoEntries) ->
+                        urlInfoEntries
+                            .filter { it["type"] == "video/mp4" }
+                            .mapNotNull { it["url"] }
+                            .map { url -> quality to url }
+                    }
+                    ?.flatten()
+                    ?.sortedByDescending { (quality) -> quality }
 
-                val uri = Uri.parse(mp4Links?.firstOrNull()?.second) ?: throw StreamResolutionException()
+                val uri = mp4Links?.firstOrNull()?.second?.let { HttpUrl.parse(it) }?.androidUri()
+                    ?: throw StreamResolutionException()
 
                 StreamResolutionResult(uri, "video/mp4")
             }
