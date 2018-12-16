@@ -470,9 +470,9 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
         userInfo.toNullable().let { nullableUserInfo ->
-            val noteColor = if (nullableUserInfo?.isNoted == true) R.color.secondaryColor else R.color.icon
-            val favorColor = if (nullableUserInfo?.isTopTen == true) R.color.secondaryColor else R.color.icon
-            val finishColor = if (nullableUserInfo?.isFinished == true) R.color.secondaryColor else R.color.icon
+            val noteColor = if (nullableUserInfo?.isNoted == true) R.color.secondary else R.color.icon_unfocused
+            val favorColor = if (nullableUserInfo?.isTopTen == true) R.color.secondary else R.color.icon_unfocused
+            val finishColor = if (nullableUserInfo?.isFinished == true) R.color.secondary else R.color.icon_unfocused
 
             note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
             favor.setIconicsImage(CommunityMaterial.Icon2.cmd_star, 24, 0, favorColor)

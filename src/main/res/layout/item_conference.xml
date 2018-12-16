@@ -44,7 +44,7 @@
                 android:layout_toEndOf="@+id/image"
                 android:layout_toRightOf="@+id/image"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="@color/textColorPrimary"
+                android:textColor="?android:attr/textColorPrimary"
                 tools:text="Title" />
 
             <FrameLayout
@@ -107,7 +107,7 @@
                 android:focusable="false"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:chipBackgroundColor="@color/secondaryColor"
+                app:chipBackgroundColor="@color/secondary"
                 app:chipEndPadding="2dp"
                 app:chipMinHeight="24dp"
                 app:chipStartPadding="0dp"

@@ -28,6 +28,6 @@ class GlideDrawerImageLoader : AbstractDrawerImageLoader() {
     override fun placeholder(context: Context, tag: String?): IconicsDrawable = IconicsDrawable(context)
         .icon(CommunityMaterial.Icon.cmd_account)
         .sizeDp(48)
-        .backgroundColorRes(R.color.primaryColor)
+        .backgroundColorRes(R.color.primary)
         .colorRes(android.R.color.white)
 }

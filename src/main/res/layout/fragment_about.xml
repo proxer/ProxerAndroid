@@ -53,7 +53,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_about_general"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondaryColor" />
+                            android:textColor="@color/secondary" />
 
                         <TableLayout
                             android:id="@+id/generalTable"
@@ -85,7 +85,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_about_about"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondaryColor" />
+                            android:textColor="@color/secondary" />
 
                         <WebView
                             android:id="@+id/about"

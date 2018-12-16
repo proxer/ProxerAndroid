@@ -228,7 +228,7 @@ object MessengerNotifications : KoinComponent {
                     false -> CommunityMaterial.Icon.cmd_account
                 }
             )
-            .color(ContextCompat.getColor(context, R.color.primaryColor))
+            .color(ContextCompat.getColor(context, R.color.primary))
             .sizeDp(96)
             .toBitmap()
     }

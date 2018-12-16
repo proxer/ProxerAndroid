@@ -2,30 +2,40 @@
 <resources>
 
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
-        <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
-
-        <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
-
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorAccent">@color/secondary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorControlNormal">@color/on_primary</item>
         <item name="android:windowBackground">@color/background</item>
 
-        <item name="material_drawer_legacy_style">true</item>
+        <item name="windowActionModeOverlay">true</item>
 
+        <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
 
-        <item name="asp_preferenceIconTint">@color/secondaryColor</item>
+        <item name="asp_preferenceIconTint">@color/secondary</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
-    </style>
 
-    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorSecondary">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="about_libraries_card">@color/surface</item>
+        <item name="about_libraries_text_description">?android:attr/textColorPrimary</item>
+        <item name="about_libraries_title_openSource">?android:attr/textColorPrimary</item>
+        <item name="about_libraries_text_openSource">?android:attr/textColorSecondary</item>
+        <item name="about_libraries_dividerLight_openSource">@color/divider</item>
+        <item name="about_libraries_dividerDark_openSource">@color/divider</item>
+
+        <item name="material_drawer_legacy_style">true</item>
+        <item name="material_drawer_background">@color/background</item>
+        <item name="material_drawer_primary_text">?android:attr/textColorPrimary</item>
+        <item name="material_drawer_primary_icon">@color/icon_unfocused</item>
+        <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
+        <item name="material_drawer_selected">@color/selected</item>
+        <item name="material_drawer_selected_legacy">@color/selected</item>
+        <item name="material_drawer_divider">@color/divider</item>
     </style>
 
     <style name="Theme.App.NoBackground" parent="Theme.App">
@@ -40,12 +50,14 @@
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
-        <item name="background">@color/primaryLightColor</item>
+        <item name="background">@color/primary_light</item>
     </style>
 
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
 
     <style name="Theme.App" parent="Base.Theme.App" />
 
     <style name="Theme.App.Transparent" parent="Theme.App" />
+
+    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
 </resources>

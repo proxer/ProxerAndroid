@@ -47,7 +47,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="@string/fragment_topten_anime"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/secondaryColor" />
+                        android:textColor="@color/secondary" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/animeRecyclerView"
@@ -70,7 +70,7 @@
                         android:layout_marginBottom="8dp"
                         android:text="@string/fragment_topten_manga"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/secondaryColor" />
+                        android:textColor="@color/secondary" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/mangaRecyclerView"

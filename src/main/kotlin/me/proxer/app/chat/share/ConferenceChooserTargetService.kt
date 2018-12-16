@@ -68,7 +68,7 @@ class ConferenceChooserTargetService : ChooserTargetService() {
     private fun constructEmptyIcon(conference: LocalConference) = IconicsDrawable(applicationContext)
         .sizeDp(DeviceUtils.getScreenWidth(applicationContext) / 6)
         .paddingDp(DeviceUtils.getScreenWidth(applicationContext) / 32)
-        .colorRes(R.color.primaryColor)
+        .colorRes(R.color.primary)
         .let { drawable ->
             when {
                 conference.isGroup -> drawable.icon(CommunityMaterial.Icon.cmd_account_multiple)

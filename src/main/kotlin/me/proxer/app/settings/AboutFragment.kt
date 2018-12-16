@@ -131,7 +131,8 @@ class AboutFragment : MaterialAboutFragment() {
                     .withLibraries(*libraries)
                     .withExcludedLibraries(*excludedLibraries)
                     .withFields(R.string::class.java.fields)
-                    .withActivityStyle(getAboutLibrariesActivityStyle())
+                    .withActivityTheme(R.style.Theme_App)
+                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                     .withUiListener(NavigationBarLibsUIListener())
                     .withActivityTitle(getString(R.string.about_licenses_activity_title))
                     .start(requireActivity())
@@ -216,7 +217,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(getString(R.string.about_developer_proxer_title))
             .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                setColorFilter(ContextCompat.getColor(context, R.color.icon), PorterDuff.Mode.SRC_IN)
+                setColorFilter(ContextCompat.getColor(context, R.color.icon_unfocused), PorterDuff.Mode.SRC_IN)
             })
             .setOnClickAction {
                 ProfileActivity.navigateTo(requireActivity(), developerProxerId, developerProxerName, null)

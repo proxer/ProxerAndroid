@@ -72,7 +72,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, R.color.primaryColor)
+            Utils.setStatusBarColorIfPossible(activity, R.color.primary)
 
             innerAdapter.selectedMessages.let {
                 menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != storageHelper.user?.id
@@ -103,7 +103,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, R.color.primaryDarkColor)
+            Utils.setStatusBarColorIfPossible(activity, R.color.primary_dark)
         }
     }
 

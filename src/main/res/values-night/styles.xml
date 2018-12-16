@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Dark">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
+    <style name="Theme.App" parent="Base.Theme.App">
+        <item name="material_drawer_selected">@color/surface</item>
+        <item name="material_drawer_selected_legacy">@color/surface</item>
     </style>
 
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Dark" />
+
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Dark" />
 </resources>

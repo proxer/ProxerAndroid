@@ -30,7 +30,7 @@ inline fun ImageView.setIconicsImage(
     icon: IIcon,
     sizeDp: Int,
     paddingDp: Int = sizeDp / 4,
-    colorRes: Int = R.color.icon
+    colorRes: Int = R.color.icon_unfocused
 ) {
     setImageDrawable(
         IconicsDrawable(context, icon)
@@ -45,7 +45,7 @@ inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable 
 }
 
 inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
-    return this.colorRes(context, R.color.icon)
+    return this.colorRes(context, R.color.icon_unfocused)
 }
 
 inline fun ViewGroup.enableLayoutAnimationsSafely() {

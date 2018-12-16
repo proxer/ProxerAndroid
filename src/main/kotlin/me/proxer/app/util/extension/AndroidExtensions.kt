@@ -5,12 +5,31 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.children
+
+@ColorInt
+inline fun Context.resolveColor(@AttrRes res: Int, resolveRefs: Boolean = true) = TypedValue()
+    .apply {
+        if (!theme.resolveAttribute(res, this, resolveRefs)) {
+            throw IllegalArgumentException("Could not resolve $res")
+        }
+    }
+    .let {
+        when {
+            it.resourceId != 0 -> ContextCompat.getColor(this, it.resourceId)
+            it.data != 0 -> it.data
+            else -> throw IllegalArgumentException("Could not resolve $res")
+        }
+    }
 
 @CheckResult
 inline fun <reified T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent {

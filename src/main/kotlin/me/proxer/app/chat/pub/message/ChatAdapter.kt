@@ -337,7 +337,7 @@ class ChatAdapter(
                 ContextCompat.getColorStateList(
                     container.context, when {
                         messageSelectionMap[message.id] == true -> R.color.selected
-                        else -> R.color.card_background
+                        else -> R.color.surface
                     }
                 )
             )
@@ -375,7 +375,7 @@ class ChatAdapter(
             title.requestLayout()
 
             if (message.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondaryColor)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondary)
             } else {
                 glide?.load(ProxerUrls.userImage(message.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

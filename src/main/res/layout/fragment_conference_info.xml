@@ -48,7 +48,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_conference_info_info_title"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondaryColor" />
+                            android:textColor="@color/secondary" />
 
                         <TextView
                             android:id="@+id/time"
@@ -84,7 +84,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_conference_info_participants_title"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondaryColor" />
+                            android:textColor="@color/secondary" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/participantList"

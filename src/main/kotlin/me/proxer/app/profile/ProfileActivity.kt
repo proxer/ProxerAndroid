@@ -168,8 +168,8 @@ class ProfileActivity : ImageTabsActivity() {
                     .icon(CommunityMaterial.Icon.cmd_account)
                     .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
                     .paddingDp(32)
-                    .backgroundColorRes(R.color.primaryLightColor)
-                    .colorRes(headerImage.context, R.color.primaryColor)
+                    .backgroundColorRes(R.color.primary_light)
+                    .colorRes(headerImage.context, R.color.primary)
             )
         }
     }

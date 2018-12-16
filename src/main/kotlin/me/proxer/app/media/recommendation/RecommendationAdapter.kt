@@ -136,7 +136,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             .colorRes(
                 upvotesImage.context, when (userVoted) {
                     true -> R.color.md_green_500
-                    false -> R.color.icon
+                    false -> R.color.icon_unfocused
                 }
             )
 
@@ -147,7 +147,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             .colorRes(
                 upvotesImage.context, when (userVoted) {
                     true -> R.color.md_red_500
-                    false -> R.color.icon
+                    false -> R.color.icon_unfocused
                 }
             )
     }

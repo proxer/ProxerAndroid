@@ -126,7 +126,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
 
         private fun bindImage(item: ParsedPost) {
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondaryColor)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

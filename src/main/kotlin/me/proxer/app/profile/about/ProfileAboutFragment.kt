@@ -14,7 +14,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -35,6 +34,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.user.UserAbout
@@ -225,8 +225,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
             <html>
               <head>
                 <style>
-                  body { color: ${htmlColorFromResource(R.color.textColorSecondary)} }
-                  a { color: ${htmlColorFromResource(R.color.link)} }
+                  body { color: ${requireContext().resolveColor(android.R.attr.textColorSecondary)} }
+                  a { color: ${ContextCompat.getColor(requireContext(), R.color.link).toHtmlColor()} }
                 </style>
               </head>
               <body>
@@ -236,12 +236,11 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
             """
     }
 
-    private fun htmlColorFromResource(@ColorRes resource: Int): String {
-        val color = ContextCompat.getColor(requireContext(), resource)
-        val red = color shr 16 and 0xff
-        val green = color shr 8 and 0xff
-        val blue = color and 0xff
-        val alpha = color shr 24 and 0xff
+    private fun Int.toHtmlColor(): String {
+        val red = this shr 16 and 0xff
+        val green = this shr 8 and 0xff
+        val blue = this and 0xff
+        val alpha = this shr 24 and 0xff
 
         return "rgba($red, $green, $blue, $alpha)"
     }

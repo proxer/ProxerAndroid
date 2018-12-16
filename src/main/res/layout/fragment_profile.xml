@@ -210,7 +210,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="16dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondaryColor"
+                            android:textColor="@color/secondary"
                             tools:text="Kage" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

@@ -34,9 +34,9 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
-                app:spoilerTextColor="@color/textColorPrimary"
+                app:spoilerTextColor="?android:attr/textColorPrimary"
                 app:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:textColor="@color/textColorPrimary"
+                app:textColor="?android:attr/textColorPrimary"
                 app:textSize="16sp"
                 tools:ignore="UnusedAttribute"
                 tools:text="User @A was added by @B looooooooooooooooooooooooong" />

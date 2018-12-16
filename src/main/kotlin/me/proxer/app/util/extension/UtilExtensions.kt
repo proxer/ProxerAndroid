@@ -145,8 +145,8 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
     CustomTabsIntent.Builder(session)
-        .setToolbarColor(ContextCompat.getColor(activity, R.color.primaryColor))
-        .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.primaryDarkColor))
+        .setToolbarColor(ContextCompat.getColor(activity, R.color.primary))
+        .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.primary_dark))
         .addDefaultShareMenuItem()
         .enableUrlBarHiding()
         .setShowTitle(true)
