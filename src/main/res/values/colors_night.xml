@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <color name="secondary_night">#C21414</color>
-    <color name="secondary_light_night" tools:ignore="UnusedResources">#FC533E</color>
-    <color name="secondary_dark_night" tools:ignore="UnusedResources">#890000</color>
+    <color name="secondary_light_night">#FC533E</color>
+    <color name="secondary_dark_night">#890000</color>
 
     <color name="background_night">#303030</color>
     <color name="on_background_night">#FFFFFF</color>

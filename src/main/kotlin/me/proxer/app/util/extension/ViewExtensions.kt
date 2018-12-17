@@ -42,7 +42,6 @@ inline fun ImageView.setIconicsImage(
 
 inline fun IconicsDrawable.colorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
     return this.color(context.resolveColor(res))
-
 }
 
 inline fun IconicsDrawable.backgroundColorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {

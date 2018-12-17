@@ -7,8 +7,8 @@
     <color name="on_primary">#FFFFFF</color>
 
     <color name="secondary">#8A0E0E</color>
-    <color name="secondary_light" tools:ignore="UnusedResources">#C14535</color>
-    <color name="secondary_dark" tools:ignore="UnusedResources">#570000</color>
+    <color name="secondary_light">#C14535</color>
+    <color name="secondary_dark">#570000</color>
     <color name="on_secondary">#FFFFFF</color>
 
     <color name="background">#FAFAFA</color>
