@@ -5,7 +5,7 @@
     <item
         android:id="@+id/toggle_orientation"
         android:title="@string/fragment_manga_toggle_orientation"
-        app:ico_color="@android:color/white"
+        app:ico_color="?attr/colorOnPrimary"
         app:ico_icon="cmd_swap_vertical"
         app:ico_padding="2dp"
         app:ico_size="24dp"

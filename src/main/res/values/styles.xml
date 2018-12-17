@@ -8,18 +8,9 @@
         <item name="colorOnPrimary">@color/on_primary</item>
 
         <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryDark">@color/secondary_dark</item>
+        <item name="colorSecondaryLight">@color/secondary_light</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
-
-        <item name="colorSurface">@color/surface</item>
-        <item name="colorOnSurface">@color/on_surface</item>
-        <item name="colorSelectedSurface">@color/selected_surface</item>
-
-        <item name="android:windowBackground">@color/background</item>
-        <item name="colorOnBackground">@color/on_background</item>
-        <item name="colorSelectedBackground">@color/selected_background</item>
-
-        <item name="colorDivider">@color/divider</item>
-        <item name="colorIcon">@color/icon</item>
 
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
         <item name="colorAccent">?attr/colorSecondary</item>
@@ -50,13 +41,29 @@
         <item name="material_drawer_primary_text">?android:attr/textColorPrimary</item>
         <item name="material_drawer_primary_icon">?attr/colorIcon</item>
         <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
-        <item name="material_drawer_selected">@color/selected_background</item>
-        <item name="material_drawer_selected_legacy">@color/selected_background</item>
+        <item name="material_drawer_selected">?attr/colorSelectedBackground</item>
+        <item name="material_drawer_selected_legacy">?attr/colorSelectedBackground</item>
         <item name="material_drawer_divider">?attr/colorDivider</item>
 
         <item name="emojiIcons">?attr/colorIcon</item>
         <item name="emojiDivider">?attr/colorDivider</item>
         <item name="emojiBackground">?attr/colorSurface</item>
+    </style>
+
+    <style name="Base.Theme.App.DayNight" parent="Base.Theme.App">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorSelectedBackground">@color/selected_background</item>
+
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSelectedSurface">@color/selected_surface</item>
+
+        <item name="colorDivider">@color/divider</item>
+        <item name="colorIcon">@color/icon</item>
+
+        <item name="colorFastscrollTrack">@color/fastscroll_track</item>
+        <item name="colorFastscrollThumb">@color/fastscroll_thumb</item>
     </style>
 
     <style name="Theme.App.NoBackground" parent="Theme.App">
@@ -65,6 +72,14 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
+    <style name="Theme.App" parent="Base.Theme.App.DayNight" />
+
+    <style name="Theme.App.Transparent" parent="Base.Theme.App.DayNight" />
+
+    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
+
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
 
     <style name="Widget.App.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor_white</item>
@@ -91,12 +106,4 @@
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/primary_light</item>
     </style>
-
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="Theme.App" parent="Base.Theme.App" />
-
-    <style name="Theme.App.Transparent" parent="Theme.App" />
-
-    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
 </resources>

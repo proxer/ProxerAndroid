@@ -5,7 +5,7 @@
     <item
         android:id="@+id/show_in_browser"
         android:title="@string/action_show_in_browser"
-        app:ico_color="@android:color/white"
+        app:ico_color="?attr/colorOnPrimary"
         app:ico_icon="cmd_web"
         app:ico_padding="2dp"
         app:ico_size="24dp"

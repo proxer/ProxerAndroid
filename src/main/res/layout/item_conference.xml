@@ -102,7 +102,7 @@
                 android:layout_marginBottom="8dp"
                 android:clickable="false"
                 android:focusable="false"
-                android:textColor="@android:color/white"
+                android:textColor="?attr/colorOnSecondary"
                 android:textStyle="bold"
                 app:chipBackgroundColor="?attr/colorSecondary"
                 app:chipEndPadding="6dp"

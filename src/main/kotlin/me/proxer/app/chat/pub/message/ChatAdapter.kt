@@ -337,7 +337,7 @@ class ChatAdapter(
                 container.context.resolveColor(
                     when {
                         messageSelectionMap[message.id.toString()] == true -> R.attr.colorSelectedSurface
-                        else -> R.attr.colorSelectedSurface
+                        else -> R.attr.colorSurface
                     }
                 )
             )

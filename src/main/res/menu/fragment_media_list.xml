@@ -6,7 +6,7 @@
     <item
         android:id="@+id/filter"
         android:title="@string/action_filter"
-        app:ico_color="@android:color/white"
+        app:ico_color="?attr/colorOnPrimary"
         app:ico_icon="cmd_filter_variant"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -80,7 +80,7 @@
     <item
         android:id="@+id/sort"
         android:title="@string/action_sort"
-        app:ico_color="@android:color/white"
+        app:ico_color="?attr/colorOnPrimary"
         app:ico_icon="cmd_sort"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -115,7 +115,7 @@
         android:id="@+id/search"
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:ico_color="@android:color/white"
+        app:ico_color="?attr/colorOnPrimary"
         app:ico_icon="cmd_magnify"
         app:ico_padding="2dp"
         app:ico_size="24dp"

@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
 import me.proxer.app.util.extension.androidUri
@@ -29,7 +28,7 @@ object Utils {
     fun setStatusBarColorIfPossible(activity: Activity?, @ColorInt color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.apply {
-                window?.statusBarColor = ContextCompat.getColor(activity, color)
+                window?.statusBarColor = color
             }
         }
     }

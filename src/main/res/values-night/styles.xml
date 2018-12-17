@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Base.Theme.App.DayNight" parent="Base.Theme.App">
+        <item name="colorSecondary">@color/secondary_night</item>
+        <item name="colorSecondaryDark">@color/secondary_dark_night</item>
+        <item name="colorSecondaryLight">@color/secondary_light_night</item>
+
+        <item name="android:windowBackground">@color/background_night</item>
+        <item name="colorOnBackground">@color/on_background_night</item>
+        <item name="colorSelectedBackground">@color/selected_background_night</item>
+
+        <item name="colorSurface">@color/surface_night</item>
+        <item name="colorOnSurface">@color/on_surface_night</item>
+        <item name="colorSelectedSurface">@color/selected_surface_night</item>
+
+        <item name="colorDivider">@color/divider_night</item>
+        <item name="colorIcon">@color/icon_night</item>
+
+        <item name="colorFastscrollTrack">@color/fastscroll_track_night</item>
+        <item name="colorFastscrollThumb">@color/fastscroll_thumb_night</item>
+    </style>
+
     <style name="Theme.App.AboutFragment" parent="Theme.Mal.Dark" />
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Dark" />
