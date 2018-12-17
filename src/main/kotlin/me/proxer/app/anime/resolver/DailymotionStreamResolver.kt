@@ -6,7 +6,6 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
-import me.proxer.app.util.extension.filterKeysNotNull
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.HttpUrl
 import okhttp3.Request
@@ -43,17 +42,10 @@ class DailymotionStreamResolver : StreamResolver() {
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
                 val mp4Links = qualityMap?.qualities
-                    ?.mapKeys { (rawQuality) ->
-                        try {
-                            rawQuality.toInt()
-                        } catch (exception: NumberFormatException) {
-                            null
-                        }
-                    }
-                    ?.filterKeysNotNull()
                     ?.mapNotNull { (quality, urlInfoEntries) ->
                         urlInfoEntries
-                            .filter { it["type"] == "video/mp4" }
+                            .filter { it["type"] == "application/x-mpegURL" || it["type"] == "video/mp4" }
+                            .sortedBy { it["type"] }
                             .mapNotNull { it["url"] }
                             .map { url -> quality to url }
                     }
