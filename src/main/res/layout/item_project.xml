@@ -8,14 +8,12 @@
     android:padding="@dimen/item_margin"
     tools:context=".info.industry.IndustryProjectAdapter">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        tools:ignore="UnusedAttribute">
+        android:clickable="true"
+        android:focusable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,8 +26,7 @@
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 app:ari_aspect="height"
-                app:ari_ratio="1.25"
-                tools:ignore="UnusedAttribute" />
+                app:ari_ratio="1.25" />
 
             <TextView
                 android:id="@+id/title"
@@ -89,5 +86,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="In progress" />
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

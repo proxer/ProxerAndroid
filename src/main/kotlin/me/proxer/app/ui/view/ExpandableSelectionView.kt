@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -12,8 +13,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatCheckBox
-import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
@@ -177,7 +176,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private fun createSingleSelectionView(item: Item): View {
-        val radioButton = AppCompatRadioButton(context)
+        val radioButton = LayoutInflater.from(context)
+            .inflate(R.layout.item_radio_button, this, false) as RadioButton
 
         radioButton.text = item.value
         radioButton.isChecked = selection.contains(item.value)
@@ -188,7 +188,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private fun createMultiSelectionView(item: Item): View {
-        val checkBox = AppCompatCheckBox(context)
+        val checkBox = LayoutInflater.from(context)
+            .inflate(R.layout.item_checkbox, this, false) as CheckBox
 
         checkBox.text = item.value
         checkBox.isChecked = selection.contains(item.value)

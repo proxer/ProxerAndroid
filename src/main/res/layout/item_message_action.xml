@@ -7,18 +7,15 @@
     android:layout_height="wrap_content"
     tools:context=".chat.prv.message.MessengerAdapter">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/item_margin"
         android:layout_marginRight="@dimen/item_margin"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        tools:ignore="UnusedAttribute">
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +35,6 @@
                 app:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:textColor="?android:attr/textColorPrimary"
                 app:textSize="16sp"
-                tools:ignore="UnusedAttribute"
                 tools:text="User @A was added by @B looooooooooooooooooooooooong" />
 
             <TextView
@@ -52,5 +48,5 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="10 minutes ago" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

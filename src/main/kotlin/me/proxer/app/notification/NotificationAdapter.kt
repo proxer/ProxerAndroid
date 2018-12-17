@@ -40,6 +40,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val text: TextView by bindView(R.id.text)
         internal val date: TextView by bindView(R.id.date)
         internal val delete: ImageButton by bindView(R.id.delete)
@@ -49,7 +50,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
         }
 
         fun bind(item: ProxerNotification) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

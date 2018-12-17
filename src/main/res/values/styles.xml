@@ -21,8 +21,12 @@
         <item name="windowActionModeOverlay">true</item>
 
         <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
-        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+        <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
+        <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
+        <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
 
         <item name="asp_preferenceIconTint">@color/secondary</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
@@ -53,6 +57,24 @@
 
     <style name="Widget.App.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor_white</item>
+    </style>
+
+    <style name="Widget.App.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="android:minHeight">32dp</item>
+    </style>
+
+    <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
+        <item name="android:minHeight">32dp</item>
+    </style>
+
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="popupTheme">@style/ThemeOverlay.App</item>
+    </style>
+
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">1dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardUseCompatPadding">true</item>
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">

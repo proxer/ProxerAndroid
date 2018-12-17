@@ -86,6 +86,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val expand: ImageButton by bindView(R.id.expand)
         internal val description: AppCompatTextView by bindView(R.id.description)
         internal val image: ImageView by bindView(R.id.image)
@@ -113,7 +114,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         }
 
         private fun initListeners() {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

@@ -53,6 +53,7 @@ class UcpTopTenAdapter : BaseAdapter<UcpTopTenEntry, ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val title: TextView by bindView(R.id.title)
         internal val image: ImageView by bindView(R.id.image)
         internal val removeButton: ImageButton by bindView(R.id.deleteButton)
@@ -62,7 +63,7 @@ class UcpTopTenAdapter : BaseAdapter<UcpTopTenEntry, ViewHolder>() {
         }
 
         fun bind(item: UcpTopTenEntry) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

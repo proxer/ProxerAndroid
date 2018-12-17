@@ -4,14 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.view.MediaControlView">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/item_margin"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true">
+        android:layout_margin="@dimen/item_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,5 +82,5 @@
 
             </androidx.gridlayout.widget.GridLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </merge>

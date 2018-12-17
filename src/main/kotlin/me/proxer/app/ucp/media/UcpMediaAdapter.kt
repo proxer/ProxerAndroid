@@ -60,6 +60,7 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val title: TextView by bindView(R.id.title)
         internal val medium: TextView by bindView(R.id.medium)
         internal val image: ImageView by bindView(R.id.image)
@@ -94,7 +95,7 @@ class UcpMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         }
 
         private fun initListeners() {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

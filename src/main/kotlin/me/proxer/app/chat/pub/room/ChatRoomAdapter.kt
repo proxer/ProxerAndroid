@@ -43,11 +43,12 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
 
     inner class ViewHolder(view: View) : AutoDisposeViewHolder(view) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val nameView by bindView<TextView>(R.id.name)
         internal val topic by bindView<AppCompatTextView>(R.id.topic)
 
         fun bind(item: ChatRoom) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

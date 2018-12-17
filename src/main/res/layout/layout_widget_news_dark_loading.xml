@@ -43,6 +43,5 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:indeterminate="true"
-        tools:ignore="UnusedAttribute" />
+        android:indeterminate="true" />
 </LinearLayout>

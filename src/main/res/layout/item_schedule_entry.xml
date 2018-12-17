@@ -7,14 +7,12 @@
     android:padding="@dimen/item_margin"
     tools:context=".anime.schedule.ScheduleEntryAdapter">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        tools:ignore="UnusedAttribute">
+        android:id="@+id/container"
+        android:clickable="true"
+        android:focusable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,7 +26,6 @@
                 android:scaleType="centerCrop"
                 app:ari_aspect="height"
                 app:ari_ratio="1.25"
-                tools:ignore="UnusedAttribute"
                 tools:layout_height="200dp"
                 tools:src="@drawable/ic_japan" />
 
@@ -117,5 +114,5 @@
                 android:paddingBottom="8dp"
                 tools:text="Aired in 00:01:01:55" />
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

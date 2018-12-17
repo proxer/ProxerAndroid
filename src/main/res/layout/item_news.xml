@@ -8,14 +8,12 @@
     android:padding="@dimen/item_margin"
     tools:context=".news.NewsAdapter">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        tools:ignore="UnusedAttribute">
+        android:clickable="true"
+        android:focusable="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,8 +31,7 @@
                     android:layout_alignParentTop="true"
                     android:scaleType="centerCrop"
                     app:ari_aspect="height"
-                    app:ari_ratio="0.75"
-                    tools:ignore="UnusedAttribute" />
+                    app:ari_ratio="0.75" />
 
                 <TextView
                     android:id="@+id/title"
@@ -107,5 +104,5 @@
                     tools:text="Anime and Managa" />
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

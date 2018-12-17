@@ -40,11 +40,12 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val subject: TextView by bindView(R.id.subject)
         internal val metaInfo: AppCompatTextView by bindView(R.id.metaInfo)
 
         fun bind(item: ForumDiscussion) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

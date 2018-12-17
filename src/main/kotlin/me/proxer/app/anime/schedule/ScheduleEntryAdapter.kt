@@ -123,6 +123,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val image by bindView<ImageView>(R.id.image)
         internal val title by bindView<TextView>(R.id.title)
         internal val episode by bindView<TextView>(R.id.episode)
@@ -156,7 +157,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         }
 
         fun bind(item: CalendarEntry) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

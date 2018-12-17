@@ -33,13 +33,10 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/item_margin"
-                    app:cardCornerRadius="1dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginBottom="@dimen/item_margin">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -319,15 +316,12 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/item_margin"
-                    app:cardCornerRadius="1dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginTop="@dimen/item_margin">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -350,7 +344,7 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textIsSelectable="true" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

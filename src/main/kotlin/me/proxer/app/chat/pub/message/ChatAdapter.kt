@@ -267,12 +267,12 @@ class ChatAdapter(
         }
 
         internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
-            root.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerClick(root, it) }
 
-            root.longClicks(Callable { onContainerLongClickHandled(root) })
+            container.longClicks(Callable { onContainerLongClickHandled(root) })
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerLongClick(root, it) }

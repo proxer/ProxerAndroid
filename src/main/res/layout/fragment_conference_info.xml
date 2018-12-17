@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -28,14 +27,11 @@
                 android:paddingRight="@dimen/screen_horizontal_margin"
                 android:paddingBottom="@dimen/screen_vertical_margin">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/item_margin"
-                    android:layout_marginBottom="@dimen/item_margin"
-                    app:cardCornerRadius="1dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginBottom="@dimen/item_margin">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -62,16 +58,13 @@
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/item_margin"
-                    android:layout_marginBottom="@dimen/item_margin"
-                    app:cardCornerRadius="1dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginBottom="@dimen/item_margin">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -92,7 +85,7 @@
                             android:layout_height="wrap_content" />
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

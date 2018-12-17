@@ -71,6 +71,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
+        internal val container: ViewGroup by bindView(R.id.container)
         internal val image: ImageView by bindView(R.id.image)
         internal val topic: TextView by bindView(R.id.topic)
         internal val time: TextView by bindView(R.id.time)
@@ -79,7 +80,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         internal val newMessages: Chip by bindView(R.id.newMessages)
 
         fun bind(item: ConferenceWithMessage) {
-            itemView.clicks()
+            container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)

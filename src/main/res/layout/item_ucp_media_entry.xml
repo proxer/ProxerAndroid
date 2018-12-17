@@ -3,19 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/root"
     android:layout_height="wrap_content"
     android:padding="@dimen/item_margin"
     tools:context=".ucp.media.UcpMediaAdapter">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/root"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:id="@+id/container"
         android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="1dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
-        tools:ignore="UnusedAttribute">
+        android:clickable="true"
+        android:focusable="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,8 +26,7 @@
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
                 app:ari_aspect="height"
-                app:ari_ratio="1.25"
-                tools:ignore="UnusedAttribute" />
+                app:ari_ratio="1.25" />
 
             <TextView
                 android:id="@+id/title"
@@ -116,5 +113,5 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/fragment_bookmark_delete_content_description" />
         </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
