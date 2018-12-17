@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
@@ -34,6 +33,7 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
@@ -347,10 +347,10 @@ class MessengerAdapter(
 
         internal open fun applySelection(message: LocalMessage) {
             container.setCardBackgroundColor(
-                ContextCompat.getColorStateList(
-                    container.context, when {
-                        messageSelectionMap[message.id.toString()] == true -> R.color.selected_surface
-                        else -> R.color.surface
+                container.context.resolveColor(
+                    when {
+                        messageSelectionMap[message.id.toString()] == true -> R.attr.colorSelectedSurface
+                        else -> R.attr.colorSelectedSurface
                     }
                 )
             )

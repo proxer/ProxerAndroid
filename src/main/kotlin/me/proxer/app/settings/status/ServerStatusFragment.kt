@@ -14,7 +14,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.colorRes
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -66,7 +65,7 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>() {
 
         val overallStatusIcon = IconicsDrawable(requireContext())
             .icon(if (allServersOnline) CommunityMaterial.Icon.cmd_earth else CommunityMaterial.Icon.cmd_earth_off)
-            .colorRes(requireContext(), if (allServersOnline) R.color.md_green_500 else R.color.md_red_500)
+            .colorRes(if (allServersOnline) R.color.md_green_500 else R.color.md_red_500)
             .sizeDp(48)
             .paddingDp(12)
 

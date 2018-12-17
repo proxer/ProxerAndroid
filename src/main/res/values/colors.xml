@@ -20,10 +20,7 @@
     <color name="selected_surface">#E8E8E8</color>
 
     <color name="divider">#1F000000</color>
-    <color name="icon_focused" tools:ignore="UnusedResources">#DE000000</color>
-    <color name="icon_unfocused">#8A000000</color>
-
-    <color name="link">@color/secondary</color>
+    <color name="icon">#8A000000</color>
 
     <color name="half_transparent">#7F000000</color>
 
@@ -39,9 +36,4 @@
     <color name="colorPrimaryLight" tools:ignore="UnusedResources">@color/primary_light</color>
     <color name="colorPrimaryDark" tools:ignore="UnusedResources">@color/primary_dark</color>
     <color name="colorAccent" tools:ignore="UnusedResources">@color/secondary</color>
-
-    <!-- Customization for library colors. -->
-    <color name="emoji_icons" tools:ignore="UnusedResources">@color/icon_unfocused</color>
-    <color name="emoji_divider" tools:ignore="UnusedResources">@color/divider</color>
-    <color name="emoji_background" tools:ignore="UnusedResources">@color/surface</color>
 </resources>

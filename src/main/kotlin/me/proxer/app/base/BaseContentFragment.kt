@@ -18,6 +18,7 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 
@@ -49,7 +50,7 @@ abstract class BaseContentFragment<T> : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progress.setColorSchemeResources(R.color.primary)
+        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()

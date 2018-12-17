@@ -40,9 +40,10 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
@@ -72,7 +73,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, R.color.primary)
+            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimary))
 
             innerAdapter.selectedMessages.let {
                 menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != storageHelper.user?.id
@@ -103,7 +104,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, R.color.primary_dark)
+            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimaryDark))
         }
     }
 
@@ -210,7 +211,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         scrollToBottom.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -221,7 +222,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorRes(requireContext(), R.color.accent)
+                .colorAttr(requireContext(), R.attr.colorSecondary)
                 .sizeDp(32)
                 .paddingDp(4)
         )

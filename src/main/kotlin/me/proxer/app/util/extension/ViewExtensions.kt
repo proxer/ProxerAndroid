@@ -6,8 +6,8 @@ import android.animation.LayoutTransition
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.AttrRes
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.postDelayed
 import androidx.core.widget.TextViewCompat
@@ -30,22 +30,27 @@ inline fun ImageView.setIconicsImage(
     icon: IIcon,
     sizeDp: Int,
     paddingDp: Int = sizeDp / 4,
-    colorRes: Int = R.color.icon_unfocused
+    @AttrRes colorAttr: Int = R.attr.colorIcon
 ) {
     setImageDrawable(
         IconicsDrawable(context, icon)
             .sizeDp(sizeDp)
             .paddingDp(paddingDp)
-            .colorRes(context, colorRes)
+            .colorAttr(context, colorAttr)
     )
 }
 
-inline fun IconicsDrawable.colorRes(context: Context, id: Int): IconicsDrawable {
-    return this.color(ContextCompat.getColor(context, id))
+inline fun IconicsDrawable.colorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
+    return this.color(context.resolveColor(res))
+
+}
+
+inline fun IconicsDrawable.backgroundColorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
+    return this.backgroundColor(context.resolveColor(res))
 }
 
 inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
-    return this.colorRes(context, R.color.icon_unfocused)
+    return this.colorAttr(context, R.attr.colorIcon)
 }
 
 inline fun ViewGroup.enableLayoutAnimationsSafely() {

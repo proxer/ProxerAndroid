@@ -40,9 +40,10 @@ import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.android.ext.android.inject
@@ -229,14 +230,14 @@ class CreateConferenceFragment : BaseFragment() {
         participants.layoutManager = LinearLayoutManager(context)
         participants.adapter = adapter
 
-        progress.setColorSchemeResources(R.color.primary)
+        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
         progress.isEnabled = false
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorRes(requireContext(), R.color.accent)
+                .colorAttr(requireContext(), R.attr.colorSecondary)
                 .sizeDp(32)
                 .paddingDp(4)
         )

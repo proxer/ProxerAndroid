@@ -106,7 +106,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_translator_group_description"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <TextView
                             android:id="@+id/description"

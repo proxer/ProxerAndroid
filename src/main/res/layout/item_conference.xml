@@ -104,7 +104,7 @@
                 android:focusable="false"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:chipBackgroundColor="@color/secondary"
+                app:chipBackgroundColor="?attr/colorSecondary"
                 app:chipEndPadding="6dp"
                 app:chipMinHeight="32dp"
                 app:chipMinTouchTargetSize="32dp"

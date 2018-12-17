@@ -14,7 +14,6 @@ import android.text.SpannableString
 import android.text.util.Linkify
 import android.widget.ImageView
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.engine.GlideException
@@ -145,8 +144,8 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
     CustomTabsIntent.Builder(session)
-        .setToolbarColor(ContextCompat.getColor(activity, R.color.primary))
-        .setSecondaryToolbarColor(ContextCompat.getColor(activity, R.color.primary_dark))
+        .setToolbarColor(activity.resolveColor(R.attr.colorPrimary))
+        .setSecondaryToolbarColor(activity.resolveColor(R.attr.colorPrimaryDark))
         .addDefaultShareMenuItem()
         .enableUrlBarHiding()
         .setShowTitle(true)

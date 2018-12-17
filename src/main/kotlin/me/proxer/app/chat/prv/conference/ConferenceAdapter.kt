@@ -27,7 +27,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
@@ -184,7 +184,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                 val icon = IconicsDrawable(image.context)
                     .sizeDp(96)
                     .paddingDp(16)
-                    .colorRes(image.context, R.color.secondary)
+                    .colorAttr(image.context, R.attr.colorSecondary)
 
                 if (item.conference.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)

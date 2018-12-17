@@ -26,7 +26,8 @@ import me.proxer.app.profile.media.ProfileMediaListFragment
 import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.backgroundColorAttr
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -168,8 +169,8 @@ class ProfileActivity : ImageTabsActivity() {
                     .icon(CommunityMaterial.Icon.cmd_account)
                     .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
                     .paddingDp(32)
-                    .backgroundColorRes(R.color.primary_light)
-                    .colorRes(headerImage.context, R.color.primary)
+                    .backgroundColorAttr(headerImage.context, R.attr.colorPrimaryLight)
+                    .colorAttr(headerImage.context, R.attr.colorPrimary)
             )
         }
     }

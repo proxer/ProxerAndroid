@@ -177,7 +177,7 @@
                                 android:layout_height="1dp"
                                 android:layout_marginLeft="8dp"
                                 android:layout_marginRight="8dp"
-                                android:background="@color/divider" />
+                                android:background="?attr/colorDivider" />
 
                             <TableRow>
 
@@ -206,7 +206,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="16dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary"
+                            android:textColor="?attr/colorSecondary"
                             tools:text="Kage" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

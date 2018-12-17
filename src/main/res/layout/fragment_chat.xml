@@ -50,9 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:visibility="gone"
-                app:backgroundTint="@color/surface"
+                app:backgroundTint="?attr/colorSurface"
                 app:fabSize="mini"
-                app:tint="@color/icon_unfocused"
+                app:tint="?attr/colorIcon"
                 app:useCompatPadding="true"
                 tools:src="@drawable/ic_japan"
                 tools:visibility="visible" />

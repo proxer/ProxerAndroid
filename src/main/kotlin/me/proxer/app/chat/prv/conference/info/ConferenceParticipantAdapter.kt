@@ -25,7 +25,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.conference.info.ConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -94,7 +94,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                         .icon(CommunityMaterial.Icon2.cmd_star)
                         .sizeDp(32)
                         .paddingDp(8)
-                        .colorRes(username.context, R.color.secondary),
+                        .colorAttr(image.context, R.attr.colorSecondary),
                     null
                 )
             } else {
@@ -109,7 +109,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
             }
 
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.color.secondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

@@ -1,11 +1,22 @@
 <resources>
+    <attr name="colorPrimaryLight" format="color|reference" />
+
+    <attr name="colorSelectedSurface" format="color|reference" />
+    <attr name="colorSelectedBackground" format="color|reference" />
+
+    <attr name="colorDivider" format="color|reference" />
+    <attr name="colorIcon" format="color|reference" />
+    <attr name="colorLink" format="color|reference" />
+
     <declare-styleable name="ExpandableSelectionView">
         <attr name="titleText" format="string" />
         <attr name="singleSelection" format="boolean" />
     </declare-styleable>
+
     <declare-styleable name="MaxLineFlexboxLayout">
         <attr name="maxLines" format="integer" />
     </declare-styleable>
+
     <declare-styleable name="BBCodeView">
         <attr name="text" format="string" />
         <attr name="textColor" format="color" />

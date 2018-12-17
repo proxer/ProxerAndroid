@@ -100,7 +100,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/airingInfo"
                 android:layout_margin="8dp"
-                android:background="@color/divider" />
+                android:background="?attr/colorDivider" />
 
             <TextView
                 android:id="@+id/status"

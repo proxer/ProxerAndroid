@@ -102,7 +102,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)

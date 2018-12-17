@@ -60,7 +60,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="8dp"
-                android:background="@color/divider" />
+                android:background="?attr/colorDivider" />
 
             <me.proxer.app.ui.view.bbcode.BBCodeView
                 android:id="@+id/signature"
@@ -74,7 +74,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="8dp"
-                android:background="@color/divider" />
+                android:background="?attr/colorDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"

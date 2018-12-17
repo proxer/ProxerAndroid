@@ -44,7 +44,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_chat_room_active_users_title"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/userList"

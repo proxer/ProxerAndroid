@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -36,6 +35,7 @@ import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -334,10 +334,10 @@ class ChatAdapter(
 
         internal open fun applySelection(message: ParsedChatMessage) {
             container.setCardBackgroundColor(
-                ContextCompat.getColorStateList(
-                    container.context, when {
-                        messageSelectionMap[message.id] == true -> R.color.selected_surface
-                        else -> R.color.surface
+                container.context.resolveColor(
+                    when {
+                        messageSelectionMap[message.id.toString()] == true -> R.attr.colorSelectedSurface
+                        else -> R.attr.colorSelectedSurface
                     }
                 )
             )
@@ -375,7 +375,7 @@ class ChatAdapter(
             title.requestLayout()
 
             if (message.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.color.secondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(message.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

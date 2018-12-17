@@ -31,6 +31,7 @@ import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toast
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -213,7 +214,7 @@ class AboutFragment : MaterialAboutFragment() {
             .text(getString(R.string.about_developer_proxer_title))
             .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                setColorFilter(ContextCompat.getColor(context, R.color.icon_unfocused), PorterDuff.Mode.SRC_IN)
+                setColorFilter(context.resolveColor(R.attr.colorIcon), PorterDuff.Mode.SRC_IN)
             })
             .setOnClickAction {
                 ProfileActivity.navigateTo(requireActivity(), developerProxerId, developerProxerName, null)

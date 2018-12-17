@@ -23,7 +23,7 @@
             style="@style/Widget.MaterialComponents.TabLayout.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
+            android:background="?attr/colorPrimary"
             android:visibility="gone" />
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -7,7 +7,6 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
-import androidx.core.content.ContextCompat
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
@@ -17,6 +16,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.resolveColor
 
 object QuotePrototype : AutoClosingPrototype {
 
@@ -50,7 +50,7 @@ object QuotePrototype : AutoClosingPrototype {
             layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
             setPadding(fourDip, fourDip, fourDip, fourDip)
-            setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected_surface))
+            setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
 
             childViews.forEach { addView(it) }
         }

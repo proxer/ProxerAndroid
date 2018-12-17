@@ -23,7 +23,7 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.recommendation.RecommendationAdapter.ViewHolder
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -134,22 +134,22 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             .icon(CommunityMaterial.Icon2.cmd_thumb_up)
             .sizeDp(32)
             .paddingDp(4)
-            .colorRes(
-                upvotesImage.context, when (userVoted) {
-                    true -> R.color.md_green_500
-                    false -> R.color.icon_unfocused
+            .apply {
+                when (userVoted) {
+                    true -> colorRes(R.color.md_green_500)
+                    false -> colorAttr(upvotesImage.context, R.attr.colorIcon)
                 }
-            )
+            }
 
         private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
             .icon(CommunityMaterial.Icon2.cmd_thumb_down)
             .sizeDp(32)
             .paddingDp(4)
-            .colorRes(
-                upvotesImage.context, when (userVoted) {
-                    true -> R.color.md_red_500
-                    false -> R.color.icon_unfocused
+            .apply {
+                when (userVoted) {
+                    true -> colorRes(R.color.md_red_500)
+                    false -> colorAttr(downvotesImage.context, R.attr.colorIcon)
                 }
-            )
+            }
     }
 }

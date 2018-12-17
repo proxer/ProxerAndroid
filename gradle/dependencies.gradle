@@ -48,7 +48,7 @@ dependencies {
     implementation "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion"
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
     implementation "com.google.android:flexbox:$flexboxVersion"
-    implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
+    implementation "com.github.rubengees.Emoji:emoji-ios:$emojiIosVersion"
     implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"

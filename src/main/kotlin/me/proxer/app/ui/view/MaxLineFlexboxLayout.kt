@@ -11,7 +11,6 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import com.google.android.flexbox.FlexboxLayout
 import com.jakewharton.rxbinding2.view.clicks
@@ -19,6 +18,7 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
+import me.proxer.app.util.extension.resolveColor
 
 /**
  * @author Ruben Gees
@@ -84,7 +84,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
 
         button.text = context.getString(R.string.fragment_media_info_show_all)
         button.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
-        button.setTextColor(ContextCompat.getColor(context, R.color.secondary))
+        button.setTextColor(context.resolveColor(R.attr.colorSecondary))
 
         button.clicks()
             .doOnNext { maxLines = Int.MAX_VALUE }

@@ -9,6 +9,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.util.extension.backgroundColorAttr
+import me.proxer.app.util.extension.colorAttr
 
 /**
  * @author Ruben Gees
@@ -28,6 +30,6 @@ class GlideDrawerImageLoader : AbstractDrawerImageLoader() {
     override fun placeholder(context: Context, tag: String?): IconicsDrawable = IconicsDrawable(context)
         .icon(CommunityMaterial.Icon.cmd_account)
         .sizeDp(48)
-        .backgroundColorRes(R.color.primary)
-        .colorRes(android.R.color.white)
+        .backgroundColorAttr(context, R.attr.colorPrimary)
+        .colorAttr(context, R.attr.colorOnPrimary)
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.LinearLayout.VERTICAL
-import androidx.core.content.ContextCompat
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
@@ -16,6 +15,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.resolveColor
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
@@ -53,7 +53,7 @@ object HidePrototype : AutoClosingPrototype, KoinComponent {
                 orientation = VERTICAL
 
                 setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(ContextCompat.getColor(parent.context, R.color.selected_surface))
+                setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
 
                 childViews.forEach { addView(it) }
             })

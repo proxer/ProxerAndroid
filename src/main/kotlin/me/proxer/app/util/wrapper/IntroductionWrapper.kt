@@ -13,6 +13,7 @@ import com.rubengees.introduction.Slide
 import com.rubengees.introduction.interfaces.OnSlideListener
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 
 /**
@@ -33,7 +34,7 @@ object IntroductionWrapper {
                         image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
                     }
                     1 -> image.setIconicsImage(
-                        CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2, android.R.color.white
+                        CommunityMaterial.Icon.cmd_bell_outline, 256, padding / 2, R.attr.colorOnPrimary
                     )
                 }
             }
@@ -42,10 +43,10 @@ object IntroductionWrapper {
 
     private fun generateSlides(context: Context) = arrayListOf(
         Slide().withTitle(R.string.introduction_welcome_title)
-            .withColorResource(R.color.primary)
+            .withColor(context.resolveColor(R.attr.colorPrimary))
             .withDescription(R.string.introduction_welcome_description),
         Slide().withTitle(R.string.introduction_notifications_title)
-            .withColorResource(R.color.primary)
+            .withColorResource(context.resolveColor(R.attr.colorPrimary))
             .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
 }

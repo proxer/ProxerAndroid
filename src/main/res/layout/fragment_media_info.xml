@@ -49,7 +49,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_general"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_genres"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/genres"
@@ -120,7 +120,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_tags"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/tags"
@@ -151,7 +151,7 @@
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                                android:textColor="@color/secondary" />
+                                android:textColor="?attr/colorSecondary" />
 
                             <Button
                                 android:id="@+id/spoilerTags"
@@ -167,7 +167,7 @@
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                                android:textColor="@color/secondary" />
+                                android:textColor="?attr/colorSecondary" />
                         </LinearLayout>
 
                         <TextView
@@ -177,7 +177,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_fsk_constraints"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <com.google.android.flexbox.FlexboxLayout
                             android:id="@+id/fskConstraints"
@@ -194,7 +194,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_translator_groups"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <me.proxer.app.ui.view.MaxLineFlexboxLayout
                             android:id="@+id/translatorGroups"
@@ -212,7 +212,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_industries"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <me.proxer.app.ui.view.MaxLineFlexboxLayout
                             android:id="@+id/industries"
@@ -229,7 +229,7 @@
                             android:layout_marginLeft="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginRight="8dp"
-                            android:background="@color/divider" />
+                            android:background="?attr/colorDivider" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -334,7 +334,7 @@
                             android:padding="8dp"
                             android:text="@string/fragment_media_info_description"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/secondary" />
+                            android:textColor="?attr/colorSecondary" />
 
                         <TextView
                             android:id="@+id/description"

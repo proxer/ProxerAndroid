@@ -15,6 +15,7 @@ import me.proxer.app.R
 import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -81,7 +82,7 @@ class UcpSettingsActivity : DrawerActivity() {
     }
 
     private fun setupUI() {
-        progress.setColorSchemeResources(R.color.primary)
+        progress.setColorSchemeColors(resolveColor(R.attr.colorPrimary))
 
         progress.refreshes()
             .autoDisposable(this.scope())

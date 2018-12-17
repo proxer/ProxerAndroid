@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:background="@color/divider" />
+            android:background="?attr/colorDivider" />
 
         <LinearLayout
             android:id="@+id/container"

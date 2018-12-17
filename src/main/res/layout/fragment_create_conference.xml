@@ -86,7 +86,7 @@
                                 android:padding="8dp"
                                 android:text="@string/fragment_create_conference_participants"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/secondary" />
+                                android:textColor="?attr/colorSecondary" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/participants"

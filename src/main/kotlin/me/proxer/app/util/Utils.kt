@@ -7,7 +7,7 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
@@ -26,7 +26,7 @@ object Utils {
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-    fun setStatusBarColorIfPossible(activity: Activity?, @ColorRes color: Int) {
+    fun setStatusBarColorIfPossible(activity: Activity?, @ColorInt color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity?.apply {
                 window?.statusBarColor = ContextCompat.getColor(activity, color)

@@ -14,7 +14,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -225,8 +224,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
             <html>
               <head>
                 <style>
-                  body { color: ${requireContext().resolveColor(android.R.attr.textColorSecondary)} }
-                  a { color: ${ContextCompat.getColor(requireContext(), R.color.link).toHtmlColor()} }
+                  body { color: ${requireContext().resolveColor(android.R.attr.textColorSecondary).toHtmlColor()} }
+                  a { color: ${requireContext().resolveColor(R.attr.colorLink).toHtmlColor()} }
                 </style>
               </head>
               <body>

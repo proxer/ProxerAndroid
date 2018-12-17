@@ -4,6 +4,7 @@
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryLight">@color/primary_light</item>
         <item name="colorOnPrimary">@color/on_primary</item>
 
         <item name="colorSecondary">@color/secondary</item>
@@ -11,12 +12,18 @@
 
         <item name="colorSurface">@color/surface</item>
         <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSelectedSurface">@color/selected_surface</item>
 
         <item name="android:windowBackground">@color/background</item>
         <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorSelectedBackground">@color/selected_background</item>
 
-        <item name="colorControlNormal">@color/on_primary</item>
-        <item name="colorAccent">@color/secondary</item>
+        <item name="colorDivider">@color/divider</item>
+        <item name="colorIcon">@color/icon</item>
+
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorLink">?attr/colorSecondary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -28,24 +35,28 @@
         <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
 
-        <item name="asp_preferenceIconTint">@color/secondary</item>
+        <item name="asp_preferenceIconTint">?attr/colorSecondary</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
 
-        <item name="about_libraries_card">@color/surface</item>
+        <item name="about_libraries_card">?attr/colorSurface</item>
         <item name="about_libraries_text_description">?android:attr/textColorPrimary</item>
         <item name="about_libraries_title_openSource">?android:attr/textColorPrimary</item>
         <item name="about_libraries_text_openSource">?android:attr/textColorSecondary</item>
-        <item name="about_libraries_dividerLight_openSource">@color/divider</item>
-        <item name="about_libraries_dividerDark_openSource">@color/divider</item>
+        <item name="about_libraries_dividerLight_openSource">?attr/colorDivider</item>
+        <item name="about_libraries_dividerDark_openSource">?attr/colorDivider</item>
 
         <item name="material_drawer_legacy_style">true</item>
-        <item name="material_drawer_background">@color/background</item>
+        <item name="material_drawer_background">?android:attr/windowBackground</item>
         <item name="material_drawer_primary_text">?android:attr/textColorPrimary</item>
-        <item name="material_drawer_primary_icon">@color/icon_unfocused</item>
+        <item name="material_drawer_primary_icon">?attr/colorIcon</item>
         <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
         <item name="material_drawer_selected">@color/selected_background</item>
         <item name="material_drawer_selected_legacy">@color/selected_background</item>
-        <item name="material_drawer_divider">@color/divider</item>
+        <item name="material_drawer_divider">?attr/colorDivider</item>
+
+        <item name="emojiIcons">?attr/colorIcon</item>
+        <item name="emojiDivider">?attr/colorDivider</item>
+        <item name="emojiBackground">?attr/colorSurface</item>
     </style>
 
     <style name="Theme.App.NoBackground" parent="Theme.App">

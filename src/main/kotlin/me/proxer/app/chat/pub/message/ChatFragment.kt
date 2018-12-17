@@ -44,10 +44,11 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.colorRes
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
@@ -78,7 +79,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, R.color.primary)
+            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimary))
 
             innerAdapter.selectedMessages.let {
                 val user = storageHelper.user
@@ -113,7 +114,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, R.color.primary_dark)
+            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimaryDark))
         }
     }
 
@@ -213,7 +214,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorRes = android.R.color.white)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
             .debounce(10, TimeUnit.MILLISECONDS)
@@ -237,7 +238,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorRes(requireContext(), R.color.accent)
+                .colorAttr(requireContext(), R.attr.colorSecondary)
                 .sizeDp(32)
                 .paddingDp(4)
         )
