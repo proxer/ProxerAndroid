@@ -1,6 +1,7 @@
 package me.proxer.app
 
 import android.content.res.Resources
+import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.gojuno.koptional.Optional
@@ -57,6 +58,7 @@ import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.ModernTlsSocketFactory
 import me.proxer.app.util.http.TaggedSocketFactory
@@ -91,9 +93,10 @@ private val applicationModules = module(createOnStart = true) {
     single { RxBus() }
 
     single {
-        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
-            init(null as KeyStore?)
-        }
+        val trustManagerFactory =
+            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+                init(null as KeyStore?)
+            }
 
         trustManagerFactory.trustManagers
             .find { trustManager -> trustManager is X509TrustManager } as X509TrustManager
@@ -116,6 +119,11 @@ private val applicationModules = module(createOnStart = true) {
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .addInterceptor(HttpsUpgradeInterceptor())
+            .apply {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    addInterceptor(ConnectionCloseInterceptor())
+                }
+            }
             .apply { if (logging != null) addInterceptor(logging) }
             .build()
 
@@ -135,8 +143,16 @@ private val applicationModules = module(createOnStart = true) {
     single { PreferenceHelper(get()) }
     single { Validators(get(), get()) }
 
-    single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
-    single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            MessengerDatabase::class.java,
+            CHAT_DATABASE_NAME
+        ).build()
+    }
+    single {
+        Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build()
+    }
     single { get<MessengerDatabase>().dao() }
     single { get<TagDatabase>().dao() }
 
@@ -167,8 +183,17 @@ private val viewModelModule = module {
 
     viewModel { parameterList ->
         MediaListViewModel(
-            parameterList[0], parameterList[1], parameterList[2], parameterList[3], parameterList[4], parameterList[5],
-            parameterList[6], parameterList[7], parameterList[8], parameterList[9], parameterList[10]
+            parameterList[0],
+            parameterList[1],
+            parameterList[2],
+            parameterList[3],
+            parameterList[4],
+            parameterList[5],
+            parameterList[6],
+            parameterList[7],
+            parameterList[8],
+            parameterList[9],
+            parameterList[10]
         )
     }
 
@@ -178,16 +203,41 @@ private val viewModelModule = module {
     viewModel { UcpOverviewViewModel() }
     viewModel { UcpTopTenViewModel() }
     viewModel { UcpSettingsViewModel() }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileInfoViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> HistoryViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) ->
+        ProfileAboutViewModel(
+            userId,
+            username
+        )
+    }
+    viewModel { (userId: Optional<String>, username: Optional<String>) ->
+        ProfileInfoViewModel(
+            userId,
+            username
+        )
+    }
+    viewModel { (userId: Optional<String>, username: Optional<String>) ->
+        TopTenViewModel(
+            userId,
+            username
+        )
+    }
+    viewModel { (userId: Optional<String>, username: Optional<String>) ->
+        HistoryViewModel(
+            userId,
+            username
+        )
+    }
     viewModel { (category: Category, filter: Optional<UserMediaListFilterType>) ->
         UcpMediaListViewModel(category, filter)
     }
 
     viewModel { parameterList ->
-        ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])
+        ProfileMediaListViewModel(
+            parameterList[0],
+            parameterList[1],
+            parameterList[2],
+            parameterList[3]
+        )
     }
 
     viewModel { (userId: Optional<String>, username: Optional<String>, category: Optional<Category>) ->
@@ -198,7 +248,12 @@ private val viewModelModule = module {
 
     viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
     viewModel { (entryId: String) -> EpisodeViewModel(entryId) }
-    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) -> CommentViewModel(entryId, sortCriteria) }
+    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) ->
+        CommentViewModel(
+            entryId,
+            sortCriteria
+        )
+    }
     viewModel { (entryId: String) -> RelationViewModel(entryId) }
     viewModel { (entryId: String) -> RecommendationViewModel(entryId) }
     viewModel { (entryId: String) -> DiscussionViewModel(entryId) }
@@ -208,8 +263,20 @@ private val viewModelModule = module {
     viewModel { (translatorGroupId: String) -> TranslatorGroupInfoViewModel(translatorGroupId) }
     viewModel { (translatorGroupId: String) -> TranslatorGroupProjectViewModel(translatorGroupId) }
 
-    viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
-    viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
+    viewModel { (entryId: String, language: Language, episode: Int) ->
+        MangaViewModel(
+            entryId,
+            language,
+            episode
+        )
+    }
+    viewModel { (entryId: String, language: AnimeLanguage, episode: Int) ->
+        AnimeViewModel(
+            entryId,
+            language,
+            episode
+        )
+    }
 
     viewModel { ServerStatusViewModel() }
 }
