@@ -17,6 +17,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.library.entity.info.Recommendation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -79,6 +80,7 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = StaggeredGridLayoutManager(
             DeviceUtils.calculateSpanAmount(requireActivity()) + 1,
             StaggeredGridLayoutManager.VERTICAL

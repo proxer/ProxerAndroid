@@ -13,6 +13,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.pub.message.ChatActivity
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.library.entity.chat.ChatRoom
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
@@ -59,6 +60,7 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }

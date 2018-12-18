@@ -32,6 +32,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.doAfterAnimations
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.unsafeLazy
@@ -138,6 +139,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
         adapter.registerAdapterDataObserver(adapterDataObserver)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
     }

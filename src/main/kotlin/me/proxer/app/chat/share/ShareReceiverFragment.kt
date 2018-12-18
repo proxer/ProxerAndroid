@@ -30,6 +30,7 @@ import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -101,10 +102,12 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = StaggeredGridLayoutManager(
             DeviceUtils.calculateSpanAmount(requireActivity()),
             StaggeredGridLayoutManager.VERTICAL
         )
+
         recyclerView.adapter = adapter
     }
 

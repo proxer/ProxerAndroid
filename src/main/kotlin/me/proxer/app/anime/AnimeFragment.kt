@@ -38,6 +38,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.addReferer
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.safeData
@@ -177,6 +178,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         innerAdapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 

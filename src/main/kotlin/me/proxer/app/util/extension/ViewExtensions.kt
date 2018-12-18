@@ -4,6 +4,9 @@ package me.proxer.app.util.extension
 
 import android.animation.LayoutTransition
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.StateListDrawable
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.AttrRes
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.R
+import timber.log.Timber
 
 inline var AppCompatTextView.fastText: CharSequence
     get() = text
@@ -85,5 +89,36 @@ fun RecyclerView.doAfterAnimations(action: () -> Unit) {
         } else {
             action()
         }
+    }
+}
+
+fun RecyclerView.enableFastScroll() {
+    val thumbColor = context.resolveColor(R.attr.colorFastscrollThumb)
+    val trackColor = context.resolveColor(R.attr.colorFastscrollTrack)
+    val pressedColor = context.resolveColor(R.attr.colorSecondary)
+
+    val thumbDrawableSelector = StateListDrawable().apply {
+        addState(intArrayOf(android.R.attr.state_pressed), ColorDrawable(pressedColor))
+        addState(intArrayOf(), ColorDrawable(thumbColor))
+    }
+
+    val trackDrawable = ColorDrawable(trackColor)
+
+    try {
+        val initFastScrollerMethod = RecyclerView::class.java.getDeclaredMethod(
+            "initFastScroller",
+            StateListDrawable::class.java, Drawable::class.java,
+            StateListDrawable::class.java, Drawable::class.java
+        ).apply {
+            isAccessible = true
+        }
+
+        initFastScrollerMethod.invoke(
+            this,
+            thumbDrawableSelector, trackDrawable,
+            thumbDrawableSelector, trackDrawable
+        )
+    } catch (error: Exception) {
+        Timber.e("Could not enable fast scroll", error)
     }
 }

@@ -44,7 +44,5 @@
         android:layout_height="match_parent"
         android:divider="?attr/colorDivider"
         android:dividerHeight="1dp"
-        android:scrollbarThumbVertical="@drawable/fastscroll_thumb_idle"
-        android:scrollbarTrackVertical="@drawable/fastscroll_track"
         tools:listitem="@layout/layout_widget_news_item" />
 </LinearLayout>

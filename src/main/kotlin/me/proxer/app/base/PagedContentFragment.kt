@@ -19,6 +19,7 @@ import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.doAfterAnimations
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.isAtCompleteTop
 import me.proxer.app.util.extension.multilineSnackbar
 import java.util.concurrent.TimeUnit
@@ -79,6 +80,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         innerAdapter.registerAdapterDataObserver(adapterDataObserver)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 

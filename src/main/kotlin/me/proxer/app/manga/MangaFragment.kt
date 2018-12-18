@@ -47,6 +47,7 @@ import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.convertToDateTime
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.snackbar
@@ -265,6 +266,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         bindLayoutManager()
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.adapter = adapter
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {

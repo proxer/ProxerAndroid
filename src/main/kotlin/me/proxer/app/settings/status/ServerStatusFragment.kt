@@ -14,6 +14,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -49,6 +50,7 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = layoutManger
         recyclerView.adapter = adapter
     }

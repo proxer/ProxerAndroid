@@ -29,12 +29,7 @@
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
                 android:paddingTop="@dimen/screen_vertical_margin_with_items"
                 android:paddingRight="@dimen/screen_horizontal_margin_with_items"
-                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
-                app:fastScrollEnabled="true"
-                app:fastScrollHorizontalThumbDrawable="@drawable/fastscroll_thumb"
-                app:fastScrollHorizontalTrackDrawable="@drawable/fastscroll_track"
-                app:fastScrollVerticalThumbDrawable="@drawable/fastscroll_thumb"
-                app:fastScrollVerticalTrackDrawable="@drawable/fastscroll_track" />
+                android:paddingBottom="@dimen/screen_vertical_margin_with_items" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -14,6 +14,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.enums.CalendarDay
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,6 +62,7 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
         adapter.glide = GlideApp.with(this)
 
         recyclerView.setHasFixedSize(true)
+        recyclerView.enableFastScroll()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }
