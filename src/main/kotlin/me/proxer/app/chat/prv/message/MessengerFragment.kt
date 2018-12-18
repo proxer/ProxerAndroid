@@ -318,7 +318,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     override fun isAtTop() = recyclerView.isAtTop()
 
-    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
+    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(requireContext())
         .icon(iconicRes)
         .sizeDp(32)
         .paddingDp(6)

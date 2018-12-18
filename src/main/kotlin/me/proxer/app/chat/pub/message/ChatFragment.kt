@@ -366,7 +366,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         }
     }
 
-    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(context)
+    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(requireContext())
         .icon(iconicRes)
         .sizeDp(32)
         .paddingDp(6)
