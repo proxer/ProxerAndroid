@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="@color/background"
     android:orientation="vertical"
     android:theme="@style/Theme.App"
     tools:ignore="Overdraw">
@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary">
+        android:background="@color/primary">
 
         <TextView
             android:id="@+id/title"
@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:text="@string/widget_news_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="@color/on_primary"
             android:textStyle="bold" />
 
         <ImageView
@@ -42,7 +42,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="?attr/colorDivider"
+        android:divider="@color/divider"
         android:dividerHeight="1dp"
         tools:listitem="@layout/layout_widget_news_item" />
 </LinearLayout>
