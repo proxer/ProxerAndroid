@@ -30,7 +30,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameContainer"
-            style="@style/Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_username_hint">
@@ -47,7 +46,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordContainer"
-            style="@style/Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_password_hint"
@@ -65,7 +63,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_login_secret_hint">

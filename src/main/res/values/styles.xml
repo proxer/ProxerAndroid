@@ -12,7 +12,7 @@
         <item name="colorSecondaryLight">@color/secondary_light</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
 
-        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="colorLink">?attr/colorSecondary</item>
 
@@ -25,6 +25,7 @@
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
         <item name="checkboxStyle">@style/Widget.App.CheckBox</item>
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+        <item name="textInputStyle">@style/Widget.App.TextInputLayout</item>
 
         <item name="asp_preferenceIconTint">?attr/colorSecondary</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
@@ -103,6 +104,11 @@
         <item name="cardCornerRadius">1dp</item>
         <item name="cardElevation">2dp</item>
         <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="hintTextColor">?attr/colorSecondary</item>
+        <item name="boxBackgroundMode">none</item>
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
