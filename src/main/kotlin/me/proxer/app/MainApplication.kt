@@ -29,6 +29,7 @@ import me.proxer.app.util.TimberFileTree
 import me.proxer.app.util.data.PreferenceHelper
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
+import org.koin.log.EmptyLogger
 import timber.log.Timber
 
 /**
@@ -51,7 +52,7 @@ class MainApplication : Application() {
             return
         }
 
-        startKoin(this, modules)
+        startKoin(this, modules, logger = EmptyLogger())
 
         LeakCanary.install(this)
         FlavorInitializer.initialize(this)
