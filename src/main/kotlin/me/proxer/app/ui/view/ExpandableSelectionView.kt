@@ -158,14 +158,13 @@ class ExpandableSelectionView @JvmOverloads constructor(
         }
 
         if (isSingleSelection) {
-            itemContainer.children
-                .filterIsInstance(RadioButton::class.java)
-                .filter { it.isChecked.not() }
-                .firstOrNull()
-                ?.apply {
-                    isChecked = true
-                    jumpDrawablesToCurrentState()
-                }
+            val children = itemContainer.children.filterIsInstance(RadioButton::class.java).toList()
+
+            if (children.none { it.isChecked }) {
+                children.firstOrNull()?.isChecked = true
+            }
+
+            jumpDrawablesToCurrentState()
         }
     }
 
