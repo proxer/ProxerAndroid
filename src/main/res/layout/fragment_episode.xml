@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:scrollbars="none"
             android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
             android:paddingTop="@dimen/screen_vertical_margin_with_items"
             android:paddingRight="@dimen/screen_horizontal_margin_with_items"

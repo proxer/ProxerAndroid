@@ -40,6 +40,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
+                android:scrollbars="none"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
