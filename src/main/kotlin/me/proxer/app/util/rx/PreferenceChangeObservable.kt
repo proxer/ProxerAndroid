@@ -4,7 +4,6 @@ import androidx.preference.Preference
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 
 /**
@@ -12,7 +11,7 @@ import me.proxer.app.util.extension.checkMainThread
  */
 class PreferenceChangeObservable<T>(
     private val preference: Preference,
-    private val handled: Predicate<in T>
+    private val handled: (T) -> Boolean
 ) : Observable<T>() {
 
     override fun subscribeActual(observer: Observer<in T>) {
@@ -29,7 +28,7 @@ class PreferenceChangeObservable<T>(
 
     internal class Listener<T>(
         private val preference: Preference,
-        private val handled: Predicate<in T>,
+        private val handled: (T) -> Boolean,
         private val observer: Observer<in T>
     ) : MainThreadDisposable(), Preference.OnPreferenceChangeListener {
 
@@ -39,7 +38,7 @@ class PreferenceChangeObservable<T>(
 
             return if (!isDisposed) {
                 try {
-                    if (handled.test(newValue)) {
+                    if (handled.invoke(newValue)) {
                         observer.onNext(newValue)
 
                         true

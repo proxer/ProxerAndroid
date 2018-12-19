@@ -13,8 +13,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.transition.TransitionManager
-import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
-import com.jakewharton.rxbinding2.view.actionViewEvents
+import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
+import com.jakewharton.rxbinding3.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -127,7 +127,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
             searchItem.actionViewEvents()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
-                    if (it.menuItem().isActionViewExpanded) {
+                    if (it.menuItem.isActionViewExpanded) {
                         searchQuery = null
                     }
 
@@ -140,7 +140,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
-                    searchQuery = it.queryText().toString().trim()
+                    searchQuery = it.queryText.toString().trim()
 
                     if (it.isSubmitted) {
                         searchView.clearFocus()

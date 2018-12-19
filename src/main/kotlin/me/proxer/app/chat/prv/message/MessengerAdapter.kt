@@ -11,8 +11,8 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.longClicks
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.longClicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.autoDisposable
@@ -37,7 +37,6 @@ import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
-import java.util.concurrent.Callable
 
 /**
  * @author Ruben Gees
@@ -281,7 +280,7 @@ class MessengerAdapter(
                 .autoDisposable(this)
                 .subscribe { onContainerClick(root, it) }
 
-            container.longClicks(Callable { onContainerLongClickHandled(root) })
+            container.longClicks { onContainerLongClickHandled(root) }
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerLongClick(root, it) }

@@ -3,11 +3,9 @@ package me.proxer.app.util.rx
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
-
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 
 /**
@@ -15,7 +13,7 @@ import me.proxer.app.util.extension.checkMainThread
  */
 class ViewTouchMonitorObservable(
     private val view: View,
-    private val handled: Predicate<in MotionEvent>
+    private val handled: (MotionEvent) -> Boolean
 ) : Observable<MotionEvent>() {
 
     override fun subscribeActual(observer: Observer<in MotionEvent>) {
@@ -31,7 +29,7 @@ class ViewTouchMonitorObservable(
 
     internal class Listener(
         private val view: View,
-        private val handled: Predicate<in MotionEvent>,
+        private val handled: (MotionEvent) -> Boolean,
         private val observer: Observer<in MotionEvent>
     ) : MainThreadDisposable(), View.OnTouchListener {
 
@@ -41,7 +39,7 @@ class ViewTouchMonitorObservable(
                 try {
                     observer.onNext(event)
 
-                    handled.test(event)
+                    handled.invoke(event)
                 } catch (e: Exception) {
                     observer.onError(e)
                     dispose()

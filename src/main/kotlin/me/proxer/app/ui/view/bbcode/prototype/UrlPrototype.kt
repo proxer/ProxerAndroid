@@ -3,7 +3,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.ui.view.bbcode.BBArgs

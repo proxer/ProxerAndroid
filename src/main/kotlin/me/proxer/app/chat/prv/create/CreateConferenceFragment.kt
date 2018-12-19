@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.widget.editorActions
-import com.jakewharton.rxbinding2.widget.textChanges
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.editorActions
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
@@ -28,7 +28,6 @@ import com.uber.autodispose.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -206,7 +205,7 @@ class CreateConferenceFragment : BaseFragment() {
                 participantInputContainer.isErrorEnabled = false
             }
 
-        participantInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
+        participantInput.editorActions { it == EditorInfo.IME_ACTION_NEXT }
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 if (it == EditorInfo.IME_ACTION_NEXT && validateAndAddUser()) {
@@ -302,7 +301,7 @@ class CreateConferenceFragment : BaseFragment() {
                     topicInputContainer.error = null
                 }
 
-            topicInput.editorActions(Predicate { it == EditorInfo.IME_ACTION_NEXT })
+            topicInput.editorActions { it == EditorInfo.IME_ACTION_NEXT }
                 .autoDisposable(viewLifecycleOwner.scope())
                 .subscribe {
                     if (it == EditorInfo.IME_ACTION_NEXT) {

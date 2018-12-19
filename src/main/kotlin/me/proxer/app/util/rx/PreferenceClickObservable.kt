@@ -4,7 +4,6 @@ import androidx.preference.Preference
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 
 /**
@@ -12,7 +11,7 @@ import me.proxer.app.util.extension.checkMainThread
  */
 class PreferenceClickObservable(
     private val preference: Preference,
-    private val handled: Predicate<in Unit>
+    private val handled: (Unit) -> Boolean
 ) : Observable<Unit>() {
 
     override fun subscribeActual(observer: Observer<in Unit>) {
@@ -29,14 +28,14 @@ class PreferenceClickObservable(
 
     internal class Listener(
         private val preference: Preference,
-        private val handled: Predicate<in Unit>,
+        private val handled: (Unit) -> Boolean,
         private val observer: Observer<in Unit>
     ) : MainThreadDisposable(), Preference.OnPreferenceClickListener {
 
         override fun onPreferenceClick(preference: Preference): Boolean {
             return if (!isDisposed) {
                 try {
-                    if (handled.test(Unit)) {
+                    if (handled.invoke(Unit)) {
                         observer.onNext(Unit)
 
                         true

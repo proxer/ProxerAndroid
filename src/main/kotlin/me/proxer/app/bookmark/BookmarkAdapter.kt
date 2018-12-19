@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.longClicks
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.longClicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject

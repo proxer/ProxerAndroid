@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import androidx.transition.TransitionManager
 import com.gojuno.koptional.toOptional
-import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
-import com.jakewharton.rxbinding2.view.actionViewEvents
+import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
+import com.jakewharton.rxbinding3.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -276,7 +276,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             searchItem.actionViewEvents()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
-                    if (it.menuItem().isActionViewExpanded) {
+                    if (it.menuItem.isActionViewExpanded) {
                         searchQuery = null
 
                         viewModel.reload()
@@ -289,7 +289,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
                 .skipInitialValue()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
                 .subscribe {
-                    searchQuery = it.queryText().toString().trim()
+                    searchQuery = it.queryText.toString().trim()
 
                     if (it.isSubmitted) {
                         searchView.clearFocus()

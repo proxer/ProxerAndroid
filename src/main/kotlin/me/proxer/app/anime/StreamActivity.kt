@@ -32,7 +32,7 @@ import com.google.android.gms.cast.framework.CastStateListener
 import com.google.android.gms.cast.framework.IntroductoryOverlay
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.jakewharton.rxbinding2.view.systemUiVisibilityChanges
+import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView

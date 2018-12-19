@@ -8,8 +8,8 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.recyclerview.scrollEvents
+import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable

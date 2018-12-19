@@ -15,7 +15,6 @@ import androidx.core.util.PatternsCompat
 import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
-import io.reactivex.functions.Predicate
 import linkClicks
 import linkLongClicks
 import me.proxer.app.R
@@ -41,7 +40,7 @@ object TextPrototype : BBPrototype {
 
     @SuppressLint("RestrictedApi")
     private val webUrlRegex = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
-    private val validLinkPredicate = Predicate<String> { it.startsWith("@") || webUrlRegex.matches(it) }
+    private val validLinkPredicate = { link: String -> link.startsWith("@") || webUrlRegex.matches(link) }
 
     override val startRegex = Regex("x^")
     override val endRegex = Regex("x^")
@@ -101,7 +100,7 @@ object TextPrototype : BBPrototype {
                 }
             }
 
-        view.linkLongClicks(Predicate { webUrlRegex.matches(it) })
+        view.linkLongClicks { webUrlRegex.matches(it) }
             .autoDisposable(ViewScopeProvider.from(parent))
             .subscribe {
                 val title = view.context.getString(R.string.clipboard_title)

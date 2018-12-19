@@ -17,7 +17,7 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isGone
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable

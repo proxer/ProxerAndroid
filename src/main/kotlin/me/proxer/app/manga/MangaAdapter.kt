@@ -20,14 +20,13 @@ import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
 import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.autoDisposable
 import events
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Predicate
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -233,7 +232,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 }
                 .connect()
 
-            image.touchesMonitored(Predicate { false })
+            image.touchesMonitored { false }
                 .filter { it.actionMasked == MotionEvent.ACTION_DOWN }
                 .map {
                     val (viewX, viewY) = IntArray(2).apply { image.getLocationInWindow(this) }

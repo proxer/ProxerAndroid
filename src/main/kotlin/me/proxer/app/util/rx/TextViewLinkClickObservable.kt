@@ -4,7 +4,6 @@ import android.widget.TextView
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.MainThreadDisposable
-import io.reactivex.functions.Predicate
 import me.proxer.app.util.extension.checkMainThread
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
@@ -13,7 +12,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod
  */
 class TextViewLinkClickObservable(
     private val view: TextView,
-    private val handled: Predicate<in String>
+    private val handled: (String) -> Boolean
 ) : Observable<String>() {
 
     override fun subscribeActual(observer: Observer<in String>) {
@@ -36,14 +35,14 @@ class TextViewLinkClickObservable(
 
     internal class Listener(
         private val view: TextView,
-        private val handled: Predicate<in String>,
+        private val handled: (String) -> Boolean,
         private val observer: Observer<in String>
     ) : MainThreadDisposable(), BetterLinkMovementMethod.OnLinkClickListener {
 
         override fun onClick(textView: TextView, url: String): Boolean {
             return if (!isDisposed) {
                 try {
-                    if (handled.test(url)) {
+                    if (handled.invoke(url)) {
                         observer.onNext(url)
 
                         true

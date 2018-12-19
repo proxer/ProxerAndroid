@@ -8,7 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ShareCompat
 import androidx.fragment.app.commitNow
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable

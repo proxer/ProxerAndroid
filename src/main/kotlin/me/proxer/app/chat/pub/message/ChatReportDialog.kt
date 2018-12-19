@@ -15,11 +15,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding2.widget.editorActionEvents
-import com.jakewharton.rxbinding2.widget.textChanges
+import com.jakewharton.rxbinding3.widget.editorActionEvents
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
@@ -67,8 +66,8 @@ class ChatReportDialog : BaseDialog() {
             dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         }
 
-        messageInput.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
-            .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
+        messageInput.editorActionEvents { event -> event.actionId == EditorInfo.IME_ACTION_GO }
+            .filter { event -> event.actionId == EditorInfo.IME_ACTION_GO }
             .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe { validateAndSendReport() }
 

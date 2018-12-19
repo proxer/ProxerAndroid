@@ -15,13 +15,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding2.widget.editorActionEvents
-import com.jakewharton.rxbinding2.widget.textChanges
+import com.jakewharton.rxbinding3.widget.editorActionEvents
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.functions.Predicate
 import kotterknife.bindView
 import linkClicks
 import me.proxer.app.R
@@ -95,8 +94,8 @@ class LoginDialog : BaseDialog() {
 
     private fun setupListeners() {
         listOf(password, secret).forEach {
-            it.editorActionEvents(Predicate { event -> event.actionId() == EditorInfo.IME_ACTION_GO })
-                .filter { event -> event.actionId() == EditorInfo.IME_ACTION_GO }
+            it.editorActionEvents { event -> event.actionId == EditorInfo.IME_ACTION_GO }
+                .filter { event -> event.actionId == EditorInfo.IME_ACTION_GO }
                 .autoDisposable(dialogLifecycleOwner.scope())
                 .subscribe { validateAndLogin() }
         }

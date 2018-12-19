@@ -13,7 +13,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.withStyledAttributes
 import com.google.android.flexbox.FlexboxLayout
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject

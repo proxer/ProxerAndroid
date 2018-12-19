@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject

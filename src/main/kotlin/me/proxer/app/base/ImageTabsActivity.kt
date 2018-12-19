@@ -15,8 +15,8 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
 import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
-import com.jakewharton.rxbinding2.support.design.widget.offsetChanges
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.material.offsetChanges
+import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
