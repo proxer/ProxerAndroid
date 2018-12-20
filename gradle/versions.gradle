@@ -88,7 +88,7 @@ ext {
     kotterknifeVersion = "2.0"
     jsr305Version = "3.0.2"
     javaxExtrasVersion = "0.1.0"
-    rapidDecoderVersion = "be88b5dd57"
+    rapidDecoderVersion = "fee3ee9dd1"
     concealVersion = "2.0.2"
     betterLinkMovementMethodVersion = "2.2.0"
     jsoupVersion = "1.11.3"

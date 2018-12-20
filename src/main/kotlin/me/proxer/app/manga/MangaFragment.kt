@@ -147,7 +147,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         isVertical = preferenceHelper.isVerticalReaderEnabled
 
-        innerAdapter = MangaAdapter(isVertical)
+        innerAdapter = MangaAdapter(savedInstanceState, isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
