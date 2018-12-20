@@ -2,8 +2,6 @@ package me.proxer.app.manga
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.os.Build
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -16,8 +14,6 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
-import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
@@ -36,13 +32,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.extension.decodedName
-import me.proxer.app.util.extension.getSafeParcelable
-import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.*
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import me.proxer.library.entity.manga.Page
@@ -55,11 +45,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
-
-    private companion object {
-        private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
-    }
+class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<Triple<View, Pair<Float, Float>, Int>> = PublishSubject.create()
@@ -69,17 +55,10 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
 
-    private val requiresFallback: ParcelableStringBooleanMap
     private val preloadTargets = mutableListOf<Target<File>>()
-
     private var lastTouchCoordinates: Pair<Float, Float>? = null
 
     init {
-        requiresFallback = when (savedInstanceState) {
-            null -> ParcelableStringBooleanMap()
-            else -> savedInstanceState.getSafeParcelable(REQUIRES_FALLBACK_STATE)
-        }
-
         setHasStableIds(true)
     }
 
@@ -125,8 +104,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         holder.image.recycle()
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
-
     private fun preload(links: Map<String, String?>, next: String, failures: Int = 0) {
         val target = GlidePreloadTarget(links, next, failures)
 
@@ -149,6 +126,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         internal var glideTarget: GlideFileTarget? = null
 
         init {
+            image.setBitmapDecoderClass(RapidImageDecoder::class.java)
+            image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
+
             image.setDoubleTapZoomDuration(shortAnimationTime)
             image.isExifInterfaceEnabled = false
 
@@ -167,18 +147,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 itemView.layoutParams.height = height
             } else {
                 itemView.layoutParams.height = MATCH_PARENT
-            }
-
-            // Do not use RapidDecoder on Android M. Crashing when zooming on that specific version.
-            val shouldUseRapidDecoder = Build.VERSION.SDK_INT != Build.VERSION_CODES.M && item.name.endsWith("png")
-            val mustUseRapidDecoder = requiresFallback[item.decodedName] == true
-
-            if (shouldUseRapidDecoder || mustUseRapidDecoder) {
-                image.setBitmapDecoderClass(RapidImageDecoder::class.java)
-                image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
-            } else {
-                image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
-                image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
             }
 
             errorIndicator.isVisible = false
@@ -210,14 +178,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .also { observable ->
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
                         .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
-                        .flatMap { event ->
-                            Observable.just(Unit)
-                                .mapAdapterPosition({ adapterPosition }) { event.error to positionResolver.resolve(it) }
-                        }
                         .autoDisposable(this)
-                        .subscribe { (error, position) ->
-                            handleImageLoadError(error, position)
-                        }
+                        .subscribe { wrappingError -> handleImageLoadError(wrappingError.error) }
 
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Ready }
                         .autoDisposable(this)
@@ -253,24 +215,15 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .subscribe(clickSubject)
         }
 
-        private fun handleImageLoadError(error: Exception, position: Int) {
-            // This happens on certain devices with certain images due to a buggy Skia library version.
-            // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
-            // use, show the error indicator.
+        private fun handleImageLoadError(error: Exception) {
             Timber.e(error)
 
-            when {
-                error is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
-                requiresFallback[data[position].decodedName] == true -> {
-                    errorIndicator.isVisible = true
-                    image.isVisible = false
-                }
-                else -> {
-                    requiresFallback.put(data[position].decodedName, true)
-
-                    bind(data[position])
-                }
+            if (error is OutOfMemoryError) {
+                lowMemorySubject.onNext(Unit)
             }
+
+            errorIndicator.isVisible = true
+            image.isVisible = false
         }
 
         internal inner class GlideFileTarget : OriginalSizeGlideTarget<File>() {

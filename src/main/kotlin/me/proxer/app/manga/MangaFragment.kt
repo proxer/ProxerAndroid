@@ -4,13 +4,7 @@ import android.app.ActivityManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.widget.Toolbar
@@ -41,18 +35,10 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.MediaControlView
-import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
-import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
-import me.proxer.app.ui.view.MediaControlView.Uploader
+import me.proxer.app.ui.view.MediaControlView.*
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.convertToDateTime
-import me.proxer.app.util.extension.enableFastScroll
-import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.safeLayoutManager
-import me.proxer.app.util.extension.snackbar
-import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -147,7 +133,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         isVertical = preferenceHelper.isVerticalReaderEnabled
 
-        innerAdapter = MangaAdapter(savedInstanceState, isVertical)
+        innerAdapter = MangaAdapter(isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)

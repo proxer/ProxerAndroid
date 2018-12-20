@@ -13,6 +13,7 @@ class RapidImageDecoder : ImageDecoder {
 
     override fun decode(context: Context, uri: Uri) = BitmapDecoder.from(context, uri)
         .config(Bitmap.Config.RGB_565)
+        .useBuiltInDecoder()
         .decode()
         ?: throw IllegalStateException("decoded bitmap is null")
 }

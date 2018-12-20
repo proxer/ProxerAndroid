@@ -27,6 +27,7 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
         return decoder?.reset()
             ?.region(sRect)
             ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
+            ?.useBuiltInDecoder()
             ?.decode()
             ?: throw IllegalStateException("decoded bitmap is null")
     }

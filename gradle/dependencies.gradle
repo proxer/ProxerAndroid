@@ -70,7 +70,7 @@ dependencies {
     implementation "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion"
     implementation "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion"
     implementation "com.github.rubengees:kotterknife:$kotterknifeVersion"
-    implementation "com.github.suckgamony.RapidDecoder:library:$rapidDecoderVersion"
+    implementation "com.github.rubengees:RapidDecoder:$rapidDecoderVersion"
     implementation "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion"
     implementation "org.jsoup:jsoup:$jsoupVersion"
 
