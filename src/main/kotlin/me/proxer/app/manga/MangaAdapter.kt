@@ -32,7 +32,11 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.ViewHolder
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.logErrors
+import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import me.proxer.library.entity.manga.Page
