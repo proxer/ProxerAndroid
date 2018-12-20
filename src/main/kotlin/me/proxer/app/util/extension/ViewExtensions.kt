@@ -119,6 +119,6 @@ fun RecyclerView.enableFastScroll() {
             thumbDrawableSelector, trackDrawable
         )
     } catch (error: Exception) {
-        Timber.e("Could not enable fast scroll", error)
+        Timber.e(error, "Could not enable fast scroll")
     }
 }
