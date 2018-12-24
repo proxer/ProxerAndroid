@@ -108,8 +108,13 @@
     </style>
 
     <style name="Widget.App.TextInputLayout" parent="Base.Widget.MaterialComponents.TextInputLayout">
+        <item name="materialThemeOverlay">@style/Widget.App.TextInputLayout.Theme</item>
         <item name="hintTextColor">?attr/colorSecondary</item>
         <item name="boxBackgroundMode">none</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout.Theme">
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
