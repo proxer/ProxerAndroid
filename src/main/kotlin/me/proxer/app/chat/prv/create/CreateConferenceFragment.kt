@@ -249,8 +249,8 @@ class CreateConferenceFragment : BaseFragment() {
             .map {
                 validators.validateLogin()
 
-                val topic = topicInput.text.toString()
-                val firstMessage = messageInput.text.toString()
+                val topic = topicInput.text.toString().trim()
+                val firstMessage = messageInput.text.toString().trim()
                 val participants = innerAdapter.participants
 
                 when {
@@ -367,7 +367,7 @@ class CreateConferenceFragment : BaseFragment() {
         super.onDestroyView()
     }
 
-    private fun validateAndAddUser(): Boolean = participantInput.text.toString().let {
+    private fun validateAndAddUser(): Boolean = participantInput.text.toString().trim().let {
         when {
             it.isBlank() -> {
                 participantInputContainer.isErrorEnabled = true
@@ -378,6 +378,12 @@ class CreateConferenceFragment : BaseFragment() {
             innerAdapter.contains(it) -> {
                 participantInputContainer.isErrorEnabled = true
                 participantInputContainer.error = requireContext().getString(R.string.error_duplicate_participant)
+
+                false
+            }
+            it.equals(storageHelper.user?.name, ignoreCase = true) -> {
+                participantInputContainer.isErrorEnabled = true
+                participantInputContainer.error = requireContext().getString(R.string.error_self_participant)
 
                 false
             }

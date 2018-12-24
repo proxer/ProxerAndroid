@@ -120,6 +120,7 @@
 
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_duplicate_participant">Diesen Teilnehmer hast du schon hinzugefügt</string>
+    <string name="error_self_participant">Du kannst dich nicht selbst hinzufügen</string>
     <string name="error_missing_message">Gib eine Nachricht ein</string>
     <string name="error_missing_participants">Füge mindestens einen Teilnehmer hinzu</string>
 
