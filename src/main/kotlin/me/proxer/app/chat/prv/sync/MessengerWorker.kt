@@ -108,8 +108,7 @@ class MessengerWorker(
                 )
                 .build()
 
-            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest)
-                .enqueue()
+            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
 
         private fun canSchedule() = preferenceHelper.areChatNotificationsEnabled ||
@@ -161,18 +160,21 @@ class MessengerWorker(
 
         val maxNewDate = newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date
 
-        return if (!isStopped && maxNewDate != null && maxNewDate > storageHelper.lastChatMessageDate) {
+        if (!isStopped && newConferencesAndMessages.isNotEmpty()) {
             bus.post(SynchronizationEvent())
+        }
 
+        if (!isStopped && maxNewDate != null && maxNewDate > storageHelper.lastChatMessageDate) {
             if (canShowNotification()) {
                 showNotification(applicationContext)
             }
 
             storageHelper.lastChatMessageDate = maxNewDate
+        }
 
-            SynchronizationResult.CHANGES
-        } else {
-            SynchronizationResult.NO_CHANGES
+        return when (newConferencesAndMessages.isNotEmpty()) {
+            true -> SynchronizationResult.CHANGES
+            false -> SynchronizationResult.NO_CHANGES
         }
     }
 
@@ -333,13 +335,12 @@ class MessengerWorker(
         }
     }
 
-    private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) =
-        conferenceToMarkAsRead.forEach {
-            api.messenger().markConferenceAsRead(it.id.toString())
-                .build()
-                .also { call -> currentCall = call }
-                .execute()
-        }
+    private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
+        api.messenger().markConferenceAsRead(it.id.toString())
+            .build()
+            .also { call -> currentCall = call }
+            .execute()
+    }
 
     private fun fetchConferences(): Collection<Conference> {
         val changedConferences = LinkedHashSet<Conference>()
@@ -367,9 +368,8 @@ class MessengerWorker(
     }
 
     private fun fetchNewMessages(conference: Conference): Pair<List<Message>, Boolean> {
-        val mostRecentMessage =
-            messengerDao.findMostRecentMessageForConference(conference.id.toLong())
-                ?.toNonLocalMessage()
+        val mostRecentMessage = messengerDao.findMostRecentMessageForConference(conference.id.toLong())
+            ?.toNonLocalMessage()
 
         return when (mostRecentMessage) {
             null -> fetchForEmptyConference(conference)
@@ -454,10 +454,9 @@ class MessengerWorker(
 
     private fun showNotification(context: Context) {
         val unreadMap = messengerDao.getUnreadConferences().associate {
-            it to messengerDao.getMostRecentMessagesForConference(
-                it.id,
-                it.unreadMessageAmount
-            ).asReversed()
+            it to messengerDao
+                .getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
+                .asReversed()
         }
 
         MessengerNotifications.showOrUpdate(context, unreadMap)
