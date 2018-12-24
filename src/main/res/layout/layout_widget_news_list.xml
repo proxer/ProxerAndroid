@@ -44,5 +44,6 @@
         android:layout_height="match_parent"
         android:divider="@color/divider"
         android:dividerHeight="1dp"
+        android:scrollbarThumbVertical="@color/fastscroll_thumb"
         tools:listitem="@layout/layout_widget_news_item" />
 </LinearLayout>

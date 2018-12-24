@@ -12,7 +12,7 @@
         <item name="colorSecondaryLight">@color/secondary_light</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
 
-        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="colorLink">?attr/colorSecondary</item>
 
@@ -98,6 +98,7 @@
 
     <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="popupTheme">@style/ThemeOverlay.App</item>
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">

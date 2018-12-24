@@ -63,5 +63,6 @@
         android:layout_height="match_parent"
         android:divider="@color/divider_night"
         android:dividerHeight="1dp"
+        android:scrollbarThumbVertical="@color/fastscroll_thumb_night"
         tools:listitem="@layout/layout_widget_schedule_dark_item" />
 </LinearLayout>
