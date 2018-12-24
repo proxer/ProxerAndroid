@@ -14,6 +14,7 @@ import me.proxer.app.util.bindPreference
 import me.proxer.library.enums.UcpSettingConstraint
 import me.proxer.library.util.ProxerUtils
 import net.xpece.android.support.preference.ListPreference
+import net.xpece.android.support.preference.PreferenceCategory
 import net.xpece.android.support.preference.SwitchPreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -31,6 +32,7 @@ class UcpSettingsFragment : XpPreferenceFragment() {
 
     private val viewModel by sharedViewModel<UcpSettingsViewModel>()
 
+    private val ads by bindPreference<PreferenceCategory>("ads")
     private val bannerAdsEnabled by bindPreference<SwitchPreference>("banner_ads_enabled")
     private val videoAdsInterval by bindPreference<ListPreference>("video_ads_interval")
     private val profile by bindPreference<ListPreference>("profile")
@@ -50,6 +52,9 @@ class UcpSettingsFragment : XpPreferenceFragment() {
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.profile_preferences)
+
+        // Hide these settings until they are actually implemented.
+        ads.isVisible = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

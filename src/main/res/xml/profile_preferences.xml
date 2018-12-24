@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/profile_preference_ads_category_title">
+    <PreferenceCategory
+        android:key="ads"
+        android:title="@string/profile_preference_ads_category_title">
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="banner_ads_enabled"
