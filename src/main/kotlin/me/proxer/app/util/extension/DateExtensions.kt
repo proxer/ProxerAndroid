@@ -10,7 +10,13 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.Date
 
+private val zeroDate = Date(0)
+
 fun Date.convertToRelativeReadableTime(context: Context): String {
+    if (this == zeroDate) {
+        return context.getString(R.string.time_unknown)
+    }
+
     val dateTime = convertToDateTime()
     val now = LocalDateTime.now()
 

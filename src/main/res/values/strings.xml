@@ -800,6 +800,7 @@
     <string name="ucp_settings_constraint_everyone">Alle</string>
     <string name="ucp_settings_constraint_private">Nur ich</string>
 
+    <string name="time_unknown">Zeit unbekannt</string>
     <string name="time_a_moment_ago">Eben gerade</string>
     <plurals name="time_days_ago">
         <item quantity="one">"Gestern"</item>
