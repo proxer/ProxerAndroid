@@ -24,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:scaleType="centerCrop"
-                app:ari_aspect="height"
                 app:ari_ratio="1.25"
                 tools:layout_height="200dp"
                 tools:src="@drawable/ic_japan" />
