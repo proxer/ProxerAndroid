@@ -1,5 +1,6 @@
 package me.proxer.app.anime.resolver
 
+import com.squareup.moshi.JsonClass
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
@@ -38,7 +39,7 @@ class DailymotionStreamResolver : StreamResolver() {
             }
             .map { html ->
                 val qualitiesJson = regex.find(html)?.value ?: throw StreamResolutionException()
-                val qualityMap = moshi.adapter(QualityMap::class.java)
+                val qualityMap = moshi.adapter(DailymotionQualityMap::class.java)
                     .fromJson("{${qualitiesJson.trimEnd(',')}}")
 
                 val mp4Links = qualityMap?.qualities
@@ -59,6 +60,6 @@ class DailymotionStreamResolver : StreamResolver() {
             }
     }
 
-    @Suppress("UnusedPrivateClass")
-    private data class QualityMap(val qualities: Map<String, Array<Map<String, String>>>?)
+    @JsonClass(generateAdapter = true)
+    internal data class DailymotionQualityMap(val qualities: Map<String, Array<Map<String, String>>>?)
 }
