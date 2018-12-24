@@ -92,6 +92,8 @@ android {
         debug {
             multiDexEnabled true
 
+            ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
+
             versionNameSuffix = "-debug-${getGitHash()}"
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
@@ -105,6 +107,8 @@ android {
                 optimizeCode true
                 proguardFile "config/proguard/proguard-rules.pro"
             }
+
+            ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
 
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"false\")"
@@ -122,6 +126,8 @@ android {
                 optimizeCode true
                 proguardFile "config/proguard/proguard-rules.pro"
             }
+
+            ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
 
             versionNameSuffix = "-logRelease-${getGitHash()}"
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
