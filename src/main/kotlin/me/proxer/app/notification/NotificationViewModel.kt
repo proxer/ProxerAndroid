@@ -69,6 +69,12 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         super.onCleared()
     }
 
+    override fun refresh() = reload()
+
+    override fun areItemsTheSame(old: ProxerNotification, new: ProxerNotification): Boolean {
+        return old == new
+    }
+
     fun addItemToDelete(item: ProxerNotification) {
         deletionQueue.add(item)
 
