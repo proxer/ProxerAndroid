@@ -154,13 +154,16 @@ android {
         exclude "META-INF/*.version"
         exclude "META-INF/rxkotlin.properties"
         exclude "META-INF/proguard/**"
+        exclude "META-INF/README.md"
         exclude "kotlin/**"
+        exclude "kotlinx/**"
         exclude "third_party/**"
         exclude "jsr305_annotations/**"
         exclude "error_prone/**"
         exclude "protobuf.meta"
         exclude "build-data.properties"
         exclude "androidsupportmultidexversion.txt"
+        exclude "play-services-*.properties"
     }
 
     applicationVariants.all { variant ->
