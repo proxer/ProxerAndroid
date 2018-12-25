@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
@@ -16,11 +19,13 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
+import linkClicks
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
-import me.proxer.app.anime.AnimeAdapter.ViewHolder
+import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
+import me.proxer.app.ui.view.BetterLinkTextView
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.convertToDateTime
@@ -28,6 +33,7 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 
 /**
  * @author Ruben Gees
@@ -35,10 +41,12 @@ import me.proxer.library.util.ProxerUrls
 class AnimeAdapter(
     savedInstanceState: Bundle?,
     private val storageHelper: StorageHelper
-) : BaseAdapter<AnimeStream, ViewHolder>() {
+) : BaseAdapter<AnimeStream, RecyclerView.ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_ITEM_STATE = "anime_stream_expanded_id"
+        private const val STREAM_VIEW_TYPE = 100
+        private const val MESSAGE_VIEW_TYPE = 101
     }
 
     var glide: GlideRequests? = null
@@ -46,6 +54,7 @@ class AnimeAdapter(
     val translatorGroupClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val loginClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
+    val linkClickSubject: PublishSubject<HttpUrl> = PublishSubject.create()
 
     private var expandedItemId: String?
 
@@ -60,14 +69,37 @@ class AnimeAdapter(
 
     override fun getItemId(position: Int) = data[position].id.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        STREAM_VIEW_TYPE -> StreamViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_stream, parent, false))
+
+        MESSAGE_VIEW_TYPE -> MessageViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_stream_message, parent, false))
+
+        else -> throw IllegalArgumentException("Unknown view type: $viewType")
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is StreamViewHolder -> holder.bind(data[position])
+            is MessageViewHolder -> holder.bind(data[position])
+            else -> throw IllegalArgumentException("Unknown view holder: ${holder::class.java.name}")
+        }
+    }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        glide?.clear(holder.image)
+    override fun getItemViewType(position: Int): Int {
+        val resolutionResult = data[position].resolutionResult
+
+        return when (resolutionResult != null && resolutionResult.intent.action != Intent.ACTION_VIEW) {
+            true -> MESSAGE_VIEW_TYPE
+            false -> STREAM_VIEW_TYPE
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if (holder is StreamViewHolder) {
+            glide?.clear(holder.image)
+        }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
@@ -84,7 +116,7 @@ class AnimeAdapter(
         super.swapDataAndNotifyWithDiffing(newData)
     }
 
-    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
+    inner class StreamViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
         internal val nameContainer: ViewGroup by bindView(R.id.nameContainer)
         internal val name: TextView by bindView(R.id.name)
@@ -222,6 +254,23 @@ class AnimeAdapter(
                 .icon(icon)
                 .sizeDp(26)
                 .iconColor(info.context)
+        }
+    }
+
+    inner class MessageViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
+
+        internal val message: BetterLinkTextView by bindView(R.id.message)
+
+        fun bind(item: AnimeStream) {
+            message.linkClicks()
+                .map { HttpUrl.parse(it).toOptional() }
+                .filterSome()
+                .autoDisposable(this)
+                .subscribe(linkClickSubject)
+
+            message.text = item.resolutionResult?.intent
+                ?.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA)
+                ?: throw IllegalStateException("")
         }
     }
 }

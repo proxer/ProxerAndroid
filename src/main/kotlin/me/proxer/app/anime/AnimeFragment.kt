@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
@@ -23,7 +21,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
@@ -40,13 +37,11 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.safeData
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -129,11 +124,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         innerAdapter.playClickSubject
             .autoDisposable(this.scope())
-            .subscribe { viewModel.resolve(it.hosterName, it.id) }
+            .subscribe { viewModel.resolve(it) }
 
         innerAdapter.loginClickSubject
             .autoDisposable(this.scope())
             .subscribe { LoginDialog.show(hostingActivity) }
+
+        innerAdapter.linkClickSubject
+            .autoDisposable(this.scope())
+            .subscribe { showPage(it) }
 
         Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
             .observeOn(AndroidSchedulers.mainThread())
@@ -196,13 +195,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                         )
                     }
                 } else {
-                    multilineSnackbar(root, it.intent.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA))
-                        ?.apply {
-                            (this.view as ViewGroup).recursiveChildren
-                                .filterIsInstance(TextView::class.java)
-                                .filterNot { it is Button }
-                                .forEach { it.movementMethod = BetterLinkMovementMethod.getInstance() }
-                        }
+                    throw IllegalArgumentException("Unknown intent action of resolved stream: ${it.intent.action}")
                 }
             }
         })

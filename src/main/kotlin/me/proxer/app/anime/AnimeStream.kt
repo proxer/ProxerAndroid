@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import me.proxer.app.anime.resolver.StreamResolutionResult
 import java.util.Date
 
 /**
@@ -18,5 +19,6 @@ data class AnimeStream(
     val isOfficial: Boolean,
     val isPublic: Boolean,
     val isSupported: Boolean,
-    val isInternalPlayerOnly: Boolean
+    val isInternalPlayerOnly: Boolean,
+    val resolutionResult: StreamResolutionResult?
 )

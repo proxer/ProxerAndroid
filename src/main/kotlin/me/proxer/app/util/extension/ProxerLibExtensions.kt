@@ -12,6 +12,7 @@ import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post
 import me.proxer.app.anime.AnimeStream
+import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.pub.message.ParsedChatMessage
@@ -385,9 +386,13 @@ inline val Page.decodedName: String
         ""
     }
 
-fun Stream.toAnimeStreamInfo(isSupported: Boolean, isInternalPlayerOnly: Boolean) = AnimeStream(
+fun Stream.toAnimeStream(
+    isSupported: Boolean,
+    isInternalPlayerOnly: Boolean,
+    resolutionResult: StreamResolutionResult? = null
+) = AnimeStream(
     id, hoster, hosterName, image, uploaderId, uploaderName, date, translatorGroupId, translatorGroupName,
-    isOfficial, isPublic, isSupported, isInternalPlayerOnly
+    isOfficial, isPublic, isSupported, isInternalPlayerOnly, resolutionResult
 )
 
 fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(

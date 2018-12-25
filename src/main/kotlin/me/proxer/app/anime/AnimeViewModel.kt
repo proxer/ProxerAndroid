@@ -23,10 +23,9 @@ import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toAnimeStreamInfo
+import me.proxer.app.util.extension.toAnimeStream
 import me.proxer.app.util.extension.toMediaLanguage
 import me.proxer.library.api.Endpoint
-import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -40,6 +39,10 @@ class AnimeViewModel(
     private val language: AnimeLanguage,
     episode: Int
 ) : BaseViewModel<AnimeStreamInfo>() {
+
+    private companion object {
+        private val streamComparator = compareBy<AnimeStream, Int?>(nullsLast()) { it.resolutionResult?.let { 0 } }
+    }
 
     override val dataSingle: Single<AnimeStreamInfo>
         get() = Single.fromCallable { validate() }
@@ -55,12 +58,7 @@ class AnimeViewModel(
             }
             .flatMap {
                 Single.just(it).zipWith(streamSingle(it)) { entry, streams ->
-                    AnimeStreamInfo(entry.name, entry.episodeAmount, streams.map { stream ->
-                        val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
-                        val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
-
-                        stream.toAnimeStreamInfo(resolver != null, internalPlayerOnly)
-                    })
+                    AnimeStreamInfo(entry.name, entry.episodeAmount, streams)
                 }
             }
 
@@ -108,10 +106,14 @@ class AnimeViewModel(
         super.load()
     }
 
-    fun resolve(name: String, id: String) {
+    fun resolve(stream: AnimeStream) {
         resolverDisposable?.dispose()
-        resolverDisposable = (StreamResolverFactory.resolverFor(name)?.resolve(id)
-            ?: throw StreamResolutionException())
+
+        val resolutionSingle = stream.resolutionResult?.let { Single.just(it) }
+            ?: StreamResolverFactory.resolverFor(stream.hosterName)?.resolve(stream.id)
+            ?: throw StreamResolutionException()
+
+        resolverDisposable = resolutionSingle
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { isLoading.value = true }
@@ -143,11 +145,27 @@ class AnimeViewModel(
         }.doOnSuccess { cachedEntryCore = it }
     }
 
-    private fun streamSingle(entry: EntryCore): Single<List<Stream>> = api.anime().streams(entryId, episode, language)
+    private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
         .includeProxerStreams(true)
         .buildPartialErrorSingle(entry)
         .map { it.filterNot { stream -> StreamResolverFactory.resolverFor(stream.hosterName)?.ignore == true } }
         .map { it.groupBy { stream -> stream.hoster }.map { (_, streams) -> streams.shuffled().first() } }
+        .toObservable()
+        .flatMapIterable { it }
+        .flatMapSingle { stream ->
+            val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
+            val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
+
+            if (resolver != null && resolver.resolveEarly) {
+                resolver.resolve(stream.id).map { resolutionResult ->
+                    stream.toAnimeStream(true, internalPlayerOnly, resolutionResult)
+                }
+            } else {
+                Single.just(stream.toAnimeStream(resolver != null, internalPlayerOnly))
+            }
+        }
+        .sorted(streamComparator)
+        .toList()
 
     @Suppress("ForbiddenVoid")
     private fun updateUserState(endpoint: Endpoint<Void>) {

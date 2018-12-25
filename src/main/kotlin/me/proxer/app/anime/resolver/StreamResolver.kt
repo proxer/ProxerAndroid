@@ -13,6 +13,8 @@ import org.koin.standalone.inject
 abstract class StreamResolver : KoinComponent {
 
     abstract val name: String
+
+    open val resolveEarly: Boolean get() = false
     open val internalPlayerOnly: Boolean get() = false
     open val ignore: Boolean get() = false
 
