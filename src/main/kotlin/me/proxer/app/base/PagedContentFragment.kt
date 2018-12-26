@@ -62,7 +62,7 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
         override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
             if (isAtTop() && positionStart == 0) {
                 recyclerView.doAfterAnimations {
-                    recyclerView.smoothScrollToPosition(0)
+                    if (view != null) recyclerView.smoothScrollToPosition(0)
                 }
             }
         }
