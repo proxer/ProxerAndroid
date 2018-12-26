@@ -1,11 +1,11 @@
 package me.proxer.app.anime.resolver
 
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.exception.AppRequiredException
+import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import org.koin.standalone.inject
 
@@ -29,9 +29,6 @@ class NetflixStreamResolver : StreamResolver() {
             }
         }
         .flatMap { api.anime().link(id).buildSingle() }
-        .map {
-            val uri = Uri.parse(it)
-
-            StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
+        .map { Utils.parseAndFixUrl(it) ?: throw StreamResolutionException() }
+        .map { StreamResolutionResult.App(it.androidUri()) }
 }

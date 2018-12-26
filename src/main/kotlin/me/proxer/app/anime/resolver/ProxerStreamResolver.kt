@@ -1,12 +1,12 @@
 package me.proxer.app.anime.resolver
 
-import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
+import okhttp3.HttpUrl
 import okhttp3.Request
 
 /**
@@ -24,23 +24,24 @@ class ProxerStreamResolver : StreamResolver() {
         return api.anime().link(id)
             .buildSingle()
             .flatMap { url ->
-                client.newCall(
-                    Request.Builder()
-                        .get()
-                        .url(Utils.getAndFixUrl(url))
-                        .header("User-Agent", USER_AGENT)
-                        .header("Connection", "close")
-                        .build()
-                )
+                client
+                    .newCall(
+                        Request.Builder()
+                            .get()
+                            .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                            .header("User-Agent", USER_AGENT)
+                            .header("Connection", "close")
+                            .build()
+                    )
                     .toBodySingle()
-                    .map {
-                        val regexResult = regex.find(it) ?: throw StreamResolutionException()
+            }
+            .map {
+                val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
-                        val result = Uri.parse(regexResult.groupValues[2])
-                        val type = regexResult.groupValues[1]
+                val url = HttpUrl.parse(regexResult.groupValues[2]) ?: throw StreamResolutionException()
+                val type = regexResult.groupValues[1]
 
-                        StreamResolutionResult(result, type)
-                    }
+                StreamResolutionResult.Video(url, type)
             }
     }
 }

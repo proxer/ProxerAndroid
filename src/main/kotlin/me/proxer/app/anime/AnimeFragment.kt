@@ -1,6 +1,5 @@
 package me.proxer.app.anime
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutEvent
@@ -33,11 +33,8 @@ import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.safeData
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
@@ -183,19 +180,12 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         viewModel.resolutionResult.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
-                if (it.intent.action == Intent.ACTION_VIEW) {
-                    if (it.intent.type == "text/html") {
-                        showPage(Utils.getAndFixUrl(it.intent.safeData.toString()))
-                    } else {
-                        requireContext().startActivity(
-                            it.intent
-                                .putExtra(StreamActivity.NAME_EXTRA, name)
-                                .putExtra(StreamActivity.EPISODE_EXTRA, episode)
-                                .addReferer()
-                        )
-                    }
-                } else {
-                    throw IllegalArgumentException("Unknown intent action of resolved stream: ${it.intent.action}")
+                when (result) {
+                    is StreamResolutionResult.Video -> result.play(requireContext(), name, episode)
+                    is StreamResolutionResult.Link -> result.show(this)
+                    is StreamResolutionResult.App -> result.navigate(requireContext())
+                    is StreamResolutionResult.Message -> throw IllegalArgumentException("ResolutionResult of type " +
+                        "Message should be shown inline")
                 }
             }
         })

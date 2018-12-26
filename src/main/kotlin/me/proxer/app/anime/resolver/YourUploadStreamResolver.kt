@@ -4,12 +4,11 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import me.proxer.app.util.extension.toSingle
+import okhttp3.HttpUrl
 import okhttp3.Request
-import java.io.IOException
 
 /**
  * @author Ruben Gees
@@ -26,43 +25,37 @@ class YourUploadStreamResolver : StreamResolver() {
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
         .flatMap { url ->
-            val parsedUrl = Utils.parseAndFixUrl(url) ?: throw StreamResolutionException()
-
-            client.newCall(
-                Request.Builder()
-                    .get()
-                    .url(parsedUrl)
-                    .header("User-Agent", GENERIC_USER_AGENT)
-                    .header("Connection", "close")
-                    .build()
-            )
+            client
+                .newCall(
+                    Request.Builder()
+                        .get()
+                        .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                        .header("User-Agent", GENERIC_USER_AGENT)
+                        .header("Connection", "close")
+                        .build()
+                )
                 .toBodySingle()
                 .map {
                     val regexResult = regex.find(it) ?: throw StreamResolutionException()
-                    val fileUrl = regexResult.groupValues[1]
 
-                    if (fileUrl.isBlank()) {
-                        throw StreamResolutionException()
-                    }
-
-                    fileUrl
+                    regexResult.groupValues[1]
+                        .let { rawUrl -> HttpUrl.parse(rawUrl) }
+                        ?: throw StreamResolutionException()
                 }
-                .flatMap {
-                    client.newCall(
-                        Request.Builder()
-                            .head()
-                            .url(Utils.parseAndFixUrl(it) ?: throw IllegalStateException("url is null"))
-                            .header("Referer", parsedUrl.toString())
-                            .header("User-Agent", GENERIC_USER_AGENT)
-                            .header("Connection", "close")
-                            .build()
-                    )
+                .flatMap { fileUrl ->
+                    client
+                        .newCall(
+                            Request.Builder()
+                                .head()
+                                .url(fileUrl)
+                                .header("Referer", url)
+                                .header("User-Agent", GENERIC_USER_AGENT)
+                                .header("Connection", "close")
+                                .build()
+                        )
                         .toSingle()
                 }
-                .map {
-                    val result = it.networkResponse()?.request()?.url() ?: throw IOException("response url is null")
-
-                    StreamResolutionResult(result.androidUri(), "video/mp4", parsedUrl.toString())
-                }
+                .map { it.networkResponse()?.request()?.url() ?: throw StreamResolutionException() }
+                .map { StreamResolutionResult.Video(it, "video/mp4", url) }
         }
 }

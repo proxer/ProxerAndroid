@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), CustomTabsAware {
 
     protected val bus by inject<RxBus>()
     protected val storageHelper by inject<StorageHelper>()
@@ -41,11 +41,11 @@ abstract class BaseFragment : Fragment() {
         super.onDestroyView()
     }
 
-    fun setLikelyUrl(url: HttpUrl): Boolean {
+    override fun setLikelyUrl(url: HttpUrl): Boolean {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
         customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
     }
 

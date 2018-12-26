@@ -57,7 +57,7 @@ class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
         super.onViewCreated(view, savedInstanceState)
 
         profileLink.linkClicks()
-            .map { Utils.getAndFixUrl(it).toOptional() }
+            .map { Utils.parseAndFixUrl(it).toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }

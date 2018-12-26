@@ -1,6 +1,5 @@
 package me.proxer.app.anime.resolver
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import io.reactivex.Single
@@ -41,8 +40,6 @@ class CrunchyrollStreamResolver : StreamResolver() {
                 throw StreamResolutionException()
             }
 
-            val uri = Uri.parse("crunchyroll://media/$mediaId")
-
-            StreamResolutionResult(Intent(Intent.ACTION_VIEW, uri).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            StreamResolutionResult.App(Uri.parse("crunchyroll://media/${Uri.encode(mediaId)}"))
         }
 }

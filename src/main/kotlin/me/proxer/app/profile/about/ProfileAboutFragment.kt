@@ -200,7 +200,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
         contentView.text = content.linkify(mentions = false)
 
         contentView.linkClicks()
-            .map { Utils.getAndFixUrl(it).toOptional() }
+            .map { Utils.parseAndFixUrl(it).toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
             .subscribe { showPage(it) }

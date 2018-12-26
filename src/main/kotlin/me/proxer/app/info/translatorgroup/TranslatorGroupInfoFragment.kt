@@ -70,7 +70,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
         super.onViewCreated(view, savedInstanceState)
 
         link.linkClicks()
-            .map { Utils.getAndFixUrl(it).toOptional() }
+            .map { Utils.parseAndFixUrl(it).toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }

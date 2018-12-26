@@ -1,6 +1,5 @@
 package me.proxer.app.anime
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,21 +75,21 @@ class AnimeAdapter(
         MESSAGE_VIEW_TYPE -> MessageViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_stream_message, parent, false))
 
-        else -> throw IllegalArgumentException("Unknown view type: $viewType")
+        else -> throw IllegalArgumentException("Unknown viewType: $viewType")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is StreamViewHolder -> holder.bind(data[position])
             is MessageViewHolder -> holder.bind(data[position])
-            else -> throw IllegalArgumentException("Unknown view holder: ${holder::class.java.name}")
+            else -> throw IllegalArgumentException("Unknown ViewHolder: ${holder::class.java.name}")
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val resolutionResult = data[position].resolutionResult
 
-        return when (resolutionResult != null && resolutionResult.intent.action != Intent.ACTION_VIEW) {
+        return when (resolutionResult is StreamResolutionResult.Message) {
             true -> MESSAGE_VIEW_TYPE
             false -> STREAM_VIEW_TYPE
         }
@@ -262,15 +261,15 @@ class AnimeAdapter(
         internal val message: BetterLinkTextView by bindView(R.id.message)
 
         fun bind(item: AnimeStream) {
+            val messageText = (item.resolutionResult as StreamResolutionResult.Message).message
+
             message.linkClicks()
                 .map { HttpUrl.parse(it).toOptional() }
                 .filterSome()
                 .autoDisposable(this)
                 .subscribe(linkClickSubject)
 
-            message.text = item.resolutionResult?.intent
-                ?.getCharSequenceExtra(StreamResolutionResult.MESSAGE_EXTRA)
-                ?: throw IllegalStateException("")
+            message.text = messageText
         }
     }
 }

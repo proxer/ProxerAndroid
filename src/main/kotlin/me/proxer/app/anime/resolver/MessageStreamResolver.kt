@@ -14,5 +14,5 @@ class MessageStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
         .buildSingle()
-        .map { StreamResolutionResult(it.trim().parseAsHtml().trim()) }
+        .map { StreamResolutionResult.Message(it.trim().parseAsHtml().trim()) }
 }

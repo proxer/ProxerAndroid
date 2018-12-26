@@ -22,7 +22,7 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseDialog : DialogFragment() {
+abstract class BaseDialog : DialogFragment(), CustomTabsAware {
 
     val dialogLifecycleOwner: LifecycleOwner = object : LifecycleOwner {
 
@@ -100,15 +100,15 @@ abstract class BaseDialog : DialogFragment() {
         super.onDestroyView()
     }
 
-    open fun onDialogCreated(savedInstanceState: Bundle?) = Unit
-
-    fun setLikelyUrl(url: HttpUrl): Boolean {
+    override fun setLikelyUrl(url: HttpUrl): Boolean {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
         customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
     }
+
+    open fun onDialogCreated(savedInstanceState: Bundle?) = Unit
 
     protected fun requireArguments() = arguments ?: throw IllegalStateException("arguments are null")
     protected fun requireTargetFragment() = targetFragment ?: throw IllegalStateException("targetFragment is null")

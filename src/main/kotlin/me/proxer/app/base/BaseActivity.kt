@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
 
     private companion object {
         private const val STATE = "activity_state"
@@ -80,11 +80,11 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun setLikelyUrl(url: HttpUrl): Boolean {
+    override fun setLikelyUrl(url: HttpUrl): Boolean {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
         customTabsHelper.openHttpPage(this, url, forceBrowser)
     }
 }

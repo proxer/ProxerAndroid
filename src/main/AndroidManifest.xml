@@ -227,7 +227,9 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
+
                 <data android:mimeType="video/*" />
+                <data android:mimeType="application/x-mpegURL" />
             </intent-filter>
         </activity>
 

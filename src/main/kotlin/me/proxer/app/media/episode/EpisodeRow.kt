@@ -33,7 +33,7 @@ data class EpisodeRow(
 
         languageHosterList = episodes.map {
             when (it) {
-                is AnimeEpisode -> it.language to it.hosterImages
+                is AnimeEpisode -> it.language to it.hosterImages.distinct()
                 else -> it.language to null
             }
         }

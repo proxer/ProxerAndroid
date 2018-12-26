@@ -76,7 +76,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                 .subscribe(participantClickSubject)
 
             status.linkClicks()
-                .map { Utils.getAndFixUrl(it).toOptional() }
+                .map { Utils.parseAndFixUrl(it).toOptional() }
                 .filterSome()
                 .autoDisposable(this)
                 .subscribe(statusLinkClickSubject)

@@ -117,16 +117,16 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
     private val uri
         get() = weakContext.get()?.intent?.data ?: throw IllegalStateException("uri is null")
 
-    private val referer: String?
-        get() = weakContext.get()?.intent?.getStringExtra(StreamResolutionResult.REFERER_EXTRA)
-
     private val name: String?
-        get() = weakContext.get()?.intent?.getStringExtra(StreamActivity.NAME_EXTRA)
+        get() = weakContext.get()?.intent?.getStringExtra(StreamResolutionResult.Video.NAME_EXTRA)
 
     private val episode: Int?
-        get() = weakContext.get()?.intent?.getIntExtra(StreamActivity.EPISODE_EXTRA, -1)?.let {
+        get() = weakContext.get()?.intent?.getIntExtra(StreamResolutionResult.Video.EPISODE_EXTRA, -1)?.let {
             if (it <= 0) null else it
         }
+
+    private val referer: String?
+        get() = weakContext.get()?.intent?.getStringExtra(StreamResolutionResult.Video.REFERER_EXTRA)
 
     private var lastPosition: Long
         get() = weakContext.get()?.intent?.getLongExtra(LAST_POSITION_EXTRA, -1) ?: -1
@@ -244,7 +244,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
 
             C.TYPE_OTHER -> ExtractorMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
 
-            else -> throw IllegalArgumentException("Unknown streamType $streamType")
+            else -> throw IllegalArgumentException("Unknown streamType: $streamType")
         }
     }
 

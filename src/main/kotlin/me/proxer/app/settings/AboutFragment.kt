@@ -21,6 +21,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
+import me.proxer.app.base.CustomTabsAware
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.message.MessengerActivity
@@ -29,6 +30,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.resolveColor
@@ -42,7 +44,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class AboutFragment : MaterialAboutFragment() {
+class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
     companion object {
         private val libraries = arrayOf(
@@ -80,6 +82,14 @@ class AboutFragment : MaterialAboutFragment() {
         super.onCreate(savedInstanceState)
 
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+    }
+
+    override fun setLikelyUrl(url: HttpUrl): Boolean {
+        return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
+    }
+
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
+        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
     }
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()
@@ -221,8 +231,4 @@ class AboutFragment : MaterialAboutFragment() {
             }
             .build()
     )
-
-    private fun showPage(url: HttpUrl, forceBrowser: Boolean = false) {
-        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
-    }
 }

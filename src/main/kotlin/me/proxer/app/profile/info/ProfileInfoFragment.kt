@@ -67,7 +67,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         super.onViewCreated(view, savedInstanceState)
 
         statusText.linkClicks()
-            .map { Utils.getAndFixUrl(it).toOptional() }
+            .map { Utils.parseAndFixUrl(it).toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }
