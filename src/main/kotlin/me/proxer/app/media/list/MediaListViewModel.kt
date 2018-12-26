@@ -1,7 +1,6 @@
 package me.proxer.app.media.list
 
 import androidx.lifecycle.MutableLiveData
-import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -38,8 +37,8 @@ import kotlin.properties.Delegates
 class MediaListViewModel(
     sortCriteria: MediaSearchSortCriteria,
     type: MediaType,
-    var searchQuery: Optional<String>,
-    var language: Optional<Language>,
+    var searchQuery: String?,
+    var language: Language?,
     var genres: List<LocalTag>,
     var excludedGenres: List<LocalTag>,
     var fskConstraints: EnumSet<FskConstraint>,
@@ -60,8 +59,8 @@ class MediaListViewModel(
     override val endpoint: PagingLimitEndpoint<List<MediaListEntry>>
         get() = api.list().mediaSearch()
             .sort(sortCriteria)
-            .name(searchQuery.toNullable())
-            .language(language.toNullable())
+            .name(searchQuery)
+            .language(language)
             .genreTags(genres.asSequence().map { it.id }.toSet())
             .excludedGenreTags(excludedGenres.asSequence().map { it.id }.toSet())
             .fskConstraints(fskConstraints)

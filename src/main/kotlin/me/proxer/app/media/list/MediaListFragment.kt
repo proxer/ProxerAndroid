@@ -18,7 +18,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import androidx.transition.TransitionManager
-import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
 import com.jakewharton.rxbinding3.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -80,7 +79,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by viewModel<MediaListViewModel> {
         parametersOf(
-            sortCriteria, type, searchQuery.toOptional(), language.toOptional(),
+            sortCriteria, type, searchQuery, language,
             genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter
         )
     }
@@ -120,7 +119,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         set(value) {
             requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
 
-            viewModel.searchQuery = value.toOptional()
+            viewModel.searchQuery = value
         }
 
     internal var language: Language?
@@ -128,7 +127,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         set(value) {
             requireArguments().putSerializable(LANGUAGE_ARGUMENT, language)
 
-            viewModel.language = value.toOptional()
+            viewModel.language = value
         }
 
     internal var genres: List<LocalTag>
@@ -275,8 +274,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
             searchItem.actionViewEvents()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                .subscribe {
-                    if (it.menuItem.isActionViewExpanded) {
+                .subscribe { event ->
+                    if (event.menuItem.isActionViewExpanded) {
                         searchQuery = null
 
                         viewModel.reload()
@@ -288,10 +287,10 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             searchView.queryTextChangeEvents()
                 .skipInitialValue()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                .subscribe {
-                    searchQuery = it.queryText.toString().trim()
+                .subscribe { event ->
+                    searchQuery = event.queryText.toString().trim()
 
-                    if (it.isSubmitted) {
+                    if (event.isSubmitted) {
                         searchView.clearFocus()
 
                         viewModel.reload()
