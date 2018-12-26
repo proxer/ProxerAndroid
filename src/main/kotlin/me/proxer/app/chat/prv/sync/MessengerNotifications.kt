@@ -86,7 +86,7 @@ object MessengerNotifications : KoinComponent {
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)
 
     private fun buildChatSummaryNotification(context: Context, conferenceMap: LocalConferenceMap): Notification? {
-        val filteredConferenceMap = conferenceMap.filter { it.value.isNotEmpty() }
+        val filteredConferenceMap = conferenceMap.filter { (_, messages) -> messages.isNotEmpty() }
 
         if (filteredConferenceMap.isEmpty()) {
             return null
@@ -99,9 +99,9 @@ object MessengerNotifications : KoinComponent {
             R.plurals.notification_chat_conference_amount, conferenceAmount
         )
 
-        val title = "$messageAmountText $conferenceAmountText"
-        val content = SpannableString(filteredConferenceMap.keys.joinToString(", ", transform = { it.topic }))
-        val style = buildSummaryStyle(content, title, filteredConferenceMap)
+        val title = context.getString(R.string.app_name)
+        val content = "$messageAmountText $conferenceAmountText"
+        val style = buildSummaryStyle(title, content, filteredConferenceMap)
 
         val shouldAlert = conferenceMap.keys
             .map { it.date }
@@ -131,18 +131,18 @@ object MessengerNotifications : KoinComponent {
     }
 
     private fun buildSummaryStyle(
-        content: SpannableString,
         title: String,
+        content: String,
         filteredConferenceMap: LocalConferenceMap
     ) = NotificationCompat.InboxStyle()
-        .setBigContentTitle(content)
-        .setSummaryText(title)
+        .setBigContentTitle(title)
+        .setSummaryText(content)
         .also {
             filteredConferenceMap.forEach { (conference, messages) ->
-                messages.forEach { message ->
+                messages.firstOrNull()?.also { message ->
                     val sender = when {
                         conference.isGroup -> "${conference.topic}: ${message.username} "
-                        else -> "${conference.topic}: "
+                        else -> "${conference.topic} "
                     }
 
                     it.addLine(SpannableString(sender + message.message).apply {
@@ -177,7 +177,7 @@ object MessengerNotifications : KoinComponent {
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_proxer)
-            .setContentTitle(conference.topic)
+            .setContentTitle(if (conference.isGroup) conference.topic else "")
             .setContentText(content)
             .setLargeIcon(icon)
             .setStyle(style)
@@ -247,7 +247,7 @@ object MessengerNotifications : KoinComponent {
 
         return NotificationCompat.MessagingStyle(person)
             .setGroupConversation(conference.isGroup)
-            .setConversationTitle(conference.topic)
+            .setConversationTitle(if (conference.isGroup) conference.topic else "")
             .also {
                 messages.forEach { message ->
                     val messagePerson = Person.Builder()
