@@ -12,5 +12,5 @@
     <string name="dialog_crash_neutral">Kopieren</string>
     <string name="dialog_crash_negative">Schließen</string>
 
-    <string name="clipboard_crash_title">ProxerMe Fehlerbericht</string>
+    <string name="clipboard_crash_title">Proxer.Me Fehlerbericht</string>
 </resources>

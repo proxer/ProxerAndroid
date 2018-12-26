@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name">ProxerMe</string>
+    <string name="app_name">Proxer.Me</string>
 
     <string name="section_anime">Anime</string>
     <string name="section_schedule">Anime-Wochenplan</string>
@@ -452,7 +452,7 @@
         Dieser Hoster ist erst nach einer Anmeldung verfügbar
     </string>
     <string name="fragment_anime_stream_only_internal_player_warning">
-        Dieser Hoster funktioniert nur mit dem ProxerMe Player
+        Dieser Hoster funktioniert nur mit dem integrierten Proxer.Me Player
     </string>
     <string name="fragment_anime_stream_official_info">
         Dieser Hoster ist ein offizielles Angebot eines Publishers und unter Umständen kostenpflichtig
