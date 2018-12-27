@@ -38,6 +38,12 @@ object IntroductionWrapper {
                             .paddingDp(padding / 2)
                             .colorRes(R.color.on_primary)
                     )
+                    2 -> image.setImageDrawable(
+                        IconicsDrawable(image.context, CommunityMaterial.Icon2.cmd_theme_light_dark)
+                            .sizeDp(256)
+                            .paddingDp(padding / 2)
+                            .colorRes(R.color.on_primary)
+                    )
                 }
             }
         })
@@ -49,6 +55,9 @@ object IntroductionWrapper {
             .withDescription(R.string.introduction_welcome_description),
         Slide().withTitle(R.string.introduction_notifications_title)
             .withColorResource(R.color.primary)
-            .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
+            .withOption(Option(context.getString(R.string.introduction_notifications_description), true)),
+        Slide().withTitle(context.getString(R.string.introduction_theme_title))
+            .withColorResource(R.color.primary)
+            .withOption(Option(context.getString(R.string.introduction_theme_description), false))
     )
 }

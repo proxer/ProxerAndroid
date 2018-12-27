@@ -3,6 +3,7 @@ package me.proxer.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
@@ -122,7 +123,13 @@ class MainActivity : DrawerActivity() {
 
                             NotificationWorker.enqueueIfPossible()
                         }
-                        2 -> preferenceHelper.isVerticalReaderEnabled = option.isActivated
+                        2 -> if (option.isActivated) {
+                            preferenceHelper.nightMode = AppCompatDelegate.MODE_NIGHT_YES
+
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+                            recreate()
+                        }
                     }
                 }
             }

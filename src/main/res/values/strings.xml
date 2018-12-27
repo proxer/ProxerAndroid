@@ -689,6 +689,11 @@
     <string name="introduction_notifications_description">
         Erhalte Benachrichtigungen zu News und deinem Account
     </string>
+
+    <string name="introduction_theme_title">Thema</string>
+    <string name="introduction_theme_description">
+        Verwende das dunkle Thema. Das kannst du jederzeit in den Einstellungen ändern
+    </string>
     <string name="introduction_skip">Überspringen</string>
 
     <string name="action_search">Suchen</string>
