@@ -54,6 +54,7 @@ class YourUploadStreamResolver : StreamResolver() {
                                 .build()
                         )
                         .toSingle()
+                        .retry(3)
                 }
                 .map { it.networkResponse()?.request()?.url() ?: throw StreamResolutionException() }
                 .map { StreamResolutionResult.Video(it, "video/mp4", url) }
