@@ -72,7 +72,6 @@ import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -90,6 +89,9 @@ private val applicationModules = module(createOnStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
+    single { StorageHelper(androidContext(), get()) }
+    single { PreferenceHelper(get()) }
+
     single { RxBus() }
 
     single {
@@ -103,9 +105,18 @@ private val applicationModules = module(createOnStart = true) {
     }
 
     single {
-        val logging = when {
+        val preferenceHelper = get<PreferenceHelper>()
+
+        val loggingInterceptor = when {
             BuildConfig.LOG -> HttpLoggingInterceptor { message -> Timber.i(message) }.apply {
-                level = if (BuildConfig.DEBUG) Level.HEADERS else Level.BASIC
+                level = preferenceHelper.httpLogLevel
+
+                redactHeader("proxer-api-key")
+                redactHeader("set-cookie")
+
+                if (preferenceHelper.shouldRedactToken) {
+                    redactHeader("proxer-api-token")
+                }
             }
             else -> null
         }
@@ -124,7 +135,15 @@ private val applicationModules = module(createOnStart = true) {
                     addInterceptor(ConnectionCloseInterceptor())
                 }
             }
-            .apply { if (logging != null) addInterceptor(logging) }
+            .apply {
+                if (loggingInterceptor != null) {
+                    if (preferenceHelper.shouldLogHttpVerbose) {
+                        addNetworkInterceptor(loggingInterceptor)
+                    } else {
+                        addInterceptor(loggingInterceptor)
+                    }
+                }
+            }
             .build()
 
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
@@ -139,20 +158,10 @@ private val applicationModules = module(createOnStart = true) {
     single { get<ProxerApi>().moshi() }
     single { get<ProxerApi>().client() }
 
-    single { StorageHelper(androidContext(), get()) }
-    single { PreferenceHelper(get()) }
     single { Validators(get(), get()) }
 
-    single {
-        Room.databaseBuilder(
-            androidContext(),
-            MessengerDatabase::class.java,
-            CHAT_DATABASE_NAME
-        ).build()
-    }
-    single {
-        Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build()
-    }
+    single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
+    single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }
     single { get<MessengerDatabase>().dao() }
     single { get<TagDatabase>().dao() }
 
@@ -183,17 +192,8 @@ private val viewModelModule = module {
 
     viewModel { parameterList ->
         MediaListViewModel(
-            parameterList[0],
-            parameterList[1],
-            parameterList[2],
-            parameterList[3],
-            parameterList[4],
-            parameterList[5],
-            parameterList[6],
-            parameterList[7],
-            parameterList[8],
-            parameterList[9],
-            parameterList[10]
+            parameterList[0], parameterList[1], parameterList[2], parameterList[3], parameterList[4], parameterList[5],
+            parameterList[6], parameterList[7], parameterList[8], parameterList[9], parameterList[10]
         )
     }
 
@@ -203,41 +203,16 @@ private val viewModelModule = module {
     viewModel { UcpOverviewViewModel() }
     viewModel { UcpTopTenViewModel() }
     viewModel { UcpSettingsViewModel() }
-    viewModel { (userId: Optional<String>, username: Optional<String>) ->
-        ProfileAboutViewModel(
-            userId,
-            username
-        )
-    }
-    viewModel { (userId: Optional<String>, username: Optional<String>) ->
-        ProfileInfoViewModel(
-            userId,
-            username
-        )
-    }
-    viewModel { (userId: Optional<String>, username: Optional<String>) ->
-        TopTenViewModel(
-            userId,
-            username
-        )
-    }
-    viewModel { (userId: Optional<String>, username: Optional<String>) ->
-        HistoryViewModel(
-            userId,
-            username
-        )
-    }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileInfoViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> HistoryViewModel(userId, username) }
     viewModel { (category: Category, filter: Optional<UserMediaListFilterType>) ->
         UcpMediaListViewModel(category, filter)
     }
 
     viewModel { parameterList ->
-        ProfileMediaListViewModel(
-            parameterList[0],
-            parameterList[1],
-            parameterList[2],
-            parameterList[3]
-        )
+        ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])
     }
 
     viewModel { (userId: Optional<String>, username: Optional<String>, category: Optional<Category>) ->
@@ -248,12 +223,7 @@ private val viewModelModule = module {
 
     viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
     viewModel { (entryId: String) -> EpisodeViewModel(entryId) }
-    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) ->
-        CommentViewModel(
-            entryId,
-            sortCriteria
-        )
-    }
+    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) -> CommentViewModel(entryId, sortCriteria) }
     viewModel { (entryId: String) -> RelationViewModel(entryId) }
     viewModel { (entryId: String) -> RecommendationViewModel(entryId) }
     viewModel { (entryId: String) -> DiscussionViewModel(entryId) }
@@ -263,20 +233,8 @@ private val viewModelModule = module {
     viewModel { (translatorGroupId: String) -> TranslatorGroupInfoViewModel(translatorGroupId) }
     viewModel { (translatorGroupId: String) -> TranslatorGroupProjectViewModel(translatorGroupId) }
 
-    viewModel { (entryId: String, language: Language, episode: Int) ->
-        MangaViewModel(
-            entryId,
-            language,
-            episode
-        )
-    }
-    viewModel { (entryId: String, language: AnimeLanguage, episode: Int) ->
-        AnimeViewModel(
-            entryId,
-            language,
-            episode
-        )
-    }
+    viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
+    viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
 
     viewModel { ServerStatusViewModel() }
 }

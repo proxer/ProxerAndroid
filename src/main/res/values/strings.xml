@@ -625,6 +625,22 @@
     <string name="preference_notifications_summary_on">Benachrichtigungen sind aktiviert</string>
     <string name="preference_notifications_interval_title">Aktualisierungshäufigkeit</string>
 
+    <string name="preference_category_developer_option">Entwickleroptionen</string>
+    <string name="preference_developer_options_http_log_level_title">HTTP Log Level</string>
+    <string name="preference_developer_options_http_log_verbose_title">HTTP ausführlich loggen</string>
+    <string name="preference_developer_options_http_log_verbose_summary_off">
+        HTTP Kommunikation wird nicht ausführlich geloggt
+    </string>
+    <string name="preference_developer_options_http_log_verbose_summary_on">
+        HTTP Kommunikation wird ausführlich geloggt
+    </string>
+    <string name="preference_developer_options_http_redact_token_title">Login Token zensieren</string>
+    <string name="preference_developer_options_http_redact_token_summary_off">
+        Das Login Token wird nicht zensiert
+    </string>
+    <string name="preference_developer_options_http_redact_token_summary_on">Das Login Token wird zensiert
+    </string>
+
     <string name="profile_preference_ads_category_title">Werbung</string>
     <string name="profile_preference_banner_ads_title">Bannerwerbung</string>
     <string name="profile_preference_banner_ads_summary_off">
@@ -804,6 +820,10 @@
     <string name="ucp_settings_constraint_logged_in_users">Angemeldete User</string>
     <string name="ucp_settings_constraint_everyone">Alle</string>
     <string name="ucp_settings_constraint_private">Nur ich</string>
+
+    <string name="http_log_level_basic">Basic</string>
+    <string name="http_log_level_headers">Headers</string>
+    <string name="http_log_level_body">Body</string>
 
     <string name="time_unknown">Zeit unbekannt</string>
     <string name="time_a_moment_ago">Eben gerade</string>

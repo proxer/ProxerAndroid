@@ -27,6 +27,9 @@ import me.proxer.app.util.bindPreference
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.PreferenceHelper.Companion.AGE_CONFIRMATION
 import me.proxer.app.util.data.PreferenceHelper.Companion.EXTERNAL_CACHE
+import me.proxer.app.util.data.PreferenceHelper.Companion.HTTP_LOG_LEVEL
+import me.proxer.app.util.data.PreferenceHelper.Companion.HTTP_REDACT_TOKEN
+import me.proxer.app.util.data.PreferenceHelper.Companion.HTTP_VERBOSE
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_ACCOUNT
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_INTERVAL
@@ -37,6 +40,7 @@ import me.proxer.app.util.extension.clearTop
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.Preference
+import net.xpece.android.support.preference.PreferenceCategory
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.koin.android.ext.android.inject
@@ -61,6 +65,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     private val ageConfirmation by bindPreference<TwoStatePreference>(AGE_CONFIRMATION)
     private val externalCache by bindPreference<TwoStatePreference>(EXTERNAL_CACHE)
     private val notificationsInterval by bindPreference<ListPreference>(NOTIFICATIONS_INTERVAL)
+    private val developerOptions by bindPreference<PreferenceCategory>("developer_options")
 
     override fun onCreatePreferences2(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences)
@@ -70,6 +75,10 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED
         ) {
             externalCache.isVisible = false
+        }
+
+        if (!BuildConfig.DEBUG && !BuildConfig.LOG) {
+            developerOptions.isVisible = false
         }
     }
 
@@ -128,17 +137,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 ageConfirmation.isChecked = true
             }
 
-            EXTERNAL_CACHE -> view?.also { view ->
-                snackbar(view, R.string.fragment_settings_restart_message,
-                    actionMessage = R.string.fragment_settings_restart_action,
-                    actionCallback = View.OnClickListener {
-                        val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
-
-                        startActivity(intent)
-                        System.exit(0)
-                    })
-            }
-
             THEME -> {
                 AppCompatDelegate.setDefaultNightMode(preferenceHelper.nightMode)
 
@@ -157,6 +155,8 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 NotificationWorker.enqueueIfPossible()
                 MessengerWorker.enqueueSynchronizationIfPossible()
             }
+
+            EXTERNAL_CACHE, HTTP_LOG_LEVEL, HTTP_VERBOSE, HTTP_REDACT_TOKEN -> showRestartMessage()
         }
     }
 
@@ -167,5 +167,18 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     private fun updateIntervalNotificationPreference() {
         notificationsInterval.isEnabled = preferenceHelper.areNewsNotificationsEnabled ||
             preferenceHelper.areAccountNotificationsEnabled
+    }
+
+    private fun showRestartMessage() {
+        view?.also { view ->
+            snackbar(view, R.string.fragment_settings_restart_message,
+                actionMessage = R.string.fragment_settings_restart_action,
+                actionCallback = View.OnClickListener {
+                    val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
+
+                    startActivity(intent)
+                    System.exit(0)
+                })
+        }
     }
 }

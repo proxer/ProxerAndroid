@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * @author Ruben Gees
@@ -23,6 +24,9 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
         const val NOTIFICATIONS_INTERVAL = "notifications_interval"
         const val MANGA_VERTICAL_READER = "manga_vertical_reader"
         const val EXTERNAL_CACHE = "external_cache"
+        const val HTTP_LOG_LEVEL = "http_log_level"
+        const val HTTP_VERBOSE = "http_log_verbose"
+        const val HTTP_REDACT_TOKEN = "http_log_redact_token"
     }
 
     var isAgeRestrictedMediaAllowed
@@ -90,4 +94,18 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
 
             sharedPreferences.edit { putString(THEME, stringValue) }
         }
+
+    val httpLogLevel
+        get() = when (sharedPreferences.getString(HTTP_LOG_LEVEL, "0")) {
+            "0" -> HttpLoggingInterceptor.Level.BASIC
+            "1" -> HttpLoggingInterceptor.Level.HEADERS
+            "2" -> HttpLoggingInterceptor.Level.BODY
+            else -> throw IllegalArgumentException("Unknown http log level saved in shared preferences")
+        }
+
+    val shouldLogHttpVerbose
+        get() = sharedPreferences.getBoolean(HTTP_VERBOSE, false)
+
+    val shouldRedactToken
+        get() = sharedPreferences.getBoolean(HTTP_REDACT_TOKEN, false)
 }

@@ -43,6 +43,18 @@
         <item>480</item>
     </string-array>
 
+    <string-array name="http_log_level_titles">
+        <item>@string/http_log_level_basic</item>
+        <item>@string/http_log_level_headers</item>
+        <item>@string/http_log_level_body</item>
+    </string-array>
+
+    <string-array name="http_log_level_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string-array name="ucp_settings_constraint_titles">
         <item>@string/ucp_settings_constraint_default</item>
         <item>@string/ucp_settings_constraint_friend</item>
