@@ -48,10 +48,12 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
     companion object {
         private val libraries = arrayOf(
-            "android_job", "android_textview_linkbuilder", "customtabshelper",
-            "exomedia", "exoplayer", "flexboxlayout", "glide", "hawk", "kotterknife", "leakcanary",
-            "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp", "retrofit",
-            "rxandroid", "rxbinding", "rxlifecylce", "rxjava", "subsamplingscaleimageview", "tablayouthelper"
+            "aspectratioimageview", "autodispose", "betterlinkmovementmethod", "customtabshelper", "exomedia",
+            "flexboxlayout", "glide", "hawk", "jsoup", "koptional", "kotterknife", "leakcanary", "materialaboutlibrary",
+            "materialpreference", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp",
+            "rapiddecoder", "recyclerviewsnap", "retrofit", "rxandroid", "rxbinding", "rxkotlin", "rxjava",
+            "subsamplingpdfdecoder", "subsamplingscaleimageview", "tablayouthelper", "timber", "threeten",
+            "threetenandroidbackport"
         )
 
         private val excludedLibraries = arrayOf("fastadapter", "materialize")
