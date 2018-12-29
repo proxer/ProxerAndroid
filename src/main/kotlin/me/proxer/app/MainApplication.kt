@@ -169,7 +169,6 @@ class MainApplication : Application() {
 
             val vmPolicy = StrictModeCompat.VmPolicy.Builder()
                 .detectAll()
-                .penaltyDeath()
                 .penaltyLog()
                 .build()
 
