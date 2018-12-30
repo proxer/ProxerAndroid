@@ -283,6 +283,7 @@ class CreateConferenceFragment : BaseFragment() {
                 }
             }
             .retry()
+            .filter { viewModel.isLoading.value != true }
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribeAndLogErrors { (topic, firstMessage, participants) ->
