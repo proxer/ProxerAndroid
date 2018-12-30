@@ -16,15 +16,11 @@ import javax.net.ssl.X509TrustManager
 class ModernTlsSocketFactory(trustManager: X509TrustManager) : SSLSocketFactory() {
 
     private val delegate = try {
-        SSLContext.getInstance(TlsVersion.TLS_1_3.javaName())
+        SSLContext.getInstance("TLS")
     } catch (error: NoSuchAlgorithmException) {
-        try {
-            SSLContext.getInstance(TlsVersion.TLS_1_2.javaName())
-        } catch (error: NoSuchAlgorithmException) {
-            Timber.e(error, "Error while enabling TLS 1.2")
+        Timber.e(error, "Error while trying to load TLS")
 
-            throw error
-        }
+        throw error
     }.let {
         it.init(null, arrayOf(trustManager), null)
 
