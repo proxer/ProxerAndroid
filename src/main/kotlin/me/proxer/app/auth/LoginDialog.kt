@@ -118,8 +118,6 @@ class LoginDialog : BaseDialog() {
             it?.let {
                 storageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
 
-                bus.post(LoginEvent())
-
                 dismiss()
             }
         })

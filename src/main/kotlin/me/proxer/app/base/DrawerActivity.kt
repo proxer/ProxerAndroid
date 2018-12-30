@@ -6,15 +6,11 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
-import me.proxer.app.auth.LoginEvent
 import me.proxer.app.auth.LogoutDialog
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ucp.UcpActivity
@@ -58,16 +54,9 @@ abstract class DrawerActivity : BaseActivity() {
                 .subscribe { item -> handleAccountItemClick(item) }
         }
 
-        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
+        storageHelper.isLoggedInObservable
             .autoDisposable(this.scope())
             .subscribe { drawer.refreshHeader(this) }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        drawer.refreshHeader(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

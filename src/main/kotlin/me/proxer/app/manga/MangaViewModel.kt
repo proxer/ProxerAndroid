@@ -1,18 +1,14 @@
 package me.proxer.app.manga
 
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
-import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.Utils
@@ -39,16 +35,14 @@ class MangaViewModel(
     episode: Int
 ) : BaseViewModel<MangaChapterInfo>() {
 
+    override val isLoginRequired = true
+
     override val dataSingle: Single<MangaChapterInfo>
         get() = Single.fromCallable { validate() }
             .flatMap<EntryCore> { entrySingle() }
             .doOnSuccess {
-                if (it.isAgeRestricted) {
-                    if (!storageHelper.isLoggedIn) {
-                        throw NotLoggedInException()
-                    } else if (!preferenceHelper.isAgeRestrictedMediaAllowed) {
-                        throw AgeConfirmationRequiredException()
-                    }
+                if (it.isAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
+                    throw AgeConfirmationRequiredException()
                 }
             }
             .flatMap { entry ->
@@ -84,20 +78,13 @@ class MangaViewModel(
     private var userStateDisposable: Disposable? = null
 
     init {
-        disposables += bus.register(AgeConfirmationEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
+        disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .skip(1)
             .subscribe {
-                // TODO: Simplify once proguard does not crash on this.
-                val safeValue = error.value
-
-                if (safeValue != null && safeValue.buttonAction == ButtonAction.AGE_CONFIRMATION) {
+                if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()
                 }
             }
-
-        disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { reload() }
     }
 
     override fun onCleared() {

@@ -3,7 +3,6 @@ package me.proxer.app.base
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.rubengees.rxbus.RxBus
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -11,9 +10,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
-import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
@@ -47,12 +43,12 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
     protected abstract val dataSingle: Single<T>
 
     init {
-        disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
+        disposables += storageHelper.isLoggedInObservable
+            .skip(1)
             .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
 
-        disposables += bus.register(AgeConfirmationEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
+        disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .skip(1)
             .subscribe { if (isAgeConfirmationRequired) reload() }
 
         disposables += bus.register(CaptchaSolvedEvent::class.java)

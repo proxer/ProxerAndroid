@@ -42,6 +42,7 @@ ext {
     rxKotlinVersion = "2.3.0"
     rxAndroidVersion = "2.1.0"
     rxBindingVersion = "3.0.0-alpha2"
+    rxPreferencesVersion = "2.0.0"
     rxBusVersion = "2.0.0"
     autoDisposeVersion = "1.1.0"
 

@@ -11,7 +11,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.NotLoggedInException
-import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
@@ -56,13 +55,11 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
     private var userInfoUpdateDisposable: Disposable? = null
 
     init {
-        disposables += bus.register(AgeConfirmationEvent::class.java)
+        disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .skip(1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                // TODO: Simplify once proguard does not crash on this.
-                val safeValue = error.value
-
-                if (safeValue != null && safeValue.buttonAction == ButtonAction.AGE_CONFIRMATION) {
+                if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()
                 }
             }

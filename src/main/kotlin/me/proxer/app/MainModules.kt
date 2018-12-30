@@ -1,9 +1,11 @@
 package me.proxer.app
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.gojuno.koptional.Optional
 import com.rubengees.rxbus.RxBus
 import com.squareup.moshi.Moshi
@@ -89,8 +91,13 @@ private val applicationModules = module(createOnStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single { StorageHelper(androidContext(), get()) }
-    single { PreferenceHelper(get()) }
+    single("defaultRxPreferences") { RxSharedPreferences.create(get()) }
+    single("hawkRxPreferences") {
+        RxSharedPreferences.create(androidContext().getSharedPreferences("Hawk2", Context.MODE_PRIVATE))
+    }
+
+    single { StorageHelper(androidContext(), get(), get("hawkRxPreferences")) }
+    single { PreferenceHelper(get(), get("defaultRxPreferences")) }
 
     single { RxBus() }
 
@@ -168,8 +175,8 @@ private val applicationModules = module(createOnStart = true) {
     single { HawkMoshiParser(Moshi.Builder().build()) }
     single { HawkInitializer(get()) }
 
-    single { ProxerLoginTokenManager(get(), get()) } bind LoginTokenManager::class
-    single { LoginHandler(get(), get(), get(), get()) }
+    single { ProxerLoginTokenManager(get()) } bind LoginTokenManager::class
+    single { LoginHandler(get(), get(), get()) }
 }
 
 private val viewModelModule = module {

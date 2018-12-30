@@ -12,7 +12,6 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
@@ -65,7 +64,8 @@ class UcpSettingsActivity : DrawerActivity() {
             progress.isRefreshing = it == true
         })
 
-        bus.register(LogoutEvent::class.java)
+        storageHelper.isLoggedInObservable
+            .filter { it.not() }
             .autoDisposable(this.scope())
             .subscribe { finish() }
 

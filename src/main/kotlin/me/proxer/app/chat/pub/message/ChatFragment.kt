@@ -33,13 +33,10 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
 import com.vanniktech.emoji.EmojiPopup
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
@@ -210,8 +207,6 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        updateInputVisibility()
-
         emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
 
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
@@ -273,8 +268,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
                 messageInput.requestFocus()
             }
 
-        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
+        storageHelper.isLoggedInObservable
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 updateInputVisibility()

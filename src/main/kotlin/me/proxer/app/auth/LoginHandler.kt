@@ -1,7 +1,8 @@
 package me.proxer.app.auth
 
+import android.annotation.SuppressLint
 import android.content.Context
-import com.rubengees.rxbus.RxBus
+import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerNotifications
@@ -19,20 +20,22 @@ import java.util.Date
  * @author Ruben Gees
  */
 class LoginHandler(
-    private val bus: RxBus,
     private val api: ProxerApi,
     private val storageHelper: StorageHelper,
     private val messengerDao: MessengerDao
 ) {
 
+    @SuppressLint("CheckResult")
     fun listen(context: Context) {
-        bus.register(LoginEvent::class.java)
-            .subscribeOn(Schedulers.io())
-            .subscribeAndLogErrors { onLogin() }
-
-        bus.register(LogoutEvent::class.java)
-            .subscribeOn(Schedulers.io())
-            .subscribeAndLogErrors { onLogout(context) }
+        storageHelper.isLoggedInObservable
+            .skip(1)
+            .subscribe { isLoggedIn ->
+                if (isLoggedIn) {
+                    onLogin()
+                } else {
+                    onLogout(context)
+                }
+            }
     }
 
     private fun onLogin() {
@@ -53,12 +56,17 @@ class LoginHandler(
 
         MessengerWorker.cancel()
 
-        storageHelper.lastChatMessageDate = Date(0L)
-        storageHelper.lastNotificationsDate = Date(0L)
-        storageHelper.areConferencesSynchronized = false
-        storageHelper.resetChatInterval()
-        storageHelper.resetUcpSettings()
+        Completable
+            .fromAction {
+                storageHelper.lastChatMessageDate = Date(0L)
+                storageHelper.lastNotificationsDate = Date(0L)
+                storageHelper.areConferencesSynchronized = false
+                storageHelper.resetChatInterval()
+                storageHelper.resetUcpSettings()
 
-        messengerDao.clear()
+                messengerDao.clear()
+            }
+            .subscribeOn(Schedulers.io())
+            .subscribeAndLogErrors()
     }
 }

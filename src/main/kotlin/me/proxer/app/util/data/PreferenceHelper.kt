@@ -3,6 +3,8 @@ package me.proxer.app.util.data
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import com.f2prateek.rx.preferences2.RxSharedPreferences
+import io.reactivex.Observable
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +13,10 @@ import okhttp3.logging.HttpLoggingInterceptor
  * @author Ruben Gees
  */
 @Suppress("UseDataClass")
-class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
+class PreferenceHelper(
+    private val sharedPreferences: SharedPreferences,
+    private val rxSharedPreferences: RxSharedPreferences
+) {
 
     companion object {
         const val AGE_CONFIRMATION = "age_confirmation"
@@ -34,6 +39,10 @@ class PreferenceHelper(private val sharedPreferences: SharedPreferences) {
         set(value) {
             sharedPreferences.edit { putBoolean(AGE_CONFIRMATION, value) }
         }
+
+    val isAgeRestrictedMediaAllowedObservable: Observable<Boolean>
+        get() = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)
+            .asObservable()
 
     val areBookmarksAutomatic
         get() = sharedPreferences.getBoolean(AUTO_BOOKMARK, false)

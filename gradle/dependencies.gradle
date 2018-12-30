@@ -21,6 +21,7 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:$rxBindingVersion"
     implementation "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:$rxBindingVersion"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:$rxBindingVersion"
+    implementation "com.f2prateek.rx.preferences2:rx-preferences:$rxPreferencesVersion"
     implementation "com.github.rubengees:rxbus:$rxBusVersion"
     implementation "com.uber.autodispose:autodispose-ktx:$autoDisposeVersion"
     implementation "com.uber.autodispose:autodispose-android-archcomponents-ktx:$autoDisposeVersion"

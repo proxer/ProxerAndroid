@@ -13,7 +13,6 @@ import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.settings.AgeConfirmationEvent
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
@@ -78,13 +77,10 @@ class AnimeViewModel(
     private var userStateDisposable: Disposable? = null
 
     init {
-        disposables += bus.register(AgeConfirmationEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
+        disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .skip(1)
             .subscribe {
-                // TODO: Simplify once proguard does not crash on this.
-                val safeValue = error.value
-
-                if (safeValue != null && safeValue.buttonAction == ButtonAction.AGE_CONFIRMATION) {
+                if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()
                 }
             }

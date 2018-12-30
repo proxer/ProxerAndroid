@@ -1,12 +1,8 @@
 package me.proxer.app.chat.pub.room
 
-import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.library.entity.chat.ChatRoom
@@ -32,8 +28,8 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
             }
 
     init {
-        disposables += Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
-            .observeOn(AndroidSchedulers.mainThread())
+        disposables += storageHelper.isLoggedInObservable
+            .skip(1)
             .subscribe { reload() }
     }
 }

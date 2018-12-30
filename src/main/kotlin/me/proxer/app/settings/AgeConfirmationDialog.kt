@@ -21,8 +21,6 @@ class AgeConfirmationDialog : BaseDialog() {
         .message(R.string.dialog_age_confirmation_content)
         .positiveButton(R.string.dialog_age_confirmation_positive) {
             preferenceHelper.isAgeRestrictedMediaAllowed = true
-
-            bus.post(AgeConfirmationEvent())
         }
         .negativeButton(R.string.cancel)
 }

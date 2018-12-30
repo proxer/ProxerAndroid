@@ -15,15 +15,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.auth.LoginDialog
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
@@ -131,10 +128,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             .autoDisposable(this.scope())
             .subscribe { showPage(it) }
 
-        Observable.merge(bus.register(LoginEvent::class.java), bus.register(LogoutEvent::class.java))
+        storageHelper.isLoggedInObservable
+            .skip(1)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
-            .subscribe { adapter.notifyItemRangeChanged(1, innerAdapter.itemCount + 1) }
+            .subscribe {
+                if (adapter.itemCount >= 1) {
+                    adapter.notifyItemRangeChanged(1, innerAdapter.itemCount + 1)
+                }
+            }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -184,8 +186,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
                     is StreamResolutionResult.Video -> result.play(requireContext(), name, episode)
                     is StreamResolutionResult.Link -> result.show(this)
                     is StreamResolutionResult.App -> result.navigate(requireContext())
-                    is StreamResolutionResult.Message -> throw IllegalArgumentException("ResolutionResult of type " +
-                        "Message should be shown inline")
+                    is StreamResolutionResult.Message -> throw IllegalArgumentException(
+                        "ResolutionResult of type Message should be shown inline"
+                    )
                 }
             }
         })

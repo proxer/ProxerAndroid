@@ -1,7 +1,9 @@
 package me.proxer.app.util.data
 
 import android.content.Context
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.orhanobut.hawk.Hawk
+import io.reactivex.Observable
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.ucp.settings.LocalUcpSettings
 import org.koin.standalone.KoinComponent
@@ -10,22 +12,26 @@ import java.util.Date
 /**
  * @author Ruben Gees
  */
-class StorageHelper(context: Context, initializer: HawkInitializer) : KoinComponent {
+class StorageHelper(
+    context: Context,
+    initializer: HawkInitializer,
+    private val rxPreferences: RxSharedPreferences
+) : KoinComponent {
 
     internal companion object {
-        internal const val USER = "user"
-        internal const val UCP_SETTINGS = "ucp_settings"
-        internal const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
-        internal const val LAST_NEWS_DATE = "last_news_date"
-        internal const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
-        internal const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
-        internal const val CHAT_INTERVAL = "chat_interval"
-        internal const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
-        internal const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
-        internal const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
-        internal const val MESSAGE_DRAFT_PREFIX = "message_draft_"
-        internal const val LAUNCHES = "launches"
-        internal const val RATED = "rated"
+        const val USER = "user"
+        const val UCP_SETTINGS = "ucp_settings"
+        const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
+        const val LAST_NEWS_DATE = "last_news_date"
+        const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
+        const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
+        const val CHAT_INTERVAL = "chat_interval"
+        const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
+        const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
+        const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
+        const val MESSAGE_DRAFT_PREFIX = "message_draft_"
+        const val LAUNCHES = "launches"
+        const val RATED = "rated"
 
         private const val DEFAULT_CHAT_INTERVAL = 10_000L
         private const val MAX_CHAT_INTERVAL = 850_000L
@@ -52,6 +58,11 @@ class StorageHelper(context: Context, initializer: HawkInitializer) : KoinCompon
 
     val isLoggedIn: Boolean
         get() = Hawk.contains(USER)
+
+    val isLoggedInObservable: Observable<Boolean>
+        get() = rxPreferences.getString(USER)
+            .asObservable()
+            .map { it.isNotBlank() }
 
     var isTwoFactorAuthenticationEnabled: Boolean
         get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)

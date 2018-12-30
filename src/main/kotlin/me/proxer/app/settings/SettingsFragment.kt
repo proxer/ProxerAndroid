@@ -10,15 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
 import clicks
-import com.rubengees.rxbus.RxBus
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
-import me.proxer.app.auth.LoginEvent
-import me.proxer.app.auth.LogoutEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.ucp.settings.UcpSettingsActivity
@@ -56,7 +51,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         }
     }
 
-    private val bus by inject<RxBus>()
     private val packageManager by inject<PackageManager>()
     private val preferenceHelper by inject<PreferenceHelper>()
     private val storageHelper by inject<StorageHelper>()
@@ -85,13 +79,9 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Observable.merge(
-            bus.register(LoginEvent::class.java),
-            bus.register(LogoutEvent::class.java)
-        )
-            .observeOn(AndroidSchedulers.mainThread())
+        storageHelper.isLoggedInObservable
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { updateProfilePreference() }
+            .subscribe { profile.isEnabled = it }
 
         profile.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -107,7 +97,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 }
             }
 
-        updateProfilePreference()
         updateIntervalNotificationPreference()
 
         listView.isFocusable = false
@@ -158,10 +147,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
             EXTERNAL_CACHE, HTTP_LOG_LEVEL, HTTP_VERBOSE, HTTP_REDACT_TOKEN -> showRestartMessage()
         }
-    }
-
-    private fun updateProfilePreference() {
-        profile.isEnabled = storageHelper.isLoggedIn
     }
 
     private fun updateIntervalNotificationPreference() {
