@@ -69,11 +69,13 @@ class AnimeAdapter(
     override fun getItemId(position: Int) = data[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        STREAM_VIEW_TYPE -> StreamViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_stream, parent, false))
+        STREAM_VIEW_TYPE -> StreamViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false)
+        )
 
-        MESSAGE_VIEW_TYPE -> MessageViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_stream_message, parent, false))
+        MESSAGE_VIEW_TYPE -> MessageViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_stream_message, parent, false)
+        )
 
         else -> throw IllegalArgumentException("Unknown viewType: $viewType")
     }

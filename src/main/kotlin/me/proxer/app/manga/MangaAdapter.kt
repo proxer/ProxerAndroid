@@ -11,6 +11,8 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
@@ -33,7 +35,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.manga.MangaAdapter.ViewHolder
+import me.proxer.app.manga.MangaAdapter.MangaViewHolder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
@@ -54,10 +56,12 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, ViewHolder>() {
+class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>() {
 
     private companion object {
         private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
+        private const val VIEW_TYPE_IMAGE = 1
+        private const val VIEW_TYPE_GIF = 2
     }
 
     var glide: GlideRequests? = null
@@ -84,11 +88,26 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
     override fun getItemId(position: Int) = data[position].decodedName.hashCode().toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
+        VIEW_TYPE_IMAGE -> ImageViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page, parent, false)
+        )
+
+        VIEW_TYPE_GIF -> GifViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page_gif, parent, false)
+        )
+
+        else -> throw IllegalArgumentException("Unknown viewType: $viewType")
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(data[position])
+    override fun onBindViewHolder(holder: MangaViewHolder, position: Int) = holder.bind(data[position])
+
+    override fun getItemViewType(position: Int): Int {
+        return when (data[position].decodedName.endsWith(".gif")) {
+            true -> VIEW_TYPE_GIF
+            false -> VIEW_TYPE_IMAGE
+        }
+    }
 
     override fun swapDataAndNotifyWithDiffing(newData: List<Page>) {
         super.swapDataAndNotifyWithDiffing(newData)
@@ -117,11 +136,17 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         glide = null
     }
 
-    override fun onViewRecycled(holder: ViewHolder) {
-        glide?.clear(holder.glideTarget)
+    override fun onViewRecycled(holder: MangaViewHolder) {
+        when (holder) {
+            is ImageViewHolder -> {
+                glide?.clear(holder.glideTarget)
 
-        holder.glideTarget = null
-        holder.image.recycle()
+                holder.glideTarget = null
+                holder.image.recycle()
+            }
+            is GifViewHolder -> glide?.clear(holder.image)
+            else -> throw IllegalArgumentException("Unknown ViewHolder: ${holder::class.java.name}")
+        }
     }
 
     override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
@@ -138,26 +163,18 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             ?.into(target)
     }
 
-    inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
+    abstract inner class MangaViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 
-        private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+        internal abstract val image: View
 
-        internal val image: SubsamplingScaleImageView by bindView(R.id.image)
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
 
-        internal var glideTarget: GlideFileTarget? = null
-
         init {
-            image.setDoubleTapZoomDuration(shortAnimationTime)
-            image.isExifInterfaceEnabled = false
-
             errorIndicator.setIconicsImage(CommunityMaterial.Icon2.cmd_refresh, 64)
         }
 
-        fun bind(item: Page) {
+        open fun bind(item: Page) {
             initListeners()
-
-            image.setMinimumTileDpi(120)
 
             if (isVertical) {
                 val width = DeviceUtils.getScreenWidth(image.context)
@@ -168,89 +185,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 itemView.layoutParams.height = MATCH_PARENT
             }
 
-            val useRapidDecoder = requiresFallback[item.decodedName] == true
-
-            if (useRapidDecoder) {
-                image.setBitmapDecoderClass(RapidImageDecoder::class.java)
-                image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
-            } else {
-                image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
-                image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
-            }
-
             errorIndicator.isVisible = false
             image.isVisible = true
-
-            glide?.clear(glideTarget)
-            glideTarget = GlideFileTarget()
-
-            glideTarget?.let { target ->
-                glide
-                    ?.downloadOnly()
-                    ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
-                    ?.logErrors()
-                    ?.into(target)
-            }
         }
 
-        @SuppressLint("ClickableViewAccessibility")
-        private fun initListeners() {
-            // Rebind on itemView clicks.
-            // This only emits if the image is not visible, which is the case if an error occurred.
-            itemView.clicks()
-                .mapAdapterPosition({ positionResolver.resolve(adapterPosition) }) { data[it] }
-                .autoDisposable(this)
-                .subscribe(this::bind)
-
-            image.events()
-                .publish()
-                .also { observable ->
-                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
-                        .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
-                        .flatMap { event ->
-                            Observable.just(Unit)
-                                .mapAdapterPosition({ adapterPosition }) { event.error to positionResolver.resolve(it) }
-                        }
-                        .autoDisposable(this)
-                        .subscribe { (error, position) ->
-                            handleImageLoadError(error, position)
-                        }
-
-                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Ready }
-                        .autoDisposable(this)
-                        .subscribe {
-                            val newMaxScale = image.minScale * 2.5f
-
-                            image.setDoubleTapZoomScale(newMaxScale)
-                            image.maxScale = newMaxScale
-
-                            image.resetScaleAndCenter()
-                        }
-                }
-                .connect()
-
-            image.touchesMonitored { false }
-                .filter { it.actionMasked == MotionEvent.ACTION_DOWN }
-                .map {
-                    val (viewX, viewY) = IntArray(2).apply { image.getLocationInWindow(this) }
-
-                    it.x + viewX to it.y + viewY
-                }
-                .autoDisposable(this)
-                .subscribe { lastTouchCoordinates = it }
-
-            image.clicks()
-                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
-                .flatMap { position ->
-                    Observable.just(lastTouchCoordinates.toOptional())
-                        .filterSome()
-                        .map { Triple(image as View, it, position) }
-                }
-                .autoDisposable(this)
-                .subscribe(clickSubject)
-        }
-
-        private fun handleImageLoadError(error: Exception, position: Int) {
+        protected fun handleImageLoadError(error: Exception, position: Int) {
             // This happens on certain devices with certain images due to a buggy Skia library version.
             // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
             // use, show the error indicator.
@@ -270,6 +209,106 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             }
         }
 
+        @SuppressLint("ClickableViewAccessibility")
+        private fun initListeners() {
+            // Rebind on itemView clicks.
+            // This only emits if the image is not visible, which is the case if an error occurred.
+            itemView.clicks()
+                .mapAdapterPosition({ positionResolver.resolve(adapterPosition) }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(this::bind)
+
+            image.touchesMonitored { false }
+                .filter { it.actionMasked == MotionEvent.ACTION_DOWN }
+                .map {
+                    val (viewX, viewY) = IntArray(2).apply { image.getLocationInWindow(this) }
+
+                    it.x + viewX to it.y + viewY
+                }
+                .autoDisposable(this)
+                .subscribe { lastTouchCoordinates = it }
+
+            image.clicks()
+                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .flatMap { position ->
+                    Observable.just(lastTouchCoordinates.toOptional())
+                        .filterSome()
+                        .map { Triple(image, it, position) }
+                }
+                .autoDisposable(this)
+                .subscribe(clickSubject)
+        }
+    }
+
+    inner class ImageViewHolder(itemView: View) : MangaViewHolder(itemView) {
+
+        override val image: SubsamplingScaleImageView by bindView(R.id.image)
+
+        internal var glideTarget: GlideFileTarget? = null
+
+        private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
+
+        init {
+            image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.isExifInterfaceEnabled = false
+        }
+
+        override fun bind(item: Page) {
+            super.bind(item)
+
+            initListeners()
+
+            image.setMinimumTileDpi(120)
+
+            val useRapidDecoder = requiresFallback[item.decodedName] == true
+
+            if (useRapidDecoder) {
+                image.setBitmapDecoderClass(RapidImageDecoder::class.java)
+                image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
+            } else {
+                image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
+                image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
+            }
+
+            glide?.clear(glideTarget)
+            glideTarget = GlideFileTarget()
+
+            glideTarget?.let { target ->
+                glide
+                    ?.downloadOnly()
+                    ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                    ?.logErrors()
+                    ?.into(target)
+            }
+        }
+
+        private fun initListeners() {
+            image.events()
+                .publish()
+                .also { observable ->
+                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
+                        .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
+                        .flatMap { event ->
+                            Observable.just(Unit)
+                                .mapAdapterPosition({ adapterPosition }) { event.error to positionResolver.resolve(it) }
+                        }
+                        .autoDisposable(this)
+                        .subscribe { (error, position) -> handleImageLoadError(error, position) }
+
+                    observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Ready }
+                        .autoDisposable(this)
+                        .subscribe {
+                            val newMaxScale = image.minScale * 2.5f
+
+                            image.setDoubleTapZoomScale(newMaxScale)
+                            image.maxScale = newMaxScale
+
+                            image.resetScaleAndCenter()
+                        }
+                }
+                .connect()
+        }
+
         internal inner class GlideFileTarget : OriginalSizeGlideTarget<File>() {
 
             override fun onResourceReady(resource: File, transition: Transition<in File>?) {
@@ -283,6 +322,30 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 errorIndicator.isVisible = true
                 image.isVisible = false
             }
+        }
+    }
+
+    inner class GifViewHolder(itemView: View) : MangaViewHolder(itemView) {
+
+        override val image: ImageView by bindView(R.id.image)
+
+        override fun bind(item: Page) {
+            super.bind(item)
+
+            glide
+                ?.asGif()
+                ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                ?.logErrors()
+                ?.into(object : ImageViewTarget<GifDrawable>(image) {
+                    override fun setResource(resource: GifDrawable?) {
+                        view.setImageDrawable(resource)
+                    }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        errorIndicator.isVisible = true
+                        image.isVisible = false
+                    }
+                })
         }
     }
 
