@@ -99,7 +99,8 @@ class BBCodeView @JvmOverloads constructor(
         val hMode = getMode(heightMeasureSpec)
 
         super.onMeasure(
-            widthMeasureSpec, when (hMode) {
+            widthMeasureSpec,
+            when (hMode) {
                 AT_MOST -> makeMeasureSpec(Math.min(hSize, maxHeight), AT_MOST)
                 EXACTLY -> makeMeasureSpec(Math.min(hSize, maxHeight), EXACTLY)
                 UNSPECIFIED -> makeMeasureSpec(maxHeight, AT_MOST)

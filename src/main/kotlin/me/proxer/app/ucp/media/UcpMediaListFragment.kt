@@ -105,12 +105,12 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(
-            inflater, context, when (category) {
-                Category.ANIME -> R.menu.fragment_user_media_list_anime
-                Category.MANGA -> R.menu.fragment_user_media_list_manga
-            }, menu, true
-        )
+        val menuToInflate = when (category) {
+            Category.ANIME -> R.menu.fragment_user_media_list_anime
+            Category.MANGA -> R.menu.fragment_user_media_list_manga
+        }
+
+        IconicsMenuInflaterUtil.inflate(inflater, context, menuToInflate, menu, true)
 
         when (filter) {
             UserMediaListFilterType.WATCHING -> menu.findItem(R.id.watching).isChecked = true

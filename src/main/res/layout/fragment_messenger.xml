@@ -23,14 +23,14 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:scrollbars="none"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
                 android:paddingTop="@dimen/screen_vertical_margin_with_items"
                 android:paddingRight="@dimen/screen_horizontal_margin_with_items"
-                android:paddingBottom="@dimen/screen_vertical_margin_with_items" />
+                android:paddingBottom="@dimen/screen_vertical_margin_with_items"
+                android:scrollbars="none" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -47,8 +47,8 @@
                 android:layout_gravity="bottom|end"
                 android:visibility="gone"
                 app:backgroundTint="?attr/colorSurface"
-                app:tint="?attr/colorIcon"
                 app:fabSize="mini"
+                app:tint="?attr/colorIcon"
                 app:useCompatPadding="true"
                 tools:src="@drawable/ic_japan"
                 tools:visibility="visible" />

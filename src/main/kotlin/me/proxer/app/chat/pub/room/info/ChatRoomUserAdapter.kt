@@ -1,5 +1,6 @@
 package me.proxer.app.chat.pub.room.info
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -87,11 +88,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
 
             if (item.isModerator) {
                 username.setCompoundDrawablesWithIntrinsicBounds(
-                    null, null, IconicsDrawable(username.context)
-                        .icon(CommunityMaterial.Icon2.cmd_star)
-                        .sizeDp(32)
-                        .paddingDp(8)
-                        .colorAttr(username.context, R.attr.colorSecondary), null
+                    null, null, generateModeratorDrawable(username.context), null
                 )
             } else {
                 username.setCompoundDrawables(null, null, null, null)
@@ -114,5 +111,11 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
                     ?.into(image)
             }
         }
+
+        private fun generateModeratorDrawable(context: Context) = IconicsDrawable(context)
+            .icon(CommunityMaterial.Icon2.cmd_star)
+            .sizeDp(32)
+            .paddingDp(8)
+            .colorAttr(username.context, R.attr.colorSecondary)
     }
 }

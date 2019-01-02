@@ -120,7 +120,8 @@ fun AnimeLanguage.toMediaLanguage() = when (this) {
 }
 
 fun Language.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
-    context, when (this) {
+    context,
+    when (this) {
         Language.GERMAN -> R.drawable.ic_germany
         Language.ENGLISH -> R.drawable.ic_united_states
         Language.OTHER -> R.drawable.ic_united_nations
@@ -140,7 +141,8 @@ fun MediaLanguage.toAppString(context: Context): String = context.getString(
 )
 
 fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
-    context, when (this) {
+    context,
+    when (this) {
         Country.GERMANY -> R.drawable.ic_germany
         Country.ENGLAND -> R.drawable.ic_united_states
         Country.UNITED_STATES -> R.drawable.ic_united_states
@@ -288,7 +290,8 @@ fun FskConstraint.toAppStringDescription(context: Context): String = context.get
 )
 
 fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
-    context, when (this) {
+    context,
+    when (this) {
         FskConstraint.FSK_0 -> R.drawable.ic_fsk_0
         FskConstraint.FSK_6 -> R.drawable.ic_fsk_6
         FskConstraint.FSK_12 -> R.drawable.ic_fsk_12
