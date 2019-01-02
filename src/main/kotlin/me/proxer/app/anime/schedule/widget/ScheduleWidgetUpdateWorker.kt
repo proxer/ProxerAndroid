@@ -102,8 +102,15 @@ class ScheduleWidgetUpdateWorker(
             }
 
             if (!isStopped) {
-                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
-                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
+                if (calendarEntries.isEmpty()) {
+                    val noDataAction = ErrorAction(R.string.error_no_data_schedule)
+
+                    widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, noDataAction, false) }
+                    darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, noDataAction, true) }
+                } else {
+                    widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, false) }
+                    darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, calendarEntries, true) }
+                }
             }
 
             Result.success()
@@ -133,7 +140,8 @@ class ScheduleWidgetUpdateWorker(
         dark: Boolean
     ) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_list
                 false -> R.layout.layout_widget_schedule_list
             }
@@ -153,17 +161,20 @@ class ScheduleWidgetUpdateWorker(
         val detailIntent = applicationContext.intentFor<MediaActivity>()
         val detailPendingIntent = PendingIntent.getActivity(applicationContext, 0, detailIntent, FLAG_UPDATE_CURRENT)
 
-        val position = calendarEntries
-            .indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
-            .let {
-                when (it < 0) {
-                    true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.convertToDateTime())) {
-                        true -> calendarEntries.lastIndex
-                        false -> 0
+        val position = when (calendarEntries.isEmpty()) {
+            true -> 0
+            false -> calendarEntries
+                .indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
+                .let {
+                    when (it < 0) {
+                        true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.convertToDateTime())) {
+                            true -> calendarEntries.lastIndex
+                            false -> 0
+                        }
+                        false -> it
                     }
-                    false -> it
                 }
-            }
+        }
 
         bindBaseLayout(id, views)
 
@@ -181,7 +192,8 @@ class ScheduleWidgetUpdateWorker(
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_error
                 false -> R.layout.layout_widget_schedule_error
             }
@@ -207,7 +219,8 @@ class ScheduleWidgetUpdateWorker(
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_schedule_dark_loading
                 false -> R.layout.layout_widget_schedule_loading
             }
@@ -233,7 +246,8 @@ class ScheduleWidgetUpdateWorker(
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 
         views.setImageViewBitmap(
-            R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
+            R.id.refresh,
+            IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
                 .colorRes(android.R.color.white)
                 .sizeDp(32)
                 .paddingDp(8)

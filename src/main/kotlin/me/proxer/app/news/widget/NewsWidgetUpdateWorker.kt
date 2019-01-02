@@ -86,8 +86,15 @@ class NewsWidgetUpdateWorker(
             }
 
             if (!isStopped) {
-                widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
-                darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }
+                if (news.isEmpty()) {
+                    val noDataAction = ErrorAction(R.string.error_no_data_news)
+
+                    widgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, noDataAction, false) }
+                    darkWidgetIds.forEach { id -> bindErrorLayout(appWidgetManager, id, noDataAction, true) }
+                } else {
+                    widgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, false) }
+                    darkWidgetIds.forEach { id -> bindListLayout(appWidgetManager, id, news, true) }
+                }
             }
 
             Result.success()
@@ -112,7 +119,8 @@ class NewsWidgetUpdateWorker(
 
     private fun bindListLayout(appWidgetManager: AppWidgetManager, id: Int, news: List<SimpleNews>, dark: Boolean) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_news_dark_list
                 false -> R.layout.layout_widget_news_list
             }
@@ -142,7 +150,8 @@ class NewsWidgetUpdateWorker(
 
     private fun bindErrorLayout(appWidgetManager: AppWidgetManager, id: Int, errorAction: ErrorAction, dark: Boolean) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_news_dark_error
                 false -> R.layout.layout_widget_news_error
             }
@@ -168,7 +177,8 @@ class NewsWidgetUpdateWorker(
 
     private fun bindLoadingLayout(appWidgetManager: AppWidgetManager, id: Int, dark: Boolean) {
         val views = RemoteViews(
-            BuildConfig.APPLICATION_ID, when (dark) {
+            BuildConfig.APPLICATION_ID,
+            when (dark) {
                 true -> R.layout.layout_widget_news_dark_loading
                 false -> R.layout.layout_widget_news_loading
             }
@@ -193,7 +203,8 @@ class NewsWidgetUpdateWorker(
         views.setOnClickPendingIntent(R.id.refresh, updatePendingIntent)
 
         views.setImageViewBitmap(
-            R.id.refresh, IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
+            R.id.refresh,
+            IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
                 .colorRes(android.R.color.white)
                 .sizeDp(32)
                 .paddingDp(8)
