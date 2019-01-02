@@ -38,7 +38,7 @@ ext {
     castVersion = "16.1.2"
 
     // RxJava
-    rxJavaVersion = "2.2.4"
+    rxJavaVersion = "2.2.5"
     rxKotlinVersion = "2.3.0"
     rxAndroidVersion = "2.1.0"
     rxBindingVersion = "3.0.0-alpha2"
@@ -81,7 +81,7 @@ ext {
     threetenVersion = "1.1.1"
     hawkVersion = "c6b8d3a82c"
     glideVersion = "4.9.0-SNAPSHOT"
-    okHttpVersion = "3.13.0-SNAPSHOT"
+    okHttpVersion = "3.12.1"
     okioVersion = "2.1.0"
     moshiVersion = "1.8.0"
     easyHeaderFooterAdapterVersion = "3.0.0"
