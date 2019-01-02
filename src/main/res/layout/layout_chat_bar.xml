@@ -33,10 +33,12 @@
             android:background="@android:color/transparent"
             android:hint="@string/fragment_messenger_message"
             android:imeOptions="flagNoExtractUi"
+            android:importantForAutofill="no"
             android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
             android:maxLines="5"
             android:scrollbars="vertical"
-            android:textColorHint="?android:attr/textColorTertiary" />
+            android:textColorHint="?android:attr/textColorTertiary"
+            tools:ignore="UnusedAttribute" />
 
         <me.proxer.app.ui.view.InfoImageButton
             android:id="@+id/sendButton"

@@ -62,8 +62,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:imeOptions="actionNext"
+                                    android:importantForAutofill="no"
                                     android:inputType="text"
-                                    android:maxLines="1" />
+                                    android:maxLines="1"
+                                    tools:ignore="UnusedAttribute" />
 
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
