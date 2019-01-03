@@ -60,6 +60,7 @@ import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.http.CacheInterceptor
 import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.ModernTlsSocketFactory
@@ -71,6 +72,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
+import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -78,6 +80,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import timber.log.Timber
+import java.io.File
 import java.security.KeyStore
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
@@ -102,13 +105,11 @@ private val applicationModules = module(createOnStart = true) {
     single { RxBus() }
 
     single {
-        val trustManagerFactory =
-            TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
-                init(null as KeyStore?)
-            }
+        val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+            init(null as KeyStore?)
+        }
 
-        trustManagerFactory.trustManagers
-            .find { trustManager -> trustManager is X509TrustManager } as X509TrustManager
+        trustManagerFactory.trustManagers.filterIsInstance(X509TrustManager::class.java).first()
     }
 
     single {
@@ -136,7 +137,9 @@ private val applicationModules = module(createOnStart = true) {
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+            .addNetworkInterceptor(CacheInterceptor())
             .addInterceptor(HttpsUpgradeInterceptor())
+            .cache(Cache(File(androidContext().cacheDir, "http"), 1024L * 1024L * 10L))
             .apply {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     addInterceptor(ConnectionCloseInterceptor())
