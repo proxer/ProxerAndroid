@@ -14,10 +14,6 @@ import java.util.Date
 @Suppress("unused")
 class RoomConverters {
 
-    private companion object {
-        private const val DELIMITER = ";"
-    }
-
     @TypeConverter
     fun fromTimestamp(value: Long?) = value?.let { Date(it) }
 
