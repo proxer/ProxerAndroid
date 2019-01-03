@@ -24,10 +24,11 @@ class CacheInterceptor : Interceptor {
 
         private val cacheInfoList = listOf(
             CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/fullentry"), 24),
-            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/chapter"), 24),
-            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/entrysearch"), 1),
-            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/proxerstreams"), 1),
-            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/link"), 1),
+            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/info/entry"), 24),
+            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/list/entrysearch"), 1),
+            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/manga/chapter"), 24),
+            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/anime/proxerstreams"), 1),
+            CacheInfo(HttpUrl.get("https://proxer.me/api/v1/anime/link"), 1),
             CacheInfo(
                 HttpUrl.get("https://proxer.me/api/v1/media/calendar"),
                 {
