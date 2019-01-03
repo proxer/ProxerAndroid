@@ -117,10 +117,15 @@ class MediaActivity : ImageTabsActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.data.observe(this, Observer {
-            sectionsPagerAdapter.update()
+            it?.let { (entry, _) ->
+                name = entry.name
+                category = entry.category
 
-            if (it != null && viewPager.currentItem == 0) {
-                viewPager.currentItem = customItemToDisplay
+                sectionsPagerAdapter.update()
+
+                if (viewPager.currentItem == 0) {
+                    viewPager.currentItem = customItemToDisplay
+                }
             }
         })
     }

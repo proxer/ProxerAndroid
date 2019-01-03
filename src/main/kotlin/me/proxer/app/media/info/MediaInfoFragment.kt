@@ -43,7 +43,6 @@ import me.proxer.app.util.extension.toStartAppString
 import me.proxer.app.util.extension.toTypeAppString
 import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
-import me.proxer.library.enums.Category
 import me.proxer.library.enums.IndustryType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -69,18 +68,6 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     private val id: String
         get() = hostingActivity.id
-
-    private var name: String?
-        get() = hostingActivity.name
-        set(value) {
-            hostingActivity.name = value
-        }
-
-    private var category: Category?
-        get() = hostingActivity.category
-        set(value) {
-            hostingActivity.category = value
-        }
 
     private var showUnratedTags: Boolean
         get() = requireArguments().getBoolean(SHOW_UNRATED_TAGS_ARGUMENT, false)
@@ -174,9 +161,6 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
 
     override fun showData(data: Pair<Entry, Optional<MediaUserInfo>>) {
         super.showData(data)
-
-        name = data.first.name
-        category = data.first.category
 
         bind(data.first, data.second)
     }
