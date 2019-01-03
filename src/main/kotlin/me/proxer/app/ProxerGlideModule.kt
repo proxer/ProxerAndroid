@@ -29,7 +29,7 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
 
     private companion object {
         private const val CACHE_SIZE = 1024L * 1024L * 250L
-        private const val CACHE_DIR = "cache"
+        private const val CACHE_DIR = "glide"
     }
 
     private val client by inject<OkHttpClient>()
