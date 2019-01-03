@@ -45,8 +45,6 @@ import me.proxer.library.entity.info.Entry
 import me.proxer.library.entity.info.MediaUserInfo
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.IndustryType
-import me.proxer.library.util.ProxerUrls
-import me.proxer.library.util.ProxerUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -314,12 +312,8 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         bindChips(
             genres,
             result.genres.toList(),
-            mapFunction = {
-                ProxerUtils.getSafeApiEnumName(it)
-            },
-            onClick = {
-                showPage(ProxerUrls.wikiWeb(ProxerUtils.getSafeApiEnumName(it).replace(' ', '_')))
-            }
+            mapFunction = { it.name },
+            onClick = { multilineSnackbar(root, it.description) }
         )
     }
 
