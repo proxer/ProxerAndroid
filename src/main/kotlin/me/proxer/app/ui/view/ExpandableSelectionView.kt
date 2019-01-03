@@ -21,6 +21,11 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
+import io.reactivex.Flowable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
@@ -52,9 +57,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
         }
 
     var items by Delegates.observable(emptyList<Item>()) { _, old, new ->
-        if (old != new && isExtended) {
-            itemContainer.removeAllViews()
-
+        if (old != new) {
             handleExtension()
         }
     }
@@ -74,6 +77,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
     }
 
     private var isSingleSelection = false
+    private var inflationDisposable: Disposable? = null
 
     init {
         orientation = VERTICAL
@@ -111,12 +115,13 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
                 selectionChangeSubject.onNext(selection)
             }
+    }
 
-        if (isSingleSelection) {
-            initSingleSelectionListeners()
-        } else {
-            initMultiSelectionListeners()
-        }
+    override fun onDetachedFromWindow() {
+        inflationDisposable?.dispose()
+        inflationDisposable = null
+
+        super.onDetachedFromWindow()
     }
 
     override fun onSaveInstanceState(): Parcelable = SavedState(super.onSaveInstanceState(), selection, isExtended)
@@ -143,38 +148,54 @@ class ExpandableSelectionView @JvmOverloads constructor(
     private fun handleExtension() {
         ViewCompat.animate(toggleButton).rotation(if (isExtended) 180f else 0f)
 
+        inflationDisposable?.dispose()
+        itemContainer.removeAllViews()
+
         if (isExtended) {
-            if (itemContainer.childCount <= 0) {
-                items
-                    .map { if (isSingleSelection) createSingleSelectionView(it) else createMultiSelectionView(it) }
-                    .forEach { itemContainer.addView(it) }
+            inflationDisposable = Flowable.fromIterable(items)
+                .concatMapEager { item ->
+                    val inflationSingle = when {
+                        isSingleSelection -> createSingleSelectionView(item)
+                        else -> createMultiSelectionView(item)
+                    }
 
-                if (ViewCompat.isAttachedToWindow(this)) {
-                    if (isSingleSelection) initSingleSelectionListeners() else initMultiSelectionListeners()
+                    inflationSingle
+                        .toFlowable()
+                        .map { view -> view to item }
+                        .subscribeOn(Schedulers.computation())
                 }
-            }
-        } else {
-            itemContainer.removeAllViews()
-        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterNext { (view, item) ->
+                    when (view) {
+                        is RadioButton -> initSingleSelectionListener(view, item.value)
+                        is CheckBox -> initMultiSelectionListener(view, item.value)
+                    }
+                }
+                .doOnComplete {
+                    if (isSingleSelection) {
+                        val radioButtonChildren = itemContainer.children.filterIsInstance(RadioButton::class.java)
+                        val isNoneChecked = radioButtonChildren.none { it.isChecked }
 
-        if (isSingleSelection) {
-            val children = itemContainer.children.filterIsInstance(RadioButton::class.java).toList()
+                        if (isNoneChecked) {
+                            radioButtonChildren.firstOrNull()?.isChecked = true
+                        }
 
-            if (children.none { it.isChecked }) {
-                children.firstOrNull()?.isChecked = true
-            }
-
-            jumpDrawablesToCurrentState()
+                        jumpDrawablesToCurrentState()
+                    }
+                }
+                .subscribeAndLogErrors { (view, _) -> itemContainer.addView(view) }
         }
     }
 
     private fun handleSelection() {
-        itemContainer.children
-            .filterIsInstance(CheckBox::class.java)
-            .forEach { it.isChecked = selection.contains(it.text.toString()) }
+        if (inflationDisposable?.isDisposed != false) {
+            itemContainer.children
+                .filterIsInstance(CheckBox::class.java)
+                .forEach { it.isChecked = selection.contains(it.text.toString()) }
+        }
     }
 
-    private fun createSingleSelectionView(item: Item): View {
+    private fun createSingleSelectionView(item: Item): Single<View> = Single.fromCallable {
         val radioButton = LayoutInflater.from(context)
             .inflate(R.layout.item_radio_button, this, false) as RadioButton
 
@@ -183,10 +204,23 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         TooltipCompat.setTooltipText(radioButton, item.description)
 
-        return radioButton
+        radioButton.clicks()
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribeAndLogErrors {
+                selection.clear()
+                selection.add(item.value)
+
+                itemContainer.children
+                    .filterIsInstance(RadioButton::class.java)
+                    .forEach { if (it != radioButton) it.isChecked = false }
+
+                selectionChangeSubject.onNext(selection)
+            }
+
+        radioButton
     }
 
-    private fun createMultiSelectionView(item: Item): View {
+    private fun createMultiSelectionView(item: Item): Single<View> = Single.fromCallable {
         val checkBox = LayoutInflater.from(context)
             .inflate(R.layout.item_checkbox, this, false) as CheckBox
 
@@ -195,38 +229,34 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         TooltipCompat.setTooltipText(checkBox, item.description)
 
-        return checkBox
+        checkBox
     }
 
-    private fun initSingleSelectionListeners() {
-        simpleItems.zip(itemContainer.children.toList()).forEach { (item, view) ->
-            view.clicks()
-                .autoDisposable(ViewScopeProvider.from(this))
-                .subscribeAndLogErrors {
-                    selection.clear()
+    private fun initSingleSelectionListener(view: RadioButton, item: String) {
+        view.clicks()
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribeAndLogErrors {
+                selection.clear()
+                selection.add(item)
+
+                itemContainer.children
+                    .filterIsInstance(RadioButton::class.java)
+                    .forEach { if (it != view) it.isChecked = false }
+
+                selectionChangeSubject.onNext(selection)
+            }
+    }
+
+    private fun initMultiSelectionListener(view: CheckBox, item: String) {
+        view.clicks()
+            .autoDisposable(ViewScopeProvider.from(this))
+            .subscribeAndLogErrors {
+                if (!selection.remove(item)) {
                     selection.add(item)
-
-                    itemContainer.children
-                        .filterIsInstance(RadioButton::class.java)
-                        .forEach { if (it != view) it.isChecked = false }
-
-                    selectionChangeSubject.onNext(selection)
                 }
-        }
-    }
 
-    private fun initMultiSelectionListeners() {
-        simpleItems.zip(itemContainer.children.toList()).forEach { (item, view) ->
-            view.clicks()
-                .autoDisposable(ViewScopeProvider.from(this))
-                .subscribeAndLogErrors {
-                    if (!selection.remove(item)) {
-                        selection.add(item)
-                    }
-
-                    selectionChangeSubject.onNext(selection)
-                }
-        }
+                selectionChangeSubject.onNext(selection)
+            }
     }
 
     data class Item(val value: String, val description: String?)
