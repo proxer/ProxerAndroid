@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
 import me.proxer.app.media.comment.CommentFragment
@@ -122,12 +124,17 @@ class MediaActivity : ImageTabsActivity() {
                 category = entry.category
 
                 sectionsPagerAdapter.update()
+                sectionsPagerAdapter.notifyDataSetChanged()
 
                 if (viewPager.currentItem == 0) {
                     viewPager.currentItem = customItemToDisplay
                 }
             }
         })
+
+        preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .autoDisposable(this.scope())
+            .subscribe { sectionsPagerAdapter.notifyDataSetChanged() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
