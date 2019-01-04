@@ -99,19 +99,19 @@
             android:key="http_log_level"
             android:summary="%s"
             android:title="@string/preference_developer_options_http_log_level_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="http_log_verbose"
+            android:summaryOff="@string/preference_developer_options_http_log_verbose_summary_off"
+            android:summaryOn="@string/preference_developer_options_http_log_verbose_summary_on"
+            android:title="@string/preference_developer_options_http_log_verbose_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="http_log_redact_token"
+            android:summaryOff="@string/preference_developer_options_http_redact_token_summary_off"
+            android:summaryOn="@string/preference_developer_options_http_redact_token_summary_on"
+            android:title="@string/preference_developer_options_http_redact_token_title" />
     </PreferenceCategory>
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="http_log_verbose"
-        android:summaryOff="@string/preference_developer_options_http_log_verbose_summary_off"
-        android:summaryOn="@string/preference_developer_options_http_log_verbose_summary_on"
-        android:title="@string/preference_developer_options_http_log_verbose_title" />
-
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="http_log_redact_token"
-        android:summaryOff="@string/preference_developer_options_http_redact_token_summary_off"
-        android:summaryOn="@string/preference_developer_options_http_redact_token_summary_on"
-        android:title="@string/preference_developer_options_http_redact_token_title" />
 </PreferenceScreen>
