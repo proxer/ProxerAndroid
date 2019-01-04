@@ -258,7 +258,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            image.setMinimumTileDpi(40)
+            image.setMinimumTileDpi(120)
 
             val useRapidDecoder = requiresFallback[item.decodedName] == true
 
