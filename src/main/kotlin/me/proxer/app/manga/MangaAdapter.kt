@@ -196,7 +196,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             Timber.e(error)
 
             when {
-                error is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
+                error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 requiresFallback[data[position].decodedName] == true -> {
                     errorIndicator.isVisible = true
                     image.isVisible = false
@@ -258,7 +258,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            image.setMinimumTileDpi(120)
+            image.setMinimumTileDpi(40)
 
             val useRapidDecoder = requiresFallback[item.decodedName] == true
 
