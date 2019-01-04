@@ -8,6 +8,7 @@ import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Single
@@ -120,6 +121,28 @@ inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Di
 }
 
 inline fun Completable.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        Timber.e(it)
+    })
+}
+
+inline fun <T> Maybe<T>.subscribeAndLogErrors(
+    noinline onSuccess: (T) -> Unit,
+    noinline onError: (Throwable) -> Unit
+): Disposable {
+    return this.subscribe(onSuccess) {
+        Timber.e(it)
+        onError(it)
+    }
+}
+
+inline fun <T> Maybe<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess) {
+        Timber.e(it)
+    }
+}
+
+inline fun <T> Maybe<T>.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
         Timber.e(it)
     })

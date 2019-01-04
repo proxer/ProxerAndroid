@@ -1,8 +1,7 @@
 package me.proxer.app.media
 
-import com.gojuno.koptional.None
-import com.gojuno.koptional.Optional
-import com.gojuno.koptional.toOptional
+import androidx.lifecycle.MutableLiveData
+import com.gojuno.koptional.rxjava2.filterSome
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -25,9 +24,9 @@ import me.proxer.library.entity.info.MediaUserInfo
 /**
  * @author Ruben Gees
  */
-class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry, Optional<MediaUserInfo>>>() {
+class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
-    override val dataSingle: Single<Pair<Entry, Optional<MediaUserInfo>>>
+    override val dataSingle: Single<Entry>
         get() = Single.fromCallable { validate() }
             .flatMap { api.info().entry(entryId).buildSingle() }
             .doOnSuccess {
@@ -39,19 +38,23 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
                     }
                 }
             }
-            .flatMap { entry ->
-                when (storageHelper.isLoggedIn) {
-                    true -> api.info().userInfo(entryId)
+            .doAfterSuccess {
+                if (storageHelper.isLoggedIn) {
+                    userInfoDisposable = api.info().userInfo(entryId)
                         .buildOptionalSingle()
-                        .map { entry to it }
-                        .onErrorReturn { entry to None }
-                    false -> Single.just(None).map { entry to it }
+                        .filterSome()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeAndLogErrors { userInfoData.value = it }
                 }
             }
+
+    val userInfoData = MutableLiveData<MediaUserInfo?>()
 
     val userInfoUpdateData = ResettingMutableLiveData<Unit?>()
     val userInfoUpdateError = ResettingMutableLiveData<ErrorAction?>()
 
+    private var userInfoDisposable: Disposable? = null
     private var userInfoUpdateDisposable: Disposable? = null
 
     init {
@@ -66,7 +69,10 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
     }
 
     override fun onCleared() {
+        userInfoDisposable?.dispose()
         userInfoUpdateDisposable?.dispose()
+
+        userInfoDisposable = null
         userInfoUpdateDisposable = null
 
         super.onCleared()
@@ -83,18 +89,18 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
             UserInfoUpdateType.FINISHED -> api.info().markAsFinished(entryId)
         }
 
+        userInfoDisposable?.dispose()
         userInfoUpdateDisposable?.dispose()
-        userInfoUpdateDisposable = endpoint
-            .buildOptionalSingle()
+        userInfoUpdateDisposable = Single.fromCallable { validators.validateLogin() }
+            .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
-            .flatMap { Single.fromCallable { it.apply { validators.validateLogin() } } }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors({
                 userInfoUpdateError.value = null
                 userInfoUpdateData.value = Unit
 
-                data.value?.let {
-                    data.value = copyData(it, updateType)
+                userInfoData.value?.also {
+                    userInfoData.value = applyMediaUserInfoChanges(it, updateType)
                 }
             }, {
                 userInfoUpdateData.value = null
@@ -102,17 +108,25 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Pair<Entry
             })
     }
 
-    private fun copyData(
-        data: Pair<Entry, Optional<MediaUserInfo>>,
-        updateType: UserInfoUpdateType
-    ) = data.first to data.second.toNullable()?.let {
-        MediaUserInfo(
-            it.isNoted || updateType == UserInfoUpdateType.NOTE,
-            it.isFinished || updateType == UserInfoUpdateType.FINISHED,
-            it.isCanceled,
-            it.isTopTen || updateType == UserInfoUpdateType.FAVORITE
-        )
-    }.toOptional()
+    private fun applyMediaUserInfoChanges(data: MediaUserInfo, updateType: UserInfoUpdateType) = data.let {
+        val isNoted = when (updateType) {
+            UserInfoUpdateType.FINISHED -> false
+            UserInfoUpdateType.NOTE -> true
+            else -> data.isNoted
+        }
+
+        val isFinished = when (updateType) {
+            UserInfoUpdateType.FINISHED -> true
+            else -> data.isFinished
+        }
+
+        val isTopTen = when (updateType) {
+            UserInfoUpdateType.FAVORITE -> true
+            else -> data.isTopTen
+        }
+
+        MediaUserInfo(isNoted, isFinished, data.isCanceled, isTopTen)
+    }
 
     private enum class UserInfoUpdateType {
         NOTE, FAVORITE, FINISHED

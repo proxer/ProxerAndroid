@@ -15,7 +15,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import com.gojuno.koptional.Optional
 import com.google.android.flexbox.FlexboxLayout
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -50,7 +49,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo>>>() {
+class MediaInfoFragment : BaseContentFragment<Entry>() {
 
     companion object {
         private const val SHOW_UNRATED_TAGS_ARGUMENT = "show_unrated_tags"
@@ -132,7 +131,7 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showUnratedTags = !showUnratedTags
 
-                viewModel.data.value?.let { (entry) -> bindTags(entry) }
+                viewModel.data.value?.let { entry -> bindTags(entry) }
             }
 
         spoilerTags.clicks()
@@ -140,8 +139,12 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
             .subscribe {
                 showSpoilerTags = !showSpoilerTags
 
-                viewModel.data.value?.let { (entry) -> bindTags(entry) }
+                viewModel.data.value?.let { entry -> bindTags(entry) }
             }
+
+        viewModel.userInfoData.observe(viewLifecycleOwner, Observer {
+            bindUserInfo(it)
+        })
 
         viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -159,13 +162,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         })
     }
 
-    override fun showData(data: Pair<Entry, Optional<MediaUserInfo>>) {
+    override fun showData(data: Entry) {
         super.showData(data)
 
-        bind(data.first, data.second)
+        bind(data)
     }
 
-    private fun bind(entry: Entry, userInfo: Optional<MediaUserInfo>) {
+    private fun bind(entry: Entry) {
         infoTable.removeAllViews()
 
         bindRating(entry)
@@ -179,7 +182,6 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         bindFskConstraints(entry)
         bindTranslatorGroups(entry)
         bindIndustries(entry)
-        bindUserInfo(userInfo)
 
         description.text = entry.description
     }
@@ -446,15 +448,13 @@ class MediaInfoFragment : BaseContentFragment<Pair<Entry, Optional<MediaUserInfo
         }
     }
 
-    private fun bindUserInfo(userInfo: Optional<MediaUserInfo>) {
-        userInfo.toNullable().let { nullableUserInfo ->
-            val noteColor = if (nullableUserInfo?.isNoted == true) R.attr.colorSecondary else R.attr.colorIcon
-            val favorColor = if (nullableUserInfo?.isTopTen == true) R.attr.colorSecondary else R.attr.colorIcon
-            val finishColor = if (nullableUserInfo?.isFinished == true) R.attr.colorSecondary else R.attr.colorIcon
+    private fun bindUserInfo(userInfo: MediaUserInfo?) {
+        val noteColor = if (userInfo?.isNoted == true) R.attr.colorSecondary else R.attr.colorIcon
+        val favorColor = if (userInfo?.isTopTen == true) R.attr.colorSecondary else R.attr.colorIcon
+        val finishColor = if (userInfo?.isFinished == true) R.attr.colorSecondary else R.attr.colorIcon
 
-            note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
-            favor.setIconicsImage(CommunityMaterial.Icon2.cmd_star, 24, 0, favorColor)
-            finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0, finishColor)
-        }
+        note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
+        favor.setIconicsImage(CommunityMaterial.Icon2.cmd_star, 24, 0, favorColor)
+        finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0, finishColor)
     }
 }

@@ -117,7 +117,7 @@ class MediaActivity : ImageTabsActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.data.observe(this, Observer {
-            it?.let { (entry, _) ->
+            it?.let { entry ->
                 name = entry.name
                 category = entry.category
 
