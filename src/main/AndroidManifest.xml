@@ -221,7 +221,8 @@
 
         <activity
             android:name=".anime.StreamActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode">
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
 
                 <action android:name="android.intent.action.VIEW" />
