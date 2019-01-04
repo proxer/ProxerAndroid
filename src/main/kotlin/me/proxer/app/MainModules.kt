@@ -86,21 +86,32 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
+const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
+const val HAWK_RX_PREFERENCES = "hawkRxPreferences"
+
 private const val API_LOGGING_TAG = "API"
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
+private const val HAWK_PREFERENCE_NAME = "Hawk2"
+
+private const val HTTP_CACHE_SIZE = 1024L * 1024L * 10L
+private const val HTTP_CACHE_NAME = "http"
+
+private const val API_TOKEN_HEADER = "proxer-api-token"
+
+private val headersToRedact = listOf("proxer-api-key", "set-cookie")
 
 private val applicationModules = module(createOnStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single("defaultRxPreferences") { RxSharedPreferences.create(get()) }
-    single("hawkRxPreferences") {
-        RxSharedPreferences.create(androidContext().getSharedPreferences("Hawk2", Context.MODE_PRIVATE))
+    single(DEFAULT_RX_PREFERENCES) { RxSharedPreferences.create(get()) }
+    single(HAWK_RX_PREFERENCES) {
+        RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
     }
 
-    single { StorageHelper(androidContext(), get(), get("hawkRxPreferences")) }
-    single { PreferenceHelper(get(), get("defaultRxPreferences")) }
+    single { StorageHelper(androidContext(), get(), get(HAWK_RX_PREFERENCES)) }
+    single { PreferenceHelper(get(), get(DEFAULT_RX_PREFERENCES)) }
 
     single { RxBus() }
 
@@ -119,11 +130,10 @@ private val applicationModules = module(createOnStart = true) {
             BuildConfig.LOG -> HttpLoggingInterceptor { message -> Timber.i(message) }.apply {
                 level = preferenceHelper.httpLogLevel
 
-                redactHeader("proxer-api-key")
-                redactHeader("set-cookie")
+                headersToRedact.forEach { redactHeader(it) }
 
                 if (preferenceHelper.shouldRedactToken) {
-                    redactHeader("proxer-api-token")
+                    redactHeader(API_TOKEN_HEADER)
                 }
             }
             else -> null
@@ -139,7 +149,7 @@ private val applicationModules = module(createOnStart = true) {
             .readTimeout(10, TimeUnit.SECONDS)
             .addNetworkInterceptor(CacheInterceptor())
             .addInterceptor(HttpsUpgradeInterceptor())
-            .cache(Cache(File(androidContext().cacheDir, "http"), 1024L * 1024L * 10L))
+            .cache(Cache(File(androidContext().cacheDir, HTTP_CACHE_NAME), HTTP_CACHE_SIZE))
             .apply {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                     addInterceptor(ConnectionCloseInterceptor())
