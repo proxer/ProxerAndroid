@@ -133,6 +133,7 @@ class MediaActivity : ImageTabsActivity() {
         })
 
         preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .skip(1)
             .autoDisposable(this.scope())
             .subscribe { sectionsPagerAdapter.notifyDataSetChanged() }
     }

@@ -58,9 +58,16 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
     private var userInfoUpdateDisposable: Disposable? = null
 
     init {
+        disposables += storageHelper.isLoggedInObservable
+            .skip(1)
+            .subscribe {
+                if (it && error.value?.buttonAction == ButtonAction.LOGIN) {
+                    reload()
+                }
+            }
+
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
             .skip(1)
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()

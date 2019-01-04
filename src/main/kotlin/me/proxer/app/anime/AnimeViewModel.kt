@@ -77,6 +77,14 @@ class AnimeViewModel(
     private var userStateDisposable: Disposable? = null
 
     init {
+        disposables += storageHelper.isLoggedInObservable
+            .skip(1)
+            .subscribe {
+                if (it && error.value?.buttonAction == ButtonAction.LOGIN) {
+                    reload()
+                }
+            }
+
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
             .skip(1)
             .subscribe {
