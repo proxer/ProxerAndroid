@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
@@ -26,6 +27,7 @@ import me.proxer.app.auth.LoginHandler
 import me.proxer.app.util.GlideDrawerImageLoader
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.TimberFileTree
+import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
@@ -92,7 +94,10 @@ class MainApplication : Application() {
                 GoogleApiAvailability.getInstance().apply {
                     Timber.e("Error installing security patches with error code $errorCode")
 
-                    if (isUserResolvableError(errorCode)) {
+                    if (
+                        isUserResolvableError(errorCode) &&
+                        Utils.isPackageInstalled(packageManager, GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE)
+                    ) {
                         showErrorNotification(this@MainApplication, errorCode)
                     }
                 }
