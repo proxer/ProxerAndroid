@@ -37,6 +37,8 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -50,11 +52,6 @@ import org.koin.android.ext.android.inject
  * @author Ruben Gees
  */
 class StreamActivity : BaseActivity() {
-
-    companion object {
-        const val NAME_EXTRA = "name"
-        const val EPISODE_EXTRA = "epsiode"
-    }
 
     private val name: String?
         get() = intent.getStringExtra(NAME_EXTRA)
@@ -123,24 +120,24 @@ class StreamActivity : BaseActivity() {
         return true
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
 
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
-        playerManager.resume()
+        playerManager.start()
 
         volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
-    override fun onPause() {
+    override fun onStop() {
         getSafeCastContext()?.removeCastStateListener(castStateListener)
 
-        playerManager.pause()
+        playerManager.stop()
 
         volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
 
-        super.onPause()
+        super.onStop()
     }
 
     override fun onDestroy() {
@@ -155,10 +152,12 @@ class StreamActivity : BaseActivity() {
     private fun setupUi() {
         title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.subtitle = Category.ANIME.toEpisodeAppString(this, episode)
+        supportActionBar?.subtitle = episode?.let { Category.ANIME.toEpisodeAppString(this, it) }
 
         playerView.setControllerVisibilityListener {
             toggleFullscreen(it == View.GONE)
+
+            toolbar.isVisible = it == View.VISIBLE
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->

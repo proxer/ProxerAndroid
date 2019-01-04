@@ -162,7 +162,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         context.application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
 
-    fun resume() {
+    fun start() {
         if (isFirstStart) {
             currentPlayer.playWhenReady = true
 
@@ -176,7 +176,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         }
     }
 
-    fun pause() {
+    fun stop() {
         wasPlaying = currentPlayer.playWhenReady == true && currentPlayer.playbackState == Player.STATE_READY
         lastPosition = currentPlayer.currentPosition
 
