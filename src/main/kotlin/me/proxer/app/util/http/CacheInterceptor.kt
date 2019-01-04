@@ -78,32 +78,30 @@ class CacheInterceptor : Interceptor {
         val url = response.request().url().toString()
 
         return when {
-            url.contains("proxer.me/api/v1") -> {
-                response.body()
-                    ?.peekAndUseWithGzip {
-                        it.readUtf8(12).matches(apiSuccessRegex)
-                    }
-                    ?: false
-            }
-            url.contains("stream.proxer.me") -> {
-                response.body()
-                    ?.peekAndUseWithGzip {
-                        var found: Boolean? = null
+            url.contains("proxer.me/api/v1") -> response.body()
+                ?.peekAndUseWithGzip {
+                    it.readUtf8(12).matches(apiSuccessRegex)
+                }
+                ?: false
 
-                        while (found == null) {
-                            val nextLine = it.readUtf8Line()
+            url.contains("stream.proxer.me") -> response.body()
+                ?.peekAndUseWithGzip {
+                    var found: Boolean? = null
 
-                            if (nextLine == null) {
-                                found = false
-                            } else if (nextLine.matches(streamSuccessRegex)) {
-                                found = true
-                            }
+                    while (found == null) {
+                        val nextLine = it.readUtf8Line()
+
+                        if (nextLine == null) {
+                            found = false
+                        } else if (nextLine.matches(streamSuccessRegex)) {
+                            found = true
                         }
-
-                        found
                     }
-                    ?: false
-            }
+
+                    found
+                }
+                ?: false
+
             else -> false
         }
     }
