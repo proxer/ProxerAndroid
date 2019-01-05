@@ -1,6 +1,7 @@
 package me.proxer.app.util.http
 
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.library.util.ProxerUrls
 import okhttp3.CacheControl
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
@@ -28,19 +29,19 @@ class CacheInterceptor : Interceptor {
         private val zoneIdBerlin by unsafeLazy { ZoneId.of("Europe/Berlin") }
 
         private val cacheInfo = listOf(
-            CacheInfo("https://proxer.me/api/v1/info/fullentry", 24),
-            CacheInfo("https://proxer.me/api/v1/info/entry", 24),
-            CacheInfo("https://proxer.me/api/v1/manga/chapter", 24),
-            CacheInfo("https://proxer.me/api/v1/anime/proxerstreams", 1),
-            CacheInfo("https://proxer.me/api/v1/anime/link", 1),
-            CacheInfo("https://stream.proxer.me", 24),
+            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("info/fullentry").build(), 24),
+            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("info/entry").build(), 24),
+            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("manga/chapter").build(), 24),
+            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("anime/proxerstreams").build(), 1),
+            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("anime/link").build(), 1),
+            CacheInfo(ProxerUrls.streamBase(), 24),
             CacheInfo(
-                "https://proxer.me/api/v1/list/entrysearch",
+                ProxerUrls.apiBase().newBuilder().addPathSegments("list/entrysearch").build(),
                 1,
                 additionalApplicableCallback = { it.urlString.contains("hide_finished=1").not() }
             ),
             CacheInfo(
-                "https://proxer.me/api/v1/media/calendar",
+                ProxerUrls.apiBase().newBuilder().addPathSegments("media/calendar").build(),
                 {
                     val now = LocalDateTime.now(zoneIdBerlin)
                     val tomorrow = LocalDate.now(zoneIdBerlin).plusDays(1).atTime(0, 0)
@@ -82,7 +83,7 @@ class CacheInterceptor : Interceptor {
         val url = response.request().url().toString()
 
         return when {
-            url.contains("proxer.me/api/v1") -> response.body()
+            url.contains(ProxerUrls.apiBase().toString()) -> response.body()
                 ?.peekAndUseWithGzip {
                     it.readUtf8(12).matches(apiSuccessRegex)
                 }
@@ -135,26 +136,26 @@ class CacheInterceptor : Interceptor {
     ) {
 
         constructor(
-            url: String,
+            url: HttpUrl,
             maxAge: Int = 24,
             timeUnit: TimeUnit = TimeUnit.HOURS,
             additionalApplicableCallback: (Response) -> Boolean = { true }
         ) : this(
             { response: Response ->
-                response.urlString.startsWith(HttpUrl.get(url).toString()) && additionalApplicableCallback(response)
+                response.urlString.startsWith(url.toString()) && additionalApplicableCallback(response)
             },
             { maxAge },
             { timeUnit }
         )
 
         constructor(
-            url: String,
+            url: HttpUrl,
             maxAgeCallback: (Response) -> Int = { 24 },
             timeUnit: TimeUnit = TimeUnit.HOURS,
             additionalApplicableCallback: (Response) -> Boolean = { true }
         ) : this(
             { response: Response ->
-                response.urlString.startsWith(HttpUrl.get(url).toString()) && additionalApplicableCallback(response)
+                response.urlString.startsWith(url.toString()) && additionalApplicableCallback(response)
             },
             maxAgeCallback,
             { timeUnit }
