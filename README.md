@@ -1,4 +1,5 @@
 # ![](art/logo/proxer-logo-title.png) Proxer.Me Android [![Latest Release](https://img.shields.io/github/release/proxer/ProxerAndroid.svg)](https://github.com/proxer/ProxerAndroid/releases/latest) [![Build status](https://circleci.com/gh/proxer/ProxerAndroid.svg?style=shield)](https://circleci.com/gh/proxer/ProxerAndroid)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fproxer%2FProxerAndroid.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fproxer%2FProxerAndroid?ref=badge_shield)
 
 ### What is this?
 
@@ -99,3 +100,7 @@ gradlew.bat assembleDebug
 A guide for contribution can be found [here](.github/CONTRIBUTING.md).
 
 - [@InfiniteSoul](https://github.com/InfiniteSoul) for implementing a persistent Navigation Drawer for tablets and UI improvements.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fproxer%2FProxerAndroid.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fproxer%2FProxerAndroid?ref=badge_large)
