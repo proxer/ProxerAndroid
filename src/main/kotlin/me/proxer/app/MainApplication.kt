@@ -30,8 +30,10 @@ import me.proxer.app.util.TimberFileTree
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import org.koin.android.ext.android.inject
-import org.koin.android.ext.koin.useAndroidContext
-import org.koin.core.KoinApplication
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.EmptyLogger
 import timber.log.Timber
 
 /**
@@ -54,10 +56,12 @@ class MainApplication : Application() {
             return
         }
 
-        KoinApplication.create()
-            .useAndroidContext(this)
-            .loadModules(modules, logger = EmptyLogger())
-            .start()
+        startKoin {
+            androidContext(this@MainApplication)
+            androidLogger(log = EmptyLogger())
+
+            modules(koinModules)
+        }
 
         LeakCanary.install(this)
         FlavorInitializer.initialize(this)

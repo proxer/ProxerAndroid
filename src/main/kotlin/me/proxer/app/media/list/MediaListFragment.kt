@@ -37,6 +37,7 @@ import me.proxer.app.util.extension.getEnumSet
 import me.proxer.app.util.extension.putEnumSet
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.unsafeParametersOf
 import me.proxer.library.entity.list.MediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.FskConstraint
@@ -46,7 +47,6 @@ import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import org.koin.androidx.viewmodel.ext.viewModel
-import org.koin.core.parameter.parametersOf
 import java.util.EnumSet
 import kotlin.properties.Delegates
 
@@ -78,7 +78,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     override val emptyDataMessage = R.string.error_no_data_search
 
     override val viewModel by viewModel<MediaListViewModel> {
-        parametersOf(
+        unsafeParametersOf(
             sortCriteria, type, searchQuery, language,
             genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter
         )

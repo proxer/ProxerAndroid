@@ -260,4 +260,4 @@ private val viewModelModule = module {
     viewModel { ServerStatusViewModel() }
 }
 
-val modules = listOf(applicationModules, viewModelModule)
+val koinModules = listOf(applicationModules, viewModelModule)
