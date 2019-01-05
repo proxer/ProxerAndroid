@@ -83,7 +83,7 @@ class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
 
             episodesRow.text = (data.toNullable() ?: 0).toString()
 
-            val minutes = data.toNullable() ?: 0 * 20
+            val minutes = (data.toNullable() ?: 0) * 20
             val hours = minutes / 60f
             val days = hours / 24f
 
