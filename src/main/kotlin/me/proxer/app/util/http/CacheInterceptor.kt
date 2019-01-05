@@ -15,7 +15,6 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
-import kotlin.contracts.ExperimentalContracts
 
 /**
  * @author Ruben Gees
@@ -55,7 +54,6 @@ class CacheInterceptor : Interceptor {
         private val excludedFileTypes = listOf(".png", ".jpg", ".jpeg", ".gif", ".webm")
     }
 
-    @ExperimentalContracts
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val applicableCacheInfo = cacheInfo.find { it.isApplicable(response) }
