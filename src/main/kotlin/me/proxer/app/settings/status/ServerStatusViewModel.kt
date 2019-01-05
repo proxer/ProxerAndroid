@@ -1,6 +1,7 @@
 package me.proxer.app.settings.status
 
 import io.reactivex.Single
+import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.HttpUrl
@@ -32,6 +33,7 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
 
     private fun constructRequest() = Request.Builder()
         .url(url)
+        .header("User-Agent", USER_AGENT)
         .header("Connection", "close")
         .build()
 

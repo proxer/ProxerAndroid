@@ -1,5 +1,6 @@
 package me.proxer.app.util.http
 
+import me.proxer.library.util.ProxerUrls
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -10,7 +11,8 @@ class HttpsUpgradeInterceptor : Interceptor {
 
     private companion object {
         private val upgradableHosts = listOf(
-            "www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com", "www.yourupload.com"
+            "www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com", "www.yourupload.com",
+            ProxerUrls.webBase().host(), ProxerUrls.cdnBase().host()
         )
     }
 

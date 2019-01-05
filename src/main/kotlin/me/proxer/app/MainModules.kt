@@ -65,6 +65,7 @@ import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.ModernTlsSocketFactory
 import me.proxer.app.util.http.TaggedSocketFactory
+import me.proxer.app.util.http.UserAgentInterceptor
 import me.proxer.library.api.LoginTokenManager
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.enums.AnimeLanguage
@@ -90,7 +91,6 @@ import javax.net.ssl.X509TrustManager
 const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
 const val HAWK_RX_PREFERENCES = "hawkRxPreferences"
 
-private const val API_LOGGING_TAG = "API"
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
 private const val HAWK_PREFERENCE_NAME = "Hawk2"
@@ -140,7 +140,7 @@ private val applicationModules = module(createdAtStart = true) {
             else -> null
         }
 
-        val client = OkHttpClient.Builder()
+        OkHttpClient.Builder()
             .retryOnConnectionFailure(false)
             .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
@@ -150,6 +150,7 @@ private val applicationModules = module(createdAtStart = true) {
             .readTimeout(10, TimeUnit.SECONDS)
             .addNetworkInterceptor(CacheInterceptor())
             .addInterceptor(HttpsUpgradeInterceptor())
+            .addInterceptor(UserAgentInterceptor())
             .cache(Cache(File(androidContext().cacheDir, HTTP_CACHE_NAME), HTTP_CACHE_SIZE))
             .apply {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -166,18 +167,18 @@ private val applicationModules = module(createdAtStart = true) {
                 }
             }
             .build()
-
-        ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
-            .userAgent(USER_AGENT)
-            .loggingTag(API_LOGGING_TAG)
-            .loginTokenManager(get())
-            .moshi(Moshi.Builder().build())
-            .client(client)
-            .build()
     }
 
-    single { get<ProxerApi>().moshi() }
-    single { get<ProxerApi>().client() }
+    single { Moshi.Builder().build() }
+
+    single {
+        ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
+            .userAgent(USER_AGENT)
+            .loginTokenManager(get())
+            .client(get())
+            .moshi(get())
+            .build()
+    }
 
     single { Validators(get(), get()) }
 
@@ -186,7 +187,7 @@ private val applicationModules = module(createdAtStart = true) {
     single { get<MessengerDatabase>().dao() }
     single { get<TagDatabase>().dao() }
 
-    single { HawkMoshiParser(Moshi.Builder().build()) }
+    single { HawkMoshiParser(get()) }
     single { HawkInitializer(get()) }
 
     single { ProxerLoginTokenManager(get()) } bind LoginTokenManager::class
