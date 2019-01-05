@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Environment
 import android.os.Looper
 import android.webkit.WebView
@@ -138,7 +139,12 @@ class MainApplication : Application() {
         RxAndroidPlugins.setMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
 
         DrawerImageLoader.init(GlideDrawerImageLoader())
-        SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.HARDWARE)
+        } else {
+            SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
+        }
     }
 
     private fun initCache() {
