@@ -68,6 +68,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
         private const val EXCLUDED_TAGS_ARGUMENT = "excluded_tags"
         private const val TAG_RATE_FILTER_ARGUMENT = "tag_rate_filter"
         private const val TAG_SPOILER_FILTER_ARGUMENT = "tag_spoiler_filter"
+        private const val HIDE_FINISHED_ARGUMENT = "hide_finished"
 
         fun newInstance(category: Category) = MediaListFragment().apply {
             arguments = bundleOf(CATEGORY_ARGUMENT to category)
@@ -79,8 +80,8 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
 
     override val viewModel by viewModel<MediaListViewModel> {
         unsafeParametersOf(
-            sortCriteria, type, searchQuery, language,
-            genres, excludedGenres, fskConstraints, tags, excludedTags, tagRateFilter, tagSpoilerFilter
+            sortCriteria, type, searchQuery, language, genres, excludedGenres, fskConstraints,
+            tags, excludedTags, tagRateFilter, tagSpoilerFilter, hideFinished
         )
     }
 
@@ -188,6 +189,14 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
             viewModel.tagSpoilerFilter = value
         }
 
+    internal var hideFinished: Boolean
+        get() = requireArguments().getBoolean(HIDE_FINISHED_ARGUMENT, false)
+        set(value) {
+            requireArguments().putBoolean(HIDE_FINISHED_ARGUMENT, value)
+
+            viewModel.hideFinished = value
+        }
+
     private var searchBottomSheetManager by Delegates.notNull<MediaListSearchBottomSheet>()
 
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
@@ -203,6 +212,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     internal val excludedTagSelector by bindView<ExpandableSelectionView>(R.id.excludedTagSelector)
     internal val includeUnratedTags by bindView<CheckBox>(R.id.includeUnratedTags)
     internal val includeSpoilerTags by bindView<CheckBox>(R.id.includeSpoilerTags)
+    internal val hideFinishedCheckBox by bindView<CheckBox>(R.id.hideFinished)
 
     internal var searchView by Delegates.notNull<SearchView>()
 

@@ -213,8 +213,9 @@ private val viewModelModule = module {
 
     viewModel { parameterList ->
         MediaListViewModel(
-            parameterList[0], parameterList[1], parameterList[2], parameterList[3], parameterList[4], parameterList[5],
-            parameterList[6], parameterList[7], parameterList[8], parameterList[9], parameterList[10]
+            parameterList[0], parameterList[1], parameterList[2], parameterList[3], parameterList[4],
+            parameterList[5], parameterList[6], parameterList[7], parameterList[8], parameterList[9],
+            parameterList[10], parameterList[11]
         )
     }
 

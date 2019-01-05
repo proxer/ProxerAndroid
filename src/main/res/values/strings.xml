@@ -397,6 +397,7 @@
     <string name="fragment_media_list_all_languages">Alle</string>
     <string name="fragment_media_list_include_unrated_tags">Unbestimmte Tags einbeziehen</string>
     <string name="fragment_media_list_include_spoiler_tags">Spoiler Tags einbeziehen</string>
+    <string name="fragment_media_list_hide_finished">Bereits geschaute/gelesene Werke ausblenden</string>
 
     <string name="fragment_media_info_description">Beschreibung</string>
     <string name="fragment_media_info_fsk_constraints">FSK</string>

@@ -63,6 +63,11 @@ class MediaListSearchBottomSheet private constructor(
             .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribe { fragment.tagSpoilerFilter = if (it) TagSpoilerFilter.ALL else TagSpoilerFilter.NO_SPOILERS }
 
+        fragment.hideFinishedCheckBox.checkedChanges()
+            .skipInitialValue()
+            .autoDisposable(fragment.viewLifecycleOwner.scope())
+            .subscribe { fragment.hideFinished = it }
+
         val fskItems = FskConstraint.values().map {
             ExpandableSelectionView.Item(
                 it.toAppString(fragment.requireContext()),

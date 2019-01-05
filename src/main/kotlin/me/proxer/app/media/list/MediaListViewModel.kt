@@ -45,7 +45,8 @@ class MediaListViewModel(
     var tags: List<LocalTag>,
     var excludedTags: List<LocalTag>,
     var tagRateFilter: TagRateFilter?,
-    var tagSpoilerFilter: TagSpoilerFilter?
+    var tagSpoilerFilter: TagSpoilerFilter?,
+    var hideFinished: Boolean?
 ) : PagedContentViewModel<MediaListEntry>() {
 
     override val itemsOnPage = 30
@@ -68,6 +69,7 @@ class MediaListViewModel(
             .excludedTags(excludedTags.asSequence().map { it.id }.toSet())
             .tagRateFilter(tagRateFilter)
             .tagSpoilerFilter(tagSpoilerFilter)
+            .hideFinished(hideFinished)
             .type(type)
 
     var sortCriteria by Delegates.observable(sortCriteria) { _, old, new ->

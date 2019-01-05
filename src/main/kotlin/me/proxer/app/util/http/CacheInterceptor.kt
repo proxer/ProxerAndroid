@@ -30,11 +30,15 @@ class CacheInterceptor : Interceptor {
         private val cacheInfo = listOf(
             CacheInfo("https://proxer.me/api/v1/info/fullentry", 24),
             CacheInfo("https://proxer.me/api/v1/info/entry", 24),
-            CacheInfo("https://proxer.me/api/v1/list/entrysearch", 1),
             CacheInfo("https://proxer.me/api/v1/manga/chapter", 24),
             CacheInfo("https://proxer.me/api/v1/anime/proxerstreams", 1),
             CacheInfo("https://proxer.me/api/v1/anime/link", 1),
             CacheInfo("https://stream.proxer.me", 24),
+            CacheInfo(
+                "https://proxer.me/api/v1/list/entrysearch",
+                1,
+                additionalApplicableCallback = { it.urlString.contains("hide_finished=1").not() }
+            ),
             CacheInfo(
                 "https://proxer.me/api/v1/media/calendar",
                 {
@@ -53,11 +57,11 @@ class CacheInterceptor : Interceptor {
     @ExperimentalContracts
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
-        val applicableCacheInfo = cacheInfo.find { (url) -> response.request().url().toString().startsWith(url) }
+        val applicableCacheInfo = cacheInfo.find { it.isApplicable(response) }
 
         return when {
             applicableCacheInfo != null && shouldEnableCacheForResponse(response) -> response.setCacheControl {
-                maxAge(applicableCacheInfo.maxAge(), applicableCacheInfo.timeUnit)
+                maxAge(applicableCacheInfo.maxAge(response), applicableCacheInfo.timeUnit(response))
             }
             shouldDisableCacheForResponse(response) -> response.setCacheControl {
                 noCache()
@@ -125,14 +129,50 @@ class CacheInterceptor : Interceptor {
         .use(block)
 
     private class CacheInfo(
-        url: String,
-        val maxAge: () -> Int,
-        val timeUnit: TimeUnit = TimeUnit.HOURS
+        private val applicableCallback: (Response) -> Boolean,
+        private val maxAgeCallback: (Response) -> Int,
+        private val timeUnitCallback: (Response) -> TimeUnit
     ) {
-        val url = HttpUrl.get(url).toString()
 
-        constructor(url: String, maxAge: Int, timeUnit: TimeUnit = TimeUnit.HOURS) : this(url, { maxAge }, timeUnit)
+        constructor(
+            url: String,
+            maxAge: Int = 24,
+            timeUnit: TimeUnit = TimeUnit.HOURS,
+            additionalApplicableCallback: (Response) -> Boolean = { true }
+        ) : this(
+            { response: Response ->
+                response.urlString.startsWith(HttpUrl.get(url).toString()) && additionalApplicableCallback(response)
+            },
+            { maxAge },
+            { timeUnit }
+        )
 
-        operator fun component1() = url
+        constructor(
+            url: String,
+            maxAgeCallback: (Response) -> Int = { 24 },
+            timeUnit: TimeUnit = TimeUnit.HOURS,
+            additionalApplicableCallback: (Response) -> Boolean = { true }
+        ) : this(
+            { response: Response ->
+                response.urlString.startsWith(HttpUrl.get(url).toString()) && additionalApplicableCallback(response)
+            },
+            maxAgeCallback,
+            { timeUnit }
+        )
+
+        fun isApplicable(response: Response): Boolean {
+            return applicableCallback(response)
+        }
+
+        fun maxAge(response: Response): Int {
+            return maxAgeCallback(response)
+        }
+
+        fun timeUnit(response: Response): TimeUnit {
+            return timeUnitCallback(response)
+        }
     }
 }
+
+private inline val Response.urlString
+    get() = this.request().url().toString()
