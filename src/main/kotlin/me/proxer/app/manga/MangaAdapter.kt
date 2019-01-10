@@ -103,7 +103,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     override fun onBindViewHolder(holder: MangaViewHolder, position: Int) = holder.bind(data[position])
 
     override fun getItemViewType(position: Int): Int {
-        return when (data[position].decodedName.endsWith(".gif")) {
+        return when (data[position].decodedName.endsWith(".gif", ignoreCase = true)) {
             true -> VIEW_TYPE_GIF
             false -> VIEW_TYPE_IMAGE
         }
