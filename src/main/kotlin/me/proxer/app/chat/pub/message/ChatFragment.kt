@@ -309,6 +309,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
     }
 
     override fun onDestroyView() {
+        messageInput.text = null
         emojiPopup.dismiss()
 
         super.onDestroyView()

@@ -363,6 +363,7 @@ class CreateConferenceFragment : BaseFragment() {
         participants.layoutManager = null
         participants.adapter = null
 
+        messageInput.text = null
         emojiPopup.dismiss()
 
         super.onDestroyView()
