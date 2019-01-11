@@ -6,7 +6,6 @@ import okhttp3.CacheControl
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.ResponseBody
 import okio.BufferedSource
 import okio.GzipSource
 import okio.buffer
@@ -23,7 +22,6 @@ class CacheInterceptor : Interceptor {
 
     private companion object {
         private val apiSuccessRegex = Regex(".*\"error\": *?0.*", setOf(RegexOption.DOT_MATCHES_ALL))
-        private val streamSuccessRegex = Regex(".*<source.*?>.*", setOf(RegexOption.DOT_MATCHES_ALL))
 
         private val zoneIdBerlin by unsafeLazy { ZoneId.of("Europe/Berlin") }
 
@@ -81,29 +79,9 @@ class CacheInterceptor : Interceptor {
         val url = response.request().url().toString()
 
         return when {
-            url.contains(ProxerUrls.apiBase().toString()) -> response.body()
-                ?.peekAndUseWithGzip {
-                    it.readUtf8(12).matches(apiSuccessRegex)
-                }
-                ?: false
-
-            url.contains("stream.proxer.me") -> response.body()
-                ?.peekAndUseWithGzip {
-                    var found: Boolean? = null
-
-                    while (found == null) {
-                        val nextLine = it.readUtf8Line()
-
-                        if (nextLine == null) {
-                            found = false
-                        } else if (nextLine.matches(streamSuccessRegex)) {
-                            found = true
-                        }
-                    }
-
-                    found
-                }
-                ?: false
+            url.contains(ProxerUrls.apiBase().toString()) -> response.peekBodyAndUseWithGzip {
+                it.readUtf8(12).matches(apiSuccessRegex)
+            } ?: false
 
             else -> false
         }
@@ -120,12 +98,19 @@ class CacheInterceptor : Interceptor {
             .build()
     }
 
-    private inline fun <R> ResponseBody.peekAndUseWithGzip(block: (BufferedSource) -> R) = this
-        .source()
-        .peek()
-        .let { GzipSource(it) }
-        .buffer()
-        .use(block)
+    private inline fun <R> Response.peekBodyAndUseWithGzip(block: (BufferedSource) -> R) = this
+        .body()
+        ?.source()
+        ?.peek()
+        ?.let {
+            if (this.header("Content-Encoding")?.equals("gzip", ignoreCase = true) == true) {
+                GzipSource(it)
+            } else {
+                it
+            }
+        }
+        ?.buffer()
+        ?.use(block)
 
     private class CacheInfo(
         private val applicableCallback: (Response) -> Boolean,
