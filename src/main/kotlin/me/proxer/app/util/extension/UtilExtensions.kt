@@ -30,7 +30,7 @@ import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.koin.core.parameter.ParametersHolder
+import org.koin.core.parameter.DefinitionParameters
 import timber.log.Timber
 import java.util.EnumSet
 import java.util.regex.Pattern.quote
@@ -109,12 +109,12 @@ inline fun Intent.addReferer(): Intent {
 
 // TODO: https://github.com/InsertKoinIO/koin/issues/303
 @Suppress("UNCHECKED_CAST")
-inline fun unsafeParametersOf(vararg parameters: Any?): ParametersHolder {
-    val constructor = ParametersHolder::class.java.getConstructor(Array<Any?>::class.java)
+inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
+    val constructor = DefinitionParameters::class.java.getConstructor(Array<Any?>::class.java)
 
     constructor.isAccessible = true
 
-    return constructor.newInstance(parameters) as ParametersHolder
+    return constructor.newInstance(parameters) as DefinitionParameters
 }
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forceBrowser: Boolean = false) {
