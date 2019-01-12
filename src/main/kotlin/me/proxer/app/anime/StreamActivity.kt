@@ -1,7 +1,6 @@
 package me.proxer.app.anime
 
 import android.content.Intent
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -127,16 +126,12 @@ class StreamActivity : BaseActivity() {
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
         playerManager.start()
-
-        volumeControlStream = AudioManager.STREAM_MUSIC
     }
 
     override fun onStop() {
         getSafeCastContext()?.removeCastStateListener(castStateListener)
 
         playerManager.stop()
-
-        volumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE
 
         super.onStop()
     }

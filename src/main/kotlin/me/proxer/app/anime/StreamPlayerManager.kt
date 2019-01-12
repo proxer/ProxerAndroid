@@ -7,6 +7,7 @@ import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -266,7 +267,14 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
 
-        return ExoPlayerFactory.newSimpleInstance(context, trackSelector)
+        return ExoPlayerFactory.newSimpleInstance(context, trackSelector).apply {
+            val audioAttributes = AudioAttributes.Builder()
+                .setContentType(C.CONTENT_TYPE_MOVIE)
+                .setUsage(C.USAGE_MEDIA)
+                .build()
+
+            setAudioAttributes(audioAttributes, true)
+        }
     }
 
     private fun buildCastPlayer(context: Activity): CastPlayer? {
