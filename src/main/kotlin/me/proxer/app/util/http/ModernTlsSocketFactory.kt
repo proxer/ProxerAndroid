@@ -16,7 +16,19 @@ import javax.net.ssl.X509TrustManager
 class ModernTlsSocketFactory(trustManager: X509TrustManager) : SSLSocketFactory() {
 
     private val delegate = try {
-        SSLContext.getInstance("TLS")
+        try {
+            SSLContext.getInstance(TlsVersion.TLS_1_3.javaName())
+        } catch (error: NoSuchAlgorithmException) {
+            try {
+                SSLContext.getInstance(TlsVersion.TLS_1_2.javaName())
+            } catch (error: NoSuchAlgorithmException) {
+                try {
+                    SSLContext.getInstance(TlsVersion.TLS_1_1.javaName())
+                } catch (error: NoSuchAlgorithmException) {
+                    SSLContext.getInstance(TlsVersion.TLS_1_0.javaName())
+                }
+            }
+        }
     } catch (error: NoSuchAlgorithmException) {
         Timber.e(error, "Error while trying to load TLS")
 
@@ -36,31 +48,43 @@ class ModernTlsSocketFactory(trustManager: X509TrustManager) : SSLSocketFactory(
     }
 
     override fun createSocket(s: Socket, host: String, port: Int, autoClose: Boolean): Socket? {
-        return delegate.createSocket(s, host, port, autoClose).patchForTls12()
+        return delegate.createSocket(s, host, port, autoClose).patchForModernTls()
     }
 
     override fun createSocket(host: String, port: Int): Socket? {
-        return delegate.createSocket(host, port).patchForTls12()
+        return delegate.createSocket(host, port).patchForModernTls()
     }
 
-    override fun createSocket(host: String, port: Int, localHost: InetAddress, localPort: Int): Socket? {
-        return delegate.createSocket(host, port, localHost, localPort).patchForTls12()
+    override fun createSocket(
+        host: String,
+        port: Int,
+        localHost: InetAddress,
+        localPort: Int
+    ): Socket? {
+        return delegate.createSocket(host, port, localHost, localPort).patchForModernTls()
     }
 
     override fun createSocket(host: InetAddress, port: Int): Socket? {
-        return delegate.createSocket(host, port).patchForTls12()
+        return delegate.createSocket(host, port).patchForModernTls()
     }
 
-    override fun createSocket(address: InetAddress, port: Int, localAddress: InetAddress, localPort: Int): Socket? {
-        return delegate.createSocket(address, port, localAddress, localPort).patchForTls12()
+    override fun createSocket(
+        address: InetAddress,
+        port: Int,
+        localAddress: InetAddress,
+        localPort: Int
+    ): Socket? {
+        return delegate.createSocket(address, port, localAddress, localPort).patchForModernTls()
     }
 
-    private fun Socket.patchForTls12(): Socket {
+    private fun Socket.patchForModernTls(): Socket {
         return (this as? SSLSocket)
             ?.apply {
+                enabledProtocols = supportedProtocols
+                enabledCipherSuites = supportedCipherSuites
+
                 enabledProtocols = enabledProtocols.toSet()
                     .minus(TlsVersion.SSL_3_0.javaName())
-                    .plus(TlsVersion.TLS_1_2.javaName())
                     .toTypedArray()
             }
             ?: this
