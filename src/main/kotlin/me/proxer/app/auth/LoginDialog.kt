@@ -114,10 +114,8 @@ class LoginDialog : BaseDialog() {
     }
 
     private fun setupViewModel() {
-        viewModel.data.observe(dialogLifecycleOwner, Observer {
+        viewModel.success.observe(dialogLifecycleOwner, Observer {
             it?.let {
-                storageHelper.user = LocalUser(it.loginToken, it.id, username.safeText.trim().toString(), it.image)
-
                 dismiss()
             }
         })

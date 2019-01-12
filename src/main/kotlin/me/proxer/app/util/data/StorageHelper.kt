@@ -44,10 +44,7 @@ class StorageHelper(
     var user: LocalUser?
         get() = Hawk.get(USER)
         set(value) {
-            when (value) {
-                null -> Hawk.delete(USER)
-                else -> Hawk.put(USER, value)
-            }
+            Hawk.put(USER, value)
         }
 
     var ucpSettings: LocalUcpSettings

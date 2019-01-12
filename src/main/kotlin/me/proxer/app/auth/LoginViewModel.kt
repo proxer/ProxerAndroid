@@ -12,7 +12,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.ProxerApi
 import me.proxer.library.api.ProxerException
 import me.proxer.library.api.ProxerException.ServerErrorType
-import me.proxer.library.entity.user.User
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -21,7 +20,7 @@ import org.koin.core.inject
  */
 class LoginViewModel : ViewModel(), KoinComponent {
 
-    val data = MutableLiveData<User?>()
+    val success = MutableLiveData<Unit?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     val isLoading = MutableLiveData<Boolean?>()
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
@@ -48,6 +47,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
             dataDisposable = api.user().login(username, password)
                 .secretKey(secretKey)
                 .buildSingle()
+                .doOnSuccess { storageHelper.user = LocalUser(it.loginToken, it.id, username, it.image) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -56,7 +56,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                 }
                 .doAfterTerminate { isLoading.value = false }
                 .subscribeAndLogErrors({
-                    data.value = it
+                    success.value = Unit
                 }, {
                     if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
                         storageHelper.isTwoFactorAuthenticationEnabled = true

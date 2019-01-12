@@ -17,7 +17,7 @@ import org.koin.core.inject
  */
 class LogoutViewModel : ViewModel(), KoinComponent {
 
-    val data = MutableLiveData<Unit?>()
+    val success = MutableLiveData<Unit?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     val isLoading = MutableLiveData<Boolean?>()
 
@@ -45,7 +45,7 @@ class LogoutViewModel : ViewModel(), KoinComponent {
                 }
                 .doAfterTerminate { isLoading.value = false }
                 .subscribeAndLogErrors({
-                    data.value = Unit
+                    success.value = Unit
                 }, {
                     error.value = ErrorUtils.handle(it)
                 })

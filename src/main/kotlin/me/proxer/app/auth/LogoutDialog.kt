@@ -39,7 +39,7 @@ class LogoutDialog : BaseDialog() {
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)
 
-        viewModel.data.observe(dialogLifecycleOwner, Observer {
+        viewModel.success.observe(dialogLifecycleOwner, Observer {
             it?.let { dismiss() }
         })
 
