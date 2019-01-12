@@ -84,8 +84,10 @@
                     android:layout_gravity="center_vertical"
                     android:drawablePadding="4dp"
                     android:ellipsize="end"
+                    android:importantForAutofill="no"
                     android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:ignore="UnusedAttribute"
                     tools:text="A message" />
             </FrameLayout>
 

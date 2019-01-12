@@ -283,7 +283,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     }
 
     override fun onDestroyView() {
-        messageInput.text = null
         emojiPopup.dismiss()
 
         super.onDestroyView()

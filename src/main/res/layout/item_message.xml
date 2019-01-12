@@ -32,10 +32,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                android:importantForAutofill="noExcludeDescendants"
                 app:spoilerTextColor="?android:attr/textColorPrimary"
                 app:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:textColor="?android:attr/textColorPrimary"
                 app:textSize="16sp"
+                tools:ignore="UnusedAttribute"
                 tools:text="Message looooooooooooooooooooooooooong" />
 
             <TextView
