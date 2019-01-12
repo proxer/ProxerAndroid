@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.content.Intent
 import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
@@ -147,6 +148,18 @@ class StreamActivity : BaseActivity() {
         playerView.player = null
 
         super.onDestroy()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        if (intent.data != null && intent.data != this.intent.data) {
+            this.intent = intent
+
+            setupUi()
+
+            playerManager.reset()
+        }
     }
 
     private fun setupUi() {

@@ -111,8 +111,8 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
     private val localPlayer = buildLocalPlayer(context)
     private val castPlayer = buildCastPlayer(context)
 
-    private val localMediaSource = buildLocalMediaSource(client, uri)
-    private val castMediaSource = buildCastMediaSource(name, episode, uri)
+    private var localMediaSource = buildLocalMediaSource(client, uri)
+    private var castMediaSource = buildCastMediaSource(name, episode, uri)
 
     private val uri
         get() = weakContext.get()?.intent?.data ?: throw IllegalStateException("uri is null")
@@ -191,6 +191,20 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         }
     }
 
+    fun reset() {
+        currentPlayer.playWhenReady = false
+
+        wasPlaying = false
+        lastPosition = -1
+
+        localMediaSource = buildLocalMediaSource(client, uri)
+        castMediaSource = buildCastMediaSource(name, episode, uri)
+
+        retry()
+
+        currentPlayer.playWhenReady = true
+    }
+
     private fun buildClient(rawClient: OkHttpClient): OkHttpClient {
         return referer.let { referer ->
             if (referer == null) {
@@ -206,6 +220,25 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
                     }
                     .build()
             }
+        }
+    }
+
+    private fun buildLocalMediaSource(client: OkHttpClient, uri: Uri): MediaSource {
+        val okHttpDataSource = OkHttpDataSourceFactory(client, MainApplication.USER_AGENT, DefaultBandwidthMeter())
+        val streamType = Util.inferContentType(uri.lastPathSegment)
+
+        return when (streamType) {
+            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(okHttpDataSource), okHttpDataSource)
+                .createMediaSource(uri)
+
+            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(okHttpDataSource), okHttpDataSource)
+                .createMediaSource(uri)
+
+            C.TYPE_HLS -> HlsMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
+
+            C.TYPE_OTHER -> ExtractorMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
+
+            else -> throw IllegalArgumentException("Unknown streamType: $streamType")
         }
     }
 
@@ -229,23 +262,11 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         return MediaQueueItem.Builder(mediaInfo).build()
     }
 
-    private fun buildLocalMediaSource(client: OkHttpClient, uri: Uri): MediaSource {
-        val okHttpDataSource = OkHttpDataSourceFactory(client, MainApplication.USER_AGENT, DefaultBandwidthMeter())
-        val streamType = Util.inferContentType(uri.lastPathSegment)
+    private fun buildLocalPlayer(context: Activity): SimpleExoPlayer {
+        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
+        val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
 
-        return when (streamType) {
-            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(okHttpDataSource), okHttpDataSource)
-                .createMediaSource(uri)
-
-            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(okHttpDataSource), okHttpDataSource)
-                .createMediaSource(uri)
-
-            C.TYPE_HLS -> HlsMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
-
-            C.TYPE_OTHER -> ExtractorMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
-
-            else -> throw IllegalArgumentException("Unknown streamType: $streamType")
-        }
+        return ExoPlayerFactory.newSimpleInstance(context, trackSelector)
     }
 
     private fun buildCastPlayer(context: Activity): CastPlayer? {
@@ -260,12 +281,5 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         } else {
             null
         }
-    }
-
-    private fun buildLocalPlayer(context: Activity): SimpleExoPlayer {
-        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
-        val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-
-        return ExoPlayerFactory.newSimpleInstance(context, trackSelector)
     }
 }

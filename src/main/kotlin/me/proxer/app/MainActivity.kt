@@ -141,7 +141,9 @@ class MainActivity : DrawerActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
-        this.intent = intent
+        if (intent.action != Intent.ACTION_MAIN) {
+            this.intent = intent
+        }
 
         if (intent.hasExtra(SECTION_EXTRA)) {
             val itemToShow = DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1))
