@@ -113,6 +113,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
 
         updateUnratedButton()
         updateSpoilerButton()
+        bindUserInfo(null)
 
         noteContainer.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
