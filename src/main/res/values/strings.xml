@@ -545,6 +545,7 @@
     <string name="exoplayer_play_description">Abspielen</string>
     <string name="exoplayer_pause_description">Anhalten</string>
     <string name="exoplayer_fast_forward_description">Vorspulen</string>
+    <string name="exoplayer_fullscreen_description">Vollbild umschalten</string>
 
     <string name="widget_news_label">Proxer.Me News</string>
     <string name="widget_news_title">News</string>

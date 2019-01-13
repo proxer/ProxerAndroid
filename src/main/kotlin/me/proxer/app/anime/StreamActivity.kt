@@ -1,6 +1,7 @@
 package me.proxer.app.anime
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,6 +17,7 @@ import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
@@ -32,7 +34,11 @@ import com.google.android.gms.cast.framework.CastStateListener
 import com.google.android.gms.cast.framework.IntroductoryOverlay
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
+import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -72,6 +78,12 @@ class StreamActivity : BaseActivity() {
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val playerView: PlayerView by bindView(R.id.player)
 
+    private val rewind: ImageButton by bindView(R.id.exo_rew)
+    private val play: ImageButton by bindView(R.id.exo_play)
+    private val pause: ImageButton by bindView(R.id.exo_pause)
+    private val fastForward: ImageButton by bindView(R.id.exo_ffwd)
+    private val fullscreen: ImageButton by bindView(R.id.fullscreen)
+
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
 
@@ -87,6 +99,12 @@ class StreamActivity : BaseActivity() {
         setContentView(R.layout.activity_stream)
         setSupportActionBar(toolbar)
         setupUi()
+
+        rewind.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_rewind))
+        play.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_play))
+        pause.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_pause))
+        fastForward.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fast_forward))
+        fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
 
         playerManager.playerReadySubject
             .autoDisposable(this.scope())
@@ -105,6 +123,20 @@ class StreamActivity : BaseActivity() {
                     .negativeButton(R.string.error_action_finish) { finish() }
                     .onCancel { finish() }
                     .show()
+            }
+
+        fullscreen.clicks()
+            .autoDisposable(this.scope())
+            .subscribe {
+                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+                    fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+                } else {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+
+                    fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen_exit))
+                }
             }
     }
 
@@ -259,4 +291,9 @@ class StreamActivity : BaseActivity() {
             null
         }
     }
+
+    private fun generateControllerIcon(icon: IIcon) = IconicsDrawable(this, icon)
+        .sizeDp(44)
+        .paddingDp(8)
+        .colorRes(android.R.color.white)
 }
