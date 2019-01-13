@@ -5,8 +5,8 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.orhanobut.hawk.Hawk
 import io.reactivex.Observable
 import me.proxer.app.auth.LocalUser
+import me.proxer.app.exception.StorageException
 import me.proxer.app.ucp.settings.LocalUcpSettings
-import org.koin.core.KoinComponent
 import java.util.Date
 
 /**
@@ -16,7 +16,7 @@ class StorageHelper(
     context: Context,
     initializer: HawkInitializer,
     private val rxPreferences: RxSharedPreferences
-) : KoinComponent {
+) {
 
     internal companion object {
         const val USER = "user"
@@ -44,13 +44,13 @@ class StorageHelper(
     var user: LocalUser?
         get() = Hawk.get(USER)
         set(value) {
-            Hawk.put(USER, value)
+            putOrThrow(USER, value)
         }
 
     var ucpSettings: LocalUcpSettings
         get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
         set(value) {
-            Hawk.put(UCP_SETTINGS, value)
+            putOrThrow(UCP_SETTINGS, value)
         }
 
     val isLoggedIn: Boolean
@@ -64,25 +64,25 @@ class StorageHelper(
     var isTwoFactorAuthenticationEnabled: Boolean
         get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)
         set(value) {
-            Hawk.put(TWO_FACTOR_AUTHENTICATION, value)
+            putOrThrow(TWO_FACTOR_AUTHENTICATION, value)
         }
 
     var lastNewsDate: Date
         get() = Date(Hawk.get(LAST_NEWS_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_NEWS_DATE, value.time)
+            putOrThrow(LAST_NEWS_DATE, value.time)
         }
 
     var lastNotificationsDate: Date
         get() = Date(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_NOTIFICATIONS_DATE, value.time)
+            putOrThrow(LAST_NOTIFICATIONS_DATE, value.time)
         }
 
     var lastChatMessageDate: Date
         get() = Date(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_CHAT_MESSAGE_DATE, value.time)
+            putOrThrow(LAST_CHAT_MESSAGE_DATE, value.time)
         }
 
     val chatInterval: Long
@@ -91,50 +91,56 @@ class StorageHelper(
     var areConferencesSynchronized: Boolean
         get() = Hawk.get(CONFERENCES_SYNCHRONIZED, false)
         set(value) {
-            Hawk.put(CONFERENCES_SYNCHRONIZED, value)
+            putOrThrow(CONFERENCES_SYNCHRONIZED, value)
         }
 
     var lastTagUpdateDate: Date
         get() = Date(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
         set(value) {
-            Hawk.put(LAST_TAG_UPDATE_DATE, value.time)
+            putOrThrow(LAST_TAG_UPDATE_DATE, value.time)
         }
 
     var wasCastIntroductoryOverlayShown: Boolean
         get() = Hawk.get(CAST_INTRODUCTORY_OVERLAY_SHOWN, false)
         set(value) {
-            Hawk.put(CAST_INTRODUCTORY_OVERLAY_SHOWN, value)
+            putOrThrow(CAST_INTRODUCTORY_OVERLAY_SHOWN, value)
         }
 
     var launches: Int
         get() = Hawk.get(LAUNCHES, 0)
         private set(value) {
-            Hawk.put(LAUNCHES, value)
+            putOrThrow(LAUNCHES, value)
         }
 
     var hasRated: Boolean
         get() = Hawk.get(RATED, false)
         set(value) {
-            Hawk.put(RATED, value)
+            putOrThrow(RATED, value)
         }
 
     fun incrementChatInterval() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
         if (it < MAX_CHAT_INTERVAL) {
-            Hawk.put(CHAT_INTERVAL, (it * 1.5f).toLong())
+            putOrThrow(CHAT_INTERVAL, (it * 1.5f).toLong())
         }
     }
 
-    fun incrementLaunches() = Hawk.get(LAUNCHES, 0).let {
-        Hawk.put(LAUNCHES, it + 1)
-    }
+    fun incrementLaunches() = putOrThrow(LAUNCHES, Hawk.get(LAUNCHES, 0) + 1)
 
-    fun resetUcpSettings() = Hawk.delete(UCP_SETTINGS)
+    fun resetUcpSettings() = deleteOrThrow(UCP_SETTINGS)
 
-    fun resetChatInterval() = Hawk.put(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+    fun resetChatInterval() = putOrThrow(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
-    fun putMessageDraft(id: String, draft: String) = Hawk.put("$MESSAGE_DRAFT_PREFIX$id", draft)
+    fun putMessageDraft(id: String, draft: String) = putOrThrow("$MESSAGE_DRAFT_PREFIX$id", draft)
 
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
-    fun deleteMessageDraft(id: String) = Hawk.delete("$MESSAGE_DRAFT_PREFIX$id")
+    fun deleteMessageDraft(id: String) = deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
+
+    private fun <T> putOrThrow(key: String, value: T) {
+        if (!Hawk.put(key, value)) throw StorageException("Could not persist $key")
+    }
+
+    private fun deleteOrThrow(key: String) {
+        if (!Hawk.delete(key)) throw StorageException("Could not delete $key")
+    }
 }
