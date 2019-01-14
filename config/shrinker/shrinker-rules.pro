@@ -1,5 +1,5 @@
-# Keep line numbers to make stacktraces readable.
--keepattributes SourceFile,LineNumberTable
+# Keep annotations for refletive access and information to make stacktraces readeable.
+-keepattributes *Annotation*,SourceFile,LineNumberTable
 
 # Keep fields in R which are accessed through reflection.
 -keepclasseswithmembers class **.R$* {
@@ -17,7 +17,7 @@
     public static int wtf(...);
 }
 
-# Support preference
+# Material Preference
 -keepclassmembers class androidx.preference.PreferenceManager {
     void setNoCommit(boolean);
 }
@@ -29,13 +29,3 @@
 
 # Iconics
 -keepclassmembernames enum * implements com.mikepenz.iconics.typeface.IIcon { *; }
-
-# Hawk
--dontwarn com.orhanobut.hawk.HawkConverter**
--dontwarn com.orhanobut.hawk.HawkBuilder
--dontwarn com.orhanobut.hawk.GsonParser
-
-# ProxerLib
--keepclassmembers enum me.proxer.library.** {
-    <fields>;
-}
