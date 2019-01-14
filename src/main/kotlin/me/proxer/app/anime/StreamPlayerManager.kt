@@ -164,15 +164,15 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
     }
 
     fun start() {
-        if (isFirstStart) {
+        if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
+            currentPlayer.seekTo(lastPosition)
+        }
+
+        if (isFirstStart || wasPlaying) {
             currentPlayer.playWhenReady = true
 
-            playerReadySubject.onNext(localPlayer)
-        } else if (wasPlaying) {
-            currentPlayer.playWhenReady = true
-        } else {
-            if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
-                currentPlayer.seekTo(lastPosition)
+            if (isFirstStart) {
+                playerReadySubject.onNext(localPlayer)
             }
         }
     }
