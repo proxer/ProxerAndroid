@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-      - image: circleci/android:api-28-alpha
+      - image: circleci/android:api-28
     environment:
       _JAVA_OPTIONS: "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
         -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
@@ -24,6 +24,9 @@ jobs:
       - run:
           name: Create Secrets
           command: .circleci/create_secrets.sh
+      - run:
+          name: Update Android SDK
+          command: sdkmanager --update
 
       - run:
           name: Run static code analysis
