@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         // Manually set the R8 and D8 version, to get latest improvements fast.
-        classpath "com.android.tools:r8:1.3.49"
+        classpath "com.android.tools:r8:1.4.23"
     }
 }
 
