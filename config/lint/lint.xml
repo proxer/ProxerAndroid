@@ -6,6 +6,7 @@
     <issue id="SelectableText" severity="ignore" />
     <issue id="SyntheticAccessor" severity="ignore" />
     <issue id="ImplicitSamInstance" severity="ignore" />
+    <issue id="GradleDependency" severity="ignore" />
 
     <!-- Disable checks not working properly. -->
     <issue id="IconExpectedSize" severity="ignore" />
@@ -27,7 +28,6 @@
     <issue id="TrustAllX509TrustManager">
         <ignore regexp=".*org.jsoup.*" />
     </issue>
-
 
     <!-- Enable all lint checks with error severity, except for those listed above. -->
     <issue id="all" severity="error" />
