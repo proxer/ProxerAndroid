@@ -5,8 +5,9 @@ repositories {
         content {
             includeGroupByRegex "androidx.*"
             includeGroupByRegex "android\\.arch.*"
-            includeGroupByRegex "com\\.android\\.tools.*"
+            includeGroupByRegex "com\\.android.*"
             includeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
+            excludeModule "com.android.tools", "r8"
         }
     }
 
@@ -15,7 +16,7 @@ repositories {
         content {
             excludeGroupByRegex "androidx.*"
             excludeGroupByRegex "android\\.arch.*"
-            excludeGroupByRegex "com\\.android\\.tools.*"
+            excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko).*"
         }
@@ -34,7 +35,12 @@ repositories {
 
     maven {
         url "https://storage.googleapis.com/r8-releases/raw"
-        content { includeGroupByRegex "com\\.android\\.tools.*" }
+        content { includeModule "com.android.tools", "r8" }
+    }
+
+    maven {
+        url "https://plugins.gradle.org/m2"
+        mavenContent { releasesOnly() }
     }
 
     maven {
