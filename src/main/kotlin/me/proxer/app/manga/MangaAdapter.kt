@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +36,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.MangaViewHolder
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.GLUtil
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.getSafeParcelable
@@ -169,6 +169,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
 
+        private val screenWidth = DeviceUtils.getScreenWidth(itemView.context)
+        private val screenHeight = DeviceUtils.getScreenHeight(itemView.context)
+
         init {
             errorIndicator.setIconicsImage(CommunityMaterial.Icon2.cmd_refresh, 64)
         }
@@ -177,12 +180,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             initListeners()
 
             if (isVertical) {
-                val width = DeviceUtils.getScreenWidth(image.context)
-                val height = (item.height * width.toFloat() / item.width.toFloat()).toInt()
+                val height = (item.height * screenWidth.toFloat() / item.width.toFloat()).toInt()
 
                 itemView.layoutParams.height = height
             } else {
-                itemView.layoutParams.height = MATCH_PARENT
+                itemView.layoutParams.height = screenHeight
             }
 
             errorIndicator.isVisible = false
@@ -249,7 +251,12 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
         init {
+            image.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE)
             image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.setMaxTileSize(GLUtil.maxTextureSize)
+            image.setMinimumTileDpi(180)
+            image.setMinimumDpi(90)
+
             image.isExifInterfaceEnabled = false
         }
 
@@ -257,8 +264,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             super.bind(item)
 
             initListeners()
-
-            image.setMinimumTileDpi(120)
 
             val useRapidDecoder = requiresFallback[item.decodedName] == true
 
@@ -303,7 +308,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                             image.setDoubleTapZoomScale(newMaxScale)
                             image.maxScale = newMaxScale
 
-                            image.resetScaleAndCenter()
+                            image.setScaleAndCenter(image.scale, image.center?.also { it.y = 0f })
                         }
                 }
                 .connect()

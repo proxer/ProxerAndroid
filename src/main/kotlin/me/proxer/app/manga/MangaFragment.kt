@@ -1,7 +1,5 @@
 package me.proxer.app.manga
 
-import android.app.ActivityManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Gravity
@@ -14,14 +12,12 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.google.android.material.appbar.AppBarLayout
@@ -154,25 +150,17 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         innerAdapter.clickSubject
             .autoDisposable(this.scope())
-            .subscribeAndLogErrors { (view, coordinates, position) ->
+            .subscribeAndLogErrors { (_, coordinates, position) ->
                 val (xCoordinate, yCoordinate) = coordinates
                 val parentHeight = recyclerView.height
                 val parentWidth = recyclerView.width
-                val normalizedParentHeight = parentHeight - parentHeight / 8
+                val normalizedParentHeight = parentHeight / 2
 
                 if (isVertical) {
-                    if (view.height > normalizedParentHeight) {
-                        if (yCoordinate < parentHeight / 3) {
-                            recyclerView.smoothScrollBy(0, -normalizedParentHeight)
-                        } else {
-                            recyclerView.smoothScrollBy(0, normalizedParentHeight)
-                        }
+                    if (yCoordinate < parentHeight / 3) {
+                        recyclerView.smoothScrollBy(0, -normalizedParentHeight)
                     } else {
-                        if (yCoordinate < parentHeight / 3) {
-                            recyclerView.smoothScrollBy(0, -view.height)
-                        } else {
-                            recyclerView.smoothScrollBy(0, view.height)
-                        }
+                        recyclerView.smoothScrollBy(0, normalizedParentHeight)
                     }
                 } else {
                     // Add one to the position to account for the header.
@@ -265,8 +253,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         bindLayoutManager()
 
+        recyclerView.setItemViewCacheSize(1)
         recyclerView.setHasFixedSize(true)
         recyclerView.enableFastScroll()
+
+        recyclerView.itemAnimator = null
         recyclerView.adapter = adapter
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
@@ -456,20 +447,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         gravityPagerSnapHelper?.attachToRecyclerView(null)
         gravityPagerSnapHelper = null
 
-        if (isVertical) {
-            recyclerView.layoutManager = object : LinearLayoutManager(context) {
-                override fun getExtraLayoutSpace(state: RecyclerView.State): Int {
-                    val isLowRamDevice = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ||
-                        requireContext().getSystemService<ActivityManager>()?.isLowRamDevice ?: true
+        recyclerView.recycledViewPool.clear()
 
-                    return when {
-                        isLowRamDevice -> 0
-                        else -> DeviceUtils.getScreenHeight(requireContext())
-                    }
-                }
-            }
-        } else {
-            recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = MangaLinearLayoutManger(requireContext(), isVertical)
+
+        if (!isVertical) {
             gravityPagerSnapHelper = GravityPagerSnapHelper(Gravity.END).apply { attachToRecyclerView(recyclerView) }
         }
 

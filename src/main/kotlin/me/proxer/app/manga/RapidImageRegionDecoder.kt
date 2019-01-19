@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
 import com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder
 import rapid.decoder.BitmapDecoder
 
@@ -24,10 +23,11 @@ class RapidImageRegionDecoder : ImageRegionDecoder {
 
     @Synchronized
     override fun decodeRegion(sRect: Rect, sampleSize: Int) = decoder?.reset()
-        ?.config(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) Bitmap.Config.HARDWARE else Bitmap.Config.RGB_565)
+        ?.config(Bitmap.Config.RGB_565)
         ?.region(sRect)
         ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
         ?.useBuiltInDecoder()
+        ?.mutable(false)
         ?.decode()
         ?: throw IllegalStateException("decoded bitmap is null")
 
