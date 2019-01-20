@@ -9,7 +9,8 @@ import me.proxer.app.util.DeviceUtils
  * @author Ruben Gees
  */
 class MangaLinearLayoutManger(
-    context: Context, isVertical: Boolean
+    context: Context,
+    isVertical: Boolean
 ) : LinearLayoutManager(context, if (isVertical) LinearLayoutManager.VERTICAL else HORIZONTAL, false) {
 
     private val extraLayoutSpace = when {
