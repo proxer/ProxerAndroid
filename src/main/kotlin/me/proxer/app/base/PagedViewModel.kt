@@ -28,7 +28,7 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
         dataDisposable?.dispose()
         dataDisposable = dataSingle
             .doAfterSuccess { newData -> hasReachedEnd = newData.size < itemsOnPage }
-            .map { newData -> mergeNewDataWithExistingData(newData, currentPage) }
+            .map { newData -> mergeNewDataWithExistingData(data.value ?: emptyList(), newData, currentPage) }
             .subscribeOn(Schedulers.io())
             .doAfterTerminate { isRefreshing = false }
             .doAfterSuccess { if (!isRefreshing) page++ }
@@ -78,19 +78,16 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
         else -> old == new
     }
 
-    protected open fun mergeNewDataWithExistingData(newData: List<T>, currentPage: Int): List<T> {
-        return data.value.let { existingData ->
-            when (existingData) {
-                null -> newData
-                else -> when (currentPage) {
-                    0 -> newData + existingData.filter { oldItem ->
-                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
-                    }
-                    else -> existingData.filter { oldItem ->
-                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
-                    } + newData
-                }
-            }
+    protected open fun mergeNewDataWithExistingData(
+        existingData: List<T>,
+        newData: List<T>,
+        currentPage: Int
+    ) = when (currentPage) {
+        0 -> newData + existingData.filter { oldItem ->
+            newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
         }
+        else -> existingData.filter { oldItem ->
+            newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
+        } + newData
     }
 }

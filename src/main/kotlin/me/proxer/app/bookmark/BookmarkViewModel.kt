@@ -59,18 +59,15 @@ class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bo
         super.onCleared()
     }
 
-    override fun mergeNewDataWithExistingData(newData: List<Bookmark>, currentPage: Int): List<Bookmark> {
-        return data.value.let { existingData ->
-            when (existingData) {
-                null -> newData
-                else -> when (currentPage) {
-                    0 -> newData
-                    else -> existingData.filter { oldItem ->
-                        newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
-                    } + newData
-                }
-            }
-        }
+    override fun mergeNewDataWithExistingData(
+        existingData: List<Bookmark>,
+        newData: List<Bookmark>,
+        currentPage: Int
+    ) = when (currentPage) {
+        0 -> newData
+        else -> existingData.filter { oldItem ->
+            newData.find { newItem -> areItemsTheSame(oldItem, newItem) } == null
+        } + newData
     }
 
     fun addItemToDelete(item: Bookmark) {

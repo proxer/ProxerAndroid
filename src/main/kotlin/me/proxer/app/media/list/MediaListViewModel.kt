@@ -103,9 +103,7 @@ class MediaListViewModel(
         super.onCleared()
     }
 
-    override fun mergeNewDataWithExistingData(newData: List<MediaListEntry>, currentPage: Int): List<MediaListEntry> {
-        return data.value?.plus(newData) ?: newData
-    }
+    override fun areItemsTheSame(old: MediaListEntry, new: MediaListEntry) = old == new
 
     fun loadTags() {
         tagsDisposable?.dispose()

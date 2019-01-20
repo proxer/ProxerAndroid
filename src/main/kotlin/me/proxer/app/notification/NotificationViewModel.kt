@@ -34,7 +34,9 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                         .buildSingle()
                         .doOnSuccess { items -> firstPageItemAmount = items.size }
                         .flatMap { unreadResult ->
-                            readSingle().map { readResult -> unreadResult + readResult }
+                            readSingle().map { readResult ->
+                                mergeNewDataWithExistingData(unreadResult, readResult, 0)
+                            }
                         }
                     else -> readSingle()
                 }
