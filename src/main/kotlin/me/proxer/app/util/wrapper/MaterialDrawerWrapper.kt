@@ -89,6 +89,11 @@ class MaterialDrawerWrapper(
 
             true
         }
+        header.isSelectionListShown -> {
+            header.toggleSelectionList(header.view.context)
+
+            true
+        }
         drawer.isDrawerOpen -> {
             drawer.closeDrawer()
 
