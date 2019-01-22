@@ -146,11 +146,11 @@ class MainActivity : DrawerActivity() {
         }
 
         if (intent.hasExtra(SECTION_EXTRA)) {
-            val itemToShow = DrawerItem.fromIdOrDefault(intent.getLongExtra(SECTION_EXTRA, -1))
+            val itemToLoad = getItemToLoad()
 
-            drawer.select(itemToShow, false)
+            drawer.select(itemToLoad, false)
 
-            setFragment(itemToShow)
+            setFragment(itemToLoad)
         }
     }
 
