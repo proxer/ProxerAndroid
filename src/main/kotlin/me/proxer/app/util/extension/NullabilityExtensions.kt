@@ -2,9 +2,7 @@
 
 package me.proxer.app.util.extension
 
-import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
@@ -17,9 +15,6 @@ inline val RecyclerView.safeLayoutManager: RecyclerView.LayoutManager
 
 inline val EditText.safeText: Editable
     get() = text ?: throw IllegalStateException("text is null")
-
-inline val Intent.safeData: Uri
-    get() = data ?: throw IllegalAccessError("data is null")
 
 inline fun Bundle.getSafeParcelableArray(key: String): Array<out Parcelable> = getParcelableArray(key)
     ?: throw IllegalAccessError("No value found for key $key")

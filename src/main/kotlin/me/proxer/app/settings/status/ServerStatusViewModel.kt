@@ -38,9 +38,9 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
         .build()
 
     private fun scrape(document: Document): List<ServerStatus> {
-        return document.getElementsByTag("td")
+        return document.getElementsByTag("td").asSequence()
             .filter { it.children().none { child -> child.tagName() == "img" } }
-            .flatMap { it.childNodes() }
+            .flatMap { it.childNodes().asSequence() }
             .zipWithNext()
             .filter { (first, second) -> isNameNode(first) && isOnlineNode(second) }
             .map { (first, second) -> first as TextNode to second as Element }
@@ -62,6 +62,7 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
                 ServerStatus(trimmedName, number, type, online)
             }
             .sortedWith(compareBy { it.number })
+            .toList()
     }
 
     private fun isNameNode(node: Node) = node is TextNode && node.text().contains("server", ignoreCase = true)
