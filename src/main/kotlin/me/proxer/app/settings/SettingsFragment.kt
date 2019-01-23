@@ -14,7 +14,9 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
+import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.sync.MessengerWorker
+import me.proxer.app.manga.MangaActivity
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.ucp.settings.UcpSettingsActivity
 import me.proxer.app.util.KotterKnifePreference
@@ -50,6 +52,9 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             arguments = bundleOf()
         }
     }
+
+    private val hostingActivity: BaseActivity
+        get() = activity as MangaActivity
 
     private val packageManager by inject<PackageManager>()
     private val preferenceHelper by inject<PreferenceHelper>()
@@ -156,7 +161,8 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     private fun showRestartMessage() {
         view?.also { view ->
-            snackbar(view, R.string.fragment_settings_restart_message,
+            hostingActivity.snackbar(
+                R.string.fragment_settings_restart_message,
                 actionMessage = R.string.fragment_settings_restart_action,
                 actionCallback = View.OnClickListener {
                     val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()

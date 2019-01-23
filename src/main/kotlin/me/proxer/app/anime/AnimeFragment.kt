@@ -197,8 +197,8 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             errorAction?.let {
                 when (it) {
                     is AppRequiredErrorAction -> it.showDialog(hostingActivity)
-                    else -> multilineSnackbar(
-                        root, it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                    else -> hostingActivity.multilineSnackbar(
+                        it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
                         it.toClickListener(hostingActivity)
                     )
                 }
@@ -207,14 +207,14 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                snackbar(root, R.string.fragment_set_user_info_success)
+                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                multilineSnackbar(
-                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }

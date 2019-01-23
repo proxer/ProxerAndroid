@@ -149,14 +149,14 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
 
         viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                snackbar(root, R.string.fragment_set_user_info_success)
+                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userInfoUpdateError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                multilineSnackbar(
-                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }
@@ -300,7 +300,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             genres,
             result.genres.toList(),
             mapFunction = { it.name },
-            onClick = { multilineSnackbar(root, it.description) }
+            onClick = { hostingActivity.multilineSnackbar(it.description) }
         )
     }
 
@@ -334,7 +334,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
             tags,
             filteredTags,
             mapFunction = { it.name },
-            onClick = { multilineSnackbar(root, it.description) }
+            onClick = { hostingActivity.multilineSnackbar(it.description) }
         )
     }
 
@@ -372,7 +372,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
                 image.clicks()
                     .autoDisposable(viewLifecycleOwner.scope())
                     .subscribe {
-                        multilineSnackbar(root, constraint.toAppStringDescription(requireContext()))
+                        hostingActivity.multilineSnackbar(constraint.toAppStringDescription(requireContext()))
                     }
 
                 fskConstraints.addView(image)

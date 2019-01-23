@@ -62,8 +62,8 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
 
         viewModel.deletionError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                multilineSnackbar(
-                    root, getString(R.string.error_notification_deletion, getString(it.message)),
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_notification_deletion, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }

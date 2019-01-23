@@ -43,7 +43,7 @@ class UcpSettingsActivity : DrawerActivity() {
         viewModel.error.observe(this, Observer {
             it?.let {
                 multilineSnackbar(
-                    root, getString(R.string.error_refresh, getString(it.message)),
+                    getString(R.string.error_refresh, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage,
                     it.toClickListener(this) ?: View.OnClickListener { viewModel.refresh() }
                 )
@@ -53,7 +53,7 @@ class UcpSettingsActivity : DrawerActivity() {
         viewModel.updateError.observe(this, Observer {
             it?.let {
                 multilineSnackbar(
-                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                    getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage,
                     it.toClickListener(this) ?: View.OnClickListener { viewModel.update() }
                 )

@@ -1,7 +1,6 @@
 package me.proxer.app.base
 
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
 import com.uber.autodispose.android.lifecycle.scope
@@ -34,7 +33,6 @@ abstract class DrawerActivity : BaseActivity() {
     protected open val isRootActivity = false
     protected open val isMainActivity = false
 
-    protected open val root: ViewGroup by bindView(R.id.root)
     protected open val toolbar: Toolbar by bindView(R.id.toolbar)
     protected open val appbar: AppBarLayout by bindView(R.id.appbar)
 

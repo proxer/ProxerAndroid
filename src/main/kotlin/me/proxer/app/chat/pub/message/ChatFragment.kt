@@ -278,8 +278,8 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
 
         viewModel.sendMessageError.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                multilineSnackbar(
-                    root, getString(R.string.error_chat_send_message, getString(it.message)),
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_chat_send_message, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }

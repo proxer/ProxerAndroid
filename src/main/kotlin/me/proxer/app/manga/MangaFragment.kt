@@ -131,7 +131,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override val contentContainer: ViewGroup
         get() = recyclerView
 
-    private val activityRoot by unsafeLazy { requireActivity().findViewById<ViewGroup>(R.id.root) }
     private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
 
@@ -176,7 +175,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             .autoDisposable(this.scope())
             .subscribe {
                 if (!hasLowMemory) {
-                    multilineSnackbar(activityRoot, R.string.fragment_manga_low_memory)
+                    hostingActivity.multilineSnackbar(R.string.fragment_manga_low_memory)
 
                     hasLowMemory = true
                 }
@@ -262,14 +261,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         viewModel.userStateData.observe(viewLifecycleOwner, Observer {
             it?.let {
-                snackbar(activityRoot, R.string.fragment_set_user_info_success)
+                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
             }
         })
 
         viewModel.userStateError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                multilineSnackbar(
-                    root, getString(R.string.error_set_user_info, getString(it.message)),
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_set_user_info, getString(it.message)),
                     Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }

@@ -3,7 +3,6 @@ package me.proxer.app.ui
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
 import com.bumptech.glide.request.target.ImageViewTarget
@@ -37,7 +36,6 @@ class ImageDetailActivity : BaseActivity() {
     private val url: String
         get() = intent.getStringExtra(URL_EXTRA)
 
-    private val root: ViewGroup by bindView(R.id.root)
     private val image: ImageView by bindView(R.id.image)
 
     override fun onCreate(savedInstanceState: Bundle?) {

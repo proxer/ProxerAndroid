@@ -113,7 +113,7 @@ class TopicActivity : DrawerActivity() {
             .autoDisposable(this.scope())
             .subscribeAndLogErrors {
                 topic?.also { topic ->
-                    multilineSnackbar(root, topic)
+                    multilineSnackbar(topic)
                 }
             }
     }

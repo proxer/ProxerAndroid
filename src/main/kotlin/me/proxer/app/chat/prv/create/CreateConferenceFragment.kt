@@ -268,15 +268,15 @@ class CreateConferenceFragment : BaseFragment() {
             .doOnError {
                 when (it) {
                     is InvalidInputException -> it.message?.let { message ->
-                        multilineSnackbar(root, message)
+                        hostingActivity.multilineSnackbar(message)
                     }
                     is TopicEmptyException -> {
                         topicInputContainer.isErrorEnabled = true
                         topicInputContainer.error = requireContext().getString(R.string.error_input_empty)
                     }
                     else -> ErrorUtils.handle(it).let { action ->
-                        multilineSnackbar(
-                            root, action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
+                        hostingActivity.multilineSnackbar(
+                            action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
                             action.toClickListener(hostingActivity)
                         )
                     }
@@ -342,12 +342,8 @@ class CreateConferenceFragment : BaseFragment() {
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
             it?.let {
-                multilineSnackbar(
-                    root,
-                    it.message,
-                    Snackbar.LENGTH_LONG,
-                    it.buttonMessage,
-                    it.toClickListener(hostingActivity)
+                hostingActivity.multilineSnackbar(
+                    it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                 )
             }
         })
