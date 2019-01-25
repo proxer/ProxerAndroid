@@ -15,7 +15,7 @@ ext {
     gradleVersion = "5.1.1"
 
     // Core plugins
-    androidPluginVersion = "3.5.0-alpha01"
+    androidPluginVersion = "3.5.0-alpha02"
     kotlinVersion = "1.3.20"
 
     // Utility plugins
@@ -26,13 +26,13 @@ ext {
     ktlintVersion = "0.29.0"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.0.0-alpha-6"
+    koinVersion = "2.0.0-beta-1"
     multidexVersion = "2.0.1"
     appcompatVersion = "1.1.0-alpha01"
     browserVersion = "1.0.0"
     lifecycleVersion = "2.1.0-alpha01"
     roomVersion = "2.1.0-alpha03"
-    workVersion = "1.0.0-beta02"
+    workVersion = "1.0.0-beta03"
     coreKtxVersion = "1.1.0-alpha03"
     fragmentKtxVersion = "1.1.0-alpha03"
     castVersion = "16.1.2"
@@ -65,7 +65,7 @@ ext {
     subsamplingScaleImageViewVersion = "e9398dce15"
     subsamplingPdfDecoderVersion = "ad07ddf671"
     tabLayoutHelperVersion = "b1d93a3b83"
-    materialDialogsVersion = "2.0.0-rc7"
+    materialDialogsVersion = "2.0.0-rc8"
     flexboxVersion = "1.1.0"
     emojiIosVersion = "748c208f3f"
     exoplayerVersion = "2.9.4"
