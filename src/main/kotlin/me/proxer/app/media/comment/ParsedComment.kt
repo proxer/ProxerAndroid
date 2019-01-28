@@ -12,7 +12,7 @@ import java.util.Date
  * @author Ruben Gees
  */
 data class ParsedComment(
-    private val id: String,
+    override val id: String,
     val entryId: String,
     val authorId: String,
     val mediaProgress: UserMediaProgress,
@@ -21,12 +21,7 @@ data class ParsedComment(
     val overallRating: Int,
     val episode: Int,
     val helpfulVotes: Int,
-    private val date: Date,
+    override val date: Date,
     val author: String,
-    private val image: String
-) : ProxerIdItem, ProxerImageItem, ProxerDateItem {
-
-    override fun getId() = id
-    override fun getImage() = image
-    override fun getDate() = date
-}
+    override val image: String
+) : ProxerIdItem, ProxerImageItem, ProxerDateItem

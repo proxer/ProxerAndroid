@@ -17,11 +17,11 @@ import java.util.concurrent.TimeUnit
 class ChatRoomInfoViewModel(private val chatRoomId: String) : BaseContentViewModel<List<ChatRoomUser>>() {
 
     override val endpoint: Endpoint<List<ChatRoomUser>>
-        get() = api.chat().roomUsers(chatRoomId)
+        get() = api.chat.roomUsers(chatRoomId)
 
     override val dataSingle: Single<List<ChatRoomUser>>
         get() = super.dataSingle
-            .map { it.sortedWith(compareByDescending(ChatRoomUser::isModerator).thenBy(ChatRoomUser::getName)) }
+            .map { it.sortedWith(compareByDescending(ChatRoomUser::isModerator).thenBy(ChatRoomUser::name)) }
             .doOnSuccess { if (pollingDisposable == null) startPolling() }
 
     private var pollingDisposable: Disposable? = null

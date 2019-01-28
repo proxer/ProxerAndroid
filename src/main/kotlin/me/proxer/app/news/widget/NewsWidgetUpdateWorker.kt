@@ -26,8 +26,8 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
-import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.ProxerApi
+import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -76,7 +76,7 @@ class NewsWidgetUpdateWorker(
 
         return try {
             val news = if (!isStopped) {
-                api.notifications().news()
+                api.notifications.news()
                     .build()
                     .also { currentCall = it }
                     .safeExecute()

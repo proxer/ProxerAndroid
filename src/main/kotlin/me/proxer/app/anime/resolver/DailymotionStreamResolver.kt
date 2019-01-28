@@ -26,7 +26,7 @@ class DailymotionStreamResolver : StreamResolver() {
 
     @Suppress("SwallowedException")
     override fun resolve(id: String): Single<StreamResolutionResult> {
-        return api.anime().link(id)
+        return api.anime.link(id)
             .buildSingle()
             .flatMap { url ->
                 client.newCall(

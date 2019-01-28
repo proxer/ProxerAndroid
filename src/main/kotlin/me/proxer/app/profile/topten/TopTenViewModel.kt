@@ -30,7 +30,7 @@ class TopTenViewModel(
             )
         }
 
-    private fun partialSingle(includeHentai: Boolean, category: Category) = api.user()
+    private fun partialSingle(includeHentai: Boolean, category: Category) = api.user
         .topTen(userId.toNullable(), username.toNullable())
         .includeHentai(includeHentai)
         .category(category)

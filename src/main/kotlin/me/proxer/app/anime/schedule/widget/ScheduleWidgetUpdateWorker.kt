@@ -30,8 +30,8 @@ import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
-import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.ProxerApi
+import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.threeten.bp.LocalDate
@@ -89,7 +89,7 @@ class ScheduleWidgetUpdateWorker(
 
         return try {
             val calendarEntries = if (!isStopped) {
-                api.media().calendar()
+                api.media.calendar()
                     .build()
                     .also { currentCall = it }
                     .safeExecute()

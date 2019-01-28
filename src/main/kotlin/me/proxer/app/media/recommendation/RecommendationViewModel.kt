@@ -10,5 +10,5 @@ import me.proxer.library.entity.info.Recommendation
 class RecommendationViewModel(private val entryId: String) : BaseContentViewModel<List<Recommendation>>() {
 
     override val endpoint: Endpoint<List<Recommendation>>
-        get() = api.info().recommendations(entryId)
+        get() = api.info.recommendations(entryId)
 }

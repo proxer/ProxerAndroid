@@ -34,7 +34,7 @@ class WatchboxStreamResolver : StreamResolver() {
                 throw AppRequiredException(name, WATCHBOX_PACKAGE)
             }
         }
-        .flatMap { api.anime().link(id).buildSingle() }
+        .flatMap { api.anime.link(id).buildSingle() }
         .flatMap { url ->
             client
                 .newCall(

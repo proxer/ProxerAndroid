@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -35,7 +35,7 @@ class ChatReportViewModel : ViewModel(), KoinComponent {
     fun sendReport(messageId: String, message: String) {
         if (isLoading.value != true) {
             dataDisposable?.dispose()
-            dataDisposable = api.chat().reportMessage(messageId, message)
+            dataDisposable = api.chat.reportMessage(messageId, message)
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

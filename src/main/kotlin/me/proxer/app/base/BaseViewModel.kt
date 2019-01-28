@@ -15,7 +15,7 @@ import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

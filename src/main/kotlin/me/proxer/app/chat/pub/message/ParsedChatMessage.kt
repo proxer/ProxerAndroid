@@ -11,19 +11,15 @@ import java.util.Date
  * @author Ruben Gees
  */
 data class ParsedChatMessage(
-    private val id: String,
+    override val id: String,
     val userId: String,
     val username: String,
-    private val image: String,
+    override val image: String,
     val message: String,
     val action: ChatMessageAction,
-    private val date: Date
+    override val date: Date
 ) : ProxerIdItem, ProxerImageItem, ProxerDateItem {
 
     @Transient
     val styledMessage = BBParser.parseSimple(message).optimize()
-
-    override fun getId() = id
-    override fun getImage() = image
-    override fun getDate() = date
 }

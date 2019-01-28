@@ -66,8 +66,8 @@ import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.ModernTlsSocketFactory
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.UserAgentInterceptor
-import me.proxer.library.api.LoginTokenManager
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.LoginTokenManager
+import me.proxer.library.ProxerApi
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria

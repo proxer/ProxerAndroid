@@ -7,7 +7,7 @@ import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import me.proxer.library.enums.NotificationFilter
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -34,7 +34,7 @@ class AccountNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
             .fromAction {
                 AccountNotifications.cancel(context)
 
-                api.notifications().notifications()
+                api.notifications.notifications()
                     .limit(Int.MAX_VALUE)
                     .markAsRead(true)
                     .filter(NotificationFilter.UNREAD)

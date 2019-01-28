@@ -10,5 +10,5 @@ import me.proxer.library.entity.info.ForumDiscussion
 class DiscussionViewModel(private val entryId: String) : BaseContentViewModel<List<ForumDiscussion>>() {
 
     override val endpoint: Endpoint<List<ForumDiscussion>>
-        get() = api.info().forumDiscussions(entryId)
+        get() = api.info.forumDiscussions(entryId)
 }

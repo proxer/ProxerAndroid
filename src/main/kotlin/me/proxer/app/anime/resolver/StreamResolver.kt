@@ -2,7 +2,7 @@ package me.proxer.app.anime.resolver
 
 import com.squareup.moshi.Moshi
 import io.reactivex.Single
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import okhttp3.OkHttpClient
 import org.koin.core.KoinComponent
 import org.koin.core.inject

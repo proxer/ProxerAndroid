@@ -28,7 +28,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
     override val dataSingle: Single<Entry>
         get() = Single.fromCallable { validate() }
-            .flatMap { api.info().entry(entryId).buildSingle() }
+            .flatMap { api.info.entry(entryId).buildSingle() }
             .doOnSuccess {
                 if (it.isTrulyAgeRestricted) {
                     if (!storageHelper.isLoggedIn) {
@@ -40,7 +40,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             }
             .doAfterSuccess {
                 if (storageHelper.isLoggedIn) {
-                    userInfoDisposable = api.info().userInfo(entryId)
+                    userInfoDisposable = api.info.userInfo(entryId)
                         .buildOptionalSingle()
                         .filterSome()
                         .subscribeOn(Schedulers.io())
@@ -91,9 +91,9 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {
-            UserInfoUpdateType.NOTE -> api.info().note(entryId)
-            UserInfoUpdateType.FAVORITE -> api.info().markAsFavorite(entryId)
-            UserInfoUpdateType.FINISHED -> api.info().markAsFinished(entryId)
+            UserInfoUpdateType.NOTE -> api.info.note(entryId)
+            UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId)
+            UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId)
         }
 
         userInfoDisposable?.dispose()

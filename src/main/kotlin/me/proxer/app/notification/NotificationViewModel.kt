@@ -26,7 +26,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         get() = Single.fromCallable { validators.validateLogin() }
             .flatMap {
                 when (page) {
-                    0 -> api.notifications().notifications()
+                    0 -> api.notifications.notifications()
                         .markAsRead(true)
                         .page(page)
                         .filter(NotificationFilter.UNREAD)
@@ -91,7 +91,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
 
         deletionQueue.clear()
 
-        api.notifications().deleteAllNotifications()
+        api.notifications.deleteAllNotifications()
             .buildOptionalSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -107,7 +107,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         deletionDisposable?.dispose()
 
         deletionQueue.poll()?.let { item ->
-            deletionDisposable = api.notifications().deleteNotification(item.id)
+            deletionDisposable = api.notifications.deleteNotification(item.id)
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,7 +123,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         }
     }
 
-    private fun readSingle() = api.notifications().notifications()
+    private fun readSingle() = api.notifications.notifications()
         .page(page - firstPageItemAmount / itemsOnPage)
         .filter(NotificationFilter.READ)
         .limit(itemsOnPage)

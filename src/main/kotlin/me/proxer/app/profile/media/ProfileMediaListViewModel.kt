@@ -21,7 +21,7 @@ class ProfileMediaListViewModel(
     override val itemsOnPage = 30
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
-        get() = api.user().mediaList(userId.toNullable(), username.toNullable())
+        get() = api.user.mediaList(userId.toNullable(), username.toNullable())
             .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
             .category(category)
             .filter(filter)

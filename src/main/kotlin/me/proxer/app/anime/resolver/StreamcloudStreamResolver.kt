@@ -22,7 +22,7 @@ class StreamcloudStreamResolver : StreamResolver() {
     override val name = "Streamcloud"
     override val internalPlayerOnly = true
 
-    override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
+    override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
         .flatMap { url ->
             client

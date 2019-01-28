@@ -12,7 +12,7 @@ class AnimeOnDemandStreamResolver : StreamResolver() {
 
     override val name = "Anime on demand"
 
-    override fun resolve(id: String): Single<StreamResolutionResult> = api.anime().link(id)
+    override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
         .map { StreamResolutionResult.Link(Utils.parseAndFixUrl(it) ?: throw StreamResolutionException()) }
 }

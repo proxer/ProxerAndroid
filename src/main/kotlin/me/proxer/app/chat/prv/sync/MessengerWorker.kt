@@ -26,9 +26,9 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
-import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerCall
-import me.proxer.library.api.ProxerException
+import me.proxer.library.ProxerApi
+import me.proxer.library.ProxerCall
+import me.proxer.library.ProxerException
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import org.koin.core.KoinComponent
@@ -292,7 +292,7 @@ class MessengerWorker(
     private fun sendMessages() = messengerDao.getMessagesToSend().apply {
         forEachIndexed { index, (messageId, conferenceId, _, _, message) ->
             val result = try {
-                api.messenger().sendMessage(conferenceId.toString(), message)
+                api.messenger.sendMessage(conferenceId.toString(), message)
                     .build()
                     .also { currentCall = it }
                     .execute()
@@ -336,7 +336,7 @@ class MessengerWorker(
     }
 
     private fun markConferencesAsRead(conferenceToMarkAsRead: List<LocalConference>) = conferenceToMarkAsRead.forEach {
-        api.messenger().markConferenceAsRead(it.id.toString())
+        api.messenger.markConferenceAsRead(it.id.toString())
             .build()
             .also { call -> currentCall = call }
             .execute()
@@ -347,7 +347,7 @@ class MessengerWorker(
         var page = 0
 
         while (true) {
-            val fetchedConferences = api.messenger().conferences()
+            val fetchedConferences = api.messenger.conferences()
                 .page(page)
                 .build()
                 .also { currentCall = it }
@@ -384,7 +384,7 @@ class MessengerWorker(
         var nextId = "0"
 
         while (unreadAmount < conference.unreadMessageAmount) {
-            val fetchedMessages = api.messenger().messages()
+            val fetchedMessages = api.messenger.messages()
                 .conferenceId(conference.id)
                 .messageId(nextId)
                 .markAsRead(false)
@@ -421,7 +421,7 @@ class MessengerWorker(
         var nextId = "0"
 
         while (currentMessage.date < conference.date || existingUnreadMessageAmount < conference.unreadMessageAmount) {
-            val fetchedMessages = api.messenger().messages()
+            val fetchedMessages = api.messenger.messages()
                 .conferenceId(conference.id)
                 .messageId(nextId)
                 .markAsRead(false)
@@ -443,7 +443,7 @@ class MessengerWorker(
         return newMessages.filter { it.id.toLong() > mostRecentMessageIdBeforeUpdate } to false
     }
 
-    private fun fetchMoreMessages(conferenceId: Long) = api.messenger().messages()
+    private fun fetchMoreMessages(conferenceId: Long) = api.messenger.messages()
         .conferenceId(conferenceId.toString())
         .messageId(messengerDao.findOldestMessageForConference(conferenceId)?.id?.toString() ?: "0")
         .markAsRead(false)

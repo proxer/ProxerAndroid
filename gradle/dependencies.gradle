@@ -78,10 +78,6 @@ dependencies {
     implementation "com.kirich1409:strict-mode-compat:$strictModeCompatVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
-    // Needed for Android < 5.
-    implementation "com.google.code.findbugs:jsr305:$jsr305Version"
-    implementation "com.uber.javaxextras:javax-extras:$javaxExtrasVersion"
-
     implementation("com.github.rubengees:hawk:$hawkVersion") {
         exclude module: "gson"
     }

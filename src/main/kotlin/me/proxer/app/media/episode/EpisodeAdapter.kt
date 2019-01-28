@@ -101,7 +101,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
 
             title.text = item.title ?: item.category.toEpisodeAppString(title.context, item.number)
 
-            if (item.userProgress >= item.number) {
+            if (item.userProgress ?: 0 >= item.number) {
                 watched.isVisible = true
             } else {
                 watched.isInvisible = true

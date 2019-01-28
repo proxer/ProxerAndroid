@@ -14,8 +14,8 @@ import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.ProxerApi
+import me.proxer.library.ProxerCall
 import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
 import org.koin.core.KoinComponent
@@ -77,7 +77,7 @@ class NotificationWorker(
 
     override fun doWork() = try {
         val notificationInfo = when (storageHelper.isLoggedIn) {
-            true -> api.notifications().notificationInfo()
+            true -> api.notifications.notificationInfo()
                 .build()
                 .also { currentCall = it }
                 .execute()
@@ -110,11 +110,11 @@ class NotificationWorker(
 
     private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
         val lastNewsDate = storageHelper.lastNewsDate
-        val newNews = when (notificationInfo?.news) {
+        val newNews = when (notificationInfo?.newsAmount) {
             0 -> emptyList()
-            else -> api.notifications().news()
+            else -> api.notifications.news()
                 .page(0)
-                .limit(notificationInfo?.news ?: 100)
+                .limit(notificationInfo?.newsAmount ?: 100)
                 .build()
                 .also { currentCall = it }
                 .safeExecute()
@@ -135,11 +135,11 @@ class NotificationWorker(
 
     private fun fetchAccountNotifications(context: Context, notificationInfo: NotificationInfo) {
         val lastNotificationsDate = storageHelper.lastNotificationsDate
-        val newNotifications = when (notificationInfo.notifications) {
+        val newNotifications = when (notificationInfo.notificationAmount) {
             0 -> emptyList()
-            else -> api.notifications().notifications()
+            else -> api.notifications.notifications()
                 .page(0)
-                .limit(notificationInfo.notifications)
+                .limit(notificationInfo.notificationAmount)
                 .filter(NotificationFilter.UNREAD)
                 .build()
                 .also { currentCall = it }

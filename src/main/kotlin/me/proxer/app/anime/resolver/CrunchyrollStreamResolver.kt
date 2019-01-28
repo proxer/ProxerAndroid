@@ -31,7 +31,7 @@ class CrunchyrollStreamResolver : StreamResolver() {
                 throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
             }
         }
-        .flatMap { api.anime().link(id).buildSingle() }
+        .flatMap { api.anime.link(id).buildSingle() }
         .map { url ->
             val regexResult = regex.find(url) ?: throw StreamResolutionException()
             val mediaId = regexResult.groupValues[1]

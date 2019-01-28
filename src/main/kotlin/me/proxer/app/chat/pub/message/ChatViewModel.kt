@@ -30,7 +30,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
     override val itemsOnPage = 50
 
     override val dataSingle: Single<List<ParsedChatMessage>>
-        get() = api.chat().messages(chatRoomId)
+        get() = api.chat.messages(chatRoomId)
             .messageId(data.value?.lastOrNull()?.id ?: "0")
             .buildSingle()
             .map { it.map { message -> message.toParsedMessage() } }
@@ -188,7 +188,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
     private fun startPolling(immediate: Boolean = false) {
         pollingDisposable?.dispose()
         pollingDisposable = Single.fromCallable { validators.validateLogin() }
-            .flatMap { api.chat().messages(chatRoomId).messageId("0").buildSingle() }
+            .flatMap { api.chat.messages(chatRoomId).messageId("0").buildSingle() }
             .map { it.map { message -> message.toParsedMessage() } }
             .repeatWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
             .retryWhen { it.concatMap { Flowable.timer(3, TimeUnit.SECONDS) } }
@@ -212,7 +212,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
 
         sendMessageQueue.poll()?.let { item ->
             sendMessageDisposable = Single.fromCallable { validators.validateLogin() }
-                .flatMap { api.chat().sendMessage(chatRoomId, item.message).buildOptionalSingle() }
+                .flatMap { api.chat.sendMessage(chatRoomId, item.message).buildOptionalSingle() }
                 .retryWhen(RxRetryWithDelay(2, 3000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -53,15 +53,15 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
             val metaInfoText = metaInfo.context.getString(
                 R.string.fragment_discussion_meta_info,
                 item.firstPostUsername,
-                item.category
+                item.categoryName
             )
 
             subject.text = item.subject
             metaInfo.fastText = SpannableString(metaInfoText).apply {
                 val usernameSpanStart = indexOf(item.firstPostUsername)
                 val usernameSpanEnd = usernameSpanStart + item.firstPostUsername.length
-                val categorySpanStart = indexOf(item.category)
-                val categorySpanEnd = categorySpanStart + item.category.length
+                val categorySpanStart = indexOf(item.categoryName)
+                val categorySpanEnd = categorySpanStart + item.categoryName.length
 
                 this[usernameSpanStart..usernameSpanEnd] = StyleSpan(Typeface.BOLD)
                 this[categorySpanStart..categorySpanEnd] = StyleSpan(Typeface.BOLD)

@@ -24,23 +24,23 @@ class RoomConverters {
     fun fromMessageAction(value: MessageAction?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toMessageAction(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(MessageAction::class.java, it) }
+    fun toMessageAction(value: String?) = value?.let { ProxerUtils.toSafeApiEnum<MessageAction>(it) }
 
     @TypeConverter
     fun fromDevice(value: Device?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toDevice(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(Device::class.java, it) }
+    fun toDevice(value: String?) = value?.let { ProxerUtils.toSafeApiEnum<Device>(it) }
 
     @TypeConverter
     fun fromTagType(value: TagType?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toTagType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(TagType::class.java, it) }
+    fun toTagType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum<TagType>(it) }
 
     @TypeConverter
     fun fromTagSubType(value: TagSubType?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }
 
     @TypeConverter
-    fun toTagSubType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum(TagSubType::class.java, it) }
+    fun toTagSubType(value: String?) = value?.let { ProxerUtils.toSafeApiEnum<TagSubType>(it) }
 }

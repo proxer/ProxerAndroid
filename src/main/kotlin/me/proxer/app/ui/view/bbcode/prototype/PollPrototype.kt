@@ -17,7 +17,7 @@ object PollPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val id = text.trim()
-        val url = ProxerUrls.webBase().newBuilder()
+        val url = ProxerUrls.webBase.newBuilder()
             .addPathSegments("poll/$id")
             .setQueryParameter("device", ProxerUtils.getSafeApiEnumName(Device.MOBILE))
             .build()

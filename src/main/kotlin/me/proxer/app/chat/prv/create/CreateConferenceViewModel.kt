@@ -18,8 +18,8 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.library.ProxerApi
 import me.proxer.library.api.Endpoint
-import me.proxer.library.api.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -97,13 +97,13 @@ class CreateConferenceViewModel : ViewModel(), KoinComponent {
 
     fun createGroup(topic: String, firstMessage: String, participants: List<Participant>) = createConference(
         api
-            .messenger()
+            .messenger
             .createConferenceGroup(topic, firstMessage, participants.map { it.username })
     )
 
     fun createChat(firstMessage: String, participant: Participant) = createConference(
         api
-            .messenger()
+            .messenger
             .createConference(firstMessage, participant.username)
     )
 

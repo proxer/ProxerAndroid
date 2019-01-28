@@ -11,7 +11,7 @@ import me.proxer.library.entity.info.Relation
 class RelationViewModel(private val entryId: String) : BaseContentViewModel<List<Relation>>() {
 
     override val endpoint: Endpoint<List<Relation>>
-        get() = api.info().relations(entryId)
+        get() = api.info.relations(entryId)
             .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
 
     override val dataSingle: Single<List<Relation>>

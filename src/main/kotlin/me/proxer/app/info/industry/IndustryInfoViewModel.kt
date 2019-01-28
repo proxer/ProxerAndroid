@@ -10,5 +10,5 @@ import me.proxer.library.entity.info.Industry
 class IndustryInfoViewModel(private val industryId: String) : BaseContentViewModel<Industry>() {
 
     override val endpoint: Endpoint<Industry>
-        get() = api.info().industry(industryId)
+        get() = api.info.industry(industryId)
 }

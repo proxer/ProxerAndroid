@@ -12,7 +12,7 @@ import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalSettings
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -46,7 +46,7 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
 
     fun refresh() {
         disposable?.dispose()
-        disposable = api.ucp().settings()
+        disposable = api.ucp.settings()
             .buildSingle()
             .map { it.toLocalSettings() }
             .doOnSuccess { storageHelper.ucpSettings = it }
@@ -69,7 +69,7 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
         data.value = newData
 
         disposable?.dispose()
-        disposable = api.ucp().setSettings(newData.toNonLocalSettings())
+        disposable = api.ucp.setSettings(newData.toNonLocalSettings())
             .buildOptionalSingle()
             .doOnSuccess { storageHelper.ucpSettings = newData }
             .subscribeOn(Schedulers.io())

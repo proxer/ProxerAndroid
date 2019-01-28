@@ -23,7 +23,7 @@ class ProfileCommentViewModel(
     override val dataSingle: Single<List<ParsedUserComment>>
         get() = Single.fromCallable { validate() }
             .flatMap {
-                api.user().comments(userId.toNullable(), username.toNullable())
+                api.user.comments(userId.toNullable(), username.toNullable())
                     .category(category.toNullable())
                     .page(page)
                     .limit(itemsOnPage)

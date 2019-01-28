@@ -1,7 +1,7 @@
 package me.proxer.app.auth
 
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.library.api.LoginTokenManager
+import me.proxer.library.LoginTokenManager
 
 /**
  * @author Ruben Gees
@@ -9,6 +9,7 @@ import me.proxer.library.api.LoginTokenManager
 class ProxerLoginTokenManager(private val storageHelper: StorageHelper) : LoginTokenManager {
 
     override fun provide() = storageHelper.user?.token
+
     override fun persist(loginToken: String?) {
         when (loginToken) {
             null -> storageHelper.user = null

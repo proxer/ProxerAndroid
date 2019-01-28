@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.CompositeException
 import io.reactivex.exceptions.Exceptions
 import io.reactivex.plugins.RxJavaPlugins
-import me.proxer.library.api.ProxerCall
+import me.proxer.library.ProxerCall
 
 /**
  * @author Ruben Gees

@@ -14,5 +14,5 @@ class UcpOverviewViewModel : BaseViewModel<Optional<Int>>() {
 
     override val dataSingle: Single<Optional<Int>>
         get() = Single.fromCallable { validate() }
-            .flatMap { api.ucp().watchedEpisodes().buildOptionalSingle() }
+            .flatMap { api.ucp.watchedEpisodes().buildOptionalSingle() }
 }

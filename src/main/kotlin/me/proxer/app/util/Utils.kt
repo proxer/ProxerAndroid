@@ -11,8 +11,8 @@ import androidx.annotation.ColorInt
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
 import me.proxer.app.util.extension.androidUri
-import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ErrorType
+import me.proxer.library.ProxerException
+import me.proxer.library.ProxerException.ErrorType
 import okhttp3.HttpUrl
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber

@@ -13,5 +13,5 @@ class UcpHistoryViewModel : PagedContentViewModel<UcpHistoryEntry>() {
     override val itemsOnPage = 50
 
     override val endpoint: PagingLimitEndpoint<List<UcpHistoryEntry>>
-        get() = api.ucp().history()
+        get() = api.ucp.history()
 }

@@ -11,7 +11,7 @@ import me.proxer.library.enums.MediaLanguage
  */
 data class EpisodeRow(
     val category: Category,
-    val userProgress: Int,
+    val userProgress: Int?,
     val episodeAmount: Int,
     private val episodes: List<Episode>
 ) {

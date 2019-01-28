@@ -10,21 +10,16 @@ import java.util.Date
  * @author Ruben Gees
  */
 data class ParsedPost(
-    private val id: String,
+    override val id: String,
     val parentId: String,
     val userId: String,
     val username: String,
-    private val image: String,
-    private val date: Date,
+    override val image: String,
+    override val date: Date,
     val signature: BBTree?,
     val modifiedById: String?,
     val modifiedByName: String?,
     val modifiedReason: String?,
     val parsedMessage: BBTree,
     val thankYouAmount: Int
-) : ProxerIdItem, ProxerImageItem, ProxerDateItem {
-
-    override fun getId() = id
-    override fun getImage() = image
-    override fun getDate() = date
-}
+) : ProxerIdItem, ProxerImageItem, ProxerDateItem

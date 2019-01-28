@@ -21,7 +21,7 @@ class CommentViewModel(
     override val dataSingle: Single<List<ParsedComment>>
         get() = Single.fromCallable { validate() }
             .flatMap {
-                api.info().comments(entryId)
+                api.info.comments(entryId)
                     .sort(sortCriteria)
                     .page(page)
                     .limit(itemsOnPage)

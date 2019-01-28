@@ -21,7 +21,7 @@ class ProxerStreamResolver : StreamResolver() {
     override val name = "Proxer-Stream"
 
     override fun resolve(id: String): Single<StreamResolutionResult> {
-        return api.anime().link(id)
+        return api.anime.link(id)
             .buildSingle()
             .flatMap { url ->
                 client

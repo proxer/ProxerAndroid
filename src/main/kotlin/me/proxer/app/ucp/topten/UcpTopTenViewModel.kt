@@ -24,7 +24,7 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() = Single.fromCallable { validators.validateLogin() }
-            .flatMap { api.ucp().topTen().buildSingle() }
+            .flatMap { api.ucp.topTen().buildSingle() }
             .map {
                 val animeList = it.filter { entry -> entry.category == Category.ANIME }
                 val mangaList = it.filter { entry -> entry.category == Category.MANGA }
@@ -56,7 +56,7 @@ class UcpTopTenViewModel : BaseViewModel<ZippedTopTenResult>() {
         deletionDisposable?.dispose()
 
         deletionQueue.poll()?.let { item ->
-            deletionDisposable = api.ucp().deleteFavorite(item.id)
+            deletionDisposable = api.ucp.deleteFavorite(item.id)
                 .buildOptionalSingle()
                 .map {
                     data.value.let { currentData ->

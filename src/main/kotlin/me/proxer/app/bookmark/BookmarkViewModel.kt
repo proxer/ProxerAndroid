@@ -25,7 +25,7 @@ class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bo
     override val isLoginRequired = true
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
-        get() = api.ucp().bookmarks()
+        get() = api.ucp.bookmarks()
             .category(category)
             .filterAvailable(filterAvailable)
 
@@ -102,7 +102,7 @@ class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bo
 
             undoItem = null
 
-            deletionDisposable = api.ucp().deleteBookmark(item.id)
+            deletionDisposable = api.ucp.deleteBookmark(item.id)
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -122,7 +122,7 @@ class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bo
         }
     }
 
-    private fun bookmarkSingle(bookmark: Bookmark) = api.ucp()
+    private fun bookmarkSingle(bookmark: Bookmark) = api.ucp
         .setBookmark(bookmark.entryId, bookmark.episode, bookmark.language, bookmark.category)
         .buildOptionalSingle()
 }

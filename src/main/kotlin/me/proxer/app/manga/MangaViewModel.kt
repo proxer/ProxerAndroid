@@ -102,23 +102,23 @@ class MangaViewModel(
         }
     }
 
-    fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
+    fun markAsFinished() = updateUserState(api.info.markAsFinished(entryId))
 
     fun bookmark(episode: Int) = updateUserState(
-        api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(), Category.MANGA)
+        api.ucp.setBookmark(entryId, episode, language.toMediaLanguage(), Category.MANGA)
     )
 
     private fun entrySingle(): Single<EntryCore> = when (cachedEntryCore != null) {
         true -> Single.just(cachedEntryCore)
-        false -> api.info().entryCore(entryId).buildSingle()
+        false -> api.info.entryCore(entryId).buildSingle()
     }
 
-    private fun chapterSingle(entry: EntryCore) = api.manga().chapter(entryId, episode, language)
+    private fun chapterSingle(entry: EntryCore) = api.manga.chapter(entryId, episode, language)
         .buildPartialErrorSingle(entry)
         .map { MangaChapterInfo(it, entry.name, entry.episodeAmount) }
 
     @Suppress("ForbiddenVoid")
-    private fun updateUserState(endpoint: Endpoint<Void>) {
+    private fun updateUserState(endpoint: Endpoint<Unit>) {
         userStateDisposable?.dispose()
         userStateDisposable = Single.fromCallable { validators.validateLogin() }
             .flatMap { endpoint.buildOptionalSingle() }

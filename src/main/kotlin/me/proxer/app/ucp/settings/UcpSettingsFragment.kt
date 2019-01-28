@@ -144,7 +144,7 @@ class UcpSettingsFragment : XpPreferenceFragment() {
             val currentSettings = viewModel.data.value
 
             if (currentSettings != null) {
-                val newConstraint = ProxerUtils.toSafeApiEnum(UcpSettingConstraint::class.java, it)
+                val newConstraint = ProxerUtils.toSafeApiEnum<UcpSettingConstraint>(it)
                 val newSettings = copyCallback(currentSettings, newConstraint)
 
                 viewModel.update(newSettings)

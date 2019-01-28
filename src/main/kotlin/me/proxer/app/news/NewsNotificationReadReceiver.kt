@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.util.Date
@@ -38,7 +38,7 @@ class NewsNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
 
                 storageHelper.lastNewsDate = Date()
 
-                api.notifications().news()
+                api.notifications.news()
                     .markAsRead(true)
                     .limit(0)
                     .build()

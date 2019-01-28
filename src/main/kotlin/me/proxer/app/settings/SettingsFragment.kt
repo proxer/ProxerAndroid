@@ -160,16 +160,14 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     }
 
     private fun showRestartMessage() {
-        view?.also { view ->
-            hostingActivity.snackbar(
-                R.string.fragment_settings_restart_message,
-                actionMessage = R.string.fragment_settings_restart_action,
-                actionCallback = View.OnClickListener {
-                    val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
+        hostingActivity.snackbar(
+            R.string.fragment_settings_restart_message,
+            actionMessage = R.string.fragment_settings_restart_action,
+            actionCallback = View.OnClickListener {
+                val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
 
-                    startActivity(intent)
-                    System.exit(0)
-                })
-        }
+                startActivity(intent)
+                System.exit(0)
+            })
     }
 }

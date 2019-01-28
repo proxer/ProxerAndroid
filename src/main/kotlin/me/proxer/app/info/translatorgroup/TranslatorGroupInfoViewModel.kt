@@ -10,5 +10,5 @@ import me.proxer.library.entity.info.TranslatorGroup
 class TranslatorGroupInfoViewModel(private val translatorGroupId: String) : BaseContentViewModel<TranslatorGroup>() {
 
     override val endpoint: Endpoint<TranslatorGroup>
-        get() = api.info().translatorGroup(translatorGroupId)
+        get() = api.info.translatorGroup(translatorGroupId)
 }

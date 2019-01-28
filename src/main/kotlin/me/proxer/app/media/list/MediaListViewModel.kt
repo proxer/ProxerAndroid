@@ -58,7 +58,7 @@ class MediaListViewModel(
         get() = isLoginRequired
 
     override val endpoint: PagingLimitEndpoint<List<MediaListEntry>>
-        get() = api.list().mediaSearch()
+        get() = api.list.mediaSearch()
             .sort(sortCriteria)
             .name(searchQuery)
             .language(language)
@@ -142,8 +142,8 @@ class MediaListViewModel(
 
     private fun tagSingle(): Single<List<Tag>> {
         return Single.zip(
-            api.list().tagList().buildSingle(),
-            api.list().tagList().type(TagType.H_TAG).buildSingle(),
+            api.list.tagList().buildSingle(),
+            api.list.tagList().type(TagType.H_TAG).buildSingle(),
             BiFunction { first: List<Tag>, second: List<Tag> -> first + second }
         )
     }

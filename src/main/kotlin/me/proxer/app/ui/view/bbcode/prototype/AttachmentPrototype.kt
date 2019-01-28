@@ -73,7 +73,7 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
         imageExtensions.any { attachment.endsWith(it, true) }
 
     private fun constructUrl(userId: String, attachment: CharSequence) =
-        ProxerUrls.webBase().newBuilder()
+        ProxerUrls.webBase.newBuilder()
             .addPathSegments(
                 "media/kunena/attachments/$userId/${attachment.replace(
                     whitespaceRegex,

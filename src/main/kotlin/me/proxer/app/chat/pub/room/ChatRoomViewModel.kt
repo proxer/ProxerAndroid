@@ -17,8 +17,8 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
     }
 
     override val dataSingle: Single<List<ChatRoom>>
-        get() = api.chat().publicRooms().buildSingle()
-            .let { if (storageHelper.isLoggedIn) it.zipWith(api.chat().userRooms().buildSingle(), zipper) else it }
+        get() = api.chat.publicRooms().buildSingle()
+            .let { if (storageHelper.isLoggedIn) it.zipWith(api.chat.userRooms().buildSingle(), zipper) else it }
             .map {
                 it
                     .asSequence()

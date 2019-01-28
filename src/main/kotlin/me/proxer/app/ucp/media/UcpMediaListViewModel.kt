@@ -28,7 +28,7 @@ class UcpMediaListViewModel(
     override val itemsOnPage = 30
 
     override val endpoint: PagingLimitEndpoint<List<UserMediaListEntry>>
-        get() = api.ucp().mediaList()
+        get() = api.ucp.mediaList()
             .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
             .category(category)
             .filter(filter)
@@ -65,7 +65,7 @@ class UcpMediaListViewModel(
         deletionDisposable?.dispose()
 
         deletionQueue.poll()?.let { item ->
-            deletionDisposable = api.ucp().deleteComment(item.commentId)
+            deletionDisposable = api.ucp.deleteComment(item.commentId)
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

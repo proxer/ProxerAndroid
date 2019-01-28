@@ -13,7 +13,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalSettings
-import me.proxer.library.api.ProxerApi
+import me.proxer.library.ProxerApi
 import java.util.Date
 
 /**
@@ -42,7 +42,7 @@ class LoginHandler(
         MessengerWorker.enqueueSynchronizationIfPossible()
         NotificationWorker.enqueueIfPossible()
 
-        api.ucp().settings()
+        api.ucp.settings()
             .buildSingle()
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {

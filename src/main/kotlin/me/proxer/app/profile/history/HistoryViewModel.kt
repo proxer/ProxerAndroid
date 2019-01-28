@@ -16,6 +16,6 @@ class HistoryViewModel(
     override val itemsOnPage = 50
 
     override val endpoint: PagingLimitEndpoint<List<UserHistoryEntry>>
-        get() = api.user().history(userId.toNullable(), username.toNullable())
+        get() = api.user.history(userId.toNullable(), username.toNullable())
             .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
 }

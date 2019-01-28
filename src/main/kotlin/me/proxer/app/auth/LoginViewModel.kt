@@ -9,9 +9,9 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.library.api.ProxerApi
-import me.proxer.library.api.ProxerException
-import me.proxer.library.api.ProxerException.ServerErrorType
+import me.proxer.library.ProxerApi
+import me.proxer.library.ProxerException
+import me.proxer.library.ProxerException.ServerErrorType
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -44,7 +44,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
     fun login(username: String, password: String, secretKey: String?) {
         if (isLoading.value != true) {
             dataDisposable?.dispose()
-            dataDisposable = api.user().login(username, password)
+            dataDisposable = api.user.login(username, password)
                 .secretKey(secretKey)
                 .buildSingle()
                 .doOnSuccess { storageHelper.user = LocalUser(it.loginToken, it.id, username, it.image) }

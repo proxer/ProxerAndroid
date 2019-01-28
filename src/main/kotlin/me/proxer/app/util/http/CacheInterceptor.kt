@@ -26,19 +26,19 @@ class CacheInterceptor : Interceptor {
         private val zoneIdBerlin by unsafeLazy { ZoneId.of("Europe/Berlin") }
 
         private val cacheInfo = listOf(
-            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("info/fullentry").build(), 24),
-            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("info/entry").build(), 24),
-            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("manga/chapter").build(), 24),
-            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("anime/proxerstreams").build(), 1),
-            CacheInfo(ProxerUrls.apiBase().newBuilder().addPathSegments("anime/link").build(), 1),
-            CacheInfo(ProxerUrls.streamBase(), 24),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("info/fullentry").build(), 24),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("info/entry").build(), 24),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("manga/chapter").build(), 24),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/proxerstreams").build(), 1),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/link").build(), 1),
+            CacheInfo(ProxerUrls.streamBase, 24),
             CacheInfo(
-                ProxerUrls.apiBase().newBuilder().addPathSegments("list/entrysearch").build(),
+                ProxerUrls.apiBase.newBuilder().addPathSegments("list/entrysearch").build(),
                 1,
                 additionalApplicableCallback = { it.urlString.contains("hide_finished=1").not() }
             ),
             CacheInfo(
-                ProxerUrls.apiBase().newBuilder().addPathSegments("media/calendar").build(),
+                ProxerUrls.apiBase.newBuilder().addPathSegments("media/calendar").build(),
                 {
                     val now = LocalDateTime.now(zoneIdBerlin)
                     val tomorrow = LocalDate.now(zoneIdBerlin).plusDays(1).atTime(0, 0)
@@ -79,7 +79,7 @@ class CacheInterceptor : Interceptor {
         val url = response.request().url().toString()
 
         return when {
-            url.contains(ProxerUrls.apiBase().toString()) -> response.peekBodyAndUseWithGzip {
+            url.contains(ProxerUrls.apiBase.toString()) -> response.peekBodyAndUseWithGzip {
                 it.readUtf8(12).matches(apiSuccessRegex)
             } ?: false
 

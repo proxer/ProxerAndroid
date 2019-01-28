@@ -134,10 +134,10 @@ class AnimeViewModel(
             })
     }
 
-    fun markAsFinished() = updateUserState(api.info().markAsFinished(entryId))
+    fun markAsFinished() = updateUserState(api.info.markAsFinished(entryId))
 
     fun bookmark(episode: Int) = updateUserState(
-        api.ucp().setBookmark(entryId, episode, language.toMediaLanguage(), Category.ANIME)
+        api.ucp.setBookmark(entryId, episode, language.toMediaLanguage(), Category.ANIME)
     )
 
     private fun entrySingle(): Single<EntryCore> {
@@ -145,11 +145,11 @@ class AnimeViewModel(
 
         return when (safeCachedEntryCore != null) {
             true -> Single.just(safeCachedEntryCore)
-            false -> api.info().entryCore(entryId).buildSingle()
+            false -> api.info.entryCore(entryId).buildSingle()
         }.doOnSuccess { cachedEntryCore = it }
     }
 
-    private fun streamSingle(entry: EntryCore) = api.anime().streams(entryId, episode, language)
+    private fun streamSingle(entry: EntryCore) = api.anime.streams(entryId, episode, language)
         .includeProxerStreams(true)
         .buildPartialErrorSingle(entry)
         .map { it.filterNot { stream -> StreamResolverFactory.resolverFor(stream.hosterName)?.ignore == true } }
@@ -172,7 +172,7 @@ class AnimeViewModel(
         .toList()
 
     @Suppress("ForbiddenVoid")
-    private fun updateUserState(endpoint: Endpoint<Void>) {
+    private fun updateUserState(endpoint: Endpoint<Unit>) {
         userStateDisposable?.dispose()
         userStateDisposable = Single.fromCallable { validators.validateLogin() }
             .flatMap { endpoint.buildOptionalSingle() }

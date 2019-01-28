@@ -10,7 +10,7 @@ import me.proxer.app.util.extension.buildSingle
 class EpisodeViewModel(private val entryId: String) : BaseViewModel<List<EpisodeRow>>() {
 
     override val dataSingle: Single<List<EpisodeRow>>
-        get() = api.info().episodeInfo(entryId)
+        get() = api.info.episodeInfo(entryId)
             .limit(Int.MAX_VALUE)
             .buildSingle()
             .map { info ->

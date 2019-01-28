@@ -14,5 +14,5 @@ class ProfileInfoViewModel(
 ) : BaseContentViewModel<UserInfo>() {
 
     override val endpoint: Endpoint<UserInfo>
-        get() = api.user().info(userId.toNullable(), username.toNullable())
+        get() = api.user.info(userId.toNullable(), username.toNullable())
 }
