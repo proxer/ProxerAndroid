@@ -149,6 +149,7 @@ android {
         mkdir("$buildDir/reports/lint")
 
         warningsAsErrors = true
+        checkReleaseBuilds = false
 
         lintConfig file("$rootDir/config/lint/lint.xml")
         xmlOutput file("$buildDir/reports/lint/lint-results.xml")
@@ -170,6 +171,12 @@ android {
         exclude "build-data.properties"
         exclude "androidsupportmultidexversion.txt"
         exclude "play-services-*.properties"
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
     applicationVariants.all { variant ->

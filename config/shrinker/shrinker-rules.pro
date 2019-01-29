@@ -1,5 +1,8 @@
-# Keep annotations for refletive access and information to make stacktraces readeable.
--keepattributes *Annotation*,SourceFile,LineNumberTable
+# Keep annotations for refletive access.
+-keepattributes *Annotation*
+
+# Keep stacktraces readeable.
+-keepattributes SourceFile,LineNumberTable
 
 # Keep fields in R which are accessed through reflection.
 -keepclasseswithmembers class **.R$* {
