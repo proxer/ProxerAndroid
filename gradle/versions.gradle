@@ -12,7 +12,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "5.1.1"
+    gradleVersion = "5.2-rc-1"
 
     // Core plugins
     androidPluginVersion = "3.5.0-alpha03"
@@ -22,18 +22,17 @@ ext {
     detektPluginVersion = "1.0.0-RC12"
     versionsPluginVersion = "0.20.0"
     androidCommandPluginVersion = "2.0.1"
-    ktlintPluginVersion = "6.3.1"
-    ktlintVersion = "0.29.0"
+    ktlintPluginVersion = "7.0.0"
 
     // Frameworks and compatibility libraries
     koinVersion = "2.0.0-beta-1"
     multidexVersion = "2.0.1"
     appcompatVersion = "1.1.0-alpha01"
     browserVersion = "1.0.0"
-    lifecycleVersion = "2.1.0-alpha01"
+    lifecycleVersion = "2.1.0-alpha02"
     roomVersion = "2.1.0-alpha04"
     workVersion = "1.0.0-beta03"
-    coreKtxVersion = "1.1.0-alpha03"
+    coreKtxVersion = "1.1.0-alpha04"
     fragmentKtxVersion = "1.1.0-alpha03"
     castVersion = "16.1.2"
 
@@ -47,10 +46,10 @@ ext {
     autoDisposeVersion = "1.1.0"
 
     // UI components
-    recyclerviewVersion = "1.1.0-alpha01"
+    recyclerviewVersion = "1.1.0-alpha02"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
-    materialComponentsVersion = "1.1.0-alpha02"
+    materialComponentsVersion = "1.1.0-alpha03"
     constraintLayoutVersion = "2.0.0-alpha2"
     preferenceVersion = "1.1.0-alpha02"
     supportPreferenceVersion = "2.3.2"
@@ -83,7 +82,7 @@ ext {
     glideVersion = "4.9.0-SNAPSHOT"
     retrofitVersion = "2.5.1-SNAPSHOT"
     okHttpVersion = "3.12.1"
-    okioVersion = "2.2.1"
+    okioVersion = "2.2.2"
     moshiVersion = "1.8.0"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"
