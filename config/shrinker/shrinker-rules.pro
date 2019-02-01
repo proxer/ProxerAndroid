@@ -1,13 +1,8 @@
-# Keep annotations for refletive access.
--keepattributes *Annotation*
-
 # Keep stacktraces readeable.
 -keepattributes SourceFile,LineNumberTable
 
-# Keep fields in R which are accessed through reflection.
--keepclasseswithmembers class **.R$* {
-    public static final int define_*;
-}
+# Keep essential support library class.
+-keep class androidx.core.app.CoreComponentFactory { *; }
 
 # Remove all kinds of logging.
 -assumenosideeffects class android.util.Log {
@@ -30,5 +25,9 @@
     public <init>(...);
 }
 
-# Iconics
--keepclassmembernames enum * implements com.mikepenz.iconics.typeface.IIcon { *; }
+# Recent versions of R8 seem to require this: https://issuetracker.google.com/issues/123558494
+-keep @com.squareup.moshi.JsonQualifier @interface *
+
+# Keep decoders accessed through reflection.
+-keep class me.proxer.app.manga.RapidImageDecoder
+-keep class me.proxer.app.manga.RapidImageRegionDecoder
