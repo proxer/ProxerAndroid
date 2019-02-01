@@ -13,10 +13,10 @@ import clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.BuildConfig
+import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.sync.MessengerWorker
-import me.proxer.app.manga.MangaActivity
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.ucp.settings.UcpSettingsActivity
 import me.proxer.app.util.KotterKnifePreference
@@ -54,7 +54,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     }
 
     private val hostingActivity: BaseActivity
-        get() = activity as MangaActivity
+        get() = activity as MainActivity
 
     private val packageManager by inject<PackageManager>()
     private val preferenceHelper by inject<PreferenceHelper>()
