@@ -4,6 +4,11 @@
 # Keep essential support library class.
 -keep class androidx.core.app.CoreComponentFactory { *; }
 
+# Keep fields in R which are accessed through reflection.
+-keepclasseswithmembers class **.R$* {
+    public static final int define_*;
+}
+
 # Remove all kinds of logging.
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);
