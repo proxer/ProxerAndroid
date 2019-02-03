@@ -503,6 +503,7 @@
     <string name="fragment_create_conference_cancel_content_description">Abbrechen</string>
     <string name="fragment_create_conference_accept_description">Akzeptieren</string>
 
+    <string name="fragment_chat_loading_message">Chat wird geladen…</string>
     <string name="fragment_chat_read_only_message">In diesen Chat kann nicht geschrieben werden</string>
     <string name="fragment_chat_login_required_message">Du musst dich anmelden um schreiben zu können</string>
 

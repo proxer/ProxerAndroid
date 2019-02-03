@@ -62,8 +62,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/item_margin"
             android:layout_marginRight="@dimen/item_margin"
-            android:layout_marginBottom="@dimen/item_margin"
-            android:visibility="gone"
-            tools:visibility="visible" />
+            android:layout_marginBottom="@dimen/item_margin" />
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

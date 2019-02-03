@@ -45,6 +45,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.unsafeLazy
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.viewModel
 import kotlin.properties.Delegates
@@ -72,14 +73,10 @@ class CreateConferenceFragment : BaseFragment() {
     private val initialParticipant: Participant?
         get() = hostingActivity.initialParticipant
 
-    private val emojiPopup by lazy {
+    private val emojiPopup by unsafeLazy {
         val popup = EmojiPopup.Builder.fromRootView(root)
-            .setOnEmojiPopupShownListener {
-                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon2.cmd_keyboard))
-            }
-            .setOnEmojiPopupDismissListener {
-                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-            }
+            .setOnEmojiPopupShownListener { updateIcons() }
+            .setOnEmojiPopupDismissListener { updateIcons() }
             .build(messageInput)
 
         popup
@@ -223,6 +220,10 @@ class CreateConferenceFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Call getter as soon as possible to make keyboard detection work properly.
+        emojiPopup
+        updateIcons()
+
         innerAdapter.glide = GlideApp.with(this)
 
         participants.isNestedScrollingEnabled = false
@@ -231,15 +232,6 @@ class CreateConferenceFragment : BaseFragment() {
 
         progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
         progress.isEnabled = false
-
-        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-
-        sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorAttr(requireContext(), R.attr.colorSecondary)
-                .sizeDp(32)
-                .paddingDp(4)
-        )
 
         emojiButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -400,9 +392,24 @@ class CreateConferenceFragment : BaseFragment() {
         }
     }
 
-    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(requireContext())
-        .icon(iconicRes)
-        .sizeDp(32)
-        .paddingDp(6)
-        .iconColor(requireContext())
+    private fun updateIcons() {
+        val emojiButtonIcon: IIcon = when (emojiPopup.isShowing) {
+            true -> CommunityMaterial.Icon2.cmd_keyboard
+            false -> CommunityMaterial.Icon.cmd_emoticon
+        }
+
+        emojiButton.setImageDrawable(
+            IconicsDrawable(requireContext(), emojiButtonIcon)
+                .iconColor(requireContext())
+                .sizeDp(32)
+                .paddingDp(6)
+        )
+
+        sendButton.setImageDrawable(
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
+                .colorAttr(requireContext(), R.attr.colorSecondary)
+                .sizeDp(32)
+                .paddingDp(4)
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package me.proxer.app.chat.prv.message
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
@@ -14,8 +15,6 @@ import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -41,13 +40,13 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.colorAttr
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toast
+import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -108,14 +107,10 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
     }
 
-    private val emojiPopup by lazy {
+    private val emojiPopup by unsafeLazy {
         val popup = EmojiPopup.Builder.fromRootView(root)
-            .setOnEmojiPopupShownListener {
-                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon2.cmd_keyboard))
-            }
-            .setOnEmojiPopupDismissListener {
-                emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-            }
+            .setOnEmojiPopupShownListener { updateInput() }
+            .setOnEmojiPopupDismissListener { updateInput() }
             .build(messageInput)
 
         popup
@@ -134,7 +129,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     private val scrollToBottom: FloatingActionButton by bindView(R.id.scrollToBottom)
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
-    private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
     private val sendButton: ImageView by bindView(R.id.sendButton)
 
@@ -189,6 +183,10 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Call getter as soon as possible to make keyboard detection work properly.
+        emojiPopup
+        updateInput()
+
         if (savedInstanceState == null) {
             messageInput.setText(hostingActivity.initialMessage)
         }
@@ -196,6 +194,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         viewModel.conference.observe(viewLifecycleOwner, Observer {
             it?.let { conference = it }
         })
+
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
             .observeOn(AndroidSchedulers.mainThread())
@@ -209,23 +209,12 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
                 }
             }
 
-        emojiButton.setImageDrawable(generateEmojiDrawable(CommunityMaterial.Icon.cmd_emoticon))
-
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
-
         scrollToBottom.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(0, 0)
             }
-
-        sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorAttr(requireContext(), R.attr.colorSecondary)
-                .sizeDp(32)
-                .paddingDp(4)
-        )
 
         emojiButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -297,13 +286,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
             recyclerView.scrollToPosition(conference.unreadMessageAmount - 1)
         }
 
-        inputContainer.isVisible = true
+        updateInput()
     }
 
     override fun hideData() {
-        if (innerAdapter.isEmpty()) {
-            inputContainer.isGone = true
-        }
+        updateInput()
 
         super.hideData()
     }
@@ -311,18 +298,62 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
     override fun showError(action: ErrorUtils.ErrorAction) {
         super.showError(action)
 
-        if (innerAdapter.isEmpty()) {
-            inputContainer.isGone = true
-        }
+        updateInput()
     }
 
     override fun isAtTop() = recyclerView.isAtTop()
 
-    private fun generateEmojiDrawable(iconicRes: IIcon) = IconicsDrawable(requireContext())
-        .icon(iconicRes)
-        .sizeDp(32)
-        .paddingDp(6)
-        .iconColor(requireContext())
+    private fun updateInput() {
+        val isLoggedIn by unsafeLazy { storageHelper.isLoggedIn }
+        val shouldEnabledInput = innerAdapter.isEmpty().not() && isLoggedIn
+
+        if (shouldEnabledInput) {
+            emojiButton.isEnabled = true
+            sendButton.isEnabled = true
+            messageInput.isEnabled = true
+
+            messageInput.hint = getString(R.string.fragment_messenger_message)
+        } else {
+            emojiButton.isEnabled = false
+            sendButton.isEnabled = false
+            messageInput.isEnabled = false
+
+            messageInput.hint = when {
+                innerAdapter.isEmpty() -> getString(R.string.fragment_chat_loading_message)
+                else -> getString(R.string.fragment_chat_login_required_message)
+            }
+        }
+
+        updateIcons(!shouldEnabledInput)
+    }
+
+    @SuppressLint("PrivateResource")
+    private fun updateIcons(disabledColor: Boolean) {
+        val emojiButtonIcon: IIcon = when (emojiPopup.isShowing) {
+            true -> CommunityMaterial.Icon2.cmd_keyboard
+            false -> CommunityMaterial.Icon.cmd_emoticon
+        }
+
+        emojiButton.setImageDrawable(
+            IconicsDrawable(requireContext(), emojiButtonIcon)
+                .colorAttr(requireContext(), when (disabledColor) {
+                    true -> R.attr.colorOnSurfaceDisabled
+                    false -> R.attr.colorIcon
+                })
+                .sizeDp(32)
+                .paddingDp(6)
+        )
+
+        sendButton.setImageDrawable(
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
+                .colorAttr(requireContext(), when (disabledColor) {
+                    true -> R.attr.colorOnSurfaceDisabled
+                    false -> R.attr.colorSecondary
+                })
+                .sizeDp(32)
+                .paddingDp(4)
+        )
+    }
 
     private fun handleCopyClick() {
         val title = getString(R.string.fragment_messenger_clip_title)
