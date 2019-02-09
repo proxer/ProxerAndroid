@@ -15,6 +15,7 @@ import kotterknife.bindView
 import linkClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
@@ -29,6 +30,12 @@ import org.koin.core.parameter.parametersOf
 class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
 
     companion object {
+        private const val RANK_FORUM_ID = "207664"
+        private const val RANK_FORUM_CATEGORY_ID = "79"
+        private const val RANK_FORUM_TOPIC = "Rangpunkte und Ränge"
+
+        private val rankRegex = Regex(".*")
+
         fun newInstance() = ProfileInfoFragment().apply {
             arguments = bundleOf()
         }
@@ -71,6 +78,12 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }
+
+        rank.linkClicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                TopicActivity.navigateTo(requireActivity(), RANK_FORUM_ID, RANK_FORUM_CATEGORY_ID, RANK_FORUM_TOPIC)
+            }
     }
 
     override fun showData(data: UserInfo) {
@@ -90,7 +103,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         infoPointsRow.text = data.infoPoints.toString()
         miscellaneousPointsRow.text = data.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
-        rank.text = rankToString(totalPoints)
+        rank.text = rankToString(totalPoints).linkify(custom = *arrayOf(rankRegex))
 
         if (data.status.isBlank()) {
             statusContainer.isGone = true
