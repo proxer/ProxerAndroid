@@ -1,7 +1,43 @@
 package me.proxer.app.ui.view.bbcode
 
-import me.proxer.app.ui.view.bbcode.prototype.*
+import me.proxer.app.ui.view.bbcode.prototype.AgeRestrictionPrototype
+import me.proxer.app.ui.view.bbcode.prototype.AttachmentPrototype
+import me.proxer.app.ui.view.bbcode.prototype.AutoClosingPrototype
+import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
+import me.proxer.app.ui.view.bbcode.prototype.BoldPrototype
+import me.proxer.app.ui.view.bbcode.prototype.BreakPrototype
+import me.proxer.app.ui.view.bbcode.prototype.CenterPrototype
+import me.proxer.app.ui.view.bbcode.prototype.CodePrototype
+import me.proxer.app.ui.view.bbcode.prototype.ColorPrototype
+import me.proxer.app.ui.view.bbcode.prototype.DividerPrototype
+import me.proxer.app.ui.view.bbcode.prototype.FacebookPrototype
+import me.proxer.app.ui.view.bbcode.prototype.HidePrototype
+import me.proxer.app.ui.view.bbcode.prototype.ImagePrototype
+import me.proxer.app.ui.view.bbcode.prototype.ItalicPrototype
+import me.proxer.app.ui.view.bbcode.prototype.LeftPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ListItemPrototype
+import me.proxer.app.ui.view.bbcode.prototype.MapPrototype
+import me.proxer.app.ui.view.bbcode.prototype.OrderedListPrototype
+import me.proxer.app.ui.view.bbcode.prototype.PdfPrototype
+import me.proxer.app.ui.view.bbcode.prototype.PollPrototype
+import me.proxer.app.ui.view.bbcode.prototype.QuotePrototype
+import me.proxer.app.ui.view.bbcode.prototype.RightPrototype
+import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SizePrototype
+import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype
+import me.proxer.app.ui.view.bbcode.prototype.StrikethroughPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SubscriptPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SuperscriptPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TableCellPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TablePrototype
+import me.proxer.app.ui.view.bbcode.prototype.TableRowPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
+import me.proxer.app.ui.view.bbcode.prototype.TwitterPrototype
+import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
+import me.proxer.app.ui.view.bbcode.prototype.UnorderedListPrototype
+import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
+import me.proxer.app.ui.view.bbcode.prototype.VideoPrototype
 import java.util.regex.Pattern.quote
 
 /**
