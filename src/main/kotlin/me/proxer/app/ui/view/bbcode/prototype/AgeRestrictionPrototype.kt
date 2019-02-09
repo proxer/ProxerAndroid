@@ -15,7 +15,7 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
 import org.koin.core.KoinComponent
@@ -24,20 +24,20 @@ import org.koin.core.inject
 /**
  * @author Ruben Gees
  */
-object HidePrototype : AutoClosingPrototype, KoinComponent {
+object AgeRestrictionPrototype : AutoClosingPrototype, KoinComponent {
 
-    override val startRegex = Regex(" *hide( .*?)?", REGEX_OPTIONS)
-    override val endRegex = Regex("/ *hide *", REGEX_OPTIONS)
+    override val startRegex = Regex(" *age18( .*?)?", REGEX_OPTIONS)
+    override val endRegex = Regex("/ *age18 *", REGEX_OPTIONS)
 
-    private val storageHelper by inject<StorageHelper>()
+    private val preferenceHelper by inject<PreferenceHelper>()
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)
 
         return when {
             childViews.isEmpty() -> childViews
-            !storageHelper.isLoggedIn -> listOf(FrameLayout(parent.context).apply {
-                val text = parent.context.getString(R.string.view_bbcode_hide_login)
+            !preferenceHelper.isAgeRestrictedMediaAllowed -> listOf(FrameLayout(parent.context).apply {
+                val text = parent.context.getString(R.string.view_bbcode_hide_age_restricted)
 
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
@@ -49,7 +49,7 @@ object HidePrototype : AutoClosingPrototype, KoinComponent {
             })
             else -> listOf(LinearLayout(parent.context).apply {
                 val fourDip = dip(4)
-                val text = parent.context.getString(R.string.view_bbcode_login)
+                val text = parent.context.getString(R.string.view_bbcode_age_restricted)
 
                 layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
