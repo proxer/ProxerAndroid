@@ -140,6 +140,26 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         private var view: SubsamplingScaleImageView? = view
         private var regionDecoder: PDFRegionDecoder? = null
 
+        init {
+            view.doOnLayout {
+                view.events()
+                    .publish()
+                    .autoConnect(2)
+                    .also { observable ->
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe { handleLoadError(view) }
+
+                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
+                            .autoDisposable(ViewScopeProvider.from(view))
+                            .subscribe {
+                                view.setDoubleTapZoomScale(view.scale * 2.5f)
+                                view.maxScale = view.scale * 2.5f
+                            }
+                    }
+            }
+        }
+
         override fun onResourceReady(resource: File, transition: Transition<in File>?) {
             view?.also { safeView ->
                 regionDecoder = PDFRegionDecoder(0, resource, 8f).also {
@@ -149,22 +169,6 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                 safeView.setBitmapDecoderFactory { PDFDecoder(0, resource, 8f) }
 
                 safeView.setImage(ImageSource.uri(resource.absolutePath))
-
-                safeView.events()
-                    .publish()
-                    .also { observable ->
-                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
-                            .autoDisposable(ViewScopeProvider.from(view))
-                            .subscribe { handleLoadError(safeView) }
-
-                        observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Loaded }
-                            .autoDisposable(ViewScopeProvider.from(view))
-                            .subscribe {
-                                safeView.setDoubleTapZoomScale(safeView.scale * 2.5f)
-                                safeView.maxScale = safeView.scale * 2.5f
-                            }
-                    }
-                    .connect()
             }
         }
 
