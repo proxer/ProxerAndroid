@@ -61,7 +61,7 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
     if (mentions) LinkifyCompat.addLinks(spannable, MENTIONS_REGEX, null)
 
     custom.forEach {
-        LinkifyCompat.addLinks(spannable, it.toPattern(), "")
+        LinkifyCompat.addLinks(spannable, it.toPattern(), null)
     }
 
     return spannable

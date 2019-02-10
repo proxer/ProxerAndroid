@@ -34,7 +34,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         private const val RANK_FORUM_CATEGORY_ID = "79"
         private const val RANK_FORUM_TOPIC = "Rangpunkte und Ränge"
 
-        private val rankRegex = Regex(".*")
+        private val rankRegex = Regex(".*", RegexOption.DOT_MATCHES_ALL)
 
         fun newInstance() = ProfileInfoFragment().apply {
             arguments = bundleOf()
@@ -103,7 +103,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         infoPointsRow.text = data.infoPoints.toString()
         miscellaneousPointsRow.text = data.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
-        rank.text = rankToString(totalPoints).linkify(custom = *arrayOf(rankRegex))
+        rank.text = rankToString(totalPoints).linkify(web = false, mentions = false, custom = *arrayOf(rankRegex))
 
         if (data.status.isBlank()) {
             statusContainer.isGone = true
