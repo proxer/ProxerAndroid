@@ -199,7 +199,7 @@
                             </TableRow>
                         </TableLayout>
 
-                        <TextView
+                        <me.proxer.app.ui.view.BetterLinkTextView
                             android:id="@+id/rank"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -216,7 +216,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/item_margin">
 
-                    <TextView
+                    <me.proxer.app.ui.view.BetterLinkTextView
                         android:id="@+id/statusText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

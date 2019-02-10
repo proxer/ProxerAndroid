@@ -88,7 +88,7 @@
                 tools:visibility="visible" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <me.proxer.app.ui.view.BetterLinkTextView
             android:id="@+id/registrationInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
