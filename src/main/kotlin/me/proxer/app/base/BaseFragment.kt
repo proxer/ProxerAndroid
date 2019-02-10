@@ -48,6 +48,4 @@ abstract class BaseFragment : Fragment(), CustomTabsAware {
     override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
         customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
     }
-
-    protected fun requireArguments() = arguments ?: throw IllegalStateException("arguments are null")
 }

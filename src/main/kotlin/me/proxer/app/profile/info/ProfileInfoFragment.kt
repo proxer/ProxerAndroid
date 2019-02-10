@@ -1,10 +1,10 @@
 package me.proxer.app.profile.info
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import com.gojuno.koptional.rxjava2.filterSome
@@ -27,6 +27,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_profile)
 class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
 
     companion object {
@@ -65,10 +66,6 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
 
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
     private val statusText: TextView by bindView(R.id.statusText)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

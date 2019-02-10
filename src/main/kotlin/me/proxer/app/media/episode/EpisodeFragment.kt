@@ -1,9 +1,9 @@
 package me.proxer.app.media.episode
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +36,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_episode)
 class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
 
     companion object {
@@ -88,10 +89,6 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>() {
                     )
                 }
             }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_episode, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -4,14 +4,13 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.ContentView
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -54,6 +53,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_messenger)
 class MessengerFragment : PagedContentFragment<LocalMessage>() {
 
     companion object {
@@ -174,10 +174,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         innerAdapter.mentionsClickSubject
             .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_messenger, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

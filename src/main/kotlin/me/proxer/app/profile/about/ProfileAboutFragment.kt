@@ -14,6 +14,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -45,6 +46,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_about)
 class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
 
     companion object {
@@ -72,10 +74,6 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
     private val generalTable by bindView<TableLayout>(R.id.generalTable)
     private val aboutContainer by bindView<ViewGroup>(R.id.aboutContainer)
     private val about by bindView<WebView>(R.id.about)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_about, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

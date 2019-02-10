@@ -1,9 +1,9 @@
 package me.proxer.app.chat.pub.room
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_chat_room)
 class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
 
     companion object {
@@ -50,10 +51,6 @@ class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
         adapter.linkClickSubject
             .autoDisposable(this.scope())
             .subscribe { showPage(it) }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_chat_room, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,9 +1,9 @@
 package me.proxer.app.anime.schedule
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +23,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_schedule)
 class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry>>>() {
 
     companion object {
@@ -50,10 +51,6 @@ class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry
             .subscribe { (view, item) ->
                 MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, null, view)
             }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,12 +1,12 @@
 package me.proxer.app.chat.prv.conference
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -44,6 +44,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_conferences)
 class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     companion object {
@@ -126,10 +127,6 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
             .subscribe { (conference) -> MessengerActivity.navigateTo(requireActivity(), conference) }
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_conferences, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,9 +1,9 @@
 package me.proxer.app.profile.topten
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -30,6 +30,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_top_ten)
 class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
     companion object {
@@ -71,10 +72,6 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
             .subscribe { (view, item) ->
                 MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category, view)
             }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

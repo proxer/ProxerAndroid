@@ -3,11 +3,11 @@ package me.proxer.app.info.translatorgroup
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -33,6 +33,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_translator_group)
 class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
 
     companion object {
@@ -61,10 +62,6 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
     private val link: TextView by bindView(R.id.link)
     private val descriptionContainer: ViewGroup by bindView(R.id.descriptionContainer)
     private val description: TextView by bindView(R.id.description)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_translator_group, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

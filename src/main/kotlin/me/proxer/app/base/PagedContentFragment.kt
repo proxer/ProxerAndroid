@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -28,6 +29,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_paged)
 abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
 
     abstract override val viewModel: PagedViewModel<T>
@@ -66,10 +68,6 @@ abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
                 }
             }
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_paged, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

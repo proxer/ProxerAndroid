@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.lifecycle.Observer
@@ -53,6 +54,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_create_conference)
 class CreateConferenceFragment : BaseFragment() {
 
     companion object {
@@ -145,7 +147,7 @@ class CreateConferenceFragment : BaseFragment() {
             }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         addParticipantFooter = inflater.inflate(
             R.layout.item_create_conference_add_participant,
             container, false
@@ -156,6 +158,71 @@ class CreateConferenceFragment : BaseFragment() {
             container, false
         ) as ViewGroup
 
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Call getter as soon as possible to make keyboard detection work properly.
+        emojiPopup
+        updateIcons()
+        initFooter()
+
+        innerAdapter.glide = GlideApp.with(this)
+
+        participants.isNestedScrollingEnabled = false
+        participants.layoutManager = LinearLayoutManager(context)
+        participants.adapter = adapter
+
+        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
+        progress.isEnabled = false
+
+        emojiButton.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { emojiPopup.toggle() }
+
+        initSendButton()
+        initTopicInput()
+
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            progress.isEnabled = it == true
+            progress.isRefreshing = it == true
+        })
+
+        viewModel.result.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                requireActivity().finish()
+
+                MessengerActivity.navigateTo(requireActivity(), it)
+            }
+        })
+
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hostingActivity.multilineSnackbar(
+                    it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        innerAdapter.saveInstanceState(outState)
+    }
+
+    override fun onDestroyView() {
+        participants.layoutManager = null
+        participants.adapter = null
+
+        emojiPopup.dismiss()
+
+        super.onDestroyView()
+    }
+
+    private fun initFooter() {
         addParticipantImage.setIconicsImage(
             when (isGroup) {
                 true -> CommunityMaterial.Icon.cmd_account_plus
@@ -172,7 +239,7 @@ class CreateConferenceFragment : BaseFragment() {
                 adapter.footer = addParticipantInputFooter
 
                 addParticipantFooter.post {
-                    if (view != null) addParticipantInputFooter.requestFocus()
+                    if (this.view != null) addParticipantInputFooter.requestFocus()
                 }
             }
 
@@ -213,30 +280,10 @@ class CreateConferenceFragment : BaseFragment() {
         if (innerAdapter.itemCount <= 0) {
             adapter.footer = addParticipantInputFooter
         }
-
-        return inflater.inflate(R.layout.fragment_create_conference, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Call getter as soon as possible to make keyboard detection work properly.
-        emojiPopup
-        updateIcons()
-
-        innerAdapter.glide = GlideApp.with(this)
-
-        participants.isNestedScrollingEnabled = false
-        participants.layoutManager = LinearLayoutManager(context)
-        participants.adapter = adapter
-
-        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
-        progress.isEnabled = false
-
-        emojiButton.clicks()
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { emojiPopup.toggle() }
-
+    @Suppress("ThrowsCount")
+    private fun initSendButton() {
         sendButton.clicks()
             .map {
                 validators.validateLogin()
@@ -284,7 +331,9 @@ class CreateConferenceFragment : BaseFragment() {
                     false -> viewModel.createChat(firstMessage, participants.first())
                 }
             }
+    }
 
+    private fun initTopicInput() {
         if (isGroup) {
             topicInput.textChanges()
                 .skipInitialValue()
@@ -318,42 +367,6 @@ class CreateConferenceFragment : BaseFragment() {
                 messageInput.requestFocus()
             }
         }
-
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
-            progress.isEnabled = it == true
-            progress.isRefreshing = it == true
-        })
-
-        viewModel.result.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                requireActivity().finish()
-
-                MessengerActivity.navigateTo(requireActivity(), it)
-            }
-        })
-
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
-            }
-        })
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        innerAdapter.saveInstanceState(outState)
-    }
-
-    override fun onDestroyView() {
-        participants.layoutManager = null
-        participants.adapter = null
-
-        emojiPopup.dismiss()
-
-        super.onDestroyView()
     }
 
     private fun validateAndAddUser(): Boolean = participantInput.text.toString().trim().let {

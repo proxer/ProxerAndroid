@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.annotation.ContentView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
@@ -58,6 +59,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_manga)
 class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     companion object {
@@ -186,67 +188,17 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val horizontalMargin = DeviceUtils.getHorizontalMargin(requireContext(), true)
-        val verticalMargin = DeviceUtils.getVerticalMargin(requireContext(), true)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
+        footer = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
 
-        header = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
-            textResolver = mediaControlTextResolver
-
-            updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                setMargins(
-                    horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin
-                )
-            }
-        }
-
-        footer = (inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView).apply {
-            textResolver = mediaControlTextResolver
-
-            updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                setMargins(
-                    horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin
-                )
-            }
-        }
-
-        Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
-
-        Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
-
-        Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe {
-                if (areBookmarksAutomatic && it > episode && storageHelper.isLoggedIn) {
-                    viewModel.bookmark(it)
-                }
-
-                episode = it
-            }
-
-        Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { viewModel.bookmark(it) }
-
-        Observable.merge(header.finishClickSubject, footer.finishClickSubject)
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { viewModel.markAsFinished() }
-
-        return inflater.inflate(R.layout.fragment_manga, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initHeaderAndFooter()
 
         innerAdapter.glide = GlideApp.with(this)
 
@@ -411,6 +363,59 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         if (viewModel.data.value == null) {
             adapter.header = null
         }
+    }
+
+    private fun initHeaderAndFooter() {
+        val horizontalMargin = DeviceUtils.getHorizontalMargin(requireContext(), true)
+        val verticalMargin = DeviceUtils.getVerticalMargin(requireContext(), true)
+
+        header.apply {
+            textResolver = mediaControlTextResolver
+
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(
+                    horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin
+                )
+            }
+        }
+
+        footer.apply {
+            textResolver = mediaControlTextResolver
+
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                setMargins(
+                    horizontalMargin, verticalMargin,
+                    horizontalMargin, verticalMargin
+                )
+            }
+        }
+
+        Observable.merge(header.uploaderClickSubject, footer.uploaderClickSubject)
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { ProfileActivity.navigateTo(requireActivity(), it.id, it.name) }
+
+        Observable.merge(header.translatorGroupClickSubject, footer.translatorGroupClickSubject)
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { TranslatorGroupActivity.navigateTo(requireActivity(), it.id, it.name) }
+
+        Observable.merge(header.episodeSwitchSubject, footer.episodeSwitchSubject)
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                if (areBookmarksAutomatic && it > episode && storageHelper.isLoggedIn) {
+                    viewModel.bookmark(it)
+                }
+
+                episode = it
+            }
+
+        Observable.merge(header.bookmarkSetSubject, footer.bookmarkSetSubject)
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { viewModel.bookmark(it) }
+
+        Observable.merge(header.finishClickSubject, footer.finishClickSubject)
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { viewModel.markAsFinished() }
     }
 
     private fun showHeaderAndFooter(data: MangaChapterInfo) {

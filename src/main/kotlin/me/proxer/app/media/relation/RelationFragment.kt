@@ -1,9 +1,9 @@
 package me.proxer.app.media.relation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -26,6 +26,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_relation)
 class RelationFragment : BaseContentFragment<List<Relation>>() {
 
     companion object {
@@ -59,10 +60,6 @@ class RelationFragment : BaseContentFragment<List<Relation>>() {
             .subscribe { (view, relation) ->
                 MediaActivity.navigateTo(requireActivity(), relation.id, relation.name, relation.category, view)
             }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_relation, container, false)
     }
 
     override fun onDestroyView() {

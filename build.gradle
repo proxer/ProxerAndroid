@@ -7,7 +7,7 @@ buildscript { scriptHandler ->
 
     dependencies {
         // Manually set the R8 and D8 version, to get latest improvements fast.
-        classpath "com.android.tools:r8:1.4.32"
+        classpath "com.android.tools:r8:1.4.39"
 
         classpath "com.android.tools.build:gradle:$androidPluginVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"

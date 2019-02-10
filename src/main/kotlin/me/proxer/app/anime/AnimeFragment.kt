@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
@@ -43,6 +44,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_anime)
 class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
 
     companion object {
@@ -139,7 +141,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         header = inflater.inflate(R.layout.layout_media_control, container, false) as MediaControlView
 
         header.textResolver = object : MediaControlView.TextResourceResolver {
@@ -167,7 +169,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFinished() }
 
-        return inflater.inflate(R.layout.fragment_anime, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

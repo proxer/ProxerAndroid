@@ -1,9 +1,9 @@
 package me.proxer.app.ucp.topten
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -30,6 +30,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_top_ten)
 class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
 
     companion object {
@@ -63,10 +64,6 @@ class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
         Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)
             .autoDisposable(this.scope())
             .subscribe { viewModel.addItemToDelete(it) }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_top_ten, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,9 +1,8 @@
 package me.proxer.app.chat
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -23,6 +22,7 @@ import me.proxer.app.util.extension.unsafeLazy
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_chat_container)
 class ChatContainerFragment : BaseFragment() {
 
     companion object {
@@ -48,10 +48,6 @@ class ChatContainerFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_chat_container, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -110,6 +110,5 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit
 
-    protected fun requireArguments() = arguments ?: throw IllegalStateException("arguments are null")
     protected fun requireTargetFragment() = targetFragment ?: throw IllegalStateException("targetFragment is null")
 }

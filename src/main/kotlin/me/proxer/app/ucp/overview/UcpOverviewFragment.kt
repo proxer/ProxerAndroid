@@ -3,10 +3,9 @@ package me.proxer.app.ucp.overview
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import com.gojuno.koptional.Optional
@@ -28,6 +27,7 @@ import org.koin.androidx.viewmodel.ext.viewModel
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_ucp_overview)
 class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
 
     companion object {
@@ -48,10 +48,6 @@ class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
     private val minutesRow: TextView by bindView(R.id.minutesRow)
     private val hoursRow: TextView by bindView(R.id.hoursRow)
     private val daysRow: TextView by bindView(R.id.daysRow)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_ucp_overview, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

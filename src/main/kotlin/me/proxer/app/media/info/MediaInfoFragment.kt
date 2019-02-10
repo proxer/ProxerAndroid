@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -49,6 +50,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_media_info)
 class MediaInfoFragment : BaseContentFragment<Entry>() {
 
     companion object {
@@ -103,10 +105,6 @@ class MediaInfoFragment : BaseContentFragment<Entry>() {
     private val finish: ImageView by bindView(R.id.finish)
 
     private val description: TextView by bindView(R.id.description)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_media_info, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

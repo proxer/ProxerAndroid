@@ -1,10 +1,9 @@
 package me.proxer.app.settings.status
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.viewModel
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_server_status)
 class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>() {
 
     companion object {
@@ -41,10 +41,6 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>() {
 
     private val overallStatus: TextView by bindView(R.id.overallStatus)
     private val recyclerView: RecyclerView by bindView(R.id.recyclerView)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_server_status, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,11 +1,11 @@
 package me.proxer.app.chat.share
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ContentView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -40,6 +40,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
+@ContentView(R.layout.fragment_conferences)
 class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
 
     companion object {
@@ -90,10 +91,6 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
             }
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_conferences, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
