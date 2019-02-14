@@ -41,11 +41,13 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
             false -> context.cacheDir
         }
 
-        builder.setDefaultRequestOptions(
-            RequestOptions()
-                .disallowHardwareConfig()
-                .format(DecodeFormat.PREFER_RGB_565)
-        )
+        builder
+            .setLogRequestOrigins(BuildConfig.DEBUG)
+            .setDefaultRequestOptions(
+                RequestOptions()
+                    .disallowHardwareConfig()
+                    .format(DecodeFormat.PREFER_RGB_565)
+            )
 
         builder.setDiskCache(DiskLruCacheFactory(cacheDir.path, CACHE_DIR, CACHE_SIZE))
     }

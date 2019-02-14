@@ -32,7 +32,6 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="@string/fragment_messenger_message"
-            android:imeOptions="flagNoExtractUi"
             android:importantForAutofill="no"
             android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
             android:maxLines="5"

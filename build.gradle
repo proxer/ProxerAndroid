@@ -196,7 +196,7 @@ configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         if (details.requested.group == "com.squareup.okhttp3") {
             details.useTarget group: "com.github.rubengees.okhttp", name: details.requested.name,
-                    version: details.requested.version
+                    version: rootProject.ext.okHttpVersion
 
             details.because "use forked version of okhttp with support for legacy Android APIs"
         }
