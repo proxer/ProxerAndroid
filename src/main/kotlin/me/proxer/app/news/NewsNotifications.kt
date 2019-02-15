@@ -22,7 +22,7 @@ import org.koin.core.inject
  */
 object NewsNotifications : KoinComponent {
 
-    private const val ID = 1357913213
+    private const val ID = 1_357_913_213
 
     private val storageHelper by inject<StorageHelper>()
 

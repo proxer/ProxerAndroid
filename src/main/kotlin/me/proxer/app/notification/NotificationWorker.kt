@@ -53,7 +53,7 @@ class NotificationWorker(
         }
 
         private fun enqueue() {
-            val interval = preferenceHelper.notificationsInterval * 1000 * 60
+            val interval = preferenceHelper.notificationsInterval * 1_000 * 60
             val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
                 .setConstraints(
                     Constraints.Builder()

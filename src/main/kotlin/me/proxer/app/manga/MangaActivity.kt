@@ -145,7 +145,7 @@ class MangaActivity : BaseActivity() {
 
                         if (isFullscreen) {
                             hideHandler.removeMessages(0)
-                            hideHandler.sendEmptyMessageDelayed(0, 2000)
+                            hideHandler.sendEmptyMessageDelayed(0, 2_000)
                         }
                     }
                 }

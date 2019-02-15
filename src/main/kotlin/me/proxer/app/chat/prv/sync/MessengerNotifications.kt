@@ -43,7 +43,7 @@ import org.koin.core.inject
 object MessengerNotifications : KoinComponent {
 
     private const val GROUP = "chat"
-    private const val ID = 782373275
+    private const val ID = 782_373_275
 
     private val storageHelper by inject<StorageHelper>()
 

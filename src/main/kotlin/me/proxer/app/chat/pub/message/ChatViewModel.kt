@@ -213,7 +213,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         sendMessageQueue.poll()?.let { item ->
             sendMessageDisposable = Single.fromCallable { validators.validateLogin() }
                 .flatMap { api.chat.sendMessage(chatRoomId, item.message).buildOptionalSingle() }
-                .retryWhen(RxRetryWithDelay(2, 3000))
+                .retryWhen(RxRetryWithDelay(2, 3_000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors({

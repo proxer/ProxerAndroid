@@ -95,7 +95,7 @@ private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
 private const val HAWK_PREFERENCE_NAME = "Hawk2"
 
-private const val HTTP_CACHE_SIZE = 1024L * 1024L * 10L
+private const val HTTP_CACHE_SIZE = 1_024L * 1_024L * 10L
 private const val HTTP_CACHE_NAME = "http"
 
 private const val API_TOKEN_HEADER = "proxer-api-token"

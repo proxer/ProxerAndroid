@@ -28,7 +28,7 @@ import java.io.InputStream
 class ProxerGlideModule : AppGlideModule(), KoinComponent {
 
     private companion object {
-        private const val CACHE_SIZE = 1024L * 1024L * 250L
+        private const val CACHE_SIZE = 1_024L * 1_024L * 250L
         private const val CACHE_DIR = "glide"
     }
 

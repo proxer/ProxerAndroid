@@ -10,7 +10,7 @@ import kotlin.math.max
  */
 object GLUtil {
 
-    private const val DEFAULT_MAX_BITMAP_DIMENSION = 2048
+    private const val DEFAULT_MAX_BITMAP_DIMENSION = 2_048
 
     val maxTextureSize by lazy {
         val egl = EGLContext.getEGL() as EGL10

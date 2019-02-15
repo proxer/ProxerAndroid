@@ -19,7 +19,7 @@ ext {
     kotlinVersion = "1.3.21"
 
     // Utility plugins
-    detektPluginVersion = "1.0.0-RC12"
+    detektPluginVersion = "1.0.0-RC13"
     versionsPluginVersion = "0.20.0"
     androidCommandPluginVersion = "2.0.1"
     ktlintPluginVersion = "7.1.0"
@@ -39,7 +39,7 @@ ext {
     // RxJava
     rxJavaVersion = "2.2.6"
     rxKotlinVersion = "2.3.0"
-    rxAndroidVersion = "2.1.0"
+    rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0-alpha2"
     rxPreferencesVersion = "2.0.0"
     rxBusVersion = "2.0.0"
@@ -66,7 +66,7 @@ ext {
     tabLayoutHelperVersion = "b1d93a3b83"
     materialDialogsVersion = "2.0.0"
     flexboxVersion = "1.1.0"
-    emojiIosVersion = "70c58cfb58"
+    emojiIosVersion = "0.6.0"
     exoplayerVersion = "2.9.5"
     materialProgressBarVersion = "1.6.1"
     materialRatingBarVersion = "1.3.2"
@@ -100,5 +100,5 @@ ext {
 
     // Test
     jUnitVersion = "4.12"
-    mockkVersion = "1.9"
+    mockkVersion = "1.9.1"
 }

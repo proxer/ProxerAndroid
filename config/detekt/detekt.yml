@@ -1,5 +1,3 @@
-failFast: true
-
 comments:
   UndocumentedPublicClass:
     searchInInnerClass: false
@@ -17,6 +15,8 @@ complexity:
   LabeledExpression:
     active: false
   LargeClass:
+    active: false
+  LongMethod:
     active: false
   LongParameterList:
     active: false
