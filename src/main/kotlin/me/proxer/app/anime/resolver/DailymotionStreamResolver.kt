@@ -59,7 +59,7 @@ class DailymotionStreamResolver : StreamResolver() {
                         }
                     }
                     .filter { it.type == "application/x-mpegURL" || it.type == "video/mp4" }
-                    .sortedWith(compareBy({ it.quality }, { it.type }))
+                    .sortedWith(compareBy<DailymotionLinkWithQuality> { it.type }.thenByDescending { it.quality })
                     .firstOrNull()
                     ?: throw StreamResolutionException()
 
