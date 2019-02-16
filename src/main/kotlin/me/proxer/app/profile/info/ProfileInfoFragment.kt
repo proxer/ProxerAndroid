@@ -17,11 +17,12 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.profile.ProfileViewModel
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.user.UserInfo
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.sharedViewModel
 import org.koin.core.parameter.parametersOf
 
 /**
@@ -45,7 +46,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity
 
-    override val viewModel by viewModel<ProfileInfoViewModel> {
+    override val viewModel by sharedViewModel<ProfileViewModel> {
         parametersOf(userId.toOptional(), username.toOptional())
     }
 
@@ -85,10 +86,6 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
 
     override fun showData(data: UserInfo) {
         super.showData(data)
-
-        hostingActivity.userId = data.id
-        hostingActivity.username = data.username
-        hostingActivity.image = data.image
 
         val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints + data.forumPoints +
             data.infoPoints + data.miscPoints

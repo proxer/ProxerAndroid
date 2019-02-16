@@ -48,7 +48,8 @@ abstract class ImageTabsActivity : DrawerActivity() {
     protected open val headerImage: ImageView by bindView(R.id.image)
     protected open val tabs: TabLayout by bindView(R.id.tabs)
 
-    private var tabLayoutHelper: TabLayoutHelper? = null
+    protected var tabLayoutHelper: TabLayoutHelper? = null
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

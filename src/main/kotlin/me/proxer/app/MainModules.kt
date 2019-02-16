@@ -43,10 +43,10 @@ import me.proxer.app.media.recommendation.RecommendationViewModel
 import me.proxer.app.media.relation.RelationViewModel
 import me.proxer.app.news.NewsViewModel
 import me.proxer.app.notification.NotificationViewModel
+import me.proxer.app.profile.ProfileViewModel
 import me.proxer.app.profile.about.ProfileAboutViewModel
 import me.proxer.app.profile.comment.ProfileCommentViewModel
 import me.proxer.app.profile.history.HistoryViewModel
-import me.proxer.app.profile.info.ProfileInfoViewModel
 import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
@@ -227,7 +227,7 @@ private val viewModelModule = module {
     viewModel { UcpTopTenViewModel() }
     viewModel { UcpSettingsViewModel() }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileInfoViewModel(userId, username) }
+    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileViewModel(userId, username) }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }
     viewModel { (userId: Optional<String>, username: Optional<String>) -> HistoryViewModel(userId, username) }
     viewModel { (category: Category, filter: Optional<UserMediaListFilterType>) ->

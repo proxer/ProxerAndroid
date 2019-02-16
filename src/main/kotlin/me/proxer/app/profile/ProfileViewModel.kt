@@ -1,4 +1,4 @@
-package me.proxer.app.profile.info
+package me.proxer.app.profile
 
 import com.gojuno.koptional.Optional
 import me.proxer.app.base.BaseContentViewModel
@@ -8,7 +8,7 @@ import me.proxer.library.entity.user.UserInfo
 /**
  * @author Ruben Gees
  */
-class ProfileInfoViewModel(
+class ProfileViewModel(
     private val userId: Optional<String>,
     private val username: Optional<String>
 ) : BaseContentViewModel<UserInfo>() {

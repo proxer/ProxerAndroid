@@ -128,6 +128,8 @@ class MediaActivity : ImageTabsActivity() {
 
                 if (viewPager.currentItem == 0) {
                     viewPager.currentItem = customItemToDisplay
+
+                    tabLayoutHelper?.updateAllTabs()
                 }
             }
         })

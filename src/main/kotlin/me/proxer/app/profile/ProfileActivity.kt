@@ -2,11 +2,14 @@ package me.proxer.app.profile
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Observer
+import com.gojuno.koptional.toOptional
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -34,6 +37,8 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -94,7 +99,12 @@ class ProfileActivity : ImageTabsActivity() {
             loadImage()
         }
 
+    private val viewModel by viewModel<ProfileViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
+
     private val messengerDao by inject<MessengerDao>()
+
+    private var createChatMenuItem: MenuItem? = null
+    private var newGroupMenuItem: MenuItem? = null
 
     override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
@@ -103,7 +113,7 @@ class ProfileActivity : ImageTabsActivity() {
             if (image == null || image.isBlank()) null else ProxerUrls.userImage(image)
         }
 
-    override val itemToDisplay: Int
+    private val customItemToDisplay: Int
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> when (intent.data?.pathSegments?.getOrNull(2)) {
                 ABOUT_SUB_SECTION -> 1
@@ -115,12 +125,33 @@ class ProfileActivity : ImageTabsActivity() {
             else -> 0
         }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        storageHelper.user.let {
-            if (it == null || it.id != userId && !it.name.equals(username, true)) {
-                IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_profile, menu, true)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel.data.observe(this, Observer { data ->
+            data?.let {
+                userId = data.id
+                username = data.username
+                image = data.image
+
+                updateMenuItems()
+
+                if (viewPager.currentItem == 0) {
+                    viewPager.currentItem = customItemToDisplay
+
+                    tabLayoutHelper?.updateAllTabs()
+                }
             }
-        }
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_profile, menu, true)
+
+        this.createChatMenuItem = menu.findItem(R.id.create_chat)
+        this.newGroupMenuItem = menu.findItem(R.id.new_group)
+
+        updateMenuItems()
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -172,6 +203,18 @@ class ProfileActivity : ImageTabsActivity() {
                     .backgroundColorAttr(headerImage.context, R.attr.colorPrimaryLight)
                     .colorAttr(headerImage.context, R.attr.colorPrimary)
             )
+        }
+    }
+
+    private fun updateMenuItems() {
+        storageHelper.user.let {
+            if (it == null || it.id != userId && !it.name.equals(username, true)) {
+                this.createChatMenuItem?.isVisible = true
+                this.newGroupMenuItem?.isVisible = true
+            } else {
+                this.createChatMenuItem?.isVisible = false
+                this.newGroupMenuItem?.isVisible = false
+            }
         }
     }
 

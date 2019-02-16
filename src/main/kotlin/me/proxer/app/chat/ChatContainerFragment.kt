@@ -60,6 +60,8 @@ class ChatContainerFragment : BaseFragment() {
 
         if (savedInstanceState == null) {
             viewPager.currentItem = if (showMessenger) 1 else 0
+
+            tabLayoutHelper?.updateAllTabs()
         }
     }
 
