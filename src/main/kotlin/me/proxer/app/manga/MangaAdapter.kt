@@ -35,9 +35,13 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.MangaViewHolder
+import me.proxer.app.manga.decoder.RapidImageDecoder
+import me.proxer.app.manga.decoder.RapidImageNativeDecoder
+import me.proxer.app.manga.decoder.RapidImageRegionDecoder
+import me.proxer.app.manga.decoder.RapidImageRegionNativeDecoder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.GLUtil
-import me.proxer.app.util.data.ParcelableStringBooleanMap
+import me.proxer.app.util.data.ParcelableStringSerializableMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
@@ -72,14 +76,14 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
 
-    private val requiresFallback: ParcelableStringBooleanMap
+    private val fallbackMap: ParcelableStringSerializableMap
     private val preloadTargets = mutableListOf<Target<File>>()
 
     private var lastTouchCoordinates: Pair<Float, Float>? = null
 
     init {
-        requiresFallback = when (savedInstanceState) {
-            null -> ParcelableStringBooleanMap()
+        fallbackMap = when (savedInstanceState) {
+            null -> ParcelableStringSerializableMap()
             else -> savedInstanceState.getSafeParcelable(REQUIRES_FALLBACK_STATE)
         }
 
@@ -149,7 +153,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         }
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, requiresFallback)
+    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, fallbackMap)
 
     private fun preload(links: Map<String, String?>, next: String, failures: Int = 0) {
         val target = GlidePreloadTarget(links, next, failures)
@@ -199,14 +203,26 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             when {
                 error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
-                requiresFallback[data[position].decodedName] == true -> {
-                    errorIndicator.isVisible = true
-                    image.isVisible = false
-                }
                 else -> {
-                    requiresFallback.put(data[position].decodedName, true)
+                    val key = data[position].decodedName
+                    val currentFallbackStage = fallbackMap.getOrDefault(key, FallbackStage.NORMAL) as FallbackStage
 
-                    bind(data[position])
+                    when (currentFallbackStage) {
+                        FallbackStage.NORMAL -> {
+                            fallbackMap[key] = FallbackStage.RAPID
+
+                            bind(data[position])
+                        }
+                        FallbackStage.RAPID -> {
+                            fallbackMap[key] = FallbackStage.NATIVE
+
+                            bind(data[position])
+                        }
+                        FallbackStage.NATIVE -> {
+                            errorIndicator.isVisible = true
+                            image.isVisible = false
+                        }
+                    }
                 }
             }
         }
@@ -265,14 +281,19 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            val useRapidDecoder = requiresFallback[item.decodedName] == true
-
-            if (useRapidDecoder) {
-                image.setBitmapDecoderClass(RapidImageDecoder::class.java)
-                image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
-            } else {
-                image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
-                image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
+            when (fallbackMap.getOrDefault(item.decodedName, FallbackStage.NORMAL) as FallbackStage) {
+                FallbackStage.NORMAL -> {
+                    image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
+                    image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
+                }
+                FallbackStage.RAPID -> {
+                    image.setBitmapDecoderClass(RapidImageDecoder::class.java)
+                    image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
+                }
+                FallbackStage.NATIVE -> {
+                    image.setBitmapDecoderClass(RapidImageNativeDecoder::class.java)
+                    image.setRegionDecoderClass(RapidImageRegionNativeDecoder::class.java)
+                }
             }
 
             glide?.clear(glideTarget)
@@ -373,5 +394,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 preload(links, next, failures + 1)
             }
         }
+    }
+
+    private enum class FallbackStage {
+        NORMAL, RAPID, NATIVE
     }
 }

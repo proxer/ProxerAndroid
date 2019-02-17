@@ -1,4 +1,4 @@
-package me.proxer.app.manga
+package me.proxer.app.manga.decoder
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,7 @@ import rapid.decoder.BitmapDecoder
 /**
  * @author Ruben Gees
  */
-class RapidImageDecoder : ImageDecoder {
+class RapidImageNativeDecoder : ImageDecoder {
 
     override fun decode(context: Context, uri: Uri) = BitmapDecoder.from(context, uri)
         .config(Bitmap.Config.RGB_565)

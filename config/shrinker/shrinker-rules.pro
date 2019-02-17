@@ -34,5 +34,7 @@
 -keep @com.squareup.moshi.JsonQualifier @interface *
 
 # Keep decoders accessed through reflection.
--keep class me.proxer.app.manga.RapidImageDecoder
--keep class me.proxer.app.manga.RapidImageRegionDecoder
+-keep class me.proxer.app.manga.decoder.RapidImageDecoder
+-keep class me.proxer.app.manga.decoder.RapidImageRegionDecoder
+-keep class me.proxer.app.manga.decoder.RapidImageNativeDecoder
+-keep class me.proxer.app.manga.decoder.RapidImageRegionNativeDecoder

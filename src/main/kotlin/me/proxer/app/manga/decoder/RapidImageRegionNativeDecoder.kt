@@ -1,4 +1,4 @@
-package me.proxer.app.manga
+package me.proxer.app.manga.decoder
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,7 +11,7 @@ import rapid.decoder.BitmapDecoder
 /**
  * @author Ruben Gees
  */
-class RapidImageRegionDecoder : ImageRegionDecoder {
+class RapidImageRegionNativeDecoder : ImageRegionDecoder {
 
     private var decoder: BitmapDecoder? = null
 

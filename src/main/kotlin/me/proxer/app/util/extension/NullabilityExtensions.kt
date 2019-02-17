@@ -19,16 +19,19 @@ inline val EditText.safeText: Editable
 inline fun Bundle.getSafeParcelableArray(key: String): Array<out Parcelable> = getParcelableArray(key)
     ?: throw IllegalAccessError("No value found for key $key")
 
-inline fun <T : Parcelable> Bundle.getSafeParcelable(key: String): T = getParcelable(key)
+inline fun <T : Parcelable> Bundle.getSafeParcelable(key: String) = getParcelable<T>(key)
     ?: throw IllegalAccessError("No value found for key $key")
 
-inline fun Bundle.getSafeCharSequence(key: String): CharSequence = getCharSequence(key)
+inline fun Bundle.getSafeCharSequence(key: String) = getCharSequence(key)
     ?: throw IllegalAccessError("No value found for key $key")
 
-inline fun Bundle.getSafeString(key: String): String = getString(key)
+inline fun Bundle.getSafeString(key: String) = getString(key)
     ?: throw IllegalAccessError("No value found for key $key")
 
-inline fun Parcel.readStringSafely(): String = readString()
+inline fun Parcel.readStringSafely() = readString()
+    ?: throw IllegalAccessError("No value available at this position")
+
+inline fun Parcel.readSerializableSafely() = readSerializable()
     ?: throw IllegalAccessError("No value available at this position")
 
 inline fun SharedPreferences.getSafeString(key: String, default: String? = null) = getString(key, default)
