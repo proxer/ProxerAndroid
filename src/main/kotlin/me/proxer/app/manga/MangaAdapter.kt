@@ -174,7 +174,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         internal val errorIndicator: ImageView by bindView(R.id.errorIndicator)
 
         private val screenWidth = DeviceUtils.getScreenWidth(itemView.context)
-        private val screenHeight = DeviceUtils.getScreenHeight(itemView.context)
 
         init {
             errorIndicator.setIconicsImage(CommunityMaterial.Icon2.cmd_refresh, 64)
@@ -188,7 +187,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
                 itemView.layoutParams.height = height
             } else {
-                itemView.layoutParams.height = screenHeight
+                itemView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
             }
 
             errorIndicator.isVisible = false
