@@ -76,7 +76,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
 
-    private val fallbackMap: ParcelableStringSerializableMap
+    private val fallbackMap: ParcelableStringSerializableMap<FallbackStage>
     private val preloadTargets = mutableListOf<Target<File>>()
 
     private var lastTouchCoordinates: Pair<Float, Float>? = null
@@ -205,7 +205,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 else -> {
                     val key = data[position].decodedName
-                    val currentFallbackStage = fallbackMap.getOrDefault(key, FallbackStage.NORMAL) as FallbackStage
+                    val currentFallbackStage = fallbackMap[key] ?: FallbackStage.NORMAL
 
                     when (currentFallbackStage) {
                         FallbackStage.NORMAL -> {
@@ -281,7 +281,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            when (fallbackMap.getOrDefault(item.decodedName, FallbackStage.NORMAL) as FallbackStage) {
+            when (fallbackMap[item.decodedName] ?: FallbackStage.NORMAL) {
                 FallbackStage.NORMAL -> {
                     image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
                     image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
