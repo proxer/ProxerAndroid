@@ -19,6 +19,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
 import com.google.android.material.appbar.AppBarLayout
@@ -227,6 +228,22 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         })
     }
 
+    override fun onDestroyView() {
+        (recyclerView.safeLayoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()?.let {
+            if (it >= 1) {
+                storageHelper.putLastMangaPage(id, episode, language, it - 1) // Subtract one for the header.
+            }
+        }
+
+        gravityPagerSnapHelper?.attachToRecyclerView(null)
+        gravityPagerSnapHelper = null
+
+        recyclerView.layoutManager = null
+        recyclerView.adapter = null
+
+        super.onDestroyView()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
 
@@ -253,16 +270,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        gravityPagerSnapHelper?.attachToRecyclerView(null)
-        gravityPagerSnapHelper = null
-
-        recyclerView.layoutManager = null
-        recyclerView.adapter = null
-
-        super.onDestroyView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -294,10 +301,22 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             innerAdapter.swapDataAndNotifyWithDiffing(pages)
         }
 
-        lastPosition?.let {
-            recyclerView.safeLayoutManager.onRestoreInstanceState(it)
+        lastPosition.let { safeLastPosition ->
+            if (safeLastPosition != null) {
+                recyclerView.safeLayoutManager.onRestoreInstanceState(safeLastPosition)
 
-            lastPosition = null
+                lastPosition = null
+            } else {
+                val lastPage = storageHelper.getLastMangaPage(id, episode, language)
+
+                if (lastPage != null) {
+                    val layoutManager = recyclerView.safeLayoutManager as? LinearLayoutManager
+                    val screenHeight = DeviceUtils.getScreenHeight(requireContext())
+                    val offset = screenHeight / 16
+
+                    layoutManager?.scrollToPositionWithOffset(lastPage + 1, offset) // Add one for header.
+                }
+            }
         }
     }
 

@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
 import me.proxer.app.ucp.settings.LocalUcpSettings
+import me.proxer.library.enums.Language
 import java.util.Date
 
 /**
@@ -30,6 +31,7 @@ class StorageHelper(
         const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
         const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
+        const val LAST_MANGA_PAGE_PREFIX = "last_manga_page_"
         const val LAUNCHES = "launches"
         const val RATED = "rated"
 
@@ -135,6 +137,14 @@ class StorageHelper(
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
     fun deleteMessageDraft(id: String) = deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
+
+    fun putLastMangaPage(id: String, chapter: Int, language: Language, page: Int) {
+        putOrThrow("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", page)
+    }
+
+    fun getLastMangaPage(id: String, chapter: Int, language: Language): Int? {
+        return Hawk.get("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language")
+    }
 
     private fun <T> putOrThrow(key: String, value: T) {
         if (!Hawk.put(key, value)) throw StorageException("Could not persist $key")
