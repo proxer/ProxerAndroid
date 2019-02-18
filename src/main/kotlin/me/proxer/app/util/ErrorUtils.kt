@@ -65,6 +65,7 @@ import me.proxer.library.ProxerException.ServerErrorType.INSUFFICIENT_PERMISSION
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_API_CLASS
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_API_FUNCTION
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_TOKEN
+import me.proxer.library.ProxerException.ServerErrorType.IP_AUTHENTICATION_REQUIRED
 import me.proxer.library.ProxerException.ServerErrorType.IP_BLOCKED
 import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_CATEGORY
 import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_ID
@@ -129,7 +130,7 @@ object ErrorUtils : KoinComponent {
 
     private val loginErrors = arrayOf(
         INVALID_TOKEN, NOTIFICATIONS_LOGIN_REQUIRED, UCP_LOGIN_REQUIRED, INFO_LOGIN_REQUIRED, MESSAGES_LOGIN_REQUIRED,
-        USER_2FA_SECRET_REQUIRED, ANIME_LOGIN_REQUIRED
+        USER_2FA_SECRET_REQUIRED, ANIME_LOGIN_REQUIRED, IP_AUTHENTICATION_REQUIRED
     )
 
     private val clientErrors = arrayOf(
@@ -251,6 +252,7 @@ object ErrorUtils : KoinComponent {
             CHAT_USER_ON_BLACKLIST -> R.string.error_chat_blacklist
             CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
             FORUM_INVALID_PERMISSIONS -> R.string.error_forum_no_permissions
+            IP_AUTHENTICATION_REQUIRED -> R.string.error_login_ip_authentication
             in apiErrors -> R.string.error_api
             in maintenanceErrors -> R.string.error_maintenance
             in loginErrors -> R.string.error_login
