@@ -7,9 +7,12 @@ import me.proxer.app.util.extension.readStringSafely
 import java.io.Serializable
 
 /**
+ * Parcelable Map for String to Serializable (e.g. Enums) pairs. This cannot actually implement the Map interface,
+ * because of the terrible way Parcelable is implemented in Android.
+ *
  * @author Ruben Gees
  */
-class ParcelableStringSerializableMap<T : Serializable> : MutableMap<String, T>, Parcelable {
+class ParcelableStringSerializableMap<T : Serializable> : Parcelable {
 
     companion object {
         @Suppress("unused")
@@ -20,10 +23,8 @@ class ParcelableStringSerializableMap<T : Serializable> : MutableMap<String, T>,
         }
     }
 
-    override val size get() = internalMap.size
-    override val entries get() = internalMap.entries
-    override val keys get() = internalMap.keys
-    override val values get() = internalMap.values
+    val size get() = internalMap.size
+    val entries get() = internalMap.entries
 
     private val internalMap = LinkedHashMap<String, T>()
 
@@ -47,12 +48,9 @@ class ParcelableStringSerializableMap<T : Serializable> : MutableMap<String, T>,
 
     override fun describeContents() = 0
 
-    override fun containsKey(key: String) = internalMap.containsKey(key)
-    override fun containsValue(value: T) = internalMap.containsValue(value)
-    override fun get(key: String) = internalMap[key]
-    override fun isEmpty() = internalMap.isEmpty()
-    override fun clear() = internalMap.clear()
-    override fun put(key: String, value: T) = internalMap.put(key, value)
-    override fun putAll(from: Map<out String, T>) = internalMap.putAll(from)
-    override fun remove(key: String) = internalMap.remove(key)
+    operator fun set(key: String, value: T) {
+        internalMap[key] = value
+    }
+
+    operator fun get(key: String) = internalMap[key]
 }
