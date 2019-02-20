@@ -311,10 +311,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
                 if (lastPage != null) {
                     val layoutManager = recyclerView.safeLayoutManager as? LinearLayoutManager
-                    val screenHeight = DeviceUtils.getScreenHeight(requireContext())
-                    val offset = screenHeight / 16
 
-                    layoutManager?.scrollToPositionWithOffset(lastPage + 1, offset) // Add one for header.
+                    layoutManager?.scrollToPositionWithOffset(lastPage + 1, 0) // Add one for header.
                 }
             }
         }
