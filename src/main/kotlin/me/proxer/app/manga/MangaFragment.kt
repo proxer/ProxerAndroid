@@ -230,8 +230,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     override fun onDestroyView() {
         (recyclerView.safeLayoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()?.let {
-            if (it >= 1) {
-                storageHelper.putLastMangaPage(id, episode, language, it - 1) // Subtract one for the header.
+            if (it > 0 || storageHelper.getLastMangaPage(id, episode, language) != null) {
+                storageHelper.putLastMangaPage(id, episode, language, it)
             }
         }
 
@@ -309,10 +309,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
             } else {
                 val lastPage = storageHelper.getLastMangaPage(id, episode, language)
 
-                if (lastPage != null) {
-                    val layoutManager = recyclerView.safeLayoutManager as? LinearLayoutManager
-
-                    layoutManager?.scrollToPositionWithOffset(lastPage + 1, 0) // Add one for header.
+                if (lastPage != null && lastPage > 0) {
+                    (recyclerView.safeLayoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(lastPage, 0)
                 }
             }
         }
