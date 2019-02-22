@@ -33,6 +33,11 @@
 # Recent versions of R8 seem to require this: https://issuetracker.google.com/issues/123558494
 -keep @com.squareup.moshi.JsonQualifier @interface *
 
+# Keep constructor of keychain class.
+-keepclasseswithmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
+    public <init>(...);
+}
+
 # Keep decoders accessed through reflection.
 -keep class me.proxer.app.manga.decoder.RapidImageDecoder
 -keep class me.proxer.app.manga.decoder.RapidImageRegionDecoder
