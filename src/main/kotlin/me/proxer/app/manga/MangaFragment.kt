@@ -111,7 +111,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private var hasLowMemory = false
     private var lastPosition: Parcelable? = null
-    private var isVertical by Delegates.notNull<Boolean>()
 
     private val mediaControlTextResolver = object : MediaControlView.TextResourceResolver {
         override fun next() = requireContext().getString(R.string.fragment_manga_next_chapter)
@@ -128,6 +127,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
     private var gravityPagerSnapHelper: GravityPagerSnapHelper? = null
 
+    private var readerOrientation = preferenceHelper.mangaReaderOrientation
+        set(value) {
+            preferenceHelper.mangaReaderOrientation = value
+
+            field = value
+        }
+
+    private val isVertical get() = readerOrientation == MangaReaderOrientation.VERTICAL
     private val areBookmarksAutomatic by unsafeLazy { preferenceHelper.areBookmarksAutomatic }
     private val mediumAnimationTime by unsafeLazy { resources.getInteger(android.R.integer.config_mediumAnimTime) }
 
@@ -142,8 +149,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         lastPosition = savedInstanceState?.getParcelable(LAST_POSITION_STATE)
         hasLowMemory = savedInstanceState?.getByte(LOW_MEMORY_STATE) == 1.toByte()
-
-        isVertical = preferenceHelper.isVerticalReaderEnabled
 
         innerAdapter = MangaAdapter(savedInstanceState, isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
@@ -248,7 +253,11 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
         IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
 
         toolbar.doOnLayout {
-            toolbar.findViewById<View>(R.id.toggle_orientation).rotation = if (isVertical) 0.0f else 90.0f
+            toolbar.findViewById<View>(R.id.toggle_orientation).rotation = when (readerOrientation) {
+                MangaReaderOrientation.LEFT_TO_RIGHT -> 90f
+                MangaReaderOrientation.RIGHT_TO_LEFT -> 270f
+                MangaReaderOrientation.VERTICAL -> 0.0f
+            }
         }
 
         return super.onCreateOptionsMenu(menu, inflater)
@@ -257,14 +266,24 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.toggle_orientation -> {
-                isVertical = !isVertical
-
-                preferenceHelper.isVerticalReaderEnabled = isVertical
+                readerOrientation = when (readerOrientation) {
+                    MangaReaderOrientation.LEFT_TO_RIGHT -> MangaReaderOrientation.RIGHT_TO_LEFT
+                    MangaReaderOrientation.RIGHT_TO_LEFT -> MangaReaderOrientation.VERTICAL
+                    MangaReaderOrientation.VERTICAL -> MangaReaderOrientation.LEFT_TO_RIGHT
+                }
 
                 bindOrientationOptionsItem()
                 bindToolbar()
                 bindHeaderAndFooterHeight()
                 bindLayoutManager()
+
+                hostingActivity.multilineSnackbar(
+                    when (readerOrientation) {
+                        MangaReaderOrientation.LEFT_TO_RIGHT -> R.string.fragment_manga_left_to_right
+                        MangaReaderOrientation.RIGHT_TO_LEFT -> R.string.fragment_manga_right_to_left
+                        MangaReaderOrientation.VERTICAL -> R.string.fragment_manga_vertical
+                    }
+                )
 
                 true
             }
@@ -454,8 +473,14 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     private fun bindOrientationOptionsItem() {
+        val rotation = when (readerOrientation) {
+            MangaReaderOrientation.LEFT_TO_RIGHT -> 90f
+            MangaReaderOrientation.RIGHT_TO_LEFT -> 270f
+            MangaReaderOrientation.VERTICAL -> 0.0f
+        }
+
         toolbar.findViewById<View>(R.id.toggle_orientation).animate()
-            .rotation(if (isVertical) 0.0f else 90.0f)
+            .rotation(rotation)
             .setDuration(mediumAnimationTime.toLong())
             .start()
     }
@@ -468,7 +493,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         recyclerView.recycledViewPool.clear()
 
-        recyclerView.layoutManager = MangaLinearLayoutManger(requireContext(), isVertical)
+        recyclerView.layoutManager = MangaLinearLayoutManger(requireContext(), readerOrientation)
 
         if (!isVertical) {
             gravityPagerSnapHelper = GravityPagerSnapHelper(Gravity.END).apply { attachToRecyclerView(recyclerView) }

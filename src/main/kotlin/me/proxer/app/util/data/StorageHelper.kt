@@ -1,6 +1,5 @@
 package me.proxer.app.util.data
 
-import android.content.Context
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.orhanobut.hawk.Hawk
 import io.reactivex.Observable
@@ -14,8 +13,7 @@ import java.util.Date
  * @author Ruben Gees
  */
 class StorageHelper(
-    context: Context,
-    initializer: HawkInitializer,
+    initializer: LocalDataInitializer,
     private val rxPreferences: RxSharedPreferences
 ) {
 
@@ -40,7 +38,7 @@ class StorageHelper(
     }
 
     init {
-        initializer.initAndMigrateIfNecessary(context)
+        initializer.initAndMigrateIfNecessary()
     }
 
     var user: LocalUser?

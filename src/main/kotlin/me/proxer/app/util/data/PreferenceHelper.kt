@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.Observable
+import me.proxer.app.manga.MangaReaderOrientation
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
  */
 @Suppress("UseDataClass")
 class PreferenceHelper(
+    Initializer: LocalDataInitializer,
     private val sharedPreferences: SharedPreferences,
     private val rxSharedPreferences: RxSharedPreferences
 ) {
@@ -27,11 +29,15 @@ class PreferenceHelper(
         const val NOTIFICATIONS_ACCOUNT = "notifications_account"
         const val NOTIFICATIONS_CHAT = "notifications_chat"
         const val NOTIFICATIONS_INTERVAL = "notifications_interval"
-        const val MANGA_VERTICAL_READER = "manga_vertical_reader"
+        const val MANGA_READER_ORIENTATION = "manga_reader_orientation"
         const val EXTERNAL_CACHE = "external_cache"
         const val HTTP_LOG_LEVEL = "http_log_level"
         const val HTTP_VERBOSE = "http_log_verbose"
         const val HTTP_REDACT_TOKEN = "http_log_redact_token"
+    }
+
+    init {
+        Initializer.initAndMigrateIfNecessary()
     }
 
     var isAgeRestrictedMediaAllowed
@@ -70,10 +76,12 @@ class PreferenceHelper(
     val notificationsInterval
         get() = sharedPreferences.getSafeString(NOTIFICATIONS_INTERVAL, "30").toLong()
 
-    var isVerticalReaderEnabled
-        get() = sharedPreferences.getBoolean(MANGA_VERTICAL_READER, true)
+    var mangaReaderOrientation
+        get() = MangaReaderOrientation.values()[
+            sharedPreferences.getInt(MANGA_READER_ORIENTATION, MangaReaderOrientation.LEFT_TO_RIGHT.ordinal)
+        ]
         set(value) {
-            sharedPreferences.edit { putBoolean(MANGA_VERTICAL_READER, value) }
+            sharedPreferences.edit { putInt(MANGA_READER_ORIENTATION, value.ordinal) }
         }
 
     var shouldCacheExternally

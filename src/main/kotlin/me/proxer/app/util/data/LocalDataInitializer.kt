@@ -7,34 +7,46 @@ import com.orhanobut.hawk.Converter
 import com.orhanobut.hawk.DataInfo
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
+import me.proxer.app.manga.MangaReaderOrientation
 import timber.log.Timber
 
 /**
  * @author Ruben Gees
  */
-class HawkInitializer(private val jsonParser: HawkMoshiParser) {
+class LocalDataInitializer(private val context: Context, private val jsonParser: HawkMoshiParser) {
 
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 1
+        private const val currentVersion = 2
     }
 
-    fun initAndMigrateIfNecessary(context: Context) {
-        initHawk(context)
+    private var isInitialized = false
 
-        val previousVersion = Hawk.get<Int>(VERSION) ?: 0
+    @Synchronized
+    fun initAndMigrateIfNecessary() {
+        if (!isInitialized) {
+            initHawk()
 
-        if (previousVersion <= 0) {
-            migrate0To1(context)
-        }
+            val previousVersion = Hawk.get<Int>(VERSION) ?: 0
 
-        if (previousVersion != currentVersion) {
-            Hawk.put(VERSION, currentVersion)
+            if (previousVersion <= 0) {
+                migrate0To1()
+            }
+
+            if (previousVersion <= 1) {
+                migrate1To2()
+            }
+
+            if (previousVersion != currentVersion) {
+                Hawk.put(VERSION, currentVersion)
+            }
+
+            isInitialized = true
         }
     }
 
-    private fun initHawk(context: Context) {
+    private fun initHawk() {
         if (!Hawk.isBuilt()) {
             Hawk.init(context)
                 .setParser(jsonParser)
@@ -43,7 +55,7 @@ class HawkInitializer(private val jsonParser: HawkMoshiParser) {
         }
     }
 
-    private fun migrate0To1(context: Context) {
+    private fun migrate0To1() {
         // On older versions of the App, the user is saved in an obfuscated format. Fix this by reading the previous
         // format and saving in the proper format.
         if (Hawk.contains(StorageHelper.USER) && Hawk.get<LocalUser>(StorageHelper.USER) == null) {
@@ -51,10 +63,10 @@ class HawkInitializer(private val jsonParser: HawkMoshiParser) {
                 .setConverter(UserMigration0To1Converter(jsonParser))
                 .build()
 
-            val migrationUser: StorageMigration0To1LocalUser? = Hawk.get(StorageHelper.USER)
+            val migrationUser: LocalDataMigration0To1LocalUser? = Hawk.get(StorageHelper.USER)
 
             Hawk.destroy()
-            initHawk(context)
+            initHawk()
 
             if (migrationUser != null) {
                 val newUser = LocalUser(migrationUser.token, migrationUser.id, migrationUser.name, migrationUser.image)
@@ -82,6 +94,22 @@ class HawkInitializer(private val jsonParser: HawkMoshiParser) {
         }
     }
 
+    private fun migrate1To2() {
+        // On older versions of the App, there was only a setting if the manga reader should be vertical or not.
+        // Now there is an enum with multiple choices.
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val wasVertical = sharedPreferences.getBoolean("manga_vertical_reader", true)
+
+        sharedPreferences.edit(commit = true) {
+            putInt(
+                PreferenceHelper.MANGA_READER_ORIENTATION, when (wasVertical) {
+                    true -> MangaReaderOrientation.VERTICAL.ordinal
+                    false -> MangaReaderOrientation.LEFT_TO_RIGHT.ordinal
+                }
+            )
+        }
+    }
+
     private class UserMigration0To1Converter(private val jsonParser: HawkMoshiParser) : Converter {
         override fun <T : Any?> toString(value: T): String {
             // This should never be called
@@ -91,7 +119,7 @@ class HawkInitializer(private val jsonParser: HawkMoshiParser) {
         @Suppress("UNCHECKED_CAST")
         override fun <T : Any?> fromString(value: String, dataInfo: DataInfo?): T {
             return jsonParser
-                .fromJson<StorageMigration0To1LocalUser>(value, StorageMigration0To1LocalUser::class.java) as T
+                .fromJson<LocalDataMigration0To1LocalUser>(value, LocalDataMigration0To1LocalUser::class.java) as T
         }
     }
 }

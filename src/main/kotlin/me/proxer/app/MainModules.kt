@@ -56,8 +56,8 @@ import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.Validators
-import me.proxer.app.util.data.HawkInitializer
 import me.proxer.app.util.data.HawkMoshiParser
+import me.proxer.app.util.data.LocalDataInitializer
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.http.CacheInterceptor
@@ -111,8 +111,8 @@ private val applicationModules = module(createdAtStart = true) {
         RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
     }
 
-    single { StorageHelper(androidContext(), get(), get(HAWK_RX_PREFERENCES)) }
-    single { PreferenceHelper(get(), get(DEFAULT_RX_PREFERENCES)) }
+    single { StorageHelper(get(), get(HAWK_RX_PREFERENCES)) }
+    single { PreferenceHelper(get(), get(), get(DEFAULT_RX_PREFERENCES)) }
 
     single { RxBus() }
 
@@ -188,7 +188,7 @@ private val applicationModules = module(createdAtStart = true) {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { HawkInitializer(get()) }
+    single { LocalDataInitializer(androidContext(), get()) }
 
     single { ProxerLoginTokenManager(get()) } bind LoginTokenManager::class
     single { LoginHandler(get(), get(), get()) }
