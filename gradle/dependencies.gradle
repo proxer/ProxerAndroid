@@ -52,7 +52,7 @@ dependencies {
     implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
     implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:extension-okhttp:2.9.5" // TODO: Update once they are in sync again.
+    implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
     implementation "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion"
     implementation "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion"
     implementation "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion"
