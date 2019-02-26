@@ -15,7 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
  */
 @Suppress("UseDataClass")
 class PreferenceHelper(
-    Initializer: LocalDataInitializer,
+    initializer: LocalDataInitializer,
     private val sharedPreferences: SharedPreferences,
     private val rxSharedPreferences: RxSharedPreferences
 ) {
@@ -37,7 +37,7 @@ class PreferenceHelper(
     }
 
     init {
-        Initializer.initAndMigrateIfNecessary()
+        initializer.initAndMigrateIfNecessary()
     }
 
     var isAgeRestrictedMediaAllowed
