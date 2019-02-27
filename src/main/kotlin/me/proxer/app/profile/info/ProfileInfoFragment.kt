@@ -36,7 +36,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
         private const val RANK_FORUM_CATEGORY_ID = "79"
         private const val RANK_FORUM_TOPIC = "Rangpunkte und Ränge"
 
-        private val rankRegex = Regex(".*", RegexOption.DOT_MATCHES_ALL)
+        private val rankRegex = Regex(".+", RegexOption.DOT_MATCHES_ALL)
 
         fun newInstance() = ProfileInfoFragment().apply {
             arguments = bundleOf()
