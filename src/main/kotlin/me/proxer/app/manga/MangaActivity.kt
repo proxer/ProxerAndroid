@@ -89,8 +89,8 @@ class MangaActivity : BaseActivity() {
     val language: Language
         get() = when {
             intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum<Language>(
-                intent.data?.pathSegments
-                ?.getOrElse(3) { "" } ?: "") ?: Language.ENGLISH
+                intent.data?.pathSegments?.getOrElse(3) { "" } ?: ""
+            ) ?: Language.ENGLISH
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
         }
 
@@ -124,8 +124,7 @@ class MangaActivity : BaseActivity() {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val hideHandler = FullscreenHandler(WeakReference(this))
-    private var isFullscreen = false
+    private val fullscreenHandler = FullscreenHandler(WeakReference(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,10 +142,7 @@ class MangaActivity : BaseActivity() {
                     if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                         window.decorView.systemUiVisibility = defaultUiFlags()
 
-                        if (isFullscreen) {
-                            hideHandler.removeMessages(0)
-                            hideHandler.sendEmptyMessageDelayed(0, 2_000)
-                        }
+                        toggleFullscreen(true, 2_000)
                     }
                 }
         }
@@ -188,15 +184,15 @@ class MangaActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun toggleFullscreen(fullscreen: Boolean) {
-        isFullscreen = fullscreen
+    fun toggleFullscreen(fullscreen: Boolean, delay: Long = 0) {
+        val fullscreenMessage = Message().apply {
+            what = 0
+            obj = fullscreen
+        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (fullscreen) {
-                window.decorView.systemUiVisibility = fullscreenUiFlags()
-            } else {
-                window.decorView.systemUiVisibility = defaultUiFlags()
-            }
+        if (!fullscreenHandler.hasMessages(0, fullscreen)) {
+            fullscreenHandler.removeMessages(0)
+            fullscreenHandler.sendMessageDelayed(fullscreenMessage, delay)
         }
     }
 
@@ -241,8 +237,18 @@ class MangaActivity : BaseActivity() {
     }
 
     private class FullscreenHandler(private val activity: WeakReference<MangaActivity>) : Handler() {
-        override fun handleMessage(msg: Message?) {
-            activity.get()?.toggleFullscreen(true)
+        override fun handleMessage(message: Message) {
+            val fullscreen = message.data.getBoolean("fullscreen", true)
+
+            this.activity.get()?.apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (fullscreen) {
+                        window.decorView.systemUiVisibility = fullscreenUiFlags()
+                    } else {
+                        window.decorView.systemUiVisibility = defaultUiFlags()
+                    }
+                }
+            }
         }
     }
 }
