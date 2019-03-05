@@ -16,8 +16,10 @@ import androidx.core.app.TaskStackBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.text.set
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorInt
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
@@ -228,7 +230,7 @@ object MessengerNotifications : KoinComponent {
                     false -> CommunityMaterial.Icon.cmd_account
                 }
             )
-            .color(ContextCompat.getColor(context, R.color.primary))
+            .colorInt(ContextCompat.getColor(context, R.color.primary))
             .sizeDp(96)
             .toBitmap()
     }

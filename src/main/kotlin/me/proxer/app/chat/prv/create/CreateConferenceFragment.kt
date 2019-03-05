@@ -19,9 +19,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActions
 import com.jakewharton.rxbinding3.widget.textChanges
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable

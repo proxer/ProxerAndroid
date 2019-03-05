@@ -15,8 +15,11 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorRes
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R

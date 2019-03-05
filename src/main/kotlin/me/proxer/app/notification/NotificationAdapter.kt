@@ -7,7 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.text.parseAsHtml
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView

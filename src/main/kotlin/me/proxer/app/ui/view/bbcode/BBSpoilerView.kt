@@ -15,8 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorInt
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -103,7 +106,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
             IconicsDrawable(context, CommunityMaterial.Icon.cmd_chevron_down)
                 .sizeDp(32)
                 .paddingDp(8)
-                .color(spoilerTextColor)
+                .colorInt(spoilerTextColor)
         )
     }
 

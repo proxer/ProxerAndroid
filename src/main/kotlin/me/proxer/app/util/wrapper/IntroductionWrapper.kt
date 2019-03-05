@@ -6,8 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.setPadding
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorRes
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
 import com.rubengees.introduction.Slide

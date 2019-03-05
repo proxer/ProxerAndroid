@@ -15,8 +15,8 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig

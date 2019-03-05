@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -122,10 +124,11 @@ class MaterialDrawerWrapper(
         val newProfiles = generateAccountItems(context)
 
         if (
+            oldProfiles == null ||
             oldProfiles.size != newProfiles.size ||
             oldProfiles.withIndex().any { (index, item) ->
                 item.identifier != newProfiles[index].identifier ||
-                    item.name.text != newProfiles[index].name.text
+                    item.name?.text != newProfiles[index].name?.text
             }
         ) {
             header.profiles = generateAccountItems(context)
@@ -135,7 +138,7 @@ class MaterialDrawerWrapper(
     }
 
     fun disableSelectability() {
-        drawer.drawerItems.forEach { it.withSelectable(false) }
+        drawer.drawerItems.forEach { it.isSelectable = false }
     }
 
     private fun buildAccountHeader(context: Activity, savedInstanceState: Bundle?) = AccountHeaderBuilder()
@@ -145,7 +148,11 @@ class MaterialDrawerWrapper(
         .withHeaderBackground(ColorDrawable(context.resolveColor(R.attr.colorPrimary)))
         .withSavedInstance(savedInstanceState)
         .withProfiles(generateAccountItems(context))
-        .withOnAccountHeaderListener { _, profile, _ -> onAccountItemClick(profile) }
+        .withOnAccountHeaderListener(object : AccountHeader.OnAccountHeaderListener {
+            override fun onProfileChanged(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
+                return onAccountItemClick(profile)
+            }
+        })
         .build()
 
     private fun buildDrawer(
@@ -162,16 +169,22 @@ class MaterialDrawerWrapper(
         .withTranslucentStatusBar(true)
         .withGenerateMiniDrawer(DeviceUtils.isTablet(context))
         .withSavedInstance(savedInstanceState)
-        .withOnDrawerItemClickListener { _, _, item -> onDrawerItemClick(item) }
-        .withOnDrawerNavigationListener {
-            if (!isRoot) context.onBackPressed()
+        .withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
+            override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
+                return onDrawerItemClick(drawerItem)
+            }
+        })
+        .withOnDrawerNavigationListener(object : Drawer.OnDrawerNavigationListener {
+            override fun onNavigationClickListener(clickedView: View): Boolean {
+                if (!isRoot) context.onBackPressed()
 
-            !isRoot
-        }
+                return !isRoot
+            }
+        })
         .let { if (DeviceUtils.isTablet(context)) it.buildView() else it.build() }
         .apply { actionBarDrawerToggle?.isDrawerIndicatorEnabled = isRoot }
 
-    private fun buildMiniDrawer(drawer: Drawer) = drawer.miniDrawer.apply {
+    private fun buildMiniDrawer(drawer: Drawer) = drawer.miniDrawer?.apply {
         withIncludeSecondaryDrawerItems(true)
     }
 
@@ -192,7 +205,7 @@ class MaterialDrawerWrapper(
             getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
         }
 
-    private fun onDrawerItemClick(item: IDrawerItem<*, *>) = DrawerItem.fromIdOrDefault(item.identifier).let {
+    private fun onDrawerItemClick(item: IDrawerItem<*>) = DrawerItem.fromIdOrDefault(item.identifier).let {
         if (it.id >= 10L) {
             miniDrawer?.setSelection(-1)
         }
@@ -208,124 +221,118 @@ class MaterialDrawerWrapper(
         false
     }
 
-    private fun generateAccountItems(context: Context): List<IProfile<*>> {
-        return storageHelper.user.let {
-            when (it) {
-                null -> listOf(
-                    ProfileDrawerItem()
-                        .withName(R.string.section_guest)
-                        .withIcon(R.mipmap.ic_launcher)
-                        .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                        .withIdentifier(AccountItem.GUEST.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_login)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                        .withIdentifier(AccountItem.LOGIN.id)
-                )
-                else -> listOf(
-                    ProfileDrawerItem()
-                        .withName(it.name)
-                        .withEmail(R.string.section_user_subtitle)
-                        .apply {
-                            if (it.image.isBlank()) {
-                                withIcon(
-                                    IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
-                                        .sizeDp(48)
-                                        .backgroundColorAttr(context, R.attr.colorPrimary)
-                                        .colorAttr(context, R.attr.colorOnPrimary)
-                                )
-                            } else {
-                                withIcon(ProxerUrls.userImage(it.image).toString())
-                            }
+    private fun generateAccountItems(context: Context): MutableList<IProfile<*>> = storageHelper.user.let {
+        when (it) {
+            null -> mutableListOf(
+                ProfileDrawerItem()
+                    .withName(R.string.section_guest)
+                    .withIcon(R.mipmap.ic_launcher)
+                    .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+                    .withIdentifier(AccountItem.GUEST.id),
+                ProfileSettingDrawerItem()
+                    .withName(R.string.section_login)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                    .withIdentifier(AccountItem.LOGIN.id)
+            )
+            else -> mutableListOf(
+                ProfileDrawerItem()
+                    .withName(it.name)
+                    .withEmail(R.string.section_user_subtitle)
+                    .apply {
+                        if (it.image.isBlank()) {
+                            withIcon(
+                                IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
+                                    .sizeDp(48)
+                                    .backgroundColorAttr(context, R.attr.colorPrimary)
+                                    .colorAttr(context, R.attr.colorOnPrimary)
+                            )
+                        } else {
+                            withIcon(ProxerUrls.userImage(it.image).toString())
                         }
-                        .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                        .withIdentifier(AccountItem.USER.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_notifications)
-                        .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
-                        .withIdentifier(AccountItem.NOTIFICATIONS.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_profile_settings)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_settings)
-                        .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_ucp)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                        .withIdentifier(AccountItem.UCP.id),
-                    ProfileSettingDrawerItem()
-                        .withName(R.string.section_logout)
-                        .withIcon(CommunityMaterial.Icon.cmd_account_remove)
-                        .withIdentifier(AccountItem.LOGOUT.id)
-                )
-            }
+                    }
+                    .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+                    .withIdentifier(AccountItem.USER.id),
+                ProfileSettingDrawerItem()
+                    .withName(R.string.section_notifications)
+                    .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
+                    .withIdentifier(AccountItem.NOTIFICATIONS.id),
+                ProfileSettingDrawerItem()
+                    .withName(R.string.section_profile_settings)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_settings)
+                    .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
+                ProfileSettingDrawerItem()
+                    .withName(R.string.section_ucp)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                    .withIdentifier(AccountItem.UCP.id),
+                ProfileSettingDrawerItem()
+                    .withName(R.string.section_logout)
+                    .withIcon(CommunityMaterial.Icon.cmd_account_remove)
+                    .withIdentifier(AccountItem.LOGOUT.id)
+            )
         }
     }
 
-    private fun generateDrawerItems(context: Context): List<IDrawerItem<*, *>> {
-        return listOf<IDrawerItem<*, *>>(
-            PrimaryDrawerItem()
-                .withName(R.string.section_news)
-                .withIcon(CommunityMaterial.Icon2.cmd_newspaper)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withIdentifier(DrawerItem.NEWS.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_chat)
-                .withIcon(CommunityMaterial.Icon2.cmd_message_text)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.CHAT.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_bookmarks)
-                .withIcon(CommunityMaterial.Icon.cmd_bookmark)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.BOOKMARKS.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_anime)
-                .withIcon(CommunityMaterial.Icon2.cmd_television)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.ANIME.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_schedule)
-                .withIcon(CommunityMaterial.Icon.cmd_calendar)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.SCHEDULE.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_manga)
-                .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.MANGA.id)
-        )
-    }
+    private fun generateDrawerItems(context: Context) = listOf(
+        PrimaryDrawerItem()
+            .withName(R.string.section_news)
+            .withIcon(CommunityMaterial.Icon2.cmd_newspaper)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withIdentifier(DrawerItem.NEWS.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_chat)
+            .withIcon(CommunityMaterial.Icon2.cmd_message_text)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.CHAT.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_bookmarks)
+            .withIcon(CommunityMaterial.Icon.cmd_bookmark)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.BOOKMARKS.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_anime)
+            .withIcon(CommunityMaterial.Icon2.cmd_television)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.ANIME.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_schedule)
+            .withIcon(CommunityMaterial.Icon.cmd_calendar)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.SCHEDULE.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_manga)
+            .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.MANGA.id)
+    )
 
-    private fun generateStickyDrawerItems(context: Context): List<IDrawerItem<*, *>> {
-        return listOf<IDrawerItem<*, *>>(
-            PrimaryDrawerItem()
-                .withName(R.string.section_info)
-                .withIcon(CommunityMaterial.Icon2.cmd_information_outline)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.INFO.id),
-            PrimaryDrawerItem()
-                .withName(R.string.section_settings)
-                .withIcon(CommunityMaterial.Icon2.cmd_settings)
-                .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
-                .withSelectable(isMain)
-                .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
-                .withIdentifier(DrawerItem.SETTINGS.id)
-        )
-    }
+    private fun generateStickyDrawerItems(context: Context): MutableList<IDrawerItem<*>> = mutableListOf(
+        PrimaryDrawerItem()
+            .withName(R.string.section_info)
+            .withIcon(CommunityMaterial.Icon2.cmd_information_outline)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.INFO.id),
+        PrimaryDrawerItem()
+            .withName(R.string.section_settings)
+            .withIcon(CommunityMaterial.Icon2.cmd_settings)
+            .withSelectedTextColor(context.resolveColor(R.attr.colorSecondary))
+            .withSelectable(isMain)
+            .withSelectedIconColor(context.resolveColor(R.attr.colorSecondary))
+            .withIdentifier(DrawerItem.SETTINGS.id)
+    )
 
     enum class DrawerItem(val id: Long) {
         NEWS(0L),
@@ -360,7 +367,7 @@ class MaterialDrawerWrapper(
     }
 
     private class CrossfadeWrapper(private val crossfader: Crossfader<*>) : ICrossfader {
+        override val isCrossfaded get() = crossfader.isCrossFaded()
         override fun crossfade() = crossfader.crossFade()
-        override fun isCrossfaded() = crossfader.isCrossFaded()
     }
 }

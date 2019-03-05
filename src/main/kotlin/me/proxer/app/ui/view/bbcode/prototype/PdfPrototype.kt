@@ -19,8 +19,9 @@ import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder

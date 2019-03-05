@@ -17,7 +17,11 @@ import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorInt
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import me.proxer.app.R
 import timber.log.Timber
@@ -45,11 +49,11 @@ inline fun ImageView.setIconicsImage(
 }
 
 inline fun IconicsDrawable.colorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
-    return this.color(context.resolveColor(res))
+    return this.colorInt(context.resolveColor(res))
 }
 
 inline fun IconicsDrawable.backgroundColorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
-    return this.backgroundColor(context.resolveColor(res))
+    return this.backgroundColor(IconicsColor.colorInt(context.resolveColor(res)))
 }
 
 inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {

@@ -10,8 +10,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import com.gojuno.koptional.toOptional
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers

@@ -5,9 +5,9 @@ package me.proxer.app.util.extension
 import android.content.Context
 import android.content.res.Resources
 import androidx.appcompat.content.res.AppCompatResources
-import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post
