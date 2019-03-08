@@ -118,6 +118,14 @@ class AnimeViewModel(
             ?: throw StreamResolutionException()
 
         resolverDisposable = resolutionSingle
+            .map {
+                // TODO: Check if ads are enabled for this stream once API is available.
+                if (it is StreamResolutionResult.Video && stream.hoster == "proxer-stream") {
+                    it.copyWithAdEnabled()
+                } else {
+                    it
+                }
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { isLoading.value = true }

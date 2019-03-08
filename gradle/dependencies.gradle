@@ -51,6 +51,7 @@ dependencies {
     implementation "com.google.android:flexbox:$flexboxVersion"
     implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
     implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:extension-ima:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
     implementation "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion"

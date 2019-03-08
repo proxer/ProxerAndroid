@@ -9,9 +9,11 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ext.cast.CastPlayer
+import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ads.AdsMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
@@ -19,6 +21,7 @@ import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
@@ -29,10 +32,13 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import io.reactivex.subjects.PublishSubject
-import me.proxer.app.MainApplication
+import me.proxer.app.BuildConfig
+import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.androidUri
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
@@ -40,11 +46,13 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
+class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, private val isAdEnabled: Boolean) {
 
     private companion object {
         private const val WAS_PLAYING_EXTRA = "was_playing"
         private const val LAST_POSITION_EXTRA = "last_position"
+
+        private val AD_TAG_URI = HttpUrl.parse(BuildConfig.AD_TAG_URI)?.androidUri()
     }
 
     val playerReadySubject = PublishSubject.create<Player>()
@@ -112,7 +120,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
     private val localPlayer = buildLocalPlayer(context)
     private val castPlayer = buildCastPlayer(context)
 
-    private var localMediaSource = buildLocalMediaSource(client, uri)
+    private var localMediaSource = buildLocalMediaSourceWithAds(client, uri)
     private var castMediaSource = buildCastMediaSource(name, episode, uri)
 
     private val uri
@@ -198,7 +206,7 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         wasPlaying = false
         lastPosition = -1
 
-        localMediaSource = buildLocalMediaSource(client, uri)
+        localMediaSource = buildLocalMediaSourceWithAds(client, uri)
         castMediaSource = buildCastMediaSource(name, episode, uri)
 
         retry()
@@ -224,20 +232,35 @@ class StreamPlayerManager(context: Activity, rawClient: OkHttpClient) {
         }
     }
 
-    private fun buildLocalMediaSource(client: OkHttpClient, uri: Uri): MediaSource {
-        val okHttpDataSource = OkHttpDataSourceFactory(client, MainApplication.USER_AGENT, DefaultBandwidthMeter())
+    private fun buildLocalMediaSourceWithAds(client: OkHttpClient, uri: Uri): MediaSource {
+        val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, DefaultBandwidthMeter())
+        val localMediaSource = buildLocalMediaSource(okHttpDataSourceFactory, uri)
+        val context = weakContext.get()
+
+        return if (AD_TAG_URI != null && context != null && isAdEnabled) {
+            val adsLoader = ImaAdsLoader(context, AD_TAG_URI).apply {
+                setPlayer(localPlayer)
+            }
+
+            AdsMediaSource(localMediaSource, okHttpDataSourceFactory, adsLoader, context.playerView)
+        } else {
+            localMediaSource
+        }
+    }
+
+    private fun buildLocalMediaSource(dataSourceFactory: DataSource.Factory, uri: Uri): MediaSource {
         val streamType = Util.inferContentType(uri.lastPathSegment)
 
         return when (streamType) {
-            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(okHttpDataSource), okHttpDataSource)
+            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(dataSourceFactory), dataSourceFactory)
                 .createMediaSource(uri)
 
-            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(okHttpDataSource), okHttpDataSource)
+            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
                 .createMediaSource(uri)
 
-            C.TYPE_HLS -> HlsMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
+            C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 
-            C.TYPE_OTHER -> ExtractorMediaSource.Factory(okHttpDataSource).createMediaSource(uri)
+            C.TYPE_OTHER -> ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 
             else -> throw IllegalArgumentException("Unknown streamType: $streamType")
         }

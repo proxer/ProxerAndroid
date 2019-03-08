@@ -44,6 +44,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.SHOW_AD_EXTRA
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -70,11 +71,15 @@ class StreamActivity : BaseActivity() {
             ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
             ?: false
 
+    private val isAdEnabled: Boolean
+        get() = intent.getBooleanExtra(SHOW_AD_EXTRA, false)
+
     private val client by inject<OkHttpClient>()
-    private val playerManager by unsafeLazy { StreamPlayerManager(this, client) }
+    private val playerManager by unsafeLazy { StreamPlayerManager(this, client, isAdEnabled) }
+
+    internal val playerView: PlayerView by bindView(R.id.player)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
-    private val playerView: PlayerView by bindView(R.id.player)
 
     private val rewind: ImageButton by bindView(R.id.exo_rew)
     private val play: ImageButton by bindView(R.id.exo_play)
