@@ -249,7 +249,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
     }
 
     private fun buildLocalMediaSource(dataSourceFactory: DataSource.Factory, uri: Uri): MediaSource {
-        val streamType = Util.inferContentType(uri.lastPathSegment)
+        val streamType = Util.inferContentType(uri)
 
         return when (streamType) {
             C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(dataSourceFactory), dataSourceFactory)
