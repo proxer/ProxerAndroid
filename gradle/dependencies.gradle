@@ -3,6 +3,8 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
     implementation "com.google.android.gms:play-services-cast-framework:$castVersion"
+    implementation "com.google.android.gms:play-services-ads-identifier:$adsVersion"
+    implementation "com.google.ads.interactivemedia.v3:interactivemedia:$interactiveMediaVersion"
 
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
@@ -50,16 +52,19 @@ dependencies {
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
     implementation "com.google.android:flexbox:$flexboxVersion"
     implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
-    implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:extension-ima:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
-    implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
     implementation "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion"
     implementation "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion"
     implementation "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion"
     implementation "com.github.rubengees:introduction:$introductionVersion"
     implementation "com.github.santalu:aspect-ratio-imageview:$aspectRatioImageViewVersion"
     implementation "com.github.rubensousa:gravitysnaphelper:$gravitySnapHelperVersion"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
+
+    implementation("com.google.android.exoplayer:extension-ima:$exoplayerVersion") {
+        exclude module: "play-services-ads"
+    }
 
     implementation "com.github.proxer:ProxerLibJava:$proxerLibVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
