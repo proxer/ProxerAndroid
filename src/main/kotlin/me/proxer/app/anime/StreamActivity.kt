@@ -71,11 +71,11 @@ class StreamActivity : BaseActivity() {
             ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
             ?: false
 
-    private val isAdEnabled: Boolean
+    private val shouldShowAd: Boolean
         get() = intent.getBooleanExtra(SHOW_AD_EXTRA, false)
 
     private val client by inject<OkHttpClient>()
-    private val playerManager by unsafeLazy { StreamPlayerManager(this, client, isAdEnabled) }
+    private val playerManager by unsafeLazy { StreamPlayerManager(this, client, shouldShowAd) }
 
     internal val playerView: PlayerView by bindView(R.id.player)
 

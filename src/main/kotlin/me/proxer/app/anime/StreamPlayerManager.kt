@@ -46,7 +46,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, private val isAdEnabled: Boolean) {
+class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, private val shouldShowAd: Boolean) {
 
     private companion object {
         private const val WAS_PLAYING_EXTRA = "was_playing"
@@ -111,6 +111,8 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
                 castPlayer?.removeListener(errorListener)
 
                 castPlayer?.setSessionAvailabilityListener(null)
+
+                adsLoader?.release()
             }
         }
     }
@@ -119,6 +121,13 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
 
     private val localPlayer = buildLocalPlayer(context)
     private val castPlayer = buildCastPlayer(context)
+
+    private val adsLoader = when {
+        AD_TAG_URI != null && shouldShowAd -> ImaAdsLoader(context, AD_TAG_URI).apply {
+            setPlayer(localPlayer)
+        }
+        else -> null
+    }
 
     private var localMediaSource = buildLocalMediaSourceWithAds(client, uri)
     private var castMediaSource = buildCastMediaSource(name, episode, uri)
@@ -235,14 +244,12 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
     private fun buildLocalMediaSourceWithAds(client: OkHttpClient, uri: Uri): MediaSource {
         val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, DefaultBandwidthMeter())
         val localMediaSource = buildLocalMediaSource(okHttpDataSourceFactory, uri)
+
         val context = weakContext.get()
+        val safeAdsLoader = adsLoader
 
-        return if (AD_TAG_URI != null && context != null && isAdEnabled) {
-            val adsLoader = ImaAdsLoader(context, AD_TAG_URI).apply {
-                setPlayer(localPlayer)
-            }
-
-            AdsMediaSource(localMediaSource, okHttpDataSourceFactory, adsLoader, context.playerView)
+        return if (context != null && safeAdsLoader != null) {
+            AdsMediaSource(localMediaSource, okHttpDataSourceFactory, safeAdsLoader, context.playerView)
         } else {
             localMediaSource
         }
