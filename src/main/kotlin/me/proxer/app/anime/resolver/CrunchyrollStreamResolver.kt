@@ -32,8 +32,8 @@ class CrunchyrollStreamResolver : StreamResolver() {
             }
         }
         .flatMap { api.anime.link(id).buildSingle() }
-        .map { url ->
-            val regexResult = regex.find(url) ?: throw StreamResolutionException()
+        .map { (link, _) ->
+            val regexResult = regex.find(link) ?: throw StreamResolutionException()
             val mediaId = regexResult.groupValues[1]
 
             if (mediaId.isBlank()) {

@@ -22,26 +22,27 @@ class ProxerStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> {
         return api.anime.link(id)
+            .enableAds(true)
             .buildSingle()
-            .flatMap { url ->
+            .flatMap { (link, shouldShowAd) ->
                 client
                     .newCall(
                         Request.Builder()
                             .get()
-                            .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                            .url(Utils.parseAndFixUrl(link) ?: throw StreamResolutionException())
                             .header("User-Agent", USER_AGENT)
                             .header("Connection", "close")
                             .build()
                     )
                     .toBodySingle()
-            }
-            .map {
-                val regexResult = regex.find(it) ?: throw StreamResolutionException()
+                    .map {
+                        val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
-                val url = HttpUrl.parse(regexResult.groupValues[2]) ?: throw StreamResolutionException()
-                val type = regexResult.groupValues[1]
+                        val url = HttpUrl.parse(regexResult.groupValues[2]) ?: throw StreamResolutionException()
+                        val type = regexResult.groupValues[1]
 
-                StreamResolutionResult.Video(url, type)
+                        StreamResolutionResult.Video(url, type, shouldShowAd = shouldShowAd)
+                    }
             }
     }
 }

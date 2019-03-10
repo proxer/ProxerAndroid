@@ -13,7 +13,12 @@ import okhttp3.HttpUrl
  */
 sealed class StreamResolutionResult {
 
-    class Video private constructor(private val intent: Intent) : StreamResolutionResult() {
+    class Video(
+        url: HttpUrl,
+        mimeType: String,
+        referer: String? = null,
+        shouldShowAd: Boolean = false
+    ) : StreamResolutionResult() {
 
         companion object {
             const val NAME_EXTRA = "name"
@@ -22,16 +27,11 @@ sealed class StreamResolutionResult {
             const val SHOW_AD_EXTRA = "show_ad"
         }
 
-        constructor(
-            url: HttpUrl,
-            mimeType: String,
-            referer: String? = null
-        ) : this(
-            Intent(Intent.ACTION_VIEW)
-                .setDataAndType(url.androidUri(), mimeType)
-                .apply { if (referer != null) putExtra(REFERER_EXTRA, referer) }
-                .addReferer()
-        )
+        private val intent = Intent(Intent.ACTION_VIEW)
+            .setDataAndType(url.androidUri(), mimeType)
+            .apply { if (referer != null) putExtra(REFERER_EXTRA, referer) }
+            .putExtra(SHOW_AD_EXTRA, shouldShowAd)
+            .addReferer()
 
         fun play(context: Context, name: String?, episode: Int?) {
             context.startActivity(
@@ -40,8 +40,6 @@ sealed class StreamResolutionResult {
                     .apply { if (episode != null) putExtra(EPISODE_EXTRA, episode) }
             )
         }
-
-        fun copyWithAdEnabled() = Video(intent.putExtra(SHOW_AD_EXTRA, true))
     }
 
     class Link(private val url: HttpUrl) : StreamResolutionResult() {
