@@ -46,7 +46,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, private val shouldShowAd: Boolean) {
+class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, shouldShowAd: Boolean) {
 
     private companion object {
         private const val WAS_PLAYING_EXTRA = "was_playing"
@@ -113,6 +113,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
                 castPlayer?.setSessionAvailabilityListener(null)
 
                 adsLoader?.release()
+                adsLoader = null
             }
         }
     }
@@ -122,7 +123,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
     private val localPlayer = buildLocalPlayer(context)
     private val castPlayer = buildCastPlayer(context)
 
-    private val adsLoader = when {
+    private var adsLoader: ImaAdsLoader? = when {
         AD_TAG_URI != null && shouldShowAd -> ImaAdsLoader(context, AD_TAG_URI).apply {
             setPlayer(localPlayer)
         }
@@ -170,6 +171,9 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
         playerReadySubject.onNext(new)
     }
         private set
+
+    val isPlayingAd: Boolean
+        get() = localPlayer.isPlayingAd
 
     init {
         localPlayer.addListener(errorListener)
@@ -243,13 +247,14 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
 
     private fun buildLocalMediaSourceWithAds(client: OkHttpClient, uri: Uri): MediaSource {
         val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, DefaultBandwidthMeter())
+        val imaFactory = ImaMediaSourceFactory(okHttpDataSourceFactory, this::buildLocalMediaSource)
         val localMediaSource = buildLocalMediaSource(okHttpDataSourceFactory, uri)
 
         val context = weakContext.get()
         val safeAdsLoader = adsLoader
 
         return if (context != null && safeAdsLoader != null) {
-            AdsMediaSource(localMediaSource, okHttpDataSourceFactory, safeAdsLoader, context.playerView)
+            AdsMediaSource(localMediaSource, imaFactory, safeAdsLoader, context.playerView)
         } else {
             localMediaSource
         }
@@ -319,5 +324,14 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, priv
         } else {
             null
         }
+    }
+
+    private class ImaMediaSourceFactory(
+        private val okHttpDataSourceFactory: OkHttpDataSourceFactory,
+        private val mediaSourceFunction: (DataSource.Factory, Uri) -> MediaSource
+    ) : AdsMediaSource.MediaSourceFactory {
+
+        override fun getSupportedTypes() = intArrayOf(C.TYPE_DASH, C.TYPE_HLS, C.TYPE_OTHER)
+        override fun createMediaSource(uri: Uri) = mediaSourceFunction(okHttpDataSourceFactory, uri)
     }
 }

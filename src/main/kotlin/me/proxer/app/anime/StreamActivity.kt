@@ -96,6 +96,8 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    private val adFullscreenHandler = Handler()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -177,6 +179,8 @@ class StreamActivity : BaseActivity() {
 
         playerView.player = null
 
+        adFullscreenHandler.removeCallbacksAndMessages(null)
+
         super.onDestroy()
     }
 
@@ -215,17 +219,21 @@ class StreamActivity : BaseActivity() {
             if (newInsets.isConsumed) newInsets.consumeSystemWindowInsets() else newInsets
         }
 
-        toggleFullscreen(true)
-
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
             .subscribe { visibility ->
-                if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                    playerView.showController()
-                    toolbar.isVisible = true
+                if (playerManager.isPlayingAd.not()) {
+                    if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                        playerView.showController()
+                        toolbar.isVisible = true
+                    } else {
+                        playerView.hideController()
+                        toolbar.isVisible = false
+                    }
                 } else {
-                    playerView.hideController()
-                    toolbar.isVisible = false
+                    adFullscreenHandler.postDelayed(3_000) {
+                        toggleFullscreen(true)
+                    }
                 }
             }
 
@@ -233,6 +241,8 @@ class StreamActivity : BaseActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
         }
+
+        toggleFullscreen(true)
     }
 
     private fun toggleFullscreen(fullscreen: Boolean) {
