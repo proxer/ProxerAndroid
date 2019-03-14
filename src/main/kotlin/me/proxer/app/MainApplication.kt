@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Environment
 import android.os.Looper
-import android.webkit.WebView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -31,9 +30,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.logger.EmptyLogger
 import timber.log.Timber
 
 /**
@@ -58,7 +55,6 @@ class MainApplication : Application() {
 
         startKoin {
             androidContext(this@MainApplication)
-            androidLogger(log = EmptyLogger())
 
             modules(koinModules)
         }
@@ -153,17 +149,6 @@ class MainApplication : Application() {
 
     private fun initNightMode() {
         val nightMode = preferenceHelper.nightMode
-
-        // Ugly hack to avoid WebViews to change the ui mode. On first inflation, a WebView changes the ui mode
-        // and creating an instance before the first inflation fixes that.
-        // See: https://issuetracker.google.com/issues/37124582
-        if (nightMode != AppCompatDelegate.MODE_NIGHT_NO) {
-            try {
-                WebView(this)
-            } catch (error: Throwable) {
-                Timber.e(error, "Error initializing night mode")
-            }
-        }
 
         AppCompatDelegate.setDefaultNightMode(nightMode)
     }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.google.android.material.snackbar.Snackbar
 import com.rubengees.rxbus.RxBus
@@ -60,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
         if (currentNightMode != newNightMode) {
             currentNightMode = newNightMode
 
-            recreate()
+            ActivityCompat.recreate(this)
         }
 
         super.onResume()

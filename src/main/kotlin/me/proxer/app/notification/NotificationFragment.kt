@@ -16,7 +16,7 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.multilineSnackbar
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**

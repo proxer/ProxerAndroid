@@ -48,7 +48,7 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**

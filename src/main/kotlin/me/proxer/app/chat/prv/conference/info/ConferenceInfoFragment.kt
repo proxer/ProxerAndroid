@@ -17,7 +17,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.library.entity.messenger.ConferenceInfo
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 

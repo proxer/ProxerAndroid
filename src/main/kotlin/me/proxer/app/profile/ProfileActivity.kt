@@ -37,7 +37,7 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 /**

@@ -31,7 +31,7 @@ import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.toast
 import me.proxer.library.util.ProxerUrls
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees

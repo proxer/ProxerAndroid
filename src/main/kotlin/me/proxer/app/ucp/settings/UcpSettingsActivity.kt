@@ -16,7 +16,7 @@ import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.startActivity
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees

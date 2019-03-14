@@ -14,7 +14,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.toast
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees

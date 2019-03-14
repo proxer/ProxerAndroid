@@ -8,6 +8,7 @@ import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import clicks
 import com.uber.autodispose.android.lifecycle.scope
@@ -134,7 +135,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
             THEME -> {
                 AppCompatDelegate.setDefaultNightMode(preferenceHelper.nightMode)
 
-                requireActivity().recreate()
+                ActivityCompat.recreate(requireActivity())
             }
 
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {

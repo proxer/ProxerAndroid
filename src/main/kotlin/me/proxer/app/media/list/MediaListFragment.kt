@@ -46,7 +46,7 @@ import me.proxer.library.enums.MediaSearchSortCriteria
 import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.EnumSet
 import kotlin.properties.Delegates
 

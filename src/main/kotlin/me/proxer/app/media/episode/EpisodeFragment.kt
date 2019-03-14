@@ -28,7 +28,7 @@ import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.Category
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates

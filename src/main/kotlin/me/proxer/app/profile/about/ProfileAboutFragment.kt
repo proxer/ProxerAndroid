@@ -40,7 +40,7 @@ import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 /**

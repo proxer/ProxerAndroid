@@ -15,7 +15,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.pub.message.ChatActivity
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.library.entity.chat.ChatRoom
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
 /**

@@ -16,7 +16,7 @@ import me.proxer.library.util.ProxerUtils
 import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.SwitchPreference
 import net.xpece.android.support.preference.XpPreferenceFragment
-import org.koin.androidx.viewmodel.ext.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * @author Ruben Gees

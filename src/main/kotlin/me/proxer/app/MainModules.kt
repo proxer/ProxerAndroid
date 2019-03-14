@@ -79,6 +79,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.StringQualifier
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import timber.log.Timber
@@ -106,13 +107,13 @@ private val applicationModules = module(createdAtStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single(DEFAULT_RX_PREFERENCES) { RxSharedPreferences.create(get()) }
-    single(HAWK_RX_PREFERENCES) {
+    single(StringQualifier(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get()) }
+    single(StringQualifier(HAWK_RX_PREFERENCES)) {
         RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
     }
 
-    single { StorageHelper(get(), get(HAWK_RX_PREFERENCES)) }
-    single { PreferenceHelper(get(), get(), get(DEFAULT_RX_PREFERENCES)) }
+    single { StorageHelper(get(), get(StringQualifier(HAWK_RX_PREFERENCES))) }
+    single { PreferenceHelper(get(), get(), get(StringQualifier(DEFAULT_RX_PREFERENCES))) }
 
     single { RxBus() }
 

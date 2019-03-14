@@ -22,7 +22,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.user.UserInfo
-import org.koin.androidx.viewmodel.ext.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 
 /**

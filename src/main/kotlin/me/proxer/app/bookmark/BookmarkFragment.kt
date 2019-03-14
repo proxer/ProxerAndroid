@@ -28,7 +28,7 @@ import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
-import org.koin.androidx.viewmodel.ext.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
