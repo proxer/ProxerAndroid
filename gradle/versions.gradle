@@ -16,17 +16,17 @@ ext {
 
     // Core plugins
     androidPluginVersion = "3.5.0-alpha07"
-    kotlinVersion = "1.3.30-eap-11"
+    kotlinVersion = "1.3.30-eap-45"
     r8Version = "1.4.75"
 
     // Utility plugins
     detektPluginVersion = "1.0.0-RC14"
     versionsPluginVersion = "0.21.0"
     androidCommandPluginVersion = "2.0.1"
-    ktlintPluginVersion = "7.1.0"
+    ktlintPluginVersion = "7.2.1"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.0.0-beta-3"
+    koinVersion = "2.0.0-beta-4"
     multidexVersion = "2.0.1"
     appcompatVersion = "1.1.0-alpha03"
     browserVersion = "1.0.0"

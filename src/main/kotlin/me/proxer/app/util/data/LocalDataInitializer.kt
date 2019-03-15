@@ -18,7 +18,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 2
+        private const val currentVersion = 3
     }
 
     private var isInitialized = false
@@ -36,6 +36,10 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
 
             if (previousVersion <= 1) {
                 migrate1To2()
+            }
+
+            if (previousVersion <= 2) {
+                migrate2To3()
             }
 
             if (previousVersion != currentVersion) {
@@ -95,7 +99,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
     }
 
     private fun migrate1To2() {
-        // On older versions of the App, there was only a setting if the manga reader should be vertical or not.
+        // In older versions of the App, there was only a setting if the manga reader should be vertical or not.
         // Now there is an enum with multiple choices.
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val wasVertical = sharedPreferences.getBoolean("manga_vertical_reader", true)
@@ -105,6 +109,22 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
                 PreferenceHelper.MANGA_READER_ORIENTATION, when (wasVertical) {
                     true -> MangaReaderOrientation.VERTICAL.ordinal
                     false -> MangaReaderOrientation.LEFT_TO_RIGHT.ordinal
+                }
+            )
+        }
+    }
+
+    private fun migrate2To3() {
+        // In older versions of the App, there was an additional night mode for automatic switching based on the
+        // time. This has been deprecated and thus removed from the App.
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val previousNightMode = sharedPreferences.getString("theme", "0")
+
+        sharedPreferences.edit(commit = true) {
+            putString(
+                PreferenceHelper.THEME, when (previousNightMode) {
+                    "1" -> "1"
+                    else -> "0"
                 }
             )
         }

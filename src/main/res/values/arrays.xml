@@ -2,15 +2,13 @@
 <resources>
 
     <string-array name="theme_titles">
-        <item>@string/preference_theme_auto</item>
-        <item>@string/preference_theme_dark</item>
         <item>@string/preference_theme_light</item>
+        <item>@string/preference_theme_dark</item>
     </string-array>
 
     <string-array name="theme_values">
         <item>0</item>
         <item>1</item>
-        <item>2</item>
     </string-array>
 
     <string-array name="start_page_titles">

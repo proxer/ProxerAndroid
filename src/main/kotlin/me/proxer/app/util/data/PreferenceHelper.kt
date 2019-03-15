@@ -96,16 +96,14 @@ class PreferenceHelper(
     @AppCompatDelegate.NightMode
     var nightMode
         get() = when (sharedPreferences.getString(THEME, "2")) {
-            "0" -> AppCompatDelegate.MODE_NIGHT_AUTO
+            "0" -> AppCompatDelegate.MODE_NIGHT_NO
             "1" -> AppCompatDelegate.MODE_NIGHT_YES
-            "2" -> AppCompatDelegate.MODE_NIGHT_NO
             else -> throw IllegalArgumentException("Unknown night mode value")
         }
         set(value) {
             val stringValue = when (value) {
-                AppCompatDelegate.MODE_NIGHT_AUTO -> "0"
+                AppCompatDelegate.MODE_NIGHT_NO -> "0"
                 AppCompatDelegate.MODE_NIGHT_YES -> "1"
-                AppCompatDelegate.MODE_NIGHT_NO -> "2"
                 else -> throw IllegalArgumentException("Unknown night mode value: $value")
             }
 

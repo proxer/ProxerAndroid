@@ -627,7 +627,6 @@
 
     <string name="preference_category_design_title">Design</string>
     <string name="preference_theme_title">Thema</string>
-    <string name="preference_theme_auto">Automatisch nach Tageszeit</string>
     <string name="preference_theme_dark">Dunkel</string>
     <string name="preference_theme_light">Hell</string>
 
