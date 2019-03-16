@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
         android:indeterminate="true"
         android:visibility="gone"
         tools:visibility="visible" />
@@ -24,7 +23,6 @@
         android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/dialog_logout_content"
         android:textSize="16sp" />
 </FrameLayout>
