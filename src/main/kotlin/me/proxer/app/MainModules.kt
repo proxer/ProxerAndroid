@@ -2,7 +2,6 @@ package me.proxer.app
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.f2prateek.rx.preferences2.RxSharedPreferences
@@ -151,12 +150,8 @@ private val applicationModules = module(createdAtStart = true) {
             .addNetworkInterceptor(CacheInterceptor())
             .addInterceptor(HttpsUpgradeInterceptor())
             .addInterceptor(UserAgentInterceptor())
+            .addInterceptor(ConnectionCloseInterceptor())
             .cache(Cache(File(androidContext().cacheDir, HTTP_CACHE_NAME), HTTP_CACHE_SIZE))
-            .apply {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    addInterceptor(ConnectionCloseInterceptor())
-                }
-            }
             .apply {
                 if (loggingInterceptor != null) {
                     if (preferenceHelper.shouldLogHttpVerbose) {
