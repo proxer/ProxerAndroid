@@ -142,7 +142,6 @@ private val applicationModules = module(createdAtStart = true) {
         }
 
         OkHttpClient.Builder()
-            .retryOnConnectionFailure(false)
             .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
             .sslSocketFactory(ModernTlsSocketFactory(get()), get())
