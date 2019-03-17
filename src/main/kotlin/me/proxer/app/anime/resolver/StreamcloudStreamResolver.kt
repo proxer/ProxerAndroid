@@ -24,12 +24,12 @@ class StreamcloudStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
-        .flatMap { (link, _) ->
+        .flatMap { url ->
             client
                 .newCall(
                     Request.Builder()
                         .get()
-                        .url(link)
+                        .url(url)
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .header("Connection", "close")
                         .build()
@@ -55,7 +55,7 @@ class StreamcloudStreamResolver : StreamResolver() {
                         .newCall(
                             Request.Builder()
                                 .post(it)
-                                .url(link)
+                                .url(url)
                                 .header("User-Agent", GENERIC_USER_AGENT)
                                 .header("Connection", "close")
                                 .build()
@@ -67,6 +67,6 @@ class StreamcloudStreamResolver : StreamResolver() {
                         ?.let { rawUrl -> HttpUrl.parse(rawUrl) }
                         ?: throw StreamResolutionException()
                 }
-                .map { StreamResolutionResult.Video(it, "video/mp4", link) }
+                .map { StreamResolutionResult.Video(it, "video/mp4", url) }
         }
 }

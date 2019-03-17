@@ -29,6 +29,6 @@ class NetflixStreamResolver : StreamResolver() {
             }
         }
         .flatMap { api.anime.link(id).buildSingle() }
-        .map { (link, _) -> Utils.parseAndFixUrl(link) ?: throw StreamResolutionException() }
+        .map { Utils.parseAndFixUrl(it) ?: throw StreamResolutionException() }
         .map { StreamResolutionResult.App(it.androidUri()) }
 }

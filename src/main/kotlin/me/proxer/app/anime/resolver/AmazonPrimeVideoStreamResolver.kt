@@ -14,6 +14,5 @@ class AmazonPrimeVideoStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
-        .map { (link, _) -> Utils.parseAndFixUrl(link) ?: throw StreamResolutionException() }
-        .map { StreamResolutionResult.Link(it) }
+        .map { StreamResolutionResult.Link(Utils.parseAndFixUrl(it) ?: throw StreamResolutionException()) }
 }

@@ -32,13 +32,10 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import io.reactivex.subjects.PublishSubject
-import me.proxer.app.BuildConfig
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.androidUri
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import java.lang.ref.WeakReference
 import kotlin.properties.Delegates
@@ -46,13 +43,11 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, shouldShowAd: Boolean) {
+class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTag: Uri?) {
 
     private companion object {
         private const val WAS_PLAYING_EXTRA = "was_playing"
         private const val LAST_POSITION_EXTRA = "last_position"
-
-        private val AD_TAG_URI = HttpUrl.parse(BuildConfig.AD_TAG_URI)?.androidUri()
     }
 
     val playerReadySubject = PublishSubject.create<Player>()
@@ -124,7 +119,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, shou
     private val castPlayer = buildCastPlayer(context)
 
     private var adsLoader: ImaAdsLoader? = when {
-        AD_TAG_URI != null && shouldShowAd -> ImaAdsLoader(context, AD_TAG_URI).apply {
+        adTag != null -> ImaAdsLoader(context, adTag).apply {
             setPlayer(localPlayer)
         }
         else -> null

@@ -35,12 +35,12 @@ class WatchboxStreamResolver : StreamResolver() {
             }
         }
         .flatMap { api.anime.link(id).buildSingle() }
-        .flatMap { (link, _) ->
+        .flatMap { url ->
             client
                 .newCall(
                     Request.Builder()
                         .get()
-                        .url(Utils.parseAndFixUrl(link) ?: throw StreamResolutionException())
+                        .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
                         .header("User-Agent", USER_AGENT)
                         .header("Connection", "close")
                         .build()

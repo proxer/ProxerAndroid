@@ -24,12 +24,12 @@ class YourUploadStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
-        .flatMap { (link, _) ->
+        .flatMap { url ->
             client
                 .newCall(
                     Request.Builder()
                         .get()
-                        .url(Utils.parseAndFixUrl(link) ?: throw StreamResolutionException())
+                        .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .header("Connection", "close")
                         .build()
@@ -48,7 +48,7 @@ class YourUploadStreamResolver : StreamResolver() {
                             Request.Builder()
                                 .head()
                                 .url(fileUrl)
-                                .header("Referer", link)
+                                .header("Referer", url)
                                 .header("User-Agent", GENERIC_USER_AGENT)
                                 .header("Connection", "close")
                                 .build()
@@ -57,6 +57,6 @@ class YourUploadStreamResolver : StreamResolver() {
                         .retry(3)
                 }
                 .map { it.networkResponse()?.request()?.url() ?: throw StreamResolutionException() }
-                .map { StreamResolutionResult.Video(it, "video/mp4", link) }
+                .map { StreamResolutionResult.Video(it, "video/mp4", url) }
         }
 }

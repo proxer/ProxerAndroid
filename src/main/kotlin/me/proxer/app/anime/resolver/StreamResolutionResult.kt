@@ -17,20 +17,20 @@ sealed class StreamResolutionResult {
         url: HttpUrl,
         mimeType: String,
         referer: String? = null,
-        shouldShowAd: Boolean = false
+        adTag: Uri? = null
     ) : StreamResolutionResult() {
 
         companion object {
             const val NAME_EXTRA = "name"
             const val EPISODE_EXTRA = "episode"
             const val REFERER_EXTRA = "referer"
-            const val SHOW_AD_EXTRA = "show_ad"
+            const val AD_TAG_EXTRA = "ad_tag"
         }
 
         private val intent = Intent(Intent.ACTION_VIEW)
             .setDataAndType(url.androidUri(), mimeType)
             .apply { if (referer != null) putExtra(REFERER_EXTRA, referer) }
-            .putExtra(SHOW_AD_EXTRA, shouldShowAd)
+            .putExtra(AD_TAG_EXTRA, adTag)
             .addReferer()
 
         fun play(context: Context, name: String?, episode: Int?) {

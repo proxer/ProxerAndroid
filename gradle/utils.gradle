@@ -4,15 +4,13 @@ static getGitHash() {
     return gitRevParseCommand.execute().text.trim()
 }
 
-static String getFromSecrets(String key, boolean optional = false) {
+static String getFromSecrets(String key) {
     Properties result = new Properties()
 
     try {
         result.load(new FileInputStream(new File("secrets.properties")))
     } catch (Exception ignored) {
-        if (optional) {
-            return null
-        } else if (isCI()) {
+        if (isCI()) {
             return "dummy"
         } else {
             throw new GradleException("Please add a secrets.properties file with a value for $key " +
@@ -21,12 +19,8 @@ static String getFromSecrets(String key, boolean optional = false) {
     }
 
     if (!result.containsKey(key)) {
-        if (optional) {
-            return null
-        } else {
-            throw new GradleException("Please include a value for $key in your secrets.properties " +
-                    "file to perform this action.")
-        }
+        throw new GradleException("Please include a value for $key in your secrets.properties " +
+                "file to perform this action.")
     }
 
     return result[key]

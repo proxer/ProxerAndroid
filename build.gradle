@@ -95,9 +95,6 @@ android {
                     "\"RELEASE_KEY_PASSWORD\" to your secrets.properties file if you want the apk to be signed.")
         }
 
-        def adTagUri = getFromSecrets("AD_TAG_URI", true)
-        def adTagUriField = adTagUri == null ? "\"\"" : "\"${adTagUri}\""
-
         debug {
             multiDexEnabled true
 
@@ -105,7 +102,6 @@ android {
 
             versionNameSuffix = "-debug-${getGitHash()}"
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
-            buildConfigField "String", "AD_TAG_URI", adTagUriField
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
         }
 
@@ -121,7 +117,6 @@ android {
             ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
 
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
-            buildConfigField "String", "AD_TAG_URI", adTagUriField
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"false\")"
 
             if (shouldSign()) {
@@ -142,7 +137,6 @@ android {
 
             versionNameSuffix = "-logRelease-${getGitHash()}"
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
-            buildConfigField "String", "AD_TAG_URI", adTagUriField
             buildConfigField "boolean", "LOG", "Boolean.parseBoolean(\"true\")"
 
             if (shouldSign()) {

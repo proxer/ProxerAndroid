@@ -2,6 +2,7 @@ package me.proxer.app.anime
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -42,9 +43,9 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
-import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.SHOW_AD_EXTRA
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.toEpisodeAppString
@@ -71,11 +72,11 @@ class StreamActivity : BaseActivity() {
             ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
             ?: false
 
-    private val shouldShowAd: Boolean
-        get() = intent.getBooleanExtra(SHOW_AD_EXTRA, false)
+    private val adTag: Uri?
+        get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
     private val client by inject<OkHttpClient>()
-    private val playerManager by unsafeLazy { StreamPlayerManager(this, client, shouldShowAd) }
+    private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: PlayerView by bindView(R.id.player)
 

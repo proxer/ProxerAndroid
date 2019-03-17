@@ -1,5 +1,6 @@
 package me.proxer.app.anime.resolver
 
+import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
@@ -21,10 +22,9 @@ class ProxerStreamResolver : StreamResolver() {
     override val name = "Proxer-Stream"
 
     override fun resolve(id: String): Single<StreamResolutionResult> {
-        return api.anime.link(id)
-            .enableAds(true)
+        return api.anime.vastLink(id)
             .buildSingle()
-            .flatMap { (link, shouldShowAd) ->
+            .flatMap { (link, adTag) ->
                 client
                     .newCall(
                         Request.Builder()
@@ -41,7 +41,9 @@ class ProxerStreamResolver : StreamResolver() {
                         val url = HttpUrl.parse(regexResult.groupValues[2]) ?: throw StreamResolutionException()
                         val type = regexResult.groupValues[1]
 
-                        StreamResolutionResult.Video(url, type, shouldShowAd = shouldShowAd)
+                        val adTagUri = if (adTag.isNotBlank()) Uri.parse(adTag) else null
+
+                        StreamResolutionResult.Video(url, type, adTag = adTagUri)
                     }
             }
     }
