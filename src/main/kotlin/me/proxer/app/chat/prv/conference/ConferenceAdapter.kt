@@ -15,11 +15,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
-import com.mikepenz.iconics.sizePx
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.toIconicsSizePx
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -30,7 +29,6 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
@@ -38,6 +36,7 @@ import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -185,9 +184,9 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         private fun bindImage(item: ConferenceWithMessage) {
             if (item.conference.image.isBlank()) {
                 val icon = IconicsDrawable(image.context)
-                    .sizeDp(96)
-                    .paddingDp(16)
-                    .colorAttr(image.context, R.attr.colorSecondary)
+                    .size(96.toIconicsSizeDp())
+                    .padding(16.toIconicsSizeDp())
+                    .color(R.attr.colorSecondary.toIconicsColorAttr(image.context))
 
                 if (item.conference.isGroup) {
                     icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
@@ -208,6 +207,6 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         private fun generateMessageStatusDrawable(context: Context, icon: IIcon) = IconicsDrawable(context)
             .icon(icon)
             .iconColor(context)
-            .sizePx(context.sp(14))
+            .size(context.sp(14).toIconicsSizePx())
     }
 }

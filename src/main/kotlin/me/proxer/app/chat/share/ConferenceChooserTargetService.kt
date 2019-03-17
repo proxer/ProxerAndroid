@@ -10,10 +10,9 @@ import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import androidx.core.os.bundleOf
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorRes
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsColorRes
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.sync.MessengerDao
@@ -69,9 +68,9 @@ class ConferenceChooserTargetService : ChooserTargetService() {
     }
 
     private fun constructEmptyIcon(conference: LocalConference) = IconicsDrawable(applicationContext)
-        .sizeDp(DeviceUtils.getScreenWidth(applicationContext) / 6)
-        .paddingDp(DeviceUtils.getScreenWidth(applicationContext) / 32)
-        .colorRes(R.color.primary)
+        .size((DeviceUtils.getScreenWidth(applicationContext) / 6).toIconicsSizeDp())
+        .padding((DeviceUtils.getScreenWidth(applicationContext) / 32).toIconicsSizeDp())
+        .color(R.color.primary.toIconicsColorRes())
         .let { drawable ->
             when {
                 conference.isGroup -> drawable.icon(CommunityMaterial.Icon.cmd_account_multiple)

@@ -7,11 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorRes
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsColorRes
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter
@@ -55,9 +54,9 @@ class ServerStatusAdapter : BaseAdapter<ServerStatus, ViewHolder>() {
 
             status.setImageDrawable(
                 IconicsDrawable(status.context, statusIcon)
-                    .sizeDp(32)
-                    .paddingDp(8)
-                    .colorRes(if (item.online) R.color.md_green_500 else R.color.md_red_500)
+                    .size(32.toIconicsSizeDp())
+                    .padding(8.toIconicsSizeDp())
+                    .color((if (item.online) R.color.md_green_500 else R.color.md_red_500).toIconicsColorRes())
             )
         }
     }

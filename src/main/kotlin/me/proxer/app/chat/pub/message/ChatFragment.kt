@@ -22,11 +22,10 @@ import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
@@ -39,13 +38,13 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -352,22 +351,24 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
 
         emojiButton.setImageDrawable(
             IconicsDrawable(requireContext(), emojiButtonIcon)
-                .colorAttr(requireContext(), when (disabledColor) {
-                    true -> R.attr.colorOnSurfaceDisabled
-                    false -> R.attr.colorIcon
+                .color(
+                    when (disabledColor) {
+                        true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
+                        false -> R.attr.colorIcon.toIconicsColorAttr(requireContext())
                 })
-                .sizeDp(32)
-                .paddingDp(6)
+                .size(32.toIconicsSizeDp())
+                .padding(6.toIconicsSizeDp())
         )
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .colorAttr(requireContext(), when (disabledColor) {
-                    true -> R.attr.colorOnSurfaceDisabled
-                    false -> R.attr.colorSecondary
+                .color(
+                    when (disabledColor) {
+                        true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
+                        false -> R.attr.colorSecondary.toIconicsColorAttr(requireContext())
                 })
-                .sizeDp(32)
-                .paddingDp(4)
+                .size(32.toIconicsSizeDp())
+                .padding(4.toIconicsSizeDp())
         )
     }
 

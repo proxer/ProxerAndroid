@@ -20,8 +20,8 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder
@@ -130,7 +130,7 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             ImageSource.bitmap(
                 IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh)
                     .iconColor(view.context)
-                    .sizeDp(32)
+                    .size(32.toIconicsSizeDp())
                     .toBitmap()
             )
         )

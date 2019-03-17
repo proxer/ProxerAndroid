@@ -11,7 +11,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -77,7 +77,7 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             status.text = item.mediaProgress.toEpisodeAppString(status.context, item.episode, item.medium.toCategory())
-            state.setImageDrawable(item.state.toAppDrawable(state.context).sizeDp(16))
+            state.setImageDrawable(item.state.toAppDrawable(state.context).size(16.toIconicsSizeDp()))
 
             if (item.rating > 0) {
                 ratingContainer.isVisible = true

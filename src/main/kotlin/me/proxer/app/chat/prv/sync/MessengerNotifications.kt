@@ -17,9 +17,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.text.set
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorInt
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsColor
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
@@ -78,7 +78,7 @@ object MessengerNotifications : KoinComponent {
         }
 
         NotificationUtils.showErrorNotification(
-            context, ID, NotificationUtils.CHAT_CHANNEL,
+            context, ID, CHAT_CHANNEL,
             context.getString(R.string.notification_chat_error_title),
             context.getString(errorAction.message),
             intent
@@ -230,8 +230,8 @@ object MessengerNotifications : KoinComponent {
                     false -> CommunityMaterial.Icon.cmd_account
                 }
             )
-            .colorInt(ContextCompat.getColor(context, R.color.primary))
-            .sizeDp(96)
+            .color(ContextCompat.getColor(context, R.color.primary).toIconicsColor())
+            .size(96.toIconicsSizeDp())
             .toBitmap()
     }
 

@@ -13,11 +13,10 @@ import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorRes
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsColorRes
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -289,14 +288,14 @@ class AnimeAdapter(
         private fun generatePlayDrawable(): IconicsDrawable {
             return IconicsDrawable(play.context)
                 .icon(CommunityMaterial.Icon2.cmd_play)
-                .sizeDp(28)
-                .paddingDp(8)
-                .colorRes(android.R.color.white)
+                .size(28.toIconicsSizeDp())
+                .padding(8.toIconicsSizeDp())
+                .color(android.R.color.white.toIconicsColorRes())
         }
 
         private fun generateInfoDrawable(icon: IIcon): IconicsDrawable {
             return IconicsDrawable(info.context, icon)
-                .sizeDp(26)
+                .size(26.toIconicsSizeDp())
                 .iconColor(info.context)
         }
     }

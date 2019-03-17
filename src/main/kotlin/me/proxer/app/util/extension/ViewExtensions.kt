@@ -19,10 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorInt
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import me.proxer.app.R
 import timber.log.Timber
 
@@ -42,22 +40,18 @@ inline fun ImageView.setIconicsImage(
 ) {
     setImageDrawable(
         IconicsDrawable(context, icon)
-            .sizeDp(sizeDp)
-            .paddingDp(paddingDp)
-            .colorAttr(context, colorAttr)
+            .size(sizeDp.toIconicsSizeDp())
+            .padding(paddingDp.toIconicsSizeDp())
+            .color(colorAttr.toIconicsColorAttr(context))
     )
 }
 
-inline fun IconicsDrawable.colorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
-    return this.colorInt(context.resolveColor(res))
-}
-
-inline fun IconicsDrawable.backgroundColorAttr(context: Context, @AttrRes res: Int): IconicsDrawable {
-    return this.backgroundColor(IconicsColor.colorInt(context.resolveColor(res)))
+inline fun @receiver:AttrRes Int.toIconicsColorAttr(context: Context): IconicsColor {
+    return IconicsColor.colorInt(context.resolveColor(this))
 }
 
 inline fun IconicsDrawable.iconColor(context: Context): IconicsDrawable {
-    return this.colorAttr(context, R.attr.colorIcon)
+    return this.color(R.attr.colorIcon.toIconicsColorAttr(context))
 }
 
 inline fun ViewGroup.enableLayoutAnimationsSafely() {

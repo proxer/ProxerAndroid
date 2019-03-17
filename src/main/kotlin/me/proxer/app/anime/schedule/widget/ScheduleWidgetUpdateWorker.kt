@@ -19,10 +19,9 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorRes
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsColorRes
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -251,9 +250,9 @@ class ScheduleWidgetUpdateWorker(
         views.setImageViewBitmap(
             R.id.refresh,
             IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
-                .colorRes(android.R.color.white)
-                .sizeDp(32)
-                .paddingDp(8)
+                .color(android.R.color.white.toIconicsColorRes())
+                .size(32.toIconicsSizeDp())
+                .padding(8.toIconicsSizeDp())
                 .toBitmap()
         )
     }

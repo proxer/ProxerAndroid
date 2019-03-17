@@ -11,10 +11,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import com.gojuno.koptional.toOptional
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
@@ -31,10 +30,9 @@ import me.proxer.app.profile.media.ProfileMediaListFragment
 import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.backgroundColorAttr
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
@@ -200,10 +198,10 @@ class ProfileActivity : ImageTabsActivity() {
             headerImage.setImageDrawable(
                 IconicsDrawable(headerImage.context)
                     .icon(CommunityMaterial.Icon.cmd_account)
-                    .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
-                    .paddingDp(32)
-                    .backgroundColorAttr(headerImage.context, R.attr.colorPrimaryLight)
-                    .colorAttr(headerImage.context, R.attr.colorPrimary)
+                    .size((DeviceUtils.getScreenWidth(this) * 0.75).toIconicsSizeDp())
+                    .padding(32.toIconicsSizeDp())
+                    .color(R.attr.colorPrimary.toIconicsColorAttr(headerImage.context))
+                    .backgroundColor(R.attr.colorPrimaryLight.toIconicsColorAttr(headerImage.context))
             )
         }
     }

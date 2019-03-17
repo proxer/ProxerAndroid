@@ -14,8 +14,8 @@ import androidx.core.view.ViewCompat
 import com.bumptech.glide.load.engine.GlideException
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.GlideRequests
@@ -105,7 +105,7 @@ object ImagePrototype : AutoClosingPrototype {
         .error(
             IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh)
                 .iconColor(view.context)
-                .sizeDp(32)
+                .size(32.toIconicsSizeDp())
         )
         .logErrors()
         .into(view)
