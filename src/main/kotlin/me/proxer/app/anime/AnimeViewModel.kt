@@ -158,14 +158,13 @@ class AnimeViewModel(
         .flatMapIterable { it }
         .flatMapSingle { stream ->
             val resolver = StreamResolverFactory.resolverFor(stream.hosterName)
-            val internalPlayerOnly = resolver?.internalPlayerOnly ?: false
 
             if (resolver != null && resolver.resolveEarly) {
                 resolver.resolve(stream.id).map { resolutionResult ->
-                    stream.toAnimeStream(true, internalPlayerOnly, resolutionResult)
+                    stream.toAnimeStream(true, resolutionResult)
                 }
             } else {
-                Single.just(stream.toAnimeStream(resolver != null, internalPlayerOnly))
+                Single.just(stream.toAnimeStream(resolver != null))
             }
         }
         .sorted(streamComparator)

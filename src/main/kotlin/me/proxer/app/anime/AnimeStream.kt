@@ -19,6 +19,5 @@ data class AnimeStream(
     val isOfficial: Boolean,
     val isPublic: Boolean,
     val isSupported: Boolean,
-    val isInternalPlayerOnly: Boolean,
     val resolutionResult: StreamResolutionResult?
 )

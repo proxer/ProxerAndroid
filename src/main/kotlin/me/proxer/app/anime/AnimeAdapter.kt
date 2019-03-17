@@ -223,13 +223,6 @@ class AnimeAdapter(
                                 generateInfoDrawable(CommunityMaterial.Icon2.cmd_information), null, null, null
                             )
                         }
-                        item.isInternalPlayerOnly -> {
-                            info.isVisible = true
-                            info.setText(R.string.fragment_anime_stream_only_internal_player_warning)
-                            info.setCompoundDrawablesWithIntrinsicBounds(
-                                generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
-                            )
-                        }
                         else -> info.isVisible = false
                     }
                 }

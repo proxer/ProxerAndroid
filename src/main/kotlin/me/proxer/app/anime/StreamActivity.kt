@@ -1,7 +1,9 @@
 package me.proxer.app.anime
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -39,19 +41,25 @@ import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.mikepenz.community_material_typeface_library.CommunityMaterial
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTERNAL_PLAYER_ONLY_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.newTask
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 
@@ -60,11 +68,23 @@ import org.koin.android.ext.android.inject
  */
 class StreamActivity : BaseActivity() {
 
-    private val name: String?
+    internal val name: String?
         get() = intent.getStringExtra(NAME_EXTRA)
 
-    private val episode: Int?
+    internal val episode: Int?
         get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
+
+    internal val referer: String?
+        get() = intent.getStringExtra(REFERER_EXTRA)
+
+    internal val uri: Uri
+        get() = intent.data ?: throw IllegalStateException("uri is null")
+
+    private val mimeType: String
+        get() = intent.type ?: throw IllegalStateException("type is null")
+
+    private val isInternalPlayerOnly: Boolean
+        get() = intent.getBooleanExtra(INTERNAL_PLAYER_ONLY_EXTRA, false)
 
     private val isProxerStream: Boolean
         get() = intent.dataString
@@ -149,13 +169,24 @@ class StreamActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
 
-        menuInflater.inflate(R.menu.activity_stream, menu)
+        IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_stream, menu, true)
 
         if (isProxerStream) {
             mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
         }
 
+        if (isInternalPlayerOnly || !canOpenInOtherApp()) {
+            menu.findItem(R.id.action_open_in_other_app).isVisible = false
+        }
+
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_open_in_other_app -> openInOtherApp()
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onStart() {
@@ -224,7 +255,7 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { visibility ->
                 if (playerManager.isPlayingAd.not()) {
-                    if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
                         playerView.showController()
                         toolbar.isVisible = true
                     } else {
@@ -293,6 +324,27 @@ class StreamActivity : BaseActivity() {
                     .build()
                     .apply { show() }
             }
+        }
+    }
+
+    private fun canOpenInOtherApp(): Boolean {
+        val intent = StreamResolutionResult.Video(HttpUrl.get(uri.toString()), mimeType, referer).makeIntent(this)
+
+        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isNotEmpty()
+    }
+
+    private fun openInOtherApp(): Boolean {
+        return try {
+            val intent = StreamResolutionResult.Video(HttpUrl.get(uri.toString()), mimeType, referer)
+                .makeIntent(this)
+                .newTask()
+
+            startActivity(intent)
+            finish()
+
+            true
+        } catch (ignored: ActivityNotFoundException) {
+            false
         }
     }
 

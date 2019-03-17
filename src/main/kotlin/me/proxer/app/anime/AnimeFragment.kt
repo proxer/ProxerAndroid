@@ -185,7 +185,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
         viewModel.resolutionResult.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result) {
-                    is StreamResolutionResult.Video -> result.play(requireContext(), name, episode)
+                    is StreamResolutionResult.Video -> result.play(requireContext(), name, episode, true)
                     is StreamResolutionResult.Link -> result.show(this)
                     is StreamResolutionResult.App -> result.navigate(requireContext())
                     is StreamResolutionResult.Message -> throw IllegalArgumentException(

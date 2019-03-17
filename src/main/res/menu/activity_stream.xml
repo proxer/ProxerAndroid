@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_open_in_other_app"
+        android:title="@string/action_open_in_other_app"
+        app:ico_color="?attr/colorOnPrimary"
+        app:ico_icon="cmd_open_in_new"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_cast"
         android:title="@string/action_cast"
         app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"

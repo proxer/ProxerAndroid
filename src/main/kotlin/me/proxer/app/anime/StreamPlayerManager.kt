@@ -33,7 +33,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.MainApplication.Companion.USER_AGENT
-import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
 import me.proxer.app.util.ErrorUtils
 import okhttp3.OkHttpClient
@@ -128,19 +127,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     private var localMediaSource = buildLocalMediaSourceWithAds(client, uri)
     private var castMediaSource = buildCastMediaSource(name, episode, uri)
 
-    private val uri
-        get() = weakContext.get()?.intent?.data ?: throw IllegalStateException("uri is null")
-
-    private val name: String?
-        get() = weakContext.get()?.intent?.getStringExtra(StreamResolutionResult.Video.NAME_EXTRA)
-
-    private val episode: Int?
-        get() = weakContext.get()?.intent?.getIntExtra(StreamResolutionResult.Video.EPISODE_EXTRA, -1)?.let {
-            if (it <= 0) null else it
-        }
-
-    private val referer: String?
-        get() = weakContext.get()?.intent?.getStringExtra(StreamResolutionResult.Video.REFERER_EXTRA)
+    private val uri get() = weakContext.get()?.uri ?: throw IllegalStateException("uri is null")
+    private val name: String? get() = weakContext.get()?.name
+    private val episode: Int? get() = weakContext.get()?.episode
+    private val referer: String? get() = weakContext.get()?.referer
 
     private var lastPosition: Long
         get() = weakContext.get()?.intent?.getLongExtra(LAST_POSITION_EXTRA, -1) ?: -1

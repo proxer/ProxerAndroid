@@ -20,7 +20,6 @@ class StreamcloudStreamResolver : StreamResolver() {
     }
 
     override val name = "Streamcloud"
-    override val internalPlayerOnly = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
@@ -67,6 +66,6 @@ class StreamcloudStreamResolver : StreamResolver() {
                         ?.let { rawUrl -> HttpUrl.parse(rawUrl) }
                         ?: throw StreamResolutionException()
                 }
-                .map { StreamResolutionResult.Video(it, "video/mp4", url) }
+                .map { StreamResolutionResult.Video(it, "video/mp4", url, internalPlayerOnly = true) }
         }
 }

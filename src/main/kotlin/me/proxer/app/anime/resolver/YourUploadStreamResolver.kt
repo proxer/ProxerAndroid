@@ -20,7 +20,6 @@ class YourUploadStreamResolver : StreamResolver() {
     }
 
     override val name = "YourUpload"
-    override val internalPlayerOnly = true
 
     override fun resolve(id: String): Single<StreamResolutionResult> = api.anime.link(id)
         .buildSingle()
@@ -57,6 +56,6 @@ class YourUploadStreamResolver : StreamResolver() {
                         .retry(3)
                 }
                 .map { it.networkResponse()?.request()?.url() ?: throw StreamResolutionException() }
-                .map { StreamResolutionResult.Video(it, "video/mp4", url) }
+                .map { StreamResolutionResult.Video(it, "video/mp4", url, internalPlayerOnly = true) }
         }
 }

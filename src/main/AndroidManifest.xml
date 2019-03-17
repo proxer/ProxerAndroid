@@ -229,23 +229,7 @@
         <activity
             android:name=".anime.StreamActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:launchMode="singleTask">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-
-                <data android:mimeType="video/*" />
-                <data
-                    android:mimeType="application/x-mpegURL"
-                    tools:ignore="AppLinkUrlError" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask" />
 
         <activity android:name=".manga.MangaActivity">
             <intent-filter>
