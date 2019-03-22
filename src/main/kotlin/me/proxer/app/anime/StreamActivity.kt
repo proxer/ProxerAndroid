@@ -13,7 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-import android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+import android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -280,11 +280,16 @@ class StreamActivity : BaseActivity() {
     private fun toggleFullscreen(fullscreen: Boolean) {
         window.decorView.systemUiVisibility = when {
             fullscreen -> SYSTEM_UI_FLAG_LOW_PROFILE or
-                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_FULLSCREEN or
                 SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_FULLSCREEN
+                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION.let {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        it or SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    } else {
+                        it
+                    }
+                }
             else -> SYSTEM_UI_FLAG_VISIBLE
         }
     }
