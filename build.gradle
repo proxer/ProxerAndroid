@@ -114,6 +114,8 @@ android {
                 proguardFile "config/shrinker/shrinker-rules.pro"
             }
 
+            multiDexEnabled true
+
             ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
 
             buildConfigField "String", "PROXER_API_KEY", "\"${getFromSecrets("PROXER_API_KEY")}\""
@@ -132,6 +134,8 @@ android {
                 optimizeCode true
                 proguardFile "config/shrinker/shrinker-rules.pro"
             }
+
+            multiDexEnabled true
 
             ndk { abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86" }
 

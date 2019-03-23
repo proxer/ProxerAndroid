@@ -40,8 +40,8 @@ dependencies {
     implementation "com.mikepenz:iconics-views:$iconicsVersion@aar"
     implementation "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion@aar"
     implementation "com.github.mikepenz:MaterialDrawer:$materialDrawerVersion@aar"
-    implementation "com.github.rubengees:AboutLibraries:$aboutLibrariesVersion@aar"
-    implementation "com.github.rubengees:materialize:$materializeVersion@aar"
+    implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion@aar"
+    implementation "com.mikepenz:materialize:$materializeVersion@aar"
     implementation "com.mikepenz:fastadapter:$fastadapterVersion@aar"
     implementation "com.mikepenz:fastadapter-extensions-expandable:$fastadapterVersion@aar"
     implementation "com.mikepenz:crossfader:$crossfaderVersion@aar"
@@ -61,10 +61,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-cast:$exoplayerVersion"
     implementation "com.google.android.exoplayer:extension-okhttp:$exoplayerVersion"
-
-    implementation("com.google.android.exoplayer:extension-ima:$exoplayerVersion") {
-        exclude module: "play-services-ads"
-    }
+    implementation "com.google.android.exoplayer:extension-ima:$exoplayerVersion"
 
     implementation "com.github.proxer:ProxerLibJava:$proxerLibVersion"
     implementation "com.jakewharton.threetenabp:threetenabp:$threetenVersion"
