@@ -100,8 +100,4 @@ ext {
     strictModeCompatVersion = "29.0.0-beta1"
     leakCanaryVersion = "1.6.3"
     timberVersion = "4.7.1"
-
-    // Test
-    jUnitVersion = "4.12"
-    mockkVersion = "1.9.2"
 }

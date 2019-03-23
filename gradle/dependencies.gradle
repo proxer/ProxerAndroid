@@ -98,8 +98,4 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
-
-    testImplementation "junit:junit:$jUnitVersion"
-    testImplementation "io.mockk:mockk:$mockkVersion"
-    testImplementation "org.koin:koin-test:$koinVersion"
 }
