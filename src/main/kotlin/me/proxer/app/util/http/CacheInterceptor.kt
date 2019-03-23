@@ -31,11 +31,7 @@ class CacheInterceptor : Interceptor {
             CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("manga/chapter").build(), 24),
             CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/proxerstreams").build(), 1),
             CacheInfo(ProxerUrls.streamBase, 24),
-            CacheInfo(
-                ProxerUrls.apiBase.newBuilder().addPathSegments("anime/link").build(),
-                1,
-                additionalApplicableCallback = { it.urlString.contains("adFlag=1").not() }
-            ),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/link").build(), 1),
             CacheInfo(
                 ProxerUrls.apiBase.newBuilder().addPathSegments("list/entrysearch").build(),
                 1,
