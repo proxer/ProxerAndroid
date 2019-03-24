@@ -67,7 +67,7 @@ ext {
     subsamplingScaleImageViewVersion = "e9398dce15"
     subsamplingPdfDecoderVersion = "ad07ddf671"
     tabLayoutHelperVersion = "b1d93a3b83"
-    materialDialogsVersion = "2.4.0"
+    materialDialogsVersion = "2.5.0"
     flexboxVersion = "1.1.0"
     emojiIosVersion = "0.6.0"
     exoplayerVersion = "2.9.6"
@@ -79,7 +79,7 @@ ext {
     gravitySnapHelperVersion = "2.0"
 
     // Utils
-    proxerLibVersion = "5f7ca13166"
+    proxerLibVersion = "5.0.1"
     threetenVersion = "1.2.0"
     hawkVersion = "c6b8d3a82c"
     glideVersion = "4.9.0"
