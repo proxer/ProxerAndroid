@@ -58,12 +58,7 @@ class LoginHandler(
 
         Completable
             .fromAction {
-                storageHelper.lastChatMessageDate = Date(0L)
-                storageHelper.lastNotificationsDate = Date(0L)
-                storageHelper.areConferencesSynchronized = false
-                storageHelper.resetChatInterval()
-                storageHelper.resetUcpSettings()
-
+                storageHelper.resetUserData()
                 messengerDao.clear()
             }
             .subscribeOn(Schedulers.io())

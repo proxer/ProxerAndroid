@@ -131,9 +131,19 @@ class StorageHelper(
 
     fun incrementLaunches() = putOrThrow(LAUNCHES, Hawk.get(LAUNCHES, 0) + 1)
 
-    fun resetUcpSettings() {
+    fun resetUserData() {
+        lastChatMessageDate = Date(0L)
+        lastNotificationsDate = Date(0L)
+        areConferencesSynchronized = false
+
         deleteOrThrow(UCP_SETTINGS)
         deleteOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE)
+
+        resetChatInterval()
+
+        Hawk.keys()
+            .filter { it.startsWith(MESSAGE_DRAFT_PREFIX) }
+            .forEach { deleteOrThrow(it) }
     }
 
     fun resetChatInterval() = putOrThrow(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
