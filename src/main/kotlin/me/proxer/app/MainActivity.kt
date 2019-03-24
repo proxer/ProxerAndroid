@@ -23,11 +23,16 @@ import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
+import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.threeten.bp.Instant
+import org.threeten.bp.temporal.ChronoUnit
+import java.util.Date
 
 /**
  * @author Ruben Gees
@@ -54,6 +59,8 @@ class MainActivity : DrawerActivity() {
 
     val tabs: TabLayout by bindView(R.id.tabs)
 
+    private val ucpSettingsViewModel by viewModel<UcpSettingsViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -62,6 +69,17 @@ class MainActivity : DrawerActivity() {
 
         if (!isRootActivity) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        if (isRootActivity && savedInstanceState == null && storageHelper.isLoggedIn) {
+            val lastUcpSettingsUpdate = Instant.ofEpochMilli(storageHelper.lastUcpSettingsUpdateDate.time)
+            val threshold = Instant.now().minus(5, ChronoUnit.MINUTES)
+
+            if (threshold.isAfter(lastUcpSettingsUpdate)) {
+                ucpSettingsViewModel.refresh()
+
+                storageHelper.lastUcpSettingsUpdateDate = Date()
+            }
         }
 
         root.postDelayed(50) {

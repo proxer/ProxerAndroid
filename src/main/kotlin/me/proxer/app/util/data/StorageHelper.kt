@@ -27,6 +27,7 @@ class StorageHelper(
         const val CHAT_INTERVAL = "chat_interval"
         const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
         const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
+        const val LAST_UCP_SETTINGS_UPDATE_DATE = "last_ucp_settings_update_date"
         const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
         const val LAST_MANGA_PAGE_PREFIX = "last_manga_page_"
@@ -98,6 +99,12 @@ class StorageHelper(
         get() = Date(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
         set(value) {
             putOrThrow(LAST_TAG_UPDATE_DATE, value.time)
+        }
+
+    var lastUcpSettingsUpdateDate: Date
+        get() = Date(Hawk.get(LAST_UCP_SETTINGS_UPDATE_DATE, 0L))
+        set(value) {
+            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, value.time)
         }
 
     var wasCastIntroductoryOverlayShown: Boolean

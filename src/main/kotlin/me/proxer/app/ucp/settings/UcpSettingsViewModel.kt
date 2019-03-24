@@ -24,7 +24,6 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
     val data = MutableLiveData<LocalUcpSettings>()
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
     val updateError = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
-    val isLoading = MutableLiveData<Boolean?>()
 
     private val api by inject<ProxerApi>()
     private val storageHelper by inject<StorageHelper>()
@@ -53,11 +52,9 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                isLoading.value = true
                 error.value = null
                 updateError.value = null
             }
-            .doAfterTerminate { isLoading.value = false }
             .subscribeAndLogErrors({
                 data.value = it
             }, {
@@ -75,7 +72,6 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
-                isLoading.value = false
                 error.value = null
                 updateError.value = null
             }
@@ -84,7 +80,7 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
             })
     }
 
-    fun update() {
+    fun retryUpdate() {
         val safeData = data.value
 
         if (safeData != null) {
