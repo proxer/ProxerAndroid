@@ -8,7 +8,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class SteamStreamResolver : StreamResolver() {
+object SteamStreamResolver : StreamResolver() {
 
     override val name = "Steam"
 

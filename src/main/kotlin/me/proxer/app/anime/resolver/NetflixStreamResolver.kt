@@ -12,11 +12,9 @@ import org.koin.core.inject
 /**
  * @author Ruben Gees
  */
-class NetflixStreamResolver : StreamResolver() {
+object NetflixStreamResolver : StreamResolver() {
 
-    private companion object {
-        private const val NETFLIX_PACKAGE = "com.netflix.mediaclient"
-    }
+    private const val NETFLIX_PACKAGE = "com.netflix.mediaclient"
 
     override val name = "Netflix"
 

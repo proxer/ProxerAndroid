@@ -16,11 +16,9 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class DailymotionStreamResolver : StreamResolver() {
+object DailymotionStreamResolver : StreamResolver() {
 
-    private companion object {
-        private val regex = Regex("\"qualities\":(${quote("{")}.+${quote("}")}${quote("]")}${quote("}")}),")
-    }
+    private val regex = Regex("\"qualities\":(${quote("{")}.+${quote("}")}${quote("]")}${quote("}")}),")
 
     override val name = "Dailymotion"
 

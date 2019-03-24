@@ -12,13 +12,11 @@ import java.util.regex.Pattern.quote
 /**
  * @author Ruben Gees
  */
-class Mp4UploadStreamResolver : StreamResolver() {
+object Mp4UploadStreamResolver : StreamResolver() {
 
-    private companion object {
-        private val itemRegex = Regex("'(${quote("|")}.*?)'.split\\(")
-        private val urlRegex = Regex("\":\"(.*?)\"")
-        private val encodeReplaceRegex = Regex("[0-9a-z]+")
-    }
+    private val itemRegex = Regex("'(${quote("|")}.*?)'.split\\(")
+    private val urlRegex = Regex("\":\"(.*?)\"")
+    private val encodeReplaceRegex = Regex("[0-9a-z]+")
 
     override val name = "MP4Upload"
 

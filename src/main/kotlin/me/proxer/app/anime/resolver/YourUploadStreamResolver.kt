@@ -13,11 +13,9 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class YourUploadStreamResolver : StreamResolver() {
+object YourUploadStreamResolver : StreamResolver() {
 
-    private companion object {
-        private val regex = Regex("file: '(.*?)'")
-    }
+    private val regex = Regex("file: '(.*?)'")
 
     override val name = "YourUpload"
 

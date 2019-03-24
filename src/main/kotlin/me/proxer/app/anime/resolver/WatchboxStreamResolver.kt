@@ -17,12 +17,10 @@ import kotlin.text.RegexOption.DOT_MATCHES_ALL
 /**
  * @author Ruben Gees
  */
-class WatchboxStreamResolver : StreamResolver() {
+object WatchboxStreamResolver : StreamResolver() {
 
-    private companion object {
-        private const val WATCHBOX_PACKAGE = "com.rtli.clipfish"
-        private val regex = Regex("\"al:android:url\" content=\"(.*?)?\"", DOT_MATCHES_ALL)
-    }
+    private const val WATCHBOX_PACKAGE = "com.rtli.clipfish"
+    private val regex = Regex("\"al:android:url\" content=\"(.*?)?\"", DOT_MATCHES_ALL)
 
     override val name = "Watchbox"
 

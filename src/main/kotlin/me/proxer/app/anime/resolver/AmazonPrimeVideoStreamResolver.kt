@@ -8,7 +8,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class AmazonPrimeVideoStreamResolver : StreamResolver() {
+object AmazonPrimeVideoStreamResolver : StreamResolver() {
 
     override val name = "Amazon Prime Video"
 

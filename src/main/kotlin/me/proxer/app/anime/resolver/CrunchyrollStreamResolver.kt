@@ -12,12 +12,10 @@ import org.koin.core.inject
 /**
  * @author Ruben Gees
  */
-class CrunchyrollStreamResolver : StreamResolver() {
+object CrunchyrollStreamResolver : StreamResolver() {
 
-    private companion object {
-        private const val CRUNCHYROLL_PACKAGE = "com.crunchyroll.crunchyroid"
-        private val regex = Regex("media_id=(\\d*)?")
-    }
+    private const val CRUNCHYROLL_PACKAGE = "com.crunchyroll.crunchyroid"
+    private val regex = Regex("media_id=(\\d*)?")
 
     override val name = "Crunchyroll"
 

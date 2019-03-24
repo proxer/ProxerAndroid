@@ -12,12 +12,10 @@ import okhttp3.Request
 /**
  * @author Ruben Gees
  */
-class StreamcloudStreamResolver : StreamResolver() {
+object StreamcloudStreamResolver : StreamResolver() {
 
-    private companion object {
-        private val formRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")
-        private val fileRegex = Regex("file: \"(.+?)\",")
-    }
+    private val formRegex = Regex("<input.*?name=\"(.*?)\".*?value=\"(.*?)\">")
+    private val fileRegex = Regex("file: \"(.+?)\",")
 
     override val name = "Streamcloud"
 

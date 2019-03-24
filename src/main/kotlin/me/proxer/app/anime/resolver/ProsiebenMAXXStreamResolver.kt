@@ -8,7 +8,7 @@ import me.proxer.app.util.extension.buildSingle
 /**
  * @author Ruben Gees
  */
-class ProsiebenMAXXStreamResolver : StreamResolver() {
+object ProsiebenMAXXStreamResolver : StreamResolver() {
 
     override val name = "ProSieben MAXX"
 
