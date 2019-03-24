@@ -31,6 +31,7 @@ class CacheInterceptor : Interceptor {
             CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("manga/chapter").build(), 24),
             CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/proxerstreams").build(), 1),
             CacheInfo(ProxerUrls.streamBase, 24),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/linkvast").build(), 0),
             CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("anime/link").build(), 1),
             CacheInfo(
                 ProxerUrls.apiBase.newBuilder().addPathSegments("list/entrysearch").build(),
@@ -52,27 +53,32 @@ class CacheInterceptor : Interceptor {
         private val excludedFileTypes = listOf(".png", ".jpg", ".jpeg", ".gif", ".webm")
     }
 
+    @Suppress("OptionalWhenBraces")
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val applicableCacheInfo = cacheInfo.find { it.isApplicable(response) }
 
         return when {
-            applicableCacheInfo != null && shouldEnableCacheForResponse(response) -> response.setCacheControl {
-                maxAge(applicableCacheInfo.maxAge(response), applicableCacheInfo.timeUnit(response))
+            shouldDisableCache(response) || applicableCacheInfo?.maxAge(response) ?: Int.MAX_VALUE <= 0 -> {
+                response.setCacheControl {
+                    noCache()
+                    noStore()
+                }
             }
-            shouldDisableCacheForResponse(response) -> response.setCacheControl {
-                noCache()
-                noStore()
+            applicableCacheInfo != null && shouldEnableCache(response) -> response.setCacheControl {
+                maxAge(applicableCacheInfo.maxAge(response), applicableCacheInfo.timeUnit(response))
             }
             else -> response
         }
     }
 
-    private fun shouldEnableCacheForResponse(response: Response) = response.isSuccessful &&
-        response.request().method().equals("GET", true) &&
-        isSuccessfulBody(response)
+    private fun shouldEnableCache(response: Response): Boolean {
+        return response.isSuccessful &&
+            response.request().method().equals("GET", true) &&
+            isSuccessfulBody(response)
+    }
 
-    private fun shouldDisableCacheForResponse(response: Response) = response.header("Cache-Control") == null ||
+    private fun shouldDisableCache(response: Response) = response.header("Cache-Control") == null ||
         excludedFileTypes.any { response.request().url().toString().endsWith(it) }
 
     private fun isSuccessfulBody(response: Response): Boolean {
