@@ -39,6 +39,11 @@ repositories {
     }
 
     maven {
+        url  "https://dl.bintray.com/drummer-aidan/maven"
+        content { includeGroupByRegex "com\\.afollestad.*" }
+    }
+
+    maven {
         url "https://plugins.gradle.org/m2"
         mavenContent { releasesOnly() }
     }
