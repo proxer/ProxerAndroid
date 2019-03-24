@@ -32,7 +32,6 @@ import me.proxer.library.enums.Category
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.Instant
 import org.threeten.bp.temporal.ChronoUnit
-import java.util.Date
 
 /**
  * @author Ruben Gees
@@ -77,8 +76,6 @@ class MainActivity : DrawerActivity() {
 
             if (threshold.isAfter(lastUcpSettingsUpdate)) {
                 ucpSettingsViewModel.refresh()
-
-                storageHelper.lastUcpSettingsUpdateDate = Date()
             }
         }
 

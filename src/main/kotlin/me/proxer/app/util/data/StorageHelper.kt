@@ -52,6 +52,7 @@ class StorageHelper(
         get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
         set(value) {
             putOrThrow(UCP_SETTINGS, value)
+            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Date())
         }
 
     val isLoggedIn: Boolean
@@ -101,11 +102,8 @@ class StorageHelper(
             putOrThrow(LAST_TAG_UPDATE_DATE, value.time)
         }
 
-    var lastUcpSettingsUpdateDate: Date
+    val lastUcpSettingsUpdateDate: Date
         get() = Date(Hawk.get(LAST_UCP_SETTINGS_UPDATE_DATE, 0L))
-        set(value) {
-            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, value.time)
-        }
 
     var wasCastIntroductoryOverlayShown: Boolean
         get() = Hawk.get(CAST_INTRODUCTORY_OVERLAY_SHOWN, false)
@@ -133,7 +131,10 @@ class StorageHelper(
 
     fun incrementLaunches() = putOrThrow(LAUNCHES, Hawk.get(LAUNCHES, 0) + 1)
 
-    fun resetUcpSettings() = deleteOrThrow(UCP_SETTINGS)
+    fun resetUcpSettings() {
+        deleteOrThrow(UCP_SETTINGS)
+        deleteOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE)
+    }
 
     fun resetChatInterval() = putOrThrow(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
