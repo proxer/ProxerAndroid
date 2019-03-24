@@ -14,7 +14,6 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
-import java.util.Date
 
 /**
  * @author Ruben Gees
