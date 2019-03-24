@@ -52,7 +52,7 @@ class StorageHelper(
         get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
         set(value) {
             putOrThrow(UCP_SETTINGS, value)
-            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Date())
+            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Date().time)
         }
 
     val isLoggedIn: Boolean
