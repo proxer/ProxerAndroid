@@ -17,7 +17,7 @@ fun Date.convertToRelativeReadableTime(context: Context): String {
         return context.getString(R.string.time_unknown)
     }
 
-    val dateTime = convertToDateTime()
+    val dateTime = toDateTimeBP()
     val now = LocalDateTime.now()
 
     val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
@@ -50,7 +50,7 @@ fun Date.convertToRelativeReadableTime(context: Context): String {
 }
 
 fun Date.calculateAndFormatDifference(other: Date): String {
-    val duration = Duration.between(this.convertToDateTime(), other.convertToDateTime())
+    val duration = Duration.between(this.toDateTimeBP(), other.toDateTimeBP())
 
     val days = duration.toDays()
     val hours = duration.minusDays(days).toHours()
@@ -60,6 +60,8 @@ fun Date.calculateAndFormatDifference(other: Date): String {
     return "%02d:%02d:%02d:%02d".format(days, hours, minutes, seconds)
 }
 
-fun Date.convertToDateTime(): LocalDateTime = Instant.ofEpochMilli(time)
+fun Date.toDateTimeBP(): LocalDateTime = toInstantBP()
     .atZone(ZoneId.systemDefault())
     .toLocalDateTime()
+
+fun Date.toInstantBP(): Instant = Instant.ofEpochMilli(time)

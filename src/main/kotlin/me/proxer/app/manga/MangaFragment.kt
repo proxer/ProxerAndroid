@@ -44,12 +44,12 @@ import me.proxer.app.ui.view.MediaControlView.SimpleTranslatorGroup
 import me.proxer.app.ui.view.MediaControlView.Uploader
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
@@ -463,7 +463,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
 
         header.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)
         header.uploader = Uploader(data.chapter.uploaderId, data.chapter.uploaderName)
-        header.dateTime = data.chapter.date.convertToDateTime()
+        header.dateTime = data.chapter.date.toDateTimeBP()
         header.translatorGroup = translatorGroup
 
         footer.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)

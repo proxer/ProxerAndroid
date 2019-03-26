@@ -51,6 +51,15 @@
 
                 <include layout="@layout/layout_upload_info" />
 
+                <include
+                    android:id="@+id/adAlert"
+                    layout="@layout/layout_ad_alert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
                 <TextView
                     android:id="@+id/info"
                     android:layout_width="match_parent"
@@ -72,7 +81,6 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp"
                     tools:text="@string/fragment_anime_stream_play" />
-
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

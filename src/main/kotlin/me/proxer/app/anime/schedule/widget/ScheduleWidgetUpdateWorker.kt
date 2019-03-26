@@ -26,8 +26,8 @@ import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.toDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
@@ -94,7 +94,7 @@ class ScheduleWidgetUpdateWorker(
                     .also { currentCall = it }
                     .safeExecute()
                     .asSequence()
-                    .filter { it.date.convertToDateTime().dayOfMonth == LocalDate.now().dayOfMonth }
+                    .filter { it.date.toDateTimeBP().dayOfMonth == LocalDate.now().dayOfMonth }
                     .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
                     .toList()
             } else {
@@ -164,10 +164,10 @@ class ScheduleWidgetUpdateWorker(
         val position = when (calendarEntries.isEmpty()) {
             true -> 0
             false -> calendarEntries
-                .indexOfFirst { it.date.convertToDateTime().isAfter(LocalDateTime.now()) }
+                .indexOfFirst { it.date.toDateTimeBP().isAfter(LocalDateTime.now()) }
                 .let {
                     when (it < 0) {
-                        true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.convertToDateTime())) {
+                        true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.toDateTimeBP())) {
                             true -> calendarEntries.lastIndex
                             false -> 0
                         }

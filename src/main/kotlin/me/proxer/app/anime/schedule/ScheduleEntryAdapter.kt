@@ -37,9 +37,9 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.calculateAndFormatDifference
-import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.toDateTimeBP
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
 import org.threeten.bp.LocalDateTime
@@ -211,8 +211,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         }
 
         private fun bindAiringInfo(item: CalendarEntry) {
-            val itemDateTime = item.date.convertToDateTime()
-            val itemUploadDateTime = item.uploadDate.convertToDateTime()
+            val itemDateTime = item.date.toDateTimeBP()
+            val itemUploadDateTime = item.uploadDate.toDateTimeBP()
 
             val airingDateText = hourMinuteDateTimeFormatter.format(itemDateTime)
             val uploadDate = hourMinuteDateTimeFormatter.format(itemUploadDateTime)
@@ -245,7 +245,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             override fun accept(t: Long?) {
                 val now = LocalDateTime.now()
 
-                if (item.uploadDate.convertToDateTime().isBefore(now)) {
+                if (item.uploadDate.toDateTimeBP().isBefore(now)) {
                     if (item.date == item.uploadDate) {
                         val airedText = status.context.getString(R.string.fragment_schedule_aired)
 
@@ -264,7 +264,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         }
                     }
                 } else {
-                    if (item.date.convertToDateTime().isBefore(now)) {
+                    if (item.date.toDateTimeBP().isBefore(now)) {
                         status.text = status.context.getString(
                             R.string.fragment_schedule_aired_remaining_time,
                             Date().calculateAndFormatDifference(item.uploadDate)

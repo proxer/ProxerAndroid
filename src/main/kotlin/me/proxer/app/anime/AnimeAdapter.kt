@@ -21,18 +21,24 @@ import kotterknife.bindView
 import linkClicks
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.anime.resolver.ProxerStreamResolver
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ui.view.BetterLinkTextView
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toInstantBP
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
+import org.threeten.bp.Instant
+import org.threeten.bp.temporal.ChronoUnit
+import java.util.Date
 
 /**
  * @author Ruben Gees
@@ -54,6 +60,7 @@ class AnimeAdapter(
     val playClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val loginClickSubject: PublishSubject<AnimeStream> = PublishSubject.create()
     val linkClickSubject: PublishSubject<HttpUrl> = PublishSubject.create()
+    val setAdIntervalClickSubject: PublishSubject<Int> = PublishSubject.create()
 
     private var expandedItemId: String?
 
@@ -128,6 +135,10 @@ class AnimeAdapter(
         internal val translatorGroup: TextView by bindView(R.id.translatorGroup)
         internal val dateText: TextView by bindView(R.id.date)
 
+        internal val adAlert: ViewGroup by bindView(R.id.adAlert)
+        internal val dismissAdAlert: Button by bindView(R.id.dismissAdAlert)
+        internal val setAdInterval: Button by bindView(R.id.setAdInterval)
+
         internal val info: TextView by bindView(R.id.info)
         internal val play: Button by bindView(R.id.play)
 
@@ -152,9 +163,11 @@ class AnimeAdapter(
             translatorGroup.text = item.translatorGroupName
                 ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
-            dateText.text = Utils.dateFormatter.format(item.date.convertToDateTime())
+            dateText.text = Utils.dateFormatter.format(item.date.toDateTimeBP())
 
-            bindInfoAndPlay(item, isLoginRequired)
+            if (!bindAlertIfNecessary(item)) {
+                bindPlayAndInfo(item, isLoginRequired)
+            }
         }
 
         private fun initListeners(loginRequired: Boolean) {
@@ -190,16 +203,51 @@ class AnimeAdapter(
                 .autoDisposable(this)
                 .subscribe(translatorGroupClickSubject)
 
+            dismissAdAlert.clicks()
+                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .doOnNext { storageHelper.lastAdAlertDate = Date() }
+                .doAfterNext { notifyItemChanged(it) }
+                .autoDisposable(this)
+                .subscribe()
+
+            setAdInterval.clicks()
+                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .doOnNext { storageHelper.lastAdAlertDate = Date() }
+                .doAfterNext { notifyItemChanged(it) }
+                .autoDisposable(this)
+                .subscribe(setAdIntervalClickSubject)
+
             play.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .apply { if (loginRequired) subscribe(loginClickSubject) else subscribe(playClickSubject) }
         }
 
-        private fun bindInfoAndPlay(item: AnimeStream, isLoginRequired: Boolean) {
-            if (item.isSupported) {
+        private fun bindAlertIfNecessary(item: AnimeStream): Boolean {
+            val threshold by unsafeLazy {
+                storageHelper.lastAdAlertDate.toInstantBP().plus(14, ChronoUnit.DAYS)
+            }
+
+            val shouldShowAdAlert = ProxerStreamResolver.supports(item.hosterName) &&
+                threshold.isBefore(Instant.now()) &&
+                storageHelper.ucpSettings.adInterval <= 0
+
+            return if (shouldShowAdAlert) {
+                adAlert.isVisible = true
+                play.isVisible = false
+                info.isVisible = false
+
+                true
+            } else {
+                adAlert.isVisible = false
                 play.isVisible = true
 
+                false
+            }
+        }
+
+        private fun bindPlayAndInfo(item: AnimeStream, isLoginRequired: Boolean) {
+            if (item.isSupported) {
                 if (isLoginRequired) {
                     play.setText(R.string.error_action_login)
                     play.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)

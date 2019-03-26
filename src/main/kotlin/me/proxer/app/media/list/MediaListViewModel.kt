@@ -10,10 +10,10 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.TagDao
 import me.proxer.app.util.extension.buildSingle
-import me.proxer.app.util.extension.convertToDateTime
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toDateTimeBP
 import me.proxer.app.util.extension.toParcelableTag
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
@@ -148,7 +148,7 @@ class MediaListViewModel(
         )
     }
 
-    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.convertToDateTime()
+    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.toDateTimeBP()
         .isBefore(LocalDateTime.now().minusDays(15))
 
     private data class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)
