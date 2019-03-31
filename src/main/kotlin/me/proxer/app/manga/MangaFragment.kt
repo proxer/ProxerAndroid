@@ -163,18 +163,29 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                 val parentWidth = recyclerView.width
                 val normalizedParentHeight = parentHeight / 2
 
-                if (isVertical) {
-                    if (yCoordinate < parentHeight / 3) {
-                        recyclerView.smoothScrollBy(0, -normalizedParentHeight)
-                    } else {
-                        recyclerView.smoothScrollBy(0, normalizedParentHeight)
+                when (readerOrientation) {
+                    MangaReaderOrientation.LEFT_TO_RIGHT -> {
+                        // Add one to the position to account for the header.
+                        if (xCoordinate < parentWidth / 3) {
+                            recyclerView.smoothScrollToPosition(position - 1 + 1)
+                        } else {
+                            recyclerView.smoothScrollToPosition(position + 1 + 1)
+                        }
                     }
-                } else {
-                    // Add one to the position to account for the header.
-                    if (xCoordinate < parentWidth / 3) {
-                        recyclerView.smoothScrollToPosition(position - 1 + 1)
-                    } else {
-                        recyclerView.smoothScrollToPosition(position + 1 + 1)
+                    MangaReaderOrientation.RIGHT_TO_LEFT -> {
+                        // Add one to the position to account for the header.
+                        if (xCoordinate < parentWidth / 3) {
+                            recyclerView.smoothScrollToPosition(position + 1 + 1)
+                        } else {
+                            recyclerView.smoothScrollToPosition(position - 1 + 1)
+                        }
+                    }
+                    MangaReaderOrientation.VERTICAL -> {
+                        if (yCoordinate < parentHeight / 3) {
+                            recyclerView.smoothScrollBy(0, -normalizedParentHeight)
+                        } else {
+                            recyclerView.smoothScrollBy(0, normalizedParentHeight)
+                        }
                     }
                 }
             }
