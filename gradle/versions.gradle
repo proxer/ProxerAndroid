@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 6
-    appVersionPatch = 4
+    appVersionPatch = 5
 
     minSdkVersion = 16
     targetSdkVersion = 28
@@ -12,11 +12,11 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "5.3"
+    gradleVersion = "5.3.1"
 
     // Core plugins
-    androidPluginVersion = "3.5.0-alpha07"
-    kotlinVersion = "1.3.30-eap-45"
+    androidPluginVersion = "3.5.0-alpha09"
+    kotlinVersion = "1.3.30-eap-125"
     r8Version = "1.4.77"
 
     // Utility plugins
@@ -26,7 +26,7 @@ ext {
     ktlintPluginVersion = "7.2.1"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.0.0-rc-1"
+    koinVersion = "2.0.0-rc-2"
     multidexVersion = "2.0.1"
     appcompatVersion = "1.1.0-alpha03"
     browserVersion = "1.0.0"
@@ -40,7 +40,7 @@ ext {
     adsVersion = "16.0.0"
 
     // RxJava
-    rxJavaVersion = "2.2.7"
+    rxJavaVersion = "2.2.8"
     rxKotlinVersion = "2.3.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0-alpha2"
@@ -52,7 +52,7 @@ ext {
     recyclerviewVersion = "1.1.0-alpha03"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
-    materialComponentsVersion = "1.1.0-alpha04"
+    materialComponentsVersion = "1.1.0-alpha05"
     constraintLayoutVersion = "2.0.0-alpha2"
     preferenceVersion = "1.1.0-alpha04"
     supportPreferenceVersion = "2.3.2"

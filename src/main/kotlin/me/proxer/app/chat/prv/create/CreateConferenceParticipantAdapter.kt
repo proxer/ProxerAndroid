@@ -61,7 +61,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
     override fun saveInstanceState(outState: Bundle) = outState.putParcelableArrayList(LIST_STATE, ArrayList(data))
 
     fun add(participant: Participant) {
-        data += participant
+        data = data + participant
 
         notifyItemInserted(itemCount - 1)
     }
@@ -83,7 +83,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
                 .mapAdapterPosition({ adapterPosition }) { data[it] to it }
                 .autoDisposable(this)
                 .subscribe { (removedParticipant, position) ->
-                    data -= removedParticipant
+                    data = data - removedParticipant
 
                     notifyItemRemoved(position)
 
