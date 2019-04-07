@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -25,7 +26,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-abstract class BaseContentFragment<T> : BaseFragment() {
+abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFragment(contentLayoutId) {
 
     private companion object {
         private const val IS_SOLVING_CAPTCHA_ARGUMENT = "is_solving_captcha"

@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import androidx.annotation.ContentView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -53,8 +52,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_media_list)
-class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware {
+class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment_media_list), BackPressAware {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"
@@ -245,7 +243,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(), BackPressAware
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_media_list, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_media_list, menu, true)
 
         when (sortCriteria) {
             MediaSearchSortCriteria.RATING -> menu.findItem(R.id.rating).isChecked = true

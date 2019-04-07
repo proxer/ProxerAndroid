@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.lifecycle.Observer
@@ -54,8 +53,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_create_conference)
-class CreateConferenceFragment : BaseFragment() {
+class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conference) {
 
     companion object {
         fun newInstance() = CreateConferenceFragment().apply {

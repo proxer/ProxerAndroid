@@ -3,7 +3,6 @@ package me.proxer.app.media.discussion
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +24,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_discussion)
-class DiscussionFragment : BaseContentFragment<List<ForumDiscussion>>() {
+class DiscussionFragment : BaseContentFragment<List<ForumDiscussion>>(R.layout.fragment_discussion) {
 
     companion object {
         fun newInstance() = DiscussionFragment().apply {

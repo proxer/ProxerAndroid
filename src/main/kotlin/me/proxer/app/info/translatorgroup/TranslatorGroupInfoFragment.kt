@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -33,8 +32,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_translator_group)
-class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>() {
+class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>(R.layout.fragment_translator_group) {
 
     companion object {
         fun newInstance() = TranslatorGroupInfoFragment().apply {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
@@ -45,8 +44,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_anime)
-class AnimeFragment : BaseContentFragment<AnimeStreamInfo>() {
+class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_anime) {
 
     companion object {
         fun newInstance() = AnimeFragment().apply {

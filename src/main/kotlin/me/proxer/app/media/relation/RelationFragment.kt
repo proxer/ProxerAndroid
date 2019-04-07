@@ -3,7 +3,6 @@ package me.proxer.app.media.relation
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -26,8 +25,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_relation)
-class RelationFragment : BaseContentFragment<List<Relation>>() {
+class RelationFragment : BaseContentFragment<List<Relation>>(R.layout.fragment_relation) {
 
     companion object {
         fun newInstance() = RelationFragment().apply {

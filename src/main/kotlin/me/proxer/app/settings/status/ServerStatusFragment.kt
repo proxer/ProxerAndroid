@@ -3,7 +3,6 @@ package me.proxer.app.settings.status
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_server_status)
-class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>() {
+class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>(R.layout.fragment_server_status) {
 
     companion object {
         fun newInstance() = ServerStatusFragment().apply {

@@ -76,7 +76,7 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_user_comments, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_user_comments, menu, true)
 
         when (category) {
             Category.ANIME -> menu.findItem(R.id.anime).isChecked = true

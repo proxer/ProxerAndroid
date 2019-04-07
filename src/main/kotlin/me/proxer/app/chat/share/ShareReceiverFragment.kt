@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -40,8 +39,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_conferences)
-class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>() {
+class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.layout.fragment_conferences) {
 
     companion object {
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
@@ -116,7 +114,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_share_receiver, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_share_receiver, menu, true)
 
         menu.findItem(R.id.search).let { searchItem ->
             val searchView = searchItem.actionView as SearchView

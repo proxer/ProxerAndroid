@@ -1,6 +1,7 @@
 package me.proxer.app.base
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.rubengees.rxbus.RxBus
@@ -18,7 +19,7 @@ import kotlin.properties.Delegates
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-abstract class BaseFragment : Fragment(), CustomTabsAware {
+abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId), CustomTabsAware {
 
     protected val bus by inject<RxBus>()
     protected val storageHelper by inject<StorageHelper>()

@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -50,8 +49,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_media_info)
-class MediaInfoFragment : BaseContentFragment<Entry>() {
+class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_info) {
 
     companion object {
         private const val SHOW_UNRATED_TAGS_ARGUMENT = "show_unrated_tags"

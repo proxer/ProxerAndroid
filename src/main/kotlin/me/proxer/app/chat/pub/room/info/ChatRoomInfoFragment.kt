@@ -2,7 +2,6 @@ package me.proxer.app.chat.pub.room.info
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +20,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_chat_room_info)
-class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>() {
+class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>(R.layout.fragment_chat_room_info) {
 
     companion object {
         fun newInstance() = ChatRoomInfoFragment().apply {

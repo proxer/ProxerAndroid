@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -34,8 +33,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_industry)
-class IndustryInfoFragment : BaseContentFragment<Industry>() {
+class IndustryInfoFragment : BaseContentFragment<Industry>(R.layout.fragment_industry) {
 
     companion object {
         fun newInstance() = IndustryInfoFragment().apply {

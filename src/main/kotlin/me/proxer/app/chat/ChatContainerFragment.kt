@@ -2,7 +2,6 @@ package me.proxer.app.chat
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -22,8 +21,7 @@ import me.proxer.app.util.extension.unsafeLazy
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_chat_container)
-class ChatContainerFragment : BaseFragment() {
+class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
 
     companion object {
         private const val SHOW_MESSENGER_ARGUMENT = "show_messenger"

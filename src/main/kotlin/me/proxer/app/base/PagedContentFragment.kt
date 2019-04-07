@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.ContentView
+import androidx.annotation.LayoutRes
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -29,8 +29,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_paged)
-abstract class PagedContentFragment<T> : BaseContentFragment<List<T>>() {
+abstract class PagedContentFragment<T>(
+    @LayoutRes contentLayoutId: Int = R.layout.fragment_paged
+) : BaseContentFragment<List<T>>(contentLayoutId) {
 
     abstract override val viewModel: PagedViewModel<T>
 

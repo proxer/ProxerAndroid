@@ -3,7 +3,6 @@ package me.proxer.app.chat.pub.room
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +20,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_chat_room)
-class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>() {
+class ChatRoomFragment : BaseContentFragment<List<ChatRoom>>(R.layout.fragment_chat_room) {
 
     companion object {
         fun newInstance() = ChatRoomFragment().apply {

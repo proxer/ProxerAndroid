@@ -14,7 +14,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TableLayout
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
@@ -46,8 +45,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_about)
-class ProfileAboutFragment : BaseContentFragment<UserAbout>() {
+class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_about) {
 
     companion object {
         private const val ZERO_DATE = "0000-00-00"

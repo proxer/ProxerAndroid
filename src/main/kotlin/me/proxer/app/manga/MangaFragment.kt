@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import androidx.annotation.ContentView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
@@ -60,8 +59,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_manga)
-class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
+class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_manga) {
 
     companion object {
         private const val LAST_POSITION_STATE = "fragment_manga_last_position"
@@ -163,29 +161,19 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
                 val parentWidth = recyclerView.width
                 val normalizedParentHeight = parentHeight / 2
 
+                // Add one to the position to account for the header.
                 when (readerOrientation) {
-                    MangaReaderOrientation.LEFT_TO_RIGHT -> {
-                        // Add one to the position to account for the header.
-                        if (xCoordinate < parentWidth / 3) {
-                            recyclerView.smoothScrollToPosition(position - 1 + 1)
-                        } else {
-                            recyclerView.smoothScrollToPosition(position + 1 + 1)
-                        }
+                    MangaReaderOrientation.LEFT_TO_RIGHT -> when {
+                        xCoordinate < parentWidth / 3 -> recyclerView.smoothScrollToPosition(position - 1 + 1)
+                        else -> recyclerView.smoothScrollToPosition(position + 1 + 1)
                     }
-                    MangaReaderOrientation.RIGHT_TO_LEFT -> {
-                        // Add one to the position to account for the header.
-                        if (xCoordinate < parentWidth / 3) {
-                            recyclerView.smoothScrollToPosition(position + 1 + 1)
-                        } else {
-                            recyclerView.smoothScrollToPosition(position - 1 + 1)
-                        }
+                    MangaReaderOrientation.RIGHT_TO_LEFT -> when {
+                        xCoordinate < parentWidth / 3 -> recyclerView.smoothScrollToPosition(position + 1 + 1)
+                        else -> recyclerView.smoothScrollToPosition(position - 1 + 1)
                     }
-                    MangaReaderOrientation.VERTICAL -> {
-                        if (yCoordinate < parentHeight / 3) {
-                            recyclerView.smoothScrollBy(0, -normalizedParentHeight)
-                        } else {
-                            recyclerView.smoothScrollBy(0, normalizedParentHeight)
-                        }
+                    MangaReaderOrientation.VERTICAL -> when {
+                        yCoordinate < parentHeight / 3 -> recyclerView.smoothScrollBy(0, -normalizedParentHeight)
+                        else -> recyclerView.smoothScrollBy(0, normalizedParentHeight)
                     }
                 }
             }
@@ -261,7 +249,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_manga, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_manga, menu, true)
 
         toolbar.doOnLayout {
             toolbar.findViewById<View>(R.id.toggle_orientation).rotation = when (readerOrientation) {

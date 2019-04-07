@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.annotation.ContentView
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -55,8 +54,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_chat)
-class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
+class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_chat) {
 
     companion object {
         fun newInstance() = ChatFragment().apply {
@@ -98,7 +96,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>() {
         }
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            IconicsMenuInflaterUtil.inflate(mode.menuInflater, context, R.menu.fragment_chat_cab, menu, true)
+            IconicsMenuInflaterUtil.inflate(mode.menuInflater, requireContext(), R.menu.fragment_chat_cab, menu, true)
 
             return true
         }

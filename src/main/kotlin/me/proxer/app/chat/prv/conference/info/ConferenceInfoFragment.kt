@@ -3,7 +3,6 @@ package me.proxer.app.chat.prv.conference.info
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +23,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_conference_info)
-class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>() {
+class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>(R.layout.fragment_conference_info) {
 
     companion object {
         fun newInstance() = ConferenceInfoFragment().apply {

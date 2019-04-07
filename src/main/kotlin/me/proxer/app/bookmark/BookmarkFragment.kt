@@ -142,7 +142,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_bookmarks, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_bookmarks, menu, true)
 
         when (category) {
             Category.ANIME -> menu.findItem(R.id.anime).isChecked = true

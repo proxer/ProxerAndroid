@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import com.gojuno.koptional.Optional
@@ -27,8 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_ucp_overview)
-class UcpOverviewFragment : BaseContentFragment<Optional<Int>>() {
+class UcpOverviewFragment : BaseContentFragment<Optional<Int>>(R.layout.fragment_ucp_overview) {
 
     companion object {
         private const val DATE_FORMAT = "%.1f"

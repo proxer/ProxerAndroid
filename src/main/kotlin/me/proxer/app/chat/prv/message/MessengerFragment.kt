@@ -10,7 +10,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
-import androidx.annotation.ContentView
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -53,8 +52,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_messenger)
-class MessengerFragment : PagedContentFragment<LocalMessage>() {
+class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_messenger) {
 
     companion object {
         fun newInstance() = MessengerFragment().apply {
@@ -92,7 +90,9 @@ class MessengerFragment : PagedContentFragment<LocalMessage>() {
         }
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-            IconicsMenuInflaterUtil.inflate(mode.menuInflater, context, R.menu.fragment_messenger_cab, menu, true)
+            IconicsMenuInflaterUtil.inflate(
+                mode.menuInflater, requireContext(), R.menu.fragment_messenger_cab, menu, true
+            )
 
             return true
         }

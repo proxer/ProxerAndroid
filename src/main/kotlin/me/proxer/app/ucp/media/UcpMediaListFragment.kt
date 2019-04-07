@@ -110,7 +110,7 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
             Category.MANGA -> R.menu.fragment_user_media_list_manga
         }
 
-        IconicsMenuInflaterUtil.inflate(inflater, context, menuToInflate, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), menuToInflate, menu, true)
 
         when (filter) {
             UserMediaListFilterType.WATCHING -> menu.findItem(R.id.watching).isChecked = true

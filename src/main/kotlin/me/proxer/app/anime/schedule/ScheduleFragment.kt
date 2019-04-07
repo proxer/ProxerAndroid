@@ -3,7 +3,6 @@ package me.proxer.app.anime.schedule
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +22,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_schedule)
-class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry>>>() {
+class ScheduleFragment : BaseContentFragment<Map<CalendarDay, List<CalendarEntry>>>(R.layout.fragment_schedule) {
 
     companion object {
         fun newInstance() = ScheduleFragment().apply {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import com.gojuno.koptional.rxjava2.filterSome
@@ -28,8 +27,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_profile)
-class ProfileInfoFragment : BaseContentFragment<UserInfo>() {
+class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_profile) {
 
     companion object {
         private const val RANK_FORUM_ID = "207664"

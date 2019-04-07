@@ -3,7 +3,6 @@ package me.proxer.app.ucp.topten
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -30,8 +29,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_top_ten)
-class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>() {
+class UcpTopTenFragment : BaseContentFragment<ZippedTopTenResult>(R.layout.fragment_top_ten) {
 
     companion object {
         fun newInstance() = UcpTopTenFragment().apply {

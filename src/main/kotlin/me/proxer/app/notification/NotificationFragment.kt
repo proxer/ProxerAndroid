@@ -71,7 +71,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, context, R.menu.fragment_notifications, menu, true)
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_notifications, menu, true)
 
         super.onCreateOptionsMenu(menu, inflater)
     }

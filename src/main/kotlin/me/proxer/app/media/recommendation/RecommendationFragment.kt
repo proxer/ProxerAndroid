@@ -3,7 +3,6 @@ package me.proxer.app.media.recommendation
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ContentView
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -26,8 +25,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-@ContentView(R.layout.fragment_recommendation)
-class RecommendationFragment : BaseContentFragment<List<Recommendation>>() {
+class RecommendationFragment : BaseContentFragment<List<Recommendation>>(R.layout.fragment_recommendation) {
 
     companion object {
         fun newInstance() = RecommendationFragment().apply {
