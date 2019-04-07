@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <color name="primary">#8A0E0E</color>
     <color name="primary_light">#C14535</color>
@@ -30,10 +30,4 @@
     <color name="text_protection_scrim_top">#60000000</color>
     <color name="text_protection_scrim_bottom">#70000000</color>
     <color name="text_protection_scrim_center">#30000000</color>
-
-    <!-- For backwards compatibility to some libraries. -->
-    <color name="colorPrimary" tools:ignore="UnusedResources">@color/primary</color>
-    <color name="colorPrimaryLight" tools:ignore="UnusedResources">@color/primary_light</color>
-    <color name="colorPrimaryDark" tools:ignore="UnusedResources">@color/primary_dark</color>
-    <color name="colorAccent" tools:ignore="UnusedResources">@color/secondary</color>
 </resources>
