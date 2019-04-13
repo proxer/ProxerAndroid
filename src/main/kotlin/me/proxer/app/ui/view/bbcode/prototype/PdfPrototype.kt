@@ -20,7 +20,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable

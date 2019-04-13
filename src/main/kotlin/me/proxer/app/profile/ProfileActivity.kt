@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import com.gojuno.koptional.toOptional
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import io.reactivex.Completable

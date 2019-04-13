@@ -7,7 +7,7 @@ import android.content.res.Resources
 import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post

@@ -21,7 +21,7 @@ import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.uber.autodispose.autoDisposable
 import events
 import io.reactivex.Observable

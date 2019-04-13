@@ -691,11 +691,6 @@
     <string name="about_licenses_title">Lizenzen</string>
     <string name="about_licenses_description">Lizenzen von Bibliotheken, die in dieser App verwendet werden</string>
     <string name="about_licenses_activity_title">Lizenzen</string>
-    <string name="about_licenses_activity_description" tools:ignore="TypographyQuotes">
-        <![CDATA[In dieser App werden Icons von <a href="http://www.freepik.com/">Freepik</a>,
-        <a href="https://material.io/icons/">Google</a> und <a href="https://materialdesignicons.com/">weiteren
-        Mitwirkenden</a> (Unter \"View the Contributors\") verwendet.<br><br>Außerdem werden die folgenden Open
-        Source Bibliotheken eingesetzt.]]></string>
     <string name="about_source_code">Quellcode</string>
     <string name="about_source_code_description">Sieh dir den Quellcode auf GitHub an</string>
     <string name="about_server_status">Serverstatus</string>

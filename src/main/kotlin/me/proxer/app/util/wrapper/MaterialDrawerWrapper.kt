@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -144,6 +144,7 @@ class MaterialDrawerWrapper(
         .withActivity(context)
         .withCompactStyle(true)
         .withHeaderBackground(ColorDrawable(context.resolveColor(R.attr.colorPrimary)))
+        .withTextColor(context.resolveColor(R.attr.colorOnPrimary))
         .withSavedInstance(savedInstanceState)
         .withProfiles(generateAccountItems(context))
         .withOnAccountHeaderListener(object : AccountHeader.OnAccountHeaderListener {

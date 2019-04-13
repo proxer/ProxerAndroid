@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import me.proxer.app.GlideApp

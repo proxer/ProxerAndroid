@@ -16,7 +16,7 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
@@ -133,11 +133,11 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .subText(R.string.about_licenses_description)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
             .setOnClickAction {
-                LibsBuilder().withAutoDetect(false)
+                LibsBuilder()
+                    .withAutoDetect(false)
                     .withShowLoadingProgress(false)
                     .withAboutVersionShown(false)
                     .withAboutIconShown(false)
-                    .withAboutDescription(getString(R.string.about_licenses_activity_description))
                     .withLibraries(*libraries)
                     .withExcludedLibraries(*excludedLibraries)
                     .withFields(R.string::class.java.fields)

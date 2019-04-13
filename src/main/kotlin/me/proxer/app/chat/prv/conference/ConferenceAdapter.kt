@@ -16,7 +16,7 @@ import com.google.android.material.chip.Chip
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.communitymaterial.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.mikepenz.iconics.utils.toIconicsSizePx
 import com.uber.autodispose.autoDisposable
