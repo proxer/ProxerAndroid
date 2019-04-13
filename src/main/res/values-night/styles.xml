@@ -2,10 +2,6 @@
 <resources>
 
     <style name="Base.Theme.App.DayNight" parent="Base.Theme.App">
-        <item name="colorPrimary">@color/primary_night</item>
-        <item name="colorPrimaryDark">@color/primary_dark_night</item>
-        <item name="colorPrimaryLight">@color/primary_light_night</item>
-
         <item name="colorSecondary">@color/secondary_night</item>
         <item name="colorSecondaryDark">@color/secondary_dark_night</item>
         <item name="colorSecondaryLight">@color/secondary_light_night</item>
