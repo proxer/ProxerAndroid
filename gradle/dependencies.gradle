@@ -6,7 +6,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-ads-identifier:$adsVersion"
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$interactiveMediaVersion"
 
-    implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.browser:browser:$browserVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"

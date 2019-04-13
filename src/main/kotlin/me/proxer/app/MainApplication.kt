@@ -1,11 +1,11 @@
 package me.proxer.app
 
+import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Environment
 import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.multidex.MultiDexApplication
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesUtil
@@ -34,7 +34,7 @@ import timber.log.Timber
 /**
  * @author Ruben Gees
  */
-class MainApplication : MultiDexApplication() {
+class MainApplication : Application() {
 
     companion object {
         const val USER_AGENT = "ProxerAndroid/${BuildConfig.VERSION_NAME}"
