@@ -204,9 +204,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 else -> {
                     val key = data[position].decodedName
-                    val currentFallbackStage = fallbackMap[key] ?: FallbackStage.NORMAL
 
-                    when (currentFallbackStage) {
+                    when (fallbackMap[key] ?: FallbackStage.NORMAL) {
                         FallbackStage.NORMAL -> {
                             fallbackMap[key] = FallbackStage.RAPID
 

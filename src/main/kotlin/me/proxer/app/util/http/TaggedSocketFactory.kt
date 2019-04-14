@@ -10,7 +10,7 @@ import javax.net.SocketFactory
  */
 class TaggedSocketFactory : SocketFactory() {
 
-    private val delegate = SocketFactory.getDefault()
+    private val delegate = getDefault()
 
     override fun createSocket(): Socket {
         return delegate.createSocket()

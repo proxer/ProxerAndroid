@@ -18,9 +18,8 @@ object TwitterPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val id = text.trim()
-        val url = HttpUrl.parse("https://twitter.com/i/web/status/$id")
 
-        return when (url) {
+        return when (val url = HttpUrl.parse("https://twitter.com/i/web/status/$id")) {
             null -> text
             else -> text.toSpannableStringBuilder()
                 .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_twitter_link))

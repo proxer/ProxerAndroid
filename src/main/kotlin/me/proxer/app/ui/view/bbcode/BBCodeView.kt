@@ -45,7 +45,7 @@ class BBCodeView @JvmOverloads constructor(
     var textColor: Int? = null
 
     @Px
-    var textSize: Float? = null
+    var textSize: Int? = null
 
     @StyleRes
     var textAppearance: Int? = null
@@ -76,7 +76,7 @@ class BBCodeView @JvmOverloads constructor(
         if (attrs != null) {
             context.withStyledAttributes(attrs, R.styleable.BBCodeView) {
                 textSize = getDimension(R.styleable.BBCodeView_textSize, Float.MIN_VALUE)
-                    .let { if (it == Float.MIN_VALUE) null else it }
+                    .let { if (it == Float.MIN_VALUE) null else it.toInt() }
 
                 textAppearance = getResourceId(R.styleable.BBCodeView_textAppearance, Int.MIN_VALUE)
                     .let { if (it == Int.MIN_VALUE) null else it }

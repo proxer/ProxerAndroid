@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -271,10 +270,8 @@ class StreamActivity : BaseActivity() {
                 }
             }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
-        }
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 
         toggleFullscreen(true)
     }
@@ -285,13 +282,8 @@ class StreamActivity : BaseActivity() {
                 SYSTEM_UI_FLAG_FULLSCREEN or
                 SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION.let {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        it or SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    } else {
-                        it
-                    }
-                }
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_IMMERSIVE_STICKY
             else -> SYSTEM_UI_FLAG_VISIBLE
         }
     }

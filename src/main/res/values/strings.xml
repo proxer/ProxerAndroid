@@ -543,10 +543,6 @@
     <string name="view_bbcode_login">Vor Gästen versteckter Inhalt</string>
     <string name="view_bbcode_hide_age_restricted">Für diesen Inhalt musst du dein Alter bestätigen</string>
     <string name="view_bbcode_age_restricted">Altersbeschränkter Inhalt</string>
-    <string name="view_bbcode_pdf_link">PDF ansehen</string>
-    <string name="view_bbcode_pdf_no_activity_error">Ein Webbrowser wie Google Chrome wird benötigt um PDFs
-        anzuzeigen
-    </string>
     <string name="view_bbcode_map_link">Zur Karte</string>
     <string name="view_bbcode_map_no_activity_error">Ein Kartendienst wie Google Maps wird benötigt um Karten
         anzuzeigen

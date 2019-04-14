@@ -154,9 +154,7 @@ object ErrorUtils : KoinComponent {
     private val storageHelper by inject<StorageHelper>()
 
     fun getMessage(error: Throwable): Int {
-        val innermostError = getInnermostError(error)
-
-        return when (innermostError) {
+        return when (val innermostError = getInnermostError(error)) {
             is ProxerException -> getMessageForProxerException(innermostError)
             is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
                 404 -> R.string.error_video_deleted
@@ -179,7 +177,7 @@ object ErrorUtils : KoinComponent {
         it is ProxerException && it.serverErrorType == IP_BLOCKED
     }
 
-    fun isNetworkError(error: Throwable) = ErrorUtils.getInnermostError(error).let {
+    fun isNetworkError(error: Throwable) = getInnermostError(error).let {
         it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
     }
 

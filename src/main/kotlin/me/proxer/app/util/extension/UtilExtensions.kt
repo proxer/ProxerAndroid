@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
-import me.proxer.app.BuildConfig
 import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequest
 import me.proxer.app.GlideRequests
@@ -96,13 +94,7 @@ inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>)
 }
 
 inline fun Intent.addReferer(): Intent {
-    val referrerExtraName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        Intent.EXTRA_REFERRER
-    } else {
-        "android.intent.extra.REFERRER"
-    }
-
-    putExtra(referrerExtraName, Uri.parse("android-app://" + BuildConfig.APPLICATION_ID))
+    putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://$APPLICATION_ID"))
 
     return this
 }

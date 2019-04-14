@@ -1,18 +1,11 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.os.Build
-import android.text.SpannableStringBuilder
-import android.text.style.ClickableSpan
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
-import androidx.core.text.set
 import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.request.transition.Transition
@@ -33,12 +26,9 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
-import me.proxer.app.ui.view.bbcode.applyToViews
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.toast
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import okhttp3.HttpUrl
@@ -47,7 +37,7 @@ import java.io.File
 /**
  * @author Ruben Gees
  */
-object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
+object PdfPrototype : AutoClosingPrototype {
 
     private const val WIDTH_ARGUMENT = "width"
 
@@ -67,9 +57,6 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
         return when {
             childViews.isEmpty() -> childViews
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP -> applyToViews<TextView>(childViews) {
-                it.text = mutate(it.text.toSpannableStringBuilder(), args)
-            }
             else -> listOf(SubsamplingScaleImageView(parent.context).also { view: SubsamplingScaleImageView ->
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
                 val parsedUrl = Utils.parseAndFixUrl(url)
@@ -103,20 +90,6 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
                 }
             })
         }
-    }
-
-    override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
-        val uri = Uri.parse(text.toString())
-
-        return text.toSpannableStringBuilder().apply {
-            replace(0, length, args.safeResources.getString(R.string.view_bbcode_pdf_link))
-
-            this[0..length] = UriClickableSpan(uri)
-        }
-    }
-
-    override fun canOptimize(recursiveChildren: List<BBTree>): Boolean {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && super.canOptimize(recursiveChildren)
     }
 
     private fun loadImage(glide: GlideRequests, view: SubsamplingScaleImageView, url: HttpUrl?) = glide
@@ -182,17 +155,6 @@ object PdfPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             regionDecoder = null
 
             view = null
-        }
-    }
-
-    private class UriClickableSpan(private val uri: Uri) : ClickableSpan() {
-
-        override fun onClick(widget: View) {
-            try {
-                widget.context.startActivity(Intent(Intent.ACTION_VIEW, uri))
-            } catch (error: ActivityNotFoundException) {
-                widget.context.toast(widget.context.getString(R.string.view_bbcode_pdf_no_activity_error))
-            }
         }
     }
 }

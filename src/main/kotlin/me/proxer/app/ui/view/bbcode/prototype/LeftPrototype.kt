@@ -30,13 +30,9 @@ object LeftPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = START
-                else -> {
-                    val layoutParams = view.layoutParams
-
-                    when (layoutParams) {
-                        is LinearLayout.LayoutParams -> layoutParams.gravity = START
-                        else -> view.layoutParams = LinearLayout.LayoutParams(layoutParams).apply { gravity = START }
-                    }
+                else -> when (val layoutParams = view.layoutParams) {
+                    is LinearLayout.LayoutParams -> layoutParams.gravity = START
+                    else -> view.layoutParams = LinearLayout.LayoutParams(layoutParams).apply { gravity = START }
                 }
             }
         }

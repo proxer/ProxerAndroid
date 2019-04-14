@@ -74,9 +74,13 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Theme.App" parent="Base.Theme.App.DayNight" />
+    <style name="Theme.App" parent="Base.Theme.App.DayNight">
+        <item name="android:navigationBarColor">@color/primary</item>
+    </style>
 
-    <style name="Theme.App.Transparent" parent="Base.Theme.App.DayNight" />
+    <style name="Theme.App.Transparent" parent="Theme.App">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
     <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
 

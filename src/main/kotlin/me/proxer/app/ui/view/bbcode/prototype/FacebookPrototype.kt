@@ -18,9 +18,8 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val url = text.trim().toString()
-        val parsedUrl = Utils.parseAndFixUrl(url)
 
-        return when (parsedUrl) {
+        return when (val parsedUrl = Utils.parseAndFixUrl(url)) {
             null -> text
             else -> text.toSpannableStringBuilder()
                 .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_facebook_link))

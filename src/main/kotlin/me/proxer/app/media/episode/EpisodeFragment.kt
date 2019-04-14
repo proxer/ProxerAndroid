@@ -106,9 +106,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
-                val currentPosition = layoutManager.findLastVisibleItemPosition()
-
-                when (currentPosition) {
+                when (layoutManager.findLastVisibleItemPosition()) {
                     adapter.itemCount - 1 -> scrollToBottom.hide()
                     else -> scrollToBottom.show()
                 }

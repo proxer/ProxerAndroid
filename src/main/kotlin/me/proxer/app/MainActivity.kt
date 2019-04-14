@@ -214,7 +214,7 @@ class MainActivity : DrawerActivity() {
     }
 
     private fun getItemToLoad(): DrawerItem {
-        val actionDrawerItem = when (intent.action == Intent.ACTION_VIEW) {
+        return when (val actionDrawerItem = when (intent.action == Intent.ACTION_VIEW) {
             true -> when (intent.data?.pathSegments?.firstOrNull()) {
                 "news" -> DrawerItem.NEWS
                 "chat" -> DrawerItem.CHAT
@@ -226,9 +226,7 @@ class MainActivity : DrawerActivity() {
                 else -> null
             }
             false -> null
-        }
-
-        return when (actionDrawerItem) {
+        }) {
             null -> {
                 val sectionExtra = intent.getSerializableExtra(SECTION_EXTRA) as? DrawerItem
 

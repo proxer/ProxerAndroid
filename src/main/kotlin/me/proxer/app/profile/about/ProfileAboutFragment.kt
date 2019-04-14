@@ -78,6 +78,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
 
         about.setBackgroundColor(Color.TRANSPARENT)
         about.setInitialScale(1)
+        about.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
         about.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         about.settings.userAgentString = USER_AGENT
         about.settings.loadWithOverviewMode = true
@@ -86,10 +87,6 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
         about.settings.defaultFontSize = 22
         about.isHorizontalScrollBarEnabled = false
         about.isVerticalScrollBarEnabled = false
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            about.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
-        }
 
         about.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {

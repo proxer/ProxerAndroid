@@ -62,7 +62,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.http.CacheInterceptor
 import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
-import me.proxer.app.util.http.ModernTlsSocketFactory
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.UserAgentInterceptor
 import me.proxer.library.LoginTokenManager
@@ -143,7 +142,6 @@ private val applicationModules = module(createdAtStart = true) {
         OkHttpClient.Builder()
             .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
-            .sslSocketFactory(ModernTlsSocketFactory(get()), get())
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)

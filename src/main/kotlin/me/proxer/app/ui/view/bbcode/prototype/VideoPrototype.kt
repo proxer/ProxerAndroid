@@ -34,14 +34,12 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 
-        val url = Utils.parseAndFixUrl(
+        return when (val url = Utils.parseAndFixUrl(
             when {
                 type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
                 else -> urlOrId.toString()
             }
-        )
-
-        return when (url) {
+        )) {
             null -> text
             else -> text.toSpannableStringBuilder()
                 .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_video_link))

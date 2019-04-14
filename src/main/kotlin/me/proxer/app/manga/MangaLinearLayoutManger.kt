@@ -13,7 +13,7 @@ class MangaLinearLayoutManger(
     readerOrientation: MangaReaderOrientation
 ) : LinearLayoutManager(
     context,
-    if (readerOrientation == MangaReaderOrientation.VERTICAL) LinearLayoutManager.VERTICAL else HORIZONTAL,
+    if (readerOrientation == MangaReaderOrientation.VERTICAL) VERTICAL else HORIZONTAL,
     readerOrientation == MangaReaderOrientation.RIGHT_TO_LEFT
 ) {
 

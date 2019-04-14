@@ -30,13 +30,9 @@ object CenterPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
                 is LinearLayout -> view.gravity = CENTER
-                else -> {
-                    val layoutParams = view.layoutParams
-
-                    when (layoutParams) {
-                        is LinearLayout.LayoutParams -> layoutParams.gravity = CENTER
-                        else -> view.layoutParams = LinearLayout.LayoutParams(layoutParams).apply { gravity = CENTER }
-                    }
+                else -> when (val layoutParams = view.layoutParams) {
+                    is LinearLayout.LayoutParams -> layoutParams.gravity = CENTER
+                    else -> view.layoutParams = LinearLayout.LayoutParams(layoutParams).apply { gravity = CENTER }
                 }
             }
         }

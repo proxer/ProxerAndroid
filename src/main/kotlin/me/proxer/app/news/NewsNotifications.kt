@@ -27,9 +27,7 @@ object NewsNotifications : KoinComponent {
     private val storageHelper by inject<StorageHelper>()
 
     fun showOrUpdate(context: Context, news: Collection<NewsArticle>) {
-        val notification = buildNewsNotification(context, news)
-
-        when (notification) {
+        when (val notification = buildNewsNotification(context, news)) {
             null -> NotificationManagerCompat.from(context).cancel(ID)
             else -> NotificationManagerCompat.from(context).notify(ID, notification)
         }

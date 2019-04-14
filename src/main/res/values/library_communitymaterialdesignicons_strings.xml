@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
-    <string name="define_communitymaterialdesignicons" />
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="define_communitymaterialdesignicons" tools:keep="@string/define_communitymaterialdesignicons" />
     <!-- Author section -->
-    <string name="library_communitymaterialdesignicons_author">Various Contributors</string>
-    <string name="library_communitymaterialdesignicons_authorWebsite">https://materialdesignicons.com/</string>
+    <string name="library_communitymaterialdesignicons_author" tools:keep="@string/library_communitymaterialdesignicons_author">Various Contributors</string>
+    <string name="library_communitymaterialdesignicons_authorWebsite" tools:keep="@string/library_communitymaterialdesignicons_authorWebsite">https://materialdesignicons.com/</string>
     <!-- Library section -->
-    <string name="library_communitymaterialdesignicons_libraryName">Community Material Design Icons</string>
-    <string name="library_communitymaterialdesignicons_libraryDescription">Material Design Icons\' growing icon collection allows designers and developers targeting various platforms to download icons in the format, color and size they need for any project.</string>
-    <string name="library_communitymaterialdesignicons_libraryWebsite">https://materialdesignicons.com/</string>
-    <string name="library_communitymaterialdesignicons_libraryVersion">1.0.0</string>
+    <string name="library_communitymaterialdesignicons_libraryName" tools:keep="@string/library_communitymaterialdesignicons_libraryName">Community Material Design Icons</string>
+    <string name="library_communitymaterialdesignicons_libraryDescription" tools:keep="@string/library_communitymaterialdesignicons_libraryDescription">Material Design Icons\' growing icon collection allows designers and developers targeting various platforms to download icons in the format, color and size they need for any project.</string>
+    <string name="library_communitymaterialdesignicons_libraryWebsite" tools:keep="@string/library_communitymaterialdesignicons_libraryWebsite">https://materialdesignicons.com/</string>
+    <string name="library_communitymaterialdesignicons_libraryVersion" tools:keep="@string/library_communitymaterialdesignicons_libraryVersion">1.0.0</string>
     <!-- OpenSource section -->
-    <string name="library_communitymaterialdesignicons_isOpenSource">true</string>
-    <string name="library_communitymaterialdesignicons_repositoryLink">https://github.com/Templarian/MaterialDesign</string>
+    <string name="library_communitymaterialdesignicons_isOpenSource" tools:keep="@string/library_communitymaterialdesignicons_isOpenSource">true</string>
+    <string name="library_communitymaterialdesignicons_repositoryLink" tools:keep="@string/library_communitymaterialdesignicons_repositoryLink">https://github.com/Templarian/MaterialDesign</string>
     <!-- ClassPath for autoDetect section -->
-    <string name="library_communitymaterialdesignicons_classPath" />
+    <string name="library_communitymaterialdesignicons_classPath" tools:keep="@string/library_communitymaterialdesignicons_classPath" />
     <!-- License section -->
-    <string name="library_communitymaterialdesignicons_licenseVersion">OFL 1.1</string>
-    <string name="library_communitymaterialdesignicons_licenseLink">https://github.com/Templarian/MaterialDesign/blob/master/LICENSE</string>
-    <string name="library_communitymaterialdesignicons_licenseContent"><![CDATA[
+    <string name="library_communitymaterialdesignicons_licenseVersion" tools:keep="@string/library_communitymaterialdesignicons_licenseVersion">OFL 1.1</string>
+    <string name="library_communitymaterialdesignicons_licenseLink" tools:keep="@string/library_communitymaterialdesignicons_licenseLink">https://github.com/Templarian/MaterialDesign/blob/master/LICENSE</string>
+    <string name="library_communitymaterialdesignicons_licenseContent" tools:keep="@string/library_communitymaterialdesignicons_licenseContent"><![CDATA[
 Copyright © 2014, Austin Andrews (http://materialdesignicons.com/),
 with Reserved Font Name Material Design Icons.
 Copyright © 2014, Google (http://www.google.com/design/)

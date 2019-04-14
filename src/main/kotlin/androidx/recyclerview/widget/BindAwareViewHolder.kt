@@ -19,9 +19,9 @@ package androidx.recyclerview.widget
 import android.view.View
 
 /**
- * A bind-aware {@link RecyclerView.ViewHolder} implementation that knows when it's bound or
+ * A bind-aware [RecyclerView.ViewHolder] implementation that knows when it's bound or
  * unbound.
- * <p>
+ *
  * Disclaimer: This is in no way supported and THIS COULD BREAK AT ANY TIME. Left for research.
  */
 abstract class BindAwareViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

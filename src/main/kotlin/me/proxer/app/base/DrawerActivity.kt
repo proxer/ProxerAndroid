@@ -73,7 +73,7 @@ abstract class DrawerActivity : BaseActivity() {
         MainActivity.navigateToSection(this, item)
     }
 
-    protected open fun handleAccountItemClick(item: MaterialDrawerWrapper.AccountItem) = when (item) {
+    protected open fun handleAccountItemClick(item: AccountItem) = when (item) {
         AccountItem.GUEST, AccountItem.LOGIN -> LoginDialog.show(this)
         AccountItem.LOGOUT -> LogoutDialog.show(this)
         AccountItem.USER -> showProfilePage()

@@ -29,9 +29,7 @@ object AccountNotifications : KoinComponent {
     private val storageHelper by inject<StorageHelper>()
 
     fun showOrUpdate(context: Context, notifications: Collection<ProxerNotification>) {
-        val notification = buildNotification(context, notifications)
-
-        when (notification) {
+        when (val notification = buildNotification(context, notifications)) {
             null -> NotificationManagerCompat.from(context).cancel(ID)
             else -> NotificationManagerCompat.from(context).notify(ID, notification)
         }

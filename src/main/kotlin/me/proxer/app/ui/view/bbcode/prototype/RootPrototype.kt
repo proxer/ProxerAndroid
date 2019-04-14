@@ -19,7 +19,10 @@ import me.proxer.app.ui.view.bbcode.applyToAllViews
  */
 object RootPrototype : BBPrototype {
 
+    @Suppress("RegExpUnexpectedAnchor")
     override val startRegex = Regex("x^")
+
+    @Suppress("RegExpUnexpectedAnchor")
     override val endRegex = Regex("x^")
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {

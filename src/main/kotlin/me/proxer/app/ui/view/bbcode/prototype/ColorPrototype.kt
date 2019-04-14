@@ -33,9 +33,7 @@ object ColorPrototype : TextMutatorPrototype {
     }
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
-        val color = args[COLOR_ARGUMENT] as Int?
-
-        return when (color) {
+        return when (val color = args[COLOR_ARGUMENT] as Int?) {
             null -> text
             else -> text.apply {
                 this[0..length] = ForegroundColorSpan(color)

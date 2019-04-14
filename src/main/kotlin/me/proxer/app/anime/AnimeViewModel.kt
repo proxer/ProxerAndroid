@@ -65,7 +65,7 @@ class AnimeViewModel(
     val resolutionError = ResettingMutableLiveData<ErrorAction>()
 
     val userStateData = ResettingMutableLiveData<Unit?>()
-    val userStateError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+    val userStateError = ResettingMutableLiveData<ErrorAction?>()
 
     var episode by Delegates.observable(episode) { _, old, new ->
         if (old != new) reload()

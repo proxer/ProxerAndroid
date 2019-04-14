@@ -91,7 +91,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
             .autoDisposable(ViewScopeProvider.from(this))
             .subscribe(showAllEvents)
 
-        container.layoutParams = FlexboxLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+        container.layoutParams = LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             isWrapBefore = true
         }
 

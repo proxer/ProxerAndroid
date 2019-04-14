@@ -2,7 +2,6 @@ package me.proxer.app.manga
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -135,17 +134,15 @@ class MangaActivity : BaseActivity() {
         setupToolbar()
         updateTitle()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.decorView.systemUiVisibilityChanges()
-                .autoDisposable(this.scope())
-                .subscribe { visibility ->
-                    if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                        window.decorView.systemUiVisibility = defaultUiFlags()
+        window.decorView.systemUiVisibilityChanges()
+            .autoDisposable(this.scope())
+            .subscribe { visibility ->
+                if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    window.decorView.systemUiVisibility = defaultUiFlags()
 
-                        toggleFullscreen(true, 2_000)
-                    }
+                    toggleFullscreen(true, 2_000)
                 }
-        }
+            }
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
@@ -221,32 +218,23 @@ class MangaActivity : BaseActivity() {
             SYSTEM_UI_FLAG_FULLSCREEN.inv()
     }
 
-    private fun fullscreenUiFlags(): Int {
-        val result = SYSTEM_UI_FLAG_LOW_PROFILE or
-            SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-            SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-            SYSTEM_UI_FLAG_FULLSCREEN
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            result or SYSTEM_UI_FLAG_IMMERSIVE
-        } else {
-            result
-        }
-    }
+    private fun fullscreenUiFlags(): Int = SYSTEM_UI_FLAG_LOW_PROFILE or
+        SYSTEM_UI_FLAG_LAYOUT_STABLE or
+        SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+        SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+        SYSTEM_UI_FLAG_FULLSCREEN or
+        SYSTEM_UI_FLAG_IMMERSIVE
 
     private class FullscreenHandler(private val activity: WeakReference<MangaActivity>) : Handler() {
         override fun handleMessage(message: Message) {
             val fullscreen = message.data.getBoolean("fullscreen", true)
 
             this.activity.get()?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    if (fullscreen) {
-                        window.decorView.systemUiVisibility = fullscreenUiFlags()
-                    } else {
-                        window.decorView.systemUiVisibility = defaultUiFlags()
-                    }
+                if (fullscreen) {
+                    window.decorView.systemUiVisibility = fullscreenUiFlags()
+                } else {
+                    window.decorView.systemUiVisibility = defaultUiFlags()
                 }
             }
         }
