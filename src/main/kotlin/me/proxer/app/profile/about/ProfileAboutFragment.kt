@@ -41,6 +41,8 @@ import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.math.BigDecimal
+import java.math.MathContext
 
 /**
  * @author Ruben Gees
@@ -234,6 +236,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
         val blue = this and 0xff
         val alpha = this shr 24 and 0xff
 
-        return "rgba($red, $green, $blue, $alpha)"
+        val normalizedAlpha = BigDecimal(alpha / 255.0).round(MathContext(2))
+
+        return "rgba($red, $green, $blue, $normalizedAlpha)"
     }
 }
