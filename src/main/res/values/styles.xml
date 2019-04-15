@@ -2,19 +2,14 @@
 <resources>
 
     <style name="Base.Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorPrimaryLight">@color/primary_light</item>
         <item name="colorOnPrimary">@color/on_primary</item>
-
-        <item name="colorSecondary">@color/secondary</item>
-        <item name="colorSecondaryDark">@color/secondary_dark</item>
-        <item name="colorSecondaryLight">@color/secondary_light</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
 
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="colorLink">?attr/colorSecondary</item>
+
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -44,6 +39,7 @@
         <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
         <item name="material_drawer_selected">?attr/colorSelectedBackground</item>
         <item name="material_drawer_selected_legacy">?attr/colorSelectedBackground</item>
+        <item name="material_drawer_selected_text">?attr/colorSecondary</item>
         <item name="material_drawer_divider">?attr/colorDivider</item>
 
         <item name="emojiIcons">?attr/colorIcon</item>
@@ -67,24 +63,26 @@
         <item name="colorFastscrollThumb">@color/fastscroll_thumb</item>
     </style>
 
-    <style name="Theme.App.NoBackground" parent="Theme.App">
+    <style name="Fragment.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
+
+    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="Theme.Placeholder.App.Transparent" parent="Base.Theme.App">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Placeholder.App.NoBackground" parent="Base.Theme.App">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Theme.App" parent="Base.Theme.App.DayNight">
-        <item name="android:navigationBarColor">@color/primary</item>
-    </style>
-
-    <style name="Theme.App.Transparent" parent="Theme.App">
+    <style name="Theme.Placeholder.App.Splash" parent="Base.Theme.App">
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
-
-    <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
 
     <style name="Widget.App.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/cursor</item>
@@ -122,6 +120,6 @@
     </style>
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
-        <item name="background">@color/primary_light</item>
+        <item name="background">?attr/colorPrimaryLight</item>
     </style>
 </resources>

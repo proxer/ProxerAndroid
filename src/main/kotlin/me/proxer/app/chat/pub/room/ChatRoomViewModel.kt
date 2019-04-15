@@ -29,7 +29,6 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
 
     init {
         disposables += storageHelper.isLoggedInObservable
-            .skip(1)
             .subscribe { reload() }
     }
 }

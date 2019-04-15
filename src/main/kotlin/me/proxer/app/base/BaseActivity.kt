@@ -5,11 +5,14 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.google.android.material.snackbar.Snackbar
 import com.rubengees.rxbus.RxBus
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
@@ -33,13 +36,15 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
         private const val STATE = "activity_state"
     }
 
+    protected open val theme
+        @StyleRes get() = preferenceHelper.themeContainer.theme.main
+
     protected open val root: ViewGroup by bindView(R.id.root)
 
     protected val bus by inject<RxBus>()
     protected val storageHelper by inject<StorageHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
 
-    private var currentNightMode by Delegates.notNull<Int>()
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,22 +54,15 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
             intent.putExtras(state)
         }
 
+        getTheme().applyStyle(theme, true)
+
         super.onCreate(savedInstanceState)
 
-        currentNightMode = preferenceHelper.nightMode
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
-    }
 
-    override fun onResume() {
-        val newNightMode = preferenceHelper.nightMode
-
-        if (currentNightMode != newNightMode) {
-            currentNightMode = newNightMode
-
-            ActivityCompat.recreate(this)
-        }
-
-        super.onResume()
+        preferenceHelper.themeObservable
+            .autoDisposable(this.scope())
+            .subscribe { ActivityCompat.recreate(this) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

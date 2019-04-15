@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="theme_titles">
-        <item>@string/preference_theme_light</item>
-        <item>@string/preference_theme_dark</item>
-    </string-array>
-
-    <string-array name="theme_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
-
     <string-array name="start_page_titles">
         <item>@string/section_news</item>
         <item>@string/section_chat</item>

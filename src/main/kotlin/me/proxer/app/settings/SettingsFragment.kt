@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import clicks
 import com.uber.autodispose.android.lifecycle.scope
@@ -19,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
+import me.proxer.app.settings.theme.ThemeDialog
 import me.proxer.app.ucp.settings.UcpSettingsActivity
 import me.proxer.app.util.KotterKnifePreference
 import me.proxer.app.util.bindPreference
@@ -63,6 +62,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     private val profile by bindPreference<Preference>("profile")
     private val ageConfirmation by bindPreference<TwoStatePreference>(AGE_CONFIRMATION)
+    private val theme by bindPreference<Preference>(THEME)
     private val externalCache by bindPreference<TwoStatePreference>(EXTERNAL_CACHE)
     private val notificationsInterval by bindPreference<ListPreference>(NOTIFICATIONS_INTERVAL)
     private val developerOptions by bindPreference<PreferenceCategory>("developer_options")
@@ -99,9 +99,21 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 if (ageConfirmation.isChecked) {
                     ageConfirmation.isChecked = false
 
-                    AgeConfirmationDialog.show(activity as AppCompatActivity)
+                    AgeConfirmationDialog.show(requireActivity() as AppCompatActivity)
                 }
             }
+
+        theme.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                ThemeDialog.show(requireActivity() as AppCompatActivity)
+            }
+
+        profile.isEnabled = storageHelper.isLoggedIn
+
+        theme.summary = preferenceHelper.themeContainer.let { (theme, variant) ->
+            "${getString(theme.themeName)} ${getString(variant.variantName)}"
+        }
 
         updateIntervalNotificationPreference()
 
@@ -130,12 +142,6 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         when (key) {
             AGE_CONFIRMATION -> if (preferenceHelper.isAgeRestrictedMediaAllowed) {
                 ageConfirmation.isChecked = true
-            }
-
-            THEME -> {
-                AppCompatDelegate.setDefaultNightMode(preferenceHelper.nightMode)
-
-                ActivityCompat.recreate(requireActivity())
             }
 
             NOTIFICATIONS_NEWS, NOTIFICATIONS_ACCOUNT -> {

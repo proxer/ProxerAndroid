@@ -134,7 +134,6 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
             .subscribe { UcpSettingsActivity.navigateTo(requireActivity()) }
 
         storageHelper.isLoggedInObservable
-            .skip(1)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe {

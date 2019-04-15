@@ -2,6 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
+        android:persistent="false"
         android:enabled="false"
         android:key="profile"
         android:summary="@string/preference_profile_summary"
@@ -41,15 +42,10 @@
 
     <PreferenceCategory android:title="@string/preference_category_design_title">
 
-        <!--suppress AndroidUnknownAttribute -->
-        <ListPreference
-            style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
-            android:defaultValue="2"
-            android:entries="@array/theme_titles"
-            android:entryValues="@array/theme_values"
+        <Preference
+            android:persistent="false"
             android:key="theme"
-            android:summary="%s"
-            android:title="@string/preference_theme_title" />
+            android:title="Thema" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/preference_category_notifications_title">

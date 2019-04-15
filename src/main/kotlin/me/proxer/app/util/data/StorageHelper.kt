@@ -2,7 +2,6 @@ package me.proxer.app.util.data
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.orhanobut.hawk.Hawk
-import io.reactivex.Observable
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
 import me.proxer.app.ucp.settings.LocalUcpSettings
@@ -59,10 +58,11 @@ class StorageHelper(
     val isLoggedIn: Boolean
         get() = Hawk.contains(USER)
 
-    val isLoggedInObservable: Observable<Boolean>
-        get() = rxPreferences.getString(USER)
-            .asObservable()
-            .map { it.isNotBlank() }
+    val isLoggedInObservable = rxPreferences.getString(USER)
+        .asObservable()
+        .map { it.isNotBlank() }
+        .publish()
+        .autoConnect()
 
     var isTwoFactorAuthenticationEnabled: Boolean
         get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)

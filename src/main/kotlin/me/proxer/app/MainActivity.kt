@@ -23,6 +23,9 @@ import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
+import me.proxer.app.settings.theme.Theme
+import me.proxer.app.settings.theme.ThemeContainer
+import me.proxer.app.settings.theme.ThemeVariant
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.extension.intentFor
@@ -141,7 +144,7 @@ class MainActivity : DrawerActivity() {
                             NotificationWorker.enqueueIfPossible()
                         }
                         2 -> if (option.isActivated) {
-                            preferenceHelper.nightMode = AppCompatDelegate.MODE_NIGHT_YES
+                            preferenceHelper.themeContainer = ThemeContainer(Theme.CLASSIC, ThemeVariant.DARK)
 
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 

@@ -26,7 +26,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:resizeableActivity="true"
         android:supportsRtl="false"
-        android:theme="@style/Theme.App"
+        android:theme="@style/Theme.Placeholder.App.Splash"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute"
         tools:replace="android:supportsRtl">
@@ -141,7 +141,7 @@
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:theme="@style/Theme.App.Transparent">
+            android:theme="@style/Theme.Placeholder.App.Transparent">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -194,7 +194,7 @@
 
         <activity
             android:name=".media.MediaActivity"
-            android:theme="@style/Theme.App.Transparent">
+            android:theme="@style/Theme.Placeholder.App.Transparent">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -216,15 +216,15 @@
 
         <activity
             android:name=".info.translatorgroup.TranslatorGroupActivity"
-            android:theme="@style/Theme.App.Transparent" />
+            android:theme="@style/Theme.Placeholder.App.Transparent" />
 
         <activity
             android:name=".info.industry.IndustryActivity"
-            android:theme="@style/Theme.App.Transparent" />
+            android:theme="@style/Theme.Placeholder.App.Transparent" />
 
         <activity
             android:name=".ui.ImageDetailActivity"
-            android:theme="@style/Theme.App.NoBackground" />
+            android:theme="@style/Theme.Placeholder.App.NoBackground" />
 
         <activity
             android:name=".anime.StreamActivity"

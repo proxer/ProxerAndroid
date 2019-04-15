@@ -174,7 +174,11 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         participants.layoutManager = LinearLayoutManager(context)
         participants.adapter = adapter
 
-        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
+        val schemeColors = requireContext().let { context ->
+            intArrayOf(context.resolveColor(R.attr.colorPrimary), context.resolveColor(R.attr.colorSecondary))
+        }
+
+        progress.setColorSchemeColors(*schemeColors)
         progress.isEnabled = false
 
         emojiButton.clicks()

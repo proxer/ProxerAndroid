@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <bool name="is_iconics_content_provider_enabled" tools:ignore="UnusedResources">false</bool>
+</resources>

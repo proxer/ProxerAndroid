@@ -79,7 +79,6 @@ class MangaViewModel(
 
     init {
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
-            .skip(1)
             .subscribe {
                 if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()

@@ -45,6 +45,12 @@
     <string name="section_translator_group_info">Info</string>
     <string name="section_translator_group_projects">Projekte</string>
 
+    <string name="theme_classic">Klassisch</string>
+    <string name="theme_bg">Blau Grün</string>
+
+    <string name="theme_variant_light">Hell</string>
+    <string name="theme_variant_dark">Dunkel</string>
+
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
@@ -310,6 +316,10 @@
         Bereiche.
     </string>
     <string name="dialog_logout_positive">Abmelden</string>
+
+    <string name="dialog_theme_title">Thema auswählen</string>
+    <string name="dialog_theme_positive">Anwenden</string>
+    <string name="dialog_theme_dark_switch">Dunkel</string>
 
     <string name="dialog_age_confirmation_content">
         Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!
@@ -628,9 +638,6 @@
     <string name="preference_start_page_title">Startseite</string>
 
     <string name="preference_category_design_title">Design</string>
-    <string name="preference_theme_title">Thema</string>
-    <string name="preference_theme_dark">Dunkel</string>
-    <string name="preference_theme_light">Hell</string>
 
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_notifications_news_title">News</string>

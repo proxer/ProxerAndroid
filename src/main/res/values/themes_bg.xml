@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App.BG" parent="Theme.App">
+        <item name="colorPrimary">@color/primary_bg</item>
+        <item name="colorPrimaryDark">@color/primary_bg_dark</item>
+        <item name="colorPrimaryLight">@color/primary_bg_light</item>
+
+        <item name="colorSecondary">@color/secondary_bg</item>
+        <item name="colorSecondaryDark">@color/secondary_bg_dark</item>
+        <item name="colorSecondaryLight">@color/secondary_bg_light</item>
+    </style>
+
+    <style name="Theme.App.BG.NoBackground" parent="Theme.App.BG">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

@@ -337,7 +337,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
                     when (disabledColor) {
                         true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
                         false -> R.attr.colorIcon.toIconicsColorAttr(requireContext())
-                })
+                    }
+                )
                 .size(32.toIconicsSizeDp())
                 .padding(6.toIconicsSizeDp())
         )
@@ -348,7 +349,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
                     when (disabledColor) {
                         true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
                         false -> R.attr.colorSecondary.toIconicsColorAttr(requireContext())
-                })
+                    }
+                )
                 .size(32.toIconicsSizeDp())
                 .padding(4.toIconicsSizeDp())
         )

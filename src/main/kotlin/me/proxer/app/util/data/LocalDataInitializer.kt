@@ -18,7 +18,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 3
+        private const val currentVersion = 4
     }
 
     private var isInitialized = false
@@ -40,6 +40,10 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
 
             if (previousVersion <= 2) {
                 migrate2To3()
+            }
+
+            if (previousVersion <= 3) {
+                migrate3To4()
             }
 
             if (previousVersion != currentVersion) {
@@ -127,6 +131,17 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
                     else -> "0"
                 }
             )
+        }
+    }
+
+    private fun migrate3To4() {
+        // In older versions of the App, there was a single setting for the theme (light and dark). Now we have
+        // an actual theme (different colors) and a variant (light and dark).
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val previousThemeVariant = sharedPreferences.getString("theme", "0")
+
+        sharedPreferences.edit(commit = true) {
+            putString(PreferenceHelper.THEME, "0_$previousThemeVariant")
         }
     }
 

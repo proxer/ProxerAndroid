@@ -51,7 +51,11 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        progress.setColorSchemeColors(requireContext().resolveColor(R.attr.colorPrimary))
+        val schemeColors = requireContext().let { context ->
+            intArrayOf(context.resolveColor(R.attr.colorPrimary), context.resolveColor(R.attr.colorSecondary))
+        }
+
+        progress.setColorSchemeColors(*schemeColors)
         progress.isEnabled = isSwipeToRefreshEnabled
 
         progress.refreshes()

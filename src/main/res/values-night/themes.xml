@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App" parent="Base.Theme.App.DayNight">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryLight">@color/primary_light</item>
+
+        <item name="colorSecondary">@color/secondary_night</item>
+        <item name="colorSecondaryDark">@color/secondary_dark_night</item>
+        <item name="colorSecondaryLight">@color/secondary_light_night</item>
+    </style>
+</resources>

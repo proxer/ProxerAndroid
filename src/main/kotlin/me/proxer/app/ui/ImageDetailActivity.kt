@@ -33,6 +33,9 @@ class ImageDetailActivity : BaseActivity() {
         }
     }
 
+    override val theme: Int
+        get() = preferenceHelper.themeContainer.theme.noBackground
+
     private val url: String
         get() = intent.getStringExtra(URL_EXTRA)
 

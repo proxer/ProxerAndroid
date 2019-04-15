@@ -59,7 +59,6 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
     init {
         disposables += storageHelper.isLoggedInObservable
-            .skip(1)
             .subscribe {
                 if (it && error.value?.buttonAction == ButtonAction.LOGIN) {
                     reload()
@@ -67,7 +66,6 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             }
 
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
-            .skip(1)
             .subscribe {
                 if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()

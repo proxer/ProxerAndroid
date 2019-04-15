@@ -27,7 +27,6 @@ class LoginHandler(
     @SuppressLint("CheckResult")
     fun listen(context: Context) {
         storageHelper.isLoggedInObservable
-            .skip(1)
             .subscribe { isLoggedIn ->
                 if (isLoggedIn) {
                     onLogin()

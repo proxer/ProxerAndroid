@@ -5,6 +5,7 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +18,13 @@ import androidx.core.os.bundleOf
 import androidx.core.view.children
 
 @ColorInt
-inline fun Context.resolveColor(@AttrRes res: Int, resolveRefs: Boolean = true) = TypedValue()
+inline fun Context.resolveColor(
+    @AttrRes res: Int,
+    resourceTheme: Resources.Theme = theme,
+    resolveRefs: Boolean = true
+) = TypedValue()
     .apply {
-        if (!theme.resolveAttribute(res, this, resolveRefs)) {
+        if (!resourceTheme.resolveAttribute(res, this, resolveRefs)) {
             throw IllegalArgumentException("Could not resolve $res")
         }
     }

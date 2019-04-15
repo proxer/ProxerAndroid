@@ -111,7 +111,7 @@ private val applicationModules = module(createdAtStart = true) {
     }
 
     single { StorageHelper(get(), get(StringQualifier(HAWK_RX_PREFERENCES))) }
-    single { PreferenceHelper(get(), get(), get(StringQualifier(DEFAULT_RX_PREFERENCES))) }
+    single { PreferenceHelper(get(), get(StringQualifier(DEFAULT_RX_PREFERENCES)), get()) }
 
     single { RxBus() }
 

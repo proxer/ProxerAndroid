@@ -1,5 +1,6 @@
 package me.proxer.app
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
@@ -12,6 +13,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
+import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.squareup.leakcanary.LeakCanary
 import com.vanniktech.emoji.EmojiManager
@@ -103,6 +105,7 @@ class MainApplication : Application() {
     private fun initLibs() {
         EmojiManager.install(IosEmojiProvider())
         AndroidThreeTen.init(this)
+        Iconics.init(this)
 
         if (BuildConfig.LOG) {
             Timber.plant(TimberFileTree(this))
@@ -137,10 +140,14 @@ class MainApplication : Application() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun initNightMode() {
-        val nightMode = preferenceHelper.nightMode
+        AppCompatDelegate.setDefaultNightMode(preferenceHelper.themeContainer.variant.value)
 
-        AppCompatDelegate.setDefaultNightMode(nightMode)
+        preferenceHelper.themeObservable
+            .subscribe {
+                AppCompatDelegate.setDefaultNightMode(it.variant.value)
+            }
     }
 
     private fun enableStrictModeForDebug() {

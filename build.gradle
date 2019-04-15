@@ -162,8 +162,6 @@ android {
         exclude "META-INF/rxkotlin.properties"
         exclude "META-INF/proguard/**"
         exclude "META-INF/README.md"
-        exclude "kotlin/**"
-        exclude "kotlinx/**"
         exclude "third_party/**"
         exclude "jsr305_annotations/**"
         exclude "error_prone/**"

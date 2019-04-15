@@ -15,6 +15,16 @@ class InfoImageButton @JvmOverloads constructor(
 ) : AppCompatImageButton(context, attrs, defStyleAttr) {
 
     init {
+        updateTooltip()
+    }
+
+    override fun setContentDescription(contentDescription: CharSequence?) {
+        super.setContentDescription(contentDescription)
+
+        updateTooltip()
+    }
+
+    private fun updateTooltip() {
         contentDescription?.let {
             TooltipCompat.setTooltipText(this, it)
         }

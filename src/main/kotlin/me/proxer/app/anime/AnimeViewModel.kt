@@ -78,7 +78,6 @@ class AnimeViewModel(
 
     init {
         disposables += storageHelper.isLoggedInObservable
-            .skip(1)
             .subscribe {
                 if (it && error.value?.buttonAction == ButtonAction.LOGIN) {
                     reload()
@@ -86,7 +85,6 @@ class AnimeViewModel(
             }
 
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
-            .skip(1)
             .subscribe {
                 if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()

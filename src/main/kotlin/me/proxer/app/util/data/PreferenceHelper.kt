@@ -1,11 +1,10 @@
 package me.proxer.app.util.data
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import io.reactivex.Observable
 import me.proxer.app.manga.MangaReaderOrientation
+import me.proxer.app.settings.theme.ThemeContainer
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,8 +15,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 @Suppress("UseDataClass")
 class PreferenceHelper(
     initializer: LocalDataInitializer,
-    private val sharedPreferences: SharedPreferences,
-    private val rxSharedPreferences: RxSharedPreferences
+    rxSharedPreferences: RxSharedPreferences,
+    private val sharedPreferences: SharedPreferences
 ) {
 
     companion object {
@@ -46,9 +45,11 @@ class PreferenceHelper(
             sharedPreferences.edit { putBoolean(AGE_CONFIRMATION, value) }
         }
 
-    val isAgeRestrictedMediaAllowedObservable: Observable<Boolean>
-        get() = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)
-            .asObservable()
+    val isAgeRestrictedMediaAllowedObservable = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)
+        .asObservable()
+        .skip(1)
+        .publish()
+        .autoConnect()
 
     val areBookmarksAutomatic
         get() = sharedPreferences.getBoolean(AUTO_BOOKMARK, false)
@@ -93,22 +94,18 @@ class PreferenceHelper(
     val isCacheExternallySet
         get() = sharedPreferences.contains(EXTERNAL_CACHE)
 
-    @AppCompatDelegate.NightMode
-    var nightMode
-        get() = when (sharedPreferences.getString(THEME, "2")) {
-            "0" -> AppCompatDelegate.MODE_NIGHT_NO
-            "1" -> AppCompatDelegate.MODE_NIGHT_YES
-            else -> throw IllegalArgumentException("Unknown night mode value")
-        }
+    var themeContainer
+        get() = ThemeContainer.fromPreferenceString(sharedPreferences.getSafeString(THEME, "0_0"))
         set(value) {
-            val stringValue = when (value) {
-                AppCompatDelegate.MODE_NIGHT_NO -> "0"
-                AppCompatDelegate.MODE_NIGHT_YES -> "1"
-                else -> throw IllegalArgumentException("Unknown night mode value: $value")
-            }
-
-            sharedPreferences.edit { putString(THEME, stringValue) }
+            sharedPreferences.edit { putString(THEME, value.toPreferenceString()) }
         }
+
+    val themeObservable = rxSharedPreferences.getString(THEME, "0")
+        .asObservable()
+        .skip(1)
+        .map { ThemeContainer.fromPreferenceString(it) }
+        .publish()
+        .autoConnect()
 
     val httpLogLevel
         get() = when (sharedPreferences.getString(HTTP_LOG_LEVEL, "0")) {

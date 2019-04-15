@@ -44,11 +44,9 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     init {
         disposables += storageHelper.isLoggedInObservable
-            .skip(1)
             .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
 
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
-            .skip(1)
             .subscribe { if (isAgeConfirmationRequired) reload() }
 
         disposables += bus.register(CaptchaSolvedEvent::class.java)
