@@ -20,6 +20,9 @@
     public static int wtf(...);
 }
 
+# Iconics
+-keepnames class com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+
 # Material Preference
 -keepclassmembers class androidx.preference.PreferenceManager {
     void setNoCommit(boolean);
