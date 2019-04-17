@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-      - image: circleci/android:api-28
+      - image: circleci/android:api-28-ndk
     environment:
       _JAVA_OPTIONS: "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
         -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
