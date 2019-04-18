@@ -30,6 +30,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
@@ -76,6 +77,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         }
     }
 
+    private val preferenceHelper by inject<PreferenceHelper>()
     private val messengerDao by inject<MessengerDao>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
@@ -141,7 +143,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                     .withLibraries(*libraries)
                     .withExcludedLibraries(*excludedLibraries)
                     .withFields(R.string::class.java.fields)
-                    .withActivityTheme(R.style.Theme_App)
+                    .withActivityTheme(preferenceHelper.themeContainer.theme.main)
                     .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                     .withActivityTitle(getString(R.string.about_licenses_activity_title))
                     .start(requireActivity())
