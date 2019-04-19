@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.util.compat.TaskDescriptionCompat
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.startActivity
+import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -26,11 +29,18 @@ class WebViewActivity : AppCompatActivity() {
     private val url: String
         get() = intent.getStringExtra(URL_EXTRA)
 
+    private val preferenceHelper by inject<PreferenceHelper>()
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val webView: WebView by bindView(R.id.webview)
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme = preferenceHelper.themeContainer.theme
+
+        getTheme().applyStyle(theme.main, true)
+        TaskDescriptionCompat.setTaskDescription(this, theme.primaryColor(this))
+
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_web_view)
