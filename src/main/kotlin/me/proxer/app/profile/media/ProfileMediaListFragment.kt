@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.gojuno.koptional.toOptional
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -44,7 +43,7 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel by viewModel<ProfileMediaListViewModel> {
-        parametersOf(userId.toOptional(), username.toOptional(), category, filter.toOptional())
+        parametersOf(userId, username, category, filter)
     }
 
     override val layoutManager by unsafeLazy {

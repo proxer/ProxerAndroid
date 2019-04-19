@@ -45,7 +45,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
         get() = activity as ProfileActivity
 
     override val viewModel by sharedViewModel<ProfileViewModel> {
-        parametersOf(userId.toOptional(), username.toOptional())
+        parametersOf(userId, username)
     }
 
     private val userId: String?

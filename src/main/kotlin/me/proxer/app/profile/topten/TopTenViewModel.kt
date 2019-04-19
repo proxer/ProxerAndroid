@@ -1,6 +1,5 @@
 package me.proxer.app.profile.topten
 
-import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import me.proxer.app.base.BaseViewModel
@@ -13,8 +12,8 @@ import me.proxer.library.enums.Category
  * @author Ruben Gees
  */
 class TopTenViewModel(
-    private val userId: Optional<String>,
-    private val username: Optional<String>
+    private val userId: String?,
+    private val username: String?
 ) : BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
@@ -31,7 +30,7 @@ class TopTenViewModel(
         }
 
     private fun partialSingle(includeHentai: Boolean, category: Category) = api.user
-        .topTen(userId.toNullable(), username.toNullable())
+        .topTen(userId, username)
         .includeHentai(includeHentai)
         .category(category)
         .buildSingle()

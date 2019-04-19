@@ -5,7 +5,6 @@ import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.gojuno.koptional.Optional
 import com.rubengees.rxbus.RxBus
 import com.squareup.moshi.Moshi
 import me.proxer.app.MainApplication.Companion.USER_AGENT
@@ -219,11 +218,11 @@ private val viewModelModule = module {
     viewModel { UcpOverviewViewModel() }
     viewModel { UcpTopTenViewModel() }
     viewModel { UcpSettingsViewModel() }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileAboutViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> ProfileViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> TopTenViewModel(userId, username) }
-    viewModel { (userId: Optional<String>, username: Optional<String>) -> HistoryViewModel(userId, username) }
-    viewModel { (category: Category, filter: Optional<UserMediaListFilterType>) ->
+    viewModel { (userId: String?, username: String?) -> ProfileAboutViewModel(userId, username) }
+    viewModel { (userId: String?, username: String?) -> ProfileViewModel(userId, username) }
+    viewModel { (userId: String?, username: String?) -> TopTenViewModel(userId, username) }
+    viewModel { (userId: String?, username: String?) -> HistoryViewModel(userId, username) }
+    viewModel { (category: Category, filter: UserMediaListFilterType?) ->
         UcpMediaListViewModel(category, filter)
     }
 
@@ -231,7 +230,7 @@ private val viewModelModule = module {
         ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])
     }
 
-    viewModel { (userId: Optional<String>, username: Optional<String>, category: Optional<Category>) ->
+    viewModel { (userId: String?, username: String?, category: Category?) ->
         ProfileCommentViewModel(userId, username, category)
     }
 

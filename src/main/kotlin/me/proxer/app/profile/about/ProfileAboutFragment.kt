@@ -61,7 +61,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
         get() = activity as ProfileActivity
 
     override val viewModel by viewModel<ProfileAboutViewModel> {
-        parametersOf(userId.toOptional(), username.toOptional())
+        parametersOf(userId, username)
     }
 
     private val userId: String?

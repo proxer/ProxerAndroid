@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.GlideApp
@@ -37,7 +36,7 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
     override val emptyDataMessage = R.string.error_no_data_history
     override val isSwipeToRefreshEnabled = false
 
-    override val viewModel by viewModel<HistoryViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
+    override val viewModel by viewModel<HistoryViewModel> { parametersOf(userId, username) }
 
     override val layoutManager by lazy {
         StaggeredGridLayoutManager(

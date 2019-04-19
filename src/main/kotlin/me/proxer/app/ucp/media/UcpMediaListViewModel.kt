@@ -1,6 +1,5 @@
 package me.proxer.app.ucp.media
 
-import com.gojuno.koptional.Optional
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -21,7 +20,7 @@ import kotlin.properties.Delegates
  */
 class UcpMediaListViewModel(
     category: Category,
-    filter: Optional<UserMediaListFilterType>
+    filter: UserMediaListFilterType?
 ) : PagedContentViewModel<UserMediaListEntry>() {
 
     override val isLoginRequired = true
@@ -39,7 +38,7 @@ class UcpMediaListViewModel(
         if (old != new) reload()
     }
 
-    var filter by Delegates.observable(filter.toNullable()) { _, old, new ->
+    var filter by Delegates.observable(filter) { _, old, new ->
         if (old != new) reload()
     }
 

@@ -9,7 +9,6 @@ import android.widget.ImageView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
-import com.gojuno.koptional.toOptional
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -99,7 +98,7 @@ class ProfileActivity : ImageTabsActivity() {
             loadImage()
         }
 
-    private val viewModel by viewModel<ProfileViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
+    private val viewModel by viewModel<ProfileViewModel> { parametersOf(userId, username) }
 
     private val messengerDao by inject<MessengerDao>()
 

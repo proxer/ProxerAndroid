@@ -8,7 +8,6 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.gojuno.koptional.toOptional
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -46,7 +45,7 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel by viewModel<UcpMediaListViewModel> {
-        parametersOf(category, filter.toOptional())
+        parametersOf(category, filter)
     }
 
     override val layoutManager by unsafeLazy {

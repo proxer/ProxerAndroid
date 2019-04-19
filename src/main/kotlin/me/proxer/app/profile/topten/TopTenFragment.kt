@@ -8,7 +8,6 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -37,7 +36,7 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>(R.layout.fragment
         }
     }
 
-    override val viewModel by viewModel<TopTenViewModel> { parametersOf(userId.toOptional(), username.toOptional()) }
+    override val viewModel by viewModel<TopTenViewModel> { parametersOf(userId, username) }
 
     override val hostingActivity: ProfileActivity
         get() = activity as ProfileActivity

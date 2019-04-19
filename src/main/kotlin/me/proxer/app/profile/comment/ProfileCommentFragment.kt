@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gojuno.koptional.toOptional
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -38,7 +37,7 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
     override val pagingThreshold = 3
 
     override val viewModel by viewModel<ProfileCommentViewModel> {
-        parametersOf(userId.toOptional(), username.toOptional(), category.toOptional())
+        parametersOf(userId, username, category)
     }
 
     override val hostingActivity: ProfileActivity
@@ -55,7 +54,7 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
         set(value) {
             requireArguments().putSerializable(CATEGORY_ARGUMENT, value)
 
-            viewModel.category = value.toOptional()
+            viewModel.category = value
         }
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
