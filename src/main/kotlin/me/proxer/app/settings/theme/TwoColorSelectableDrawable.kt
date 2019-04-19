@@ -1,6 +1,5 @@
 package me.proxer.app.settings.theme
 
-import android.content.Context
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.Paint
@@ -12,7 +11,6 @@ import androidx.annotation.ColorInt
  * @author Ruben Gees
  */
 class TwoColorSelectableDrawable(
-    context: Context,
     @ColorInt private val firstColor: Int,
     @ColorInt private val secondColor: Int,
     @ColorInt private val selectedColor: Int?

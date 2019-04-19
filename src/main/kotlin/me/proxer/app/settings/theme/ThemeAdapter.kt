@@ -48,7 +48,6 @@ class ThemeAdapter(currentThemeContainer: ThemeContainer) : BaseAdapter<Theme, V
 
         fun bind(item: Theme) {
             val drawable = TwoColorSelectableDrawable(
-                themeButton.context,
                 item.primaryColor(themeButton.context),
                 item.secondaryColor(themeButton.context),
                 if (selectedIndex == adapterPosition) item.colorOnSecondary(themeButton.context) else null
