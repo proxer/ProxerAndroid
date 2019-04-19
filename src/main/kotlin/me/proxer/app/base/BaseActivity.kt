@@ -16,6 +16,7 @@ import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.compat.TaskDescriptionCompat
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
@@ -55,6 +56,7 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
         }
 
         getTheme().applyStyle(theme, true)
+        TaskDescriptionCompat.setTaskDescription(this, preferenceHelper.themeContainer.theme.primaryColor(this))
 
         super.onCreate(savedInstanceState)
 
