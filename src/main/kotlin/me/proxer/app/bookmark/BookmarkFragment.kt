@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
-import com.gojuno.koptional.toOptional
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
@@ -48,7 +47,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     override val emptyDataMessage = R.string.error_no_data_bookmark
 
-    override val viewModel by viewModel<BookmarkViewModel> { parametersOf(category.toOptional()) }
+    override val viewModel by viewModel<BookmarkViewModel> { parametersOf(category, filterAvailable) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)
@@ -64,10 +63,10 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             viewModel.category = value
         }
 
-    private var filterAvailable: Boolean?
-        get() = requireArguments().getBoolean(FILTER_AVAILABLE_ARGUMENT)
+    private var filterAvailable: Boolean
+        get() = requireArguments().getBoolean(FILTER_AVAILABLE_ARGUMENT, false)
         set(value) {
-            value?.let { requireArguments().putBoolean(FILTER_AVAILABLE_ARGUMENT, it) }
+            requireArguments().putBoolean(FILTER_AVAILABLE_ARGUMENT, value)
 
             viewModel.filterAvailable = value
         }
@@ -171,7 +170,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 item.isChecked = true
             }
             R.id.filterAvailable -> {
-                filterAvailable = if (item.isChecked) null else true
+                filterAvailable = !item.isChecked
 
                 item.isChecked = !item.isChecked
             }

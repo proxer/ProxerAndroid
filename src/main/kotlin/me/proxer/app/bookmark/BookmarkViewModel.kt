@@ -1,6 +1,5 @@
 package me.proxer.app.bookmark
 
-import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -19,7 +18,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bookmark>() {
+class BookmarkViewModel(category: Category?, filterAvailable: Boolean) : PagedContentViewModel<Bookmark>() {
 
     override val itemsOnPage = 30
     override val isLoginRequired = true
@@ -34,11 +33,11 @@ class BookmarkViewModel(category: Optional<Category>) : PagedContentViewModel<Bo
     val undoData = ResettingMutableLiveData<Unit?>()
     val undoError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
-    var category by Delegates.observable(category.toNullable()) { _, old, new ->
+    var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()
     }
 
-    var filterAvailable by Delegates.observable<Boolean?>(null) { _, old, new ->
+    var filterAvailable by Delegates.observable(filterAvailable) { _, old, new ->
         if (old != new) reload()
     }
 
