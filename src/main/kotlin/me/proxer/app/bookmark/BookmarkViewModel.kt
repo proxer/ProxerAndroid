@@ -26,7 +26,7 @@ class BookmarkViewModel(category: Category?, filterAvailable: Boolean) : PagedCo
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp.bookmarks()
             .category(category)
-            .filterAvailable(filterAvailable)
+            .filterAvailable(if (filterAvailable) true else null)
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
