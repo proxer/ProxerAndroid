@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.core.content.ContextCompat
 import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -48,19 +47,11 @@ class ThemeAdapter(currentThemeContainer: ThemeContainer) : BaseAdapter<Theme, V
         internal val themeButton by bindView<ImageButton>(R.id.themeButton)
 
         fun bind(item: Theme) {
-            val borderColor = when (selectedIndex == adapterPosition) {
-                true -> when (selectedVariant) {
-                    ThemeVariant.LIGHT -> ContextCompat.getColor(themeButton.context, android.R.color.black)
-                    ThemeVariant.DARK -> ContextCompat.getColor(themeButton.context, android.R.color.white)
-                }
-                false -> null
-            }
-
-            val drawable = TwoColorBorderDrawable(
+            val drawable = TwoColorSelectableDrawable(
                 themeButton.context,
                 item.primaryColor(themeButton.context),
                 item.secondaryColor(themeButton.context),
-                borderColor
+                if (selectedIndex == adapterPosition) item.colorOnSecondary(themeButton.context) else null
             )
 
             themeButton.contentDescription = themeButton.context.getString(item.themeName)

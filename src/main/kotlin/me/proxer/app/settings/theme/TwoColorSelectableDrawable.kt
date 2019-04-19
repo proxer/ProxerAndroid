@@ -7,16 +7,15 @@ import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
-import me.proxer.app.util.extension.dip
 
 /**
  * @author Ruben Gees
  */
-class TwoColorBorderDrawable(
+class TwoColorSelectableDrawable(
     context: Context,
     @ColorInt private val firstColor: Int,
     @ColorInt private val secondColor: Int,
-    @ColorInt private val borderColor: Int?
+    @ColorInt private val selectedColor: Int?
 ) : Drawable() {
 
     private val topPaint = Paint().apply {
@@ -27,10 +26,8 @@ class TwoColorBorderDrawable(
         color = secondColor
     }
 
-    private val selectedIndicatorPaint = borderColor?.let {
+    private val selectedIndicatorPaint = selectedColor?.let {
         Paint().apply {
-            strokeWidth = context.dip(8).toFloat()
-            style = Paint.Style.STROKE
             color = it
         }
     }
@@ -45,7 +42,7 @@ class TwoColorBorderDrawable(
         canvas.drawRect(0f, height / 2, width, height, bottomPaint)
 
         if (selectedIndicatorPaint != null) {
-            canvas.drawRect(0f, 0f, width, height, selectedIndicatorPaint)
+            canvas.drawCircle(width / 4 * 3, height / 4 * 3, width / 8, selectedIndicatorPaint)
         }
     }
 
