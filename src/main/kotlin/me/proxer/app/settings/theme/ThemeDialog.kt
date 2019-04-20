@@ -11,7 +11,6 @@ import com.afollestad.materialdialogs.customview.customView
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.DeviceUtils
 import kotlin.properties.Delegates
 
 /**
@@ -56,13 +55,8 @@ class ThemeDialog : BaseDialog() {
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)
 
-        val spanAmount = when {
-            DeviceUtils.isTablet(requireContext()) || DeviceUtils.isLandscape(requireContext().resources) -> 8
-            else -> 4
-        }
-
         colorList.isNestedScrollingEnabled = false
-        colorList.layoutManager = GridLayoutManager(colorList.context, spanAmount)
+        colorList.layoutManager = GridLayoutManager(colorList.context, 4)
         colorList.adapter = adapter
 
         nightSwitch.isChecked = preferenceHelper.themeContainer.variant == ThemeVariant.DARK
