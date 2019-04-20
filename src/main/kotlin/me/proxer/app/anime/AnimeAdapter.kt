@@ -15,7 +15,6 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColorRes
 import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
@@ -34,6 +33,7 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -290,7 +290,7 @@ class AnimeAdapter(
                 .icon(CommunityMaterial.Icon2.cmd_play)
                 .size(28.toIconicsSizeDp())
                 .padding(8.toIconicsSizeDp())
-                .color(android.R.color.white.toIconicsColorRes())
+                .color(R.attr.colorOnPrimary.toIconicsColorAttr(play.context))
         }
 
         private fun generateInfoDrawable(icon: IIcon): IconicsDrawable {
