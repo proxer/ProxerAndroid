@@ -232,13 +232,17 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         })
     }
 
-    override fun onDestroyView() {
+    override fun onStop() {
         (recyclerView.safeLayoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition()?.let {
             if (it > 0 || storageHelper.getLastMangaPage(id, episode, language) != null) {
                 storageHelper.putLastMangaPage(id, episode, language, it)
             }
         }
 
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
         gravityPagerSnapHelper?.attachToRecyclerView(null)
         gravityPagerSnapHelper = null
 
