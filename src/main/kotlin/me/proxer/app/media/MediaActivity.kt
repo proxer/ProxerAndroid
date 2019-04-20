@@ -118,19 +118,18 @@ class MediaActivity : ImageTabsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.data.observe(this, Observer {
-            it?.let { entry ->
+        viewModel.data.observe(this, Observer { entry ->
+            if (entry != null) {
                 name = entry.name
                 category = entry.category
-
-                sectionsPagerAdapter.update()
-                sectionsPagerAdapter.notifyDataSetChanged()
 
                 if (viewPager.currentItem == 0) {
                     viewPager.currentItem = customItemToDisplay
 
                     tabLayoutHelper?.updateAllTabs()
                 }
+            } else {
+                sectionsPagerAdapter.update()
             }
         })
 
@@ -195,12 +194,12 @@ class MediaActivity : ImageTabsActivity() {
         }
 
         fun update() {
-            this.notifyDataSetChanged()
-
             if (count >= 1) {
                 tabs.getTabAt(2)?.text = category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
             }
+
+            this.notifyDataSetChanged()
         }
     }
 }
