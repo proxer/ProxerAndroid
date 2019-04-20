@@ -17,8 +17,8 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         app:controller_layout_id="@layout/layout_exoplayer_controls"
-        app:fastforward_increment="30000"
-        app:rewind_increment="30000"
+        app:fastforward_increment="10000"
+        app:rewind_increment="10000"
         app:show_buffering="always" />
 
     <androidx.appcompat.widget.Toolbar
