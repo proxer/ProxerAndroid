@@ -42,6 +42,8 @@
         <item name="material_drawer_selected_text">?attr/colorSecondary</item>
         <item name="material_drawer_divider">?attr/colorDivider</item>
 
+        <item name="md_color_button_text">?attr/colorSecondary</item>
+
         <item name="emojiIcons">?attr/colorIcon</item>
         <item name="emojiDivider">?attr/colorDivider</item>
         <item name="emojiBackground">?attr/colorSurface</item>

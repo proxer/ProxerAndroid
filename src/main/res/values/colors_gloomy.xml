@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_gloomy">#263238</color>
+    <color name="primary_gloomy_light">#4f5b62</color>
+    <color name="primary_gloomy_dark">#000a12</color>
+
+    <color name="secondary_gloomy">#263238</color>
+    <color name="secondary_gloomy_light">#4f5b62</color>
+    <color name="secondary_gloomy_dark">#000a12</color>
+</resources>

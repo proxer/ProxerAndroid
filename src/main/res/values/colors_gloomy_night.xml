@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_gloomy_night">#455a64</color>
+    <color name="primary_gloomy_light_night">#718792</color>
+    <color name="primary_gloomy_dark_night">#1c313a</color>
+
+    <color name="secondary_gloomy_night">#78909c</color>
+    <color name="secondary_gloomy_light_night">#a7c0cd</color>
+    <color name="secondary_gloomy_dark_night">#4b636e</color>
+</resources>

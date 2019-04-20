@@ -47,6 +47,7 @@
 
     <string name="theme_classic">Klassisch</string>
     <string name="theme_bg">Blau Grün</string>
+    <string name="theme_gloomy">Düster</string>
 
     <string name="theme_variant_light">Hell</string>
     <string name="theme_variant_dark">Dunkel</string>

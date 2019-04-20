@@ -27,6 +27,12 @@ enum class Theme(
         R.string.theme_bg,
         R.style.Theme_App_BG,
         R.style.Theme_App_BG_NoBackground
+    ),
+    GLOOMY(
+        "2",
+        R.string.theme_gloomy,
+        R.style.Theme_App_Gloomy,
+        R.style.Theme_App_Gloomy_NoBackground
     );
 
     @ColorInt
