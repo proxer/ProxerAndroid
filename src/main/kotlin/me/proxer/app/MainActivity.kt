@@ -210,7 +210,7 @@ class MainActivity : DrawerActivity() {
                 setFragment(itemToLoad)
 
                 if (!isRootActivity) {
-                    drawer.disableSelectability()
+                    drawer.disableSelectivity()
                 }
             }
         }

@@ -81,6 +81,7 @@ class MaterialDrawerWrapper(
 
         if (!isRoot) {
             drawer.deselect()
+            miniDrawer?.setSelection(-1)
         }
     }
 
@@ -136,7 +137,7 @@ class MaterialDrawerWrapper(
         }
     }
 
-    fun disableSelectability() {
+    fun disableSelectivity() {
         drawer.drawerItems.forEach { it.isSelectable = false }
     }
 
@@ -217,7 +218,20 @@ class MaterialDrawerWrapper(
     private fun onAccountItemClick(profile: IProfile<*>) = AccountItem.fromIdOrDefault(profile.identifier).let {
         accountClickSubject.onNext(it)
 
-        false
+        // Workaround for crash in current MaterialDrawer version.
+        when {
+            crossfader?.isCrossFaded() == true -> {
+                crossfader.crossFade()
+
+                true
+            }
+            drawer.isDrawerOpen -> {
+                drawer.closeDrawer()
+
+                true
+            }
+            else -> false
+        }
     }
 
     private fun generateAccountItems(context: Context): MutableList<IProfile<*>> = storageHelper.user.let {
