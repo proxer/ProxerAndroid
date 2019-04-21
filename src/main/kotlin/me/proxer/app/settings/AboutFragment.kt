@@ -49,7 +49,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
     companion object {
         private val libraries = arrayOf(
-            "aspectratioimageview", "autodispose", "betterlinkmovementmethod", "customtabshelper", "exomedia",
+            "aspectratioimageview", "autodispose", "betterlinkmovementmethod", "customtabshelper", "exoplayer",
             "flexboxlayout", "glide", "hawk", "jsoup", "koptional", "kotterknife", "leakcanary", "materialaboutlibrary",
             "materialpreference", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp",
             "rapiddecoder", "recyclerviewsnap", "retrofit", "rxandroid", "rxbinding", "rxkotlin", "rxjava",

@@ -9,6 +9,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
 import com.google.android.exoplayer2.ext.cast.CastPlayer
+import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
@@ -54,7 +55,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
     private val weakContext = WeakReference(context)
 
-    private val castSessionAvailabilityListener = object : CastPlayer.SessionAvailabilityListener {
+    private val castSessionAvailabilityListener = object : SessionAvailabilityListener {
         override fun onCastSessionAvailable() {
             if (castPlayer != null) {
                 castPlayer.loadItem(castMediaSource, localPlayer.currentPosition)
