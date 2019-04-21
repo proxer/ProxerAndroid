@@ -24,6 +24,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.ui.ImageDetailActivity
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.logErrors
 import okhttp3.HttpUrl
 
@@ -141,6 +142,11 @@ abstract class ImageTabsActivity : DrawerActivity() {
     }
 
     protected open fun setupToolbar() {
+        if (!DeviceUtils.isTablet(this)) {
+            root.fitsSystemWindows = true
+            root.requestApplyInsets()
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
 
