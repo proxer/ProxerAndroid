@@ -86,12 +86,8 @@ dependencies {
     }
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$leakCanaryVersion"
 
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     releaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
-
-    logReleaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     logReleaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
 
     kapt "android.arch.persistence.room:compiler:$roomVersion"

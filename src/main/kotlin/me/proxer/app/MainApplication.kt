@@ -15,7 +15,6 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
-import com.squareup.leakcanary.LeakCanary
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.android.plugins.RxAndroidPlugins
@@ -49,17 +48,12 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-
         startKoin {
             androidContext(this@MainApplication)
 
             modules(koinModules)
         }
 
-        LeakCanary.install(this)
         FlavorInitializer.initialize(this)
         NotificationUtils.createNotificationChannels(this)
 

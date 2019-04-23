@@ -23,7 +23,7 @@ ext {
     detektPluginVersion = "1.0.0-RC14"
     versionsPluginVersion = "0.21.0"
     androidCommandPluginVersion = "2.0.1"
-    ktlintPluginVersion = "7.3.0"
+    ktlintPluginVersion = "7.4.0"
 
     // Frameworks and compatibility libraries
     koinVersion = "2.0.0-rc-3"
@@ -35,7 +35,7 @@ ext {
     coreKtxVersion = "1.1.0-alpha05"
     fragmentKtxVersion = "1.1.0-alpha06"
     interactiveMediaVersion = "3.11.2"
-    castVersion = "16.1.2"
+    castVersion = "16.2.0"
     adsVersion = "16.0.0"
 
     // RxJava
@@ -97,6 +97,6 @@ ext {
     // Debugging
     customActivityOnCrashVersion = "2.2.0"
     strictModeCompatVersion = "29.0.0-beta1"
-    leakCanaryVersion = "1.6.3"
+    leakCanaryVersion = "2.0-alpha-1"
     timberVersion = "4.7.1"
 }
