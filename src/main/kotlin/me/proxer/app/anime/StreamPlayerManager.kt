@@ -12,8 +12,8 @@ import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.ads.AdsMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
@@ -232,14 +232,16 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     private fun buildLocalMediaSourceWithAds(client: OkHttpClient, uri: Uri): MediaSource {
-        val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, DefaultBandwidthMeter())
+        val context = weakContext.get() ?: throw IllegalStateException("context is null")
+
+        val bandwidthMeter = DefaultBandwidthMeter.Builder(context).build()
+        val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, bandwidthMeter)
         val imaFactory = ImaMediaSourceFactory(okHttpDataSourceFactory, this::buildLocalMediaSource)
         val localMediaSource = buildLocalMediaSource(okHttpDataSourceFactory, uri)
 
-        val context = weakContext.get()
         val safeAdsLoader = adsLoader
 
-        return if (context != null && safeAdsLoader != null) {
+        return if (safeAdsLoader != null) {
             AdsMediaSource(localMediaSource, imaFactory, safeAdsLoader, context.playerView)
         } else {
             localMediaSource
@@ -256,7 +258,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
             C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 
-            C.TYPE_OTHER -> ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
+            C.TYPE_OTHER -> ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 
             else -> throw IllegalArgumentException("Unknown streamType: $streamType")
         }
