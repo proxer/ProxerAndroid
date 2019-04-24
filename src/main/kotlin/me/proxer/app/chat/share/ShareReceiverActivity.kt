@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commitNow
+import com.squareup.moshi.Moshi
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.util.extension.unsafeLazy
+import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -21,9 +23,12 @@ class ShareReceiverActivity : BaseActivity() {
     }
 
     val conference: LocalConference? by unsafeLazy {
-        intent.getBundleExtra(ConferenceChooserTargetService.ARGUMENT_CONFERENCE_WRAPPER)
-            ?.getParcelable<LocalConference>(ConferenceChooserTargetService.ARGUMENT_CONFERENCE)
+        intent.getStringExtra(ConferenceChooserTargetService.ARGUMENT_CONFERENCE)?.let {
+            moshi.adapter(LocalConference::class.java).fromJson(it)
+        }
     }
+
+    private val moshi by inject<Moshi>()
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 

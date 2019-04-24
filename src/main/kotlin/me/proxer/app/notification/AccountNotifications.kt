@@ -16,6 +16,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.toInstantBP
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -100,8 +101,10 @@ object AccountNotifications : KoinComponent {
         }
 
         val shouldAlert = notifications
-            .map { it.date }
-            .maxBy { it }?.time ?: 0 > storageHelper.lastNotificationsDate.time
+            .maxBy { it.date }
+            ?.let { it.date.toInstantBP() }
+            ?.isAfter(storageHelper.lastNotificationsDate)
+            ?: true
 
         return builder.setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_stat_proxer)

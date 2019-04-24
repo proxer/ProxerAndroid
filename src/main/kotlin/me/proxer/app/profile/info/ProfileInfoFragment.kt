@@ -18,7 +18,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.ProfileViewModel
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.user.UserInfo
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -100,7 +100,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
         if (data.status.isBlank()) {
             statusContainer.isGone = true
         } else {
-            val rawText = data.status + " - " + data.lastStatusChange.convertToRelativeReadableTime(requireContext())
+            val rawText = data.status + " - " + data.lastStatusChange.distanceInWordsToNow(requireContext())
 
             statusText.text = rawText.linkify(mentions = false)
         }

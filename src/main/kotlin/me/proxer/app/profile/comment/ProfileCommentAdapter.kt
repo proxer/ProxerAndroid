@@ -25,7 +25,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
@@ -136,7 +136,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
             comment.userId = item.authorId
             comment.tree = item.parsedContent
 
-            time.text = item.date.convertToRelativeReadableTime(time.context)
+            time.text = item.date.distanceInWordsToNow(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(progress.context, item.episode, item.category)
 
             handleExpansion(item.id)

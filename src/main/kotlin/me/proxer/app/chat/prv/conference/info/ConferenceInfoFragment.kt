@@ -14,7 +14,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.library.entity.messenger.ConferenceInfo
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -76,7 +76,7 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>(R.layout.frag
     override fun showData(data: ConferenceInfo) {
         super.showData(data)
 
-        val dateTime = data.firstMessageTime.toDateTimeBP()
+        val dateTime = data.firstMessageTime.toLocalDateTimeBP()
         val creationDate = Utils.dateFormatter.format(dateTime)
         val creationTime = Utils.timeFormatter.format(dateTime)
 

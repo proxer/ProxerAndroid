@@ -48,7 +48,7 @@ import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
@@ -466,7 +466,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
         header.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)
         header.uploader = Uploader(data.chapter.uploaderId, data.chapter.uploaderName)
-        header.dateTime = data.chapter.date.toDateTimeBP()
+        header.dateTime = data.chapter.date.toLocalDateTimeBP()
         header.translatorGroup = translatorGroup
 
         footer.episodeInfo = SimpleEpisodeInfo(data.episodeAmount, episode)

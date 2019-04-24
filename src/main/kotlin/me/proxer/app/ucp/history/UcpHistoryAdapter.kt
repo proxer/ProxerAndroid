@@ -17,8 +17,8 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ucp.history.UcpHistoryAdapter.ViewHolder
-import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.ucp.UcpHistoryEntry
@@ -77,7 +77,7 @@ class UcpHistoryAdapter : BaseAdapter<UcpHistoryEntry, ViewHolder>() {
             status.text = status.context.getString(
                 R.string.fragment_ucp_history_entry_status,
                 item.episode,
-                item.date.convertToRelativeReadableTime(status.context)
+                item.date.distanceInWordsToNow(status.context)
             )
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))

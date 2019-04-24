@@ -7,7 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.os.bundleOf
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -19,6 +18,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsColorRes
 import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.squareup.moshi.Moshi
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -26,6 +26,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
@@ -59,6 +60,7 @@ class NewsWidgetUpdateWorker(
     }
 
     private val api by inject<ProxerApi>()
+    private val moshi by inject<Moshi>()
 
     private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
 
@@ -82,7 +84,9 @@ class NewsWidgetUpdateWorker(
                     .build()
                     .also { currentCall = it }
                     .safeExecute()
-                    .map { SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date) }
+                    .map {
+                        SimpleNews(it.id, it.threadId, it.categoryId, it.subject, it.category, it.date.toInstantBP())
+                    }
             } else {
                 emptyList()
             }
@@ -128,15 +132,17 @@ class NewsWidgetUpdateWorker(
             }
         )
 
-        val params = arrayOf(
-            NewsWidgetService.ARGUMENT_NEWS_WRAPPER to bundleOf(
-                NewsWidgetService.ARGUMENT_NEWS to news.toTypedArray()
-            )
-        )
+        val serializedNews = news
+            .map { moshi.adapter(SimpleNews::class.java).toJson(it) }
+            .toTypedArray()
 
         val intent = when (dark) {
-            true -> applicationContext.intentFor<NewsWidgetDarkService>(*params)
-            false -> applicationContext.intentFor<NewsWidgetService>(*params)
+            true -> applicationContext.intentFor<NewsWidgetDarkService>(
+                NewsWidgetDarkService.ARGUMENT_NEWS to serializedNews
+            )
+            false -> applicationContext.intentFor<NewsWidgetService>(
+                NewsWidgetService.ARGUMENT_NEWS to serializedNews
+            )
         }
 
         val detailIntent = applicationContext.intentFor<TopicActivity>()

@@ -5,7 +5,6 @@ import android.content.ComponentName
 import android.content.IntentFilter
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.os.Bundle
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import androidx.core.os.bundleOf
@@ -13,6 +12,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsColorRes
 import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.squareup.moshi.Moshi
 import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.sync.MessengerDao
@@ -20,7 +20,7 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.Utils
 import me.proxer.library.util.ProxerUrls
 import org.koin.android.ext.android.inject
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -30,28 +30,24 @@ class ConferenceChooserTargetService : ChooserTargetService() {
 
     companion object {
         const val ARGUMENT_CONFERENCE = "conference"
-        const val ARGUMENT_CONFERENCE_WRAPPER = "conference_wrapper" /* Hack for making it possible to share
-                                                                        between processes. */
     }
 
     private val messengerDao by inject<MessengerDao>()
+    private val moshi by inject<Moshi>()
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onGetChooserTargets(component: ComponentName, filter: IntentFilter) = messengerDao.getConferences()
         .asSequence()
         .take(8)
         .map {
-            val bundle = Bundle()
-
-            bundle.putParcelable(ARGUMENT_CONFERENCE, it)
-            bundle.classLoader = LocalConference::class.java.classLoader
+            val serializedConference = moshi.adapter(LocalConference::class.java).toJson(it)
 
             ChooserTarget(
                 it.topic,
                 constructIcon(it),
                 calculateScore(it.date),
                 ComponentName(packageName, ShareReceiverActivity::class.java.name),
-                bundleOf(ARGUMENT_CONFERENCE_WRAPPER to bundleOf(ARGUMENT_CONFERENCE to it))
+                bundleOf(ARGUMENT_CONFERENCE to serializedConference)
             )
         }
         .toList()
@@ -78,8 +74,8 @@ class ConferenceChooserTargetService : ChooserTargetService() {
             }
         }.toBitmap()
 
-    private fun calculateScore(conferenceDate: Date): Float {
-        val score = Date().time.toFloat() / conferenceDate.time.toFloat()
+    private fun calculateScore(conferenceDate: Instant): Float {
+        val score = Instant.now().toEpochMilli().toFloat() / conferenceDate.toEpochMilli().toFloat()
 
         return score.let { if (it > 1.0f) 1.0f else it }
     }

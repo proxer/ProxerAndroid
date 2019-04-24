@@ -32,15 +32,13 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.app.util.extension.toDateTimeBP
 import me.proxer.app.util.extension.toIconicsColorAttr
-import me.proxer.app.util.extension.toInstantBP
+import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.threeten.bp.Instant
 import org.threeten.bp.temporal.ChronoUnit
-import java.util.Date
 
 /**
  * @author Ruben Gees
@@ -165,7 +163,7 @@ class AnimeAdapter(
             translatorGroup.text = item.translatorGroupName
                 ?: translatorGroup.context.getString(R.string.fragment_anime_empty_subgroup)
 
-            dateText.text = Utils.dateFormatter.format(item.date.toDateTimeBP())
+            dateText.text = item.date.toLocalDateTime().format(Utils.dateFormatter)
 
             if (!bindAlertIfNecessary(item)) {
                 bindPlayAndInfo(item, isLoginRequired)
@@ -207,14 +205,14 @@ class AnimeAdapter(
 
             dismissAdAlert.clicks()
                 .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
-                .doOnNext { storageHelper.lastAdAlertDate = Date() }
+                .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe()
 
             setAdInterval.clicks()
                 .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
-                .doOnNext { storageHelper.lastAdAlertDate = Date() }
+                .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe(setAdIntervalClickSubject)
@@ -227,7 +225,7 @@ class AnimeAdapter(
 
         private fun bindAlertIfNecessary(item: AnimeStream): Boolean {
             val threshold by unsafeLazy {
-                storageHelper.lastAdAlertDate.toInstantBP().plus(14, ChronoUnit.DAYS)
+                storageHelper.lastAdAlertDate.plus(14, ChronoUnit.DAYS)
             }
 
             val shouldShowAdAlert = ProxerStreamResolver.supports(item.hosterName) &&

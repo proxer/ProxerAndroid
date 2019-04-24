@@ -29,13 +29,14 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.library.enums.MessageAction
 import okhttp3.HttpUrl
 
@@ -337,7 +338,7 @@ class MessengerAdapter(
         }
 
         internal open fun applyTime(message: LocalMessage) {
-            time.text = message.date.convertToRelativeReadableTime(time.context)
+            time.text = message.date.toLocalDateTime().distanceInWordsToNow(time.context)
         }
 
         internal open fun applySendStatus(message: LocalMessage) = when (message.id < 0) {

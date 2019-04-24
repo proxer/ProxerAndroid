@@ -6,7 +6,7 @@ import android.widget.RemoteViewsService
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.library.enums.Category
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -34,7 +34,7 @@ class ScheduleWidgetViewsFactory(
         val result = RemoteViews(BuildConfig.APPLICATION_ID, layout)
         val entryIntent = MediaActivity.getIntent(context, entry.entryId, entry.name, Category.ANIME)
 
-        val dateText = entry.date.toDateTimeBP().format(hourMinuteDateTimeFormatter)
+        val dateText = entry.date.toLocalDateTime().format(hourMinuteDateTimeFormatter)
         val episodeText = context.getString(R.string.fragment_schedule_episode, entry.episode.toString())
 
         result.setTextViewText(R.id.date, dateText)

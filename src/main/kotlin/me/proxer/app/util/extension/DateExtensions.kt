@@ -1,9 +1,12 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package me.proxer.app.util.extension
 
 import android.content.Context
 import me.proxer.app.R
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Period
 import org.threeten.bp.ZoneId
@@ -12,23 +15,33 @@ import java.util.Date
 
 private val zeroDate = Date(0)
 
-fun Date.convertToRelativeReadableTime(context: Context): String {
-    if (this == zeroDate) {
-        return context.getString(R.string.time_unknown)
-    }
+fun Date.distanceInWordsToNow(context: Context): String = when (zeroDate) {
+    this -> context.getString(R.string.time_unknown)
+    else -> toLocalDateTimeBP().distanceInWordsToNow(context)
+}
 
-    val dateTime = toDateTimeBP()
+fun LocalDateTime.formattedDistanceTo(other: LocalDateTime): String {
+    val duration = Duration.between(this, other)
+
+    val days = duration.toDays()
+    val hours = duration.minusDays(days).toHours()
+    val minutes = duration.minusDays(days).minusHours(hours).toMinutes()
+    val seconds = duration.minusDays(days).minusHours(hours).minusMinutes(minutes).seconds
+
+    return "%02d:%02d:%02d:%02d".format(days, hours, minutes, seconds)
+}
+
+fun LocalDateTime.distanceInWordsToNow(context: Context): String {
     val now = LocalDateTime.now()
-
-    val period = Period.between(dateTime.toLocalDate(), now.toLocalDate())
+    val period = Period.between(this.toLocalDate(), now.toLocalDate())
 
     return if (period.years <= 0) {
         if (period.months <= 0) {
             if (period.days <= 0) {
-                val hoursBetween = ChronoUnit.HOURS.between(dateTime, now).toInt()
+                val hoursBetween = ChronoUnit.HOURS.between(this, now).toInt()
 
                 if (hoursBetween <= 0) {
-                    val minutesBetween = ChronoUnit.MINUTES.between(dateTime, now).toInt()
+                    val minutesBetween = ChronoUnit.MINUTES.between(this, now).toInt()
 
                     if (minutesBetween <= 0) {
                         context.getString(R.string.time_a_moment_ago)
@@ -49,19 +62,9 @@ fun Date.convertToRelativeReadableTime(context: Context): String {
     }
 }
 
-fun Date.calculateAndFormatDifference(other: Date): String {
-    val duration = Duration.between(this.toDateTimeBP(), other.toDateTimeBP())
+inline fun Instant.toLocalDateTime(): LocalDateTime = atZone(ZoneId.systemDefault()).toLocalDateTime()
+inline fun Instant.toLocalDate(): LocalDate = atZone(ZoneId.systemDefault()).toLocalDate()
+inline fun Instant.toDate() = Date(toEpochMilli())
 
-    val days = duration.toDays()
-    val hours = duration.minusDays(days).toHours()
-    val minutes = duration.minusDays(days).minusHours(hours).toMinutes()
-    val seconds = duration.minusDays(days).minusHours(hours).minusMinutes(minutes).seconds
-
-    return "%02d:%02d:%02d:%02d".format(days, hours, minutes, seconds)
-}
-
-fun Date.toDateTimeBP(): LocalDateTime = toInstantBP()
-    .atZone(ZoneId.systemDefault())
-    .toLocalDateTime()
-
-fun Date.toInstantBP(): Instant = Instant.ofEpochMilli(time)
+inline fun Date.toLocalDateTimeBP(): LocalDateTime = toInstantBP().toLocalDateTime()
+inline fun Date.toInstantBP(): Instant = Instant.ofEpochMilli(time)

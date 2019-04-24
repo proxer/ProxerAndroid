@@ -393,12 +393,12 @@ fun Stream.toAnimeStream(
     isSupported: Boolean,
     resolutionResult: StreamResolutionResult? = null
 ) = AnimeStream(
-    id, hoster, hosterName, image, uploaderId, uploaderName, date, translatorGroupId, translatorGroupName,
+    id, hoster, hosterName, image, uploaderId, uploaderName, date.toInstantBP(), translatorGroupId, translatorGroupName,
     isOfficial, isPublic, isSupported, resolutionResult
 )
 
 fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(
-    id.toLong(), topic, customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date,
+    id.toLong(), topic, customTopic, participantAmount, image, imageType, isGroup, isRead, isRead, date.toInstantBP(),
     unreadMessageAmount, lastReadMessageId, isFullyLoaded
 )
 
@@ -409,17 +409,17 @@ fun UcpSettings.toLocalSettings() = LocalUcpSettings(
 )
 
 fun Message.toLocalMessage() = LocalMessage(
-    id.toLong(), conferenceId.toLong(), userId, username, message, action, date, device
+    id.toLong(), conferenceId.toLong(), userId, username, message, action, date.toInstantBP(), device
 )
 
 fun Comment.toParsedComment() = ParsedComment(
     id, entryId, authorId, mediaProgress, ratingDetails,
-    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date, author, image
+    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
 )
 
 fun UserComment.toParsedUserComment() = ParsedUserComment(
     id, entryId, entryName, medium, category, authorId, mediaProgress, ratingDetails,
-    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date, author, image
+    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
 )
 
 fun Topic.toTopicMetaData() = TopicMetaData(
@@ -433,11 +433,11 @@ fun Post.toParsedPost(resources: Resources): ParsedPost {
     }
 
     return ParsedPost(
-        id, parentId, userId, username, image, date, parsedSignature, modifiedById, modifiedByName, modifiedReason,
-        parsedMessage, thankYouAmount
+        id, parentId, userId, username, image, date.toInstantBP(), parsedSignature,
+        modifiedById, modifiedByName, modifiedReason, parsedMessage, thankYouAmount
     )
 }
 
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)
 
-fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message, action, date)
+fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message, action, date.toInstantBP())

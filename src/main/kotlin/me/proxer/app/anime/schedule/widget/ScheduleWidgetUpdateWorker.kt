@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.view.View
 import android.widget.RemoteViews
-import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
@@ -22,6 +21,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.toIconicsColorRes
 import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.squareup.moshi.Moshi
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -29,15 +29,16 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.intentFor
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toInstantBP
+import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.util.Locale
@@ -69,6 +70,7 @@ class ScheduleWidgetUpdateWorker(
     }
 
     private val api by inject<ProxerApi>()
+    private val moshi by inject<Moshi>()
 
     private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
 
@@ -96,8 +98,13 @@ class ScheduleWidgetUpdateWorker(
                     .also { currentCall = it }
                     .safeExecute()
                     .asSequence()
-                    .filter { it.date.toDateTimeBP().dayOfMonth == LocalDate.now().dayOfMonth }
-                    .map { SimpleCalendarEntry(it.id, it.entryId, it.name, it.episode, it.date, it.uploadDate) }
+                    .filter { it.date.toLocalDateTimeBP().dayOfMonth == LocalDate.now().dayOfMonth }
+                    .map {
+                        SimpleCalendarEntry(
+                            it.id, it.entryId, it.name, it.episode,
+                            it.date.toInstantBP(), it.uploadDate.toInstantBP()
+                        )
+                    }
                     .toList()
             } else {
                 emptyList()
@@ -149,15 +156,17 @@ class ScheduleWidgetUpdateWorker(
             }
         )
 
-        val params = arrayOf(
-            ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES_WRAPPER to bundleOf(
-                ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES to calendarEntries.toTypedArray()
-            )
-        )
+        val serializedCalendarEntries = calendarEntries
+            .map { moshi.adapter(SimpleCalendarEntry::class.java).toJson(it) }
+            .toTypedArray()
 
         val intent = when (dark) {
-            true -> applicationContext.intentFor<ScheduleWidgetDarkService>(*params)
-            false -> applicationContext.intentFor<ScheduleWidgetService>(*params)
+            true -> applicationContext.intentFor<ScheduleWidgetDarkService>(
+                ScheduleWidgetDarkService.ARGUMENT_CALENDAR_ENTRIES to serializedCalendarEntries
+            )
+            false -> applicationContext.intentFor<ScheduleWidgetService>(
+                ScheduleWidgetService.ARGUMENT_CALENDAR_ENTRIES to serializedCalendarEntries
+            )
         }
 
         val detailIntent = applicationContext.intentFor<MediaActivity>()
@@ -166,10 +175,10 @@ class ScheduleWidgetUpdateWorker(
         val position = when (calendarEntries.isEmpty()) {
             true -> 0
             false -> calendarEntries
-                .indexOfFirst { it.date.toDateTimeBP().isAfter(LocalDateTime.now()) }
+                .indexOfFirst { it.date.isAfter(Instant.now()) }
                 .let {
                     when (it < 0) {
-                        true -> when (LocalDateTime.now().isAfter(calendarEntries.last().date.toDateTimeBP())) {
+                        true -> when (Instant.now().isAfter(calendarEntries.last().date)) {
                             true -> calendarEntries.lastIndex
                             false -> 0
                         }

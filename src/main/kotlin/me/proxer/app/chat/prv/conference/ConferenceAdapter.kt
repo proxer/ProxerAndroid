@@ -29,14 +29,15 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toIconicsColorAttr
+import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.library.util.ProxerUrls
 
 /**
@@ -113,7 +114,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
         }
 
         private fun bindTime(item: ConferenceWithMessage) {
-            time.text = item.conference.date.convertToRelativeReadableTime(time.context)
+            time.text = item.conference.date.toLocalDateTime().distanceInWordsToNow(time.context)
         }
 
         private fun bindPreviewText(item: ConferenceWithMessage) {

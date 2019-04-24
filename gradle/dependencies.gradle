@@ -71,6 +71,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
     implementation "com.squareup.okio:okio:$okioVersion"
     implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.squareup.moshi:moshi-adapters:$moshiVersion"
     implementation "com.github.rubengees:easy-header-footer-adapter:$easyHeaderFooterAdapterVersion"
     implementation "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion"
     implementation "com.github.rubengees:kotterknife:$kotterknifeVersion"

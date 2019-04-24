@@ -6,7 +6,8 @@ import android.widget.RemoteViewsService
 import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.distanceInWordsToNow
+import me.proxer.app.util.extension.toLocalDateTime
 
 /**
  * @author Ruben Gees
@@ -29,7 +30,7 @@ class NewsWidgetViewsFactory(
         val topicIntent = TopicActivity.getIntent(context, news.threadId, news.categoryId, news.subject)
         val info = context.getString(
             R.string.widget_news_info,
-            news.date.convertToRelativeReadableTime(context),
+            news.date.toLocalDateTime().distanceInWordsToNow(context),
             news.category
         )
 

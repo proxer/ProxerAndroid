@@ -3,6 +3,7 @@ package me.proxer.app.news
 import io.reactivex.Single
 import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.base.PagedContentViewModel
+import me.proxer.app.util.extension.toInstantBP
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.notifications.NewsArticle
 
@@ -16,7 +17,7 @@ class NewsViewModel : PagedContentViewModel<NewsArticle>() {
     override val dataSingle: Single<List<NewsArticle>>
         get() = super.dataSingle.doOnSuccess {
             if (page == 0) {
-                it.firstOrNull()?.date?.let { date ->
+                it.firstOrNull()?.date?.toInstantBP()?.let { date ->
                     storageHelper.lastNewsDate = date
                 }
             }

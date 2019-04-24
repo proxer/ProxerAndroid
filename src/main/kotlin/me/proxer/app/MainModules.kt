@@ -6,6 +6,9 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.AnimeViewModel
@@ -79,6 +82,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.StringQualifier
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.threeten.bp.Instant
 import timber.log.Timber
 import java.io.File
 import java.security.KeyStore
@@ -161,7 +165,25 @@ private val applicationModules = module(createdAtStart = true) {
             .build()
     }
 
-    single { Moshi.Builder().build() }
+    single {
+        Moshi.Builder()
+            .add(Instant::class.java, object : JsonAdapter<Instant>() {
+                override fun fromJson(reader: JsonReader): Instant? {
+                    return when {
+                        reader.peek() == JsonReader.Token.NULL -> null
+                        else -> Instant.ofEpochMilli(reader.nextLong())
+                    }
+                }
+
+                override fun toJson(writer: JsonWriter, value: Instant?) {
+                    when (value) {
+                        null -> writer.nullValue()
+                        else -> writer.value(value.toEpochMilli())
+                    }
+                }
+            })
+            .build()
+    }
 
     single {
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)

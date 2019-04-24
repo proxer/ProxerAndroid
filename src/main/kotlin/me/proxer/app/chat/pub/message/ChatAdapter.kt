@@ -30,8 +30,8 @@ import me.proxer.app.chat.pub.message.ChatAdapter.MessageViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
@@ -324,7 +324,7 @@ class ChatAdapter(
         }
 
         internal open fun applyTime(message: ParsedChatMessage) {
-            time.text = message.date.convertToRelativeReadableTime(time.context)
+            time.text = message.date.distanceInWordsToNow(time.context)
         }
 
         internal open fun applySendStatus(message: ParsedChatMessage) = when (message.id.toLong() < 0) {

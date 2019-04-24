@@ -23,8 +23,8 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.extension.convertToRelativeReadableTime
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -106,7 +106,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
             title.text = item.subject
             description.fastText = item.description.trim()
             category.text = item.category
-            time.text = item.date.convertToRelativeReadableTime(time.context)
+            time.text = item.date.distanceInWordsToNow(time.context)
 
             handleExpansion(item.id)
 

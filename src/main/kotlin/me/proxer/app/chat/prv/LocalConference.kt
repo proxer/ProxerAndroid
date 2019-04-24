@@ -4,13 +4,16 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.JsonClass
 import me.proxer.app.util.extension.readStringSafely
+import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.messenger.Conference
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
  */
+@JsonClass(generateAdapter = true)
 @Entity(tableName = "conferences")
 data class LocalConference(
     @PrimaryKey(autoGenerate = true) val id: Long,
@@ -22,7 +25,7 @@ data class LocalConference(
     val isGroup: Boolean,
     val localIsRead: Boolean,
     val isRead: Boolean,
-    val date: Date,
+    val date: Instant,
     val unreadMessageAmount: Int,
     val lastReadMessageId: String,
     val isFullyLoaded: Boolean
@@ -47,7 +50,7 @@ data class LocalConference(
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
         parcel.readByte() != 0.toByte(),
-        Date(parcel.readLong()),
+        Instant.ofEpochMilli(parcel.readLong()),
         parcel.readInt(),
         parcel.readStringSafely(),
         parcel.readByte() != 0.toByte()
@@ -63,7 +66,7 @@ data class LocalConference(
         parcel.writeByte(if (isGroup) 1 else 0)
         parcel.writeByte(if (localIsRead) 1 else 0)
         parcel.writeByte(if (isRead) 1 else 0)
-        parcel.writeLong(date.time)
+        parcel.writeLong(date.toEpochMilli())
         parcel.writeInt(unreadMessageAmount)
         parcel.writeString(lastReadMessageId)
         parcel.writeByte(if (isFullyLoaded) 1 else 0)
@@ -73,6 +76,6 @@ data class LocalConference(
 
     fun toNonLocalConference() = Conference(
         id.toString(), topic, customTopic, participantAmount, image, imageType,
-        isGroup, isRead, date, unreadMessageAmount, lastReadMessageId
+        isGroup, isRead, date.toDate(), unreadMessageAmount, lastReadMessageId
     )
 }

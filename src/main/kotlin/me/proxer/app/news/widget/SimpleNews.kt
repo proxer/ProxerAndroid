@@ -2,19 +2,21 @@ package me.proxer.app.news.widget
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import me.proxer.app.util.extension.readStringSafely
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
  */
+@JsonClass(generateAdapter = true)
 data class SimpleNews(
     val id: String,
     val threadId: String,
     val categoryId: String,
     val subject: String,
     val category: String,
-    val date: Date
+    val date: Instant
 ) : Parcelable {
 
     companion object {
@@ -32,7 +34,7 @@ data class SimpleNews(
         parcel.readStringSafely(),
         parcel.readStringSafely(),
         parcel.readStringSafely(),
-        Date(parcel.readLong())
+        Instant.ofEpochMilli(parcel.readLong())
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -41,7 +43,7 @@ data class SimpleNews(
         parcel.writeString(categoryId)
         parcel.writeString(subject)
         parcel.writeString(category)
-        parcel.writeLong(date.time)
+        parcel.writeLong(date.toEpochMilli())
     }
 
     override fun describeContents() = 0

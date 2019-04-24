@@ -2,19 +2,21 @@ package me.proxer.app.anime.schedule.widget
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.squareup.moshi.JsonClass
 import me.proxer.app.util.extension.readStringSafely
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
  */
+@JsonClass(generateAdapter = true)
 data class SimpleCalendarEntry(
     val id: String,
     val entryId: String,
     val name: String,
     val episode: Int,
-    val date: Date,
-    val uploadDate: Date
+    val date: Instant,
+    val uploadDate: Instant
 ) : Parcelable {
 
     companion object {
@@ -31,8 +33,8 @@ data class SimpleCalendarEntry(
         parcel.readStringSafely(),
         parcel.readStringSafely(),
         parcel.readInt(),
-        Date(parcel.readLong()),
-        Date(parcel.readLong())
+        Instant.ofEpochMilli(parcel.readLong()),
+        Instant.ofEpochMilli(parcel.readLong())
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,8 +42,8 @@ data class SimpleCalendarEntry(
         parcel.writeString(entryId)
         parcel.writeString(name)
         parcel.writeInt(episode)
-        parcel.writeLong(date.time)
-        parcel.writeLong(uploadDate.time)
+        parcel.writeLong(date.toEpochMilli())
+        parcel.writeLong(uploadDate.toEpochMilli())
     }
 
     override fun describeContents() = 0

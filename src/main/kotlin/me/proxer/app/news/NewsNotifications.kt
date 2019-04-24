@@ -12,6 +12,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.entity.notifications.NewsArticle
 import org.koin.core.KoinComponent
@@ -87,8 +88,10 @@ object NewsNotifications : KoinComponent {
         }
 
         val shouldAlert = news
-            .map { it.date }
-            .maxBy { it }?.time ?: 0 > storageHelper.lastNewsDate.time
+            .maxBy { it.date }
+            ?.let { it.date.toInstantBP() }
+            ?.isAfter(storageHelper.lastNewsDate)
+            ?: true
 
         return builder.setAutoCancel(true)
             .setSmallIcon(R.drawable.ic_stat_proxer)

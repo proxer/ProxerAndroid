@@ -12,6 +12,7 @@ import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toInstantBP
 import me.proxer.library.enums.NotificationFilter
 
 /**
@@ -43,7 +44,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
             }
             .doOnSuccess {
                 if (page == 0) {
-                    it.firstOrNull()?.date?.let { date ->
+                    it.firstOrNull()?.date?.toInstantBP()?.let { date ->
                         storageHelper.lastNotificationsDate = date
                     }
                 }

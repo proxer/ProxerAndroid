@@ -16,7 +16,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.notification.NotificationAdapter.ViewHolder
 import me.proxer.app.util.extension.ProxerNotification
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 
@@ -61,7 +61,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
                 .subscribe(deleteClickSubject)
 
             text.text = item.text.parseAsHtml()
-            date.text = item.date.convertToRelativeReadableTime(date.context)
+            date.text = item.date.distanceInWordsToNow(date.context)
         }
     }
 }

@@ -6,6 +6,7 @@ import me.proxer.library.enums.MessageAction
 import me.proxer.library.enums.TagSubType
 import me.proxer.library.enums.TagType
 import me.proxer.library.util.ProxerUtils
+import org.threeten.bp.Instant
 import java.util.Date
 
 /**
@@ -15,10 +16,16 @@ import java.util.Date
 class RoomConverters {
 
     @TypeConverter
-    fun fromTimestamp(value: Long?) = value?.let { Date(it) }
+    fun fromDate(date: Date?) = date?.time
 
     @TypeConverter
-    fun toTimestamp(date: Date?) = date?.time
+    fun toDate(value: Long?) = value?.let { Date(it) }
+
+    @TypeConverter
+    fun fromInstant(date: Instant?) = date?.toEpochMilli()
+
+    @TypeConverter
+    fun toInstant(value: Long?) = value?.let { Instant.ofEpochMilli(it) }
 
     @TypeConverter
     fun fromMessageAction(value: MessageAction?) = value?.let { ProxerUtils.getSafeApiEnumName(it) }

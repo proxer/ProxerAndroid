@@ -36,16 +36,15 @@ import me.proxer.app.anime.schedule.ScheduleEntryAdapter.ViewHolder
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.calculateAndFormatDifference
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.formattedDistanceTo
 import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Collections
-import java.util.Date
 import java.util.Locale
 import java.util.WeakHashMap
 import java.util.concurrent.TimeUnit
@@ -211,8 +210,8 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
         }
 
         private fun bindAiringInfo(item: CalendarEntry) {
-            val itemDateTime = item.date.toDateTimeBP()
-            val itemUploadDateTime = item.uploadDate.toDateTimeBP()
+            val itemDateTime = item.date.toLocalDateTimeBP()
+            val itemUploadDateTime = item.uploadDate.toLocalDateTimeBP()
 
             val airingDateText = hourMinuteDateTimeFormatter.format(itemDateTime)
             val uploadDate = hourMinuteDateTimeFormatter.format(itemUploadDateTime)
@@ -245,7 +244,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
             override fun accept(t: Long?) {
                 val now = LocalDateTime.now()
 
-                if (item.uploadDate.toDateTimeBP().isBefore(now)) {
+                if (item.uploadDate.toLocalDateTimeBP().isBefore(now)) {
                     if (item.date == item.uploadDate) {
                         val airedText = status.context.getString(R.string.fragment_schedule_aired)
 
@@ -264,15 +263,15 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         }
                     }
                 } else {
-                    if (item.date.toDateTimeBP().isBefore(now)) {
+                    if (item.date.toLocalDateTimeBP().isBefore(now)) {
                         status.text = status.context.getString(
                             R.string.fragment_schedule_aired_remaining_time,
-                            Date().calculateAndFormatDifference(item.uploadDate)
+                            LocalDateTime.now().formattedDistanceTo(item.uploadDate.toLocalDateTimeBP())
                         )
                     } else {
                         status.text = status.context.getString(
                             R.string.fragment_schedule_remaining_time,
-                            Date().calculateAndFormatDifference(item.date)
+                            LocalDateTime.now().formattedDistanceTo(item.date.toLocalDateTimeBP())
                         )
                     }
                 }

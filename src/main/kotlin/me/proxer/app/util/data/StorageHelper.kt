@@ -6,7 +6,7 @@ import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
 import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.library.enums.Language
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -52,7 +52,7 @@ class StorageHelper(
         get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
         set(value) {
             putOrThrow(UCP_SETTINGS, value)
-            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Date().time)
+            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
         }
 
     val isLoggedIn: Boolean
@@ -70,22 +70,22 @@ class StorageHelper(
             putOrThrow(TWO_FACTOR_AUTHENTICATION, value)
         }
 
-    var lastNewsDate: Date
-        get() = Date(Hawk.get(LAST_NEWS_DATE, 0L))
+    var lastNewsDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_NEWS_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_NEWS_DATE, value.time)
+            putOrThrow(LAST_NEWS_DATE, value.toEpochMilli())
         }
 
-    var lastNotificationsDate: Date
-        get() = Date(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
+    var lastNotificationsDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_NOTIFICATIONS_DATE, value.time)
+            putOrThrow(LAST_NOTIFICATIONS_DATE, value.toEpochMilli())
         }
 
-    var lastChatMessageDate: Date
-        get() = Date(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
+    var lastChatMessageDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_CHAT_MESSAGE_DATE, value.time)
+            putOrThrow(LAST_CHAT_MESSAGE_DATE, value.toEpochMilli())
         }
 
     val chatInterval: Long
@@ -97,19 +97,19 @@ class StorageHelper(
             putOrThrow(CONFERENCES_SYNCHRONIZED, value)
         }
 
-    var lastTagUpdateDate: Date
-        get() = Date(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
+    var lastTagUpdateDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_TAG_UPDATE_DATE, value.time)
+            putOrThrow(LAST_TAG_UPDATE_DATE, value.toEpochMilli())
         }
 
-    val lastUcpSettingsUpdateDate: Date
-        get() = Date(Hawk.get(LAST_UCP_SETTINGS_UPDATE_DATE, 0L))
+    val lastUcpSettingsUpdateDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_UCP_SETTINGS_UPDATE_DATE, 0L))
 
-    var lastAdAlertDate: Date
-        get() = Date(Hawk.get(LAST_AD_ALERT_DATE, 0L))
+    var lastAdAlertDate: Instant
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_AD_ALERT_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_AD_ALERT_DATE, value.time)
+            putOrThrow(LAST_AD_ALERT_DATE, value.toEpochMilli())
         }
 
     var wasCastIntroductoryOverlayShown: Boolean
@@ -139,8 +139,8 @@ class StorageHelper(
     fun incrementLaunches() = putOrThrow(LAUNCHES, Hawk.get(LAUNCHES, 0) + 1)
 
     fun resetUserData() {
-        lastChatMessageDate = Date(0L)
-        lastNotificationsDate = Date(0L)
+        lastChatMessageDate = Instant.ofEpochMilli(0L)
+        lastNotificationsDate = Instant.ofEpochMilli(0L)
         areConferencesSynchronized = false
 
         deleteOrThrow(UCP_SETTINGS)

@@ -2,7 +2,8 @@ package me.proxer.app.news.widget
 
 import android.content.Intent
 import android.widget.RemoteViewsService
-import me.proxer.app.util.extension.getSafeParcelableArray
+import com.squareup.moshi.Moshi
+import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -11,13 +12,13 @@ class NewsWidgetService : RemoteViewsService() {
 
     companion object {
         const val ARGUMENT_NEWS = "news"
-        const val ARGUMENT_NEWS_WRAPPER = "news_wrapper" /* Hack for making it possible to share
-                                                            between processes. */
     }
 
+    private val moshi by inject<Moshi>()
+
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        val newsWrapper = intent.getBundleExtra(ARGUMENT_NEWS_WRAPPER)
-        val news = newsWrapper.getSafeParcelableArray(ARGUMENT_NEWS).map { it as SimpleNews }
+        val news = intent.getStringArrayExtra(ARGUMENT_NEWS)
+            .mapNotNull { moshi.adapter(SimpleNews::class.java).fromJson(it) }
 
         return NewsWidgetViewsFactory(applicationContext, false, news)
     }

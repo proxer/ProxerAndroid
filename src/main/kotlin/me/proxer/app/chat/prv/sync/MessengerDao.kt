@@ -14,7 +14,7 @@ import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
 import org.koin.core.KoinComponent
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -26,7 +26,7 @@ abstract class MessengerDao : KoinComponent {
     open fun insertMessageToSend(user: LocalUser, text: String, conferenceId: Long): LocalMessage {
         val message = LocalMessage(
             calculateNextMessageToSendId(), conferenceId, user.id, user.name,
-            text, MessageAction.NONE, Date(), Device.MOBILE
+            text, MessageAction.NONE, Instant.now(), Device.MOBILE
         )
 
         insertMessage(message)

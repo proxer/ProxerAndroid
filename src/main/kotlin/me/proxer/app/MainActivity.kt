@@ -29,7 +29,6 @@ import me.proxer.app.settings.theme.ThemeVariant
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.extension.intentFor
-import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
@@ -75,7 +74,7 @@ class MainActivity : DrawerActivity() {
         }
 
         if (isRootActivity && savedInstanceState == null && storageHelper.isLoggedIn) {
-            val lastUcpSettingsUpdate = storageHelper.lastUcpSettingsUpdateDate.toInstantBP()
+            val lastUcpSettingsUpdate = storageHelper.lastUcpSettingsUpdateDate
             val threshold = Instant.now().minus(5, ChronoUnit.MINUTES)
 
             if (threshold.isAfter(lastUcpSettingsUpdate)) {

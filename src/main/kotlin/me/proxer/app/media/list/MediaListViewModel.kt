@@ -13,7 +13,7 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toDateTimeBP
+import me.proxer.app.util.extension.toLocalDate
 import me.proxer.app.util.extension.toParcelableTag
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.list.MediaListEntry
@@ -26,8 +26,8 @@ import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import me.proxer.library.enums.TagType
 import org.koin.core.inject
-import org.threeten.bp.LocalDateTime
-import java.util.Date
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
 import java.util.EnumSet
 import kotlin.properties.Delegates
 
@@ -116,7 +116,7 @@ class MediaListViewModel(
                         .doOnSuccess {
                             tagDao.replaceTags(it)
 
-                            storageHelper.lastTagUpdateDate = Date()
+                            storageHelper.lastTagUpdateDate = Instant.now()
                         }
                     else -> Single.just(cachedTags)
                 }
@@ -148,8 +148,8 @@ class MediaListViewModel(
         )
     }
 
-    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.toDateTimeBP()
-        .isBefore(LocalDateTime.now().minusDays(15))
+    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.toLocalDate()
+        .isBefore(LocalDate.now().minusDays(15))
 
     private data class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)
 }

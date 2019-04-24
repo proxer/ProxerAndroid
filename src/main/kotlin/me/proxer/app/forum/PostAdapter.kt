@@ -23,7 +23,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
-import me.proxer.app.util.extension.convertToRelativeReadableTime
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
@@ -101,7 +101,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             ViewCompat.setTransitionName(image, "post_${item.id}")
 
             user.text = item.username
-            date.text = item.date.convertToRelativeReadableTime(date.context)
+            date.text = item.date.distanceInWordsToNow(date.context)
             thankYou.text = item.thankYouAmount.toString()
 
             post.userId = item.userId

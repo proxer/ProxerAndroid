@@ -5,10 +5,11 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -29,7 +30,7 @@ data class LocalMessage(
     val username: String,
     val message: String,
     val action: MessageAction,
-    val date: Date,
+    val date: Instant,
     val device: Device
 ) {
 
@@ -37,6 +38,6 @@ data class LocalMessage(
     val styledMessage = BBParser.parseSimple(message).optimize()
 
     fun toNonLocalMessage() = Message(
-        id.toString(), conferenceId.toString(), userId, username, message, action, date, device
+        id.toString(), conferenceId.toString(), userId, username, message, action, date.toDate(), device
     )
 }

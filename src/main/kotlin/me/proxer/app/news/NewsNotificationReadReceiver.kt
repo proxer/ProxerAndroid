@@ -11,7 +11,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import java.util.Date
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -36,7 +36,7 @@ class NewsNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
             .fromAction {
                 NewsNotifications.cancel(context)
 
-                storageHelper.lastNewsDate = Date()
+                storageHelper.lastNewsDate = Instant.now()
 
                 api.notifications.news()
                     .markAsRead(true)

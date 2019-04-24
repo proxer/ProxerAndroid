@@ -107,7 +107,9 @@ object MessengerNotifications : KoinComponent {
 
         val shouldAlert = conferenceMap.keys
             .map { it.date }
-            .maxBy { it }?.time ?: 0 > storageHelper.lastChatMessageDate.time
+            .maxBy { it }
+            ?.isAfter(storageHelper.lastChatMessageDate)
+            ?: true
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_proxer)
@@ -258,7 +260,7 @@ object MessengerNotifications : KoinComponent {
                         .setKey(message.userId)
                         .build()
 
-                    it.addMessage(message.message, message.date.time, messagePerson)
+                    it.addMessage(message.message, message.date.toEpochMilli(), messagePerson)
                 }
             }
     }
