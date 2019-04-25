@@ -60,7 +60,9 @@ class UcpActivity : DrawerActivity() {
         title = getString(R.string.section_ucp)
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
 
         override fun getItem(position: Int) = when (position) {
             0 -> UcpOverviewFragment.newInstance()

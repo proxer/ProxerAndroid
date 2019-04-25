@@ -191,6 +191,8 @@ apply from: "${projectDir}/gradle/dependencies.gradle"
 
 tasks.withType(KotlinCompile).all {
     kotlinOptions {
+        allWarningsAsErrors = true
+        jvmTarget = javaVersion.toString()
         freeCompilerArgs = ["-Xjsr305=strict", "-progressive"]
     }
 }

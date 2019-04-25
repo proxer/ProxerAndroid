@@ -73,7 +73,9 @@ class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
         super.onDestroyView()
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
 
         override fun getItem(position: Int) = when (position) {
             0 -> ChatRoomFragment.newInstance()

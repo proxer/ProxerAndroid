@@ -72,7 +72,9 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         title = name
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
 
         override fun getItem(position: Int) = when (position) {
             0 -> TranslatorGroupInfoFragment.newInstance()
