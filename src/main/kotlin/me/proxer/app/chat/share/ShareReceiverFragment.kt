@@ -126,6 +126,7 @@ class ShareReceiverFragment : BaseContentFragment<List<ConferenceWithMessage>>(R
                         searchQuery = null
                     }
 
+                    TransitionManager.endTransitions(toolbar)
                     TransitionManager.beginDelayedTransition(toolbar)
                 }
 

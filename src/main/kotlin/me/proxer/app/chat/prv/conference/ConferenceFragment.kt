@@ -171,6 +171,7 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.la
                         searchQuery = null
                     }
 
+                    TransitionManager.endTransitions(toolbar)
                     TransitionManager.beginDelayedTransition(toolbar)
                 }
 

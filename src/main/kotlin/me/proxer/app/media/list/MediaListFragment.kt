@@ -286,6 +286,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment
                         viewModel.reload()
                     }
 
+                    TransitionManager.endTransitions(toolbar)
                     TransitionManager.beginDelayedTransition(toolbar)
                 }
 
