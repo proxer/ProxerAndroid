@@ -1,4 +1,4 @@
--repackageclasses
+-overloadaggressively
 
 # Keep stacktraces readeable.
 -keepattributes SourceFile,LineNumberTable
