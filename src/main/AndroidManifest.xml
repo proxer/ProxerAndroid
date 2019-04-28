@@ -398,5 +398,11 @@
         <receiver
             android:name=".chat.prv.sync.DirectReplyReceiver"
             android:exported="false" />
+
+        <provider
+            android:name="com.mikepenz.iconics.IconicsContentProvider"
+            android:authorities="${applicationId}.iconics.core.provider"
+            android:exported="false"
+            tools:node="remove" />
     </application>
 </manifest>

@@ -3,7 +3,6 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
     implementation "com.google.android.gms:play-services-cast-framework:$castVersion"
-    implementation "com.google.android.gms:play-services-ads-identifier:$adsVersion"
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$interactiveMediaVersion"
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
@@ -33,11 +32,11 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
     implementation "com.google.android.material:material:$materialComponentsVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
-    implementation "net.xpece.android:support-preference:$supportPreferenceVersion"
-    implementation "net.xpece.android:support-spinner:$supportPreferenceVersion"
-    implementation "com.mikepenz:iconics-core:$iconicsVersion"
-    implementation "com.mikepenz:iconics-views:$iconicsVersion"
-    implementation "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion"
+    implementation "com.github.consp1racy.android-support-preference:support-preference:$supportPreferenceVersion"
+    implementation "com.github.consp1racy.android-support-preference:support-spinner:$supportPreferenceVersion"
+    implementation "com.github.rubengees.Android-Iconics:library-core:$iconicsVersion"
+    implementation "com.github.rubengees.Android-Iconics:iconics-view-library:$iconicsVersion"
+    implementation "com.github.rubengees.Android-Iconics:community-material-typeface-library:$iconicsVersion"
     implementation "com.mikepenz:materialdrawer:$materialDrawerVersion"
     implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion"
     implementation "com.mikepenz:materialize:$materializeVersion"
@@ -76,15 +75,12 @@ dependencies {
     implementation "com.gojuno.koptional:koptional-rxjava2-extensions:$kOptionalVersion"
     implementation "com.github.rubengees:kotterknife:$kotterknifeVersion"
     implementation "com.github.rubengees:RapidDecoder:$rapidDecoderVersion"
+    implementation "com.github.rubengees:hawk:$hawkVersion"
     implementation "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion"
     implementation "org.jsoup:jsoup:$jsoupVersion"
 
     implementation "com.kirich1409:strict-mode-compat:$strictModeCompatVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
-
-    implementation("com.github.rubengees:hawk:$hawkVersion") {
-        exclude module: "gson"
-    }
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
@@ -94,4 +90,11 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+}
+
+configurations {
+    implementation {
+        exclude group: "com.mikepenz", module: "iconics-core"
+        exclude module: "gson"
+    }
 }

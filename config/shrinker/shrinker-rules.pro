@@ -20,9 +20,6 @@
     public static int wtf(...);
 }
 
-# Iconics
--keepnames class com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-
 # Material Preference
 -keepclassmembers class androidx.preference.PreferenceManager {
     void setNoCommit(boolean);
@@ -40,9 +37,3 @@
 -keepclasseswithmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
     public <init>(...);
 }
-
-# Keep decoders accessed through reflection.
--keep class me.proxer.app.manga.decoder.RapidImageDecoder
--keep class me.proxer.app.manga.decoder.RapidImageRegionDecoder
--keep class me.proxer.app.manga.decoder.RapidImageNativeDecoder
--keep class me.proxer.app.manga.decoder.RapidImageRegionNativeDecoder
