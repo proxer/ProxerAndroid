@@ -3,8 +3,6 @@ package me.proxer.app
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
@@ -144,10 +142,6 @@ class MainActivity : DrawerActivity() {
                         }
                         2 -> if (option.isActivated) {
                             preferenceHelper.themeContainer = ThemeContainer(Theme.CLASSIC, ThemeVariant.DARK)
-
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-                            ActivityCompat.recreate(this)
                         }
                     }
                 }
