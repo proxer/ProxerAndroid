@@ -1,3 +1,5 @@
+-repackageclasses
+
 # Keep stacktraces readeable.
 -keepattributes SourceFile,LineNumberTable
 
@@ -18,6 +20,15 @@
     public static int w(...);
     public static int e(...);
     public static int wtf(...);
+}
+
+# subsampling-scale-image-view
+-keepclasseswithmembernames class * implements com.davemorrissey.labs.subscaleview.decoder.ImageDecoder {
+    <init>(...);
+}
+
+-keepclasseswithmembernames class * implements com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder {
+    <init>(...);
 }
 
 # Material Preference
