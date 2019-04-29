@@ -2,7 +2,7 @@ package me.proxer.app.manga
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.os.Bundle
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -12,12 +12,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.target.ImageViewTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
-import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
@@ -35,21 +32,18 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.MangaViewHolder
-import me.proxer.app.manga.decoder.RapidImageDecoder
-import me.proxer.app.manga.decoder.RapidImageNativeDecoder
-import me.proxer.app.manga.decoder.RapidImageRegionDecoder
-import me.proxer.app.manga.decoder.RapidImageRegionNativeDecoder
+import me.proxer.app.manga.decoder.FallbackDecoderFactory
+import me.proxer.app.manga.decoder.FallbackRegionDecoderFactory
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.GLUtil
-import me.proxer.app.util.data.ParcelableStringSerializableMap
 import me.proxer.app.util.extension.decodedName
-import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
+import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
@@ -60,10 +54,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>() {
+class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>() {
 
     private companion object {
-        private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
         private const val VIEW_TYPE_IMAGE = 1
         private const val VIEW_TYPE_GIF = 2
     }
@@ -72,21 +65,16 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     val clickSubject: PublishSubject<Triple<View, Pair<Float, Float>, Int>> = PublishSubject.create()
     val lowMemorySubject: PublishSubject<Unit> = PublishSubject.create()
 
-    var server by Delegates.notNull<String>()
-    var entryId by Delegates.notNull<String>()
-    var id by Delegates.notNull<String>()
+    private val imageRegionDecoderFactory = FallbackRegionDecoderFactory()
+    private val imageDecoderFactory = FallbackDecoderFactory()
 
-    private val fallbackMap: ParcelableStringSerializableMap<FallbackStage>
-    private val preloadTargets = mutableListOf<Target<File>>()
+    private var server by Delegates.notNull<String>()
+    private var entryId by Delegates.notNull<String>()
+    private var id by Delegates.notNull<String>()
 
     private var lastTouchCoordinates: Pair<Float, Float>? = null
 
     init {
-        fallbackMap = when (savedInstanceState) {
-            null -> ParcelableStringSerializableMap()
-            else -> savedInstanceState.getSafeParcelable(REQUIRES_FALLBACK_STATE)
-        }
-
         setHasStableIds(true)
     }
 
@@ -107,36 +95,13 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     override fun onBindViewHolder(holder: MangaViewHolder, position: Int) = holder.bind(data[position])
 
     override fun getItemViewType(position: Int): Int {
-        return when (data[position].decodedName.endsWith(".gif", ignoreCase = true)) {
+        return when (data[position].name.endsWith(".gif", ignoreCase = true)) {
             true -> VIEW_TYPE_GIF
             false -> VIEW_TYPE_IMAGE
         }
     }
 
-    override fun swapDataAndNotifyWithDiffing(newData: List<Page>) {
-        super.swapDataAndNotifyWithDiffing(newData)
-
-        preloadTargets.forEach { glide?.clear(it) }
-        preloadTargets.clear()
-
-        val preloadList = newData.map {
-            ProxerUrls.mangaPageImage(server, entryId, id, it.decodedName).toString()
-        }
-
-        if (preloadList.isNotEmpty()) {
-            val preloadMap = preloadList
-                .asSequence()
-                .mapIndexed { index, url -> url to preloadList.getOrNull(index + 1) }
-                .associate { it }
-
-            preload(preloadMap, preloadList.first())
-        }
-    }
-
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        preloadTargets.forEach { glide?.clear(it) }
-        preloadTargets.clear()
-
         glide = null
     }
 
@@ -153,18 +118,10 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         }
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, fallbackMap)
-
-    private fun preload(links: Map<String, String?>, next: String, failures: Int = 0) {
-        val target = GlidePreloadTarget(links, next, failures)
-
-        preloadTargets += target
-
-        glide
-            ?.downloadOnly()
-            ?.load(next)
-            ?.logErrors()
-            ?.into(target)
+    fun setChapter(chapter: Chapter) {
+        this.server = chapter.server
+        this.entryId = chapter.entryId
+        this.id = chapter.id
     }
 
     abstract inner class MangaViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
@@ -194,34 +151,16 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             image.isVisible = true
         }
 
-        protected fun handleImageLoadError(error: Exception, position: Int) {
-            // This happens on certain devices with certain images due to a buggy Skia library version.
-            // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
-            // use, show the error indicator.
+        protected open fun handleImageLoadError(error: Exception, position: Int): Boolean {
             Timber.e(error)
 
-            when {
-                error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
-                else -> {
-                    val key = data[position].decodedName
+            return when {
+                error is OutOfMemoryError || error.cause is OutOfMemoryError -> {
+                    lowMemorySubject.onNext(Unit)
 
-                    when (fallbackMap[key] ?: FallbackStage.NORMAL) {
-                        FallbackStage.NORMAL -> {
-                            fallbackMap[key] = FallbackStage.RAPID
-
-                            bind(data[position])
-                        }
-                        FallbackStage.RAPID -> {
-                            fallbackMap[key] = FallbackStage.NATIVE
-
-                            bind(data[position])
-                        }
-                        FallbackStage.NATIVE -> {
-                            errorIndicator.isVisible = true
-                            image.isVisible = false
-                        }
-                    }
+                    true
                 }
+                else -> false
             }
         }
 
@@ -266,7 +205,10 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         init {
             image.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE)
+            image.setRegionDecoderFactory(imageRegionDecoderFactory)
+            image.setBitmapDecoderFactory(imageDecoderFactory)
             image.setDoubleTapZoomDuration(shortAnimationTime)
+            image.setExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             image.setMaxTileSize(GLUtil.maxTextureSize)
             image.setMinimumTileDpi(180)
             image.setMinimumDpi(90)
@@ -279,20 +221,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            when (fallbackMap[item.decodedName] ?: FallbackStage.NORMAL) {
-                FallbackStage.NORMAL -> {
-                    image.setBitmapDecoderClass(SkiaImageDecoder::class.java)
-                    image.setRegionDecoderClass(SkiaPooledImageRegionDecoder::class.java)
-                }
-                FallbackStage.RAPID -> {
-                    image.setBitmapDecoderClass(RapidImageDecoder::class.java)
-                    image.setRegionDecoderClass(RapidImageRegionDecoder::class.java)
-                }
-                FallbackStage.NATIVE -> {
-                    image.setBitmapDecoderClass(RapidImageNativeDecoder::class.java)
-                    image.setRegionDecoderClass(RapidImageRegionNativeDecoder::class.java)
-                }
-            }
+            imageRegionDecoderFactory.nextKey = item.url()
+            imageDecoderFactory.nextKey = item.url()
 
             glide?.clear(glideTarget)
             glideTarget = GlideFileTarget()
@@ -300,10 +230,26 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             glideTarget?.let { target ->
                 glide
                     ?.downloadOnly()
-                    ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                    ?.load(item.url())
                     ?.logErrors()
                     ?.into(target)
             }
+        }
+
+        override fun handleImageLoadError(error: Exception, position: Int): Boolean {
+            if (!super.handleImageLoadError(error, position)) {
+                val item = data[position]
+                val key = item.url()
+
+                if (!imageRegionDecoderFactory.nextFallbackStage(key) && !imageDecoderFactory.nextFallbackStage(key)) {
+                    errorIndicator.isVisible = true
+                    image.isVisible = false
+                } else {
+                    bind(item)
+                }
+            }
+
+            return true
         }
 
         private fun initListeners() {
@@ -358,7 +304,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             glide
                 ?.asGif()
-                ?.load(ProxerUrls.mangaPageImage(server, entryId, id, item.decodedName).toString())
+                ?.load(item.url())
                 ?.logErrors()
                 ?.into(object : ImageViewTarget<GifDrawable>(image) {
                     override fun setResource(resource: GifDrawable?) {
@@ -371,30 +317,16 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                     }
                 })
         }
-    }
 
-    internal inner class GlidePreloadTarget(
-        private val links: Map<String, String?>,
-        private val next: String,
-        private val failures: Int
-    ) : OriginalSizeGlideTarget<File>() {
-
-        override fun onResourceReady(resource: File, transition: Transition<in File>?) {
-            val afterNext = links[next]
-
-            if (afterNext != null) {
-                preload(links, afterNext)
+        override fun handleImageLoadError(error: Exception, position: Int): Boolean {
+            if (!super.handleImageLoadError(error, position)) {
+                errorIndicator.isVisible = true
+                image.isVisible = false
             }
-        }
 
-        override fun onLoadFailed(errorDrawable: Drawable?) {
-            if (failures <= 2) {
-                preload(links, next, failures + 1)
-            }
+            return true
         }
     }
 
-    private enum class FallbackStage {
-        NORMAL, RAPID, NATIVE
-    }
+    private fun Page.url() = ProxerUrls.mangaPageImage(server, entryId, id, decodedName).toString()
 }

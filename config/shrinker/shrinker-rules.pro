@@ -20,21 +20,12 @@
     public static int wtf(...);
 }
 
-# subsampling-scale-image-view
--keepclasseswithmembernames class * implements com.davemorrissey.labs.subscaleview.decoder.ImageDecoder {
-    <init>(...);
-}
-
--keepclasseswithmembernames class * implements com.davemorrissey.labs.subscaleview.decoder.ImageRegionDecoder {
-    <init>(...);
-}
-
 # Material Preference
 -keepclassmembers class androidx.preference.PreferenceManager {
     void setNoCommit(boolean);
 }
 
-# Chromecast
+# Cast
 -keepclasseswithmembers class androidx.mediarouter.app.MediaRouteActionProvider {
     public <init>(...);
 }

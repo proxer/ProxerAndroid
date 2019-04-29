@@ -117,6 +117,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         override fun bookmarkNext() = requireContext().getString(R.string.fragment_manga_bookmark_next_chapter)
     }
 
+    private var preloader by Delegates.notNull<MangaPreloader>()
     private var innerAdapter by Delegates.notNull<MangaAdapter>()
     private var adapter by Delegates.notNull<EasyHeaderFooterAdapter>()
 
@@ -148,7 +149,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         lastPosition = savedInstanceState?.getParcelable(LAST_POSITION_STATE)
         hasLowMemory = savedInstanceState?.getByte(LOW_MEMORY_STATE) == 1.toByte()
 
-        innerAdapter = MangaAdapter(savedInstanceState, isVertical)
+        preloader = MangaPreloader()
+        innerAdapter = MangaAdapter(isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)
@@ -205,6 +207,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
         initHeaderAndFooter()
 
+        preloader.glide = GlideApp.with(this)
         innerAdapter.glide = GlideApp.with(this)
 
         bindLayoutManager()
@@ -248,6 +251,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
         recyclerView.layoutManager = null
         recyclerView.adapter = null
+
+        preloader.glide = null
 
         super.onDestroyView()
     }
@@ -297,8 +302,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        innerAdapter.saveInstanceState(outState)
-
         outState.putParcelable(LAST_POSITION_STATE, recyclerView.safeLayoutManager.onSaveInstanceState())
         outState.putByte(LOW_MEMORY_STATE, if (hasLowMemory) 1 else 0)
     }
@@ -315,9 +318,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
         showHeaderAndFooter(data)
 
-        innerAdapter.server = data.chapter.server
-        innerAdapter.entryId = data.chapter.entryId
-        innerAdapter.id = data.chapter.id
+        preloader.preload(data.chapter)
+        innerAdapter.setChapter(data.chapter)
 
         data.chapter.pages?.let { pages ->
             innerAdapter.swapDataAndNotifyWithDiffing(pages)
@@ -341,6 +343,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     override fun hideData() {
         bindToolbar()
 
+        preloader.cancel()
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
         if (viewModel.error.value?.data?.get(ErrorUtils.ENTRY_DATA_KEY) !is EntryCore) {
