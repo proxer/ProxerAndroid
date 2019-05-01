@@ -236,6 +236,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
         init {
+            image.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER)
+            image.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_START)
             image.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE)
             image.setDoubleTapZoomDuration(shortAnimationTime)
             image.setExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
