@@ -16,6 +16,8 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.PAN_LIMIT_INSIDE
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ZOOM_FOCUS_CENTER
 import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
 import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
@@ -236,12 +238,11 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         private val shortAnimationTime = itemView.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
         init {
-            image.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER)
-            image.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_START)
-            image.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE)
             image.setDoubleTapZoomDuration(shortAnimationTime)
             image.setExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            image.setDoubleTapZoomStyle(ZOOM_FOCUS_CENTER)
             image.setMaxTileSize(GLUtil.maxTextureSize)
+            image.setPanLimit(PAN_LIMIT_INSIDE)
             image.setMinimumTileDpi(180)
             image.setMinimumDpi(90)
 

@@ -302,6 +302,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
+        innerAdapter.saveInstanceState(outState)
+
         outState.putParcelable(LAST_POSITION_STATE, recyclerView.safeLayoutManager.onSaveInstanceState())
         outState.putByte(LOW_MEMORY_STATE, if (hasLowMemory) 1 else 0)
     }
