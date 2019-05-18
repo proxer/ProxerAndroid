@@ -43,8 +43,10 @@ class NewsWidgetUpdateWorker(
     workerParams: WorkerParameters
 ) : Worker(context, workerParams), KoinComponent {
 
-    companion object {
+    companion object : KoinComponent {
         private const val NAME = "NewsWidgetUpdateWorker"
+
+        private val workManager by inject<WorkManager>()
 
         fun enqueueWork() {
             val workRequest = OneTimeWorkRequestBuilder<NewsWidgetUpdateWorker>()
@@ -55,7 +57,7 @@ class NewsWidgetUpdateWorker(
                 )
                 .build()
 
-            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
     }
 

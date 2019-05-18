@@ -61,7 +61,9 @@ class UcpOverviewFragment : BaseContentFragment<Optional<Int>>(R.layout.fragment
             .subscribe {
                 val title = getString(R.string.clipboard_title)
 
-                requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                    ClipData.newPlainText(title, it.toString())
+
                 requireContext().toast(R.string.clipboard_status)
             }
     }

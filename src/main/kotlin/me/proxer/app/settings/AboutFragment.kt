@@ -125,9 +125,10 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).iconColor(context))
             .setOnClickAction {
                 val title = getString(R.string.clipboard_title)
-                val clipData = ClipData.newPlainText(title, BuildConfig.VERSION_NAME)
 
-                requireContext().getSystemService<ClipboardManager>()?.primaryClip = clipData
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                    ClipData.newPlainText(title, BuildConfig.VERSION_NAME)
+
                 requireContext().toast(R.string.clipboard_status)
             }.build(),
         MaterialAboutActionItem.Builder()

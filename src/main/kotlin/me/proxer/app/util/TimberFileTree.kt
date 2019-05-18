@@ -41,7 +41,7 @@ class TimberFileTree(context: Context) : Timber.Tree() {
 
     @SuppressLint("LogNotTimber")
     private fun internalLog(tag: String?, message: String) {
-        val currentLogFiles = resolvedLogsDirectory.listFiles()
+        val currentLogFiles = resolvedLogsDirectory.listFiles() ?: emptyArray()
         val currentDateTime = LocalDateTime.now()
         val rotationThresholdDate = currentDateTime.toLocalDate().minusDays(ROTATION_THRESHOLD)
 

@@ -85,7 +85,7 @@ inline fun <T : Enum<T>> Bundle.putEnumSet(key: String, set: EnumSet<T>) {
 }
 
 inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>): EnumSet<T> {
-    val values = getIntArray(key)?.map { klass.enumConstants[it] }
+    val values = getIntArray(key)?.map { klass.enumConstants[it] }?.filterNotNull()
 
     return when {
         values?.isEmpty() != false -> EnumSet.noneOf(T::class.java)
@@ -106,7 +106,7 @@ inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
 
     constructor.isAccessible = true
 
-    return constructor.newInstance(parameters) as DefinitionParameters
+    return constructor.newInstance(parameters)
 }
 
 fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forceBrowser: Boolean = false) {

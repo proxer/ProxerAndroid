@@ -17,6 +17,7 @@ import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.SwitchPreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.Locale
 
 /**
  * @author Ruben Gees
@@ -161,7 +162,7 @@ class UcpSettingsFragment : XpPreferenceFragment() {
         val value = videoAdsInterval.value ?: "0"
         val index = resources.getStringArray(R.array.ucp_settings_video_ads_interval_values).indexOf(value)
         val keyword = resources.getStringArray(R.array.ucp_settings_video_ads_interval_titles)[index]
-        val newSummary = getString(R.string.profile_preference_video_ads_summary, keyword.toLowerCase())
+        val newSummary = getString(R.string.profile_preference_video_ads_summary, keyword.toLowerCase(Locale.GERMANY))
 
         videoAdsInterval.summary = newSummary
     }

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -32,7 +33,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
     }
 
     val id: String
-        get() = intent.getStringExtra(ID_EXTRA)
+        get() = intent.getSafeStringExtra(ID_EXTRA)
 
     var name: String?
         get() = intent.getStringExtra(NAME_EXTRA)
@@ -73,7 +74,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
     ) {
 
         override fun getItem(position: Int) = when (position) {

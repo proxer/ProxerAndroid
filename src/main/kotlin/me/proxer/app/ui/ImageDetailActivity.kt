@@ -14,6 +14,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.logErrors
 import okhttp3.HttpUrl
@@ -37,7 +38,7 @@ class ImageDetailActivity : BaseActivity() {
         get() = preferenceHelper.themeContainer.theme.noBackground
 
     private val url: String
-        get() = intent.getStringExtra(URL_EXTRA)
+        get() = intent.getSafeStringExtra(URL_EXTRA)
 
     private val image: ImageView by bindView(R.id.image)
 

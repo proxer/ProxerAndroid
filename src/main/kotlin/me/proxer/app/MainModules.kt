@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
 import com.squareup.moshi.JsonAdapter
@@ -80,7 +81,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.StringQualifier
-import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.threeten.bp.Instant
 import timber.log.Timber
@@ -125,6 +125,8 @@ private val applicationModules = module(createdAtStart = true) {
 
         trustManagerFactory.trustManagers.filterIsInstance(X509TrustManager::class.java).first()
     }
+
+    single { WorkManager.getInstance(androidContext()) }
 
     single {
         val preferenceHelper = get<PreferenceHelper>()
@@ -204,7 +206,7 @@ private val applicationModules = module(createdAtStart = true) {
     single { HawkMoshiParser(get()) }
     single { LocalDataInitializer(androidContext(), get()) }
 
-    single { ProxerLoginTokenManager(get()) } bind LoginTokenManager::class
+    single { ProxerLoginTokenManager(get()) as LoginTokenManager }
     single { LoginHandler(get(), get(), get()) }
 }
 

@@ -26,6 +26,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.Category
@@ -70,7 +71,7 @@ class MangaActivity : BaseActivity() {
     val id: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
-            else -> intent.getStringExtra(ID_EXTRA)
+            else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     var episode: Int

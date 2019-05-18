@@ -3,6 +3,7 @@ package me.proxer.app.anime.schedule.widget
 import android.content.Intent
 import android.widget.RemoteViewsService
 import com.squareup.moshi.Moshi
+import me.proxer.app.util.extension.getSafeStringArrayExtra
 import org.koin.android.ext.android.inject
 
 /**
@@ -17,7 +18,7 @@ class ScheduleWidgetService : RemoteViewsService() {
     private val moshi by inject<Moshi>()
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
-        val calendarEntries = intent.getStringArrayExtra(ARGUMENT_CALENDAR_ENTRIES)
+        val calendarEntries = intent.getSafeStringArrayExtra(ARGUMENT_CALENDAR_ENTRIES)
             .mapNotNull { moshi.adapter(SimpleCalendarEntry::class.java).fromJson(it) }
 
         return ScheduleWidgetViewsFactory(applicationContext, false, calendarEntries)

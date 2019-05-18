@@ -1,12 +1,9 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 buildscript { scriptHandler ->
     apply from: "${projectDir}/gradle/versions.gradle"
     apply from: "${projectDir}/gradle/repositories.gradle", to: scriptHandler
 
     dependencies {
-        // Manually set the R8 and D8 version, to get latest improvements fast.
+        // Manually set the R8 and D8 version to get latest improvements fast.
         classpath "com.android.tools:r8:$r8Version"
 
         classpath "com.android.tools.build:gradle:$androidPluginVersion"
@@ -192,7 +189,7 @@ android {
 apply from: "${projectDir}/gradle/repositories.gradle"
 apply from: "${projectDir}/gradle/dependencies.gradle"
 
-tasks.withType(KotlinCompile).all {
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         allWarningsAsErrors = true
         jvmTarget = javaVersion.toString()
@@ -219,7 +216,7 @@ detekt {
 }
 
 ktlint {
-    reporters = [ReporterType.CHECKSTYLE]
+    reporters = [org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE]
 }
 
 wrapper {

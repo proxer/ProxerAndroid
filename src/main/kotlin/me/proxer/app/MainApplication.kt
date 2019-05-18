@@ -113,7 +113,8 @@ class MainApplication : Application() {
             when (error) {
                 is UndeliverableException -> Timber.w("Can't deliver error: $error")
                 is InterruptedException -> Timber.w(error)
-                else -> Thread.currentThread().uncaughtExceptionHandler.uncaughtException(Thread.currentThread(), error)
+                else -> Thread.currentThread().uncaughtExceptionHandler
+                    ?.uncaughtException(Thread.currentThread(), error)
             }
         }
 

@@ -14,6 +14,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.startActivity
@@ -50,13 +51,13 @@ class TopicActivity : DrawerActivity() {
     val id: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(2) { "-1" } ?: "-1"
-            else -> intent.getStringExtra(ID_EXTRA)
+            else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     val categoryId: String
         get() = when {
             intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
-            else -> intent.getStringExtra(CATEGORY_ID_EXTRA)
+            else -> intent.getSafeStringExtra(CATEGORY_ID_EXTRA)
         }
 
     var topic: String?

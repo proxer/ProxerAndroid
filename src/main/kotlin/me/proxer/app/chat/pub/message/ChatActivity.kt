@@ -9,6 +9,7 @@ import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 
 /**
@@ -31,10 +32,10 @@ class ChatActivity : DrawerActivity() {
     }
 
     val chatRoomId: String
-        get() = intent.getStringExtra(CHAT_ROOM_ID_EXTRA)
+        get() = intent.getSafeStringExtra(CHAT_ROOM_ID_EXTRA)
 
     val chatRoomName: String
-        get() = intent.getStringExtra(CHAT_ROOM_NAME_EXTRA)
+        get() = intent.getSafeStringExtra(CHAT_ROOM_NAME_EXTRA)
 
     val chatRoomIsReadOnly: Boolean
         get() = intent.getBooleanExtra(CHAT_ROOM_IS_READ_ONLY_EXTRA, false)

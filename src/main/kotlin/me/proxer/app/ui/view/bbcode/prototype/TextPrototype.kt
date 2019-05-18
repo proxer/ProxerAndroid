@@ -105,7 +105,9 @@ object TextPrototype : BBPrototype {
             .subscribe {
                 val title = view.context.getString(R.string.clipboard_title)
 
-                parent.context.getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
+                parent.context.getSystemService<ClipboardManager>()?.primaryClip =
+                    ClipData.newPlainText(title, it.toString())
+
                 parent.context.toast(R.string.clipboard_status)
             }
     }

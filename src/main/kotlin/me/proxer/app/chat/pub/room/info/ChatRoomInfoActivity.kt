@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.commitNow
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 
 /**
@@ -25,10 +26,10 @@ class ChatRoomInfoActivity : DrawerActivity() {
     }
 
     val chatRoomId: String
-        get() = intent.getStringExtra(CHAT_ROOM_ID_EXTRA)
+        get() = intent.getSafeStringExtra(CHAT_ROOM_ID_EXTRA)
 
     val chatRoomName: String
-        get() = intent.getStringExtra(CHAT_ROOM_NAME_EXTRA)
+        get() = intent.getSafeStringExtra(CHAT_ROOM_NAME_EXTRA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

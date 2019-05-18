@@ -75,7 +75,9 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>(R.layou
             .subscribe {
                 val title = getString(R.string.clipboard_title)
 
-                requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, it)
+                requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                    ClipData.newPlainText(title, it.toString())
+
                 requireContext().toast(R.string.clipboard_status)
             }
     }

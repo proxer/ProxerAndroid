@@ -6,6 +6,7 @@ import androidx.fragment.app.commitNow
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.LocalConference
+import me.proxer.app.util.extension.getSafeParcelableExtra
 import me.proxer.app.util.extension.startActivity
 
 /**
@@ -22,7 +23,7 @@ class ConferenceInfoActivity : DrawerActivity() {
     }
 
     val conference: LocalConference
-        get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
+        get() = intent.getSafeParcelableExtra(CONFERENCE_EXTRA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

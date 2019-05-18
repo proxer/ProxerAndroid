@@ -218,7 +218,7 @@ class ProfileActivity : ImageTabsActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
     ) {
 
         override fun getItem(position: Int) = when (position) {

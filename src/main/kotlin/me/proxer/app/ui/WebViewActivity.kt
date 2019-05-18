@@ -12,6 +12,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.compat.TaskDescriptionCompat
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 import org.koin.android.ext.android.inject
 
@@ -27,7 +28,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private val url: String
-        get() = intent.getStringExtra(URL_EXTRA)
+        get() = intent.getSafeStringExtra(URL_EXTRA)
 
     private val preferenceHelper by inject<PreferenceHelper>()
 

@@ -9,7 +9,7 @@ dependencies {
     implementation "androidx.browser:browser:$browserVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "android.arch.work:work-runtime-ktx:$workVersion"
+    implementation "androidx.work:work-runtime-ktx:$workVersion"
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
 
@@ -87,7 +87,7 @@ dependencies {
     releaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
     logReleaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"
 
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 }

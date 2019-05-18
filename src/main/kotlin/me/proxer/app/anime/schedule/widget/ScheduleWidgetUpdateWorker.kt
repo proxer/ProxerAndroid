@@ -51,8 +51,10 @@ class ScheduleWidgetUpdateWorker(
     workerParams: WorkerParameters
 ) : Worker(context, workerParams), KoinComponent {
 
-    companion object {
+    companion object : KoinComponent {
         private const val NAME = "ScheduleWidgetUpdateWorker"
+
+        private val workManager by inject<WorkManager>()
 
         private val dayDateTimeFormatter = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
 
@@ -65,7 +67,7 @@ class ScheduleWidgetUpdateWorker(
                 )
                 .build()
 
-            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
     }
 

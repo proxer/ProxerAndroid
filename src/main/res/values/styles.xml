@@ -12,9 +12,11 @@
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
+        <item name="elevationOverlaysEnabled">true</item>
 
         <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
+        <item name="appBarLayoutStyle">@style/Widget.App.AppBarLayout</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardView</item>
         <item name="radioButtonStyle">@style/Widget.App.RadioButton</item>
         <item name="actionModeStyle">@style/Widget.App.ActionMode</item>
@@ -98,6 +100,10 @@
     <style name="Widget.App.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:minHeight">32dp</item>
         <item name="android:minWidth">32dp</item>
+    </style>
+
+    <style name="Widget.App.AppBarLayout" parent="Widget.Design.AppBarLayout">
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
     <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar">

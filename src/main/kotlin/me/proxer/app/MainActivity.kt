@@ -101,12 +101,10 @@ class MainActivity : DrawerActivity() {
         outState.putCharSequence(TITLE_STATE, title)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
-        if (savedInstanceState != null) {
-            title = savedInstanceState.getString(TITLE_STATE)
-        }
+        title = savedInstanceState.getString(TITLE_STATE)
     }
 
     override fun onBackPressed() {
@@ -138,7 +136,7 @@ class MainActivity : DrawerActivity() {
                             preferenceHelper.areNewsNotificationsEnabled = option.isActivated
                             preferenceHelper.areAccountNotificationsEnabled = option.isActivated
 
-                            NotificationWorker.enqueueIfPossible()
+                            NotificationWorker.enqueueIfPossible(delay = true)
                         }
                         2 -> if (option.isActivated) {
                             preferenceHelper.themeContainer = ThemeContainer(Theme.CLASSIC, ThemeVariant.DARK)

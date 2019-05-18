@@ -23,6 +23,7 @@ import me.proxer.app.media.info.MediaInfoFragment
 import me.proxer.app.media.recommendation.RecommendationFragment
 import me.proxer.app.media.relation.RelationFragment
 import me.proxer.app.util.ActivityUtils
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -78,7 +79,7 @@ class MediaActivity : ImageTabsActivity() {
     val id: String
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
-            else -> intent.getStringExtra(ID_EXTRA)
+            else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     var name: String?
@@ -166,7 +167,7 @@ class MediaActivity : ImageTabsActivity() {
     }
 
     inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, RESUME_ONLY_CURRENT_FRAGMENT
+        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
     ) {
 
         override fun getItem(position: Int) = when (position) {

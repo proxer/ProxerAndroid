@@ -36,26 +36,28 @@ class NotificationWorker(
         private const val NAME = "NotificationWorker"
 
         private val bus by inject<RxBus>()
+        private val workManager by inject<WorkManager>()
         private val preferenceHelper by inject<PreferenceHelper>()
 
-        fun enqueueIfPossible() {
+        fun enqueueIfPossible(delay: Boolean = false) {
             val areNotificationsEnabled = preferenceHelper.areNewsNotificationsEnabled ||
                 preferenceHelper.areAccountNotificationsEnabled
 
             if (areNotificationsEnabled) {
-                enqueue()
+                enqueue(delay)
             } else {
                 cancel()
             }
         }
 
         fun cancel() {
-            WorkManager.getInstance().cancelUniqueWork(NAME)
+            workManager.cancelUniqueWork(NAME)
         }
 
-        private fun enqueue() {
+        private fun enqueue(delay: Boolean) {
             val interval = preferenceHelper.notificationsInterval * 1_000 * 60
             val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(interval, TimeUnit.MILLISECONDS)
+                .apply { if (delay) setInitialDelay(interval, TimeUnit.MILLISECONDS) }
                 .setConstraints(
                     Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -63,7 +65,7 @@ class NotificationWorker(
                 )
                 .build()
 
-            WorkManager.getInstance().enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+            workManager.enqueueUniquePeriodicWork(NAME, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
         }
     }
 

@@ -13,6 +13,7 @@ import me.proxer.app.base.DrawerActivity
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.getSafeParcelableExtra
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.startActivity
 
@@ -41,7 +42,7 @@ class MessengerActivity : DrawerActivity() {
     }
 
     var conference: LocalConference
-        get() = intent.getParcelableExtra(CONFERENCE_EXTRA)
+        get() = intent.getSafeParcelableExtra(CONFERENCE_EXTRA)
         set(value) {
             intent.putExtra(CONFERENCE_EXTRA, value)
 

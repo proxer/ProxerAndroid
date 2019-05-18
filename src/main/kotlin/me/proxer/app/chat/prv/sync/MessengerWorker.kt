@@ -53,18 +53,18 @@ class MessengerWorker(
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
-        private val isRunning = Transformations.map(WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(NAME)) {
-            it.all { info -> info.state == WorkInfo.State.RUNNING }
-        }
-
         private val bus by inject<RxBus>()
+        private val workManager by inject<WorkManager>()
         private val storageHelper by inject<StorageHelper>()
         private val preferenceHelper by inject<PreferenceHelper>()
 
-        fun enqueueSynchronizationIfPossible() = if (canSchedule()) {
-            enqueueSynchronization()
-        } else {
-            cancel()
+        private val isRunning = Transformations.map(workManager.getWorkInfosForUniqueWorkLiveData(NAME)) {
+            it.all { info -> info.state == WorkInfo.State.RUNNING }
+        }
+
+        fun enqueueSynchronizationIfPossible() = when {
+            canSchedule() -> enqueueSynchronization()
+            else -> cancel()
         }
 
         fun enqueueSynchronization() = doEnqueue()
@@ -72,7 +72,7 @@ class MessengerWorker(
         fun enqueueMessageLoad(conferenceId: Long) = doEnqueue(conferenceId = conferenceId)
 
         fun cancel() {
-            WorkManager.getInstance().cancelUniqueWork(NAME)
+            workManager.cancelUniqueWork(NAME)
         }
 
         fun isRunning() = isRunning.value ?: false
@@ -109,7 +109,7 @@ class MessengerWorker(
                 )
                 .build()
 
-            WorkManager.getInstance().beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
         }
 
         private fun canSchedule() = preferenceHelper.areChatNotificationsEnabled ||

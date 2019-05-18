@@ -14,6 +14,7 @@ import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.library.enums.AnimeLanguage
@@ -54,7 +55,7 @@ class AnimeActivity : DrawerActivity() {
     val id: String
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> intent?.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
-            else -> intent.getStringExtra(ID_EXTRA)
+            else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     var episode: Int
