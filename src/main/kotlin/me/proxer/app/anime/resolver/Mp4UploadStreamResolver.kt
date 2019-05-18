@@ -7,16 +7,14 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.Request
-import java.util.regex.Pattern.quote
 
 /**
  * @author Ruben Gees
  */
 object Mp4UploadStreamResolver : StreamResolver() {
 
-    private val itemRegex = Regex("'(${quote("|")}.*?)'.split\\(")
-    private val urlRegex = Regex("\":\"(.*?)\"")
-    private val encodeReplaceRegex = Regex("[0-9a-z]+")
+    private val packedRegex = Regex("return p.*?'(.*?)',(\\d+),(\\d+),'(.*?)'")
+    private val urlRegex = Regex("player.src\\(\"(.*?\")\\)")
 
     override val name = "MP4Upload"
 
@@ -34,29 +32,33 @@ object Mp4UploadStreamResolver : StreamResolver() {
                 .toBodySingle()
         }
         .map {
-            val itemRegexResult = itemRegex.find(it) ?: throw StreamResolutionException()
-            val items = itemRegexResult.groupValues[1].split("|")
+            val packedFunction = packedRegex.find(it) ?: throw StreamResolutionException()
 
-            if (items.isEmpty()) {
+            val p = packedFunction.groupValues[1]
+            val a = packedFunction.groupValues[2].toIntOrNull() ?: throw StreamResolutionException()
+            val c = packedFunction.groupValues[3].toIntOrNull() ?: throw StreamResolutionException()
+            val k = packedFunction.groupValues[4].split("|")
+
+            if (p.isBlank() || k.size != c) {
                 throw StreamResolutionException()
             }
 
-            val urlRegexResult = urlRegex.find(it) ?: throw StreamResolutionException()
-            val encodedUrl = urlRegexResult.groupValues[1]
+            val unpacked = unpack(p, a, c, k)
 
-            if (encodedUrl.isBlank()) {
-                throw StreamResolutionException()
-            }
+            val urlRegexResult = urlRegex.find(unpacked) ?: throw StreamResolutionException()
+            val url = urlRegexResult.groupValues[1]
 
-            val decodedUrl = encodedUrl.replace(encodeReplaceRegex) { result ->
-                val base36Index = result.value
-                val index = base36Index.toIntOrNull(36) ?: throw StreamResolutionException()
-                val item = items.getOrNull(index) ?: throw StreamResolutionException()
-
-                if (item.isNotBlank()) item else base36Index
-            }
-
-            Utils.parseAndFixUrl(decodedUrl) ?: throw StreamResolutionException()
+            Utils.parseAndFixUrl(url) ?: throw StreamResolutionException()
         }
         .map { StreamResolutionResult.Video(it, "video/mp4") }
+
+    private fun unpack(p: String, a: Int, c: Int, k: List<String>): String {
+        return (c - 1 downTo 0).fold(p, { acc, next ->
+            if (k[next].isNotEmpty()) {
+                acc.replace(Regex("\\b" + next.toString(a) + "\\b"), k[next])
+            } else {
+                acc
+            }
+        })
+    }
 }
