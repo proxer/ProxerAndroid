@@ -12,7 +12,6 @@
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
-        <item name="elevationOverlaysEnabled">true</item>
 
         <item name="autoCompleteTextViewStyle">@style/Widget.App.AutoCompleteTextView</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.Material</item>
