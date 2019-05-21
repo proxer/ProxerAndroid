@@ -34,9 +34,9 @@ dependencies {
     implementation "androidx.preference:preference:$preferenceVersion"
     implementation "com.github.consp1racy.android-support-preference:support-preference:$supportPreferenceVersion"
     implementation "com.github.consp1racy.android-support-preference:support-spinner:$supportPreferenceVersion"
-    implementation "com.github.rubengees.Android-Iconics:library-core:$iconicsVersion"
-    implementation "com.github.rubengees.Android-Iconics:iconics-view-library:$iconicsVersion"
-    implementation "com.github.rubengees.Android-Iconics:community-material-typeface-library:$iconicsVersion"
+    implementation "com.mikepenz:iconics-core:$iconicsVersion"
+    implementation "com.mikepenz:iconics-views:$iconicsVersion"
+    implementation "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion"
     implementation "com.mikepenz:materialdrawer:$materialDrawerVersion"
     implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion"
     implementation "com.mikepenz:materialize:$materializeVersion"
@@ -94,7 +94,6 @@ dependencies {
 
 configurations {
     implementation {
-        exclude group: "com.mikepenz", module: "iconics-core"
         exclude module: "gson"
     }
 }

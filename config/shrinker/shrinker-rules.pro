@@ -30,6 +30,9 @@
     public <init>(...);
 }
 
+# Fix for Community-Material-Typeface
+-keep class com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial { *; }
+
 # Recent versions of R8 seem to require this: https://issuetracker.google.com/issues/123558494
 -keep @com.squareup.moshi.JsonQualifier @interface *
 
