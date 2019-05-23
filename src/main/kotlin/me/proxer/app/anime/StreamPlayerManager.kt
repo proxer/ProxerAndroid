@@ -51,6 +51,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     val playerReadySubject = PublishSubject.create<Player>()
+    val playerStateSubject = PublishSubject.create<PlayerState>()
     val errorSubject = PublishSubject.create<ErrorUtils.ErrorAction>()
 
     private val weakContext = WeakReference(context)
@@ -73,7 +74,20 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         }
     }
 
-    private val errorListener = object : Player.EventListener {
+    private val eventListener = object : Player.EventListener {
+        override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            when (playbackState) {
+                Player.STATE_BUFFERING, Player.STATE_IDLE -> playerStateSubject.onNext(PlayerState.LOADING)
+                Player.STATE_ENDED -> playerStateSubject.onNext(PlayerState.PAUSING)
+                Player.STATE_READY -> playerStateSubject.onNext(
+                    when (playWhenReady) {
+                        true -> PlayerState.PLAYING
+                        false -> PlayerState.PAUSING
+                    }
+                )
+            }
+        }
+
         override fun onPlayerError(error: ExoPlaybackException) {
             lastPosition = currentPlayer.currentPosition
 
@@ -102,8 +116,8 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
                 localPlayer.release()
                 castPlayer?.release()
 
-                localPlayer.removeListener(errorListener)
-                castPlayer?.removeListener(errorListener)
+                localPlayer.removeListener(eventListener)
+                castPlayer?.removeListener(eventListener)
 
                 castPlayer?.setSessionAvailabilityListener(null)
 
@@ -162,15 +176,15 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         get() = localPlayer.isPlayingAd
 
     init {
-        localPlayer.addListener(errorListener)
-        castPlayer?.addListener(errorListener)
+        localPlayer.addListener(eventListener)
+        castPlayer?.addListener(eventListener)
 
         localPlayer.prepare(localMediaSource)
 
         context.application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
 
-    fun start() {
+    fun play() {
         if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
             currentPlayer.seekTo(lastPosition)
         }
@@ -184,11 +198,19 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         }
     }
 
-    fun stop() {
+    fun pause() {
         wasPlaying = currentPlayer.playWhenReady == true && currentPlayer.playbackState == Player.STATE_READY
         lastPosition = currentPlayer.currentPosition
 
         localPlayer.playWhenReady = false
+    }
+
+    fun toggle() {
+        if (currentPlayer.playWhenReady) {
+            pause()
+        } else {
+            play()
+        }
     }
 
     fun retry() {
@@ -310,6 +332,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         } else {
             null
         }
+    }
+
+    enum class PlayerState {
+        PLAYING, PAUSING, LOADING
     }
 
     private class ImaMediaSourceFactory(

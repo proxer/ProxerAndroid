@@ -19,10 +19,12 @@ import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.google.android.exoplayer2.ext.cast.CastPlayer
@@ -47,6 +49,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
@@ -103,10 +106,8 @@ class StreamActivity : BaseActivity() {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val rewind: ImageButton by bindView(R.id.exo_rew)
-    private val play: ImageButton by bindView(R.id.exo_play)
-    private val pause: ImageButton by bindView(R.id.exo_pause)
-    private val fastForward: ImageButton by bindView(R.id.exo_ffwd)
+    private val play: ImageButton by bindView(R.id.play)
+    private val loading: ProgressBar by bindView(R.id.loading)
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
 
     private var mediaRouteButton: MenuItem? = null
@@ -127,11 +128,12 @@ class StreamActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         setupUi()
 
-        rewind.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_rewind))
-        play.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_play))
-        pause.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon2.cmd_pause))
-        fastForward.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fast_forward))
         fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+        play.setImageDrawable(AnimatedVectorDrawableCompat.create(this, R.drawable.pause_play))
+
+        play.clicks()
+            .autoDisposable(this.scope())
+            .subscribe { playerManager.toggle() }
 
         playerManager.playerReadySubject
             .autoDisposable(this.scope())
@@ -139,6 +141,38 @@ class StreamActivity : BaseActivity() {
                 toggleStableControls(it is CastPlayer)
 
                 playerView.player = it
+            }
+
+        playerManager.playerStateSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                when (it) {
+                    PlayerState.PLAYING -> {
+                        val newDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.pause_play)?.apply {
+                            start()
+                        }
+
+                        play.setImageDrawable(newDrawable)
+
+                        loading.isVisible = false
+                        play.isVisible = true
+                    }
+                    PlayerState.PAUSING -> {
+                        val newDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.play_pause)?.apply {
+                            start()
+                        }
+
+                        play.setImageDrawable(newDrawable)
+
+                        loading.isVisible = false
+                        play.isVisible = true
+                    }
+                    PlayerState.LOADING -> {
+                        loading.isVisible = true
+                        play.isVisible = false
+                    }
+                    null -> throw NullPointerException("playerState is null")
+                }
             }
 
         playerManager.errorSubject
@@ -195,13 +229,13 @@ class StreamActivity : BaseActivity() {
 
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
-        playerManager.start()
+        playerManager.play()
     }
 
     override fun onStop() {
         getSafeCastContext()?.removeCastStateListener(castStateListener)
 
-        playerManager.stop()
+        playerManager.pause()
 
         super.onStop()
     }
