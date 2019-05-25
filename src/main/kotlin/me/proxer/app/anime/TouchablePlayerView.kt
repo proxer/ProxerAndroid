@@ -51,26 +51,30 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     fun rewind(triggerSubject: Boolean = false) {
-        player.seekTo(max(player.currentPosition - 10_000, 0))
+        if (player.isCurrentWindowSeekable) {
+            player.seekTo(max(player.currentPosition - 10_000, 0))
 
-        if (triggerSubject) {
-            rewindSubject.onNext(Unit)
+            if (triggerSubject) {
+                rewindSubject.onNext(Unit)
+            }
         }
     }
 
     fun fastForward(triggerSubject: Boolean = false) {
-        val durationMs = player.duration
+        if (player.isCurrentWindowSeekable) {
+            val durationMs = player.duration
 
-        val seekPositionMs = if (durationMs != C.TIME_UNSET) {
-            min(player.currentPosition + 10_000, durationMs)
-        } else {
-            player.currentPosition + 10_000
-        }
+            val seekPositionMs = if (durationMs != C.TIME_UNSET) {
+                min(player.currentPosition + 10_000, durationMs)
+            } else {
+                player.currentPosition + 10_000
+            }
 
-        player.seekTo(seekPositionMs)
+            player.seekTo(seekPositionMs)
 
-        if (triggerSubject) {
-            fastForwardSubject.onNext(Unit)
+            if (triggerSubject) {
+                fastForwardSubject.onNext(Unit)
+            }
         }
     }
 
