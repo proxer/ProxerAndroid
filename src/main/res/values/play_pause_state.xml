@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PlayPauseState">
+        <attr name="state_play" format="boolean" />
+        <attr name="state_pause" format="boolean" />
+    </declare-styleable>
+</resources>

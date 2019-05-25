@@ -206,11 +206,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     fun toggle() {
-        if (currentPlayer.playWhenReady) {
-            pause()
-        } else {
-            play()
-        }
+        currentPlayer.playWhenReady = currentPlayer.playWhenReady.not()
     }
 
     fun retry() {

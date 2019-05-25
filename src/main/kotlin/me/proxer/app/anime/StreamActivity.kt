@@ -17,6 +17,7 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -24,7 +25,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.google.android.exoplayer2.ext.cast.CastPlayer
@@ -109,6 +109,7 @@ class StreamActivity : BaseActivity() {
     private val play: ImageButton by bindView(R.id.play)
     private val loading: ProgressBar by bindView(R.id.loading)
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
+    private val systemWindowContainer: ViewGroup by bindView(R.id.systemWindowContainer)
 
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
@@ -129,7 +130,6 @@ class StreamActivity : BaseActivity() {
         setupUi()
 
         fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
-        play.setImageDrawable(AnimatedVectorDrawableCompat.create(this, R.drawable.pause_play))
 
         play.clicks()
             .autoDisposable(this.scope())
@@ -148,21 +148,13 @@ class StreamActivity : BaseActivity() {
             .subscribe {
                 when (it) {
                     PlayerState.PLAYING -> {
-                        val newDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.pause_play)?.apply {
-                            start()
-                        }
-
-                        play.setImageDrawable(newDrawable)
+                        play.setImageState(intArrayOf(R.attr.state_pause), false)
 
                         loading.isVisible = false
                         play.isVisible = true
                     }
                     PlayerState.PAUSING -> {
-                        val newDrawable = AnimatedVectorDrawableCompat.create(this, R.drawable.play_pause)?.apply {
-                            start()
-                        }
-
-                        play.setImageDrawable(newDrawable)
+                        play.setImageState(intArrayOf(), false)
 
                         loading.isVisible = false
                         play.isVisible = true

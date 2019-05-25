@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         app:controller_layout_id="@layout/layout_exoplayer_controls"
-        app:show_buffering="always" />
+        app:show_buffering="never" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -26,4 +26,17 @@
         android:background="@color/half_transparent"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/loading"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:mpb_indeterminateTint="@android:color/white" />
+    </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

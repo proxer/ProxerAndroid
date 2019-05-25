@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/pause"
+        android:drawable="@drawable/pause_play"
+        app:state_pause="true" />
+
+    <item
+        android:id="@+id/play"
+        android:drawable="@drawable/play_pause" />
+
+    <transition
+        android:drawable="@drawable/pause_play"
+        android:fromId="@id/pause"
+        android:toId="@id/play" />
+
+    <transition
+        android:drawable="@drawable/play_pause"
+        android:fromId="@id/play"
+        android:toId="@id/pause" />
+
+</animated-selector>
