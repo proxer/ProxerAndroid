@@ -131,10 +131,6 @@ class StreamActivity : BaseActivity() {
 
         fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
 
-        play.clicks()
-            .autoDisposable(this.scope())
-            .subscribe { playerManager.toggle() }
-
         playerManager.playerReadySubject
             .autoDisposable(this.scope())
             .subscribe {
@@ -149,14 +145,14 @@ class StreamActivity : BaseActivity() {
                 when (it) {
                     PlayerState.PLAYING -> {
                         play.contentDescription = getString(R.string.exoplayer_pause_description)
-                        play.setImageState(intArrayOf(R.attr.state_pause), false)
+                        play.setImageState(intArrayOf(R.attr.state_pause), true)
 
                         loading.isVisible = false
                         play.isVisible = true
                     }
                     PlayerState.PAUSING -> {
                         play.contentDescription = getString(R.string.exoplayer_play_description)
-                        play.setImageState(intArrayOf(), false)
+                        play.setImageState(intArrayOf(-R.attr.state_pause), true)
 
                         loading.isVisible = false
                         play.isVisible = true
@@ -183,6 +179,10 @@ class StreamActivity : BaseActivity() {
                     .onCancel { finish() }
                     .show()
             }
+
+        play.clicks()
+            .autoDisposable(this.scope())
+            .subscribe { playerManager.toggle() }
 
         fullscreen.clicks()
             .autoDisposable(this.scope())
