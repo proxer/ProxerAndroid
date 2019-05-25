@@ -5,7 +5,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ui.PlayerView
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * @author Ruben Gees
@@ -43,16 +46,20 @@ class TouchablePlayerView @JvmOverloads constructor(
         return true
     }
 
-    private fun fastForward() {
-        if (player.isCurrentWindowSeekable) {
-            player.seekTo(player.currentPosition + 10_000)
-        }
+    private fun rewind() {
+        player.seekTo(max(player.currentPosition - 10_000, 0))
     }
 
-    private fun rewind() {
-        if (player.isCurrentWindowSeekable) {
-            player.seekTo(player.currentPosition - 10_000)
+    private fun fastForward() {
+        val durationMs = player.duration
+
+        val seekPositionMs = if (durationMs != C.TIME_UNSET) {
+            min(player.currentPosition + 10_000, durationMs)
+        } else {
+            player.currentPosition + 10_000
         }
+
+        player.seekTo(seekPositionMs)
     }
 
     private fun delegateTouch(event: MotionEvent) {
