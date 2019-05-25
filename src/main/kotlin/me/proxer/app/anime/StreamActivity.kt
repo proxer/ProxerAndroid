@@ -17,6 +17,7 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ProgressBar
@@ -108,6 +109,7 @@ class StreamActivity : BaseActivity() {
     private val play: ImageButton by bindView(R.id.play)
     private val loading: ProgressBar by bindView(R.id.loading)
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
+    private val controlsContainer: ViewGroup by bindView(R.id.controlsContainer)
 
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
@@ -164,6 +166,10 @@ class StreamActivity : BaseActivity() {
                         play.isVisible = false
                     }
                     null -> throw NullPointerException("playerState is null")
+                }
+
+                if ((controlsContainer.parent as? View)?.isVisible?.not() != false) {
+                    play.jumpDrawablesToCurrentState()
                 }
             }
 
