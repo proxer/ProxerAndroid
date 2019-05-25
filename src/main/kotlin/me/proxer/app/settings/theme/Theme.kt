@@ -10,6 +10,7 @@ import me.proxer.app.util.extension.resolveColor
 /**
  * @author Ruben Gees
  */
+@Suppress("unused")
 enum class Theme(
     val preferenceId: String,
     @StringRes val themeName: Int,

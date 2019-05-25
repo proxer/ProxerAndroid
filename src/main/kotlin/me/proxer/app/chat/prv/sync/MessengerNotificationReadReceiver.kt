@@ -37,10 +37,8 @@ class MessengerNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
                 messengerDao.markConferenceAsRead(conferenceId)
 
                 val unreadMap = messengerDao.getUnreadConferences()
-                    .asSequence()
-                    .associate {
-                        it to messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
-                            .asReversed()
+                    .asSequence().associateWith {
+                        messengerDao.getMostRecentMessagesForConference(it.id, it.unreadMessageAmount).asReversed()
                     }
                     .plus(messengerDao.getConference(conferenceId) to emptyList())
                     .toMap()

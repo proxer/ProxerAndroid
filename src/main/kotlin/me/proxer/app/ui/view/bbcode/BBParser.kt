@@ -114,14 +114,14 @@ object BBParser {
                             currentTree = fittingTree.parent ?: throw IllegalArgumentException("parent is null")
                         }
                     } else {
-                        val unknownString = trimmedInput.substring(it.range.first, it.range.endInclusive + 1)
+                        val unknownString = trimmedInput.substring(it.range.first, it.range.last + 1)
 
                         currentTree.children.add(TextPrototype.construct(unknownString, currentTree))
                     }
                 }
             }
 
-            currentPosition = it.range.endInclusive + 1
+            currentPosition = it.range.last + 1
         }
 
         if (currentPosition < trimmedInput.length) {

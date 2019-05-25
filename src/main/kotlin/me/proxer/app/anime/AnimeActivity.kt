@@ -73,8 +73,8 @@ class AnimeActivity : DrawerActivity() {
     val language: AnimeLanguage
         get() = when (intent.action) {
             Intent.ACTION_VIEW -> ProxerUtils.toApiEnum<AnimeLanguage>(
-                intent?.data?.pathSegments
-                    ?.getOrElse(3) { "" } ?: "") ?: AnimeLanguage.ENGLISH_SUB
+                intent?.data?.pathSegments?.getOrElse(3) { "" } ?: ""
+            ) ?: AnimeLanguage.ENGLISH_SUB
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 

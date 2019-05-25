@@ -13,7 +13,8 @@
      limitations under the License.
 -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedResources">
 
     <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
         android:id="@id/exo_content_frame"
@@ -40,15 +41,6 @@
             android:id="@id/exo_subtitles"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@id/exo_error_message"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@color/exo_error_message_background_color"
-            android:gravity="center"
-            android:padding="16dp" />
 
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
 

@@ -80,8 +80,8 @@ object BBCodeEmoticons {
 
         foundEmoticons.forEach { emoticon ->
             val id = emoticons.find { it.pattern == emoticon.value }?.id
-            val spanStart = emoticon.range.start
-            val spanEnd = emoticon.range.endInclusive + 1
+            val spanStart = emoticon.range.first
+            val spanEnd = emoticon.range.last + 1
 
             glide.asGif()
                 .load(id)

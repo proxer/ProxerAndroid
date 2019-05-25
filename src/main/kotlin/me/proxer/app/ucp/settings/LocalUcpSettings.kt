@@ -33,7 +33,7 @@ data class LocalUcpSettings(
     companion object {
         fun default() = LocalUcpSettings(
             DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT,
-            DEFAULT, DEFAULT, false, false, 3
+            DEFAULT, DEFAULT, shouldHideTags = false, shouldShowAds = false, adInterval = 3
         )
     }
 

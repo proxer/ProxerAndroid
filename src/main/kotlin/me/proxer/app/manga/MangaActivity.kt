@@ -88,7 +88,7 @@ class MangaActivity : BaseActivity() {
 
     val language: Language
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum<Language>(
+            intent.action == Intent.ACTION_VIEW -> ProxerUtils.toApiEnum(
                 intent.data?.pathSegments?.getOrElse(3) { "" } ?: ""
             ) ?: Language.ENGLISH
             else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language

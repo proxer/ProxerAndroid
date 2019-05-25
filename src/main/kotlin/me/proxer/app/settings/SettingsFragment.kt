@@ -41,6 +41,7 @@ import net.xpece.android.support.preference.PreferenceCategory
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
 import org.koin.android.ext.android.inject
+import kotlin.system.exitProcess
 
 /**
  * @author Ruben Gees
@@ -174,7 +175,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
                 val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)?.clearTop()
 
                 startActivity(intent)
-                System.exit(0)
+                exitProcess(0)
             })
     }
 }

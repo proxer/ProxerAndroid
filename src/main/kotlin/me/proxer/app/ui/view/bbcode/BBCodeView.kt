@@ -28,6 +28,7 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_APPEARANCE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_COLOR_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_SIZE_ARGUMENT
+import kotlin.math.min
 import kotlin.properties.Delegates
 
 /**
@@ -101,8 +102,8 @@ class BBCodeView @JvmOverloads constructor(
         super.onMeasure(
             widthMeasureSpec,
             when (hMode) {
-                AT_MOST -> makeMeasureSpec(Math.min(hSize, maxHeight), AT_MOST)
-                EXACTLY -> makeMeasureSpec(Math.min(hSize, maxHeight), EXACTLY)
+                AT_MOST -> makeMeasureSpec(min(hSize, maxHeight), AT_MOST)
+                EXACTLY -> makeMeasureSpec(min(hSize, maxHeight), EXACTLY)
                 UNSPECIFIED -> makeMeasureSpec(maxHeight, AT_MOST)
                 else -> throw IllegalArgumentException("Illegal measurement mode: $hMode")
             }

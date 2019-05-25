@@ -13,7 +13,7 @@ import org.threeten.bp.Instant
  */
 class StorageHelper(
     initializer: LocalDataInitializer,
-    private val rxPreferences: RxSharedPreferences
+    rxPreferences: RxSharedPreferences
 ) {
 
     internal companion object {

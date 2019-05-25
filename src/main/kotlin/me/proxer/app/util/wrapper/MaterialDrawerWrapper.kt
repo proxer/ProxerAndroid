@@ -86,7 +86,7 @@ class MaterialDrawerWrapper(
     }
 
     fun onBackPressed() = when {
-        crossfader?.isCrossFaded() == true -> {
+        crossfader?.isCrossFaded == true -> {
             crossfader.crossFade()
 
             true
@@ -220,7 +220,7 @@ class MaterialDrawerWrapper(
 
         // Workaround for crash in current MaterialDrawer version.
         when {
-            crossfader?.isCrossFaded() == true -> {
+            crossfader?.isCrossFaded == true -> {
                 crossfader.crossFade()
 
                 true
@@ -362,7 +362,7 @@ class MaterialDrawerWrapper(
     }
 
     private class CrossfadeWrapper(private val crossfader: Crossfader<*>) : ICrossfader {
-        override val isCrossfaded get() = crossfader.isCrossFaded()
+        override val isCrossfaded get() = crossfader.isCrossFaded
         override fun crossfade() = crossfader.crossFade()
     }
 }

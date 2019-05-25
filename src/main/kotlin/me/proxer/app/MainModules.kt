@@ -206,7 +206,7 @@ private val applicationModules = module(createdAtStart = true) {
     single { HawkMoshiParser(get()) }
     single { LocalDataInitializer(androidContext(), get()) }
 
-    single { ProxerLoginTokenManager(get()) as LoginTokenManager }
+    single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
     single { LoginHandler(get(), get(), get()) }
 }
 

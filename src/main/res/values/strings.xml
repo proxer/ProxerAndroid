@@ -565,10 +565,8 @@
     <string name="layout_chat_bar_emoji_content_description">Emoji Auswahl</string>
     <string name="layout_chat_bar_send_content_description">Senden</string>
 
-    <string name="exoplayer_rewind_description">Zurückspulen</string>
     <string name="exoplayer_play_description">Abspielen</string>
     <string name="exoplayer_pause_description">Anhalten</string>
-    <string name="exoplayer_fast_forward_description">Vorspulen</string>
     <string name="exoplayer_fullscreen_description">Vollbild umschalten</string>
 
     <string name="widget_news_label">Proxer.Me News</string>

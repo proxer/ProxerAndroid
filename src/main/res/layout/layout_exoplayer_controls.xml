@@ -12,10 +12,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="?selectableItemBackgroundBorderless"
-        android:contentDescription="@string/exoplayer_play_description"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/play_pause_selector" />
 
     <FrameLayout
@@ -24,10 +21,10 @@
         android:fitsSystemWindows="true">
 
         <RelativeLayout
-            android:id="@+id/systemWindowContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
+            android:layout_gravity="bottom"
+            tools:ignore="UselessParent">
 
             <TextView
                 android:id="@+id/exo_position"

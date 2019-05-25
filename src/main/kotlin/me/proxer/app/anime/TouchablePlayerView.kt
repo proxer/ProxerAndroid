@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -10,10 +11,14 @@ import com.google.android.exoplayer2.ui.PlayerView
  * @author Ruben Gees
  */
 class TouchablePlayerView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : PlayerView(context, attrs, defStyleAttr) {
 
-    private val gestureListener = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+        override fun onDown(event: MotionEvent) = true
+
         override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
             delegateTouch(event)
 
@@ -31,8 +36,9 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
     })
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gestureListener.onTouchEvent(event)
+        gestureDetector.onTouchEvent(event)
 
         return true
     }

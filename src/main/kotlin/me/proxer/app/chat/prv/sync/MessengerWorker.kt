@@ -453,8 +453,8 @@ class MessengerWorker(
         .asReversed()
 
     private fun showNotification(context: Context) {
-        val unreadMap = messengerDao.getUnreadConferences().associate {
-            it to messengerDao
+        val unreadMap = messengerDao.getUnreadConferences().associateWith {
+            messengerDao
                 .getMostRecentMessagesForConference(it.id, it.unreadMessageAmount)
                 .asReversed()
         }
