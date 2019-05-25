@@ -7,6 +7,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ui.PlayerView
+import io.reactivex.subjects.PublishSubject
 import kotlin.math.max
 import kotlin.math.min
 
@@ -19,6 +20,9 @@ class TouchablePlayerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : PlayerView(context, attrs, defStyleAttr) {
 
+    val rewindSubject = PublishSubject.create<Unit>()
+    val fastForwardSubject = PublishSubject.create<Unit>()
+
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
         override fun onDown(event: MotionEvent) = true
 
@@ -30,9 +34,9 @@ class TouchablePlayerView @JvmOverloads constructor(
 
         override fun onDoubleTap(event: MotionEvent): Boolean {
             if (event.x > width / 2) {
-                fastForward()
+                fastForward(triggerSubject = true)
             } else {
-                rewind()
+                rewind(triggerSubject = true)
             }
 
             return true
@@ -46,11 +50,15 @@ class TouchablePlayerView @JvmOverloads constructor(
         return true
     }
 
-    private fun rewind() {
+    fun rewind(triggerSubject: Boolean = false) {
         player.seekTo(max(player.currentPosition - 10_000, 0))
+
+        if (triggerSubject) {
+            rewindSubject.onNext(Unit)
+        }
     }
 
-    private fun fastForward() {
+    fun fastForward(triggerSubject: Boolean = false) {
         val durationMs = player.duration
 
         val seekPositionMs = if (durationMs != C.TIME_UNSET) {
@@ -60,6 +68,10 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
 
         player.seekTo(seekPositionMs)
+
+        if (triggerSubject) {
+            fastForwardSubject.onNext(Unit)
+        }
     }
 
     private fun delegateTouch(event: MotionEvent) {

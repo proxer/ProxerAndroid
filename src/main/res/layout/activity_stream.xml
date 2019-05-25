@@ -29,7 +29,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
 
         <me.zhanghai.android.materialprogressbar.MaterialProgressBar
             android:id="@+id/loading"
@@ -38,5 +40,37 @@
             android:layout_gravity="center"
             android:indeterminate="true"
             app:mpb_indeterminateTint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/rewindIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            tools:text="10"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/fastForwardIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:padding="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            tools:text="10"
+            tools:visibility="visible" />
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

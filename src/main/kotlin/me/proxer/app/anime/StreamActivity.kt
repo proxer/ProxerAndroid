@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
@@ -29,7 +30,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
-import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -40,6 +40,9 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.colorRes
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -102,12 +105,15 @@ class StreamActivity : BaseActivity() {
     private val client by inject<OkHttpClient>()
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
-    internal val playerView: PlayerView by bindView(R.id.player)
+    internal val playerView: TouchablePlayerView by bindView(R.id.player)
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val play: ImageButton by bindView(R.id.play)
     private val loading: ProgressBar by bindView(R.id.loading)
+    private val rewindIndicator: TextView by bindView(R.id.rewindIndicator)
+    private val fastForwardIndicator: TextView by bindView(R.id.fastForwardIndicator)
+
+    private val play: ImageButton by bindView(R.id.play)
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
     private val controlsContainer: ViewGroup by bindView(R.id.controlsContainer)
 
@@ -120,7 +126,11 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    private val animationTime by unsafeLazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
+
+    private val hideIndicatorHandler = Handler()
     private val adFullscreenHandler = Handler()
+    private val animationHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,6 +140,14 @@ class StreamActivity : BaseActivity() {
         setupUi()
 
         fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+
+        rewindIndicator.setCompoundDrawables(
+            null, generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind), null, null
+        )
+
+        fastForwardIndicator.setCompoundDrawables(
+            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_fast_forward), null, null
+        )
 
         playerManager.playerReadySubject
             .autoDisposable(this.scope())
@@ -180,9 +198,39 @@ class StreamActivity : BaseActivity() {
                     .show()
             }
 
+        playerView.rewindSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                resetIndicator(fastForwardIndicator)
+                updateIndicator(rewindIndicator)
+            }
+
+        playerView.fastForwardSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                resetIndicator(rewindIndicator)
+                updateIndicator(fastForwardIndicator)
+            }
+
         play.clicks()
             .autoDisposable(this.scope())
             .subscribe { playerManager.toggle() }
+
+        rewindIndicator.clicks()
+            .autoDisposable(this.scope())
+            .subscribe {
+                playerView.rewind()
+
+                updateIndicator(rewindIndicator, animate = false)
+            }
+
+        fastForwardIndicator.clicks()
+            .autoDisposable(this.scope())
+            .subscribe {
+                playerView.fastForward()
+
+                updateIndicator(fastForwardIndicator, animate = false)
+            }
 
         fullscreen.clicks()
             .autoDisposable(this.scope())
@@ -244,7 +292,9 @@ class StreamActivity : BaseActivity() {
 
         playerView.player = null
 
+        hideIndicatorHandler.removeCallbacksAndMessages(null)
         adFullscreenHandler.removeCallbacksAndMessages(null)
+        animationHandler.removeCallbacksAndMessages(null)
 
         super.onDestroy()
     }
@@ -357,6 +407,48 @@ class StreamActivity : BaseActivity() {
             }
         }
     }
+
+    private fun resetIndicator(view: TextView) {
+        view.background.state = intArrayOf()
+        view.isVisible = false
+        view.text = ""
+
+        view.jumpDrawablesToCurrentState()
+
+        hideIndicatorHandler.removeCallbacksAndMessages(null)
+        animationHandler.removeCallbacksAndMessages(null)
+    }
+
+    private fun updateIndicator(view: TextView, animate: Boolean = true) {
+        val previousDuration = view.text.toString().toIntOrNull()
+        val wasVisible = view.isVisible
+
+        view.isVisible = true
+        view.text = ((previousDuration ?: 0) + 10).toString()
+
+        if (animate) {
+            view.background.state = intArrayOf(
+                android.R.attr.state_pressed, android.R.attr.state_enabled
+            )
+
+            animationHandler.postDelayed(animationTime) {
+                view.background.state = intArrayOf()
+            }
+        }
+
+        if (wasVisible) {
+            hideIndicatorHandler.removeCallbacksAndMessages(null)
+        }
+
+        hideIndicatorHandler.postDelayed(1_000) {
+            resetIndicator(view)
+        }
+    }
+
+    private fun generateIndicatorIcon(icon: IIcon) = IconicsDrawable(this, icon)
+        .sizeDp(36)
+        .paddingDp(4)
+        .colorRes(android.R.color.white)
 
     private fun canOpenInOtherApp(): Boolean {
         val intent = StreamResolutionResult.Video(HttpUrl.get(uri.toString()), mimeType, referer).makeIntent(this)
