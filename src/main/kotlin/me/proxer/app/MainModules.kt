@@ -1,9 +1,12 @@
 package me.proxer.app
 
-import android.content.Context
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV
+import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+import androidx.security.crypto.MasterKeys
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
@@ -81,6 +84,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.StringQualifier
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.threeten.bp.Instant
@@ -91,14 +95,18 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
+const val DEFAULT_SHARED_PREFERENCES = "defaultSharedPreferences"
+const val SECURE_SHARED_PREFERENCES = "secureSharedPreferences"
+
 const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
-const val HAWK_RX_PREFERENCES = "hawkRxPreferences"
+const val SECURE_RX_PREFERENCES = "secureRxPreferences"
 
 const val SINGLE_CONNECTION_CLIENT = "singleConnectionOkHttpClient"
 
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
-private const val HAWK_PREFERENCE_NAME = "Hawk2"
+
+private const val SECURE_PREFERENCE_NAME = "${BuildConfig.APPLICATION_ID}_secure_preferences"
 
 private const val HTTP_CACHE_SIZE = 1_024L * 1_024L * 10L
 private const val HTTP_CACHE_NAME = "http"
@@ -108,16 +116,37 @@ private const val API_TOKEN_HEADER = "proxer-api-token"
 private val headersToRedact = listOf("proxer-api-key", "set-cookie")
 
 private val applicationModules = module {
-    single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single(named(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get()) }
-    single(named(HAWK_RX_PREFERENCES)) {
-        RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
+    single(StringQualifier(DEFAULT_SHARED_PREFERENCES)) {
+        PreferenceManager.getDefaultSharedPreferences(androidContext())
     }
 
-    single { StorageHelper(get(), get(named(HAWK_RX_PREFERENCES))) }
-    single { PreferenceHelper(get(), get(named(DEFAULT_RX_PREFERENCES)), get()) }
+    single(StringQualifier(SECURE_SHARED_PREFERENCES)) {
+        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+        EncryptedSharedPreferences.create(SECURE_PREFERENCE_NAME, masterKeyAlias, get(), AES256_SIV, AES256_GCM)
+    }
+
+    single(named(DEFAULT_RX_PREFERENCES)) {
+        RxSharedPreferences.create(get(StringQualifier(DEFAULT_SHARED_PREFERENCES)))
+    }
+
+    single(named(SECURE_RX_PREFERENCES)) {
+        RxSharedPreferences.create(get(StringQualifier(SECURE_SHARED_PREFERENCES)))
+    }
+
+    single {
+        PreferenceHelper(
+            get(), get(StringQualifier(DEFAULT_RX_PREFERENCES)), get(named(DEFAULT_SHARED_PREFERENCES))
+        )
+    }
+
+    single {
+        StorageHelper(
+            get(), get(named(SECURE_RX_PREFERENCES)), get(StringQualifier(SECURE_SHARED_PREFERENCES)), get()
+        )
+    }
 
     single { RxBus() }
 
@@ -214,7 +243,7 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { LocalDataInitializer(androidContext(), get()) }
+    single { LocalDataInitializer(androidContext(), get(), get(StringQualifier(SECURE_SHARED_PREFERENCES))) }
 
     single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
     single { LoginHandler(get(), get(), get()) }

@@ -33,6 +33,7 @@ ext {
     roomVersion = "2.1.0-rc01"
     workVersion = "2.1.0-alpha02"
     coreKtxVersion = "1.1.0-beta01"
+    securityVersion = "1.0.0-alpha02"
     fragmentKtxVersion = "1.1.0-alpha09"
     interactiveMediaVersion = "3.11.2"
     castVersion = "16.2.0"

@@ -12,7 +12,7 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
-    <uses-sdk tools:overrideLibrary="de.number42.subsampling_pdf_decoder" />
+    <uses-sdk tools:overrideLibrary="de.number42.subsampling_pdf_decoder, androidx.security" />
 
     <application
         android:name=".MainApplication"

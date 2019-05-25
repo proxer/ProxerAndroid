@@ -39,11 +39,7 @@ class PreferenceHelper(
         initializer.initAndMigrateIfNecessary()
     }
 
-    var isAgeRestrictedMediaAllowed
-        get() = sharedPreferences.getBoolean(AGE_CONFIRMATION, false)
-        set(value) {
-            sharedPreferences.edit { putBoolean(AGE_CONFIRMATION, value) }
-        }
+    var isAgeRestrictedMediaAllowed by booleanPreference(sharedPreferences, AGE_CONFIRMATION)
 
     val isAgeRestrictedMediaAllowedObservable = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)
         .asObservable()
@@ -51,28 +47,16 @@ class PreferenceHelper(
         .publish()
         .autoConnect()
 
-    val areBookmarksAutomatic
-        get() = sharedPreferences.getBoolean(AUTO_BOOKMARK, false)
+    val areBookmarksAutomatic by booleanPreference(sharedPreferences, AUTO_BOOKMARK)
 
     val startPage
         get() = DrawerItem.fromIdOrDefault(
-            sharedPreferences.getSafeString(START_PAGE, "0").toLongOrNull()
+            sharedPreferences.getString(START_PAGE, "0")?.toLongOrNull()
         )
 
-    var areNewsNotificationsEnabled
-        get() = sharedPreferences.getBoolean(NOTIFICATIONS_NEWS, false)
-        set(value) {
-            sharedPreferences.edit { putBoolean(NOTIFICATIONS_NEWS, value) }
-        }
-
-    var areAccountNotificationsEnabled
-        get() = sharedPreferences.getBoolean(NOTIFICATIONS_ACCOUNT, false)
-        set(value) {
-            sharedPreferences.edit { putBoolean(NOTIFICATIONS_ACCOUNT, value) }
-        }
-
-    val areChatNotificationsEnabled
-        get() = sharedPreferences.getBoolean(NOTIFICATIONS_CHAT, true)
+    var areNewsNotificationsEnabled by booleanPreference(sharedPreferences, NOTIFICATIONS_NEWS)
+    var areAccountNotificationsEnabled by booleanPreference(sharedPreferences, NOTIFICATIONS_NEWS)
+    val areChatNotificationsEnabled by booleanPreference(sharedPreferences, NOTIFICATIONS_CHAT)
 
     val notificationsInterval
         get() = sharedPreferences.getSafeString(NOTIFICATIONS_INTERVAL, "30").toLong()
@@ -85,11 +69,7 @@ class PreferenceHelper(
             sharedPreferences.edit { putInt(MANGA_READER_ORIENTATION, value.ordinal) }
         }
 
-    var shouldCacheExternally
-        get() = sharedPreferences.getBoolean(EXTERNAL_CACHE, true)
-        set(value) {
-            sharedPreferences.edit { putBoolean(EXTERNAL_CACHE, value) }
-        }
+    var shouldCacheExternally by booleanPreference(sharedPreferences, EXTERNAL_CACHE, default = true)
 
     val isCacheExternallySet
         get() = sharedPreferences.contains(EXTERNAL_CACHE)
@@ -115,9 +95,7 @@ class PreferenceHelper(
             else -> throw IllegalArgumentException("Unknown http log level saved in shared preferences")
         }
 
-    val shouldLogHttpVerbose
-        get() = sharedPreferences.getBoolean(HTTP_VERBOSE, false)
+    val shouldLogHttpVerbose by booleanPreference(sharedPreferences, HTTP_VERBOSE)
 
-    val shouldRedactToken
-        get() = sharedPreferences.getBoolean(HTTP_REDACT_TOKEN, false)
+    val shouldRedactToken by booleanPreference(sharedPreferences, HTTP_REDACT_TOKEN)
 }

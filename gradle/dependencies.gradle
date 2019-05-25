@@ -12,6 +12,7 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$workVersion"
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+    implementation "androidx.security:security-crypto:$securityVersion"
 
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion"
