@@ -75,9 +75,9 @@ import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
 import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.Cache
+import okhttp3.ConnectionPool
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -94,7 +94,7 @@ import javax.net.ssl.X509TrustManager
 const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
 const val HAWK_RX_PREFERENCES = "hawkRxPreferences"
 
-const val HTTP_1_1_CLIENT = "okHttp11Client"
+const val SINGLE_CONNECTION_CLIENT = "singleConnectionOkHttpClient"
 
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
@@ -171,9 +171,9 @@ private val applicationModules = module(createdAtStart = true) {
     }
 
     // TODO: Remove once https://github.com/square/okhttp/issues/3146 is fixed.
-    single(named(HTTP_1_1_CLIENT)) {
+    single(named(SINGLE_CONNECTION_CLIENT)) {
         get<OkHttpClient>().newBuilder()
-            .protocols(listOf(Protocol.HTTP_1_1))
+            .connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
             .build()
     }
 

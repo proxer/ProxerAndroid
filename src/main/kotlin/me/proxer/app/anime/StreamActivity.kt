@@ -51,8 +51,8 @@ import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
-import me.proxer.app.HTTP_1_1_CLIENT
 import me.proxer.app.R
+import me.proxer.app.SINGLE_CONNECTION_CLIENT
 import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
@@ -104,7 +104,7 @@ class StreamActivity : BaseActivity() {
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
-    private val client by inject<OkHttpClient>(named(HTTP_1_1_CLIENT))
+    private val client by inject<OkHttpClient>(named(SINGLE_CONNECTION_CLIENT))
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: TouchablePlayerView by bindView(R.id.player)
