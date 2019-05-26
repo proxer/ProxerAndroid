@@ -236,17 +236,11 @@ class StreamActivity : BaseActivity() {
 
         fullscreen.clicks()
             .autoDisposable(this.scope())
-            .subscribe {
-                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            .subscribe { toggleOrientation() }
 
-                    fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
-                } else {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-
-                    fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen_exit))
-                }
-            }
+        if (savedInstanceState == null) {
+            toggleOrientation()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -358,6 +352,18 @@ class StreamActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 
         toggleFullscreen(true)
+    }
+
+    private fun toggleOrientation() {
+        if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+        } else {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen_exit))
+        }
     }
 
     private fun toggleFullscreen(fullscreen: Boolean) {
