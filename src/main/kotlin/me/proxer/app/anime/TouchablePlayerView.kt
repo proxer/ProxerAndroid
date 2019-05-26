@@ -165,10 +165,12 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     private fun adjustBrightness(distanceY: Float) {
         val increment = distanceY / (height / 0.75f)
-        val windowLayoutParams = (context as? Activity)?.window?.attributes
+        val window = (context as? Activity)?.window
+        val windowLayoutParams = window?.attributes
 
         if (windowLayoutParams != null) {
             windowLayoutParams.screenBrightness = abs(windowLayoutParams.screenBrightness) + increment
+            window.attributes = windowLayoutParams
 
             brightnessChangeSubject.onNext((windowLayoutParams.screenBrightness * 100f).toInt())
         }
