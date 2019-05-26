@@ -169,10 +169,12 @@ class TouchablePlayerView @JvmOverloads constructor(
         val windowLayoutParams = window?.attributes
 
         if (windowLayoutParams != null) {
-            windowLayoutParams.screenBrightness = abs(windowLayoutParams.screenBrightness) + increment
+            val newBrightness = max(0f, min(1f, abs(windowLayoutParams.screenBrightness) + increment))
+
+            windowLayoutParams.screenBrightness = newBrightness
             window.attributes = windowLayoutParams
 
-            brightnessChangeSubject.onNext((windowLayoutParams.screenBrightness * 100f).toInt())
+            brightnessChangeSubject.onNext((newBrightness * 100f).toInt())
         }
     }
 
