@@ -81,7 +81,7 @@ import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.StringQualifier
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.threeten.bp.Instant
 import timber.log.Timber
@@ -111,13 +111,13 @@ private val applicationModules = module(createdAtStart = true) {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single(StringQualifier(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get()) }
-    single(StringQualifier(HAWK_RX_PREFERENCES)) {
+    single(named(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get()) }
+    single(named(HAWK_RX_PREFERENCES)) {
         RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
     }
 
-    single { StorageHelper(get(), get(StringQualifier(HAWK_RX_PREFERENCES))) }
-    single { PreferenceHelper(get(), get(StringQualifier(DEFAULT_RX_PREFERENCES)), get()) }
+    single { StorageHelper(get(), get(named(HAWK_RX_PREFERENCES))) }
+    single { PreferenceHelper(get(), get(named(DEFAULT_RX_PREFERENCES)), get()) }
 
     single { RxBus() }
 
@@ -171,7 +171,7 @@ private val applicationModules = module(createdAtStart = true) {
     }
 
     // TODO: Remove once https://github.com/square/okhttp/issues/3146 is fixed.
-    single(StringQualifier(HTTP_1_1_CLIENT)) {
+    single(named(HTTP_1_1_CLIENT)) {
         get<OkHttpClient>().newBuilder()
             .protocols(listOf(Protocol.HTTP_1_1))
             .build()

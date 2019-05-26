@@ -70,7 +70,7 @@ import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.StringQualifier
+import org.koin.core.qualifier.named
 
 /**
  * @author Ruben Gees
@@ -104,7 +104,7 @@ class StreamActivity : BaseActivity() {
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
-    private val client by inject<OkHttpClient>(StringQualifier(HTTP_1_1_CLIENT))
+    private val client by inject<OkHttpClient>(named(HTTP_1_1_CLIENT))
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: TouchablePlayerView by bindView(R.id.player)
