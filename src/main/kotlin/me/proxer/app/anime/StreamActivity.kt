@@ -20,6 +20,7 @@ import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -67,6 +68,8 @@ import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar
+import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
@@ -117,6 +120,8 @@ class StreamActivity : BaseActivity() {
 
     private val play: ImageButton by bindView(R.id.play)
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
+    private val controlIcon: ImageView by bindView(R.id.controlIcon)
+    private val controlProgress: MaterialProgressBar by bindView(R.id.controlProgress)
     private val controlsContainer: ViewGroup by bindView(R.id.controlsContainer)
 
     private var mediaRouteButton: MenuItem? = null
@@ -132,6 +137,7 @@ class StreamActivity : BaseActivity() {
 
     private val hideIndicatorHandler = Handler()
     private val adFullscreenHandler = Handler()
+    private val hideControlHandler = Handler()
     private val animationHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,6 +148,8 @@ class StreamActivity : BaseActivity() {
         setupUi()
 
         fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+        controlProgress.progressDrawable = ThinCircularProgressDrawable(this)
+        controlProgress.showProgressBackground = false
 
         rewindIndicator.setCompoundDrawables(
             null, generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind), null, null
@@ -212,6 +220,31 @@ class StreamActivity : BaseActivity() {
             .subscribe {
                 resetIndicator(rewindIndicator)
                 updateIndicator(fastForwardIndicator)
+            }
+
+        playerView.volumeChangeSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                val icon = when {
+                    it <= 0 -> CommunityMaterial.Icon2.cmd_volume_mute
+                    it <= 33 -> CommunityMaterial.Icon2.cmd_volume_low
+                    it <= 66 -> CommunityMaterial.Icon2.cmd_volume_medium
+                    else -> CommunityMaterial.Icon2.cmd_volume_high
+                }
+
+                updateControl(it, icon)
+            }
+
+        playerView.brightnessChangeSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                val icon = when {
+                    it <= 33 -> CommunityMaterial.Icon.cmd_brightness_5
+                    it <= 66 -> CommunityMaterial.Icon.cmd_brightness_6
+                    else -> CommunityMaterial.Icon.cmd_brightness_7
+                }
+
+                updateControl(it, icon)
             }
 
         play.clicks()
@@ -290,6 +323,7 @@ class StreamActivity : BaseActivity() {
 
         hideIndicatorHandler.removeCallbacksAndMessages(null)
         adFullscreenHandler.removeCallbacksAndMessages(null)
+        hideControlHandler.removeCallbacksAndMessages(null)
         animationHandler.removeCallbacksAndMessages(null)
 
         super.onDestroy()
@@ -450,6 +484,26 @@ class StreamActivity : BaseActivity() {
 
         hideIndicatorHandler.postDelayed(1_000) {
             resetIndicator(view)
+        }
+    }
+
+    private fun updateControl(value: Int, icon: IIcon) {
+        hideControlHandler.removeCallbacksAndMessages(null)
+
+        controlProgress.isVisible = true
+        controlIcon.isVisible = true
+
+        controlProgress.progress = value
+        controlIcon.setImageDrawable(
+            IconicsDrawable(this, icon)
+                .sizeDp(64)
+                .paddingDp(12)
+                .colorRes(android.R.color.white)
+        )
+
+        hideControlHandler.postDelayed(1_000) {
+            controlProgress.isVisible = false
+            controlIcon.isVisible = false
         }
     }
 

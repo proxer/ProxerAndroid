@@ -1,13 +1,22 @@
 package me.proxer.app.anime
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.NotificationManager
 import android.content.Context
+import android.database.ContentObserver
+import android.media.AudioManager
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
+import androidx.core.content.getSystemService
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.util.Util
 import io.reactivex.subjects.PublishSubject
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -22,8 +31,26 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     val rewindSubject = PublishSubject.create<Unit>()
     val fastForwardSubject = PublishSubject.create<Unit>()
+    val volumeChangeSubject = PublishSubject.create<Int>()
+    val brightnessChangeSubject = PublishSubject.create<Int>()
+
+    private val audioManager = context.getSystemService<AudioManager>()
+        ?: throw IllegalStateException("audioManager is null")
+
+    private val notificationManager = context.getSystemService<NotificationManager>()
+        ?: throw IllegalStateException("notificationManager is null")
+
+    private val audioStreamType
+        get() = Util.getStreamTypeForAudioUsage(player.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)
+
+    private val canChangeAudio
+        get() = audioManager.isVolumeFixed.not() ||
+            if (VERSION.SDK_INT >= VERSION_CODES.M) notificationManager.isNotificationPolicyAccessGranted else true
+
+    private var localVolume = 0f
 
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+
         override fun onDown(event: MotionEvent) = true
 
         override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
@@ -41,7 +68,48 @@ class TouchablePlayerView @JvmOverloads constructor(
 
             return true
         }
+
+        override fun onScroll(
+            initialEvent: MotionEvent,
+            movingEvent: MotionEvent,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            if (abs(movingEvent.y - initialEvent.y) <= 40 || abs(distanceX) > abs(distanceY)) {
+                return false
+            }
+
+            if (initialEvent.x > width / 2 && canChangeAudio) {
+                adjustVolume(distanceY)
+            } else {
+                adjustBrightness(distanceY)
+            }
+
+            return true
+        }
     })
+
+    private val settingsChangeObserver = object : ContentObserver(handler) {
+        override fun onChange(selfChange: Boolean) {
+            if (!selfChange) {
+                localVolume = audioManager.getStreamVolume(audioStreamType).toFloat()
+            }
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        context.contentResolver.registerContentObserver(
+            android.provider.Settings.System.CONTENT_URI, true, settingsChangeObserver
+        )
+    }
+
+    override fun onDetachedFromWindow() {
+        context.contentResolver.unregisterContentObserver(settingsChangeObserver)
+
+        super.onDetachedFromWindow()
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -75,6 +143,27 @@ class TouchablePlayerView @JvmOverloads constructor(
             if (triggerSubject) {
                 fastForwardSubject.onNext(Unit)
             }
+        }
+    }
+
+    private fun adjustVolume(distanceY: Float) {
+        val maxVolume = audioManager.getStreamMaxVolume(audioStreamType).toFloat()
+        val increment = distanceY / (height / 0.75f) * maxVolume
+
+        localVolume = min(maxVolume, localVolume + increment)
+
+        audioManager.setStreamVolume(audioStreamType, localVolume.toInt(), 0)
+        volumeChangeSubject.onNext((localVolume / maxVolume * 100).toInt())
+    }
+
+    private fun adjustBrightness(distanceY: Float) {
+        val increment = distanceY / (height / 0.75f)
+        val windowLayoutParams = (context as? Activity)?.window?.attributes
+
+        if (windowLayoutParams != null) {
+            windowLayoutParams.screenBrightness = abs(windowLayoutParams.screenBrightness) + increment
+
+            brightnessChangeSubject.onNext((windowLayoutParams.screenBrightness * 100f).toInt())
         }
     }
 

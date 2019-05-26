@@ -72,5 +72,27 @@
             tools:ignore="ContentDescription"
             tools:text="10"
             tools:visibility="visible" />
+
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+            android:id="@+id/controlProgress"
+            style="@style/Widget.MaterialProgressBar.ProgressBar.Small"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center"
+            android:background="@drawable/player_control_background"
+            android:indeterminate="false"
+            android:visibility="gone"
+            app:mpb_progressTint="@android:color/white"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/controlIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/quantum_ic_volume_up_white_36"
+            tools:visibility="visible" />
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
