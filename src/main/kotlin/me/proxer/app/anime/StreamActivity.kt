@@ -30,7 +30,6 @@ import androidx.core.view.isVisible
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.google.android.exoplayer2.ext.cast.CastPlayer
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -419,7 +418,7 @@ class StreamActivity : BaseActivity() {
             playerView.showController()
         } else {
             playerView.controllerHideOnTouch = true
-            playerView.controllerShowTimeoutMs = PlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+            playerView.controllerShowTimeoutMs = 2_000
         }
     }
 
