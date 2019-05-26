@@ -48,6 +48,7 @@ class TouchablePlayerView @JvmOverloads constructor(
             if (VERSION.SDK_INT >= VERSION_CODES.M) notificationManager.isNotificationPolicyAccessGranted else true
 
     private var localVolume = 0f
+    private var isScrolling = false
 
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
 
@@ -75,6 +76,8 @@ class TouchablePlayerView @JvmOverloads constructor(
             distanceX: Float,
             distanceY: Float
         ): Boolean {
+            isScrolling = true
+
             if (abs(movingEvent.y - initialEvent.y) <= 40 || abs(distanceX) > abs(distanceY)) {
                 return false
             }
@@ -91,7 +94,7 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     private val settingsChangeObserver = object : ContentObserver(handler) {
         override fun onChange(selfChange: Boolean) {
-            if (!selfChange) {
+            if (!selfChange && !isScrolling) {
                 localVolume = audioManager.getStreamVolume(audioStreamType).toFloat()
             }
         }
@@ -112,8 +115,12 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         gestureDetector.onTouchEvent(event)
+
+        if (event.action == MotionEvent.ACTION_UP) {
+            isScrolling = false
+        }
 
         return true
     }
@@ -150,7 +157,7 @@ class TouchablePlayerView @JvmOverloads constructor(
         val maxVolume = audioManager.getStreamMaxVolume(audioStreamType).toFloat()
         val increment = distanceY / (height / 0.75f) * maxVolume
 
-        localVolume = min(maxVolume, localVolume + increment)
+        localVolume = max(0f, min(maxVolume, localVolume + increment))
 
         audioManager.setStreamVolume(audioStreamType, localVolume.toInt(), 0)
         volumeChangeSubject.onNext((localVolume / maxVolume * 100).toInt())
