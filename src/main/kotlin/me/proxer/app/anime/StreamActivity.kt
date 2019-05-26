@@ -51,6 +51,7 @@ import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
+import me.proxer.app.HTTP_1_1_CLIENT
 import me.proxer.app.R
 import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
@@ -69,6 +70,7 @@ import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.StringQualifier
 
 /**
  * @author Ruben Gees
@@ -102,7 +104,7 @@ class StreamActivity : BaseActivity() {
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
-    private val client by inject<OkHttpClient>()
+    private val client by inject<OkHttpClient>(StringQualifier(HTTP_1_1_CLIENT))
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: TouchablePlayerView by bindView(R.id.player)
