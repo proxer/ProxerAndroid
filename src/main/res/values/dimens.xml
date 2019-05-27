@@ -14,4 +14,6 @@
     <dimen name="image_tabs_header_size">256dp</dimen>
     <dimen name="image_tabs_text_protection_scrim_top_size">92dp</dimen>
     <dimen name="image_tabs_text_protection_scrim_bottom_size">64dp</dimen>
+
+    <dimen name="stream_indicator_margin">32dp</dimen>
 </resources>

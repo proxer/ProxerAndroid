@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="stream_indicator_margin">128dp</dimen>
+</resources>

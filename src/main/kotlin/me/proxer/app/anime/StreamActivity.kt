@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -27,6 +28,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.google.android.exoplayer2.ext.cast.CastPlayer
@@ -289,6 +291,15 @@ class StreamActivity : BaseActivity() {
         }
 
         return true
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        val indicatorMargin = resources.getDimensionPixelSize(R.dimen.stream_indicator_margin)
+
+        rewindIndicator.updateLayoutParams<ViewGroup.MarginLayoutParams> { marginStart = indicatorMargin }
+        fastForwardIndicator.updateLayoutParams<ViewGroup.MarginLayoutParams> { marginEnd = indicatorMargin }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
