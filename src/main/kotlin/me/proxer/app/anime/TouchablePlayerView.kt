@@ -3,11 +3,15 @@ package me.proxer.app.anime
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.database.ContentObserver
 import android.media.AudioManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import android.provider.Settings.System
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
@@ -100,15 +104,21 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
     }
 
+    private val audioNoisyReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            player.playWhenReady = false
+        }
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        context.contentResolver.registerContentObserver(
-            android.provider.Settings.System.CONTENT_URI, true, settingsChangeObserver
-        )
+        context.contentResolver.registerContentObserver(System.CONTENT_URI, true, settingsChangeObserver)
+        context.registerReceiver(audioNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
     }
 
     override fun onDetachedFromWindow() {
+        context.unregisterReceiver(audioNoisyReceiver)
         context.contentResolver.unregisterContentObserver(settingsChangeObserver)
 
         super.onDetachedFromWindow()
