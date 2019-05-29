@@ -113,6 +113,8 @@ class TouchablePlayerView @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
+        localVolume = audioManager.getStreamVolume(audioStreamType).toFloat()
+
         context.contentResolver.registerContentObserver(System.CONTENT_URI, true, settingsChangeObserver)
         context.registerReceiver(audioNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
     }
