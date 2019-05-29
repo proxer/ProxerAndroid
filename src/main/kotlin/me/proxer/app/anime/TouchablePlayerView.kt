@@ -11,6 +11,7 @@ import android.database.ContentObserver
 import android.media.AudioManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import android.provider.Settings.SettingNotFoundException
 import android.provider.Settings.System
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -20,6 +21,7 @@ import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.util.Util
 import io.reactivex.subjects.PublishSubject
+import me.proxer.app.util.extension.unsafeLazy
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -175,13 +177,24 @@ class TouchablePlayerView @JvmOverloads constructor(
         volumeChangeSubject.onNext((localVolume / maxVolume * 100).toInt())
     }
 
+    @Suppress("SwallowedException")
     private fun adjustBrightness(distanceY: Float) {
         val increment = distanceY / (height / 0.75f)
         val window = (context as? Activity)?.window
         val windowLayoutParams = window?.attributes
 
         if (windowLayoutParams != null) {
-            val currentBrightness = windowLayoutParams.screenBrightness.let { if (it < 0) 0.5f else it }
+            val systemBrightness by unsafeLazy {
+                try {
+                    val value = System.getInt(context.contentResolver, System.SCREEN_BRIGHTNESS)
+
+                    if (value <= 0) 0f else value.toFloat() / 255f
+                } catch (_: SettingNotFoundException) {
+                    0.5f
+                }
+            }
+
+            val currentBrightness = windowLayoutParams.screenBrightness.let { if (it < 0) systemBrightness else it }
             val newBrightness = max(0f, min(1f, currentBrightness + increment))
 
             windowLayoutParams.screenBrightness = newBrightness
