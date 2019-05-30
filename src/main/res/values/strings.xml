@@ -707,6 +707,10 @@
     <string name="about_discord_title">Discord</string>
     <string name="about_discord_description">Tritt dem Proxer.Me Discord Server bei</string>
     <string name="about_support_title">Support</string>
+    <string name="about_support_info">
+        Bitte prüfe den Serverstatus bevor du einen Fehler meldest.
+        Wenn es sich nicht um ein technisches Problem handelt, wende dich bitte an das zutreffende Team
+    </string>
     <string name="about_support_forum_title">Forum</string>
     <string name="about_support_forum_description">Berichte Fehler oder mache Verbesserungsvorschläge im Forum</string>
     <string name="about_support_message_title">Nachricht</string>

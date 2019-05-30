@@ -59,6 +59,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
         private val excludedLibraries = arrayOf("fastadapter", "materialize")
 
+        private val teamLink = Utils.getAndFixUrl("https://proxer.me/team?device=default")
         private val facebookLink = Utils.getAndFixUrl("https://facebook.com/Anime.Proxer.Me")
         private val twitterLink = Utils.getAndFixUrl("https://twitter.com/proxerme")
         private val youtubeLink = Utils.getAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
@@ -86,6 +87,12 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         super.onCreate(savedInstanceState)
 
         customTabsHelper = CustomTabsHelperFragment.attachTo(this)
+
+        setLikelyUrl(teamLink)
+        setLikelyUrl(facebookLink)
+        setLikelyUrl(twitterLink)
+        setLikelyUrl(youtubeLink)
+        setLikelyUrl(discordLink)
     }
 
     override fun setLikelyUrl(url: HttpUrl): Boolean {
@@ -192,10 +199,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
     private fun buildSupportItems(context: Context) = listOf(
         MaterialAboutActionItem.Builder()
-            .text(R.string.about_support_forum_title)
-            .subText(R.string.about_support_forum_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
-            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_information).iconColor(context))
+            .subText(R.string.about_support_info)
+            .setOnClickAction { showPage(teamLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
@@ -215,7 +221,13 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                     }
                     .subscribeOn(Schedulers.io())
                     .subscribeAndLogErrors()
-            }.build()
+            }.build(),
+        MaterialAboutActionItem.Builder()
+            .text(R.string.about_support_forum_title)
+            .subText(R.string.about_support_forum_description)
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
+            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
+            .build()
     )
 
     private fun buildDeveloperItems(context: Context) = listOf(

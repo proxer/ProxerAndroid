@@ -298,7 +298,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".settings.status.ServerStatusActivity" />
+        <activity android:name=".settings.status.ServerStatusActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="proxer.de"
+                    android:scheme="http" />
+
+                <data
+                    android:host="proxer.de"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ui.WebViewActivity" />
 
         <service
