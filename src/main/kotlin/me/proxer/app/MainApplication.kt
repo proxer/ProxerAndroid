@@ -10,6 +10,8 @@ import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginHandler
 import me.proxer.app.util.GlideDrawerImageLoader
 import me.proxer.app.util.NotificationUtils
@@ -43,11 +45,15 @@ class MainApplication : Application() {
     }
 
     private fun initLibs() {
-        EmojiManager.install(IosEmojiProvider())
         Iconics.init(this)
 
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
         DrawerImageLoader.init(GlideDrawerImageLoader())
+
+        Completable
+            .fromAction { EmojiManager.install(IosEmojiProvider()) }
+            .subscribeOn(Schedulers.computation())
+            .subscribe()
     }
 
     private fun initCache() {

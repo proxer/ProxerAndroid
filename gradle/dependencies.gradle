@@ -48,7 +48,7 @@ dependencies {
     implementation "com.github.rubengees:android-tablayouthelper:$tabLayoutHelperVersion"
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
     implementation "com.google.android:flexbox:$flexboxVersion"
-    implementation "com.github.vanniktech.Emoji:emoji-ios:$emojiIosVersion"
+    implementation "com.github.rubengees.Emoji:emoji-ios:$emojiIosVersion"
     implementation "me.zhanghai.android.materialprogressbar:library:$materialProgressBarVersion"
     implementation "me.zhanghai.android.materialratingbar:library:$materialRatingBarVersion"
     implementation "me.zhanghai.android.customtabshelper:library:$customtabsHelperVersion"
