@@ -107,7 +107,7 @@ private const val API_TOKEN_HEADER = "proxer-api-token"
 
 private val headersToRedact = listOf("proxer-api-key", "set-cookie")
 
-private val applicationModules = module(createdAtStart = true) {
+private val applicationModules = module {
     single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 

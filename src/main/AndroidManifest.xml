@@ -400,6 +400,12 @@
             android:exported="false" />
 
         <provider
+            android:name=".MainContentProvider"
+            android:authorities="${applicationId}.initialization"
+            android:exported="false"
+            android:initOrder="100000" />
+
+        <provider
             android:name="com.mikepenz.iconics.IconicsContentProvider"
             android:authorities="${applicationId}.iconics.core.provider"
             android:exported="false"
