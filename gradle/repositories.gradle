@@ -4,9 +4,9 @@ repositories {
         mavenContent { releasesOnly() }
         content {
             includeGroupByRegex "androidx.*"
-            includeGroupByRegex "android\\.arch.*"
             includeGroupByRegex "com\\.android.*"
-            includeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
+            includeGroupByRegex "com\\.google\\.android.*"
+
             excludeModule "com.android.tools", "r8"
         }
     }
@@ -15,10 +15,22 @@ repositories {
         mavenContent { releasesOnly() }
         content {
             excludeGroupByRegex "androidx.*"
-            excludeGroupByRegex "android\\.arch.*"
             excludeGroupByRegex "com\\.android.*"
-            excludeGroupByRegex "com\\.google\\.android\\.(gms|material).*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko).*"
+            excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
+            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*"
+        }
+    }
+
+    maven {
+        url "https://plugins.gradle.org/m2"
+        mavenContent { releasesOnly() }
+        content {
+            excludeGroupByRegex "androidx.*"
+            excludeGroupByRegex "com\\.github.*"
+            excludeGroupByRegex "com\\.android.*"
+            excludeGroupByRegex "com\\.google\\.android\\.*"
+            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*"
         }
     }
 
@@ -30,22 +42,14 @@ repositories {
 
     maven {
         url "https://dl.bintray.com/kotlin/kotlin-eap"
-        content { includeGroupByRegex "org\\.jetbrains\\.kotlin.*" }
+        mavenContent { releasesOnly() }
+        content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*" }
     }
 
     maven {
         url "https://storage.googleapis.com/r8-releases/raw"
-        content { includeModule "com.android.tools", "r8" }
-    }
-
-    maven {
-        url  "https://dl.bintray.com/drummer-aidan/maven"
-        content { includeGroupByRegex "com\\.afollestad.*" }
-    }
-
-    maven {
-        url "https://plugins.gradle.org/m2"
         mavenContent { releasesOnly() }
+        content { includeModule "com.android.tools", "r8" }
     }
 
     maven {
