@@ -19,7 +19,6 @@ import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
-import linkClicks
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.ProxerStreamResolver
@@ -31,6 +30,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toLocalDateTime

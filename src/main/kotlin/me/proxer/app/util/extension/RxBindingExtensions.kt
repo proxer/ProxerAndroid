@@ -1,5 +1,7 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
+package me.proxer.app.util.extension
+
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -11,7 +13,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import io.reactivex.Observable
-import me.proxer.app.util.extension.safeLayoutManager
 import me.proxer.app.util.rx.PreferenceChangeObservable
 import me.proxer.app.util.rx.PreferenceClickObservable
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable

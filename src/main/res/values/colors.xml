@@ -21,6 +21,7 @@
 
     <color name="divider">#1F000000</color>
     <color name="icon">#8A000000</color>
+    <color name="icon_disabled">#4C000000</color>
 
     <color name="half_transparent">#7F000000</color>
 

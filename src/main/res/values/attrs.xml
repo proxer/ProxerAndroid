@@ -9,6 +9,8 @@
 
     <attr name="colorDivider" format="color|reference" />
     <attr name="colorIcon" format="color|reference" />
+    <attr name="colorIconDisabled" format="color|reference" />
+
     <attr name="colorLink" format="color|reference" />
 
     <attr name="colorFastscrollTrack" format="color|reference" />

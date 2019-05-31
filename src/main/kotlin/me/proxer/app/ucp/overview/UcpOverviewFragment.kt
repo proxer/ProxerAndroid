@@ -13,11 +13,11 @@ import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
-import linkClicks
-import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.linkClicks
+import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toast
 import me.proxer.library.util.ProxerUrls

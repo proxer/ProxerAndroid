@@ -353,7 +353,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             IconicsDrawable(requireContext(), emojiButtonIcon)
                 .color(
                     when (disabledColor) {
-                        true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
+                        true -> R.attr.colorIconDisabled.toIconicsColorAttr(requireContext())
                         false -> R.attr.colorIcon.toIconicsColorAttr(requireContext())
                     }
                 )
@@ -365,7 +365,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
                 .color(
                     when (disabledColor) {
-                        true -> R.attr.colorOnSurfaceDisabled.toIconicsColorAttr(requireContext())
+                        true -> R.attr.colorIconDisabled.toIconicsColorAttr(requireContext())
                         false -> R.attr.colorSecondary.toIconicsColorAttr(requireContext())
                     }
                 )

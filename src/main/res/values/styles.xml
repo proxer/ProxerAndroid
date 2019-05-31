@@ -61,6 +61,7 @@
 
         <item name="colorDivider">@color/divider</item>
         <item name="colorIcon">@color/icon</item>
+        <item name="colorIconDisabled">@color/icon_disabled</item>
 
         <item name="colorFastscrollTrack">@color/fastscroll_track</item>
         <item name="colorFastscrollThumb">@color/fastscroll_thumb</item>

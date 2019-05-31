@@ -12,6 +12,7 @@
 
         <item name="colorDivider">@color/divider_night</item>
         <item name="colorIcon">@color/icon_night</item>
+        <item name="colorIconDisabled">@color/icon_disabled_night</item>
 
         <item name="colorFastscrollTrack">@color/fastscroll_track_night</item>
         <item name="colorFastscrollThumb">@color/fastscroll_thumb_night</item>

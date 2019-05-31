@@ -19,7 +19,6 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder
 import de.number42.subsampling_pdf_decoder.PDFRegionDecoder
-import events
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -28,6 +27,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.events
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget

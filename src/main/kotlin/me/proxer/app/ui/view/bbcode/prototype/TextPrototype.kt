@@ -14,8 +14,6 @@ import androidx.core.util.PatternsCompat
 import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
-import linkClicks
-import linkLongClicks
 import me.proxer.app.R
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
@@ -25,6 +23,8 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.linkClicks
+import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toast
 

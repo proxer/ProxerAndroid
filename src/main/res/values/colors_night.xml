@@ -15,6 +15,7 @@
 
     <color name="divider_night">#1FFFFFFF</color>
     <color name="icon_night">#B3FFFFFF</color>
+    <color name="icon_disabled_night">#42FFFFFF</color>
 
     <color name="fastscroll_track_night">#1FFFFFFF</color>
     <color name="fastscroll_thumb_night">#9E9E9E</color>

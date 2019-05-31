@@ -11,7 +11,6 @@ import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
-import linkClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.forum.TopicActivity
@@ -19,6 +18,7 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.ProfileViewModel
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.distanceInWordsToNow
+import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.library.entity.user.UserInfo
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

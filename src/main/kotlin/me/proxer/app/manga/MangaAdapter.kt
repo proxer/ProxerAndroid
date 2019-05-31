@@ -25,7 +25,6 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.uber.autodispose.autoDisposable
-import events
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -45,18 +44,19 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.GLUtil
 import me.proxer.app.util.data.ParcelableStringSerializableMap
 import me.proxer.app.util.extension.decodedName
+import me.proxer.app.util.extension.events
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.touchesMonitored
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.util.ProxerUrls
 import timber.log.Timber
-import touchesMonitored
 import java.io.File
 import kotlin.properties.Delegates
 

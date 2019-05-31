@@ -8,7 +8,6 @@ import android.os.Environment
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.BuildConfig
@@ -34,6 +33,7 @@ import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clearTop
+import me.proxer.app.util.extension.clicks
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.Preference

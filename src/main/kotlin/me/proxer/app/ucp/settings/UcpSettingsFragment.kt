@@ -5,12 +5,12 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.preference.Preference
-import changes
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.util.KotterKnifePreference
 import me.proxer.app.util.bindPreference
+import me.proxer.app.util.extension.changes
 import me.proxer.library.enums.UcpSettingConstraint
 import me.proxer.library.util.ProxerUtils
 import net.xpece.android.support.preference.ListPreference

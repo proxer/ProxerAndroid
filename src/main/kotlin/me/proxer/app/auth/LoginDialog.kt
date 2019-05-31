@@ -23,11 +23,11 @@ import com.mikepenz.iconics.utils.toIconicsSizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
-import linkClicks
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.toast
