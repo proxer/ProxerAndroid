@@ -419,7 +419,8 @@
             android:name=".MainContentProvider"
             android:authorities="${applicationId}.initialization"
             android:exported="false"
-            android:initOrder="100000" />
+            android:initOrder="100000"
+            android:multiprocess="true" />
 
         <provider
             android:name="com.mikepenz.iconics.IconicsContentProvider"
