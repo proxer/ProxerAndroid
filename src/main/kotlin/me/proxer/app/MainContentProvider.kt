@@ -1,11 +1,13 @@
 package me.proxer.app
 
+import android.annotation.SuppressLint
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Looper
 import androidx.work.Configuration
+import androidx.work.Logger
 import androidx.work.WorkManager
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesUtil
@@ -16,8 +18,9 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
-import me.proxer.app.util.TimberFileTree
 import me.proxer.app.util.Utils
+import me.proxer.app.util.logging.TimberFileTree
+import me.proxer.app.util.logging.WorkManagerTimberLogger
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -76,6 +79,8 @@ class MainContentProvider : ContentProvider() {
         })
     }
 
+    // TODO: Remove once api becomes public.
+    @SuppressLint("RestrictedApi")
     private fun initLibs() {
         WorkManager.initialize(safeContext, Configuration.Builder().build())
         AndroidThreeTen.init(safeContext)
@@ -87,6 +92,8 @@ class MainContentProvider : ContentProvider() {
                 Timber.plant(Timber.DebugTree())
             }
         }
+
+        Logger.setLogger(WorkManagerTimberLogger())
 
         RxJavaPlugins.setErrorHandler { error ->
             when (error) {

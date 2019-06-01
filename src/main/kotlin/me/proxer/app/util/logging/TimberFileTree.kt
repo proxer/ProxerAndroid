@@ -1,4 +1,4 @@
-package me.proxer.app.util
+package me.proxer.app.util.logging
 
 import android.annotation.SuppressLint
 import android.content.Context
