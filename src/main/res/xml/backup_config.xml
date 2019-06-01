@@ -2,9 +2,32 @@
 <full-backup-content>
 
     <exclude
-        domain="sharedpref"
-        path="evernote_jobs.xml" />
+        domain="database"
+        path="androidx.work.workdb" />
     <exclude
         domain="database"
-        path="evernote_jobs.db" />
+        path="androidx.work.workdb-shm" />
+    <exclude
+        domain="database"
+        path="androidx.work.workdb-wal" />
+
+    <exclude
+        domain="database"
+        path="chat.db" />
+    <exclude
+        domain="database"
+        path="chat.db-shm" />
+    <exclude
+        domain="database"
+        path="chat.db-wal" />
+
+    <exclude
+        domain="sharedpref"
+        path="androidx.work.util.id.xml" />
+    <exclude
+        domain="sharedpref"
+        path="Hawk2.xml" />
+    <exclude
+        domain="sharedpref"
+        path="crypto.KEY_256.xml" />
 </full-backup-content>
