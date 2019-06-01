@@ -103,7 +103,7 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
         draftDisposable = Single
             .fromCallable {
                 if (draft.isBlank()) {
-                    storageHelper.deleteMessageDraft(chatRoomId)
+                    storageHelper.removeMessageDraft(chatRoomId)
                 } else {
                     storageHelper.putMessageDraft(chatRoomId, draft)
                 }

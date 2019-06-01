@@ -122,7 +122,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         draftDisposable = Single
             .fromCallable {
                 if (draft.isBlank()) {
-                    storageHelper.deleteMessageDraft(safeConference.id.toString())
+                    storageHelper.removeMessageDraft(safeConference.id.toString())
                 } else {
                     storageHelper.putMessageDraft(safeConference.id.toString(), draft)
                 }

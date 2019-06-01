@@ -51,7 +51,11 @@ class SecurePreferenceHelper(
         get() = sharedPreferences.getString(USER, null)?.let { moshi.fromJson(it) }
         set(value) {
             sharedPreferences.edit(commit = true) {
-                putString(USER, moshi.toJson(value))
+                if (value == null) {
+                    remove(USER)
+                } else {
+                    putString(USER, moshi.toJson(value))
+                }
             }
         }
 
@@ -135,7 +139,7 @@ class SecurePreferenceHelper(
 
     fun getMessageDraft(id: String): String? = sharedPreferences.getString("$MESSAGE_DRAFT_PREFIX$id", null)
 
-    fun deleteMessageDraft(id: String) = sharedPreferences.edit(commit = true) {
+    fun removeMessageDraft(id: String) = sharedPreferences.edit(commit = true) {
         remove("$MESSAGE_DRAFT_PREFIX$id")
     }
 
