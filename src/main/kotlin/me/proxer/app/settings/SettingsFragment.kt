@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -31,7 +32,7 @@ import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_CHAT
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_INTERVAL
 import me.proxer.app.util.data.PreferenceHelper.Companion.NOTIFICATIONS_NEWS
 import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.clearTop
 import me.proxer.app.util.extension.clicks
 import me.proxer.app.util.extension.snackbar
@@ -59,7 +60,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
     private val packageManager by inject<PackageManager>()
     private val preferenceHelper by inject<PreferenceHelper>()
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     private val profile by bindPreference<Preference>("profile")
     private val ageConfirmation by bindPreference<TwoStatePreference>(AGE_CONFIRMATION)
@@ -87,6 +88,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         super.onViewCreated(view, savedInstanceState)
 
         storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { profile.isEnabled = it }
 

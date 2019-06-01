@@ -28,7 +28,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.iconColor
@@ -43,7 +43,9 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
+class ConferenceAdapter(
+    private val securePreferenceHelper: SecurePreferenceHelper
+) : BaseAdapter<ConferenceWithMessage, ViewHolder>() {
 
     var glide: GlideRequests? = null
     val clickSubject: PublishSubject<ConferenceWithMessage> = PublishSubject.create()
@@ -119,7 +121,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
         private fun bindPreviewText(item: ConferenceWithMessage) {
             if (item.message != null) {
-                val messageFromUser = item.message.userId == storageHelper.user?.id
+                val messageFromUser = item.message.userId == securePreferenceHelper.user?.id
 
                 val trimmedFirstMessageText = item.message.messageText
                     .replace("\r\n", " ")

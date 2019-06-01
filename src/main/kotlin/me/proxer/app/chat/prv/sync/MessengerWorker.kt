@@ -23,7 +23,7 @@ import me.proxer.app.exception.ChatSynchronizationException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
@@ -55,7 +55,7 @@ class MessengerWorker(
 
         private val bus by inject<RxBus>()
         private val workManager by inject<WorkManager>()
-        private val storageHelper by inject<StorageHelper>()
+        private val storageHelper by inject<SecurePreferenceHelper>()
         private val preferenceHelper by inject<PreferenceHelper>()
 
         private val isRunning = Transformations.map(workManager.getWorkInfosForUniqueWorkLiveData(NAME)) {
@@ -123,7 +123,7 @@ class MessengerWorker(
         get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
 
     private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
     private val messengerDatabase by inject<MessengerDatabase>()
     private val messengerDao by inject<MessengerDao>()
 

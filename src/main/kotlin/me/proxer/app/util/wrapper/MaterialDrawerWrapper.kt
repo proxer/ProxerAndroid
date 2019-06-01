@@ -25,7 +25,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toIconicsColorAttr
@@ -57,7 +57,7 @@ class MaterialDrawerWrapper(
             return DrawerItem.fromIdOrNull(idToUse)
         }
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     private val header: AccountHeader
     private val drawer: Drawer

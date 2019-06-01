@@ -12,7 +12,8 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
-    <uses-sdk tools:overrideLibrary="de.number42.subsampling_pdf_decoder, androidx.security" />
+    <!-- We have a custom compat implementation of the MasterKeys class, which is api 23+. -->
+    <uses-sdk tools:overrideLibrary="androidx.security" />
 
     <application
         android:name=".MainApplication"

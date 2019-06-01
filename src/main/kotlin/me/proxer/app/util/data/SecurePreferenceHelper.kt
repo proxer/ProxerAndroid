@@ -14,8 +14,8 @@ import org.threeten.bp.Instant
 /**
  * @author Ruben Gees
  */
-class StorageHelper(
-    initializer: LocalDataInitializer,
+class SecurePreferenceHelper(
+    migrationManager: MigrationManager,
     rxPreferences: RxSharedPreferences,
     private val sharedPreferences: SharedPreferences,
     private val moshi: Moshi
@@ -44,7 +44,7 @@ class StorageHelper(
     }
 
     init {
-        initializer.initAndMigrateIfNecessary()
+        migrationManager.migrateIfNecessary()
     }
 
     var user: LocalUser?

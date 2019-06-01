@@ -18,7 +18,7 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.compat.TaskDescriptionCompat
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.recursiveChildren
@@ -43,7 +43,7 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
     protected open val root: ViewGroup by bindView(R.id.root)
 
     protected val bus by inject<RxBus>()
-    protected val storageHelper by inject<StorageHelper>()
+    protected val storageHelper by inject<SecurePreferenceHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()

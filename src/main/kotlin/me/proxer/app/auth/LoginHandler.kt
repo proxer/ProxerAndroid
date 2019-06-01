@@ -9,7 +9,7 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalSettings
@@ -20,13 +20,13 @@ import me.proxer.library.ProxerApi
  */
 class LoginHandler(
     private val api: ProxerApi,
-    private val storageHelper: StorageHelper,
+    private val securePreferenceHelper: SecurePreferenceHelper,
     private val messengerDao: MessengerDao
 ) {
 
     @SuppressLint("CheckResult")
     fun listen(context: Context) {
-        storageHelper.isLoggedInObservable
+        securePreferenceHelper.isLoggedInObservable
             .subscribe { isLoggedIn ->
                 if (isLoggedIn) {
                     onLogin()
@@ -44,7 +44,7 @@ class LoginHandler(
             .buildSingle()
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
-                storageHelper.ucpSettings = it.toLocalSettings()
+                securePreferenceHelper.ucpSettings = it.toLocalSettings()
             }
     }
 
@@ -56,7 +56,7 @@ class LoginHandler(
 
         Completable
             .fromAction {
-                storageHelper.resetUserData()
+                securePreferenceHelper.resetUserData()
                 messengerDao.clear()
             }
             .subscribeOn(Schedulers.io())

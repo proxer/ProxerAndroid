@@ -252,6 +252,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             }
 
         storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 updateInput()

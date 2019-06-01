@@ -77,6 +77,7 @@ class AnimeViewModel(
 
     init {
         disposables += storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 if (it && error.value?.buttonAction == ButtonAction.LOGIN) {
                     reload()
@@ -84,6 +85,7 @@ class AnimeViewModel(
             }
 
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 if (error.value?.buttonAction == ButtonAction.AGE_CONFIRMATION) {
                     reload()

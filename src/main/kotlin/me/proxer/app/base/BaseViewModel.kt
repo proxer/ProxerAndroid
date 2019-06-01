@@ -13,7 +13,7 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
@@ -33,7 +33,7 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     protected val bus by inject<RxBus>()
     protected val api by inject<ProxerApi>()
-    protected val storageHelper by inject<StorageHelper>()
+    protected val storageHelper by inject<SecurePreferenceHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
     protected val validators by inject<Validators>()
 
@@ -44,9 +44,11 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
 
     init {
         disposables += storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { if (isLoginRequired || isLoginErrorPresent()) reload() }
 
         disposables += preferenceHelper.isAgeRestrictedMediaAllowedObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { if (isAgeConfirmationRequired) reload() }
 
         disposables += bus.register(CaptchaSolvedEvent::class.java)

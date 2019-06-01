@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package me.proxer.app
 
 import android.content.res.Resources
@@ -6,7 +8,6 @@ import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-import androidx.security.crypto.MasterKeys
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
@@ -62,14 +63,15 @@ import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
-import me.proxer.app.util.data.LocalDataInitializer
+import me.proxer.app.util.data.MigrationManager
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.http.CacheInterceptor
 import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.UserAgentInterceptor
+import me.proxer.app.util.security.MasterKeysCompat
 import me.proxer.library.LoginTokenManager
 import me.proxer.library.ProxerApi
 import me.proxer.library.enums.AnimeLanguage
@@ -123,9 +125,9 @@ private val applicationModules = module {
     }
 
     single(StringQualifier(SECURE_SHARED_PREFERENCES)) {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val keyAlias = MasterKeysCompat().getOrCreate(androidContext())
 
-        EncryptedSharedPreferences.create(SECURE_PREFERENCE_NAME, masterKeyAlias, get(), AES256_SIV, AES256_GCM)
+        EncryptedSharedPreferences.create(SECURE_PREFERENCE_NAME, keyAlias, get(), AES256_SIV, AES256_GCM)
     }
 
     single(named(DEFAULT_RX_PREFERENCES)) {
@@ -143,7 +145,7 @@ private val applicationModules = module {
     }
 
     single {
-        StorageHelper(
+        SecurePreferenceHelper(
             get(), get(named(SECURE_RX_PREFERENCES)), get(StringQualifier(SECURE_SHARED_PREFERENCES)), get()
         )
     }
@@ -243,7 +245,7 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { LocalDataInitializer(androidContext(), get(), get(StringQualifier(SECURE_SHARED_PREFERENCES))) }
+    single { MigrationManager(androidContext(), get(), get(StringQualifier(SECURE_SHARED_PREFERENCES))) }
 
     single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
     single { LoginHandler(get(), get(), get()) }

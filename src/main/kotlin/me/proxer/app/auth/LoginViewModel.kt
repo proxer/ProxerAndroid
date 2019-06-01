@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
@@ -26,7 +26,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
 
     private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     private var dataDisposable: Disposable? = null
 

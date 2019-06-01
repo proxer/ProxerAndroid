@@ -13,7 +13,7 @@ import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
@@ -70,7 +70,7 @@ class NotificationWorker(
     }
 
     private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     private var currentCall: ProxerCall<*>? = null
 

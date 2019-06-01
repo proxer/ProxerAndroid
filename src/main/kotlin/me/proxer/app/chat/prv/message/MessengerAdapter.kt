@@ -28,7 +28,7 @@ import me.proxer.app.chat.prv.message.MessengerAdapter.MessageViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBParser
 import me.proxer.app.util.data.ParcelableStringBooleanMap
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
@@ -46,7 +46,7 @@ import okhttp3.HttpUrl
 class MessengerAdapter(
     savedInstanceState: Bundle?,
     private val isGroup: Boolean,
-    private val storageHelper: StorageHelper
+    private val securePreferenceHelper: SecurePreferenceHelper
 ) : BaseAdapter<LocalMessage, MessageViewHolder>() {
 
     private companion object {
@@ -147,7 +147,7 @@ class MessengerAdapter(
                 }
             }
 
-            if (current.userId == storageHelper.user?.id) {
+            if (current.userId == securePreferenceHelper.user?.id) {
                 result += 4 // Make the item a "self" item.
             }
         }

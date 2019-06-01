@@ -27,7 +27,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ui.view.BetterLinkTextView
 import me.proxer.app.util.Utils
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkClicks
@@ -45,7 +45,7 @@ import org.threeten.bp.temporal.ChronoUnit
  */
 class AnimeAdapter(
     savedInstanceState: Bundle?,
-    private val storageHelper: StorageHelper
+    private val securePreferenceHelper: SecurePreferenceHelper
 ) : BaseAdapter<AnimeStream, RecyclerView.ViewHolder>() {
 
     private companion object {
@@ -143,7 +143,7 @@ class AnimeAdapter(
         internal val play: Button by bindView(R.id.play)
 
         fun bind(item: AnimeStream) {
-            val isLoginRequired = !item.isPublic && !storageHelper.isLoggedIn
+            val isLoginRequired = !item.isPublic && !securePreferenceHelper.isLoggedIn
 
             initListeners(isLoginRequired)
 
@@ -205,14 +205,14 @@ class AnimeAdapter(
 
             dismissAdAlert.clicks()
                 .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
-                .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
+                .doOnNext { securePreferenceHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe()
 
             setAdInterval.clicks()
                 .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
-                .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
+                .doOnNext { securePreferenceHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe(setAdIntervalClickSubject)
@@ -225,12 +225,12 @@ class AnimeAdapter(
 
         private fun bindAlertIfNecessary(item: AnimeStream): Boolean {
             val threshold by unsafeLazy {
-                storageHelper.lastAdAlertDate.plus(14, ChronoUnit.DAYS)
+                securePreferenceHelper.lastAdAlertDate.plus(14, ChronoUnit.DAYS)
             }
 
             val shouldShowAdAlert = ProxerStreamResolver.supports(item.hosterName) &&
                 threshold.isBefore(Instant.now()) &&
-                storageHelper.ucpSettings.adInterval <= 0
+                securePreferenceHelper.ucpSettings.adInterval <= 0
 
             return if (shouldShowAdAlert) {
                 adAlert.isVisible = true

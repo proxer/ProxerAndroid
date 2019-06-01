@@ -12,7 +12,7 @@ import java.io.File
 /**
  * @author Ruben Gees
  */
-class LocalDataInitializer(
+class MigrationManager(
     private val context: Context,
     private val hawkMoshiParser: HawkMoshiParser,
     private val secureSharedPreferences: SharedPreferences
@@ -27,7 +27,7 @@ class LocalDataInitializer(
     private var isInitialized = false
 
     @Synchronized
-    fun initAndMigrateIfNecessary() {
+    fun migrateIfNecessary() {
         if (!isInitialized) {
             Hawk.init(context)
                 .setParser(hawkMoshiParser)
@@ -64,7 +64,9 @@ class LocalDataInitializer(
             }
 
             if (previousVersion != currentVersion) {
-                Hawk.put(VERSION, currentVersion)
+                secureSharedPreferences.edit(commit = true) {
+                    putInt(VERSION, currentVersion)
+                }
             }
 
             isInitialized = true

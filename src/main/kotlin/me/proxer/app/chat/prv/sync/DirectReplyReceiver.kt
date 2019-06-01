@@ -7,7 +7,7 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.getSafeCharSequence
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.core.KoinComponent
@@ -33,7 +33,7 @@ class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
     }
 
     private val messengerDao by inject<MessengerDao>()
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)

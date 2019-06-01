@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotterknife.bindView
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -53,6 +54,7 @@ abstract class DrawerActivity : BaseActivity() {
         }
 
         storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe { drawer.refreshHeader(this) }
     }

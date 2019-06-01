@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleRegistry
 import com.rubengees.rxbus.RxBus
 import kotterknife.KotterKnife
 import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -34,7 +34,7 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
     }
 
     protected val bus by inject<RxBus>()
-    protected val storageHelper by inject<StorageHelper>()
+    protected val storageHelper by inject<SecurePreferenceHelper>()
     protected val preferenceHelper by inject<PreferenceHelper>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()

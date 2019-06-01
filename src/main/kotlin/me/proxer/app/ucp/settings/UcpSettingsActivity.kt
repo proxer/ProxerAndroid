@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.multilineSnackbar
@@ -55,6 +56,7 @@ class UcpSettingsActivity : DrawerActivity() {
 
         storageHelper.isLoggedInObservable
             .filter { it.not() }
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(this.scope())
             .subscribe { finish() }
 

@@ -10,7 +10,7 @@ import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -25,7 +25,7 @@ object NewsNotifications : KoinComponent {
 
     private const val ID = 1_357_913_213
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     fun showOrUpdate(context: Context, news: Collection<NewsArticle>) {
         when (val notification = buildNewsNotification(context, news)) {

@@ -1,6 +1,7 @@
 package me.proxer.app.chat.pub.room
 
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.plusAssign
 import me.proxer.app.base.BaseViewModel
@@ -29,6 +30,7 @@ class ChatRoomViewModel : BaseViewModel<List<ChatRoom>>() {
 
     init {
         disposables += storageHelper.isLoggedInObservable
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { reload() }
     }
 }

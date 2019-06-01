@@ -12,7 +12,7 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.PROFILE_CHANNEL
-import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.data.SecurePreferenceHelper
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.getQuantityString
@@ -27,7 +27,7 @@ object AccountNotifications : KoinComponent {
 
     private const val ID = 759_234_852
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by inject<SecurePreferenceHelper>()
 
     fun showOrUpdate(context: Context, notifications: Collection<ProxerNotification>) {
         when (val notification = buildNotification(context, notifications)) {
