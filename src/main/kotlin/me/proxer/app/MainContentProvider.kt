@@ -5,6 +5,8 @@ import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Looper
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
@@ -28,16 +30,16 @@ class MainContentProvider : ContentProvider() {
     private val safeContext get() = this.context ?: throw IllegalStateException("context is null")
 
     override fun onCreate(): Boolean {
+        enableStrictModeForDebug()
+        initGlobalErrorHandler()
+        initSecurity()
+        initLibs()
+
         startKoin {
             androidContext(safeContext)
 
             modules(koinModules)
         }
-
-        enableStrictModeForDebug()
-        initGlobalErrorHandler()
-        initSecurity()
-        initLibs()
 
         return true
     }
@@ -75,6 +77,7 @@ class MainContentProvider : ContentProvider() {
     }
 
     private fun initLibs() {
+        WorkManager.initialize(safeContext, Configuration.Builder().build())
         AndroidThreeTen.init(safeContext)
 
         if (BuildConfig.LOG) {
