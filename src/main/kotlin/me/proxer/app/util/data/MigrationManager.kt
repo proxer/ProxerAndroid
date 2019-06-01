@@ -57,9 +57,10 @@ class MigrationManager(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     context.deleteSharedPreferences("Hawk2")
                 } else {
-                    File(context.filesDir.parent, "shared_prefs/Hawk2.xml").let {
-                        if (it.exists()) it.delete()
-                    }
+                    arrayOf("shared_prefs/Hawk2.xml", "shared_prefs/crypto.KEY_256.xml")
+                        .map { File(context.filesDir.parent, it) }
+                        .filter { it.exists() }
+                        .forEach { it.delete() }
                 }
             }
 
