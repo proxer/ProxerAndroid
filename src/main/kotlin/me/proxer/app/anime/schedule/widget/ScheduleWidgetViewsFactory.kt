@@ -27,7 +27,10 @@ class ScheduleWidgetViewsFactory(
     override fun getItemId(position: Int) = calendarEntries[position].id.toLong()
     override fun getLoadingView() = null
 
-    override fun getViewAt(position: Int): RemoteViews {
+    override fun getViewAt(position: Int): RemoteViews? {
+        // Workaround Android bug passing too large positions.
+        if (position > calendarEntries.lastIndex) return null
+
         val layout = if (dark) R.layout.layout_widget_schedule_dark_item else R.layout.layout_widget_schedule_item
         val entry = calendarEntries[position]
 

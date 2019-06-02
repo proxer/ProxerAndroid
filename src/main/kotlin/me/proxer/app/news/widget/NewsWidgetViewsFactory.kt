@@ -22,7 +22,10 @@ class NewsWidgetViewsFactory(
     override fun getItemId(position: Int) = news[position].id.toLong()
     override fun getLoadingView() = null
 
-    override fun getViewAt(position: Int): RemoteViews {
+    override fun getViewAt(position: Int): RemoteViews? {
+        // Workaround Android bug passing too large positions.
+        if (position > news.lastIndex) return null
+
         val layout = if (dark) R.layout.layout_widget_news_dark_item else R.layout.layout_widget_news_item
         val news = news[position]
 
