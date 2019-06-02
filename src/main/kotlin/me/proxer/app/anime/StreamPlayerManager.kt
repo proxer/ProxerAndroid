@@ -29,9 +29,6 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
@@ -302,7 +299,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         return MediaQueueItem.Builder(mediaInfo).build()
     }
 
-    private fun buildLocalPlayer(context: Activity): SimpleExoPlayer {
+    private fun buildLocalPlayer(context: StreamActivity): SimpleExoPlayer {
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
 
@@ -316,18 +313,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         }
     }
 
-    private fun buildCastPlayer(context: Activity): CastPlayer? {
-        val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)
-
-        return if (availabilityResult == ConnectionResult.SUCCESS) {
-            val castContext = CastContext.getSharedInstance(context)
-
-            CastPlayer(castContext).apply {
-                setSessionAvailabilityListener(castSessionAvailabilityListener)
-            }
-        } else {
-            null
-        }
+    private fun buildCastPlayer(context: StreamActivity): CastPlayer? {
+        return context.getSafeCastContext()
+            ?.let { CastPlayer(it) }
+            ?.apply { setSessionAvailabilityListener(castSessionAvailabilityListener) }
     }
 
     enum class PlayerState {

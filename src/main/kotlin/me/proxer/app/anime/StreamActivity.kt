@@ -351,6 +351,21 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    @Suppress("SwallowedException")
+    internal fun getSafeCastContext(): CastContext? {
+        val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+
+        return if (availabilityResult == ConnectionResult.SUCCESS) {
+            try {
+                CastContext.getSharedInstance(this)
+            } catch (_: Exception) {
+                null
+            }
+        } else {
+            null
+        }
+    }
+
     private fun setupUi() {
         title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -540,16 +555,6 @@ class StreamActivity : BaseActivity() {
             true
         } catch (ignored: ActivityNotFoundException) {
             false
-        }
-    }
-
-    private fun getSafeCastContext(): CastContext? {
-        val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-
-        return if (availabilityResult == ConnectionResult.SUCCESS) {
-            CastContext.getSharedInstance(this)
-        } else {
-            null
         }
     }
 
