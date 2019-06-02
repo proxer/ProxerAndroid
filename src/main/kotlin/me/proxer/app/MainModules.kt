@@ -7,9 +7,6 @@ import androidx.room.Room
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.JsonReader
-import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.Moshi
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.anime.AnimeViewModel
@@ -59,6 +56,7 @@ import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
+import me.proxer.app.util.data.InstantJsonAdapter
 import me.proxer.app.util.data.LocalDataInitializer
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -67,6 +65,7 @@ import me.proxer.app.util.http.ConnectionCloseInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.UserAgentInterceptor
+import me.proxer.app.util.logging.HttpTimberLogger
 import me.proxer.library.LoginTokenManager
 import me.proxer.library.ProxerApi
 import me.proxer.library.enums.AnimeLanguage
@@ -84,7 +83,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.threeten.bp.Instant
-import timber.log.Timber
 import java.io.File
 import java.security.KeyStore
 import java.util.concurrent.TimeUnit
@@ -135,7 +133,7 @@ private val applicationModules = module {
         val preferenceHelper = get<PreferenceHelper>()
 
         val loggingInterceptor = when {
-            BuildConfig.LOG -> HttpLoggingInterceptor { message -> Timber.i(message) }.apply {
+            BuildConfig.LOG -> HttpLoggingInterceptor(HttpTimberLogger()).apply {
                 level = preferenceHelper.httpLogLevel
 
                 headersToRedact.forEach { redactHeader(it) }
@@ -179,21 +177,7 @@ private val applicationModules = module {
 
     single {
         Moshi.Builder()
-            .add(Instant::class.java, object : JsonAdapter<Instant>() {
-                override fun fromJson(reader: JsonReader): Instant? {
-                    return when {
-                        reader.peek() == JsonReader.Token.NULL -> null
-                        else -> Instant.ofEpochMilli(reader.nextLong())
-                    }
-                }
-
-                override fun toJson(writer: JsonWriter, value: Instant?) {
-                    when (value) {
-                        null -> writer.nullValue()
-                        else -> writer.value(value.toEpochMilli())
-                    }
-                }
-            })
+            .add(Instant::class.java, InstantJsonAdapter())
             .build()
     }
 
