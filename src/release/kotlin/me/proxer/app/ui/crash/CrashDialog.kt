@@ -34,9 +34,9 @@ class CrashDialog : BaseDialog() {
         .title(R.string.dialog_crash_title)
         .message(text = errorDetails)
         .neutralButton(R.string.dialog_crash_neutral) {
-
-            requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+            requireContext().getSystemService<ClipboardManager>()?.setPrimaryClip(
                 ClipData.newPlainText(getString(R.string.clipboard_crash_title), errorDetails)
+            )
 
             requireContext().toast(R.string.clipboard_status)
         }
