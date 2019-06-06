@@ -28,6 +28,11 @@ jobs:
           name: Update Android SDK
           command: sdkmanager --update
 
+      # TODO: Remove once image with this version is available.
+      - run:
+          name: Install Android Q platform
+          command: sdkmanager --install "platforms;android-29"
+
       - run:
           name: Run static code analysis
           command: ./gradlew detekt ktlintCheck -Dorg.gradle.parallel=false -Pkotlin.incremental=false
