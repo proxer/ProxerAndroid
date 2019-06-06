@@ -3,7 +3,11 @@ package me.proxer.app.settings
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.os.Build
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -34,7 +38,6 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
-import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toast
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -133,8 +136,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .setOnClickAction {
                 val title = getString(R.string.clipboard_title)
 
-                requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                requireContext().getSystemService<ClipboardManager>()?.setPrimaryClip(
                     ClipData.newPlainText(title, BuildConfig.VERSION_NAME)
+                )
 
                 requireContext().toast(R.string.clipboard_status)
             }.build(),
@@ -241,7 +245,11 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(getString(R.string.about_developer_proxer_title))
             .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                setColorFilter(context.resolveColor(R.attr.colorIcon), PorterDuff.Mode.SRC_IN)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    colorFilter = BlendModeColorFilter(R.attr.colorIcon, BlendMode.SRC_IN)
+                } else {
+                    colorFilter = PorterDuffColorFilter(R.attr.colorIcon, PorterDuff.Mode.SRC_IN)
+                }
             })
             .setOnClickAction {
                 ProfileActivity.navigateTo(requireActivity(), developerProxerId, developerProxerName, null)

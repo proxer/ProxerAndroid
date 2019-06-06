@@ -85,7 +85,7 @@ inline fun <T : Enum<T>> Bundle.putEnumSet(key: String, set: EnumSet<T>) {
 }
 
 inline fun <reified T : Enum<T>> Bundle.getEnumSet(key: String, klass: Class<T>): EnumSet<T> {
-    val values = getIntArray(key)?.map { klass.enumConstants[it] }?.filterNotNull()
+    val values = getIntArray(key)?.map { klass.enumConstants?.get(it) }?.filterNotNull()
 
     return when {
         values?.isEmpty() != false -> EnumSet.noneOf(T::class.java)

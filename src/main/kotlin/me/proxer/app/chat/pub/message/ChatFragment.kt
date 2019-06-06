@@ -174,8 +174,9 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             .autoDisposable(this.scope())
             .subscribe {
                 getString(R.string.clipboard_title).let { title ->
-                    requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                    requireContext().getSystemService<ClipboardManager>()?.setPrimaryClip(
                         ClipData.newPlainText(title, it.toString())
+                    )
 
                     requireContext().toast(R.string.clipboard_status)
                 }
@@ -378,7 +379,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         val title = getString(R.string.fragment_messenger_clip_title)
         val content = innerAdapter.selectedMessages.joinToString(separator = "\n", transform = { it.message })
 
-        requireContext().getSystemService<ClipboardManager>()?.primaryClip = ClipData.newPlainText(title, content)
+        requireContext().getSystemService<ClipboardManager>()?.setPrimaryClip(
+            ClipData.newPlainText(title, content)
+        )
+
         requireContext().toast(R.string.clipboard_status)
 
         actionMode?.finish()

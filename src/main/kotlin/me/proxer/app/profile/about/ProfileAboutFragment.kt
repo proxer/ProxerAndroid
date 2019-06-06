@@ -205,8 +205,9 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
             .subscribe {
                 val clipboardTitle = getString(R.string.clipboard_title)
 
-                requireContext().getSystemService<ClipboardManager>()?.primaryClip =
+                requireContext().getSystemService<ClipboardManager>()?.setPrimaryClip(
                     ClipData.newPlainText(clipboardTitle, it.toString())
+                )
 
                 requireContext().toast(R.string.clipboard_status)
             }
