@@ -17,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -32,18 +33,13 @@ object MessengerShortcuts : KoinComponent {
 
     fun updateShareTargets(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-
-            // TODO: Remove once ShortcutManagerCompat delegates properly.
-            ShortcutInfoCompatSaverImpl.getInstance(context).removeAllShortcuts()
-
-            val shortcutManager = context.getSystemService<ShortcutManager>()
+            val shortcutManager by unsafeLazy { requireNotNull(context.getSystemService<ShortcutManager>()) }
             val componentName = ComponentName(context, MainActivity::class.java)
 
             val shortcutsLeft = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 val maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(context)
-                val usedShortcuts = shortcutManager?.dynamicShortcuts?.plus(shortcutManager.manifestShortcuts)
-                    ?.count { shortcutInfo -> shortcutInfo.activity == componentName } ?: 0
+                val usedShortcuts = shortcutManager.dynamicShortcuts.plus(shortcutManager.manifestShortcuts)
+                    .count { shortcutInfo -> shortcutInfo.activity == componentName }
 
                 maxShortcuts - usedShortcuts
             } else {
@@ -74,10 +70,17 @@ object MessengerShortcuts : KoinComponent {
                     .build()
             }
 
-            ShortcutManagerCompat.addDynamicShortcuts(context, newShortcuts)
+            if (
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1 ||
+                newShortcuts.any { newShortcut -> shortcutManager.dynamicShortcuts.none { it.id == newShortcut.id } }
+            ) {
+                ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+                // TODO: Remove once ShortcutManagerCompat delegates properly.
+                ShortcutInfoCompatSaverImpl.getInstance(context).removeAllShortcuts()
 
-            // TODO: Remove once ShortcutManagerCompat delegates properly.
-            ShortcutInfoCompatSaverImpl.getInstance(context).addShortcuts(newShortcuts)
+                ShortcutManagerCompat.addDynamicShortcuts(context, newShortcuts)
+                ShortcutInfoCompatSaverImpl.getInstance(context).addShortcuts(newShortcuts)
+            }
         }
     }
 
