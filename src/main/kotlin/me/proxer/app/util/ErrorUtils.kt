@@ -1,6 +1,8 @@
 package me.proxer.app.util
 
 import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
@@ -9,6 +11,7 @@ import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.ChatException
+import me.proxer.app.exception.NotConnectedException
 import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.exception.StreamResolutionException
@@ -18,6 +21,7 @@ import me.proxer.app.settings.AgeConfirmationDialog
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.AGE_CONFIRMATION
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.CAPTCHA
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.LOGIN
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.NETWORK_SETTINGS
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.OPEN_LINK
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
@@ -164,6 +168,7 @@ object ErrorUtils : KoinComponent {
             is SocketTimeoutException -> R.string.error_timeout
             is SSLPeerUnverifiedException -> R.string.error_ssl
             is IOException -> R.string.error_io
+            is NotConnectedException -> R.string.error_no_network
             is NotLoggedInException -> R.string.error_login_required
             is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
             is StreamResolutionException -> R.string.error_stream_resolution
@@ -175,6 +180,10 @@ object ErrorUtils : KoinComponent {
 
     fun isIpBlockedError(error: Throwable) = getInnermostError(error).let {
         it is ProxerException && it.serverErrorType == IP_BLOCKED
+    }
+
+    fun isNotConnectedError(error: Throwable) = getInnermostError(error).let {
+        it is NotConnectedException
     }
 
     fun isNetworkError(error: Throwable) = getInnermostError(error).let {
@@ -192,6 +201,7 @@ object ErrorUtils : KoinComponent {
                 else -> ACTION_MESSAGE_DEFAULT
             }
             is NotLoggedInException -> R.string.error_action_login
+            is NotConnectedException -> R.string.error_action_network_settings
             is AgeConfirmationRequiredException -> R.string.error_action_confirm
             is MangaLinkException -> R.string.error_action_open_link
             else -> ACTION_MESSAGE_DEFAULT
@@ -204,6 +214,7 @@ object ErrorUtils : KoinComponent {
                 else -> null
             }
             is NotLoggedInException -> LOGIN
+            is NotConnectedException -> NETWORK_SETTINGS
             is AgeConfirmationRequiredException -> AGE_CONFIRMATION
             is MangaLinkException -> OPEN_LINK
             else -> null
@@ -269,7 +280,11 @@ object ErrorUtils : KoinComponent {
         UNKNOWN -> R.string.error_unknown
     }
 
-    private fun getInnermostError(error: Throwable) = when (error) {
+    private fun getInnermostError(error: Throwable): Throwable = when (error) {
+        is ProxerException -> when (error.errorType) {
+            UNKNOWN -> error.cause?.let { getInnermostError(it) } ?: error
+            else -> error
+        }
         is PartialException -> error.innerError
         is ChatException -> error.innerError
         is ExoPlaybackException -> error.cause ?: Exception()
@@ -290,6 +305,13 @@ object ErrorUtils : KoinComponent {
 
         fun toClickListener(activity: BaseActivity) = when (buttonAction) {
             CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
+            NETWORK_SETTINGS -> View.OnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    activity.startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+                } else {
+                    activity.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+                }
+            }
             LOGIN -> View.OnClickListener { LoginDialog.show(activity) }
             AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
             OPEN_LINK -> data[LINK_DATA_KEY].let { link ->
@@ -306,6 +328,6 @@ object ErrorUtils : KoinComponent {
             else -> null
         }
 
-        enum class ButtonAction { CAPTCHA, LOGIN, AGE_CONFIRMATION, OPEN_LINK }
+        enum class ButtonAction { CAPTCHA, NETWORK_SETTINGS, LOGIN, AGE_CONFIRMATION, OPEN_LINK }
     }
 }

@@ -59,6 +59,7 @@
     <string name="error_ssl">Die Sicherheitszertifikate sind ungültig. Überprüfe ob es ein Update für die App gibt
     </string>
 
+    <string name="error_no_network">Dein Gerät ist nicht mit dem Internet verbunden</string>
     <string name="error_invalid_token">Du wurdest zu deiner Sicherheit automatisch abgemeldet. Melde dich erneut an
     </string>
     <string name="error_login_credentials">Falsches Passwort oder falscher Nutzername</string>
@@ -162,6 +163,7 @@
     <string name="error_action_retry">Erneut versuchen</string>
     <string name="error_action_finish">Beenden</string>
     <string name="error_action_captcha">Captcha</string>
+    <string name="error_action_network_settings">Einstellungen</string>
     <string name="error_action_login">Anmelden</string>
     <string name="error_action_confirm">Bestätigen</string>
     <string name="error_action_open_link">Extern öffnen</string>

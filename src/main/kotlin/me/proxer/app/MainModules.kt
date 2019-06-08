@@ -62,6 +62,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.http.CacheInterceptor
 import me.proxer.app.util.http.ConnectionCloseInterceptor
+import me.proxer.app.util.http.ConnectivityInterceptor
 import me.proxer.app.util.http.HttpsUpgradeInterceptor
 import me.proxer.app.util.http.TaggedSocketFactory
 import me.proxer.app.util.http.UserAgentInterceptor
@@ -152,6 +153,7 @@ private val applicationModules = module {
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .addNetworkInterceptor(CacheInterceptor())
+            .addInterceptor(ConnectivityInterceptor(get()))
             .addInterceptor(HttpsUpgradeInterceptor())
             .addInterceptor(UserAgentInterceptor())
             .addInterceptor(ConnectionCloseInterceptor())

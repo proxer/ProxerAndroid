@@ -11,6 +11,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -52,7 +53,15 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
         disposables += bus.register(CaptchaSolvedEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                if (error.value?.message == R.string.error_captcha) {
+                if (error.value?.buttonAction == ButtonAction.CAPTCHA) {
+                    refresh()
+                }
+            }
+
+        disposables += bus.register(NetworkConnectedEvent::class.java)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (error.value?.buttonAction == ButtonAction.NETWORK_SETTINGS) {
                     refresh()
                 }
             }
