@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.View
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.upstream.HttpDataSource
+import com.google.android.exoplayer2.upstream.Loader
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
@@ -287,7 +288,8 @@ object ErrorUtils : KoinComponent {
         }
         is PartialException -> error.innerError
         is ChatException -> error.innerError
-        is ExoPlaybackException -> error.cause ?: Exception()
+        is ExoPlaybackException -> error.cause?.let { getInnermostError(it) } ?: Exception()
+        is Loader.UnexpectedLoaderException -> error.cause?.let { getInnermostError(it) } ?: Exception()
         else -> error
     }
 

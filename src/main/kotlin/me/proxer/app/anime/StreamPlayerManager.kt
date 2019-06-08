@@ -208,7 +208,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
     fun retry() {
         if (currentPlayer == localPlayer) {
-            localPlayer.prepare(localMediaSource)
+            localPlayer.prepare(localMediaSource, false, false)
         } else if (currentPlayer == castPlayer) {
             castPlayer.loadItem(castMediaSource, lastPosition)
         }
