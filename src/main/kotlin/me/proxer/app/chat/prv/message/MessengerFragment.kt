@@ -206,7 +206,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
         })
 
         toolbar.clicks()
-            .autoDisposable(this.scope())
+            .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
                 when (conference.isGroup) {
                     true -> ConferenceInfoActivity.navigateTo(requireActivity(), conference)
