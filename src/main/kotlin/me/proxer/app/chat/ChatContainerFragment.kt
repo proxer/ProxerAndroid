@@ -80,15 +80,15 @@ class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
         override fun getItem(position: Int) = when (position) {
             0 -> ChatRoomFragment.newInstance()
             1 -> ConferenceFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = 2
 
         override fun getPageTitle(position: Int): String = when (position) {
-            0 -> "Öffentlich"
-            1 -> "Privat"
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            0 -> getString(R.string.fragment_chat_container_public)
+            1 -> getString(R.string.fragment_chat_container_private)
+            else -> error("Unknown index passed: $position")
         }
     }
 }

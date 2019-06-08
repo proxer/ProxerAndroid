@@ -40,11 +40,8 @@ class TouchablePlayerView @JvmOverloads constructor(
     val volumeChangeSubject = PublishSubject.create<Int>()
     val brightnessChangeSubject = PublishSubject.create<Int>()
 
-    private val audioManager = context.getSystemService<AudioManager>()
-        ?: throw IllegalStateException("audioManager is null")
-
-    private val notificationManager = context.getSystemService<NotificationManager>()
-        ?: throw IllegalStateException("notificationManager is null")
+    private val audioManager = requireNotNull(context.getSystemService<AudioManager>())
+    private val notificationManager = requireNotNull(context.getSystemService<NotificationManager>())
 
     private val audioStreamType
         get() = Util.getStreamTypeForAudioUsage(player.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)

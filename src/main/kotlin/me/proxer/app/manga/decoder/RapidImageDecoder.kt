@@ -30,5 +30,5 @@ class RapidImageDecoder @JvmOverloads @Keep constructor(bitmapConfig: Bitmap.Con
         .config(bitmapConfig)
         .mutable(false)
         .decode()
-        ?: throw IllegalStateException("decoded bitmap is null")
+        .let { requireNotNull(it) }
 }

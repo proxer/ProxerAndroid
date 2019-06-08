@@ -30,7 +30,7 @@ import timber.log.Timber
  */
 class MainContentProvider : ContentProvider() {
 
-    private val safeContext get() = this.context ?: throw IllegalStateException("context is null")
+    private val safeContext get() = requireNotNull(this.context)
 
     override fun onCreate(): Boolean {
         enableStrictModeForDebug()
@@ -128,10 +128,10 @@ class MainContentProvider : ContentProvider() {
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues?) = null
+    override fun insert(uri: Uri, values: ContentValues?): Nothing? = null
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?) = 0
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?) = 0
-    override fun getType(uri: Uri) = null
+    override fun getType(uri: Uri): Nothing? = null
 
     override fun query(
         uri: Uri,
@@ -139,5 +139,5 @@ class MainContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<String>?,
         sortOrder: String?
-    ) = null
+    ): Nothing? = null
 }

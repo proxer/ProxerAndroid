@@ -229,7 +229,7 @@ class ProfileActivity : ImageTabsActivity() {
             4 -> ProfileMediaListFragment.newInstance(Category.MANGA)
             5 -> ProfileCommentFragment.newInstance()
             6 -> HistoryFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = 7
@@ -242,7 +242,7 @@ class ProfileActivity : ImageTabsActivity() {
             4 -> getString(R.string.section_user_media_list_manga)
             5 -> getString(R.string.section_user_comments)
             6 -> getString(R.string.section_user_history)
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
     }
 }

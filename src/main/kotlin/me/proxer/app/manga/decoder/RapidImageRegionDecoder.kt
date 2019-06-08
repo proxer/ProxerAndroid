@@ -43,7 +43,7 @@ class RapidImageRegionDecoder @JvmOverloads @Keep constructor(
         ?.scale(sRect.width() / sampleSize, sRect.height() / sampleSize)
         ?.mutable(false)
         ?.decode()
-        ?: throw IllegalStateException("decoded bitmap is null")
+        .let { requireNotNull(it) }
 
     override fun isReady() = decoder != null
 

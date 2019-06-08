@@ -25,14 +25,14 @@ inline fun Context.resolveColor(
 ) = TypedValue()
     .apply {
         if (!resourceTheme.resolveAttribute(res, this, resolveRefs)) {
-            throw IllegalArgumentException("Could not resolve $res")
+            error("Could not resolve $res")
         }
     }
     .let {
         when {
             it.resourceId != 0 -> ContextCompat.getColor(this, it.resourceId)
             it.data != 0 -> it.data
-            else -> throw IllegalArgumentException("Could not resolve $res")
+            else -> error("Could not resolve $res")
         }
     }
 

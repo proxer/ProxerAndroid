@@ -190,7 +190,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                     is StreamResolutionResult.Video -> result.play(requireContext(), name, episode, true)
                     is StreamResolutionResult.Link -> result.show(this)
                     is StreamResolutionResult.App -> result.navigate(requireContext())
-                    is StreamResolutionResult.Message -> throw IllegalArgumentException(
+                    is StreamResolutionResult.Message -> error(
                         "ResolutionResult of type Message should be shown inline"
                     )
                 }

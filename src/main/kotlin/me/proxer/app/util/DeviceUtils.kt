@@ -20,17 +20,11 @@ object DeviceUtils {
     fun isLargeTablet(context: Context) = context.resources.getBoolean(R.bool.is_large_tablet)
 
     fun getScreenWidth(context: Context) = Point()
-        .apply {
-            context.getSystemService<WindowManager>()?.defaultDisplay?.getSize(this)
-                ?: throw IllegalStateException("Could not get WindowManager")
-        }
+        .apply { requireNotNull(context.getSystemService<WindowManager>()).defaultDisplay.getSize(this) }
         .x
 
     fun getScreenHeight(context: Context) = Point()
-        .apply {
-            context.getSystemService<WindowManager>()?.defaultDisplay?.getSize(this)
-                ?: throw IllegalStateException("Could not get WindowManager")
-        }
+        .apply { requireNotNull(context.getSystemService<WindowManager>()).defaultDisplay.getSize(this) }
         .y
 
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources.getDimensionPixelSize(

@@ -103,7 +103,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             LayoutInflater.from(parent.context).inflate(R.layout.item_manga_page_gif, parent, false)
         )
 
-        else -> throw IllegalArgumentException("Unknown viewType: $viewType")
+        else -> error("Unknown viewType: $viewType")
     }
 
     override fun onBindViewHolder(holder: MangaViewHolder, position: Int) = holder.bind(data[position])
@@ -128,7 +128,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 holder.image.recycle()
             }
             is GifViewHolder -> glide?.clear(holder.image)
-            else -> throw IllegalArgumentException("Unknown ViewHolder: ${holder::class.java.name}")
+            else -> error("Unknown ViewHolder: ${holder::class.java.name}")
         }
     }
 

@@ -422,8 +422,7 @@ class MessengerAdapter(
         ACTION(8);
 
         companion object {
-            fun from(type: Int) = values().firstOrNull { it.type == type }
-                ?: throw IllegalArgumentException("Unknown type: $type")
+            fun from(type: Int) = values().firstOrNull { it.type == type } ?: error("Unknown type: $type")
         }
     }
 }

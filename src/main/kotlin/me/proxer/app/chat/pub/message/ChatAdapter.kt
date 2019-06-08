@@ -391,8 +391,7 @@ class ChatAdapter(
         SELF_INNER(4), SELF_SINGLE(5), SELF_TOP(6), SELF_BOTTOM(7);
 
         companion object {
-            fun from(type: Int) = values().firstOrNull { it.type == type }
-                ?: throw IllegalArgumentException("Unknown type: $type")
+            fun from(type: Int) = values().firstOrNull { it.type == type } ?: error("Unknown type: $type")
         }
     }
 }

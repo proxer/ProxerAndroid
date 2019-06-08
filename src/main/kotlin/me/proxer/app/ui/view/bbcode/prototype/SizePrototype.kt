@@ -45,7 +45,7 @@ object SizePrototype : TextMutatorPrototype {
                 "4" -> 1.0f
                 "5" -> 1.5f
                 "6" -> 2.0f
-                else -> throw IllegalArgumentException("Unknown size: $value")
+                else -> error("Unknown size: $value")
             }
 
             BBTree(

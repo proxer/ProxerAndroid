@@ -73,15 +73,15 @@ fun RecyclerView.isAtTop() = when (val layoutManager = this.safeLayoutManager) {
 fun RecyclerView.scrollToTop() = when (val layoutManager = safeLayoutManager) {
     is StaggeredGridLayoutManager -> layoutManager.scrollToPositionWithOffset(0, 0)
     is LinearLayoutManager -> layoutManager.scrollToPositionWithOffset(0, 0)
-    else -> throw IllegalStateException("Unsupported layout manager: ${layoutManager.javaClass.name}")
+    else -> error("Unsupported layout manager: ${layoutManager.javaClass.name}")
 }
 
 fun RecyclerView.doAfterAnimations(action: () -> Unit) {
     postDelayed(10) {
         if (isAnimating) {
-            val safeItemAnimator = itemAnimator ?: throw IllegalStateException(
+            val safeItemAnimator = requireNotNull(itemAnimator) {
                 "RecyclerView is reporting isAnimating as true, but no itemAnimator is set"
-            )
+            }
 
             safeItemAnimator.isRunning { doAfterAnimations(action) }
         } else {

@@ -12,34 +12,34 @@ import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 
 inline val RecyclerView.safeLayoutManager: RecyclerView.LayoutManager
-    get() = layoutManager ?: throw IllegalStateException("layoutManager is null")
+    get() = requireNotNull(layoutManager)
 
 inline val EditText.safeText: Editable
-    get() = text ?: throw IllegalStateException("text is null")
+    get() = requireNotNull(text)
 
-inline fun Intent.getSafeStringExtra(key: String) = getStringExtra(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun Intent.getSafeStringExtra(key: String) =
+    requireNotNull(getStringExtra(key)) { "No value found for key $key" }
 
-inline fun Intent.getSafeStringArrayExtra(key: String): Array<out String> = getStringArrayExtra(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun Intent.getSafeStringArrayExtra(key: String): Array<out String> =
+    requireNotNull(getStringArrayExtra(key)) { "No value found for key $key" }
 
-inline fun <reified T : Parcelable> Intent.getSafeParcelableExtra(key: String) = getParcelableExtra<T>(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun <reified T : Parcelable> Intent.getSafeParcelableExtra(key: String) =
+    requireNotNull(getParcelableExtra<T>(key)) { "No value found for key $key" }
 
-inline fun <T : Parcelable> Bundle.getSafeParcelable(key: String) = getParcelable<T>(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun <T : Parcelable> Bundle.getSafeParcelable(key: String) =
+    requireNotNull(getParcelable<T>(key)) { "No value found for key $key" }
 
-inline fun Bundle.getSafeCharSequence(key: String) = getCharSequence(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun Bundle.getSafeCharSequence(key: String) =
+    requireNotNull(getCharSequence(key)) { "No value found for key $key" }
 
-inline fun Bundle.getSafeString(key: String) = getString(key)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun Bundle.getSafeString(key: String) =
+    requireNotNull(getString(key)) { "No value found for key $key" }
 
-inline fun Parcel.readStringSafely() = readString()
-    ?: throw IllegalAccessError("No value available at this position")
+inline fun Parcel.readStringSafely() =
+    requireNotNull(readString()) { "No value available at this position" }
 
-inline fun Parcel.readSerializableSafely() = readSerializable()
-    ?: throw IllegalAccessError("No value available at this position")
+inline fun Parcel.readSerializableSafely() =
+    requireNotNull(readSerializable()) { "No value available at this position" }
 
-inline fun SharedPreferences.getSafeString(key: String, default: String? = null) = getString(key, default)
-    ?: throw IllegalAccessError("No value found for key $key")
+inline fun SharedPreferences.getSafeString(key: String, default: String? = null) =
+    requireNotNull(getString(key, default)) { "No value found for key $key" }

@@ -35,8 +35,7 @@ object AttachmentPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototy
 
         return when {
             isImage(attachment) -> {
-                val parentTree =
-                    children.first().parent ?: throw IllegalArgumentException("parent is null")
+                val parentTree = requireNotNull(children.first().parent)
                 val url = constructUrl(args.safeUserId, attachment)
 
                 ImagePrototype.makeViews(

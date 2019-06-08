@@ -106,7 +106,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment
         get() = requireArguments().getSerializable(TYPE_ARGUMENT) as? MediaType ?: when (category) {
             Category.ANIME -> MediaType.ALL_ANIME
             Category.MANGA -> MediaType.ALL_MANGA
-            else -> throw IllegalArgumentException("Unknown value for category")
+            else -> error("Unknown value for category")
         }
         set(value) {
             requireArguments().putSerializable(TYPE_ARGUMENT, value)
@@ -250,7 +250,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment
             MediaSearchSortCriteria.CLICKS -> menu.findItem(R.id.clicks).isChecked = true
             MediaSearchSortCriteria.EPISODE_AMOUNT -> menu.findItem(R.id.episodeAmount).isChecked = true
             MediaSearchSortCriteria.NAME -> menu.findItem(R.id.name).isChecked = true
-            else -> throw IllegalArgumentException("Unsupported sort criteria: $sortCriteria")
+            else -> error("Unsupported sort criteria: $sortCriteria")
         }
 
         val filterSubMenu = menu.findItem(R.id.filter).subMenu
@@ -271,7 +271,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment
             MediaType.ONESHOT -> filterSubMenu.findItem(R.id.oneshot).isChecked = true
             MediaType.DOUJIN -> filterSubMenu.findItem(R.id.doujin).isChecked = true
             MediaType.HMANGA -> filterSubMenu.findItem(R.id.hmanga).isChecked = true
-            else -> throw IllegalArgumentException("Unsupported type: $type")
+            else -> error("Unsupported type: $type")
         }
 
         menu.findItem(R.id.search).let { searchItem ->

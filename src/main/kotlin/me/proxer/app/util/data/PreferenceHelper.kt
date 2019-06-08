@@ -112,7 +112,7 @@ class PreferenceHelper(
             "0" -> HttpLoggingInterceptor.Level.BASIC
             "1" -> HttpLoggingInterceptor.Level.HEADERS
             "2" -> HttpLoggingInterceptor.Level.BODY
-            else -> throw IllegalArgumentException("Unknown http log level saved in shared preferences")
+            else -> error("Unknown http log level saved in shared preferences")
         }
 
     val shouldLogHttpVerbose

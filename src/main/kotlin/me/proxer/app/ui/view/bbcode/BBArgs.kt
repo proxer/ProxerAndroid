@@ -30,9 +30,9 @@ class BBArgs : LinkedHashMap<String, Any?> {
     val userId get() = this[USER_ID_ARGUMENT] as? String?
     val enableEmoticons get() = this[ENABLE_EMOTICONS_ARGUMENT] as? Boolean? ?: false
 
-    val safeText get() = text ?: throw IllegalStateException("text is null")
-    val safeResources get() = resources ?: throw IllegalStateException("resources is null")
-    val safeUserId get() = userId ?: throw IllegalStateException("userId is null")
+    val safeText get() = requireNotNull(text)
+    val safeResources get() = requireNotNull(resources)
+    val safeUserId get() = requireNotNull(userId)
 
     constructor(
         text: CharSequence? = null,

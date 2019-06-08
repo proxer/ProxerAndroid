@@ -30,5 +30,5 @@ class RapidImageNativeDecoder @JvmOverloads @Keep constructor(bitmapConfig: Bitm
         .useBuiltInDecoder()
         .mutable(false)
         .decode()
-        ?: throw IllegalStateException("decoded bitmap is null")
+        .let { requireNotNull(it) }
 }

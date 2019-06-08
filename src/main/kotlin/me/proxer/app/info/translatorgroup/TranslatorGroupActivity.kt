@@ -80,7 +80,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> TranslatorGroupInfoFragment.newInstance()
             1 -> TranslatorGroupProjectFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = 2
@@ -88,7 +88,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_translator_group_info)
             1 -> getString(R.string.section_translator_group_projects)
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
     }
 }

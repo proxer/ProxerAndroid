@@ -70,7 +70,7 @@ class UcpActivity : DrawerActivity() {
             2 -> UcpMediaListFragment.newInstance(Category.ANIME)
             3 -> UcpMediaListFragment.newInstance(Category.MANGA)
             4 -> UcpHistoryFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = 5
@@ -81,7 +81,7 @@ class UcpActivity : DrawerActivity() {
             2 -> getString(R.string.section_user_media_list_anime)
             3 -> getString(R.string.section_user_media_list_manga)
             4 -> getString(R.string.section_ucp_history)
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
     }
 }

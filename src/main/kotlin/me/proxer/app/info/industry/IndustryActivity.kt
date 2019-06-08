@@ -80,7 +80,7 @@ class IndustryActivity : ImageTabsActivity() {
         override fun getItem(position: Int) = when (position) {
             0 -> IndustryInfoFragment.newInstance()
             1 -> IndustryProjectFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = 2
@@ -88,7 +88,7 @@ class IndustryActivity : ImageTabsActivity() {
         override fun getPageTitle(position: Int): String = when (position) {
             0 -> getString(R.string.section_industry_info)
             1 -> getString(R.string.section_industry_projects)
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
     }
 }

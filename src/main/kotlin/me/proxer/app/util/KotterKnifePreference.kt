@@ -20,10 +20,7 @@ private val PreferenceFragmentCompat.preferenceFinder: PreferenceFragmentCompat.
 
 @Suppress("UNCHECKED_CAST")
 private fun <T, V : Preference> required(key: CharSequence, finder: T.(CharSequence) -> Preference?) =
-    Lazy { t: T, desc -> t.finder(key) as V? ?: preferenceNotFound(key, desc) }
-
-private fun preferenceNotFound(key: CharSequence, desc: KProperty<*>): Nothing =
-    throw IllegalStateException("Preference KEY $key for '${desc.name}' not found.")
+    Lazy { t: T, desc -> t.finder(key) as V? ?: error("Preference KEY $key for '${desc.name}' not found.") }
 
 // Like Kotlin's lazy delegate but the initializer gets the target and metadata passed to it
 private class Lazy<in T, out V>(private val initializer: (T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {

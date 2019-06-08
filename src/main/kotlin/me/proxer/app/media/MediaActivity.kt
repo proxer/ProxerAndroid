@@ -177,7 +177,7 @@ class MediaActivity : ImageTabsActivity() {
             3 -> RelationFragment.newInstance()
             4 -> RecommendationFragment.newInstance()
             5 -> DiscussionFragment.newInstance()
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         override fun getCount() = when {
@@ -193,7 +193,7 @@ class MediaActivity : ImageTabsActivity() {
             3 -> getString(R.string.section_relations)
             4 -> getString(R.string.section_recommendations)
             5 -> getString(R.string.section_discussions)
-            else -> throw IllegalArgumentException("Unknown index passed: $position")
+            else -> error("Unknown index passed: $position")
         }
 
         fun update() {

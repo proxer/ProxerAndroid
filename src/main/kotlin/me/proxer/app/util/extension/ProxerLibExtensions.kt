@@ -74,7 +74,7 @@ object ProxerLibExtensions {
         context.getString(R.string.fsk_fear) -> FskConstraint.FEAR
         context.getString(R.string.fsk_violence) -> FskConstraint.VIOLENCE
         context.getString(R.string.fsk_sex) -> FskConstraint.SEX
-        else -> throw IllegalStateException("Could not find fsk constraint for description: $description")
+        else -> error("Could not find fsk constraint for description: $description")
     }
 }
 
@@ -126,7 +126,7 @@ fun Language.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
         Language.ENGLISH -> R.drawable.ic_united_states
         Language.OTHER -> R.drawable.ic_united_nations
     }
-) ?: throw IllegalStateException("Could not resolve Drawable for language: $this")
+) ?: error("Could not resolve Drawable for language: $this")
 
 fun MediaLanguage.toAppString(context: Context): String = context.getString(
     when (this) {
@@ -151,7 +151,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
         Country.CHINA -> R.drawable.ic_china
         Country.INTERNATIONAL, Country.OTHER, Country.NONE -> R.drawable.ic_united_nations
     }
-) ?: throw IllegalStateException("Could not resolve Drawable for country: $this")
+) ?: error("Could not resolve Drawable for country: $this")
 
 fun Medium.toCategory() = when (this) {
     Medium.ANIMESERIES, Medium.MOVIE, Medium.OVA, Medium.HENTAI -> Category.ANIME
@@ -302,7 +302,7 @@ fun FskConstraint.toAppDrawable(context: Context) = AppCompatResources.getDrawab
         FskConstraint.SEX -> R.drawable.ic_fsk_sex
         FskConstraint.VIOLENCE -> R.drawable.ic_fsk_violence
     }
-) ?: throw IllegalStateException("Could not resolve Drawable for fsk constraint: $this")
+) ?: error("Could not resolve Drawable for fsk constraint: $this")
 
 fun IndustryType.toAppString(context: Context): String = context.getString(
     when (this) {

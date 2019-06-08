@@ -128,7 +128,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
             points < 18_000 -> R.string.rank_18000
             points < 20_000 -> R.string.rank_20000
             points > 20_000 -> R.string.rank_kami_sama
-            else -> throw IllegalArgumentException("Illegal rank: $points")
+            else -> error("Illegal rank: $points")
         }
     )
 }

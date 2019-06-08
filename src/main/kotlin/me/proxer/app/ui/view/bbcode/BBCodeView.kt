@@ -105,7 +105,7 @@ class BBCodeView @JvmOverloads constructor(
                 AT_MOST -> makeMeasureSpec(min(hSize, maxHeight), AT_MOST)
                 EXACTLY -> makeMeasureSpec(min(hSize, maxHeight), EXACTLY)
                 UNSPECIFIED -> makeMeasureSpec(maxHeight, AT_MOST)
-                else -> throw IllegalArgumentException("Illegal measurement mode: $hMode")
+                else -> error("Illegal measurement mode: $hMode")
             }
         )
     }

@@ -91,10 +91,10 @@ class StreamActivity : BaseActivity() {
         get() = intent.getStringExtra(REFERER_EXTRA)
 
     internal val uri: Uri
-        get() = intent.data ?: throw IllegalStateException("uri is null")
+        get() = requireNotNull(intent.data)
 
     private val mimeType: String
-        get() = intent.type ?: throw IllegalStateException("type is null")
+        get() = requireNotNull(intent.type)
 
     private val isInternalPlayerOnly: Boolean
         get() = intent.getBooleanExtra(INTERNAL_PLAYER_ONLY_EXTRA, false)
@@ -190,7 +190,7 @@ class StreamActivity : BaseActivity() {
                         loading.isVisible = true
                         play.isVisible = false
                     }
-                    null -> throw NullPointerException("playerState is null")
+                    null -> error("playerState is null")
                 }
 
                 if ((controlsContainer.parent as? View)?.isVisible?.not() != false) {

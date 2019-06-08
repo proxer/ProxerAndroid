@@ -139,7 +139,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     private var localMediaSource = buildLocalMediaSourceWithAds(client, uri)
     private var castMediaSource = buildCastMediaSource(name, episode, uri)
 
-    private val uri get() = weakContext.get()?.uri ?: throw IllegalStateException("uri is null")
+    private val uri get() = requireNotNull(weakContext.get()?.uri)
     private val name: String? get() = weakContext.get()?.name
     private val episode: Int? get() = weakContext.get()?.episode
     private val referer: String? get() = weakContext.get()?.referer
@@ -247,7 +247,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     private fun buildLocalMediaSourceWithAds(client: OkHttpClient, uri: Uri): MediaSource {
-        val context = weakContext.get() ?: throw IllegalStateException("context is null")
+        val context = requireNotNull(weakContext.get())
 
         val bandwidthMeter = DefaultBandwidthMeter.Builder(context).build()
         val okHttpDataSourceFactory = OkHttpDataSourceFactory(client, USER_AGENT, bandwidthMeter)
@@ -275,7 +275,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
             C.TYPE_OTHER -> ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 
-            else -> throw IllegalArgumentException("Unknown streamType: $streamType")
+            else -> error("Unknown streamType: $streamType")
         }
     }
 

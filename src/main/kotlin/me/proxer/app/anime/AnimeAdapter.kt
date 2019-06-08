@@ -84,14 +84,14 @@ class AnimeAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.item_stream_message, parent, false)
         )
 
-        else -> throw IllegalArgumentException("Unknown viewType: $viewType")
+        else -> error("Unknown viewType: $viewType")
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is StreamViewHolder -> holder.bind(data[position])
             is MessageViewHolder -> holder.bind(data[position])
-            else -> throw IllegalArgumentException("Unknown ViewHolder: ${holder::class.java.name}")
+            else -> error("Unknown ViewHolder: ${holder::class.java.name}")
         }
     }
 

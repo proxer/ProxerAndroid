@@ -78,7 +78,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     private val messengerDao by inject<MessengerDao>()
 
     private val safeConference: LocalConference
-        get() = conference.value ?: throw IllegalArgumentException("Conference cannot be null")
+        get() = requireNotNull(conference.value)
 
     private var draftDisposable: Disposable? = null
 
@@ -132,7 +132,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     fun sendMessage(text: String) {
-        val safeUser = storageHelper.user ?: throw IllegalStateException("User cannot be null")
+        val safeUser = requireNotNull(storageHelper.user)
 
         disposables += Single
             .fromCallable { messengerDao.insertMessageToSend(safeUser, text, safeConference.id) }

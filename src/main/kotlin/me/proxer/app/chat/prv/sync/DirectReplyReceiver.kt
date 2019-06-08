@@ -40,7 +40,7 @@ class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
 
         Completable
             .fromAction {
-                val safeUser = storageHelper.user ?: throw IllegalStateException("User cannot be null")
+                val safeUser = requireNotNull(storageHelper.user)
 
                 messengerDao.insertMessageToSend(safeUser, getMessageText(intent), conferenceId)
 

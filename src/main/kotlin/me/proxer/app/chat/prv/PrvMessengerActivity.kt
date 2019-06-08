@@ -83,7 +83,7 @@ class PrvMessengerActivity : DrawerActivity() {
                                         replace(R.id.container, MessengerFragment.newInstance(it, initialMessage))
                                     }
                                 } else {
-                                    throw IllegalArgumentException("No conference found for id $conferenceId")
+                                    error("No conference found for id $conferenceId")
                                 }
                             },
                             Consumer {

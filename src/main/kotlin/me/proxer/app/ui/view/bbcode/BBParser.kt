@@ -111,7 +111,7 @@ object BBParser {
                         finishedList += fittingTree
 
                         if (fittingTree.prototype is AutoClosingPrototype) {
-                            currentTree = fittingTree.parent ?: throw IllegalArgumentException("parent is null")
+                            currentTree = requireNotNull(fittingTree.parent)
                         }
                     } else {
                         val unknownString = trimmedInput.substring(it.range.first, it.range.last + 1)
@@ -165,7 +165,7 @@ object BBParser {
             if (finishedList.none { it === currentTree }) {
                 return currentTree
             } else {
-                currentTree = currentTree.parent ?: throw IllegalStateException("No unfinished tree found")
+                currentTree = requireNotNull(currentTree.parent)
             }
         }
     }

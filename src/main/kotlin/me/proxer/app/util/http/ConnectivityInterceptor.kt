@@ -14,8 +14,7 @@ import org.koin.core.KoinComponent
  */
 class ConnectivityInterceptor(context: Context) : Interceptor, KoinComponent {
 
-    private val connectivityManager = context.getSystemService<ConnectivityManager>()
-        ?: throw IllegalStateException("connectivityManager is null")
+    private val connectivityManager = requireNotNull(context.getSystemService<ConnectivityManager>())
 
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!connectivityManager.isConnected) {

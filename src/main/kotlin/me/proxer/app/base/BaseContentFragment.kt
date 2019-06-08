@@ -62,8 +62,7 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
     }
 
     private val connectivityManager
-        get() = requireContext().getSystemService<ConnectivityManager>()
-            ?: throw IllegalStateException("connectivity manager is null")
+        get() = requireNotNull(requireContext().getSystemService<ConnectivityManager>())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

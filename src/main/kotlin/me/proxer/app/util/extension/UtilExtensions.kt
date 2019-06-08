@@ -50,7 +50,7 @@ inline fun <T> unsafeLazy(noinline initializer: () -> T) = lazy(LazyThreadSafety
 inline fun Context.getQuantityString(id: Int, quantity: Int): String = resources
     .getQuantityString(id, quantity, quantity)
 
-inline fun Fragment.dip(value: Int) = context?.dip(value) ?: throw IllegalStateException("context is null")
+inline fun Fragment.dip(value: Int) = requireContext().dip(value)
 
 inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, vararg custom: Regex): Spannable {
     val spannable = this as? Spannable ?: SpannableString(this)
