@@ -2,6 +2,7 @@ package me.proxer.app.util.wrapper
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
@@ -51,15 +52,21 @@ object IntroductionWrapper {
         })
         .introduceMyself()
 
-    private fun generateSlides(context: Context) = arrayListOf(
+    private fun generateSlides(context: Context) = listOf(
         Slide().withTitle(R.string.introduction_welcome_title)
             .withColorResource(R.color.primary)
             .withDescription(R.string.introduction_welcome_description),
         Slide().withTitle(R.string.introduction_notifications_title)
             .withColorResource(R.color.primary)
-            .withOption(Option(context.getString(R.string.introduction_notifications_description), true)),
-        Slide().withTitle(context.getString(R.string.introduction_theme_title))
-            .withColorResource(R.color.primary)
-            .withOption(Option(context.getString(R.string.introduction_theme_description), false))
+            .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
+        .apply {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                plus(
+                    Slide().withTitle(context.getString(R.string.introduction_theme_title))
+                        .withColorResource(R.color.primary)
+                        .withOption(Option(context.getString(R.string.introduction_theme_description), false))
+                )
+            }
+        }
 }

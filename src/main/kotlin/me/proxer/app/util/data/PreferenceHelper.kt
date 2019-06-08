@@ -95,7 +95,7 @@ class PreferenceHelper(
         get() = sharedPreferences.contains(EXTERNAL_CACHE)
 
     var themeContainer
-        get() = ThemeContainer.fromPreferenceString(sharedPreferences.getSafeString(THEME, "0_0"))
+        get() = ThemeContainer.fromPreferenceString(sharedPreferences.getSafeString(THEME, "0_2"))
         set(value) {
             sharedPreferences.edit { putString(THEME, value.toPreferenceString()) }
         }

@@ -2,8 +2,8 @@ package me.proxer.app.settings.theme
 
 import android.app.Dialog
 import android.os.Bundle
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -24,7 +24,7 @@ class ThemeDialog : BaseDialog() {
     }
 
     private val colorList by bindView<RecyclerView>(R.id.colorList)
-    private val nightSwitch by bindView<SwitchCompat>(R.id.nightSwitch)
+    private val nightRadioGroup by bindView<RadioGroup>(R.id.nightRadioGroup)
 
     private var adapter by Delegates.notNull<ThemeAdapter>()
 
@@ -40,9 +40,11 @@ class ThemeDialog : BaseDialog() {
         .positiveButton(R.string.dialog_theme_positive) {
             val theme = adapter.selected
 
-            val variant = when (nightSwitch.isChecked) {
-                true -> ThemeVariant.DARK
-                false -> ThemeVariant.LIGHT
+            val variant = when (val id = nightRadioGroup.checkedRadioButtonId) {
+                R.id.systemButton -> ThemeVariant.SYSTEM
+                R.id.lightButton -> ThemeVariant.LIGHT
+                R.id.darkButton -> ThemeVariant.DARK
+                else -> error("Unknown radio button id: $id")
             }
 
             preferenceHelper.themeContainer = ThemeContainer(theme, variant)
@@ -59,6 +61,12 @@ class ThemeDialog : BaseDialog() {
         colorList.layoutManager = GridLayoutManager(colorList.context, 4)
         colorList.adapter = adapter
 
-        nightSwitch.isChecked = preferenceHelper.themeContainer.variant == ThemeVariant.DARK
+        nightRadioGroup.check(
+            when (preferenceHelper.themeContainer.variant) {
+                ThemeVariant.LIGHT -> R.id.lightButton
+                ThemeVariant.DARK -> R.id.darkButton
+                ThemeVariant.SYSTEM -> R.id.systemButton
+            }
+        )
     }
 }

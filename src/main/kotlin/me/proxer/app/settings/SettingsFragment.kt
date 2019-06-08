@@ -113,7 +113,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
         profile.isEnabled = storageHelper.isLoggedIn
 
         theme.summary = preferenceHelper.themeContainer.let { (theme, variant) ->
-            "${getString(theme.themeName)} ${getString(variant.variantName)}"
+            "${getString(theme.themeName)} ${if (variant.variantName != null) getString(variant.variantName) else ""}"
         }
 
         updateIntervalNotificationPreference()

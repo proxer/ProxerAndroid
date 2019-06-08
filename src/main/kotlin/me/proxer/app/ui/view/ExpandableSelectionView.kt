@@ -17,6 +17,7 @@ import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isGone
+import androidx.core.view.updateLayoutParams
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.uber.autodispose.android.ViewScopeProvider
@@ -29,6 +30,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import kotlin.properties.Delegates
@@ -201,6 +203,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         radioButton.text = item.value
         radioButton.isChecked = selection.contains(item.value)
+        radioButton.updateLayoutParams<MarginLayoutParams> { marginStart = -context.dip(5) }
 
         TooltipCompat.setTooltipText(radioButton, item.description)
 
@@ -226,6 +229,7 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         checkBox.text = item.value
         checkBox.isChecked = selection.contains(item.value)
+        checkBox.updateLayoutParams<MarginLayoutParams> { marginStart = -context.dip(5) }
 
         TooltipCompat.setTooltipText(checkBox, item.description)
 

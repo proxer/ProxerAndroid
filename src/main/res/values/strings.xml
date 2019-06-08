@@ -49,8 +49,10 @@
     <string name="theme_bg">Blau Grün</string>
     <string name="theme_gloomy">Düster</string>
 
+    <string name="theme_variant_title">Variante</string>
     <string name="theme_variant_light">Hell</string>
     <string name="theme_variant_dark">Dunkel</string>
+    <string name="theme_variant_system">Standard</string>
 
     <string name="error_timeout">Der Server hat nicht rechtzeitig geantwortet. Versuche es später noch einmal</string>
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
