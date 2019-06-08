@@ -325,7 +325,6 @@
 
     <string name="dialog_theme_title">Thema auswählen</string>
     <string name="dialog_theme_positive">Anwenden</string>
-    <string name="dialog_theme_dark_switch">Dunkel</string>
 
     <string name="dialog_age_confirmation_content">
         Dieser Bereich darf nur von Benutzern über 18 Jahren betreten werden!
