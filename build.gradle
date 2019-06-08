@@ -101,7 +101,7 @@ android {
         release {
             postprocessing {
                 removeUnusedCode true
-                removeUnusedResources true
+                removeUnusedResources false // TODO: This does currently not work. Check again later.
                 obfuscate true
                 optimizeCode true
                 proguardFile "config/shrinker/shrinker-rules.pro"
@@ -122,7 +122,7 @@ android {
         logRelease {
             postprocessing {
                 removeUnusedCode true
-                removeUnusedResources true
+                removeUnusedResources false // TODO: This does currently not work. Check again later.
                 obfuscate true
                 optimizeCode true
                 proguardFile "config/shrinker/shrinker-rules.pro"
