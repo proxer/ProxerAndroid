@@ -35,7 +35,7 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseFragment
 import me.proxer.app.chat.prv.Participant
-import me.proxer.app.chat.prv.message.MessengerActivity
+import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
@@ -197,7 +197,7 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
             it?.let {
                 requireActivity().finish()
 
-                MessengerActivity.navigateTo(requireActivity(), it)
+                PrvMessengerActivity.navigateTo(requireActivity(), it)
             }
         })
 

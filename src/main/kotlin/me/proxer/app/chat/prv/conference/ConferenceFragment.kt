@@ -24,8 +24,8 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.chat.prv.ConferenceWithMessage
+import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
-import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
@@ -47,9 +47,10 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.la
 
     companion object {
         private const val SEARCH_QUERY_ARGUMENT = "search_query"
+        private const val INITIAL_MESSAGE_ARGUMENT = "initial_message"
 
-        fun newInstance() = ConferenceFragment().apply {
-            arguments = bundleOf()
+        fun newInstance(initialMessage: String? = null) = ConferenceFragment().apply {
+            arguments = bundleOf(INITIAL_MESSAGE_ARGUMENT to initialMessage)
         }
     }
 
@@ -103,6 +104,9 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.la
         }
     }
 
+    private val initialMessage: String?
+        get() = requireArguments().getString(INITIAL_MESSAGE_ARGUMENT, null)
+
     private var searchQuery: String?
         get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
         set(value) {
@@ -122,7 +126,9 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.la
 
         adapter.clickSubject
             .autoDisposable(this.scope())
-            .subscribe { (conference) -> MessengerActivity.navigateTo(requireActivity(), conference) }
+            .subscribe { (conference) ->
+                PrvMessengerActivity.navigateTo(requireActivity(), conference, initialMessage)
+            }
 
         setHasOptionsMenu(true)
     }
@@ -159,7 +165,11 @@ class ConferenceFragment : BaseContentFragment<List<ConferenceWithMessage>>(R.la
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_conferences, menu, true)
+        if (initialMessage == null) {
+            IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_conferences, menu, true)
+        } else {
+            IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_share_receiver, menu, true)
+        }
 
         menu.findItem(R.id.search).let { searchItem ->
             val searchView = searchItem.actionView as SearchView

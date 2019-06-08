@@ -173,6 +173,8 @@ class MessengerWorker(
             storageHelper.lastChatMessageDate = maxNewDate
         }
 
+        MessengerShortcuts.updateShareTargets(applicationContext)
+
         return when (newConferencesAndMessages.isNotEmpty()) {
             true -> SynchronizationResult.CHANGES
             false -> SynchronizationResult.NO_CHANGES

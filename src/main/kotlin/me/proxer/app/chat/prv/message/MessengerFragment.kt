@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -34,10 +35,12 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
+import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
@@ -56,8 +59,14 @@ import kotlin.properties.Delegates
 class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_messenger) {
 
     companion object {
-        fun newInstance() = MessengerFragment().apply {
-            arguments = bundleOf()
+        private const val CONFERENCE_ARGUEMNT = "conference"
+        private const val INITIAL_MESSAGE_ARGUEMNT = "initial_meesage"
+
+        fun newInstance(conference: LocalConference, initialMessage: String? = null) = MessengerFragment().apply {
+            arguments = bundleOf(
+                CONFERENCE_ARGUEMNT to conference,
+                INITIAL_MESSAGE_ARGUEMNT to initialMessage
+            )
         }
     }
 
@@ -65,9 +74,6 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
 
     override val emptyDataMessage = R.string.error_no_data_chat
     override val isSwipeToRefreshEnabled = false
-
-    override val hostingActivity: MessengerActivity
-        get() = activity as MessengerActivity
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -120,14 +126,20 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
     private var actionMode: ActionMode? = null
 
     private var conference: LocalConference
-        get() = hostingActivity.conference
+        get() = requireArguments().getSafeParcelable(CONFERENCE_ARGUEMNT)
         set(value) {
-            hostingActivity.conference = value
+            requireArguments().putParcelable(CONFERENCE_ARGUEMNT, value)
+
+            requireActivity().title = value.topic
         }
+
+    private val initialMessage: String?
+        get() = requireArguments().getString(INITIAL_MESSAGE_ARGUEMNT)
 
     override val layoutManager by lazy { LinearLayoutManager(context).apply { reverseLayout = true } }
     override var innerAdapter by Delegates.notNull<MessengerAdapter>()
 
+    private val toolbar: Toolbar get() = hostingActivity.findViewById(R.id.toolbar)
     private val scrollToBottom: FloatingActionButton by bindView(R.id.scrollToBottom)
     private val emojiButton: ImageButton by bindView(R.id.emojiButton)
     private val messageInput: EmojiEditText by bindView(R.id.messageInput)
@@ -186,12 +198,21 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
         updateInput()
 
         if (savedInstanceState == null) {
-            messageInput.setText(hostingActivity.initialMessage)
+            messageInput.setText(initialMessage)
         }
 
         viewModel.conference.observe(viewLifecycleOwner, Observer {
             it?.let { conference = it }
         })
+
+        toolbar.clicks()
+            .autoDisposable(this.scope())
+            .subscribe {
+                when (conference.isGroup) {
+                    true -> ConferenceInfoActivity.navigateTo(requireActivity(), conference)
+                    false -> ProfileActivity.navigateTo(requireActivity(), null, conference.topic, conference.image)
+                }
+            }
 
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 

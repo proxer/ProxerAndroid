@@ -2,6 +2,7 @@ package me.proxer.app.auth
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.core.content.pm.ShortcutManagerCompat
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.chat.prv.sync.MessengerDao
@@ -49,6 +50,8 @@ class LoginHandler(
     }
 
     private fun onLogout(context: Context) {
+        ShortcutManagerCompat.removeAllDynamicShortcuts(context)
+
         AccountNotifications.cancel(context)
         MessengerNotifications.cancel(context)
 

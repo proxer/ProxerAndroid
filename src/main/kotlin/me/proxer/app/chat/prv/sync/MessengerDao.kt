@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
+import io.reactivex.Maybe
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.LocalConference
@@ -53,6 +54,9 @@ abstract class MessengerDao : KoinComponent {
     @Query("SELECT * FROM conferences ORDER BY date DESC")
     abstract fun getConferences(): List<LocalConference>
 
+    @Query("SELECT * FROM conferences ORDER BY date DESC LIMIT :amount")
+    abstract fun getMostRecentConferences(amount: Int): List<LocalConference>
+
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query(
         "SELECT * " +
@@ -77,6 +81,9 @@ abstract class MessengerDao : KoinComponent {
 
     @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
     abstract fun getConferenceLiveData(id: Long): LiveData<LocalConference?>
+
+    @Query("SELECT * FROM conferences WHERE id = :id LIMIT 1")
+    abstract fun getConferenceMaybe(id: Long): Maybe<LocalConference>
 
     @Query("SELECT * FROM conferences WHERE localIsRead = 0 AND isRead = 0 ORDER BY id DESC")
     abstract fun getUnreadConferences(): List<LocalConference>

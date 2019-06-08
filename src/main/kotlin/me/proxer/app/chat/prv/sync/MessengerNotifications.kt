@@ -25,7 +25,7 @@ import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
-import me.proxer.app.chat.prv.message.MessengerActivity
+import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.CHAT_CHANNEL
@@ -176,7 +176,7 @@ object MessengerNotifications : KoinComponent {
         val style = buildIndividualStyle(messages, conference, user, icon)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
-            .addNextIntent(MessengerActivity.getIntent(context, conference))
+            .addNextIntent(PrvMessengerActivity.getIntent(context, conference))
             .getPendingIntent(conference.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(context, CHAT_CHANNEL)

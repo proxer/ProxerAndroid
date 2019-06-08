@@ -27,8 +27,8 @@ import me.proxer.app.BuildConfig
 import me.proxer.app.R
 import me.proxer.app.base.CustomTabsAware
 import me.proxer.app.chat.prv.Participant
+import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
-import me.proxer.app.chat.prv.message.MessengerActivity
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
@@ -219,7 +219,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                                 null -> CreateConferenceActivity.navigateTo(
                                     requireActivity(), false, Participant(developerProxerName)
                                 )
-                                else -> MessengerActivity.navigateTo(requireActivity(), existingConference)
+                                else -> PrvMessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
                         }
                     }

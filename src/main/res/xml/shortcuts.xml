@@ -42,4 +42,9 @@
             android:targetClass="me.proxer.app.MainActivity"
             android:targetPackage="me.proxer.app" />
     </shortcut>
+
+    <share-target android:targetClass="me.proxer.app.chat.prv.PrvMessengerActivity">
+        <data android:mimeType="text/plain" />
+        <category android:name="me.proxer.app.sharingshortcuts.category.TEXT_SHARE_TARGET" />
+    </share-target>
 </shortcuts>

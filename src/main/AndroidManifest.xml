@@ -165,12 +165,9 @@
 
         <activity android:name=".chat.pub.message.ChatActivity" />
 
-        <activity android:name=".chat.prv.message.MessengerActivity" />
-
         <activity
-            android:name=".chat.share.ShareReceiverActivity"
-            android:label="Senden an&#8230;">
-
+            android:name=".chat.prv.PrvMessengerActivity"
+            android:label="@string/activity_prv_messenger_send_to">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -179,7 +176,7 @@
 
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
-                android:value=".chat.share.ConferenceChooserTargetService" />
+                android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
         </activity>
 
         <activity android:name=".chat.prv.create.CreateConferenceActivity" />
@@ -316,16 +313,6 @@
         </activity>
 
         <activity android:name=".ui.WebViewActivity" />
-
-        <service
-            android:name=".chat.share.ConferenceChooserTargetService"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
-
-            <intent-filter>
-                <action android:name="android.service.chooser.ChooserTargetService" />
-            </intent-filter>
-        </service>
 
         <service
             android:name=".news.widget.NewsWidgetService"
