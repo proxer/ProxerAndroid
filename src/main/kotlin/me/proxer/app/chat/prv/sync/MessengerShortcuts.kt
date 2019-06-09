@@ -17,7 +17,6 @@ import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.util.Utils
-import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -33,10 +32,10 @@ object MessengerShortcuts : KoinComponent {
 
     fun updateShareTargets(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val shortcutManager by unsafeLazy { requireNotNull(context.getSystemService<ShortcutManager>()) }
             val componentName = ComponentName(context, MainActivity::class.java)
 
             val shortcutsLeft = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                val shortcutManager = requireNotNull(context.getSystemService<ShortcutManager>())
                 val maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(context)
                 val usedShortcuts = shortcutManager.dynamicShortcuts.plus(shortcutManager.manifestShortcuts)
                     .count { shortcutInfo -> shortcutInfo.activity == componentName }
@@ -70,10 +69,15 @@ object MessengerShortcuts : KoinComponent {
                     .build()
             }
 
-            if (
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1 ||
+            val needsUpdate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                val shortcutManager = requireNotNull(context.getSystemService<ShortcutManager>())
+
                 newShortcuts.any { newShortcut -> shortcutManager.dynamicShortcuts.none { it.id == newShortcut.id } }
-            ) {
+            } else {
+                true
+            }
+
+            if (needsUpdate) {
                 ShortcutManagerCompat.removeAllDynamicShortcuts(context)
                 // TODO: Remove once ShortcutManagerCompat delegates properly.
                 ShortcutInfoCompatSaverImpl.getInstance(context).removeAllShortcuts()
