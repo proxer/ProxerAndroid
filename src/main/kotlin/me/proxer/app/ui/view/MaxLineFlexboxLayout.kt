@@ -67,7 +67,7 @@ class MaxLineFlexboxLayout @JvmOverloads constructor(
     }
 
     fun canAddView(view: View): Boolean {
-        require(width == 0) { "Only call this method after this view has been laid out." }
+        require(width != 0) { "Only call this method after this view has been laid out." }
 
         if (view.measuredWidth == 0) {
             view.measure(makeMeasureSpec(width, AT_MOST), makeMeasureSpec(0, UNSPECIFIED))
