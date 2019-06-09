@@ -60,13 +60,14 @@ object IntroductionWrapper {
             .withColorResource(R.color.primary)
             .withOption(Option(context.getString(R.string.introduction_notifications_description), true))
     )
-        .apply {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                plus(
+        .let {
+            when {
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> it.plus(
                     Slide().withTitle(context.getString(R.string.introduction_theme_title))
                         .withColorResource(R.color.primary)
                         .withOption(Option(context.getString(R.string.introduction_theme_description), false))
                 )
+                else -> it
             }
         }
 }
