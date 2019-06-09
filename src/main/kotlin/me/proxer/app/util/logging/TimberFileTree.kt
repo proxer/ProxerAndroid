@@ -29,6 +29,8 @@ class TimberFileTree(context: Context) : Timber.Tree() {
     private val resolvedLogsDirectory = File(context.getExternalFilesDir(null), LOGS_DIRECTORY)
         .also { it.mkdirs() }
 
+    override fun isLoggable(tag: String?, priority: Int) = priority >= Log.INFO
+
     @SuppressLint("CheckResult", "LogNotTimber")
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         Completable
