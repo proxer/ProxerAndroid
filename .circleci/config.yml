@@ -7,7 +7,7 @@ jobs:
   build:
     working_directory: ~/app
     docker:
-      - image: circleci/android:api-28-ndk
+      - image: circleci/android:api-28
     environment:
       _JAVA_OPTIONS: "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
         -XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -XX:ParallelGCThreads=1
@@ -18,20 +18,17 @@ jobs:
       - restore_cache:
           key: app-{{ checksum ".circleci/config.yml" }}-{{ checksum "gradle/versions.gradle" }}
       - run:
-          name: Create Licences
-          command: echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_HOME/licenses/android-sdk-license &&
-            echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_HOME/licenses/android-sdk-preview-license
-      - run:
           name: Create Secrets
           command: .circleci/create_secrets.sh
       - run:
           name: Update Android SDK
-          command: sdkmanager --update
-
-      # TODO: Remove once image with this version is available.
+          command: sdkmanager --update --channel=3
       - run:
           name: Install Android Q platform
-          command: sdkmanager --install "platforms;android-29"
+          command: sdkmanager "platforms;android-29"
+      - run:
+          name: Install NDK
+          command: sdkmanager "ndk;$(grep "ndkVersion" ./gradle/versions.gradle | sed 's/.*"\(.*\)"/\1/')" --channel=3
 
       - run:
           name: Run static code analysis

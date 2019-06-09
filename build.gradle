@@ -29,6 +29,7 @@ apply from: "${projectDir}/gradle/utils.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    ndkVersion rootProject.ext.ndkVersion
 
     dexOptions {
         preDexLibraries !isCI()
