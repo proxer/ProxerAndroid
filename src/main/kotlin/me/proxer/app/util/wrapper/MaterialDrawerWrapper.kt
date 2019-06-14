@@ -86,13 +86,15 @@ class MaterialDrawerWrapper(
     }
 
     fun onBackPressed() = when {
-        crossfader?.isCrossFaded == true -> {
-            crossfader.crossFade()
-
-            true
-        }
         header.isSelectionListShown -> {
             header.toggleSelectionList(header.view.context)
+
+            // Return true (handled) if the drawer is open.
+            // Otherwise return false to let the caller handle the back press.
+            crossfader?.isCrossFaded == true || drawer.isDrawerOpen
+        }
+        crossfader?.isCrossFaded == true -> {
+            crossfader.crossFade()
 
             true
         }
