@@ -127,6 +127,12 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // We only handle events in the left or right third.
+        // Delegate other events to the PlayerView.
+        if (event.x > (width / 3) && event.x < (width / 3) * 2) {
+            return super.onTouchEvent(event)
+        }
+
         gestureDetector.onTouchEvent(event)
 
         if (event.action == MotionEvent.ACTION_UP) {
