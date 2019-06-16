@@ -109,8 +109,7 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
         Snackbar.make(root, message, duration).apply {
             when (actionMessage) {
                 ErrorUtils.ErrorAction.ACTION_MESSAGE_DEFAULT -> {
-                    val multilineActionMessage =
-                        getString(R.string.error_action_retry).replace(" ", "\n")
+                    val multilineActionMessage = getString(R.string.error_action_retry).replace(" ", "\n")
 
                     setAction(multilineActionMessage, actionCallback)
                 }
