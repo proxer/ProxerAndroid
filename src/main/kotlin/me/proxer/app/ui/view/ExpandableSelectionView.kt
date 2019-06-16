@@ -203,7 +203,11 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         radioButton.text = item.value
         radioButton.isChecked = selection.contains(item.value)
-        radioButton.updateLayoutParams<MarginLayoutParams> { marginStart = -context.dip(5) }
+
+        radioButton.updateLayoutParams<MarginLayoutParams> {
+            marginStart = -context.dip(5)
+            marginEnd = context.dip(5)
+        }
 
         TooltipCompat.setTooltipText(radioButton, item.description)
 
@@ -229,7 +233,11 @@ class ExpandableSelectionView @JvmOverloads constructor(
 
         checkBox.text = item.value
         checkBox.isChecked = selection.contains(item.value)
-        checkBox.updateLayoutParams<MarginLayoutParams> { marginStart = -context.dip(5) }
+
+        checkBox.updateLayoutParams<MarginLayoutParams> {
+            marginStart = -context.dip(5)
+            marginEnd = context.dip(5)
+        }
 
         TooltipCompat.setTooltipText(checkBox, item.description)
 
