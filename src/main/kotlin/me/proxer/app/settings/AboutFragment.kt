@@ -152,6 +152,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                     .withShowLoadingProgress(false)
                     .withAboutVersionShown(false)
                     .withAboutIconShown(false)
+                    .withVersionShown(false)
                     .withLibraries(*libraries)
                     .withExcludedLibraries(*excludedLibraries)
                     .withFields(R.string::class.java.fields)
