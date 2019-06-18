@@ -79,15 +79,16 @@ class TouchablePlayerView @JvmOverloads constructor(
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-            if (initialEvent == null || movingEvent == null) {
+            if (
+                initialEvent == null ||
+                movingEvent == null ||
+                abs(movingEvent.y - initialEvent.y) <= 40 ||
+                abs(distanceX) > abs(distanceY)
+            ) {
                 return false
             }
 
             isScrolling = true
-
-            if (abs(movingEvent.y - initialEvent.y) <= 40 || abs(distanceX) > abs(distanceY)) {
-                return false
-            }
 
             if (initialEvent.x > width / 2 && canChangeAudio) {
                 adjustVolume(distanceY)
