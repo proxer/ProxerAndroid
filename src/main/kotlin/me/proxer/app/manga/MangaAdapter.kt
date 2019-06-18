@@ -243,7 +243,7 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             image.setDoubleTapZoomStyle(ZOOM_FOCUS_CENTER)
             image.setMaxTileSize(GLUtil.maxTextureSize)
             image.setPanLimit(PAN_LIMIT_INSIDE)
-            image.setMinimumTileDpi(180)
+            image.setMinimumTileDpi(196)
             image.setMinimumDpi(90)
 
             image.isExifInterfaceEnabled = false
