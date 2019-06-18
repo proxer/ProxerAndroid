@@ -168,8 +168,8 @@ object ErrorUtils : KoinComponent {
             }
             is SocketTimeoutException -> R.string.error_timeout
             is SSLPeerUnverifiedException -> R.string.error_ssl
-            is IOException -> R.string.error_io
             is NotConnectedException -> R.string.error_no_network
+            is IOException -> R.string.error_io
             is NotLoggedInException -> R.string.error_login_required
             is AgeConfirmationRequiredException -> R.string.error_age_confirmation_needed
             is StreamResolutionException -> R.string.error_stream_resolution
@@ -183,12 +183,8 @@ object ErrorUtils : KoinComponent {
         it is ProxerException && it.serverErrorType == IP_BLOCKED
     }
 
-    fun isNotConnectedError(error: Throwable) = getInnermostError(error).let {
-        it is NotConnectedException
-    }
-
     fun isNetworkError(error: Throwable) = getInnermostError(error).let {
-        it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
+        it is IOException || it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
     }
 
     fun handle(error: Throwable): ErrorAction {
@@ -271,25 +267,22 @@ object ErrorUtils : KoinComponent {
             in unsupportedErrors -> R.string.error_unsupported_code
             else -> R.string.error_unknown
         }
-        IO -> when (error.cause) {
-            is SSLPeerUnverifiedException -> R.string.error_ssl
-            else -> R.string.error_io
-        }
+        IO -> R.string.error_io
         TIMEOUT -> R.string.error_timeout
         PARSING -> R.string.error_parsing
-        CANCELLED -> R.string.error_unknown
-        UNKNOWN -> R.string.error_unknown
+        UNKNOWN, CANCELLED -> R.string.error_unknown
     }
 
     private fun getInnermostError(error: Throwable): Throwable = when (error) {
         is ProxerException -> when (error.errorType) {
+            IO -> error.cause?.let { getInnermostError(it) } ?: error
             UNKNOWN -> error.cause?.let { getInnermostError(it) } ?: error
             else -> error
         }
         is PartialException -> error.innerError
         is ChatException -> error.innerError
-        is ExoPlaybackException -> error.cause?.let { getInnermostError(it) } ?: Exception()
-        is Loader.UnexpectedLoaderException -> error.cause?.let { getInnermostError(it) } ?: Exception()
+        is ExoPlaybackException -> error.cause?.let { getInnermostError(it) } ?: error
+        is Loader.UnexpectedLoaderException -> error.cause?.let { getInnermostError(it) } ?: error
         else -> error
     }
 
