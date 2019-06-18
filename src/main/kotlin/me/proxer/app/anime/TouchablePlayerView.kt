@@ -74,11 +74,15 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
 
         override fun onScroll(
-            initialEvent: MotionEvent,
-            movingEvent: MotionEvent,
+            initialEvent: MotionEvent?,
+            movingEvent: MotionEvent?,
             distanceX: Float,
             distanceY: Float
         ): Boolean {
+            if (initialEvent == null || movingEvent == null) {
+                return false
+            }
+
             isScrolling = true
 
             if (abs(movingEvent.y - initialEvent.y) <= 40 || abs(distanceX) > abs(distanceY)) {
@@ -127,6 +131,10 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_UP) {
+            isScrolling = false
+        }
+
         // We only handle events in the left or right third.
         // Delegate other events to the PlayerView.
         if (event.x > width / 3 && event.x < width / 3 * 2) {
@@ -134,10 +142,6 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
 
         gestureDetector.onTouchEvent(event)
-
-        if (event.action == MotionEvent.ACTION_UP) {
-            isScrolling = false
-        }
 
         return true
     }
