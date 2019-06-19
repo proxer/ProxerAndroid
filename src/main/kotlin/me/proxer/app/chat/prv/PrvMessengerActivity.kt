@@ -9,7 +9,6 @@ import androidx.fragment.app.commitNow
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
@@ -77,7 +76,7 @@ class PrvMessengerActivity : DrawerActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .autoDisposable(this.scope())
                         .subscribe(
-                            Consumer {
+                            {
                                 if (it != null) {
                                     supportFragmentManager.commitNow {
                                         replace(R.id.container, MessengerFragment.newInstance(it, initialMessage))
@@ -86,11 +85,12 @@ class PrvMessengerActivity : DrawerActivity() {
                                     error("No conference found for id $conferenceId")
                                 }
                             },
-                            Consumer {
+                            {
                                 Timber.e(it)
 
                                 finish()
-                            })
+                            }
+                        )
                 } else {
                     title = getString(R.string.activity_prv_messenger_send_to)
 

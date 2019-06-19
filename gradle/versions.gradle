@@ -17,7 +17,7 @@ ext {
 
     // Core plugins
     androidPluginVersion = "3.6.0-alpha03"
-    kotlinVersion = "1.3.40-eap-105"
+    kotlinVersion = "1.3.40"
     r8Version = "1.5.45"
 
     // Utility plugins
@@ -37,7 +37,7 @@ ext {
     fragmentKtxVersion = "1.1.0-beta01"
     shareTargetVersion = "1.0.0-alpha02"
     interactiveMediaVersion = "3.11.3"
-    castVersion = "16.2.0"
+    castVersion = "17.0.0"
 
     // RxJava
     rxJavaVersion = "2.2.9"
