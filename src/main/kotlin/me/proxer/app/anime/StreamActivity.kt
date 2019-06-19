@@ -393,7 +393,8 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { visibility ->
                 if (playerManager.isPlayingAd.not()) {
-                    if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    // If visibility == 0, no flags for hiding system UI are set. Show the controls.
+                    if (visibility == 0) {
                         playerView.showController()
                         toolbar.isVisible = true
                     } else {
