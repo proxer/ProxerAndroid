@@ -10,6 +10,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 import java.util.regex.Pattern.quote
 
@@ -53,7 +54,7 @@ object DailymotionStreamResolver : StreamResolver() {
                 val link = qualityMap.qualities
                     .flatMap { (quality, links) ->
                         links.mapNotNull { (type, url) ->
-                            HttpUrl.parse(url)?.let { DailymotionLinkWithQuality(quality, type, it) }
+                            url.toHttpUrlOrNull()?.let { DailymotionLinkWithQuality(quality, type, it) }
                         }
                     }
                     .filter { it.type == "application/x-mpegURL" || it.type == "video/mp4" }

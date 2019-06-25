@@ -6,7 +6,7 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.FormBody
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 
 /**
@@ -41,7 +41,7 @@ object StreamcloudStreamResolver : StreamResolver() {
                         }
                         .build()
 
-                    if (formValues.size() == 0) {
+                    if (formValues.size == 0) {
                         throw StreamResolutionException()
                     }
 
@@ -61,7 +61,7 @@ object StreamcloudStreamResolver : StreamResolver() {
                 }
                 .map {
                     fileRegex.find(it)?.groupValues?.get(1)
-                        ?.let { rawUrl -> HttpUrl.parse(rawUrl) }
+                        ?.let { rawUrl -> rawUrl.toHttpUrlOrNull() }
                         ?: throw StreamResolutionException()
                 }
                 .map { StreamResolutionResult.Video(it, "video/mp4", url, internalPlayerOnly = true) }

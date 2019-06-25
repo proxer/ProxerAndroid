@@ -13,7 +13,7 @@ class UserAgentInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
-        val newRequest = when (request.header("User-Agent") == null && ProxerUrls.hasProxerHost(request.url())) {
+        val newRequest = when (request.header("User-Agent") == null && ProxerUrls.hasProxerHost(request.url)) {
             true -> request.newBuilder()
                 .header("User-Agent", USER_AGENT)
                 .build()

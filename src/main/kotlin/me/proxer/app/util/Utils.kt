@@ -14,6 +14,7 @@ import me.proxer.app.util.extension.androidUri
 import me.proxer.library.ProxerException
 import me.proxer.library.ProxerException.ErrorType
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 
@@ -47,13 +48,11 @@ object Utils {
     }
 
     fun parseAndFixUrl(url: String) = when {
-        url.startsWith("http://") || url.startsWith("https://") -> HttpUrl.parse(url)
-        else -> HttpUrl.parse(
-            when {
-                url.startsWith("//") -> "http:$url"
-                else -> "http://$url"
-            }
-        )
+        url.startsWith("http://") || url.startsWith("https://") -> url.toHttpUrlOrNull()
+        else -> when {
+            url.startsWith("//") -> "http:$url"
+            else -> "http://$url"
+        }.toHttpUrlOrNull()
     }
 
     fun getAndFixUrl(url: String) = parseAndFixUrl(url) ?: throw ProxerException(ErrorType.PARSING)

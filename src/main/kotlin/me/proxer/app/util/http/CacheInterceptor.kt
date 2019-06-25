@@ -74,15 +74,15 @@ class CacheInterceptor : Interceptor {
 
     private fun shouldEnableCache(response: Response): Boolean {
         return response.isSuccessful &&
-            response.request().method().equals("GET", true) &&
+            response.request.method.equals("GET", true) &&
             isSuccessfulBody(response)
     }
 
     private fun shouldDisableCache(response: Response) = response.header("Cache-Control") == null ||
-        excludedFileTypes.any { response.request().url().toString().endsWith(it) }
+        excludedFileTypes.any { response.request.url.toString().endsWith(it) }
 
     private fun isSuccessfulBody(response: Response): Boolean {
-        val url = response.request().url().toString()
+        val url = response.request.url.toString()
 
         return when {
             url.contains(ProxerUrls.apiBase.toString()) -> response.peekBodyAndUseWithGzip {
@@ -105,7 +105,7 @@ class CacheInterceptor : Interceptor {
     }
 
     private inline fun <R> Response.peekBodyAndUseWithGzip(block: (BufferedSource) -> R) = this
-        .body()
+        .body
         ?.source()
         ?.peek()
         ?.let {
@@ -165,4 +165,4 @@ class CacheInterceptor : Interceptor {
 }
 
 private inline val Response.urlString
-    get() = this.request().url().toString()
+    get() = this.request.url.toString()

@@ -12,7 +12,7 @@ class ConnectionCloseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val oldRequest = chain.request()
 
-        return if (ProxerUrls.hasProxerProxyHost(oldRequest.url())) {
+        return if (ProxerUrls.hasProxerProxyHost(oldRequest.url)) {
             val newRequest = oldRequest.newBuilder()
                 .header("Connection", "close")
                 .build()

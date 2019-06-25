@@ -37,6 +37,7 @@ import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.threeten.bp.Instant
 import org.threeten.bp.temporal.ChronoUnit
 
@@ -306,7 +307,7 @@ class AnimeAdapter(
             val messageText = (item.resolutionResult as StreamResolutionResult.Message).message
 
             message.linkClicks()
-                .map { HttpUrl.parse(it).toOptional() }
+                .map { it.toHttpUrlOrNull().toOptional() }
                 .filterSome()
                 .autoDisposable(this)
                 .subscribe(linkClickSubject)

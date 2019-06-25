@@ -4,7 +4,7 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.extension.toBodySingle
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.jsoup.Jsoup
@@ -20,7 +20,7 @@ import org.koin.core.inject
 class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
 
     private companion object {
-        private val url = HttpUrl.get("https://proxer.de")
+        private val url = "https://proxer.de".toHttpUrl()
     }
 
     override val dataSingle: Single<List<ServerStatus>>

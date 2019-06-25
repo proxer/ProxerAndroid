@@ -28,7 +28,7 @@ class CallStringBodySingle(private val originalCall: Call) : Single<String>() {
 
         try {
             call.execute().use {
-                val body = it.body()?.string()
+                val body = it.body?.string()
 
                 if (!disposable.isDisposed) {
                     terminated = true

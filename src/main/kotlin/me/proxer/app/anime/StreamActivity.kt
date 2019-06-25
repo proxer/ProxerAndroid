@@ -71,7 +71,7 @@ import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
@@ -539,14 +539,14 @@ class StreamActivity : BaseActivity() {
         .colorRes(android.R.color.white)
 
     private fun canOpenInOtherApp(): Boolean {
-        val intent = StreamResolutionResult.Video(HttpUrl.get(uri.toString()), mimeType, referer).makeIntent(this)
+        val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer).makeIntent(this)
 
         return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isNotEmpty()
     }
 
     private fun openInOtherApp(): Boolean {
         return try {
-            val intent = StreamResolutionResult.Video(HttpUrl.get(uri.toString()), mimeType, referer)
+            val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer)
                 .makeIntent(this)
                 .newTask()
 

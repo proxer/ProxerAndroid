@@ -9,7 +9,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 import org.koin.core.inject
 import kotlin.text.RegexOption.DOT_MATCHES_ALL
@@ -47,7 +47,7 @@ object WatchboxStreamResolver : StreamResolver() {
         }
         .map {
             regex.find(it)?.groupValues?.get(1)
-                ?.let { rawUrl -> HttpUrl.parse(rawUrl) }
+                ?.let { rawUrl -> rawUrl.toHttpUrlOrNull() }
                 ?: throw StreamResolutionException()
         }
         .map { StreamResolutionResult.App(it.androidUri()) }

@@ -16,6 +16,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
 import me.proxer.app.util.Utils
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 /**
  * @author Ruben Gees
@@ -25,7 +26,7 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
     private const val URL_ARGUMENT = "url"
 
     private val attributeRegex = Regex("url *= *(.+?)( |$)", REGEX_OPTIONS)
-    private val invalidUrl = HttpUrl.get("https://proxer.me/404")
+    private val invalidUrl = "https://proxer.me/404".toHttpUrl()
 
     override val startRegex = Regex(" *url *= *.+?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *url *", REGEX_OPTIONS)

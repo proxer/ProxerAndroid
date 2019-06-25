@@ -7,7 +7,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
 import me.proxer.app.util.extension.toSingle
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 
 /**
@@ -36,7 +36,7 @@ object YourUploadStreamResolver : StreamResolver() {
                     val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
                     regexResult.groupValues[1]
-                        .let { rawUrl -> HttpUrl.parse(rawUrl) }
+                        .let { rawUrl -> rawUrl.toHttpUrlOrNull() }
                         ?: throw StreamResolutionException()
                 }
                 .flatMap { fileUrl ->
@@ -53,7 +53,7 @@ object YourUploadStreamResolver : StreamResolver() {
                         .toSingle()
                         .retry(3)
                 }
-                .map { it.networkResponse()?.request()?.url() ?: throw StreamResolutionException() }
+                .map { it.networkResponse?.request?.url ?: throw StreamResolutionException() }
                 .map { StreamResolutionResult.Video(it, "video/mp4", url, internalPlayerOnly = true) }
         }
 }

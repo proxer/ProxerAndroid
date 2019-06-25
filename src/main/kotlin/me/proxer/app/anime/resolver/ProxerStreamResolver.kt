@@ -7,7 +7,7 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 
 /**
@@ -36,7 +36,7 @@ object ProxerStreamResolver : StreamResolver() {
                     .map {
                         val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
-                        val url = HttpUrl.parse(regexResult.groupValues[2]) ?: throw StreamResolutionException()
+                        val url = regexResult.groupValues[2].toHttpUrlOrNull() ?: throw StreamResolutionException()
                         val type = regexResult.groupValues[1]
 
                         val adTagUri = if (adTag.isNotBlank()) Uri.parse(adTag) else null

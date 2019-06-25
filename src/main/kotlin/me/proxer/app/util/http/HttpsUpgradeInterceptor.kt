@@ -12,7 +12,7 @@ class HttpsUpgradeInterceptor : Interceptor {
     private companion object {
         private val upgradableHosts = listOf(
             "www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com", "www.yourupload.com",
-            ProxerUrls.webBase.host(), ProxerUrls.cdnBase.host(), ProxerUrls.streamBase.host()
+            ProxerUrls.webBase.host, ProxerUrls.cdnBase.host, ProxerUrls.streamBase.host
         )
     }
 
@@ -20,12 +20,12 @@ class HttpsUpgradeInterceptor : Interceptor {
         val currentRequest = chain.request()
 
         val newRequest = if (currentRequest.isHttps.not()) {
-            val currentHost = currentRequest.url().host()
+            val currentHost = currentRequest.url.host
 
             if (upgradableHosts.any { it.equals(currentHost, ignoreCase = true) }) {
                 currentRequest.newBuilder()
                     .url(
-                        currentRequest.url().newBuilder()
+                        currentRequest.url.newBuilder()
                             .scheme("https")
                             .build()
                     )

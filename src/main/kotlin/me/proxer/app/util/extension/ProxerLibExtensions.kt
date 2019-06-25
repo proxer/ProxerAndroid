@@ -370,7 +370,7 @@ inline val Chapter.isOfficial: Boolean
     get() = if (pages == null) {
         val serverUrl = Utils.parseAndFixUrl(server)
 
-        serverUrl != null && serverUrl.host() in arrayOf("www.webtoons.com", "www.lezhin.com")
+        serverUrl != null && serverUrl.host in arrayOf("www.webtoons.com", "www.lezhin.com")
     } else {
         false
     }
