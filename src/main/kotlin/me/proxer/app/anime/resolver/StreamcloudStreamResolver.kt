@@ -60,8 +60,7 @@ object StreamcloudStreamResolver : StreamResolver() {
                         .toBodySingle()
                 }
                 .map {
-                    fileRegex.find(it)?.groupValues?.get(1)
-                        ?.let { rawUrl -> rawUrl.toHttpUrlOrNull() }
+                    fileRegex.find(it)?.groupValues?.get(1)?.toHttpUrlOrNull()
                         ?: throw StreamResolutionException()
                 }
                 .map { StreamResolutionResult.Video(it, "video/mp4", url, internalPlayerOnly = true) }

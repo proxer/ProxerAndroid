@@ -35,8 +35,7 @@ object YourUploadStreamResolver : StreamResolver() {
                 .map {
                     val regexResult = regex.find(it) ?: throw StreamResolutionException()
 
-                    regexResult.groupValues[1]
-                        .let { rawUrl -> rawUrl.toHttpUrlOrNull() }
+                    regexResult.groupValues[1].toHttpUrlOrNull()
                         ?: throw StreamResolutionException()
                 }
                 .flatMap { fileUrl ->

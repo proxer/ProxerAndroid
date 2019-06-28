@@ -46,8 +46,7 @@ object WatchboxStreamResolver : StreamResolver() {
                 .toBodySingle()
         }
         .map {
-            regex.find(it)?.groupValues?.get(1)
-                ?.let { rawUrl -> rawUrl.toHttpUrlOrNull() }
+            regex.find(it)?.groupValues?.get(1)?.toHttpUrlOrNull()
                 ?: throw StreamResolutionException()
         }
         .map { StreamResolutionResult.App(it.androidUri()) }
