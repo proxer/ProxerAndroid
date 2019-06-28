@@ -59,7 +59,7 @@ class TouchablePlayerView @JvmOverloads constructor(
         override fun onDown(event: MotionEvent) = true
 
         override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-            delegateTouch(event)
+            performClick()
 
             return true
         }
@@ -217,9 +217,5 @@ class TouchablePlayerView @JvmOverloads constructor(
 
             brightnessChangeSubject.onNext((newBrightness * 100f).toInt())
         }
-    }
-
-    private fun delegateTouch(event: MotionEvent) {
-        super.onTouchEvent(event)
     }
 }
