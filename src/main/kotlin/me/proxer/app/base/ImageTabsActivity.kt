@@ -45,10 +45,10 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
     private var isHeaderImageVisible = true
 
-    open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    open val viewPager: ViewPager by bindView(R.id.viewPager)
-    open val headerImage: ImageView by bindView(R.id.image)
-    open val tabs: TabLayout by bindView(R.id.tabs)
+    protected open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
+    protected open val viewPager: ViewPager by bindView(R.id.viewPager)
+    protected open val headerImage: ImageView by bindView(R.id.image)
+    protected open val tabs: TabLayout by bindView(R.id.tabs)
 
     protected var tabLayoutHelper: TabLayoutHelper? = null
         private set
@@ -97,6 +97,10 @@ abstract class ImageTabsActivity : DrawerActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun collapse() {
+        appbar.setExpanded(false)
     }
 
     fun headerHeightChanges(): Observable<Float> = appbar.offsetChanges()

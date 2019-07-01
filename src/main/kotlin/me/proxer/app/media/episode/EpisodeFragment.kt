@@ -112,6 +112,10 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                 }
             }
 
+        hostingActivity.headerHeightChanges()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { scrollToBottom.translationY = it }
+
         scrollToBottom.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
@@ -123,6 +127,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                     false -> indexBasedUserProgress
                 }
 
+                hostingActivity.collapse()
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
