@@ -1,4 +1,4 @@
-package me.proxer.app.media.comment
+package me.proxer.app.media.comments
 
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.util.extension.toDate

@@ -26,6 +26,7 @@ import me.proxer.app.chat.pub.message.ChatReportViewModel
 import me.proxer.app.chat.pub.message.ChatViewModel
 import me.proxer.app.chat.pub.room.ChatRoomViewModel
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoViewModel
+import me.proxer.app.comment.CommentViewModel
 import me.proxer.app.forum.TopicViewModel
 import me.proxer.app.info.industry.IndustryInfoViewModel
 import me.proxer.app.info.industry.IndustryProjectViewModel
@@ -34,7 +35,7 @@ import me.proxer.app.info.translatorgroup.TranslatorGroupProjectViewModel
 import me.proxer.app.manga.MangaViewModel
 import me.proxer.app.media.MediaInfoViewModel
 import me.proxer.app.media.TagDatabase
-import me.proxer.app.media.comment.CommentViewModel
+import me.proxer.app.media.comments.CommentsViewModel
 import me.proxer.app.media.discussion.DiscussionViewModel
 import me.proxer.app.media.episode.EpisodeViewModel
 import me.proxer.app.media.list.MediaListViewModel
@@ -258,7 +259,7 @@ private val viewModelModule = module {
 
     viewModel { (entryId: String) -> MediaInfoViewModel(entryId) }
     viewModel { (entryId: String) -> EpisodeViewModel(entryId) }
-    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) -> CommentViewModel(entryId, sortCriteria) }
+    viewModel { (entryId: String, sortCriteria: CommentSortCriteria) -> CommentsViewModel(entryId, sortCriteria) }
     viewModel { (entryId: String) -> RelationViewModel(entryId) }
     viewModel { (entryId: String) -> RecommendationViewModel(entryId) }
     viewModel { (entryId: String) -> DiscussionViewModel(entryId) }
@@ -270,6 +271,8 @@ private val viewModelModule = module {
 
     viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
     viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
+
+    viewModel { (id: String?, entryId: String?) -> CommentViewModel(id, entryId) }
 
     viewModel { ServerStatusViewModel() }
 }

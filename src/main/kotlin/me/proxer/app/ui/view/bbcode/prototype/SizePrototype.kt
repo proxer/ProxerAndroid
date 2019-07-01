@@ -39,12 +39,12 @@ object SizePrototype : TextMutatorPrototype {
             )
         } else {
             val size = when (value) {
-                "1" -> 0.4f
-                "2" -> 0.7f
-                "3" -> 0.85f
-                "4" -> 1.0f
-                "5" -> 1.5f
-                "6" -> 2.0f
+                "1" -> 0.7f
+                "2" -> 0.85f
+                "3" -> 1.0f
+                "4" -> 1.5f
+                "5" -> 2.0f
+                "6" -> 3.0f
                 else -> error("Unknown size: $value")
             }
 

@@ -56,6 +56,18 @@ import me.proxer.library.ProxerException.ServerErrorType.CHAT_LOGIN_REQUIRED
 import me.proxer.library.ProxerException.ServerErrorType.CHAT_NO_PERMISSIONS
 import me.proxer.library.ProxerException.ServerErrorType.CHAT_SEVEN_DAY_PROTECTION
 import me.proxer.library.ProxerException.ServerErrorType.CHAT_USER_ON_BLACKLIST
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_ALREADY_EXISTS
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INSUFFICIENT_PERMISSIONS
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_COMMENT
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_CONTENT
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_ENTRY_ID
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_EPISODE
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_ID
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_RATING
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_INVALID_STATUS
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_LOGIN_REQUIRED
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_NOT_ACTIVE_YET
+import me.proxer.library.ProxerException.ServerErrorType.COMMENT_SAVE_ERROR
 import me.proxer.library.ProxerException.ServerErrorType.ERRORLOG_INVALID_INPUT
 import me.proxer.library.ProxerException.ServerErrorType.FORUM_INVALID_ID
 import me.proxer.library.ProxerException.ServerErrorType.FORUM_INVALID_PERMISSIONS
@@ -78,6 +90,7 @@ import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_LANGUAGE
 import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_MEDIUM
 import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_SUBJECT
 import me.proxer.library.ProxerException.ServerErrorType.LIST_INVALID_TYPE
+import me.proxer.library.ProxerException.ServerErrorType.LIST_NO_ENTRIES_LEFT
 import me.proxer.library.ProxerException.ServerErrorType.LIST_TOP_ACCESS_RESET
 import me.proxer.library.ProxerException.ServerErrorType.LOGIN_ALREADY_LOGGED_IN
 import me.proxer.library.ProxerException.ServerErrorType.LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN
@@ -128,14 +141,16 @@ object ErrorUtils : KoinComponent {
     const val LINK_DATA_KEY = "link"
 
     private val apiErrors = arrayOf(
-        UNKNOWN_API, API_REMOVED, INVALID_API_CLASS, INVALID_API_FUNCTION, INSUFFICIENT_PERMISSIONS, FUNCTION_BLOCKED
+        UNKNOWN_API, API_REMOVED, INVALID_API_CLASS, INVALID_API_FUNCTION, INSUFFICIENT_PERMISSIONS, FUNCTION_BLOCKED,
+        COMMENT_SAVE_ERROR
     )
 
     private val maintenanceErrors = arrayOf(SERVER_MAINTENANCE, API_MAINTENANCE)
 
     private val loginErrors = arrayOf(
         INVALID_TOKEN, NOTIFICATIONS_LOGIN_REQUIRED, UCP_LOGIN_REQUIRED, INFO_LOGIN_REQUIRED, MESSAGES_LOGIN_REQUIRED,
-        USER_2FA_SECRET_REQUIRED, ANIME_LOGIN_REQUIRED, IP_AUTHENTICATION_REQUIRED
+        USER_2FA_SECRET_REQUIRED, ANIME_LOGIN_REQUIRED, IP_AUTHENTICATION_REQUIRED,
+        COMMENT_LOGIN_REQUIRED
     )
 
     private val clientErrors = arrayOf(
@@ -143,7 +158,9 @@ object ErrorUtils : KoinComponent {
         LOGIN_DIFFERENT_USER_ALREADY_LOGGED_IN, LIST_INVALID_CATEGORY, LIST_INVALID_MEDIUM, MEDIA_INVALID_STYLE,
         ANIME_INVALID_STREAM, LIST_INVALID_LANGUAGE, LIST_INVALID_TYPE, ERRORLOG_INVALID_INPUT, LIST_INVALID_SUBJECT,
         CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU, CHAT_INVALID_INPUT,
-        INFO_DELETE_COMMENT_INVALID_INPUT, UCP_INVALID_SETTINGS
+        INFO_DELETE_COMMENT_INVALID_INPUT, UCP_INVALID_SETTINGS, COMMENT_INVALID_ID, COMMENT_INVALID_COMMENT,
+        COMMENT_INVALID_RATING, COMMENT_INVALID_EPISODE, COMMENT_INVALID_STATUS, COMMENT_INVALID_ENTRY_ID,
+        COMMENT_INVALID_CONTENT, COMMENT_ALREADY_EXISTS
     )
 
     private val invalidIdErrors = arrayOf(
@@ -153,7 +170,7 @@ object ErrorUtils : KoinComponent {
 
     private val unsupportedErrors = arrayOf(
         USER, AUTH_INVALID_USER, AUTH_CODE_ALREADY_EXISTS, AUTH_CODE_DOES_NOT_EXIST, AUTH_CODE_REJECTED,
-        AUTH_CODE_PENDING, AUTH_CODE_INVALID_NAME, AUTH_CODE_DUPLICATE
+        AUTH_CODE_PENDING, AUTH_CODE_INVALID_NAME, AUTH_CODE_DUPLICATE, LIST_NO_ENTRIES_LEFT
     )
 
     private val storageHelper by inject<StorageHelper>()
@@ -258,6 +275,8 @@ object ErrorUtils : KoinComponent {
             CHAT_USER_ON_BLACKLIST -> R.string.error_chat_blacklist
             CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
             FORUM_INVALID_PERMISSIONS -> R.string.error_forum_no_permissions
+            COMMENT_INSUFFICIENT_PERMISSIONS -> R.string.error_comment_no_permissions
+            COMMENT_NOT_ACTIVE_YET -> R.string.error_comment_not_active_yet
             IP_AUTHENTICATION_REQUIRED -> R.string.error_login_ip_authentication
             in apiErrors -> R.string.error_api
             in maintenanceErrors -> R.string.error_maintenance

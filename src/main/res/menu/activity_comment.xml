@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_publish"
+        android:title="@string/action_publish"
+        app:ico_color="?attr/colorOnPrimary"
+        app:ico_icon="cmd_send"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+</menu>

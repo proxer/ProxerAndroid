@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.ui.view.bbcode.toSimpleBBTree
 import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
@@ -35,7 +35,7 @@ data class LocalMessage(
 ) {
 
     @Transient
-    val styledMessage = BBParser.parseSimple(message).optimize()
+    val styledMessage = message.toSimpleBBTree()
 
     fun toNonLocalMessage() = Message(
         id.toString(), conferenceId.toString(), userId, username, message, action, date.toDate(), device

@@ -48,7 +48,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
             updateToggleButtonIcon()
         }
 
-    private var isExpanded = false
+    var isExpanded = false
         set(value) {
             field = value
 

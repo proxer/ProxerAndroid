@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context=".comment.CommentEditFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
+
+                <FrameLayout
+                    android:id="@+id/contentContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/screen_horizontal_margin"
+                    android:paddingTop="@dimen/screen_vertical_margin"
+                    android:paddingRight="@dimen/screen_horizontal_margin"
+                    android:paddingBottom="@dimen/screen_vertical_margin">
+
+                    <EditText
+                        android:id="@+id/editor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top"
+                        android:background="@null"
+                        android:gravity="top"
+                        android:hint="@string/fragment_comment_edit_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        tools:targetApi="o" />
+                </FrameLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <HorizontalScrollView
+                android:id="@+id/formatterBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorBackgroundFloating"
+                android:clipToPadding="false"
+                android:elevation="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/bold"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_bold"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/italic"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_italic"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/underline"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_underline"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/strikethrough"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_strikethrough"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/size"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_size"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/left"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_left"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/center"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_center"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/right"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_right"
+                        tools:src="@drawable/ic_japan" />
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/layout_error" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

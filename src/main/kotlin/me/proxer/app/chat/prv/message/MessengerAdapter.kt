@@ -26,7 +26,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.prv.message.MessengerAdapter.MessageViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
-import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.ui.view.bbcode.toSimpleBBTree
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
@@ -412,7 +412,7 @@ class MessengerAdapter(
         override fun applyMessage(message: LocalMessage) {
             val messageText = message.action.toAppString(text.context, message.username, message.message)
 
-            text.tree = BBParser.parseSimple("[center]$messageText[/center]").optimize()
+            text.tree = "[center]$messageText[/center]".toSimpleBBTree()
         }
     }
 

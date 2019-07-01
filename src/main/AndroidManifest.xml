@@ -191,6 +191,10 @@
         <activity android:name=".ucp.settings.UcpSettingsActivity" />
 
         <activity
+            android:name=".comment.CommentActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
             android:name=".media.MediaActivity"
             android:theme="@style/Theme.Placeholder.App.Transparent">
 

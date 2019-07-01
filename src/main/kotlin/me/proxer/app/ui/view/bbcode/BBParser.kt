@@ -170,3 +170,6 @@ object BBParser {
         }
     }
 }
+
+fun String.toBBTree(args: BBArgs = BBArgs()) = BBParser.parse(this).optimize(args)
+fun String.toSimpleBBTree(args: BBArgs = BBArgs()) = BBParser.parseSimple(this).optimize(args)

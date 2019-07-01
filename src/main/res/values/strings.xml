@@ -110,7 +110,11 @@
     </string>
     <string name="error_chat_blacklist">Du bist aktuell vom Chat ausgeschlossen</string>
     <string name="error_chat_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Chat</string>
+
     <string name="error_forum_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Thread</string>
+
+    <string name="error_comment_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Kommentar</string>
+    <string name="error_comment_not_active_yet">Dieses Werk kann noch nicht bewertet werden</string>
 
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
@@ -171,6 +175,7 @@
     <string name="error_action_open_link">Extern öffnen</string>
 
     <string name="error_set_user_info">Eintrag konnte nicht aktualisiert werden: %s</string>
+    <string name="error_comment_publish">Der Kommentar konnte nicht veröffentlich werden: %s</string>
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
     <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_ucp_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
@@ -506,6 +511,24 @@
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
 
+    <string name="fragment_comment_edit">Bearbeiten</string>
+    <string name="fragment_comment_preview">Vorschau</string>
+    <string name="fragment_comment_edit_hint">Schreibe hier deinen Kommentar</string>
+    <string name="fragment_comment_edit_bold">Fett</string>
+    <string name="fragment_comment_edit_italic">Kursiv</string>
+    <string name="fragment_comment_edit_underline">Unterstrichen</string>
+    <string name="fragment_comment_edit_strikethrough">Durchgestrichen</string>
+    <string name="fragment_comment_edit_size">Größe</string>
+    <string name="fragment_comment_edit_left">Links</string>
+    <string name="fragment_comment_edit_center">Mittig</string>
+    <string name="fragment_comment_edit_right">Rechts</string>
+    <string name="fragment_comment_preview_empty">Hier erscheint eine Vorschau deines Kommentars</string>
+    <string name="fragment_comment_edit_size_huge">Riesig</string>
+    <string name="fragment_comment_edit_size_large">Groß</string>
+    <string name="fragment_comment_edit_size_normal">Normal</string>
+    <string name="fragment_comment_edit_size_small">Klein</string>
+    <string name="fragment_comment_edit_size_tiny">Winzig</string>
+
     <string name="fragment_comment_rating_animation">Animation/Bilder</string>
     <string name="fragment_comment_rating_characters">Charaktere</string>
     <string name="fragment_comment_rating_genre">Genre</string>
@@ -768,6 +791,10 @@
     <string name="action_sort_rating">Nach Bewertungen</string>
     <string name="action_sort_time">Nach Datum</string>
 
+    <string name="action_write_comment">Kommentar schreiben</string>
+    <string name="action_create_comment">Neuer Kommentar</string>
+    <string name="action_update_comment">Kommentar bearbeiten</string>
+
     <string name="action_send_message">Nachricht schreiben</string>
     <string name="action_create_chat">Neuer Chat</string>
     <string name="action_new_group_with_user">Neue Gruppe mit diesem Nutzer</string>
@@ -779,6 +806,8 @@
     <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
 
     <string name="action_filter_available">Nur verfügbare anzeigen</string>
+
+    <string name="action_publish">Veröffentlichen</string>
 
     <string name="action_show_in_browser">Im Browser anzeigen</string>
 

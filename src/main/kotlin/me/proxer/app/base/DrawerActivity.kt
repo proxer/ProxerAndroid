@@ -33,8 +33,8 @@ abstract class DrawerActivity : BaseActivity() {
     protected open val isRootActivity = false
     protected open val isMainActivity = false
 
-    protected open val toolbar: Toolbar by bindView(R.id.toolbar)
-    protected open val appbar: AppBarLayout by bindView(R.id.appbar)
+    open val toolbar: Toolbar by bindView(R.id.toolbar)
+    open val appbar: AppBarLayout by bindView(R.id.appbar)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

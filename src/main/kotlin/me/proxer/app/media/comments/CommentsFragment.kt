@@ -1,20 +1,30 @@
-package me.proxer.app.media.comment
+package me.proxer.app.media.comments
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.paddingDp
+import com.mikepenz.iconics.sizeDp
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.comment.CommentActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -25,12 +35,12 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CommentFragment : PagedContentFragment<ParsedComment>() {
+class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_comments) {
 
     companion object {
         private const val SORT_CRITERIA_ARGUMENT = "sort_criteria"
 
-        fun newInstance() = CommentFragment().apply {
+        fun newInstance() = CommentsFragment().apply {
             arguments = bundleOf()
         }
     }
@@ -39,7 +49,7 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
     override val isSwipeToRefreshEnabled = true
     override val pagingThreshold = 3
 
-    override val viewModel by viewModel<CommentViewModel> { parametersOf(id, sortCriteria) }
+    override val viewModel by viewModel<CommentsViewModel> { parametersOf(id, sortCriteria) }
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
@@ -49,6 +59,9 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
 
     private val category: Category?
         get() = hostingActivity.category
+
+    private val name: String?
+        get() = hostingActivity.name
 
     private var sortCriteria: CommentSortCriteria
         get() = requireArguments().getSerializable(SORT_CRITERIA_ARGUMENT) as? CommentSortCriteria
@@ -61,12 +74,14 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
 
     override val layoutManager by unsafeLazy { LinearLayoutManager(context) }
 
-    override var innerAdapter by Delegates.notNull<CommentAdapter>()
+    override var innerAdapter by Delegates.notNull<CommentsAdapter>()
+
+    private val create by bindView<FloatingActionButton>(R.id.create)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = CommentAdapter(savedInstanceState)
+        innerAdapter = CommentsAdapter(savedInstanceState)
 
         innerAdapter.profileClickSubject
             .autoDisposable(this.scope())
@@ -85,6 +100,24 @@ class CommentFragment : PagedContentFragment<ParsedComment>() {
 
         innerAdapter.glide = GlideApp.with(this)
         innerAdapter.categoryCallback = { category }
+
+        hostingActivity.headerHeightChanges()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { create.translationY = it }
+
+        create.setImageDrawable(
+            IconicsDrawable(requireContext())
+                .icon(CommunityMaterial.Icon2.cmd_pencil)
+                .color(R.attr.colorOnPrimary.toIconicsColorAttr(requireContext()))
+                .sizeDp(64)
+                .paddingDp(8)
+        )
+
+        create.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { CommentActivity.navigateTo(requireActivity(), entryId = id, name = name) }
+
+        TooltipCompat.setTooltipText(create, getString(R.string.action_write_comment))
     }
 
     override fun onDestroy() {

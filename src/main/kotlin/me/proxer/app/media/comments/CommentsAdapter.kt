@@ -1,4 +1,4 @@
-package me.proxer.app.media.comment
+package me.proxer.app.media.comments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +23,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
-import me.proxer.app.media.comment.CommentAdapter.ViewHolder
+import me.proxer.app.media.comments.CommentsAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.distanceInWordsToNow
@@ -39,7 +39,7 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, ViewHolder>() {
+class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
@@ -117,6 +117,7 @@ class CommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, V
         private val maxHeight by unsafeLazy { comment.context.resources.displayMetrics.heightPixels / 4 }
 
         init {
+
             comment.glide = glide
 
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)

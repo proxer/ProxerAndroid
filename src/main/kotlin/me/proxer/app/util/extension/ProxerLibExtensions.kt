@@ -16,14 +16,16 @@ import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.app.chat.pub.message.ParsedChatMessage
+import me.proxer.app.comment.LocalComment
 import me.proxer.app.forum.ParsedPost
 import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag
-import me.proxer.app.media.comment.ParsedComment
+import me.proxer.app.media.comments.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.app.ui.view.bbcode.BBArgs
-import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.ui.view.bbcode.toBBTree
+import me.proxer.app.ui.view.bbcode.toSimpleBBTree
 import me.proxer.app.util.Utils
 import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.chat.ChatMessage
@@ -414,12 +416,16 @@ fun Message.toLocalMessage() = LocalMessage(
 
 fun Comment.toParsedComment() = ParsedComment(
     id, entryId, authorId, mediaProgress, ratingDetails,
-    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
+    content.toSimpleBBTree(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
+)
+
+fun Comment.toLocalComment() = LocalComment(
+    id, entryId, mediaProgress, ratingDetails, content, overallRating, episode
 )
 
 fun UserComment.toParsedUserComment() = ParsedUserComment(
     id, entryId, entryName, medium, category, authorId, mediaProgress, ratingDetails,
-    BBParser.parseSimple(content).optimize(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
+    content.toSimpleBBTree(), overallRating, episode, helpfulVotes, date.toInstantBP(), author, image
 )
 
 fun Topic.toTopicMetaData() = TopicMetaData(
@@ -427,9 +433,9 @@ fun Topic.toTopicMetaData() = TopicMetaData(
 )
 
 fun Post.toParsedPost(resources: Resources): ParsedPost {
-    val parsedMessage = BBParser.parse(message).optimize(BBArgs(resources = resources, userId = userId))
+    val parsedMessage = message.toBBTree(BBArgs(resources = resources, userId = userId))
     val parsedSignature = signature?.let {
-        if (it.isNotBlank()) BBParser.parse(it).optimize(BBArgs(resources = resources, userId = userId)) else null
+        if (it.isNotBlank()) it.toBBTree(BBArgs(resources = resources, userId = userId)) else null
     }
 
     return ParsedPost(

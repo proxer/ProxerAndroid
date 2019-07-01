@@ -1,4 +1,4 @@
-package me.proxer.app.media.comment
+package me.proxer.app.media.comments
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -11,7 +11,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class CommentViewModel(
+class CommentsViewModel(
     private val entryId: String,
     sortCriteria: CommentSortCriteria
 ) : PagedViewModel<ParsedComment>() {

@@ -1,6 +1,6 @@
 package me.proxer.app.chat.pub.message
 
-import me.proxer.app.ui.view.bbcode.BBParser
+import me.proxer.app.ui.view.bbcode.toSimpleBBTree
 import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.ProxerDateItem
 import me.proxer.library.entity.ProxerIdItem
@@ -25,5 +25,5 @@ data class ParsedChatMessage(
     override val date = instant.toDate()
 
     @Transient
-    val styledMessage = BBParser.parseSimple(message).optimize()
+    val styledMessage = message.toSimpleBBTree()
 }

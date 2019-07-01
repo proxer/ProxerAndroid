@@ -14,6 +14,7 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 object SpoilerPrototype : AutoClosingPrototype {
 
     const val SPOILER_TEXT_COLOR_ARGUMENT = "spoiler_text_color"
+    const val SPOILER_EXPAND_ARGUMENT = "spoiler_expand"
 
     private const val TITLE_ARGUMENT = "title"
 
@@ -31,6 +32,7 @@ object SpoilerPrototype : AutoClosingPrototype {
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)
         val title = args[TITLE_ARGUMENT] as String?
+        val shouldExpand = args[SPOILER_EXPAND_ARGUMENT] as Boolean? ?: false
 
         return when (childViews.isEmpty()) {
             true -> childViews
@@ -38,6 +40,7 @@ object SpoilerPrototype : AutoClosingPrototype {
                 (args[SPOILER_TEXT_COLOR_ARGUMENT] as? Int)?.let { spoilerTextColor = it }
 
                 spoilerTitle = title
+                isExpanded = shouldExpand
 
                 childViews.forEach { addView(it) }
             })

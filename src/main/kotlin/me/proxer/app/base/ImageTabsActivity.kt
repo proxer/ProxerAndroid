@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding3.material.offsetChanges
 import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.Observable
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
@@ -44,10 +45,10 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
     private var isHeaderImageVisible = true
 
-    protected open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    protected open val viewPager: ViewPager by bindView(R.id.viewPager)
-    protected open val headerImage: ImageView by bindView(R.id.image)
-    protected open val tabs: TabLayout by bindView(R.id.tabs)
+    open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
+    open val viewPager: ViewPager by bindView(R.id.viewPager)
+    open val headerImage: ImageView by bindView(R.id.image)
+    open val tabs: TabLayout by bindView(R.id.tabs)
 
     protected var tabLayoutHelper: TabLayoutHelper? = null
         private set
@@ -97,6 +98,18 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    fun headerHeightChanges(): Observable<Float> = appbar.offsetChanges()
+        .map { verticalOffset ->
+            val overallHeight = collapsingToolbar.height
+            val toolbarHeight = toolbar.height
+            val toolbarTranslation = IntArray(2).apply { toolbar.getLocationOnScreen(this) }[1]
+            val tabLayoutHeight = tabs.height
+
+            val collapsedHeight = overallHeight - toolbarHeight - toolbarTranslation - tabLayoutHeight
+
+            (-collapsedHeight - verticalOffset).toFloat()
+        }
 
     protected open fun setupImage() {
         ViewCompat.setTransitionName(headerImage, ActivityUtils.getTransitionName(this))
@@ -173,6 +186,7 @@ abstract class ImageTabsActivity : DrawerActivity() {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null
     }
 
+    @Suppress("EmptyFunctionBlock")
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     interface TransitionListenerWrapper : Transition.TransitionListener {
         override fun onTransitionEnd(transition: Transition?) {}

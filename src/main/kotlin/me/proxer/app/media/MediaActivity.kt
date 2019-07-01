@@ -16,7 +16,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
-import me.proxer.app.media.comment.CommentFragment
+import me.proxer.app.media.comments.CommentsFragment
 import me.proxer.app.media.discussion.DiscussionFragment
 import me.proxer.app.media.episode.EpisodeFragment
 import me.proxer.app.media.info.MediaInfoFragment
@@ -172,7 +172,7 @@ class MediaActivity : ImageTabsActivity() {
 
         override fun getItem(position: Int) = when (position) {
             0 -> MediaInfoFragment.newInstance()
-            1 -> CommentFragment.newInstance()
+            1 -> CommentsFragment.newInstance()
             2 -> EpisodeFragment.newInstance()
             3 -> RelationFragment.newInstance()
             4 -> RecommendationFragment.newInstance()

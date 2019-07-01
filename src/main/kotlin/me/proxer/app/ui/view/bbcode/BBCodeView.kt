@@ -23,6 +23,7 @@ import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
 import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
+import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype.SPOILER_EXPAND_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype.SPOILER_TEXT_COLOR_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_APPEARANCE_ARGUMENT
@@ -53,6 +54,8 @@ class BBCodeView @JvmOverloads constructor(
 
     @ColorInt
     var spoilerTextColor: Int? = null
+
+    var expandSpoilers: Boolean = false
 
     var maxHeight: Int = Int.MAX_VALUE
 
@@ -90,7 +93,7 @@ class BBCodeView @JvmOverloads constructor(
 
                 maxHeight = getDimensionPixelSize(R.styleable.BBCodeView_maxHeight, Int.MAX_VALUE)
 
-                getString(R.styleable.BBCodeView_text)?.let { tree = BBParser.parseSimple(it).optimize() }
+                getString(R.styleable.BBCodeView_text)?.let { tree = it.toSimpleBBTree() }
             }
         }
     }
@@ -132,6 +135,7 @@ class BBCodeView @JvmOverloads constructor(
         args[TEXT_SIZE_ARGUMENT] = textSize
         args[TEXT_APPEARANCE_ARGUMENT] = textAppearance
         args[SPOILER_TEXT_COLOR_ARGUMENT] = spoilerTextColor
+        args[SPOILER_EXPAND_ARGUMENT] = expandSpoilers
 
         if (existingChild is BetterLinkGifAwareEmojiTextView && firstTreeChild?.prototype === TextPrototype) {
             TextPrototype.applyOnView(this, existingChild, args + firstTreeChild.args)
