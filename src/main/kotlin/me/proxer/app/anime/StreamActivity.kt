@@ -68,7 +68,7 @@ import me.proxer.app.util.extension.newTask
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
-import me.proxer.library.util.ProxerUrls
+import me.proxer.library.util.ProxerUrls.hasProxerStreamFileHost
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -102,7 +102,7 @@ class StreamActivity : BaseActivity() {
     private val isProxerStream: Boolean
         get() = intent.dataString
             ?.let { Utils.parseAndFixUrl(it) }
-            ?.let { ProxerUrls.hasProxerStreamFileHost(it) }
+            ?.hasProxerStreamFileHost
             ?: false
 
     private val adTag: Uri?

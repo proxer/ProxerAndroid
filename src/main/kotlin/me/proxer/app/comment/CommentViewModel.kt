@@ -56,9 +56,7 @@ class CommentViewModel(
 
                 else -> when (val it = entryId) {
                     null -> null
-                    else -> api.comment.create(it, UserMediaProgress.WATCHING)
-                        .rating(5)
-                        .episode(1)
+                    else -> api.comment.create(it)
                         .comment(comment.content.trim())
                         .buildOptionalSingle()
                 }

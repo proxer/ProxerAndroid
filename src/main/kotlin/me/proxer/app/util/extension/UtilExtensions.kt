@@ -25,7 +25,7 @@ import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
-import me.proxer.library.util.ProxerUrls
+import me.proxer.library.util.ProxerUrls.hasProxerHost
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import org.koin.core.parameter.DefinitionParameters
@@ -121,7 +121,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
                 val intent = when (nativePackages.contains(APPLICATION_ID)) {
                     true -> Intent(Intent.ACTION_VIEW, url.androidUri()).setPackage(APPLICATION_ID)
                     false -> Intent(Intent.ACTION_VIEW, url.androidUri()).apply {
-                        if (!ProxerUrls.hasProxerHost(url)) {
+                        if (!url.hasProxerHost) {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         }
                     }

@@ -41,7 +41,7 @@ ext {
 
     // RxJava
     rxJavaVersion = "2.2.10"
-    rxKotlinVersion = "2.3.0"
+    rxKotlinVersion = "2.4.0-beta.1"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0-alpha2"
     rxPreferencesVersion = "2.0.0"
@@ -65,7 +65,7 @@ ext {
     subsamplingScaleImageViewVersion = "e9398dce15"
     subsamplingPdfDecoderVersion = "ad07ddf671"
     tabLayoutHelperVersion = "b1d93a3b83"
-    materialDialogsVersion = "3.0.0"
+    materialDialogsVersion = "3.0.2"
     flexboxVersion = "1.1.0"
     emojiIosVersion = "bef7c5a87e"
     exoplayerVersion = "2.10.2"
@@ -77,7 +77,7 @@ ext {
     gravitySnapHelperVersion = "2.0"
 
     // Utils
-    proxerLibVersion = "394338c090"
+    proxerLibVersion = "1cc54656d7"
     threetenVersion = "1.2.1"
     hawkVersion = "7a1a625455"
     glideVersion = "4.9.0"
