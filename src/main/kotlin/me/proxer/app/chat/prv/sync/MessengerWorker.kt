@@ -75,7 +75,7 @@ class MessengerWorker(
             workManager.cancelUniqueWork(NAME)
         }
 
-        fun isRunning() = isRunning.value ?: false
+        fun isRunning() = isRunning.value ?: true
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {
