@@ -55,6 +55,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val left by bindView<ImageButton>(R.id.left)
     private val center by bindView<ImageButton>(R.id.center)
     private val right by bindView<ImageButton>(R.id.right)
+    private val spoiler by bindView<ImageButton>(R.id.spoiler)
 
     private val inputMethodManager by unsafeLazy {
         requireNotNull(requireContext().getSystemService<InputMethodManager>())
@@ -81,12 +82,13 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         strikethrough.setIconicsImage(CommunityMaterial.Icon.cmd_format_strikethrough_variant, 32)
         size.setIconicsImage(CommunityMaterial.Icon.cmd_format_size, 32)
         left.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_left, 32)
-        right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
-        center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
+        center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
+        right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
+        spoiler.setIconicsImage(CommunityMaterial.Icon.cmd_eye_off, 32)
 
         arrayOf(
             bold to "b", italic to "i", underlined to "u", strikethrough to "s",
-            left to "left", center to "center", right to "right"
+            left to "left", center to "center", right to "right", spoiler to "spoiler"
         ).forEach { (button, tag) ->
             button.clicks()
                 .autoDisposable(viewLifecycleOwner.scope())

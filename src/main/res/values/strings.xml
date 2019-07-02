@@ -522,6 +522,7 @@
     <string name="fragment_comment_edit_left">Links</string>
     <string name="fragment_comment_edit_center">Mittig</string>
     <string name="fragment_comment_edit_right">Rechts</string>
+    <string name="fragment_comment_edit_spoiler">Spoiler</string>
     <string name="fragment_comment_preview_empty">Hier erscheint eine Vorschau deines Kommentars</string>
     <string name="fragment_comment_edit_size_huge">Riesig</string>
     <string name="fragment_comment_edit_size_large">Groß</string>
