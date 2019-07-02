@@ -25,6 +25,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.comment.ProfileCommentAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.mapAdapterPosition
@@ -35,13 +36,17 @@ import me.proxer.app.util.extension.unsafeLazy
 /**
  * @author Ruben Gees
  */
-class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUserComment, ViewHolder>() {
+class ProfileCommentAdapter(
+    savedInstanceState: Bundle?,
+    private val storageHelper: StorageHelper
+) : BaseAdapter<ParsedUserComment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "profile_comment_expanded"
     }
 
     var glide: GlideRequests? = null
+    val editClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
     val titleClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
 
     private var layoutManager: LayoutManager? = null
@@ -85,6 +90,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
 
+        internal val edit: ImageView by bindView(R.id.edit)
         internal val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
         internal val upvotes: TextView by bindView(R.id.upvotes)
 
@@ -114,6 +120,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
 
             image.isGone = true
 
+            edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
@@ -125,6 +132,7 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
 
             title.text = item.entryName
             upvotes.text = item.helpfulVotes.toString()
+            edit.isVisible = item.authorId == storageHelper.user?.id
 
             bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
             bindRatingRow(ratingStoryRow, ratingStory, item.ratingDetails.story.toFloat())
@@ -143,16 +151,21 @@ class ProfileCommentAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedUse
         }
 
         private fun initListeners() {
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(titleClickSubject)
+
             expand.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }
                 .doOnNext { expansionMap.putOrRemove(it) }
                 .autoDisposable(this)
                 .subscribe { handleExpansion(it, true) }
 
-            titleContainer.clicks()
+            edit.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
-                .subscribe(titleClickSubject)
+                .subscribe(editClickSubject)
 
             comment.heightChanges
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }

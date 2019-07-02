@@ -11,6 +11,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
+import me.proxer.app.comment.CommentActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.unsafeLazy
@@ -63,12 +64,18 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = ProfileCommentAdapter(savedInstanceState)
+        innerAdapter = ProfileCommentAdapter(savedInstanceState, storageHelper)
 
         innerAdapter.titleClickSubject
             .autoDisposable(this.scope())
             .subscribe {
                 MediaActivity.navigateTo(requireActivity(), it.entryId, it.entryName, it.category)
+            }
+
+        innerAdapter.editClickSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                CommentActivity.navigateTo(requireActivity(), it.id, it.entryId, it.entryName)
             }
 
         setHasOptionsMenu(true)

@@ -81,7 +81,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        innerAdapter = CommentsAdapter(savedInstanceState)
+        innerAdapter = CommentsAdapter(savedInstanceState, storageHelper)
 
         innerAdapter.profileClickSubject
             .autoDisposable(this.scope())
@@ -90,6 +90,12 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
                     requireActivity(), comment.authorId, comment.author, comment.image,
                     if (view.drawable != null && comment.image.isNotBlank()) view else null
                 )
+            }
+
+        innerAdapter.editClickSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                CommentActivity.navigateTo(requireActivity(), it.id, it.entryId, name)
             }
 
         setHasOptionsMenu(true)

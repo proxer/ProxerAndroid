@@ -26,6 +26,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.comments.CommentsAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.data.ParcelableStringBooleanMap
+import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
@@ -39,13 +40,17 @@ import me.proxer.library.util.ProxerUrls
 /**
  * @author Ruben Gees
  */
-class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, ViewHolder>() {
+class CommentsAdapter(
+    savedInstanceState: Bundle?,
+    private val storageHelper: StorageHelper
+) : BaseAdapter<ParsedComment, ViewHolder>() {
 
     private companion object {
         private const val EXPANDED_STATE = "comments_expanded"
     }
 
     var glide: GlideRequests? = null
+    val editClickSubject: PublishSubject<ParsedComment> = PublishSubject.create()
     val profileClickSubject: PublishSubject<Pair<ImageView, ParsedComment>> = PublishSubject.create()
     var categoryCallback: (() -> Category?)? = null
 
@@ -92,6 +97,7 @@ class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, 
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
 
+        internal val edit: ImageView by bindView(R.id.edit)
         internal val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
         internal val upvotes: TextView by bindView(R.id.upvotes)
 
@@ -117,9 +123,9 @@ class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, 
         private val maxHeight by unsafeLazy { comment.context.resources.displayMetrics.heightPixels / 4 }
 
         init {
-
             comment.glide = glide
 
+            edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
@@ -131,6 +137,7 @@ class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, 
 
             title.text = item.author
             upvotes.text = item.helpfulVotes.toString()
+            edit.isVisible = item.authorId == storageHelper.user?.id
 
             bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
             bindRatingRow(ratingStoryRow, ratingStory, item.ratingDetails.story.toFloat())
@@ -154,6 +161,11 @@ class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, 
         }
 
         private fun initListeners() {
+            titleContainer.clicks()
+                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .autoDisposable(this)
+                .subscribe(profileClickSubject)
+
             expand.clicks()
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }
                 .autoDisposable(this)
@@ -163,10 +175,10 @@ class CommentsAdapter(savedInstanceState: Bundle?) : BaseAdapter<ParsedComment, 
                     handleExpansion(it, true)
                 }
 
-            titleContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+            edit.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
-                .subscribe(profileClickSubject)
+                .subscribe(editClickSubject)
 
             comment.heightChanges
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }

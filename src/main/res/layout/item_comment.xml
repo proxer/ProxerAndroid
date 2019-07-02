@@ -40,10 +40,27 @@
                     android:layout_alignWithParentIfMissing="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="8dp"
-                    android:layout_toStartOf="@+id/upvoteIcon"
+                    android:layout_toStartOf="@+id/edit"
                     android:layout_toEndOf="@+id/image"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="Username" />
+
+                <me.proxer.app.ui.view.InfoImageButton
+                    android:id="@+id/edit"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_toStartOf="@+id/upvoteIcon"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/fragment_comment_edit"
+                    android:visibility="gone"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_japan"
+                    tools:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/upvoteIcon"
@@ -55,7 +72,8 @@
                     android:layout_marginEnd="2dp"
                     android:layout_marginBottom="8dp"
                     android:layout_toStartOf="@+id/upvotes"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/ic_japan" />
 
                 <TextView
                     android:id="@+id/upvotes"
