@@ -11,7 +11,6 @@ import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import androidx.sharetarget.ShortcutInfoCompatSaverImpl
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.chat.prv.LocalConference
@@ -79,11 +78,7 @@ object MessengerShortcuts : KoinComponent {
 
             if (needsUpdate) {
                 ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-                // TODO: Remove once ShortcutManagerCompat delegates properly.
-                ShortcutInfoCompatSaverImpl.getInstance(context).removeAllShortcuts()
-
                 ShortcutManagerCompat.addDynamicShortcuts(context, newShortcuts)
-                ShortcutInfoCompatSaverImpl.getInstance(context).addShortcuts(newShortcuts)
             }
         }
     }
