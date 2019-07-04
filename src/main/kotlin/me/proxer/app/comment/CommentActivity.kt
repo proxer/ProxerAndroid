@@ -17,6 +17,7 @@ import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.startActivity
+import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -75,8 +76,21 @@ class CommentActivity : DrawerActivity() {
 
         tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
 
+        viewModel.isUpdate.observe(this, Observer {
+            title = getString(
+                when (it) {
+                    true -> R.string.action_update_comment
+                    false -> R.string.action_create_comment
+                }
+            )
+        })
+
         viewModel.publishResult.observe(this, Observer {
-            if (it != null) finish()
+            if (it != null) {
+                toast(R.string.fragment_comment_published)
+
+                finish()
+            }
         })
 
         viewModel.publishError.observe(this, Observer {
@@ -113,7 +127,6 @@ class CommentActivity : DrawerActivity() {
     }
 
     private fun setupToolbar() {
-        title = getString(if (id == null) R.string.action_create_comment else R.string.action_update_comment)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.subtitle = name?.trim()
     }

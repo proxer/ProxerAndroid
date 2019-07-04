@@ -1,5 +1,6 @@
 package me.proxer.app.comment
 
+import androidx.lifecycle.MutableLiveData
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Single
@@ -44,6 +45,7 @@ class CommentViewModel(
                         false -> Single.error<Nothing>(error)
                     }
                 }
+                .doOnSuccess { isUpdate.postValue(it.id.isNotBlank() && it.content.isNotBlank()) }
         }
 
     private val publishSingle
@@ -62,6 +64,8 @@ class CommentViewModel(
                 }
             }
         }
+
+    val isUpdate = MutableLiveData(id.isNullOrBlank().not())
 
     val publishResult = ResettingMutableLiveData<Unit?>()
     val publishError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
