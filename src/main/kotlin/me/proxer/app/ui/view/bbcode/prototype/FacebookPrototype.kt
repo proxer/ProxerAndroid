@@ -6,7 +6,7 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 
 /**
  * @author Ruben Gees
@@ -19,7 +19,7 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
         val url = text.trim().toString()
 
-        return when (val parsedUrl = Utils.parseAndFixUrl(url)) {
+        return when (val parsedUrl = url.toPrefixedUrlOrNull()) {
             null -> text
             else -> text.toSpannableStringBuilder()
                 .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_facebook_link))

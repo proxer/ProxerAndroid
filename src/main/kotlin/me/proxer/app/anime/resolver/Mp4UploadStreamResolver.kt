@@ -3,9 +3,9 @@ package me.proxer.app.anime.resolver
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import okhttp3.Request
 
 /**
@@ -24,7 +24,7 @@ object Mp4UploadStreamResolver : StreamResolver() {
             client.newCall(
                 Request.Builder()
                     .get()
-                    .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                    .url(url.toPrefixedUrlOrNull() ?: throw StreamResolutionException())
                     .header("User-Agent", GENERIC_USER_AGENT)
                     .header("Connection", "close")
                     .build()
@@ -48,7 +48,7 @@ object Mp4UploadStreamResolver : StreamResolver() {
             val urlRegexResult = urlRegex.find(unpacked) ?: throw StreamResolutionException()
             val url = urlRegexResult.groupValues[1]
 
-            Utils.parseAndFixUrl(url) ?: throw StreamResolutionException()
+            url.toPrefixedUrlOrNull() ?: throw StreamResolutionException()
         }
         .map { StreamResolutionResult.Video(it, "video/mp4") }
 

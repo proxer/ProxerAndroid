@@ -22,10 +22,10 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.toPrefixedHttpUrl
 import me.proxer.app.util.extension.toast
 
 /**
@@ -97,7 +97,7 @@ object TextPrototype : BBPrototype {
 
                 when {
                     it.startsWith("@") -> ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
-                    webUrlRegex.matches(it) -> baseActivity.showPage(Utils.getAndFixUrl(it))
+                    webUrlRegex.matches(it) -> baseActivity.showPage(it.toPrefixedHttpUrl())
                 }
             }
 

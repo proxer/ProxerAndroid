@@ -5,8 +5,8 @@ import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.isPackageInstalled
 import org.koin.core.inject
 
 /**
@@ -25,7 +25,7 @@ object CrunchyrollStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
-            if (!Utils.isPackageInstalled(packageManager, CRUNCHYROLL_PACKAGE)) {
+            if (!packageManager.isPackageInstalled(CRUNCHYROLL_PACKAGE)) {
                 throw AppRequiredException(name, CRUNCHYROLL_PACKAGE)
             }
         }

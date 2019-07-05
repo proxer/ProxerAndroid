@@ -39,7 +39,6 @@ import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.resolveColor
@@ -77,7 +76,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimary))
+            requireActivity().window.statusBarColor = requireContext().resolveColor(R.attr.colorPrimary)
 
             innerAdapter.selectedMessages.let {
                 menu.findItem(R.id.reply).isVisible = it.size == 1 && it.first().userId != storageHelper.user?.id
@@ -110,7 +109,7 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimaryDark))
+            requireActivity().window.statusBarColor = requireContext().resolveColor(R.attr.colorPrimaryDark)
         }
     }
 

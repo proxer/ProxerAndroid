@@ -26,9 +26,9 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.events
 import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
 import okhttp3.HttpUrl
@@ -59,7 +59,7 @@ object PdfPrototype : AutoClosingPrototype {
             childViews.isEmpty() -> childViews
             else -> listOf(SubsamplingScaleImageView(parent.context).also { view: SubsamplingScaleImageView ->
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-                val parsedUrl = Utils.parseAndFixUrl(url)
+                val parsedUrl = url.toPrefixedUrlOrNull()
 
                 val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 

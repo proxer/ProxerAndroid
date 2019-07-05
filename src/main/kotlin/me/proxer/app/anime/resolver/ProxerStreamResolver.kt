@@ -4,9 +4,9 @@ import android.net.Uri
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 
@@ -27,7 +27,7 @@ object ProxerStreamResolver : StreamResolver() {
                     .newCall(
                         Request.Builder()
                             .get()
-                            .url(Utils.parseAndFixUrl(link) ?: throw StreamResolutionException())
+                            .url(link.toPrefixedUrlOrNull() ?: throw StreamResolutionException())
                             .header("User-Agent", USER_AGENT)
                             .header("Connection", "close")
                             .build()

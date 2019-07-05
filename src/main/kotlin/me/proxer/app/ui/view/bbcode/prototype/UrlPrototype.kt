@@ -14,7 +14,7 @@ import me.proxer.app.ui.view.bbcode.applyToAllViews
 import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
@@ -33,7 +33,7 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
 
     override fun construct(code: String, parent: BBTree): BBTree {
         val url = BBUtils.cutAttribute(code, attributeRegex)?.trim() ?: ""
-        val parsedUrl = Utils.parseAndFixUrl(url) ?: invalidUrl
+        val parsedUrl = url.toPrefixedUrlOrNull() ?: invalidUrl
 
         return BBTree(this, parent, args = BBArgs(custom = *arrayOf(URL_ARGUMENT to parsedUrl)))
     }

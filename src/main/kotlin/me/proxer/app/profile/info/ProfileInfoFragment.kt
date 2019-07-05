@@ -16,10 +16,10 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.ProfileViewModel
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.user.UserInfo
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -70,7 +70,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
         super.onViewCreated(view, savedInstanceState)
 
         statusText.linkClicks()
-            .map { Utils.parseAndFixUrl(it).toOptional() }
+            .map { it.toPrefixedUrlOrNull().toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }

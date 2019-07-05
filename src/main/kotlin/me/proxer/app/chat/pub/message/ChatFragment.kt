@@ -37,7 +37,6 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
@@ -73,7 +72,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
-            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimary))
+            requireActivity().window.statusBarColor = requireContext().resolveColor(R.attr.colorPrimary)
 
             innerAdapter.selectedMessages.let {
                 val user = storageHelper.user
@@ -108,7 +107,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             innerAdapter.clearSelection()
             innerAdapter.notifyDataSetChanged()
 
-            Utils.setStatusBarColorIfPossible(activity, requireContext().resolveColor(R.attr.colorPrimaryDark))
+            requireActivity().window.statusBarColor = requireContext().resolveColor(R.attr.colorPrimaryDark)
         }
     }
 

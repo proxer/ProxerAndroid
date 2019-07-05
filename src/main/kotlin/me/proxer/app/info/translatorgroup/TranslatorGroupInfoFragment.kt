@@ -18,11 +18,11 @@ import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toAppDrawable
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.info.TranslatorGroup
 import me.proxer.library.enums.Country
@@ -65,7 +65,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>(R.layou
         super.onViewCreated(view, savedInstanceState)
 
         link.linkClicks()
-            .map { Utils.parseAndFixUrl(it).toOptional() }
+            .map { it.toPrefixedUrlOrNull().toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { showPage(it) }

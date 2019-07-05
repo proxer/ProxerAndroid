@@ -15,7 +15,7 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -91,7 +91,7 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.show_in_browser -> {
-                val url = Utils.parseAndFixUrl(activity?.intent?.dataString ?: "")
+                val url = (activity?.intent?.dataString ?: "").toPrefixedUrlOrNull()
 
                 if (url != null) {
                     val mobileUrl = url.newBuilder()

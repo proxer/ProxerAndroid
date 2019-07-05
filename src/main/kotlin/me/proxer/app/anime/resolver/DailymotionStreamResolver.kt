@@ -6,9 +6,9 @@ import com.squareup.moshi.JsonEncodingException
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toBodySingle
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
@@ -31,7 +31,7 @@ object DailymotionStreamResolver : StreamResolver() {
                 client.newCall(
                     Request.Builder()
                         .get()
-                        .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                        .url(url.toPrefixedUrlOrNull() ?: throw StreamResolutionException())
                         .header("User-Agent", GENERIC_USER_AGENT)
                         .header("Connection", "close")
                         .build()

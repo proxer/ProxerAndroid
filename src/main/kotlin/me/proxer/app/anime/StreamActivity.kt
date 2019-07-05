@@ -63,9 +63,9 @@ import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTER
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.newTask
 import me.proxer.app.util.extension.toEpisodeAppString
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls.hasProxerStreamFileHost
@@ -101,7 +101,7 @@ class StreamActivity : BaseActivity() {
 
     private val isProxerStream: Boolean
         get() = intent.dataString
-            ?.let { Utils.parseAndFixUrl(it) }
+            ?.toPrefixedUrlOrNull()
             ?.hasProxerStreamFileHost
             ?: false
 

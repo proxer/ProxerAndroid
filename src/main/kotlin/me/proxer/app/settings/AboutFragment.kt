@@ -33,12 +33,12 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
-import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toPrefixedHttpUrl
 import me.proxer.app.util.extension.toast
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -62,12 +62,12 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
         private val excludedLibraries = arrayOf("fastadapter", "materialize")
 
-        private val teamLink = Utils.getAndFixUrl("https://proxer.me/team?device=default")
-        private val facebookLink = Utils.getAndFixUrl("https://facebook.com/Anime.Proxer.Me")
-        private val twitterLink = Utils.getAndFixUrl("https://twitter.com/proxerme")
-        private val youtubeLink = Utils.getAndFixUrl("https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA")
-        private val discordLink = Utils.getAndFixUrl("https://discord.gg/XwrEDmA")
-        private val repositoryLink = Utils.getAndFixUrl("https://github.com/proxer/ProxerAndroid")
+        private val teamLink = "https://proxer.me/team?device=default".toPrefixedHttpUrl()
+        private val facebookLink = "https://facebook.com/Anime.Proxer.Me".toPrefixedHttpUrl()
+        private val twitterLink = "https://twitter.com/proxerme".toPrefixedHttpUrl()
+        private val youtubeLink = "https://youtube.com/channel/UC7h-fT9Y9XFxuZ5GZpbcrtA".toPrefixedHttpUrl()
+        private val discordLink = "https://discord.gg/XwrEDmA".toPrefixedHttpUrl()
+        private val repositoryLink = "https://github.com/proxer/ProxerAndroid".toPrefixedHttpUrl()
 
         private const val supportId = "374605"
         private const val supportCategory = "anwendungen"
@@ -240,7 +240,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_developer_github_title)
             .subText(developerGithubName)
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
-            .setOnClickAction { showPage(Utils.getAndFixUrl("https://github.com/$developerGithubName")) }
+            .setOnClickAction { showPage("https://github.com/$developerGithubName".toPrefixedHttpUrl()) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(getString(R.string.about_developer_proxer_title))

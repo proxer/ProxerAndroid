@@ -5,6 +5,7 @@ package me.proxer.app.util.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -25,9 +26,11 @@ import me.proxer.app.R
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
+import me.proxer.library.ProxerException
 import me.proxer.library.util.ProxerUrls.hasProxerHost
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.koin.core.parameter.DefinitionParameters
 import timber.log.Timber
 import java.util.EnumSet
@@ -65,6 +68,12 @@ inline fun CharSequence.linkify(web: Boolean = true, mentions: Boolean = true, v
     return spannable
 }
 
+fun PackageManager.isPackageInstalled(packageName: String) = try {
+    getApplicationInfo(packageName, 0).enabled
+} catch (error: PackageManager.NameNotFoundException) {
+    false
+}
+
 inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Drawable> = load(url.toString())
     .transition(DrawableTransitionOptions.withCrossFade())
     .logErrors()
@@ -79,6 +88,16 @@ inline fun <T> GlideRequest<T>.logErrors(): GlideRequest<T> = this.addListener(o
 })
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
+
+fun String.toPrefixedUrlOrNull(): HttpUrl? = when {
+    this.startsWith("http://") || this.startsWith("https://") -> this.toHttpUrlOrNull()
+    else -> when {
+        this.startsWith("//") -> "http:$this"
+        else -> "http://$this"
+    }.toHttpUrlOrNull()
+}
+
+fun String.toPrefixedHttpUrl() = toPrefixedUrlOrNull() ?: throw ProxerException(ProxerException.ErrorType.PARSING)
 
 inline fun <T : Enum<T>> Bundle.putEnumSet(key: String, set: EnumSet<T>) {
     putIntArray(key, set.map { it.ordinal }.toIntArray())

@@ -29,12 +29,12 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
@@ -93,9 +93,9 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
         about.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
                 val httpUrl = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Utils.parseAndFixUrl(request.url.toString())
+                    request.url.toString().toPrefixedUrlOrNull()
                 } else {
-                    Utils.parseAndFixUrl(request.toString())
+                    request.toString().toPrefixedUrlOrNull()
                 }
 
                 return if (httpUrl != null) {
@@ -195,7 +195,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
         contentView.text = content.linkify(mentions = false)
 
         contentView.linkClicks()
-            .map { Utils.parseAndFixUrl(it).toOptional() }
+            .map { it.toPrefixedUrlOrNull().toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
             .subscribe { showPage(it) }

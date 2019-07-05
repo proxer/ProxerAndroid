@@ -1,20 +1,13 @@
 package me.proxer.app.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.ColorInt
 import com.bumptech.glide.request.target.Target
 import me.proxer.app.GlideApp
 import me.proxer.app.util.extension.androidUri
-import me.proxer.library.ProxerException
-import me.proxer.library.ProxerException.ErrorType
 import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 
@@ -25,14 +18,6 @@ object Utils {
 
     val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
-    fun setStatusBarColorIfPossible(activity: Activity?, @ColorInt color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity?.apply {
-                window?.statusBarColor = color
-            }
-        }
-    }
 
     fun getCircleBitmapFromUrl(context: Context, url: HttpUrl) = try {
         GlideApp.with(context)
@@ -45,22 +30,6 @@ object Utils {
         Timber.e(error)
 
         null
-    }
-
-    fun parseAndFixUrl(url: String) = when {
-        url.startsWith("http://") || url.startsWith("https://") -> url.toHttpUrlOrNull()
-        else -> when {
-            url.startsWith("//") -> "http:$url"
-            else -> "http://$url"
-        }.toHttpUrlOrNull()
-    }
-
-    fun getAndFixUrl(url: String) = parseAndFixUrl(url) ?: throw ProxerException(ErrorType.PARSING)
-
-    fun isPackageInstalled(packageManager: PackageManager, packageName: String) = try {
-        packageManager.getApplicationInfo(packageName, 0).enabled
-    } catch (error: PackageManager.NameNotFoundException) {
-        false
     }
 
     fun getNativeAppPackage(context: Context, url: HttpUrl): Set<String> {

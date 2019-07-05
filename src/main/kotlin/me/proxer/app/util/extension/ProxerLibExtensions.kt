@@ -26,7 +26,6 @@ import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.toBBTree
 import me.proxer.app.ui.view.bbcode.toSimpleBBTree
-import me.proxer.app.util.Utils
 import me.proxer.library.entity.anime.Stream
 import me.proxer.library.entity.chat.ChatMessage
 import me.proxer.library.entity.forum.Post
@@ -370,7 +369,7 @@ fun MediaType.isAgeRestricted(): Boolean {
 
 inline val Chapter.isOfficial: Boolean
     get() = if (pages == null) {
-        val serverUrl = Utils.parseAndFixUrl(server)
+        val serverUrl = server.toPrefixedUrlOrNull()
 
         serverUrl != null && serverUrl.host in arrayOf("www.webtoons.com", "www.lezhin.com")
     } else {

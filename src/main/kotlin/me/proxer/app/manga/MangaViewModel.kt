@@ -11,7 +11,6 @@ import me.proxer.app.exception.NotLoggedInException
 import me.proxer.app.exception.PartialException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.Utils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
@@ -20,6 +19,7 @@ import me.proxer.app.util.extension.isAgeRestricted
 import me.proxer.app.util.extension.isOfficial
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toMediaLanguage
+import me.proxer.app.util.extension.toPrefixedHttpUrl
 import me.proxer.library.api.Endpoint
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Category
@@ -55,7 +55,7 @@ class MangaViewModel(
                     .map { data ->
                         if (data.chapter.isOfficial) {
                             throw PartialException(
-                                MangaLinkException(data.chapter.title, Utils.getAndFixUrl(data.chapter.server)),
+                                MangaLinkException(data.chapter.title, data.chapter.server.toPrefixedHttpUrl()),
                                 entry
                             )
                         } else if (data.chapter.pages == null) {

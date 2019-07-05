@@ -5,10 +5,11 @@ import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.exception.AppRequiredException
 import me.proxer.app.exception.StreamResolutionException
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.isPackageInstalled
 import me.proxer.app.util.extension.toBodySingle
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Request
 import org.koin.core.inject
@@ -28,7 +29,7 @@ object WatchboxStreamResolver : StreamResolver() {
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {
-            if (!Utils.isPackageInstalled(packageManager, WATCHBOX_PACKAGE)) {
+            if (!packageManager.isPackageInstalled(WATCHBOX_PACKAGE)) {
                 throw AppRequiredException(name, WATCHBOX_PACKAGE)
             }
         }
@@ -38,7 +39,7 @@ object WatchboxStreamResolver : StreamResolver() {
                 .newCall(
                     Request.Builder()
                         .get()
-                        .url(Utils.parseAndFixUrl(url) ?: throw StreamResolutionException())
+                        .url(url.toPrefixedUrlOrNull() ?: throw StreamResolutionException())
                         .header("User-Agent", USER_AGENT)
                         .header("Connection", "close")
                         .build()

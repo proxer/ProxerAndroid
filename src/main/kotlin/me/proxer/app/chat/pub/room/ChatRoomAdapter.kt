@@ -17,11 +17,11 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
 
@@ -54,7 +54,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
                 .subscribe(clickSubject)
 
             topic.linkClicks()
-                .map { Utils.parseAndFixUrl(it).toOptional() }
+                .map { it.toPrefixedUrlOrNull().toOptional() }
                 .filterSome()
                 .autoDisposable(this)
                 .subscribe(linkClickSubject)

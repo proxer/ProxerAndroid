@@ -25,9 +25,9 @@ import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
-import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -54,7 +54,7 @@ object ImagePrototype : AutoClosingPrototype {
         val childViews = children.flatMap { it.makeViews(parent, args) }
 
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-        val proxyUrl = Utils.parseAndFixUrl(url)?.let { ProxerUrls.proxyImage(it) }
+        val proxyUrl = url.toPrefixedUrlOrNull()?.let { ProxerUrls.proxyImage(it) }
 
         val width = if (proxyUrl == null) null else args[WIDTH_ARGUMENT] as Int?
 

@@ -8,7 +8,7 @@ import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.linkifyUrl
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.ui.view.bbcode.toSpannableStringBuilder
-import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.toPrefixedUrlOrNull
 
 /**
  * @author Ruben Gees
@@ -34,12 +34,11 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 
-        return when (val url = Utils.parseAndFixUrl(
-            when {
-                type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
-                else -> urlOrId.toString()
-            }
-        )) {
+        return when (val url = when {
+            type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
+            else -> urlOrId.toString()
+        }
+            .toPrefixedUrlOrNull()) {
             null -> text
             else -> text.toSpannableStringBuilder()
                 .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_video_link))

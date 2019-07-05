@@ -18,7 +18,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
-import me.proxer.app.util.Utils
+import me.proxer.app.util.extension.isPackageInstalled
 import me.proxer.app.util.logging.TimberFileTree
 import me.proxer.app.util.logging.WorkManagerTimberLogger
 import org.koin.android.ext.koin.androidContext
@@ -65,8 +65,7 @@ class MainContentProvider : ContentProvider() {
 
                     if (
                         isUserResolvableError(errorCode) &&
-                        Utils.isPackageInstalled(
-                            safeContext.packageManager,
+                        safeContext.packageManager.isPackageInstalled(
                             GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE
                         )
                     ) {
