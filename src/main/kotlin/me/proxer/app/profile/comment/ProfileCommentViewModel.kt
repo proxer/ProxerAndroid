@@ -26,6 +26,7 @@ class ProfileCommentViewModel(
                     .category(category)
                     .page(page)
                     .limit(itemsOnPage)
+                    .minimumLength(1)
                     .buildSingle()
             }
             .observeOn(Schedulers.computation())
