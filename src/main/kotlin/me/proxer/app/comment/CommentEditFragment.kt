@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.ratingChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
@@ -87,6 +88,11 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.updateContent(it.toString()) }
 
+        editor.focusChanges()
+            .skipInitialValue()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { if (it) viewModel.hasFocused = true }
+
         ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
         bold.setIconicsImage(CommunityMaterial.Icon.cmd_format_bold, 32)
         italic.setIconicsImage(CommunityMaterial.Icon.cmd_format_italic, 32)
@@ -140,7 +146,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun onResume() {
         super.onResume()
 
-        if (viewModel.data.value != null) {
+        if (viewModel.data.value != null && viewModel.hasFocused) {
             focusEditor()
         }
     }
@@ -163,9 +169,9 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         if (editor.text.isBlank()) {
             if (data.content.isNotBlank()) {
                 editor.setText(data.content)
+            } else if (!viewModel.hasFocused) {
+                focusEditor()
             }
-
-            focusEditor()
         }
     }
 
@@ -211,12 +217,14 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     }
 
     private fun focusEditor() {
+        viewModel.hasFocused = true
+
         editor.requestFocus()
         inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun clearEditorFocus() {
         editor.clearFocus()
-        inputMethodManager.hideSoftInputFromWindow(editor.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        inputMethodManager.hideSoftInputFromWindow(editor.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }

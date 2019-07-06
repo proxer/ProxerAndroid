@@ -72,6 +72,8 @@ class CommentViewModel(
     val publishResult = ResettingMutableLiveData<Unit?>()
     val publishError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
+    var hasFocused = false
+
     private var updateDisposable: Disposable? = null
     private var publishDisposable: Disposable? = null
 
