@@ -25,6 +25,7 @@
                 android:fillViewport="true">
 
                 <LinearLayout
+                    android:id="@+id/contentContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -86,7 +87,6 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <FrameLayout
-                        android:id="@+id/contentContainer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:paddingLeft="@dimen/screen_horizontal_margin"
