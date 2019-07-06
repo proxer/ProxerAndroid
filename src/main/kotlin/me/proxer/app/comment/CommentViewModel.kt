@@ -54,12 +54,14 @@ class CommentViewModel(
                 comment == null || comment.content.isBlank() -> null
                 comment.id.isNotEmpty() -> api.comment.update(comment.id)
                     .comment(comment.content.trim())
+                    .rating(comment.overallRating)
                     .buildOptionalSingle()
 
                 else -> when (val it = entryId) {
                     null -> null
                     else -> api.comment.create(it)
                         .comment(comment.content.trim())
+                        .rating(comment.overallRating)
                         .buildOptionalSingle()
                 }
             }
@@ -81,6 +83,12 @@ class CommentViewModel(
         publishDisposable = null
 
         super.onCleared()
+    }
+
+    fun updateRating(rating: Float) {
+        require(rating in 0.0..5.0)
+
+        data.value = data.value?.copy(overallRating = (rating * 2).toInt())
     }
 
     fun updateContent(newContent: String) {

@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.ratingChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -45,6 +48,9 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         parametersOf(id, entryId)
     }
 
+    private val ratingTitle by bindView<TextView>(R.id.ratingTitle)
+    private val rating by bindView<RatingBar>(R.id.rating)
+    private val ratingClear by bindView<ImageButton>(R.id.ratingClear)
     private val editor by bindView<EditText>(R.id.editor)
     private val formatterBar by bindView<ViewGroup>(R.id.formatterBar)
     private val bold by bindView<ImageButton>(R.id.bold)
@@ -70,12 +76,18 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        rating.ratingChanges()
+            .skipInitialValue()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { viewModel.updateRating(it) }
+
         editor.textChanges()
             .skipInitialValue()
             .debounce(500, TimeUnit.MILLISECONDS)
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.updateContent(it.toString()) }
 
+        ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
         bold.setIconicsImage(CommunityMaterial.Icon.cmd_format_bold, 32)
         italic.setIconicsImage(CommunityMaterial.Icon.cmd_format_italic, 32)
         underlined.setIconicsImage(CommunityMaterial.Icon.cmd_format_underline, 32)
@@ -94,6 +106,10 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                 .autoDisposable(viewLifecycleOwner.scope())
                 .subscribe { insertTag(tag) }
         }
+
+        ratingClear.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { viewModel.updateRating(0f) }
 
         size.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -140,6 +156,10 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         formatterBar.isVisible = true
 
+        ratingTitle.text = getString(getRatingTitle(data.overallRating))
+        rating.rating = data.overallRating / 2f
+        ratingClear.isVisible = data.overallRating > 0f
+
         if (editor.text.isBlank()) {
             if (data.content.isNotBlank()) {
                 editor.setText(data.content)
@@ -174,6 +194,20 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         }
 
         focusEditor()
+    }
+
+    private fun getRatingTitle(rating: Int) = when (rating) {
+        1 -> R.string.fragment_comment_rating_title_1
+        2 -> R.string.fragment_comment_rating_title_2
+        3 -> R.string.fragment_comment_rating_title_3
+        4 -> R.string.fragment_comment_rating_title_4
+        5 -> R.string.fragment_comment_rating_title_5
+        6 -> R.string.fragment_comment_rating_title_6
+        7 -> R.string.fragment_comment_rating_title_7
+        8 -> R.string.fragment_comment_rating_title_8
+        9 -> R.string.fragment_comment_rating_title_9
+        10 -> R.string.fragment_comment_rating_title_10
+        else -> R.string.fragment_comment_rating_title_0
     }
 
     private fun focusEditor() {

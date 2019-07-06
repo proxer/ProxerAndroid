@@ -513,6 +513,20 @@
 
     <string name="fragment_comment_edit">Bearbeiten</string>
     <string name="fragment_comment_preview">Vorschau</string>
+
+    <string name="fragment_comment_rating_title_0">Bewertung</string>
+    <string name="fragment_comment_rating_title_1">Bewertung: Katastrophal</string>
+    <string name="fragment_comment_rating_title_2">Bewertung: Zeitverschwendung</string>
+    <string name="fragment_comment_rating_title_3">Bewertung: Schwach</string>
+    <string name="fragment_comment_rating_title_4">Bewertung: Unterdurchschnittlich</string>
+    <string name="fragment_comment_rating_title_5">Bewertung: Durchschnittlich</string>
+    <string name="fragment_comment_rating_title_6">Bewertung: Zufriedenstellend</string>
+    <string name="fragment_comment_rating_title_7">Bewertung: Sehenswert</string>
+    <string name="fragment_comment_rating_title_8">Bewertung: Hervorragend</string>
+    <string name="fragment_comment_rating_title_9">Bewertung: Toptitel</string>
+    <string name="fragment_comment_rating_title_10">Bewertung: Meisterwerk</string>
+
+    <string name="fragment_comment_rating_clear_content_description">Zurücksetzen</string>
     <string name="fragment_comment_edit_hint">Schreibe hier deinen Kommentar</string>
     <string name="fragment_comment_edit_bold">Fett</string>
     <string name="fragment_comment_edit_italic">Kursiv</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -23,27 +24,88 @@
                 android:layout_weight="1"
                 android:fillViewport="true">
 
-                <FrameLayout
-                    android:id="@+id/contentContainer"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/screen_horizontal_margin"
-                    android:paddingTop="@dimen/screen_vertical_margin"
-                    android:paddingRight="@dimen/screen_horizontal_margin"
-                    android:paddingBottom="@dimen/screen_vertical_margin">
+                    android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/editor"
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="@dimen/screen_vertical_margin"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="@dimen/screen_vertical_margin"
+                        android:padding="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true">
+
+                            <TextView
+                                android:id="@+id/ratingTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:padding="8dp"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="?attr/colorSecondary"
+                                tools:text="@string/fragment_comment_rating_title_8" />
+
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/rating"
+                                style="@style/Widget.MaterialRatingBar.RatingBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ratingTitle"
+                                android:layout_marginBottom="8dp"
+                                android:layout_toStartOf="@+id/ratingClear"
+                                android:numStars="5"
+                                android:paddingLeft="-3dp"
+                                android:paddingRight="-3dp"
+                                android:stepSize="0.5"
+                                app:mrb_fillBackgroundStars="true" />
+
+                            <me.proxer.app.ui.view.InfoImageButton
+                                android:id="@+id/ratingClear"
+                                android:layout_width="32dp"
+                                android:layout_height="0dp"
+                                android:layout_alignTop="@+id/rating"
+                                android:layout_alignBottom="@+id/rating"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:contentDescription="@string/fragment_comment_rating_clear_content_description"
+                                android:visibility="gone"
+                                tools:src="@drawable/ic_japan"
+                                tools:visibility="visible" />
+                        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <FrameLayout
+                        android:id="@+id/contentContainer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="top"
-                        android:background="@null"
-                        android:gravity="top"
-                        android:hint="@string/fragment_comment_edit_hint"
-                        android:importantForAutofill="no"
-                        android:inputType="textMultiLine"
-                        tools:targetApi="o" />
-                </FrameLayout>
+                        android:paddingLeft="@dimen/screen_horizontal_margin"
+                        android:paddingRight="@dimen/screen_horizontal_margin"
+                        android:paddingBottom="@dimen/screen_vertical_margin">
+
+                        <EditText
+                            android:id="@+id/editor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:background="@null"
+                            android:gravity="top"
+                            android:hint="@string/fragment_comment_edit_hint"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine"
+                            tools:targetApi="o" />
+                    </FrameLayout>
+                </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
             <HorizontalScrollView
