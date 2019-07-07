@@ -151,8 +151,9 @@
                     <EditText
                         android:id="@+id/editor"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
                         android:layout_gravity="top"
+                        android:layout_weight="1"
                         android:background="@null"
                         android:gravity="top"
                         android:hint="@string/fragment_comment_edit_hint"

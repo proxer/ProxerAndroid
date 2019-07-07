@@ -113,6 +113,8 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         rulesContainer.clicks().mergeWith(expandRules.clicks())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
+                clearEditorFocus()
+
                 rules.isVisible = !rules.isVisible
 
                 ViewCompat.animate(expandRules).rotation(if (rules.isVisible) 180f else 0f)
@@ -203,8 +205,6 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         if (editor.text.isBlank()) {
             if (data.content.isNotBlank()) {
                 editor.setText(data.content)
-            } else if (!viewModel.hasFocused) {
-                focusEditor()
             }
         }
     }
