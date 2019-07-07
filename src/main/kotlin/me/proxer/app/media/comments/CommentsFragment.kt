@@ -1,5 +1,7 @@
 package me.proxer.app.media.comments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -17,13 +19,19 @@ import com.mikepenz.iconics.typeface.library.community.material.CommunityMateria
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.comment.CommentActivity
+import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.getSafeParcelableExtra
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -95,7 +103,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         innerAdapter.editClickSubject
             .autoDisposable(this.scope())
             .subscribe {
-                CommentActivity.navigateTo(requireActivity(), it.id, it.entryId, name)
+                CommentActivity.navigateTo(this, it.id, it.entryId, name)
             }
 
         setHasOptionsMenu(true)
@@ -121,7 +129,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
 
         create.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { CommentActivity.navigateTo(requireActivity(), entryId = id, name = name) }
+            .subscribe { CommentActivity.navigateTo(this, entryId = id, name = name) }
 
         TooltipCompat.setTooltipText(create, getString(R.string.action_write_comment))
     }
@@ -130,6 +138,16 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         innerAdapter.categoryCallback = null
 
         super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(CommentActivity.COMMENT_EXTRA) }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(this.scope())
+                .subscribeAndLogErrors { viewModel.updateComment(it) }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

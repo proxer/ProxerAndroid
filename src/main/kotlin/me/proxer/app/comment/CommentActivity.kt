@@ -1,9 +1,12 @@
 package me.proxer.app.comment
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
@@ -15,8 +18,8 @@ import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
+import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.multilineSnackbar
-import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,16 +31,27 @@ import org.koin.core.parameter.parametersOf
 class CommentActivity : DrawerActivity() {
 
     companion object {
+        const val COMMENT_REQUEST = 53_454
+        const val COMMENT_EXTRA = "comment"
+
         private const val ID_ARGUMENT = "id"
         private const val ENTRY_ID_ARGUMENT = "entry_id"
         private const val NAME_ARGUMENT = "name_id"
 
-        fun navigateTo(
-            context: Activity,
+        fun navigateTo(context: Activity, id: String? = null, entryId: String? = null, name: String? = null) {
+            context.startActivityForResult(getIntent(context, id, entryId, name), COMMENT_REQUEST)
+        }
+
+        fun navigateTo(context: Fragment, id: String? = null, entryId: String? = null, name: String? = null) {
+            context.startActivityForResult(getIntent(context.requireContext(), id, entryId, name), COMMENT_REQUEST)
+        }
+
+        private fun getIntent(
+            context: Context,
             id: String? = null,
             entryId: String? = null,
             name: String? = null
-        ) = context.startActivity<CommentActivity>(
+        ) = context.intentFor<CommentActivity>(
             ID_ARGUMENT to id,
             ENTRY_ID_ARGUMENT to entryId,
             NAME_ARGUMENT to name
@@ -87,6 +101,10 @@ class CommentActivity : DrawerActivity() {
 
         viewModel.publishResult.observe(this, Observer {
             if (it != null) {
+                viewModel.data.value?.also { comment ->
+                    setResult(Activity.RESULT_OK, Intent().putExtra(COMMENT_EXTRA, comment))
+                }
+
                 toast(R.string.fragment_comment_published)
 
                 finish()

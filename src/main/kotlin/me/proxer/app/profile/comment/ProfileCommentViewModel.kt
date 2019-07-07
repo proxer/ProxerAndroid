@@ -3,9 +3,11 @@ package me.proxer.app.profile.comment
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
+import me.proxer.app.comment.LocalComment
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.toParsedUserComment
 import me.proxer.library.enums.Category
+import org.threeten.bp.Instant
 import kotlin.properties.Delegates
 
 /**
@@ -34,5 +36,20 @@ class ProfileCommentViewModel(
 
     var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()
+    }
+
+    fun updateComment(comment: LocalComment) {
+        data.value = data.value?.map {
+            if (it.id == comment.id) {
+                it.copy(
+                    ratingDetails = comment.ratingDetails,
+                    parsedContent = comment.parsedContent,
+                    overallRating = comment.overallRating,
+                    instant = Instant.now()
+                )
+            } else {
+                it
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 package me.proxer.app.profile.comment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,11 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.comment.CommentActivity
+import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.getSafeParcelableExtra
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -75,10 +83,20 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
         innerAdapter.editClickSubject
             .autoDisposable(this.scope())
             .subscribe {
-                CommentActivity.navigateTo(requireActivity(), it.id, it.entryId, it.entryName)
+                CommentActivity.navigateTo(this, it.id, it.entryId, it.entryName)
             }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(CommentActivity.COMMENT_EXTRA) }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(this.scope())
+                .subscribeAndLogErrors { viewModel.updateComment(it) }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

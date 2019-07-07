@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.recyclerview.widget.RecyclerView
 import com.uber.autodispose.CompletableSubscribeProxy
 import com.uber.autodispose.ObservableSubscribeProxy
+import com.uber.autodispose.SingleSubscribeProxy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -165,6 +166,28 @@ inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSucc
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
+    return this.subscribe({}, {
+        Timber.e(it)
+    })
+}
+
+inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(
+    noinline onSuccess: (T) -> Unit,
+    noinline onError: (Throwable) -> Unit
+): Disposable {
+    return this.subscribe(onSuccess) {
+        Timber.e(it)
+        onError(it)
+    }
+}
+
+inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): Disposable {
+    return this.subscribe(onSuccess) {
+        Timber.e(it)
+    }
+}
+
+inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
     return this.subscribe({}, {
         Timber.e(it)
     })
