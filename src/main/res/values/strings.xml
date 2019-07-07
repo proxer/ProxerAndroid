@@ -514,6 +514,43 @@
     <string name="fragment_comment_edit">Bearbeiten</string>
     <string name="fragment_comment_preview">Vorschau</string>
 
+    <string name="fragment_comment_rules_title">Regeln</string>
+    <string name="fragment_comment_rules_expand_content_description">Ausklappen</string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_1">
+        <![CDATA[
+        Inhalte die Spoiler enthalten, aber nicht als Spoiler markiert wurden werden gelöscht!
+        Verderbe anderen nicht den Spaß am Anime/Manga.
+        ]]>
+    </string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_2">
+        <![CDATA[
+        Keine Antworten zu anderen Kommentaren! Jeder hat seine eigene Meinung.
+        Vergiss nicht, dass du die Kommentare an erster Stelle für DICH schreibst.
+        ]]>
+    </string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_3">
+        <![CDATA[
+        BEGRÜNDE deine Meinung und schreibe so, dass es anderen hilft.
+        ]]>
+    </string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_4">
+        <![CDATA[
+        <u>Sei kritisch.</u> Verteil nicht wahllos hohe Bewertungen.
+        Das führt dazu,dass deine Kommentare/Bewertungen nicht ernst genommen werden.
+        Sei bereit auch schlechte Bewertungen abzugeben!
+        ]]>
+    </string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_5">
+        <![CDATA[
+        Plagiate (Kopien) sind <u>in keinster Weise</u> gestattet (auch mit Quellenangaben)!
+        ]]>
+    </string>
+
     <string name="fragment_comment_rating_title_0">Bewertung</string>
     <string name="fragment_comment_rating_title_1">Bewertung: Katastrophal</string>
     <string name="fragment_comment_rating_title_2">Bewertung: Zeitverschwendung</string>

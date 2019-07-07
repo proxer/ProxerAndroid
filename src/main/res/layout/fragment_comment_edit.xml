@@ -31,10 +31,72 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/rulesContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="@dimen/screen_vertical_margin"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="@dimen/screen_vertical_margin"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true">
+
+                            <me.proxer.app.ui.view.InfoImageButton
+                                android:id="@+id/expandRules"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:contentDescription="@string/fragment_comment_rules_expand_content_description"
+                                android:focusable="true"
+                                tools:src="@drawable/ic_japan" />
+
+                            <TextView
+                                android:id="@+id/rulesTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/expandRules"
+                                android:layout_alignBottom="@+id/expandRules"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_toEndOf="@+id/expandRules"
+                                android:gravity="center_vertical"
+                                android:text="@string/fragment_comment_rules_title"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                            <TextView
+                                android:id="@+id/rules"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/rulesTitle"
+                                android:layout_alignParentEnd="true"
+                                android:layout_margin="8dp"
+                                android:layout_toEndOf="@+id/expandRules"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:visibility="gone"
+                                tools:text="Rule 1: Test\nRule: 2: Test2"
+                                tools:visibility="visible" />
+
+                        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="@dimen/screen_vertical_margin"
                         android:padding="8dp">
@@ -103,6 +165,7 @@
                             android:hint="@string/fragment_comment_edit_hint"
                             android:importantForAutofill="no"
                             android:inputType="textMultiLine"
+                            android:minHeight="200dp"
                             tools:targetApi="o" />
                     </FrameLayout>
                 </LinearLayout>

@@ -1,6 +1,9 @@
 package me.proxer.app.comment
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
+import androidx.core.text.parseAsHtml
+import androidx.core.text.set
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
@@ -25,6 +31,7 @@ import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -49,6 +56,9 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         parametersOf(id, entryId)
     }
 
+    private val rulesContainer by bindView<ViewGroup>(R.id.rulesContainer)
+    private val expandRules by bindView<ImageButton>(R.id.expandRules)
+    private val rules by bindView<TextView>(R.id.rules)
     private val ratingTitle by bindView<TextView>(R.id.ratingTitle)
     private val rating by bindView<RatingBar>(R.id.rating)
     private val ratingClear by bindView<ImageButton>(R.id.ratingClear)
@@ -77,6 +87,31 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        rules.text = resources.getStringArray(R.array.fragment_comment_rules)
+            .joinTo(SpannableStringBuilder(), "\n\n") {
+                SpannableString(it.parseAsHtml()).apply { this[0..length] = BulletSpan(requireContext().dip(6)) }
+            }
+
+        expandRules.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+        ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
+        bold.setIconicsImage(CommunityMaterial.Icon.cmd_format_bold, 32)
+        italic.setIconicsImage(CommunityMaterial.Icon.cmd_format_italic, 32)
+        underlined.setIconicsImage(CommunityMaterial.Icon.cmd_format_underline, 32)
+        strikethrough.setIconicsImage(CommunityMaterial.Icon.cmd_format_strikethrough_variant, 32)
+        size.setIconicsImage(CommunityMaterial.Icon.cmd_format_size, 32)
+        left.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_left, 32)
+        center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
+        right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
+        spoiler.setIconicsImage(CommunityMaterial.Icon.cmd_eye_off, 32)
+
+        rulesContainer.clicks().mergeWith(expandRules.clicks())
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                rules.isVisible = !rules.isVisible
+
+                ViewCompat.animate(expandRules).rotation(if (rules.isVisible) 180f else 0f)
+            }
+
         rating.ratingChanges()
             .skipInitialValue()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -92,17 +127,6 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             .skipInitialValue()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { if (it) viewModel.hasFocused = true }
-
-        ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
-        bold.setIconicsImage(CommunityMaterial.Icon.cmd_format_bold, 32)
-        italic.setIconicsImage(CommunityMaterial.Icon.cmd_format_italic, 32)
-        underlined.setIconicsImage(CommunityMaterial.Icon.cmd_format_underline, 32)
-        strikethrough.setIconicsImage(CommunityMaterial.Icon.cmd_format_strikethrough_variant, 32)
-        size.setIconicsImage(CommunityMaterial.Icon.cmd_format_size, 32)
-        left.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_left, 32)
-        center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
-        right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
-        spoiler.setIconicsImage(CommunityMaterial.Icon.cmd_eye_off, 32)
 
         arrayOf(
             bold to "b", italic to "i", underlined to "u", strikethrough to "s",
