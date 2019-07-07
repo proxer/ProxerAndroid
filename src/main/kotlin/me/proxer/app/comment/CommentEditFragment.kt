@@ -1,5 +1,6 @@
 package me.proxer.app.comment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -59,10 +60,14 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val rulesContainer by bindView<ViewGroup>(R.id.rulesContainer)
     private val expandRules by bindView<ImageButton>(R.id.expandRules)
     private val rules by bindView<TextView>(R.id.rules)
+
     private val ratingTitle by bindView<TextView>(R.id.ratingTitle)
     private val rating by bindView<RatingBar>(R.id.rating)
     private val ratingClear by bindView<ImageButton>(R.id.ratingClear)
+
     private val editor by bindView<EditText>(R.id.editor)
+    private val counter by bindView<TextView>(R.id.counter)
+
     private val formatterBar by bindView<ViewGroup>(R.id.formatterBar)
     private val bold by bindView<ImageButton>(R.id.bold)
     private val italic by bindView<ImageButton>(R.id.italic)
@@ -84,6 +89,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val entryId: String?
         get() = hostingActivity.entryId
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -122,6 +128,10 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             .debounce(500, TimeUnit.MILLISECONDS)
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.updateContent(it.toString()) }
+
+        editor.textChanges()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { counter.text = "${it.length} / 20000" }
 
         editor.focusChanges()
             .skipInitialValue()

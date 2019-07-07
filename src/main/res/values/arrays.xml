@@ -80,5 +80,6 @@
         <item>@string/fragment_comment_rule_3</item>
         <item>@string/fragment_comment_rule_4</item>
         <item>@string/fragment_comment_rule_5</item>
+        <item>@string/fragment_comment_rule_6</item>
     </string-array>
 </resources>

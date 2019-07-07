@@ -1,6 +1,7 @@
 package me.proxer.app.comment
 
 import androidx.lifecycle.MutableLiveData
+import com.gojuno.koptional.Optional
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Single
@@ -27,6 +28,8 @@ class CommentViewModel(
 ) : BaseViewModel<LocalComment>() {
 
     companion object {
+        private const val MAX_LENGTH = 20_000
+
         private val defaultComment = LocalComment(
             id = "", entryId = "", mediaProgress = UserMediaProgress.WATCHED,
             ratingDetails = RatingDetails(genre = 0, story = 0, animation = 0, characters = 0, music = 0),
@@ -52,6 +55,7 @@ class CommentViewModel(
         get() = data.value.let { comment ->
             when {
                 comment == null || comment.content.isBlank() -> null
+                comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
                 comment.id.isNotEmpty() -> api.comment.update(comment.id)
                     .comment(comment.content.trim())
                     .rating(comment.overallRating)

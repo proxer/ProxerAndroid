@@ -148,26 +148,32 @@
                         </RelativeLayout>
                     </com.google.android.material.card.MaterialCardView>
 
-                    <FrameLayout
+                    <EditText
+                        android:id="@+id/editor"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="top"
+                        android:background="@null"
+                        android:gravity="top"
+                        android:hint="@string/fragment_comment_edit_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:minHeight="300dp"
                         android:paddingLeft="@dimen/screen_horizontal_margin"
                         android:paddingRight="@dimen/screen_horizontal_margin"
-                        android:paddingBottom="@dimen/screen_vertical_margin">
+                        android:paddingBottom="@dimen/screen_vertical_margin"
+                        tools:targetApi="o" />
 
-                        <EditText
-                            android:id="@+id/editor"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="top"
-                            android:background="@null"
-                            android:gravity="top"
-                            android:hint="@string/fragment_comment_edit_hint"
-                            android:importantForAutofill="no"
-                            android:inputType="textMultiLine"
-                            android:minHeight="200dp"
-                            tools:targetApi="o" />
-                    </FrameLayout>
+                    <TextView
+                        android:id="@+id/counter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:paddingLeft="@dimen/screen_horizontal_margin"
+                        android:paddingRight="@dimen/screen_horizontal_margin"
+                        android:paddingBottom="@dimen/screen_vertical_margin"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        tools:text="5 / 200" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 

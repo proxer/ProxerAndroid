@@ -136,6 +136,8 @@
         Dieses Kapitel ist aufgrund von einer Lizensierung nicht im internen Reader verfügbar
     </string>
 
+    <string name="error_comment_too_long">Der Kommentar darf maximal 20000 Zeichen lang sein</string>
+
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_duplicate_participant">Diesen Teilnehmer hast du schon hinzugefügt</string>
     <string name="error_self_participant">Du kannst dich nicht selbst hinzufügen</string>
@@ -548,6 +550,12 @@
     <string name="fragment_comment_rule_5">
         <![CDATA[
         Plagiate (Kopien) sind <u>in keinster Weise</u> gestattet (auch mit Quellenangaben)!
+        ]]>
+    </string>
+    <!-- language=HTML -->
+    <string name="fragment_comment_rule_6">
+        <![CDATA[
+        Dein Kommentar muss mindestens 300 Zeichen lang sein um öffentlich angezeigt werden.
         ]]>
     </string>
 
