@@ -202,10 +202,8 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         rating.rating = data.overallRating / 2f
         ratingClear.isVisible = data.overallRating > 0f
 
-        if (editor.text.isBlank()) {
-            if (data.content.isNotBlank()) {
-                editor.setText(data.content)
-            }
+        if (editor.text.isBlank() && data.content.isNotBlank()) {
+            editor.setText(data.content)
         }
     }
 
