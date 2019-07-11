@@ -22,7 +22,8 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -40,12 +41,12 @@ import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -417,15 +418,15 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         emojiButton.setImageDrawable(
             IconicsDrawable(requireContext(), emojiButtonIcon)
                 .iconColor(requireContext())
-                .size(32.toIconicsSizeDp())
-                .padding(6.toIconicsSizeDp())
+                .sizeDp(32)
+                .paddingDp(6)
         )
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .color(R.attr.colorSecondary.toIconicsColorAttr(requireContext()))
-                .size(32.toIconicsSizeDp())
-                .padding(4.toIconicsSizeDp())
+                .colorAttr(requireContext(), R.attr.colorSecondary)
+                .sizeDp(32)
+                .paddingDp(4)
         )
     }
 }

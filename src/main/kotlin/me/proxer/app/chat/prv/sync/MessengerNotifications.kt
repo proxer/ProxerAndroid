@@ -18,8 +18,8 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.text.set
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColor
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.sizeDp
 import me.proxer.app.MainActivity
 import me.proxer.app.R
 import me.proxer.app.auth.LocalUser
@@ -225,16 +225,19 @@ object MessengerNotifications : KoinComponent {
             context, ProxerUrls.userImage(conference.image)
         )
 
-        else -> IconicsDrawable(context)
-            .icon(
-                when (conference.isGroup) {
-                    true -> CommunityMaterial.Icon.cmd_account_multiple
-                    false -> CommunityMaterial.Icon.cmd_account
-                }
-            )
-            .color(ContextCompat.getColor(context, R.color.primary).toIconicsColor())
-            .size(96.toIconicsSizeDp())
-            .toBitmap()
+        else -> {
+            ContextCompat.getColor(context, R.color.primary)
+            IconicsDrawable(context)
+                .icon(
+                    when (conference.isGroup) {
+                        true -> CommunityMaterial.Icon.cmd_account_multiple
+                        false -> CommunityMaterial.Icon.cmd_account
+                    }
+                )
+                .colorRes(R.color.primary)
+                .sizeDp(96)
+                .toBitmap()
+        }
     }
 
     private fun buildIndividualStyle(

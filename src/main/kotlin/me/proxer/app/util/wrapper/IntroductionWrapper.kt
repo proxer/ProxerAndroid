@@ -9,8 +9,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.setPadding
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColorRes
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.rubengees.introduction.IntroductionBuilder
 import com.rubengees.introduction.Option
 import com.rubengees.introduction.Slide
@@ -37,15 +38,15 @@ object IntroductionWrapper {
                     }
                     1 -> image.setImageDrawable(
                         IconicsDrawable(image.context, CommunityMaterial.Icon.cmd_bell_outline)
-                            .size(256.toIconicsSizeDp())
-                            .padding((padding / 2).toIconicsSizeDp())
-                            .color(R.color.on_primary.toIconicsColorRes())
+                            .sizeDp(256)
+                            .paddingDp(padding / 2)
+                            .colorRes(R.color.on_primary)
                     )
                     2 -> image.setImageDrawable(
                         IconicsDrawable(image.context, CommunityMaterial.Icon2.cmd_theme_light_dark)
-                            .size(256.toIconicsSizeDp())
-                            .padding((padding / 2).toIconicsSizeDp())
-                            .color(R.color.on_primary.toIconicsColorRes())
+                            .sizeDp(256)
+                            .paddingDp(padding / 2)
+                            .colorRes(R.color.on_primary)
                     )
                 }
             }

@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Single
@@ -30,9 +30,9 @@ import me.proxer.app.comment.CommentActivity
 import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.getSafeParcelableExtra
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
@@ -122,7 +122,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         create.setImageDrawable(
             IconicsDrawable(requireContext())
                 .icon(CommunityMaterial.Icon2.cmd_pencil)
-                .color(R.attr.colorOnPrimary.toIconicsColorAttr(requireContext()))
+                .colorAttr(requireContext(), R.attr.colorOnPrimary)
                 .sizeDp(64)
                 .paddingDp(8)
         )

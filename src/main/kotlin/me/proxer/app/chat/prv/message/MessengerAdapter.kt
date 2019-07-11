@@ -15,7 +15,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindOptionalView
@@ -271,7 +271,7 @@ class MessengerAdapter(
         init {
             sendStatus?.setImageDrawable(
                 IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock_outline)
-                    .size(16.toIconicsSizeDp())
+                    .sizeDp(16)
                     .iconColor(text.context)
             )
         }

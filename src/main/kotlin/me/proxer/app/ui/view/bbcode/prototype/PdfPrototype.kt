@@ -14,7 +14,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import de.number42.subsampling_pdf_decoder.PDFDecoder
@@ -103,7 +103,7 @@ object PdfPrototype : AutoClosingPrototype {
             ImageSource.bitmap(
                 IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh)
                     .iconColor(view.context)
-                    .size(32.toIconicsSizeDp())
+                    .sizeDp(32)
                     .toBitmap()
             )
         )

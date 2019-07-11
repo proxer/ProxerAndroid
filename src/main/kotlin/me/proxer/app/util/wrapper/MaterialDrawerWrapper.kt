@@ -10,7 +10,7 @@ import com.mikepenz.crossfader.Crossfader
 import com.mikepenz.crossfader.view.GmailStyleCrossFadeSlidingPaneLayout
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
@@ -26,9 +26,10 @@ import io.reactivex.subjects.PublishSubject
 import me.proxer.app.R
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.backgroundColorAttr
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.library.util.ProxerUrls
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -203,7 +204,7 @@ class MaterialDrawerWrapper(
         .withGmailStyleSwiping()
         .build()
         .apply {
-            miniDrawer.withCrossFader(CrossfadeWrapper(this))
+            miniDrawer.withCrossFader(CrossfaderWrapper(this))
             getCrossFadeSlidingPaneLayout()?.setShadowResourceLeft(R.drawable.material_drawer_shadow_left)
         }
 
@@ -256,9 +257,9 @@ class MaterialDrawerWrapper(
                         if (it.image.isBlank()) {
                             withIcon(
                                 IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
-                                    .size(48.toIconicsSizeDp())
-                                    .color(R.attr.colorOnPrimary.toIconicsColorAttr(context))
-                                    .backgroundColor(R.attr.colorPrimary.toIconicsColorAttr(context))
+                                    .sizeDp(48)
+                                    .colorAttr(context, R.attr.colorOnPrimary)
+                                    .backgroundColorAttr(context, R.attr.colorPrimary)
                             )
                         } else {
                             withIcon(ProxerUrls.userImage(it.image).toString())
@@ -363,7 +364,7 @@ class MaterialDrawerWrapper(
         }
     }
 
-    private class CrossfadeWrapper(private val crossfader: Crossfader<*>) : ICrossfader {
+    private class CrossfaderWrapper(private val crossfader: Crossfader<*>) : ICrossfader {
         override val isCrossfaded get() = crossfader.isCrossFaded
         override fun crossfade() = crossfader.crossFade()
     }

@@ -6,11 +6,12 @@ import android.net.Uri
 import android.widget.ImageView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import me.proxer.app.GlideApp
 import me.proxer.app.R
-import me.proxer.app.util.extension.toIconicsColorAttr
+import me.proxer.app.util.extension.backgroundColorAttr
+import me.proxer.app.util.extension.colorAttr
 
 /**
  * @author Ruben Gees
@@ -29,7 +30,7 @@ class GlideDrawerImageLoader : AbstractDrawerImageLoader() {
 
     override fun placeholder(ctx: Context, tag: String?): IconicsDrawable = IconicsDrawable(ctx)
         .icon(CommunityMaterial.Icon.cmd_account)
-        .size(48.toIconicsSizeDp())
-        .color(R.attr.colorOnPrimary.toIconicsColorAttr(ctx))
-        .backgroundColor(R.attr.colorPrimary.toIconicsColorAttr(ctx))
+        .sizeDp(48)
+        .colorAttr(ctx, R.attr.colorOnPrimary)
+        .backgroundColorAttr(ctx, R.attr.colorPrimary)
 }

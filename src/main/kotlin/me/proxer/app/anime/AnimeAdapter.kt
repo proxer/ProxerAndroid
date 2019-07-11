@@ -13,9 +13,11 @@ import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.IconicsSize
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -28,11 +30,11 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ui.view.BetterLinkTextView
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -287,14 +289,14 @@ class AnimeAdapter(
         private fun generatePlayDrawable(): IconicsDrawable {
             return IconicsDrawable(play.context)
                 .icon(CommunityMaterial.Icon2.cmd_play)
-                .size(28.toIconicsSizeDp())
-                .padding(8.toIconicsSizeDp())
-                .color(R.attr.colorOnPrimary.toIconicsColorAttr(play.context))
+                .sizeDp(28)
+                .paddingDp(8)
+                .colorAttr(play.context, R.attr.colorOnPrimary)
         }
 
         private fun generateInfoDrawable(icon: IIcon): IconicsDrawable {
             return IconicsDrawable(info.context, icon)
-                .size(26.toIconicsSizeDp())
+                .size(IconicsSize.dp(26))
                 .iconColor(info.context)
         }
     }

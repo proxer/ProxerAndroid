@@ -37,6 +37,7 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toPrefixedHttpUrl
 import me.proxer.app.util.extension.toast
@@ -247,9 +248,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    colorFilter = BlendModeColorFilter(R.attr.colorIcon, BlendMode.SRC_IN)
+                    colorFilter = BlendModeColorFilter(context.resolveColor(R.attr.colorIcon), BlendMode.SRC_IN)
                 } else {
-                    colorFilter = PorterDuffColorFilter(R.attr.colorIcon, PorterDuff.Mode.SRC_IN)
+                    colorFilter = PorterDuffColorFilter(context.resolveColor(R.attr.colorIcon), PorterDuff.Mode.SRC_IN)
                 }
             })
             .setOnClickAction {

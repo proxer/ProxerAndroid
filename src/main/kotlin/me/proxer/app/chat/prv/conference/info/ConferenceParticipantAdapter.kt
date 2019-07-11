@@ -15,7 +15,8 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -24,12 +25,12 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.conference.info.ConferenceParticipantAdapter.ViewHolder
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.messenger.ConferenceParticipant
 import me.proxer.library.util.ProxerUrls
@@ -93,9 +94,9 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                     null,
                     IconicsDrawable(username.context)
                         .icon(CommunityMaterial.Icon2.cmd_star)
-                        .size(32.toIconicsSizeDp())
-                        .padding(8.toIconicsSizeDp())
-                        .color(R.attr.colorSecondary.toIconicsColorAttr(image.context)),
+                        .sizeDp(32)
+                        .paddingDp(8)
+                        .colorAttr(image.context, R.attr.colorSecondary),
                     null
                 )
             } else {

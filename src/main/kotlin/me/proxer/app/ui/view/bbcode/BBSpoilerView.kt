@@ -17,8 +17,9 @@ import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColor
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorInt
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -103,9 +104,9 @@ internal class BBSpoilerView @JvmOverloads constructor(
     private fun updateToggleButtonIcon() {
         toggleButton.setImageDrawable(
             IconicsDrawable(context, CommunityMaterial.Icon.cmd_chevron_down)
-                .size(32.toIconicsSizeDp())
-                .padding(8.toIconicsSizeDp())
-                .color(spoilerTextColor.toIconicsColor())
+                .sizeDp(32)
+                .paddingDp(8)
+                .colorInt(spoilerTextColor)
         )
     }
 

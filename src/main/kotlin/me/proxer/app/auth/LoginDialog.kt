@@ -19,7 +19,7 @@ import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -173,5 +173,5 @@ class LoginDialog : BaseDialog() {
     private fun generateInfoDrawable() = IconicsDrawable(requireContext())
         .icon(CommunityMaterial.Icon2.cmd_information_outline)
         .iconColor(requireContext())
-        .size(20.toIconicsSizeDp())
+        .sizeDp(20)
 }

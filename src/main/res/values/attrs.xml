@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <attr name="colorPrimaryLight" format="color|reference" />
 
     <attr name="colorSecondaryLight" format="color|reference" />
@@ -33,4 +33,14 @@
         <attr name="maxHeight" format="dimension" />
         <attr name="spoilerTextColor" format="color" />
     </declare-styleable>
+
+    <!-- TODO: Workaround for issue in ConstraintLayout. -->
+    <!-- https://issuetracker.google.com/issues/136103084 -->
+    <attr name="ringtonePreferenceStyle" tools:ignore="PrivateResource" />
+    <attr name="flow_horizontalSeparator" />
+    <attr name="flow_verticalSeparator" />
+    <attr name="motionProgress" />
+    <attr name="waveDecay" />
+    <attr name="motionPathRotate" />
+    <attr name="duration" />
 </resources>

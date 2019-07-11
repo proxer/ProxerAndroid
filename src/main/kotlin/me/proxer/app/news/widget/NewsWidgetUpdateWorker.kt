@@ -16,8 +16,9 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColorRes
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.squareup.moshi.Moshi
 import me.proxer.app.BuildConfig
 import me.proxer.app.MainActivity
@@ -215,9 +216,9 @@ class NewsWidgetUpdateWorker(
         views.setImageViewBitmap(
             R.id.refresh,
             IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
-                .color(android.R.color.white.toIconicsColorRes())
-                .size(32.toIconicsSizeDp())
-                .padding(8.toIconicsSizeDp())
+                .colorRes(android.R.color.white)
+                .sizeDp(32)
+                .paddingDp(8)
                 .toBitmap()
         )
     }

@@ -24,7 +24,8 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import com.vanniktech.emoji.EmojiEditText
@@ -39,13 +40,13 @@ import me.proxer.app.chat.prv.conference.info.ConferenceInfoActivity
 import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.scrollToTop
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.toIconicsColorAttr
 import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -354,26 +355,28 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
 
         emojiButton.setImageDrawable(
             IconicsDrawable(requireContext(), emojiButtonIcon)
-                .color(
+                .colorAttr(
+                    requireContext(),
                     when (disabledColor) {
-                        true -> R.attr.colorIconDisabled.toIconicsColorAttr(requireContext())
-                        false -> R.attr.colorIcon.toIconicsColorAttr(requireContext())
+                        true -> R.attr.colorIconDisabled
+                        false -> R.attr.colorIcon
                     }
                 )
-                .size(32.toIconicsSizeDp())
-                .padding(6.toIconicsSizeDp())
+                .sizeDp(32)
+                .paddingDp(6)
         )
 
         sendButton.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
-                .color(
+                .colorAttr(
+                    requireContext(),
                     when (disabledColor) {
-                        true -> R.attr.colorIconDisabled.toIconicsColorAttr(requireContext())
-                        false -> R.attr.colorSecondary.toIconicsColorAttr(requireContext())
+                        true -> R.attr.colorIconDisabled
+                        false -> R.attr.colorSecondary
                     }
                 )
-                .size(32.toIconicsSizeDp())
-                .padding(4.toIconicsSizeDp())
+                .sizeDp(32)
+                .paddingDp(4)
         )
     }
 

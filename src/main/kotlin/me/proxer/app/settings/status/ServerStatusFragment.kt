@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.toIconicsColorRes
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -63,9 +64,9 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>(R.layout.fr
 
         val overallStatusIcon = IconicsDrawable(requireContext())
             .icon(if (allServersOnline) CommunityMaterial.Icon.cmd_earth else CommunityMaterial.Icon.cmd_earth_off)
-            .color((if (allServersOnline) R.color.md_green_500 else R.color.md_red_500).toIconicsColorRes())
-            .size(48.toIconicsSizeDp())
-            .padding(12.toIconicsSizeDp())
+            .colorRes((if (allServersOnline) R.color.md_green_500 else R.color.md_red_500))
+            .sizeDp(48)
+            .paddingDp(12)
 
         overallStatus.text = overallStatusText
         overallStatus.setCompoundDrawablesWithIntrinsicBounds(overallStatusIcon, null, null, null)

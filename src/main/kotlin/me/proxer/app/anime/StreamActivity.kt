@@ -42,14 +42,12 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.colorRes
-import com.mikepenz.iconics.paddingDp
-import com.mikepenz.iconics.sizeDp
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
-import com.mikepenz.iconics.utils.toIconicsColorRes
-import com.mikepenz.iconics.utils.toIconicsSizeDp
+import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
@@ -560,7 +558,7 @@ class StreamActivity : BaseActivity() {
     }
 
     private fun generateControllerIcon(icon: IIcon) = IconicsDrawable(this, icon)
-        .size(44.toIconicsSizeDp())
-        .padding(8.toIconicsSizeDp())
-        .color(android.R.color.white.toIconicsColorRes())
+        .sizeDp(44)
+        .paddingDp(8)
+        .colorRes(android.R.color.white)
 }

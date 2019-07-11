@@ -4,6 +4,7 @@ repositories {
         mavenContent { releasesOnly() }
         content {
             includeGroupByRegex "androidx.*"
+            includeGroupByRegex "zipflinger.*"
             includeGroupByRegex "com\\.android.*"
             includeGroupByRegex "com\\.google\\.android.*"
 
@@ -15,6 +16,7 @@ repositories {
         mavenContent { releasesOnly() }
         content {
             excludeGroupByRegex "androidx.*"
+            excludeGroupByRegex "zipflinger.*"
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko).*"
             excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
@@ -27,6 +29,7 @@ repositories {
         mavenContent { releasesOnly() }
         content {
             excludeGroupByRegex "androidx.*"
+            excludeGroupByRegex "zipflinger.*"
             excludeGroupByRegex "com\\.github.*"
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.google\\.android\\.*"
