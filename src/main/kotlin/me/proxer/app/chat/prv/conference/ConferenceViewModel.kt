@@ -27,7 +27,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
         get() = Single
             .fromCallable { validators.validateLogin() }
             .flatMap {
-                if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization()
+                if (!MessengerWorker.isRunning) MessengerWorker.enqueueSynchronization()
 
                 Single.never<List<ConferenceWithMessage>>()
             }

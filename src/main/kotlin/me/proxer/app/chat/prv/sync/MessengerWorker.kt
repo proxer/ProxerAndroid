@@ -53,13 +53,20 @@ class MessengerWorker(
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
+        var isRunning = false
+            private set
+
         private val bus by inject<RxBus>()
         private val workManager by inject<WorkManager>()
         private val storageHelper by inject<StorageHelper>()
         private val preferenceHelper by inject<PreferenceHelper>()
 
-        private val isRunning = Transformations.map(workManager.getWorkInfosForUniqueWorkLiveData(NAME)) {
-            it.all { info -> info.state == WorkInfo.State.RUNNING }
+        init {
+            Transformations
+                .map(workManager.getWorkInfosForUniqueWorkLiveData(NAME)) {
+                    it.all { info -> info.state == WorkInfo.State.RUNNING }
+                }
+                .observeForever { isRunning = it }
         }
 
         fun enqueueSynchronizationIfPossible() = when {
@@ -74,8 +81,6 @@ class MessengerWorker(
         fun cancel() {
             workManager.cancelUniqueWork(NAME)
         }
-
-        fun isRunning() = isRunning.value ?: true
 
         private fun reschedule(synchronizationResult: SynchronizationResult) {
             if (canSchedule() && synchronizationResult != SynchronizationResult.ERROR) {

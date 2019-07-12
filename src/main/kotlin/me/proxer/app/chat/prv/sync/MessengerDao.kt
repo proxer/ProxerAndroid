@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.sync
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -40,6 +41,26 @@ abstract class MessengerDao : KoinComponent {
     open fun clear() {
         clearMessages()
         clearConferences()
+    }
+
+    open fun getMessagesLiveDataForConference(conferenceId: Long): MediatorLiveData<List<LocalMessage>> {
+        val sentLiveData = getSentMessagesLiveDataForConference(conferenceId)
+        val unsentLiveData = getUnsentMessagesLiveDataForConference(conferenceId)
+
+        return MediatorLiveData<List<LocalMessage>>().apply {
+            addSource(sentLiveData) {
+                value = (unsentLiveData.value ?: emptyList()) + (it ?: emptyList())
+            }
+
+            addSource(unsentLiveData) {
+                // Prevent duplicate update when detecting sent messages.
+                // If the amount of unsent messages is lower than before, these messages have been sent.
+                // Without this check, both sources would update (racy) and potentially cause weird visual effects.
+                if (it?.size ?: 0 >= value?.takeWhile { message -> message.id < 0 }?.size ?: 0) {
+                    value = (it ?: emptyList()) + (sentLiveData.value ?: emptyList())
+                }
+            }
+        }
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -100,12 +121,11 @@ abstract class MessengerDao : KoinComponent {
     @Query("SELECT * FROM conferences WHERE topic = :username LIMIT 1")
     abstract fun findConferenceForUser(username: String): LocalConference?
 
-    @Query(
-        "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC) " +
-            "UNION ALL " +
-            "SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC)"
-    )
-    abstract fun getMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
+    @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id >= 0 ORDER BY id DESC) ")
+    abstract fun getSentMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
+
+    @Query("SELECT * FROM (SELECT * FROM messages WHERE conferenceId = :conferenceId AND id < 0 ORDER BY id ASC)")
+    abstract fun getUnsentMessagesLiveDataForConference(conferenceId: Long): LiveData<List<LocalMessage>>
 
     @Query("SELECT COUNT(*) FROM messages WHERE conferenceId = :conferenceId AND id = :lastReadMessageId")
     abstract fun getUnreadMessageAmountForConference(conferenceId: Long, lastReadMessageId: Long): Int

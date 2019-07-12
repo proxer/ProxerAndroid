@@ -43,7 +43,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
             .flatMap {
                 when (page) {
                     0 -> messengerDao.markConferenceAsRead(safeConference.id)
-                    else -> MessengerWorker.enqueueMessageLoad(safeConference.id)
+                    else -> if (!hasReachedEnd) MessengerWorker.enqueueMessageLoad(safeConference.id)
                 }
 
                 Single.never<List<LocalMessage>>()
@@ -51,13 +51,15 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
     private val dataSource: (List<LocalMessage>?) -> Unit = {
         if (it != null && storageHelper.isLoggedIn) {
-            if (it.isEmpty() && !hasReachedEnd) {
-                MessengerWorker.enqueueMessageLoad(safeConference.id)
+            if (it.isEmpty()) {
+                if (!hasReachedEnd) {
+                    MessengerWorker.enqueueMessageLoad(safeConference.id)
+                }
             } else {
                 if (error.value == null) {
                     dataDisposable?.dispose()
 
-                    page = it.size.div(itemsOnPage)
+                    page = it.size / itemsOnPage
 
                     isLoading.value = false
                     error.value = null
@@ -136,7 +138,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
 
         disposables += Single
             .fromCallable { messengerDao.insertMessageToSend(safeUser, text, safeConference.id) }
-            .doOnSuccess { if (!MessengerWorker.isRunning()) MessengerWorker.enqueueSynchronization() }
+            .doOnSuccess { if (!MessengerWorker.isRunning) MessengerWorker.enqueueSynchronization() }
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors()
     }
