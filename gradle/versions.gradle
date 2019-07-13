@@ -41,7 +41,7 @@ ext {
 
     // RxJava
     rxJavaVersion = "2.2.10"
-    rxKotlinVersion = "2.4.0-beta.1"
+    rxKotlinVersion = "2.4.0-RC3"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0-alpha2"
     rxPreferencesVersion = "2.0.0"
@@ -57,7 +57,7 @@ ext {
     supportPreferenceVersion = "746ffabc50"
     iconicsVersion = "4.0.1-b01"
     communityMaterialTypefaceVersion = "3.5.95.1-kotlin"
-    materialDrawerVersion = "7.0.0-rc02"
+    materialDrawerVersion = "7.0.0-rc03"
     aboutLibrariesVersion = "7.0.1"
     materializeVersion = "1.2.1"
     crossfaderVersion = "1.6.0"
