@@ -199,7 +199,7 @@ class ProfileActivity : ImageTabsActivity() {
             headerImage.setImageDrawable(
                 IconicsDrawable(headerImage.context)
                     .icon(CommunityMaterial.Icon.cmd_account)
-                    .sizeDp(((DeviceUtils.getScreenWidth(this) * 0.75).toInt()))
+                    .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
                     .paddingDp(32)
                     .colorAttr(headerImage.context, R.attr.colorPrimary)
                     .backgroundColorAttr(headerImage.context, R.attr.colorPrimaryLight)

@@ -57,7 +57,7 @@ class ServerStatusAdapter : BaseAdapter<ServerStatus, ViewHolder>() {
                 IconicsDrawable(status.context, statusIcon)
                     .sizeDp(32)
                     .paddingDp(8)
-                    .colorRes((if (item.online) R.color.md_green_500 else R.color.md_red_500))
+                    .colorRes(if (item.online) R.color.md_green_500 else R.color.md_red_500)
             )
         }
     }
