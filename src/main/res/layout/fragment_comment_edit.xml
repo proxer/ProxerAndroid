@@ -164,19 +164,20 @@
                         android:paddingRight="@dimen/screen_horizontal_margin"
                         android:paddingBottom="@dimen/screen_vertical_margin"
                         tools:targetApi="o" />
-
-                    <TextView
-                        android:id="@+id/counter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:paddingLeft="@dimen/screen_horizontal_margin"
-                        android:paddingRight="@dimen/screen_horizontal_margin"
-                        android:paddingBottom="@dimen/screen_vertical_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        tools:text="5 / 200" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
+
+            <TextView
+                android:id="@+id/counter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingTop="@dimen/screen_vertical_margin"
+                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingBottom="@dimen/screen_vertical_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="5 / 200" />
 
             <HorizontalScrollView
                 android:id="@+id/formatterBar"

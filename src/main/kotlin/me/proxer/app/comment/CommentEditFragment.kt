@@ -196,6 +196,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun showData(data: LocalComment) {
         super.showData(data)
 
+        counter.isVisible = true
         formatterBar.isVisible = true
 
         ratingTitle.text = getString(getRatingTitle(data.overallRating))
@@ -209,6 +210,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
     override fun hideData() {
         editor.text = null
+        counter.isVisible = false
         formatterBar.isVisible = false
 
         super.hideData()
