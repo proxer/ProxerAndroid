@@ -59,7 +59,7 @@ class LoginHandler(
 
         Completable
             .fromAction {
-                storageHelper.resetUserData()
+                storageHelper.reset()
                 messengerDao.clear()
             }
             .subscribeOn(Schedulers.io())

@@ -116,24 +116,7 @@ class StorageHelper(
         }
     }
 
-    fun resetUserData() {
-        lastChatMessageDate = Instant.ofEpochMilli(0L)
-        lastNotificationsDate = Instant.ofEpochMilli(0L)
-        areConferencesSynchronized = false
-
-        deleteOrThrow(UCP_SETTINGS)
-        deleteOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE)
-
-        resetChatInterval()
-
-        Hawk.keys()
-            .filter {
-                it.startsWith(MESSAGE_DRAFT_PREFIX) ||
-                    it.startsWith(COMMENT_DRAFT_PREFIX) ||
-                    it.startsWith(LAST_MANGA_PAGE_PREFIX)
-            }
-            .forEach { deleteOrThrow(it) }
-    }
+    fun reset() = Hawk.deleteAll()
 
     fun resetChatInterval() = putOrThrow(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
