@@ -43,8 +43,11 @@ class CommentViewModel(
         }
     }
 
+    override val isLoginRequired = true
+
     override val dataSingle: Single<LocalComment>
-        get() = api.comment.comment(id, entryId).buildSingle()
+        get() = Single.fromCallable { validate() }
+            .flatMap { api.comment.comment(id, entryId).buildSingle() }
             .map { it.toLocalComment() }
             .onErrorResumeNext { error: Throwable ->
                 when (error.isInvalidCommentError) {
@@ -64,24 +67,29 @@ class CommentViewModel(
             }
 
     private val publishSingle
-        get() = data.value.let { comment ->
-            when {
-                comment == null || comment.content.isBlank() -> null
-                comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
-                comment.id.isNotEmpty() -> api.comment.update(comment.id)
-                    .comment(comment.content.trim())
-                    .rating(comment.overallRating)
-                    .buildOptionalSingle()
-
-                else -> when (val it = entryId) {
-                    null -> null
-                    else -> api.comment.create(it)
+        get() = data.value
+            .let { comment ->
+                when {
+                    comment == null || comment.content.isBlank() -> null
+                    comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
+                    comment.id.isNotEmpty() -> api.comment.update(comment.id)
                         .comment(comment.content.trim())
                         .rating(comment.overallRating)
                         .buildOptionalSingle()
+
+                    else -> when (val it = entryId) {
+                        null -> null
+                        else -> api.comment.create(it)
+                            .comment(comment.content.trim())
+                            .rating(comment.overallRating)
+                            .buildOptionalSingle()
+                    }
                 }
             }
-        }
+            ?.let {
+                Single.fromCallable { validate() }
+                    .flatMap { _ -> it }
+            }
 
     val isUpdate = MutableLiveData(id.isNullOrBlank().not())
 
