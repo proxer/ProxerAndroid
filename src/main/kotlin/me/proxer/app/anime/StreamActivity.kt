@@ -127,7 +127,7 @@ class StreamActivity : BaseActivity() {
     private var introductoryOverlay: IntroductoryOverlay? = null
 
     private val castStateListener = CastStateListener { newState ->
-        if (newState != CastState.NO_DEVICES_AVAILABLE && !storageHelper.wasCastIntroductoryOverlayShown) {
+        if (newState != CastState.NO_DEVICES_AVAILABLE && !preferenceHelper.wasCastIntroductoryOverlayShown) {
             showIntroductoryOverlay()
         }
     }
@@ -459,7 +459,7 @@ class StreamActivity : BaseActivity() {
             toggleStableControls(true)
 
             Handler().postDelayed(50) {
-                storageHelper.wasCastIntroductoryOverlayShown = true
+                preferenceHelper.wasCastIntroductoryOverlayShown = true
 
                 introductoryOverlay = IntroductoryOverlay.Builder(this, safeMediaRouteButton)
                     .setTitleText(R.string.activity_stream_cast_introduction)

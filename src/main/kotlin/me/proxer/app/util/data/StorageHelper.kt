@@ -28,12 +28,9 @@ class StorageHelper(
         const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
         const val LAST_UCP_SETTINGS_UPDATE_DATE = "last_ucp_settings_update_date"
         const val LAST_AD_ALERT_DATE = "last_ad_alert_date"
-        const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
         const val COMMENT_DRAFT_PREFIX = "comment_draft_"
         const val LAST_MANGA_PAGE_PREFIX = "last_manga_page_"
-        const val LAUNCHES = "launches"
-        const val RATED = "rated"
 
         private const val DEFAULT_CHAT_INTERVAL = 10_000L
         private const val MAX_CHAT_INTERVAL = 850_000L
@@ -113,31 +110,11 @@ class StorageHelper(
             putOrThrow(LAST_AD_ALERT_DATE, value.toEpochMilli())
         }
 
-    var wasCastIntroductoryOverlayShown: Boolean
-        get() = Hawk.get(CAST_INTRODUCTORY_OVERLAY_SHOWN, false)
-        set(value) {
-            putOrThrow(CAST_INTRODUCTORY_OVERLAY_SHOWN, value)
-        }
-
-    var launches: Int
-        get() = Hawk.get(LAUNCHES, 0)
-        private set(value) {
-            putOrThrow(LAUNCHES, value)
-        }
-
-    var hasRated: Boolean
-        get() = Hawk.get(RATED, false)
-        set(value) {
-            putOrThrow(RATED, value)
-        }
-
     fun incrementChatInterval() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
         if (it < MAX_CHAT_INTERVAL) {
             putOrThrow(CHAT_INTERVAL, (it * 1.5f).toLong())
         }
     }
-
-    fun incrementLaunches() = putOrThrow(LAUNCHES, Hawk.get(LAUNCHES, 0) + 1)
 
     fun resetUserData() {
         lastChatMessageDate = Instant.ofEpochMilli(0L)
@@ -164,21 +141,13 @@ class StorageHelper(
 
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
-    fun deleteMessageDraft(id: String) {
-        if (Hawk.contains("$MESSAGE_DRAFT_PREFIX$id")) {
-            deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
-        }
-    }
+    fun deleteMessageDraft(id: String) = deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
 
     fun putCommentDraft(entryId: String, draft: String) = putOrThrow("$COMMENT_DRAFT_PREFIX$entryId", draft)
 
     fun getCommentDraft(entryId: String): String? = Hawk.get("$COMMENT_DRAFT_PREFIX$entryId")
 
-    fun deleteCommentDraft(entryId: String) {
-        if (Hawk.contains("$COMMENT_DRAFT_PREFIX$entryId")) {
-            deleteOrThrow("$COMMENT_DRAFT_PREFIX$entryId")
-        }
-    }
+    fun deleteCommentDraft(entryId: String) = deleteOrThrow("$COMMENT_DRAFT_PREFIX$entryId")
 
     fun putLastMangaPage(id: String, chapter: Int, language: Language, page: Int) {
         putOrThrow("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", page)

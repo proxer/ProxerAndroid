@@ -18,7 +18,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 4
+        private const val currentVersion = 5
     }
 
     private var isInitialized = false
@@ -46,6 +46,10 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
                 migrate3To4()
             }
 
+            if (previousVersion <= 4) {
+                migrate4To5()
+            }
+
             if (previousVersion != currentVersion) {
                 Hawk.put(VERSION, currentVersion)
             }
@@ -64,7 +68,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
     }
 
     private fun migrate0To1() {
-        // On older versions of the App, the user is saved in an obfuscated format. Fix this by reading the previous
+        // In older versions of the App, the user is saved in an obfuscated format. Fix this by reading the previous
         // format and saving in the proper format.
         if (Hawk.contains(StorageHelper.USER) && Hawk.get<LocalUser>(StorageHelper.USER) == null) {
             Hawk.init(context)
@@ -85,20 +89,20 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
             }
         }
 
-        // On older versions of the App, this information is saved as an unencrypted preference. While not critical,
+        // In older versions of the App, this information is saved as an unencrypted preference. While not critical,
         // these are not preferences and should be hidden from the user.
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-        if (sharedPreferences.contains(StorageHelper.LAUNCHES)) {
-            Hawk.put(StorageHelper.LAUNCHES, sharedPreferences.getInt(StorageHelper.LAUNCHES, 0))
+        if (sharedPreferences.contains("launches")) {
+            Hawk.put("launches", sharedPreferences.getInt("launches", 0))
 
-            sharedPreferences.edit(commit = true) { remove(StorageHelper.LAUNCHES) }
+            sharedPreferences.edit(commit = true) { remove("launches") }
         }
 
-        if (sharedPreferences.contains(StorageHelper.RATED)) {
-            Hawk.put(StorageHelper.RATED, sharedPreferences.getBoolean(StorageHelper.RATED, false))
+        if (sharedPreferences.contains("rated")) {
+            Hawk.put("rated", sharedPreferences.getBoolean("rated", false))
 
-            sharedPreferences.edit(commit = true) { remove(StorageHelper.RATED) }
+            sharedPreferences.edit(commit = true) { remove("rated") }
         }
     }
 
@@ -143,6 +147,27 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
         sharedPreferences.edit(commit = true) {
             putString(PreferenceHelper.THEME, "0_$previousThemeVariant")
         }
+    }
+
+    private fun migrate4To5() {
+        // On older versions of the App, this information is saved in the encrypted preference.
+        // In the current version that preference is tied to the login state of the user, but these are preferences
+        // which should be shared between users.
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val castIntroductoryOverlayShown = Hawk.get("cast_introductory_overlay_shown", false)
+        val launches = Hawk.get("launches", 0)
+        val rated = Hawk.get("rated", false)
+
+        sharedPreferences.edit(commit = true) {
+            putBoolean("cast_introductory_overlay_shown", castIntroductoryOverlayShown)
+            putInt("launches", launches)
+            putBoolean("rated", rated)
+        }
+
+        Hawk.delete("cast_introductory_overlay_shown")
+        Hawk.delete("launches")
+        Hawk.delete("rated")
     }
 
     private class UserMigration0To1Converter(private val jsonParser: HawkMoshiParser) : Converter {

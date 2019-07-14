@@ -85,10 +85,10 @@ class MainActivity : DrawerActivity() {
         }
 
         if (intent.action == Intent.ACTION_MAIN && savedInstanceState == null) {
-            storageHelper.incrementLaunches()
+            preferenceHelper.incrementLaunches()
 
-            storageHelper.launches.let { launches ->
-                if (launches >= 3 && launches % 3 == 0 && !storageHelper.hasRated) {
+            preferenceHelper.launches.let { launches ->
+                if (launches >= 3 && launches % 3 == 0 && !preferenceHelper.hasRated) {
                     RatingDialog.show(this)
                 }
             }
@@ -189,7 +189,7 @@ class MainActivity : DrawerActivity() {
 
     private fun displayFirstPage(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            val shouldIntroduce = storageHelper.launches <= 0 && intent.action == Intent.ACTION_MAIN
+            val shouldIntroduce = preferenceHelper.launches <= 0 && intent.action == Intent.ACTION_MAIN
 
             if (shouldIntroduce) {
                 IntroductionWrapper.introduce(this)

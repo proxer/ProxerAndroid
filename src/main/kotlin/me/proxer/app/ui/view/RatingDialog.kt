@@ -26,7 +26,7 @@ class RatingDialog : BaseDialog() {
         .title(R.string.dialog_rating_title)
         .message(R.string.dialog_rating_content)
         .positiveButton(R.string.dialog_rating_positive) {
-            storageHelper.hasRated = true
+            preferenceHelper.hasRated = true
 
             try {
                 requireContext().startActivity(
@@ -46,6 +46,6 @@ class RatingDialog : BaseDialog() {
         }
         .neutralButton(R.string.dialog_rating_neutral)
         .negativeButton(R.string.dialog_rating_negative) {
-            storageHelper.hasRated = true
+            preferenceHelper.hasRated = true
         }
 }

@@ -20,6 +20,10 @@ class PreferenceHelper(
 ) {
 
     companion object {
+        const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
+        const val LAUNCHES = "launches"
+        const val RATED = "rated"
+
         const val AGE_CONFIRMATION = "age_confirmation"
         const val AUTO_BOOKMARK = "auto_bookmark"
         const val START_PAGE = "start_page"
@@ -38,6 +42,24 @@ class PreferenceHelper(
     init {
         initializer.initAndMigrateIfNecessary()
     }
+
+    var wasCastIntroductoryOverlayShown: Boolean
+        get() = sharedPreferences.getBoolean(CAST_INTRODUCTORY_OVERLAY_SHOWN, false)
+        set(value) {
+            sharedPreferences.edit { putBoolean(CAST_INTRODUCTORY_OVERLAY_SHOWN, value) }
+        }
+
+    var launches: Int
+        get() = sharedPreferences.getInt(LAUNCHES, 0)
+        private set(value) {
+            sharedPreferences.edit { putInt(LAUNCHES, value) }
+        }
+
+    var hasRated: Boolean
+        get() = sharedPreferences.getBoolean(RATED, false)
+        set(value) {
+            sharedPreferences.edit { putBoolean(RATED, value) }
+        }
 
     var isAgeRestrictedMediaAllowed
         get() = sharedPreferences.getBoolean(AGE_CONFIRMATION, false)
@@ -120,4 +142,6 @@ class PreferenceHelper(
 
     val shouldRedactToken
         get() = sharedPreferences.getBoolean(HTTP_REDACT_TOKEN, false)
+
+    fun incrementLaunches() = sharedPreferences.edit { putInt(LAUNCHES, sharedPreferences.getInt(LAUNCHES, 0) + 1) }
 }
