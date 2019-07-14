@@ -30,6 +30,7 @@ class StorageHelper(
         const val LAST_AD_ALERT_DATE = "last_ad_alert_date"
         const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
+        const val COMMENT_DRAFT_PREFIX = "comment_draft_"
         const val LAST_MANGA_PAGE_PREFIX = "last_manga_page_"
         const val LAUNCHES = "launches"
         const val RATED = "rated"
@@ -149,7 +150,11 @@ class StorageHelper(
         resetChatInterval()
 
         Hawk.keys()
-            .filter { it.startsWith(MESSAGE_DRAFT_PREFIX) }
+            .filter {
+                it.startsWith(MESSAGE_DRAFT_PREFIX) ||
+                    it.startsWith(COMMENT_DRAFT_PREFIX) ||
+                    it.startsWith(LAST_MANGA_PAGE_PREFIX)
+            }
             .forEach { deleteOrThrow(it) }
     }
 
@@ -159,7 +164,21 @@ class StorageHelper(
 
     fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
 
-    fun deleteMessageDraft(id: String) = deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
+    fun deleteMessageDraft(id: String) {
+        if (Hawk.contains("$MESSAGE_DRAFT_PREFIX$id")) {
+            deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
+        }
+    }
+
+    fun putCommentDraft(entryId: String, draft: String) = putOrThrow("$COMMENT_DRAFT_PREFIX$entryId", draft)
+
+    fun getCommentDraft(entryId: String): String? = Hawk.get("$COMMENT_DRAFT_PREFIX$entryId")
+
+    fun deleteCommentDraft(entryId: String) {
+        if (Hawk.contains("$COMMENT_DRAFT_PREFIX$entryId")) {
+            deleteOrThrow("$COMMENT_DRAFT_PREFIX$entryId")
+        }
+    }
 
     fun putLastMangaPage(id: String, chapter: Int, language: Language, page: Int) {
         putOrThrow("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", page)

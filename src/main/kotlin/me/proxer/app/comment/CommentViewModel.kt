@@ -37,19 +37,31 @@ class CommentViewModel(
         )
     }
 
-    override val dataSingle: Single<LocalComment>
-        get() = when (id == null && entryId == null) {
-            true -> Single.just(defaultComment)
-            false -> api.comment.comment(id, entryId).buildSingle()
-                .map { it.toLocalComment() }
-                .onErrorResumeNext { error: Throwable ->
-                    when (error.isInvalidCommentError) {
-                        true -> Single.just(defaultComment)
-                        false -> Single.error<Nothing>(error)
-                    }
-                }
-                .doOnSuccess { isUpdate.postValue(it.id.isNotBlank() && it.content.isNotBlank()) }
+    init {
+        require(id != null || entryId != null) {
+            "Either id or entryId must be not null"
         }
+    }
+
+    override val dataSingle: Single<LocalComment>
+        get() = api.comment.comment(id, entryId).buildSingle()
+            .map { it.toLocalComment() }
+            .onErrorResumeNext { error: Throwable ->
+                when (error.isInvalidCommentError) {
+                    true -> Single.just(defaultComment)
+                    false -> Single.error<Nothing>(error)
+                }
+            }
+            .doOnSuccess { isUpdate.postValue(it.id.isNotBlank() && it.content.isNotBlank()) }
+            .map {
+                val safeEntryId = entryId
+
+                if (safeEntryId != null && isUpdate.value == false) {
+                    storageHelper.getCommentDraft(safeEntryId)?.let { draft -> it.copy(content = draft) } ?: it
+                } else {
+                    it
+                }
+            }
 
     private val publishSingle
         get() = data.value.let { comment ->

@@ -588,6 +588,7 @@
     <string name="fragment_comment_edit_size_normal">Normal</string>
     <string name="fragment_comment_edit_size_small">Klein</string>
     <string name="fragment_comment_edit_size_tiny">Winzig</string>
+    <string name="fragment_comment_draft_saved">Kommentar wurde als Entwurf gespeichert</string>
     <string name="fragment_comment_published">Kommentar wurde erfolgreich veröffentlicht</string>
 
     <string name="fragment_comment_rating_animation">Animation/Bilder</string>

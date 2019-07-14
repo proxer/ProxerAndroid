@@ -122,6 +122,18 @@ class CommentActivity : DrawerActivity() {
     }
 
     override fun onDestroy() {
+        entryId?.also { safeEntryId ->
+            viewModel.data.value?.content?.also { content ->
+                if (viewModel.isUpdate.value == false && content.isNotBlank()) {
+                    storageHelper.putCommentDraft(safeEntryId, content)
+
+                    toast(R.string.fragment_comment_draft_saved)
+                } else {
+                    storageHelper.deleteCommentDraft(safeEntryId)
+                }
+            }
+        }
+
         tabLayoutHelper?.release()
         tabLayoutHelper = null
         viewPager.adapter = null
