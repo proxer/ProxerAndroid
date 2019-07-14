@@ -56,5 +56,3 @@ style:
     active: false
   OptionalUnit:
     active: false
-  UnnecessaryApply:
-    active: false
