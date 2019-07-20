@@ -1,5 +1,6 @@
 package me.proxer.app.anime
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -412,6 +413,7 @@ class StreamActivity : BaseActivity() {
         toggleFullscreen(true)
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     private fun toggleOrientation() {
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED

@@ -66,7 +66,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
         notifyItemInserted(itemCount - 1)
     }
 
-    fun contains(username: String) = data.find { it.username.equals(username, ignoreCase = true) } != null
+    operator fun contains(username: String) = data.find { it.username.equals(username, ignoreCase = true) } != null
 
     inner class ViewHolder(itemView: View) : AutoDisposeViewHolder(itemView) {
 

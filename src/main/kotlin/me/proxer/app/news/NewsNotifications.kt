@@ -89,7 +89,7 @@ object NewsNotifications : KoinComponent {
 
         val shouldAlert = news
             .maxBy { it.date }
-            ?.let { it.date.toInstantBP() }
+            ?.date?.toInstantBP()
             ?.isAfter(storageHelper.lastNewsDate)
             ?: true
 

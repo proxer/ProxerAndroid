@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Build
@@ -37,6 +38,7 @@ object TextPrototype : BBPrototype {
     const val TEXT_SIZE_ARGUMENT = "text_size"
     const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
 
+    @SuppressLint("RestrictedApi")
     private val webUrlRegex = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
     private val validLinkPredicate = { link: String -> link.startsWith("@") || webUrlRegex.matches(link) }
 

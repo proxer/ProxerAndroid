@@ -102,7 +102,7 @@ object AccountNotifications : KoinComponent {
 
         val shouldAlert = notifications
             .maxBy { it.date }
-            ?.let { it.date.toInstantBP() }
+            ?.date?.toInstantBP()
             ?.isAfter(storageHelper.lastNotificationsDate)
             ?: true
 

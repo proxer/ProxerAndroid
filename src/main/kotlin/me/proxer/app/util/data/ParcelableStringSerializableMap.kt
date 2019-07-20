@@ -23,8 +23,8 @@ class ParcelableStringSerializableMap<T : Serializable> : Parcelable {
         }
     }
 
-    val size get() = internalMap.size
-    val entries get() = internalMap.entries
+    val size: Int get() = internalMap.size
+    val entries: MutableSet<MutableMap.MutableEntry<String, T>> get() = internalMap.entries
 
     private val internalMap = LinkedHashMap<String, T>()
 

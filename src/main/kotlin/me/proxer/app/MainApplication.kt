@@ -54,15 +54,15 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        enableStrictModeForDebug()
-        initGlobalErrorHandler()
-        initSecurity()
-
         startKoin {
             androidContext(this@MainApplication)
 
             modules(koinModules)
         }
+
+        enableStrictModeForDebug()
+        initGlobalErrorHandler()
+        initSecurity()
 
         FlavorInitializer.initialize(this)
         NotificationUtils.createNotificationChannels(this)

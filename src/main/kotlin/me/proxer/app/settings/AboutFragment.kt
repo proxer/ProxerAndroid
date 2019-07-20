@@ -247,10 +247,10 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(getString(R.string.about_developer_proxer_title))
             .subText(developerProxerName)
             .icon(ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    colorFilter = BlendModeColorFilter(context.resolveColor(R.attr.colorIcon), BlendMode.SRC_IN)
+                colorFilter = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    BlendModeColorFilter(context.resolveColor(R.attr.colorIcon), BlendMode.SRC_IN)
                 } else {
-                    colorFilter = PorterDuffColorFilter(context.resolveColor(R.attr.colorIcon), PorterDuff.Mode.SRC_IN)
+                    PorterDuffColorFilter(context.resolveColor(R.attr.colorIcon), PorterDuff.Mode.SRC_IN)
                 }
             })
             .setOnClickAction {
