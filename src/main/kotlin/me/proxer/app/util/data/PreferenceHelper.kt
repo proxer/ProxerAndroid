@@ -101,7 +101,7 @@ class PreferenceHelper(
 
     var mangaReaderOrientation
         get() = MangaReaderOrientation.values()[
-            sharedPreferences.getInt(MANGA_READER_ORIENTATION, MangaReaderOrientation.LEFT_TO_RIGHT.ordinal)
+            sharedPreferences.getInt(MANGA_READER_ORIENTATION, MangaReaderOrientation.VERTICAL.ordinal)
         ]
         set(value) {
             sharedPreferences.edit { putInt(MANGA_READER_ORIENTATION, value.ordinal) }
