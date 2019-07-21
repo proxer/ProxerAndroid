@@ -58,6 +58,18 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="ucp_settings_friend_request_constraint_titles">
+        <item>@string/ucp_settings_constraint_default</item>
+        <item>@string/ucp_settings_constraint_everyone</item>
+        <item>@string/ucp_settings_constraint_nobody</item>
+    </string-array>
+
+    <string-array name="ucp_settings_friend_request_constraint_values">
+        <item>0</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
     <string-array name="ucp_settings_video_ads_interval_titles">
         <item>@string/ucp_settings_interval_never</item>
         <item>@string/ucp_settings_interval_always</item>

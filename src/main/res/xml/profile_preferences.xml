@@ -106,8 +106,8 @@
         <ListPreference
             style="@style/Preference.Material.DialogPreference.ListPreference.SimpleMenu"
             android:defaultValue="0"
-            android:entries="@array/ucp_settings_constraint_titles"
-            android:entryValues="@array/ucp_settings_constraint_values"
+            android:entries="@array/ucp_settings_friend_request_constraint_titles"
+            android:entryValues="@array/ucp_settings_friend_request_constraint_values"
             android:key="friend_request"
             android:persistent="false"
             android:summary="%s"
