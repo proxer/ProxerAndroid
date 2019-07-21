@@ -116,7 +116,7 @@ class MediaListViewModel(
                         .doOnSuccess {
                             tagDao.replaceTags(it)
 
-                            storageHelper.lastTagUpdateDate = Instant.now()
+                            preferenceHelper.lastTagUpdateDate = Instant.now()
                         }
                     else -> Single.just(cachedTags)
                 }
@@ -148,7 +148,7 @@ class MediaListViewModel(
         )
     }
 
-    private fun shouldUpdateTags() = storageHelper.lastTagUpdateDate.toLocalDate()
+    private fun shouldUpdateTags() = preferenceHelper.lastTagUpdateDate.toLocalDate()
         .isBefore(LocalDate.now().minusDays(15))
 
     private data class TagContainer(val genreTags: List<LocalTag>, val entryTags: List<LocalTag>)

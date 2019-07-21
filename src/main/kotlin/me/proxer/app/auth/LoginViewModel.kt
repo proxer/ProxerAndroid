@@ -6,6 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -27,11 +28,12 @@ class LoginViewModel : ViewModel(), KoinComponent {
 
     private val api by inject<ProxerApi>()
     private val storageHelper by inject<StorageHelper>()
+    private val preferenceHelper by inject<PreferenceHelper>()
 
     private var dataDisposable: Disposable? = null
 
     init {
-        isTwoFactorAuthenticationEnabled.value = storageHelper.isTwoFactorAuthenticationEnabled
+        isTwoFactorAuthenticationEnabled.value = preferenceHelper.isTwoFactorAuthenticationEnabled
     }
 
     override fun onCleared() {
@@ -59,7 +61,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     success.value = Unit
                 }, {
                     if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
-                        storageHelper.isTwoFactorAuthenticationEnabled = true
+                        preferenceHelper.isTwoFactorAuthenticationEnabled = true
                         isTwoFactorAuthenticationEnabled.value = true
                     }
 

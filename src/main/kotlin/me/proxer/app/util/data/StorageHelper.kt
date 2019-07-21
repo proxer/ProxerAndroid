@@ -19,13 +19,10 @@ class StorageHelper(
     internal companion object {
         const val USER = "user"
         const val UCP_SETTINGS = "ucp_settings"
-        const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
-        const val LAST_NEWS_DATE = "last_news_date"
         const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
         const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
         const val CHAT_INTERVAL = "chat_interval"
         const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
-        const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
         const val LAST_UCP_SETTINGS_UPDATE_DATE = "last_ucp_settings_update_date"
         const val LAST_AD_ALERT_DATE = "last_ad_alert_date"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
@@ -63,18 +60,6 @@ class StorageHelper(
         .publish()
         .autoConnect()
 
-    var isTwoFactorAuthenticationEnabled: Boolean
-        get() = Hawk.get(TWO_FACTOR_AUTHENTICATION, false)
-        set(value) {
-            putOrThrow(TWO_FACTOR_AUTHENTICATION, value)
-        }
-
-    var lastNewsDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_NEWS_DATE, 0L))
-        set(value) {
-            putOrThrow(LAST_NEWS_DATE, value.toEpochMilli())
-        }
-
     var lastNotificationsDate: Instant
         get() = Instant.ofEpochMilli(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
@@ -94,12 +79,6 @@ class StorageHelper(
         get() = Hawk.get(CONFERENCES_SYNCHRONIZED, false)
         set(value) {
             putOrThrow(CONFERENCES_SYNCHRONIZED, value)
-        }
-
-    var lastTagUpdateDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_TAG_UPDATE_DATE, 0L))
-        set(value) {
-            putOrThrow(LAST_TAG_UPDATE_DATE, value.toEpochMilli())
         }
 
     val lastUcpSettingsUpdateDate: Instant

@@ -112,7 +112,7 @@ class NotificationWorker(
     }
 
     private fun fetchNews(context: Context, notificationInfo: NotificationInfo?) {
-        val lastNewsDate = storageHelper.lastNewsDate
+        val lastNewsDate = preferenceHelper.lastNewsDate
         val newNews = when (notificationInfo?.newsAmount) {
             0 -> emptyList()
             else -> api.notifications.news()
@@ -131,7 +131,7 @@ class NotificationWorker(
             if (!isStopped && it != lastNewsDate && !bus.post(NewsNotificationEvent())) {
                 NewsNotifications.showOrUpdate(context, newNews)
 
-                storageHelper.lastNewsDate = it
+                preferenceHelper.lastNewsDate = it
             }
         }
     }

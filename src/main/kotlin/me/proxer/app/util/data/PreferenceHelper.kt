@@ -8,6 +8,7 @@ import me.proxer.app.settings.theme.ThemeContainer
 import me.proxer.app.util.extension.getSafeString
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import okhttp3.logging.HttpLoggingInterceptor
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
@@ -23,6 +24,10 @@ class PreferenceHelper(
         const val CAST_INTRODUCTORY_OVERLAY_SHOWN = "cast_introductory_overlay_shown"
         const val LAUNCHES = "launches"
         const val RATED = "rated"
+
+        const val TWO_FACTOR_AUTHENTICATION = "two_factor_authentication"
+        const val LAST_TAG_UPDATE_DATE = "last_tag_update_date"
+        const val LAST_NEWS_DATE = "last_news_date"
 
         const val AGE_CONFIRMATION = "age_confirmation"
         const val AUTO_BOOKMARK = "auto_bookmark"
@@ -59,6 +64,24 @@ class PreferenceHelper(
         get() = sharedPreferences.getBoolean(RATED, false)
         set(value) {
             sharedPreferences.edit { putBoolean(RATED, value) }
+        }
+
+    var isTwoFactorAuthenticationEnabled: Boolean
+        get() = sharedPreferences.getBoolean(TWO_FACTOR_AUTHENTICATION, false)
+        set(value) {
+            sharedPreferences.edit { putBoolean(TWO_FACTOR_AUTHENTICATION, value) }
+        }
+
+    var lastTagUpdateDate: Instant
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_TAG_UPDATE_DATE, 0L))
+        set(value) {
+            sharedPreferences.edit { putLong(LAST_TAG_UPDATE_DATE, value.toEpochMilli()) }
+        }
+
+    var lastNewsDate: Instant
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_NEWS_DATE, 0L))
+        set(value) {
+            sharedPreferences.edit { putLong(LAST_NEWS_DATE, value.toEpochMilli()) }
         }
 
     var isAgeRestrictedMediaAllowed

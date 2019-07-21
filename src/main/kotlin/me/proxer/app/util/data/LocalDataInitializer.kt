@@ -64,14 +64,26 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
         val launches = Hawk.get("launches", 0)
         val rated = Hawk.get("rated", false)
 
+        val isTwoFactorAuthenticationEnabled = Hawk.get("two_factor_authentication", true)
+        val lastTagUpdateDate = Hawk.get("last_tag_update_date", 0L)
+        val lastNewsDate = Hawk.get("last_news_date", 0L)
+
         preferences.edit(commit = true) {
             putBoolean("cast_introductory_overlay_shown", castIntroductoryOverlayShown)
             putInt("launches", launches)
             putBoolean("rated", rated)
+
+            putBoolean("two_factor_authentication", isTwoFactorAuthenticationEnabled)
+            putLong("last_tag_update_date", lastTagUpdateDate)
+            putLong("last_news_date", lastNewsDate)
         }
 
         Hawk.delete("cast_introductory_overlay_shown")
         Hawk.delete("launches")
         Hawk.delete("rated")
+
+        Hawk.delete("two_factor_authentication")
+        Hawk.delete("last_tag_update_date")
+        Hawk.delete("last_news_date")
     }
 }

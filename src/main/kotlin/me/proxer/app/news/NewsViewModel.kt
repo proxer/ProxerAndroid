@@ -18,7 +18,7 @@ class NewsViewModel : PagedContentViewModel<NewsArticle>() {
         get() = super.dataSingle.doOnSuccess {
             if (page == 0) {
                 it.firstOrNull()?.date?.toInstantBP()?.let { date ->
-                    storageHelper.lastNewsDate = date
+                    preferenceHelper.lastNewsDate = date
                 }
             }
         }
