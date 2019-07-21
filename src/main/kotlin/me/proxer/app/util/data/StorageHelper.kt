@@ -58,6 +58,7 @@ class StorageHelper(
 
     val isLoggedInObservable = rxPreferences.getString(USER)
         .asObservable()
+        .skip(1)
         .map { it.isNotBlank() }
         .publish()
         .autoConnect()

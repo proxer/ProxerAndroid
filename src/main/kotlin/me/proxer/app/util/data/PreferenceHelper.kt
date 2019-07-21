@@ -122,7 +122,7 @@ class PreferenceHelper(
             sharedPreferences.edit { putString(THEME, value.toPreferenceString()) }
         }
 
-    val themeObservable = rxSharedPreferences.getString(THEME, "0")
+    val themeObservable = rxSharedPreferences.getString(THEME, "0_2")
         .asObservable()
         .skip(1)
         .map { ThemeContainer.fromPreferenceString(it) }
