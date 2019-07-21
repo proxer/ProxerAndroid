@@ -1,7 +1,6 @@
 package me.proxer.app.chat.prv.sync
 
 import android.content.Context
-import androidx.lifecycle.Transformations
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
@@ -53,21 +52,14 @@ class MessengerWorker(
         private const val NAME = "MessengerWorker"
         private const val CONFERENCE_ID_ARGUMENT = "conference_id"
 
-        var isRunning = false
-            private set
+        val isRunning
+            get() = workManager.getWorkInfosForUniqueWork(NAME).get()
+                .all { info -> info.state == WorkInfo.State.RUNNING }
 
         private val bus by inject<RxBus>()
         private val workManager by inject<WorkManager>()
         private val storageHelper by inject<StorageHelper>()
         private val preferenceHelper by inject<PreferenceHelper>()
-
-        init {
-            Transformations
-                .map(workManager.getWorkInfosForUniqueWorkLiveData(NAME)) {
-                    it.all { info -> info.state == WorkInfo.State.RUNNING }
-                }
-                .observeForever { isRunning = it }
-        }
 
         fun enqueueSynchronizationIfPossible() = when {
             canSchedule() -> enqueueSynchronization()
