@@ -55,7 +55,7 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            if (connectivityManager.isConnected) {
+            if (context != null && connectivityManager.isConnected) {
                 bus.post(NetworkConnectedEvent())
             }
         }
