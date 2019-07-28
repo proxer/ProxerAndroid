@@ -137,6 +137,7 @@ class CommentViewModel(
             ?.doAfterTerminate { isLoading.postValue(false) }
             ?.subscribeOn(Schedulers.io())
             ?.subscribeAndLogErrors({
+                data.postValue(null)
                 publishResult.postValue(Unit)
             }, {
                 publishError.postValue(ErrorUtils.handle(it))
