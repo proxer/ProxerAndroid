@@ -3,12 +3,13 @@ package me.proxer.app.profile.about
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -23,6 +24,7 @@ import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
+import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
@@ -39,10 +41,17 @@ import me.proxer.app.util.extension.toast
 import me.proxer.library.entity.user.UserAbout
 import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
+import me.proxer.library.util.ProxerUrls
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import timber.log.Timber
+import java.io.FileInputStream
 import java.math.BigDecimal
 import java.math.MathContext
+import java.util.Locale
 
 /**
  * @author Ruben Gees
@@ -70,6 +79,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
     private val username: String?
         get() = hostingActivity.username
 
+    private val client by inject<OkHttpClient>()
+
     private val generalContainer by bindView<ViewGroup>(R.id.generalContainer)
     private val generalTable by bindView<TableLayout>(R.id.generalTable)
     private val aboutContainer by bindView<ViewGroup>(R.id.aboutContainer)
@@ -80,6 +91,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
 
         about.setBackgroundColor(Color.TRANSPARENT)
         about.setInitialScale(1)
+
         about.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING
         about.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         about.settings.userAgentString = USER_AGENT
@@ -92,18 +104,64 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
 
         about.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
-                val httpUrl = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    request.url.toString().toPrefixedUrlOrNull()
-                } else {
-                    request.toString().toPrefixedUrlOrNull()
+                return when (val httpUrl = request.url.toString().toPrefixedUrlOrNull()) {
+                    null -> super.shouldOverrideUrlLoading(view, request)
+                    else -> {
+                        showPage(httpUrl)
+
+                        true
+                    }
                 }
+            }
 
-                return if (httpUrl != null) {
-                    showPage(httpUrl)
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+                val url = request.url.toString().toPrefixedUrlOrNull()
 
-                    true
+                return if (url != null) {
+                    val fileExtension = url.toString().substringAfterLast(".", "").toLowerCase(Locale.US)
+
+                    if (
+                        url.host == ProxerUrls.cdnBase.host ||
+                        fileExtension == "jpg" ||
+                        fileExtension == "jpeg" ||
+                        fileExtension == "png" ||
+                        fileExtension == "gif"
+                    ) {
+                        val proxyUrl = if (url.host != ProxerUrls.cdnBase.host) ProxerUrls.proxyImage(url) else url
+
+                        try {
+                            val imageFile = GlideApp.with(view).download(proxyUrl.toString()).submit().get()
+                            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
+
+                            WebResourceResponse(mimeType, "", FileInputStream(imageFile))
+                        } catch (error: Throwable) {
+                            Timber.e(error)
+
+                            null
+                        }
+                    } else {
+                        return try {
+                            val response = client.newCall(
+                                Request.Builder()
+                                    .method(request.method, null)
+                                    .url(request.url.toString())
+                                    .apply { request.requestHeaders.onEach { (key, value) -> addHeader(key, value) } }
+                                    .build()
+                            ).execute()
+
+                            val contentType = response.header("Content-Type")?.split(";") ?: emptyList()
+                            val mimeType = contentType.getOrNull(0)
+                            val encoding = contentType.getOrNull(1)
+
+                            WebResourceResponse(mimeType, encoding, response.body?.byteStream())
+                        } catch (error: Throwable) {
+                            Timber.e(error)
+
+                            null
+                        }
+                    }
                 } else {
-                    super.shouldOverrideUrlLoading(view, request)
+                    super.shouldInterceptRequest(view, request)
                 }
             }
         }
@@ -122,7 +180,13 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
 
         data.about.let {
             when (it.isNotBlank()) {
-                true -> about.loadData(constructHtmlSkeleton(it), "text/html", "utf-8")
+                true -> about.loadDataWithBaseURL(
+                    null,
+                    constructHtmlSkeleton(it),
+                    "text/html; charset=utf-8",
+                    "utf-8",
+                    null
+                )
                 false -> aboutContainer.isGone = true
             }
         }
@@ -220,15 +284,19 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
             <html>
               <head>
                 <style>
-                  body { color: ${requireContext().resolveColor(android.R.attr.textColorSecondary).toHtmlColor()} }
-                  a { color: ${requireContext().resolveColor(R.attr.colorLink).toHtmlColor()} }
+                  body {
+                    color: ${requireContext().resolveColor(android.R.attr.textColorSecondary).toHtmlColor()};
+                  }
+                  a {
+                    color: ${requireContext().resolveColor(R.attr.colorLink).toHtmlColor()};
+                  }
                 </style>
               </head>
               <body>
-              ${content.trim()}
+                ${content.trim()}
               </body>
             </html>
-            """
+            """.trimIndent()
     }
 
     private fun Int.toHtmlColor(): String {
