@@ -6,8 +6,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.text.parseAsHtml
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -21,6 +26,7 @@ import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.getSafeParcelableExtra
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -86,7 +92,32 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
                 CommentActivity.navigateTo(this, it.id, it.entryId, it.entryName)
             }
 
+        innerAdapter.deleteClickSubject
+            .autoDisposable(this.scope())
+            .subscribe { comment ->
+                MaterialDialog(requireContext())
+                    .message(text = getString(R.string.dialog_comment_delete_message, comment.entryName).parseAsHtml())
+                    .negativeButton(res = R.string.cancel)
+                    .positiveButton(res = R.string.dialog_comment_delete_positive) {
+                        viewModel.deleteComment(comment)
+                    }
+                    .show()
+            }
+
         setHasOptionsMenu(true)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_comment_deletion, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

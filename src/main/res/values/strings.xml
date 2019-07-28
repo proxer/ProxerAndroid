@@ -178,6 +178,7 @@
 
     <string name="error_set_user_info">Eintrag konnte nicht aktualisiert werden: %s</string>
     <string name="error_comment_publish">Der Kommentar konnte nicht veröffentlich werden: %s</string>
+    <string name="error_comment_deletion">Der Kommentar konnte nicht gelöscht werden: %s</string>
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
     <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
     <string name="error_ucp_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
@@ -362,6 +363,14 @@
     <string name="dialog_chat_report_message_hint">Nachricht an den Moderator</string>
     <string name="dialog_chat_error_message">Bitte gib eine Nachricht an</string>
 
+    <!-- language=HTML -->
+    <string name="dialog_comment_delete_message">
+        <![CDATA[
+        Möchtest du deinen Kommentar zu <b>%s</b> löschen?
+        ]]>
+    </string>
+    <string name="dialog_comment_delete_positive">Löschen</string>
+
     <string name="fragment_ucp_overview_username">Nutzername</string>
     <string name="fragment_ucp_overview_epsiode_counter_days">Tage</string>
     <string name="fragment_ucp_overview_epsiode_counter_episodes">Episoden</string>
@@ -514,6 +523,7 @@
     <string name="fragment_industry_description">Beschreibung</string>
 
     <string name="fragment_comment_edit">Bearbeiten</string>
+    <string name="fragment_comment_delete">Löschen</string>
     <string name="fragment_comment_preview">Vorschau</string>
 
     <string name="fragment_comment_rules_title">Regeln</string>

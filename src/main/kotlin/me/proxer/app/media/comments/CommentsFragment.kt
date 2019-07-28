@@ -9,8 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.os.bundleOf
+import androidx.core.text.parseAsHtml
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
@@ -32,6 +36,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.getSafeParcelableExtra
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -106,6 +111,18 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
                 CommentActivity.navigateTo(this, it.id, it.entryId, name)
             }
 
+        innerAdapter.deleteClickSubject
+            .autoDisposable(this.scope())
+            .subscribe { comment ->
+                MaterialDialog(requireContext())
+                    .message(text = getString(R.string.dialog_comment_delete_message, comment.author).parseAsHtml())
+                    .negativeButton(res = R.string.cancel)
+                    .positiveButton(res = R.string.dialog_comment_delete_positive) {
+                        viewModel.deleteComment(comment)
+                    }
+                    .show()
+            }
+
         setHasOptionsMenu(true)
     }
 
@@ -118,6 +135,15 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         hostingActivity.headerHeightChanges()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { create.translationY = it }
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_comment_deletion, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
 
         create.setImageDrawable(
             IconicsDrawable(requireContext())

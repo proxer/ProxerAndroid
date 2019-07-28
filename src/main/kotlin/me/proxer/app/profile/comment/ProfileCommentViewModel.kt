@@ -1,10 +1,16 @@
 package me.proxer.app.profile.comment
 
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.comment.LocalComment
+import me.proxer.app.util.ErrorUtils
+import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedUserComment
 import me.proxer.library.enums.Category
 import org.threeten.bp.Instant
@@ -36,6 +42,27 @@ class ProfileCommentViewModel(
 
     var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()
+    }
+
+    val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+
+    private var deleteDisposable: Disposable? = null
+
+    fun deleteComment(comment: ParsedUserComment) {
+        deleteDisposable?.dispose()
+
+        deleteDisposable = api.comment.update(comment.id)
+            .comment("")
+            .rating(0)
+            .buildOptionalSingle()
+            .doOnSuccess { storageHelper.deleteCommentDraft(comment.entryId) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeAndLogErrors({
+                data.value = data.value?.filter { it.id != comment.id }
+            }, {
+                itemDeletionError.value = ErrorUtils.handle(it)
+            })
     }
 
     fun updateComment(comment: LocalComment) {

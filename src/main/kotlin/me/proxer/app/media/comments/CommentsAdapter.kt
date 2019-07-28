@@ -51,6 +51,7 @@ class CommentsAdapter(
 
     var glide: GlideRequests? = null
     val editClickSubject: PublishSubject<ParsedComment> = PublishSubject.create()
+    val deleteClickSubject: PublishSubject<ParsedComment> = PublishSubject.create()
     val profileClickSubject: PublishSubject<Pair<ImageView, ParsedComment>> = PublishSubject.create()
     var categoryCallback: (() -> Category?)? = null
 
@@ -98,6 +99,7 @@ class CommentsAdapter(
         internal val title: TextView by bindView(R.id.title)
 
         internal val edit: ImageView by bindView(R.id.edit)
+        internal val delete: ImageView by bindView(R.id.delete)
         internal val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
         internal val upvotes: TextView by bindView(R.id.upvotes)
 
@@ -126,6 +128,7 @@ class CommentsAdapter(
             comment.glide = glide
 
             edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32)
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
@@ -138,6 +141,7 @@ class CommentsAdapter(
             title.text = item.author
             upvotes.text = item.helpfulVotes.toString()
             edit.isVisible = item.authorId == storageHelper.user?.id
+            delete.isVisible = item.authorId == storageHelper.user?.id
 
             bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
             bindRatingRow(ratingStoryRow, ratingStory, item.ratingDetails.story.toFloat())
@@ -179,6 +183,11 @@ class CommentsAdapter(
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(editClickSubject)
+
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteClickSubject)
 
             comment.heightChanges
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }

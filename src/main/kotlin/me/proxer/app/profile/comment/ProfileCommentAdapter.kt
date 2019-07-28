@@ -47,6 +47,7 @@ class ProfileCommentAdapter(
 
     var glide: GlideRequests? = null
     val editClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
+    val deleteClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
     val titleClickSubject: PublishSubject<ParsedUserComment> = PublishSubject.create()
 
     private var layoutManager: LayoutManager? = null
@@ -91,6 +92,7 @@ class ProfileCommentAdapter(
         internal val title: TextView by bindView(R.id.title)
 
         internal val edit: ImageView by bindView(R.id.edit)
+        internal val delete: ImageView by bindView(R.id.delete)
         internal val upvoteIcon: ImageView by bindView(R.id.upvoteIcon)
         internal val upvotes: TextView by bindView(R.id.upvotes)
 
@@ -121,6 +123,7 @@ class ProfileCommentAdapter(
             image.isGone = true
 
             edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32)
             expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
             upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
@@ -133,6 +136,7 @@ class ProfileCommentAdapter(
             title.text = item.entryName
             upvotes.text = item.helpfulVotes.toString()
             edit.isVisible = item.authorId == storageHelper.user?.id
+            delete.isVisible = item.authorId == storageHelper.user?.id
 
             bindRatingRow(ratingGenreRow, ratingGenre, item.ratingDetails.genre.toFloat())
             bindRatingRow(ratingStoryRow, ratingStory, item.ratingDetails.story.toFloat())
@@ -166,6 +170,11 @@ class ProfileCommentAdapter(
                 .mapAdapterPosition({ adapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(editClickSubject)
+
+            delete.clicks()
+                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .autoDisposable(this)
+                .subscribe(deleteClickSubject)
 
             comment.heightChanges
                 .mapAdapterPosition({ adapterPosition }) { data[it].id }
