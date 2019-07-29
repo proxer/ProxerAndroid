@@ -1,1 +1,25 @@
-rootProject.name = 'ProxerAndroid'
+pluginManagement { scriptHandler ->
+    apply from: "gradle/versions.gradle"
+    apply from: "gradle/repositories.gradle", to: scriptHandler
+
+    plugins {
+        id "org.jetbrains.kotlin.android" version "${kotlinVersion}"
+        id "org.jetbrains.kotlin.kapt" version "${kotlinVersion}"
+
+        id "com.github.ben-manes.versions" version "${versionsPluginVersion}"
+        id "io.gitlab.arturbosch.detekt" version "${detektPluginVersion}"
+        id "org.jlleitschuh.gradle.ktlint" version "${ktlintPluginVersion}"
+    }
+
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "com.android.application") {
+                useModule("com.android.tools.build:gradle:${androidPluginVersion}")
+            } else if (requested.id.id == "com.novoda.android-command") {
+                useModule("com.novoda:gradle-android-command-plugin:${androidCommandPluginVersion}")
+            }
+        }
+    }
+}
+
+rootProject.name = "ProxerAndroid"

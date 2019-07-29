@@ -20,7 +20,7 @@ repositories {
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko).*"
             excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
-            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*"
+            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*"
         }
     }
 
@@ -30,10 +30,10 @@ repositories {
         content {
             excludeGroupByRegex "androidx.*"
             excludeGroupByRegex "zipflinger.*"
-            excludeGroupByRegex "com\\.github.*"
+            excludeGroupByRegex "com\\.github\\.(?!ben-manes).*"
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.google\\.android\\.*"
-            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*"
+            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*"
         }
     }
 
@@ -46,7 +46,7 @@ repositories {
     maven {
         url "https://dl.bintray.com/kotlin/kotlin-eap"
         mavenContent { releasesOnly() }
-        content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", "kotlin.*", ".*-eap-.*" }
+        content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*" }
     }
 
     maven {

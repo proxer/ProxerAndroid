@@ -5,25 +5,19 @@ buildscript { scriptHandler ->
     dependencies {
         // Manually set the R8 and D8 version to get latest improvements fast.
         classpath "com.android.tools:r8:$r8Version"
-
-        classpath "com.android.tools.build:gradle:$androidPluginVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektPluginVersion"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlintPluginVersion"
-        classpath "com.github.ben-manes:gradle-versions-plugin:$versionsPluginVersion"
-        classpath "com.novoda:gradle-android-command-plugin:$androidCommandPluginVersion"
     }
 }
 
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
-apply plugin: "kotlin-kapt"
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "org.jetbrains.kotlin.kapt"
 
-apply plugin: "com.github.ben-manes.versions"
-apply plugin: "org.jlleitschuh.gradle.ktlint"
-apply plugin: "io.gitlab.arturbosch.detekt"
-apply plugin: "com.novoda.android-command"
+    id "com.github.ben-manes.versions"
+    id "io.gitlab.arturbosch.detekt"
+    id "org.jlleitschuh.gradle.ktlint"
+    id "com.novoda.android-command"
+}
 
 apply from: "${projectDir}/gradle/utils.gradle"
 

@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "5.5.1"
+    gradleVersion = "5.6-rc-1"
 
     // Core plugins
     androidPluginVersion = "3.6.0-alpha03"
@@ -21,10 +21,10 @@ ext {
     r8Version = "1.5.63"
 
     // Utility plugins
-    detektPluginVersion = "1.0.0-RC16"
     versionsPluginVersion = "0.21.0"
-    androidCommandPluginVersion = "2.1.0"
+    detektPluginVersion = "1.0.0-RC16"
     ktlintPluginVersion = "8.2.0"
+    androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
     koinVersion = "2.0.1"
@@ -41,7 +41,7 @@ ext {
 
     // RxJava
     rxJavaVersion = "2.2.10"
-    rxKotlinVersion = "2.4.0-RC3"
+    rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0"
     rxPreferencesVersion = "2.0.0"
@@ -52,7 +52,7 @@ ext {
     recyclerviewVersion = "1.1.0-beta01"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
-    materialComponentsVersion = "1.1.0-alpha08"
+    materialComponentsVersion = "1.1.0-alpha09"
     preferenceVersion = "1.1.0-rc01"
     supportPreferenceVersion = "746ffabc50"
     iconicsVersion = "4.0.1-b01"
@@ -83,7 +83,7 @@ ext {
     glideVersion = "4.9.0"
     retrofitVersion = "2.6.0"
     okHttpVersion = "4.0.1"
-    okioVersion = "2.2.2"
+    okioVersion = "2.3.0"
     moshiVersion = "1.8.0"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"
