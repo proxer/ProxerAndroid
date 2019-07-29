@@ -127,10 +127,8 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
                         fileExtension == "png" ||
                         fileExtension == "gif"
                     ) {
-                        val proxyUrl = if (url.host != ProxerUrls.cdnBase.host) ProxerUrls.proxyImage(url) else url
-
                         try {
-                            val imageFile = GlideApp.with(view).download(proxyUrl.toString()).submit().get()
+                            val imageFile = GlideApp.with(view).download(url.toString()).submit().get()
                             val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
 
                             WebResourceResponse(mimeType, "", FileInputStream(imageFile))
