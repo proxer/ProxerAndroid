@@ -8,9 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.app.ShareCompat
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -95,11 +96,14 @@ class MediaActivity : ImageTabsActivity() {
         set(value) {
             intent.putExtra(CATEGORY_EXTRA, value)
 
-            sectionsPagerAdapter.update()
+            if (sectionsPagerAdapter.itemCount >= 3) {
+                sectionsPagerAdapter.notifyItemChanged(2)
+            }
         }
 
     override val headerImageUrl: HttpUrl by unsafeLazy { ProxerUrls.entryImage(id) }
-    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
+    override val sectionsPagerAdapter: FragmentStateAdapter by unsafeLazy { SectionsPagerAdapter() }
+    override val sectionsTabCallback: TabLayoutMediator.OnConfigureTabCallback by unsafeLazy { SectionsTabCallback() }
 
     private val customItemToDisplay: Int
         get() = when (intent.action) {
@@ -126,11 +130,7 @@ class MediaActivity : ImageTabsActivity() {
 
                 if (viewPager.currentItem == 0) {
                     viewPager.currentItem = customItemToDisplay
-
-                    tabLayoutHelper?.updateAllTabs()
                 }
-            } else {
-                sectionsPagerAdapter.update()
             }
         })
 
@@ -166,11 +166,14 @@ class MediaActivity : ImageTabsActivity() {
         title = name
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-    ) {
+    private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
 
-        override fun getItem(position: Int) = when (position) {
+        override fun getItemCount() = when {
+            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> 6
+            else -> 1
+        }
+
+        override fun createFragment(position: Int) = when (position) {
             0 -> MediaInfoFragment.newInstance()
             1 -> CommentsFragment.newInstance()
             2 -> EpisodeFragment.newInstance()
@@ -179,30 +182,21 @@ class MediaActivity : ImageTabsActivity() {
             5 -> DiscussionFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
+    }
 
-        override fun getCount() = when {
-            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> 6
-            else -> 1
-        }
+    private inner class SectionsTabCallback : TabLayoutMediator.OnConfigureTabCallback {
 
-        override fun getPageTitle(position: Int): String = when (position) {
-            0 -> getString(R.string.section_media_info)
-            1 -> getString(R.string.section_comments)
-            2 -> category?.toEpisodeAppString(this@MediaActivity)
-                ?: getString(R.string.category_anime_episodes_title)
-            3 -> getString(R.string.section_relations)
-            4 -> getString(R.string.section_recommendations)
-            5 -> getString(R.string.section_discussions)
-            else -> error("Unknown index passed: $position")
-        }
-
-        fun update() {
-            if (count >= 1) {
-                tabs.getTabAt(2)?.text = category?.toEpisodeAppString(this@MediaActivity)
+        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
+            tab.text = when (position) {
+                0 -> getString(R.string.section_media_info)
+                1 -> getString(R.string.section_comments)
+                2 -> category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
+                3 -> getString(R.string.section_relations)
+                4 -> getString(R.string.section_recommendations)
+                5 -> getString(R.string.section_discussions)
+                else -> error("Unknown index passed: $position")
             }
-
-            this.notifyDataSetChanged()
         }
     }
 }

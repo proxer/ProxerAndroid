@@ -2,7 +2,6 @@ package me.proxer.app.util
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 
@@ -14,7 +13,7 @@ object ActivityUtils {
     private const val TRANSITION_NAME_EXTRA = "transition_name"
 
     fun navigateToWithImageTransition(intent: Intent, context: Activity, imageView: ImageView?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && imageView?.drawable != null) {
+        if (imageView?.drawable != null) {
             intent.putExtra(TRANSITION_NAME_EXTRA, imageView.transitionName)
 
             context.startActivity(

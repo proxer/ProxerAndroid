@@ -5,11 +5,10 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
+import com.google.android.material.tabs.TabLayoutMediator
 import kotterknife.bindView
 import me.proxer.app.MainActivity
 import me.proxer.app.R
@@ -34,13 +33,16 @@ class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
     override val hostingActivity: MainActivity
         get() = activity as MainActivity
 
-    private val viewPager: ViewPager by bindView(R.id.viewPager)
+    private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter() }
+    private val sectionsTabCallback by unsafeLazy { SectionsTabCallback() }
+
+    private val viewPager: ViewPager2 by bindView(R.id.viewPager)
     private val tabs: TabLayout by unsafeLazy { hostingActivity.tabs }
+
+    private var mediator: TabLayoutMediator? = null
 
     private val showMessenger
         get() = requireArguments().getBoolean(SHOW_MESSENGER_ARGUMENT, false)
-
-    private var tabLayoutHelper: TabLayoutHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,20 +54,18 @@ class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
         super.onViewCreated(view, savedInstanceState)
 
         tabs.isVisible = true
-        viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
-
-        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+        viewPager.adapter = sectionsPagerAdapter
 
         if (savedInstanceState == null) {
             viewPager.currentItem = if (showMessenger) 1 else 0
-
-            tabLayoutHelper?.updateAllTabs()
         }
+
+        mediator = TabLayoutMediator(tabs, viewPager, sectionsTabCallback).also { it.attach() }
     }
 
     override fun onDestroyView() {
-        tabLayoutHelper?.release()
-        tabLayoutHelper = null
+        mediator?.detach()
+        mediator = null
         viewPager.adapter = null
 
         tabs.isGone = true
@@ -73,22 +73,26 @@ class ChatContainerFragment : BaseFragment(R.layout.fragment_chat_container) {
         super.onDestroyView()
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-    ) {
+    private inner class SectionsPagerAdapter :
+        FragmentStateAdapter(childFragmentManager, viewLifecycleOwner.lifecycle) {
 
-        override fun getItem(position: Int) = when (position) {
+        override fun getItemCount() = 2
+
+        override fun createFragment(position: Int) = when (position) {
             0 -> ChatRoomFragment.newInstance()
             1 -> ConferenceFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
+    }
 
-        override fun getCount() = 2
+    private inner class SectionsTabCallback : TabLayoutMediator.OnConfigureTabCallback {
 
-        override fun getPageTitle(position: Int): String = when (position) {
-            0 -> getString(R.string.fragment_chat_container_public)
-            1 -> getString(R.string.fragment_chat_container_private)
-            else -> error("Unknown index passed: $position")
+        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
+            tab.text = when (position) {
+                0 -> getString(R.string.fragment_chat_container_public)
+                1 -> getString(R.string.fragment_chat_container_private)
+                else -> error("Unknown index passed: $position")
+            }
         }
     }
 }
