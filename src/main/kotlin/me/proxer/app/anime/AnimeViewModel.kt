@@ -5,6 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.anime.resolver.ProxerStreamResolver
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolverFactory
 import me.proxer.app.base.BaseViewModel
@@ -110,8 +111,15 @@ class AnimeViewModel(
     fun resolve(stream: AnimeStream) {
         resolverDisposable?.dispose()
 
-        val resolutionSingle = stream.resolutionResult?.let { Single.just(it) }
-            ?: StreamResolverFactory.resolverFor(stream.hosterName)?.resolve(stream.id)
+        val resolutionSingle = stream.resolutionResult
+            ?.let { Single.just(it) }
+            ?: StreamResolverFactory.resolverFor(stream.hosterName)
+                ?.let {
+                    when (it) {
+                        is ProxerStreamResolver -> it.resolve(stream.id, entryId, episode, language)
+                        else -> it.resolve(stream.id)
+                    }
+                }
             ?: throw StreamResolutionException()
 
         resolverDisposable = resolutionSingle
