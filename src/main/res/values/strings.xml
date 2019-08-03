@@ -145,6 +145,9 @@
     <string name="error_missing_participants">Füge mindestens einen Teilnehmer hinzu</string>
 
     <string name="error_video_deleted">Das Video ist nicht mehr verfügbar</string>
+    <string name="error_video_service_unavailable">
+        Der Hoster ist (temporär) nicht verfügbar. Versuche es später erneut
+    </string>
     <string name="error_video_unknown">Es gab ein unbekanntes Problem mit dem Hoster. Versuche es später erneut</string>
 
     <string name="error_no_data">Keine Daten</string>

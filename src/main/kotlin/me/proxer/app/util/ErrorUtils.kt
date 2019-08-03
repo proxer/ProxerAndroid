@@ -181,6 +181,7 @@ object ErrorUtils : KoinComponent {
             is ProxerException -> getMessageForProxerException(innermostError)
             is HttpDataSource.InvalidResponseCodeException -> when (innermostError.responseCode) {
                 404 -> R.string.error_video_deleted
+                503 -> R.string.error_video_service_unavailable
                 in 400 until 600 -> R.string.error_video_unknown
                 else -> R.string.error_unknown
             }
