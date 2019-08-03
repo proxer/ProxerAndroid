@@ -37,8 +37,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/inputContainer"
-            android:animateLayoutChanges="true">
+            android:layout_above="@+id/inputContainer">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/scrollToBottom"

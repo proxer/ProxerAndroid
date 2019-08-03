@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -102,15 +103,11 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
+            .skip(1)
             .debounce(10, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe {
-                when (layoutManager.findLastVisibleItemPosition()) {
-                    adapter.itemCount - 1 -> scrollToBottom.hide()
-                    else -> scrollToBottom.show()
-                }
-            }
+            .subscribe { updateScrollToBottomVisibility() }
 
         hostingActivity.headerHeightChanges()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -161,6 +158,17 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                     ACTION_MESSAGE_HIDE
                 )
             )
+        }
+
+        recyclerView.post {
+            if (view != null) updateScrollToBottomVisibility(false)
+        }
+    }
+
+    private fun updateScrollToBottomVisibility(animate: Boolean = true) {
+        when (layoutManager.findLastVisibleItemPosition()) {
+            adapter.itemCount - 1 -> if (animate) scrollToBottom.hide() else scrollToBottom.isVisible = false
+            else -> if (animate) scrollToBottom.show() else scrollToBottom.isVisible = true
         }
     }
 }

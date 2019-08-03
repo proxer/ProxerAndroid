@@ -14,6 +14,7 @@ import android.widget.ImageView
 import androidx.appcompat.view.ActionMode
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,7 +50,6 @@ import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -203,17 +203,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
-            .debounce(10, TimeUnit.MILLISECONDS)
+            .skip(1)
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe {
-                val currentPosition = layoutManager.findFirstVisibleItemPosition()
-
-                when (currentPosition <= innerAdapter.enqueuedMessageCount) {
-                    true -> scrollToBottom.hide()
-                    false -> scrollToBottom.show()
-                }
-            }
+            .subscribe { updateScrollToBottomVisibility() }
 
         scrollToBottom.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -302,6 +295,8 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         super.showData(data)
 
         updateInput()
+
+        recyclerView.post { if (view != null) updateScrollToBottomVisibility(false) }
     }
 
     override fun hideData() {
@@ -408,5 +403,14 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         ChatReportDialog.show(hostingActivity, messageId)
 
         actionMode?.finish()
+    }
+
+    private fun updateScrollToBottomVisibility(animate: Boolean = true) {
+        val currentPosition = layoutManager.findFirstVisibleItemPosition()
+
+        when (currentPosition <= innerAdapter.enqueuedMessageCount) {
+            true -> if (animate) scrollToBottom.hide() else scrollToBottom.isVisible = false
+            false -> if (animate) scrollToBottom.show() else scrollToBottom.isVisible = true
+        }
     }
 }
