@@ -32,7 +32,7 @@ PROXER_API_KEY = YourApiKey
 ```
 
 This app offers three variants to build: `debug`, `release` and `logRelease`.<br>
-It is strongly recommended to use the `release` variant as it is faster and does not sensitive log data.
+It is strongly recommended to use the `release` variant as it is faster and does not log sensitive data.
 
 Before building, [generate a key](https://developer.android.com/studio/publish/app-signing.html#generate-key)
 for signing the app if you have none yet.<br>
