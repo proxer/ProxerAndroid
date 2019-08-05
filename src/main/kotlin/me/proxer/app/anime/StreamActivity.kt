@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.os.PowerManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -156,7 +155,7 @@ class StreamActivity : BaseActivity() {
     private val animationHandler = Handler()
 
     private val wakeLock by lazy {
-        UpdatableWakeLock(requireNotNull(getSystemService()), PowerManager.PARTIAL_WAKE_LOCK, "$packageName:Player")
+        StreamWakeLock(requireNotNull(getSystemService()), requireNotNull(getSystemService()), "$packageName:Player")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
