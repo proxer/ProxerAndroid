@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.PowerManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,12 +27,14 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
@@ -74,6 +77,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -140,6 +144,10 @@ class StreamActivity : BaseActivity() {
     private val hideControlHandler = Handler()
     private val animationHandler = Handler()
 
+    private val wakeLock by lazy {
+        UpdatableWakeLock(requireNotNull(getSystemService()), PowerManager.PARTIAL_WAKE_LOCK, "$packageName:Player")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -190,6 +198,27 @@ class StreamActivity : BaseActivity() {
                         play.isVisible = false
                     }
                     null -> error("playerState is null")
+                }
+
+                when (it) {
+                    PlayerState.PLAYING, PlayerState.LOADING -> {
+                        playerView.keepScreenOn = true
+
+                        val duration = playerManager.currentPlayer.duration.let { duration ->
+                            if (duration == C.TIME_UNSET) {
+                                TimeUnit.SECONDS.toMillis(30)
+                            } else {
+                                duration - playerManager.currentPlayer.currentPosition + TimeUnit.MINUTES.toMillis(2)
+                            }
+                        }
+
+                        wakeLock.acquire(duration)
+                    }
+                    PlayerState.PAUSING -> {
+                        playerView.keepScreenOn = false
+
+                        wakeLock.release()
+                    }
                 }
 
                 if ((controlsContainer.parent as? View)?.isVisible?.not() != false) {
@@ -325,6 +354,8 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        wakeLock.release()
+
         introductoryOverlay?.remove()
         introductoryOverlay = null
 
