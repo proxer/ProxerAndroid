@@ -591,6 +591,7 @@
     <string name="fragment_comment_edit_underline">Unterstrichen</string>
     <string name="fragment_comment_edit_strikethrough">Durchgestrichen</string>
     <string name="fragment_comment_edit_size">Größe</string>
+    <string name="fragment_comment_edit_color">Farbe</string>
     <string name="fragment_comment_edit_left">Links</string>
     <string name="fragment_comment_edit_center">Mittig</string>
     <string name="fragment_comment_edit_right">Rechts</string>
@@ -601,6 +602,14 @@
     <string name="fragment_comment_edit_size_normal">Normal</string>
     <string name="fragment_comment_edit_size_small">Klein</string>
     <string name="fragment_comment_edit_size_tiny">Winzig</string>
+    <string name="fragment_comment_edit_color_red">Rot</string>
+    <string name="fragment_comment_edit_color_purple">Lila</string>
+    <string name="fragment_comment_edit_color_blue">Blau</string>
+    <string name="fragment_comment_edit_color_green">Grün</string>
+    <string name="fragment_comment_edit_color_yellow">Gelb</string>
+    <string name="fragment_comment_edit_color_orange">Orange</string>
+    <string name="fragment_comment_edit_color_grey">Grau</string>
+    <string name="fragment_comment_edit_color_white">Weiß</string>
     <string name="fragment_comment_draft_saved">Kommentar wurde als Entwurf gespeichert</string>
     <string name="fragment_comment_published">Kommentar wurde erfolgreich veröffentlicht</string>
 

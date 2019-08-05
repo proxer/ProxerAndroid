@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/red"
+        android:title="@string/fragment_comment_edit_color_red"
+        app:ico_color="@color/md_red_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/purple"
+        android:title="@string/fragment_comment_edit_color_purple"
+        app:ico_color="@color/md_purple_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/blue"
+        android:title="@string/fragment_comment_edit_color_blue"
+        app:ico_color="@color/md_blue_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/green"
+        android:title="@string/fragment_comment_edit_color_green"
+        app:ico_color="@color/md_green_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/yellow"
+        android:title="@string/fragment_comment_edit_color_yellow"
+        app:ico_color="@color/md_yellow_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/orange"
+        android:title="@string/fragment_comment_edit_color_orange"
+        app:ico_color="@color/md_orange_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/grey"
+        android:title="@string/fragment_comment_edit_color_grey"
+        app:ico_color="@color/md_grey_600"
+        app:ico_icon="cmd_circle"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/white"
+        android:title="@string/fragment_comment_edit_color_white"
+        app:ico_color="?attr/colorIcon"
+        app:ico_icon="cmd_circle_outline"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="ifRoom" />
+</menu>

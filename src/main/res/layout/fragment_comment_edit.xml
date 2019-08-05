@@ -263,6 +263,20 @@
                         android:background="?attr/colorDivider" />
 
                     <me.proxer.app.ui.view.InfoImageButton
+                        android:id="@+id/color"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/fragment_comment_edit_color"
+                        tools:src="@drawable/ic_japan" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="?attr/colorDivider" />
+
+                    <me.proxer.app.ui.view.InfoImageButton
                         android:id="@+id/left"
                         android:layout_width="48dp"
                         android:layout_height="48dp"

@@ -13,7 +13,11 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
@@ -74,6 +78,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val underlined by bindView<ImageButton>(R.id.underline)
     private val strikethrough by bindView<ImageButton>(R.id.strikethrough)
     private val size by bindView<ImageButton>(R.id.size)
+    private val color by bindView<ImageButton>(R.id.color)
     private val left by bindView<ImageButton>(R.id.left)
     private val center by bindView<ImageButton>(R.id.center)
     private val right by bindView<ImageButton>(R.id.right)
@@ -105,6 +110,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         underlined.setIconicsImage(CommunityMaterial.Icon.cmd_format_underline, 32)
         strikethrough.setIconicsImage(CommunityMaterial.Icon.cmd_format_strikethrough_variant, 32)
         size.setIconicsImage(CommunityMaterial.Icon.cmd_format_size, 32)
+        color.setIconicsImage(CommunityMaterial.Icon.cmd_format_color_fill, 32)
         left.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_left, 32)
         center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
         right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
@@ -175,7 +181,38 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                                 }
                             }
                     }
-                    .show()
+                    .let { MenuPopupHelper(requireContext(), it.menu as MenuBuilder, color) }
+                    .show(-dip(48), 0)
+            }
+
+        color.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                PopupMenu(requireContext(), color, Gravity.TOP)
+                    .apply {
+                        IconicsMenuInflaterUtil.inflate(
+                            menuInflater, requireContext(), R.menu.fragment_comment_color, menu
+                        )
+                    }
+                    .apply {
+                        itemClicks()
+                            .autoDisposable(viewLifecycleOwner.scope())
+                            .subscribe {
+                                when (it.itemId) {
+                                    R.id.red -> insertTag("color", getColorString(R.color.md_red_600))
+                                    R.id.purple -> insertTag("color", getColorString(R.color.md_purple_600))
+                                    R.id.blue -> insertTag("color", getColorString(R.color.md_blue_600))
+                                    R.id.green -> insertTag("color", getColorString(R.color.md_green_600))
+                                    R.id.yellow -> insertTag("color", getColorString(R.color.md_yellow_600))
+                                    R.id.orange -> insertTag("color", getColorString(R.color.md_orange_600))
+                                    R.id.grey -> insertTag("color", getColorString(R.color.md_grey_600))
+                                    R.id.white -> insertTag("color", getColorString(R.color.md_white_1000))
+                                }
+                            }
+                    }
+                    .let { MenuPopupHelper(requireContext(), it.menu as MenuBuilder, color) }
+                    .apply { setForceShowIcon(true) }
+                    .show(-dip(48), 0)
             }
     }
 
@@ -248,6 +285,10 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         9 -> R.string.fragment_comment_rating_title_9
         10 -> R.string.fragment_comment_rating_title_10
         else -> R.string.fragment_comment_rating_title_0
+    }
+
+    private fun getColorString(@ColorRes color: Int): String {
+        return "#${Integer.toHexString(ContextCompat.getColor(requireContext(), color) and 0x00ffffff)}"
     }
 
     private fun focusEditor() {

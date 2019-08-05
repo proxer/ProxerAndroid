@@ -5,45 +5,25 @@
     <item
         android:id="@+id/huge"
         android:title="@string/fragment_comment_edit_size_huge"
-        app:ico_color="?attr/colorIcon"
-        app:ico_icon="cmd_format_header_1"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/large"
         android:title="@string/fragment_comment_edit_size_large"
-        app:ico_color="?attr/colorIcon"
-        app:ico_icon="cmd_format_header_2"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/normal"
         android:title="@string/fragment_comment_edit_size_normal"
-        app:ico_color="?attr/colorIcon"
-        app:ico_icon="cmd_format_header_3"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/small"
         android:title="@string/fragment_comment_edit_size_small"
-        app:ico_color="?attr/colorIcon"
-        app:ico_icon="cmd_format_header_4"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tiny"
         android:title="@string/fragment_comment_edit_size_tiny"
-        app:ico_color="?attr/colorIcon"
-        app:ico_icon="cmd_format_header_5"
-        app:ico_padding="2dp"
-        app:ico_size="24dp"
         app:showAsAction="ifRoom" />
 </menu>
