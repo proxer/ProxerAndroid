@@ -26,6 +26,7 @@ sealed class StreamResolutionResult {
         companion object {
             const val NAME_EXTRA = "name"
             const val EPISODE_EXTRA = "episode"
+            const val COVER_EXTRA = "cover"
             const val REFERER_EXTRA = "referer"
             const val AD_TAG_EXTRA = "ad_tag"
             const val INTERNAL_PLAYER_ONLY_EXTRA = "internal_player_only"
@@ -42,16 +43,24 @@ sealed class StreamResolutionResult {
             context: Context,
             name: String? = null,
             episode: Int? = null,
+            coverUri: Uri? = null,
             forceInternal: Boolean = false
         ): Intent {
             return intent
                 .apply { if (forceInternal) component = ComponentName(context, StreamActivity::class.java) }
                 .apply { if (name != null) putExtra(NAME_EXTRA, name) }
                 .apply { if (episode != null) putExtra(EPISODE_EXTRA, episode) }
+                .apply { if (coverUri != null) putExtra(COVER_EXTRA, coverUri) }
         }
 
-        fun play(context: Context, name: String?, episode: Int?, forceInternal: Boolean = false) {
-            context.startActivity(makeIntent(context, name, episode, forceInternal))
+        fun play(
+            context: Context,
+            name: String?,
+            episode: Int?,
+            coverUri: Uri? = null,
+            forceInternal: Boolean = false
+        ) {
+            context.startActivity(makeIntent(context, name, episode, coverUri, forceInternal))
         }
     }
 

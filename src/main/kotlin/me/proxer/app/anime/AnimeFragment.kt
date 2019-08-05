@@ -31,12 +31,14 @@ import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.AnimeLanguage
+import me.proxer.library.util.ProxerUrls
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -187,7 +189,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
         viewModel.resolutionResult.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result) {
-                    is StreamResolutionResult.Video -> result.play(requireContext(), name, episode, true)
+                    is StreamResolutionResult.Video -> result.play(
+                        requireContext(), name, episode, ProxerUrls.entryImage(id).androidUri(), true
+                    )
                     is StreamResolutionResult.Link -> result.show(this)
                     is StreamResolutionResult.App -> result.navigate(requireContext())
                     is StreamResolutionResult.Message -> error(

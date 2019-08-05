@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -34,8 +35,11 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ext.cast.CastPlayer
+import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.CastState
@@ -55,16 +59,19 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
+import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.SINGLE_CONNECTION_CLIENT
 import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.COVER_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTERNAL_PLAYER_ONLY_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.newTask
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
@@ -77,6 +84,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
@@ -89,6 +97,9 @@ class StreamActivity : BaseActivity() {
 
     internal val episode: Int?
         get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
+
+    internal val coverUri: Uri?
+        get() = intent.getParcelableExtra<Uri>(COVER_EXTRA)
 
     internal val referer: String?
         get() = intent.getStringExtra(REFERER_EXTRA)
@@ -388,7 +399,9 @@ class StreamActivity : BaseActivity() {
         return if (availabilityResult == ConnectionResult.SUCCESS) {
             try {
                 CastContext.getSharedInstance(this)
-            } catch (_: Exception) {
+            } catch (error: Exception) {
+                Timber.e(error)
+
                 null
             }
         } else {
@@ -400,6 +413,23 @@ class StreamActivity : BaseActivity() {
         title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.subtitle = episode?.let { Category.ANIME.toEpisodeAppString(this, it) }
+
+        coverUri?.also {
+            GlideApp.with(playerView)
+                .load(coverUri)
+                .logErrors()
+                .into(object : CustomViewTarget<PlayerView, Drawable>(playerView) {
+                    override fun onLoadFailed(errorDrawable: Drawable?) = Unit
+
+                    override fun onResourceCleared(placeholder: Drawable?) {
+                        playerView.defaultArtwork = null
+                    }
+
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                        playerView.defaultArtwork = resource
+                    }
+                })
+        }
 
         playerView.setControllerVisibilityListener {
             toggleFullscreen(it == View.GONE)

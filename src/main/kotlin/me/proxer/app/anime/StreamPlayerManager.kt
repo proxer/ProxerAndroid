@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
+import com.google.android.gms.common.images.WebImage
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
@@ -137,11 +138,12 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     private var localMediaSource = buildLocalMediaSourceWithAds(client, uri)
-    private var castMediaSource = buildCastMediaSource(name, episode, uri)
+    private var castMediaSource = buildCastMediaSource(name, episode, coverUri, uri)
 
     private val uri get() = requireNotNull(weakContext.get()?.uri)
     private val name: String? get() = weakContext.get()?.name
     private val episode: Int? get() = weakContext.get()?.episode
+    private val coverUri: Uri? get() = weakContext.get()?.coverUri
     private val referer: String? get() = weakContext.get()?.referer
 
     private var lastPosition: Long
@@ -221,7 +223,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         lastPosition = -1
 
         localMediaSource = buildLocalMediaSourceWithAds(client, uri)
-        castMediaSource = buildCastMediaSource(name, episode, uri)
+        castMediaSource = buildCastMediaSource(name, episode, coverUri, uri)
 
         retry()
 
@@ -279,7 +281,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         }
     }
 
-    private fun buildCastMediaSource(name: String?, episode: Int?, uri: Uri): MediaQueueItem {
+    private fun buildCastMediaSource(name: String?, episode: Int?, coverUri: Uri?, uri: Uri): MediaQueueItem {
         val mediaMetadata = MediaMetadata(MediaMetadata.MEDIA_TYPE_TV_SHOW).apply {
             if (name != null) {
                 putString(MediaMetadata.KEY_TITLE, name)
@@ -287,6 +289,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
             if (episode != null) {
                 putInt(MediaMetadata.KEY_EPISODE_NUMBER, episode)
+            }
+
+            if (coverUri != null) {
+                addImage(WebImage(coverUri))
             }
         }
 
