@@ -24,8 +24,8 @@ class CastOptionsProvider : OptionsProvider {
                 listOf(
                     MediaIntentReceiver.ACTION_REWIND,
                     MediaIntentReceiver.ACTION_TOGGLE_PLAYBACK,
-                    MediaIntentReceiver.ACTION_STOP_CASTING,
-                    MediaIntentReceiver.ACTION_FORWARD
+                    MediaIntentReceiver.ACTION_FORWARD,
+                    MediaIntentReceiver.ACTION_STOP_CASTING
                 ),
                 intArrayOf(0, 1, 2, 3)
             )
