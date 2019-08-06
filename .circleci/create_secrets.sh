@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -v KEYSTORE ]] && [[ -v SECRETS ]]; then
+if [[ ${KEYSTORE:+1} ]] && [[ ${SECRETS:+1} ]]; then
 	echo "${KEYSTORE}" | base64 -d >keystore.jks
 	echo "${SECRETS}" | base64 -d >secrets.properties
 	echo "Created secrets"

@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ -v CIRCLE_COMPARE_URL ]]; then
+if [[ ${CIRCLE_COMPARE_URL:+1} ]]; then
 	COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
 	CAPTION=$(git log --pretty=format:"- %s" "${COMMIT_RANGE}" --reverse) || true
 else
 	CAPTION=$(git log -1 --pretty=format:"- %s") || true
 fi
 
-if [[ -v CAPTION ]]; then
+if [[ ${CAPTION:+1} ]]; then
     CAPTION=$(echo "$CAPTION" | cut -c -1024)
 else
 	CAPTION="No changelog available"
 fi
 
-if [[ -v TELEGRAM_CHAT_ID ]] && [[ -v TELEGRAM_BOT_ID ]]; then
+if [[ ${TELEGRAM_CHAT_ID:+1} ]] && [[ ${TELEGRAM_BOT_ID:+1} ]]; then
     curl -s -S \
         -F chat_id="$TELEGRAM_CHAT_ID" \
         -F caption="$CAPTION" \
@@ -24,3 +24,6 @@ else
     echo "TELEGRAM_CHAT_ID or TELEGRAM_BOT_ID not set."
     exit -1
 fi
+
+unset COMMIT_RANGE
+unset CAPTION
