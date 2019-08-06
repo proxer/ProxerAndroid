@@ -192,7 +192,7 @@
         <activity android:name=".ucp.settings.UcpSettingsActivity" />
 
         <activity
-            android:name=".comment.CommentActivity"
+            android:name=".comment.EditCommentActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <activity

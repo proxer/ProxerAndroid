@@ -30,7 +30,7 @@ import kotterknife.bindView
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
-import me.proxer.app.comment.CommentActivity
+import me.proxer.app.comment.EditCommentActivity
 import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
@@ -108,7 +108,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         innerAdapter.editClickSubject
             .autoDisposable(this.scope())
             .subscribe {
-                CommentActivity.navigateTo(this, it.id, it.entryId, name)
+                EditCommentActivity.navigateTo(this, it.id, it.entryId, name)
             }
 
         innerAdapter.deleteClickSubject
@@ -155,7 +155,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
 
         create.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { CommentActivity.navigateTo(this, entryId = id, name = name) }
+            .subscribe { EditCommentActivity.navigateTo(this, entryId = id, name = name) }
 
         TooltipCompat.setTooltipText(create, getString(R.string.action_write_comment))
     }
@@ -167,8 +167,8 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(CommentActivity.COMMENT_EXTRA) }
+        if (requestCode == EditCommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(EditCommentActivity.COMMENT_EXTRA) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(this.scope())

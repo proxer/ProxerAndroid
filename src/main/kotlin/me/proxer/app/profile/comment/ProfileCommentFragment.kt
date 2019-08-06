@@ -21,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
-import me.proxer.app.comment.CommentActivity
+import me.proxer.app.comment.EditCommentActivity
 import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
@@ -89,7 +89,7 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
         innerAdapter.editClickSubject
             .autoDisposable(this.scope())
             .subscribe {
-                CommentActivity.navigateTo(this, it.id, it.entryId, it.entryName)
+                EditCommentActivity.navigateTo(this, it.id, it.entryId, it.entryName)
             }
 
         innerAdapter.deleteClickSubject
@@ -121,8 +121,8 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == CommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(CommentActivity.COMMENT_EXTRA) }
+        if (requestCode == EditCommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(EditCommentActivity.COMMENT_EXTRA) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(this.scope())

@@ -4,26 +4,26 @@
 
     <item
         android:id="@+id/huge"
-        android:title="@string/fragment_comment_edit_size_huge"
+        android:title="@string/fragment_edit_comment_size_huge"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/large"
-        android:title="@string/fragment_comment_edit_size_large"
+        android:title="@string/fragment_edit_comment_size_large"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/normal"
-        android:title="@string/fragment_comment_edit_size_normal"
+        android:title="@string/fragment_edit_comment_size_normal"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/small"
-        android:title="@string/fragment_comment_edit_size_small"
+        android:title="@string/fragment_edit_comment_size_small"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tiny"
-        android:title="@string/fragment_comment_edit_size_tiny"
+        android:title="@string/fragment_edit_comment_size_tiny"
         app:showAsAction="ifRoom" />
 </menu>

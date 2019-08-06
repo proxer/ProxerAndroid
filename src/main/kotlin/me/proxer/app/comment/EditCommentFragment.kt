@@ -6,9 +6,11 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RatingBar
@@ -18,26 +20,29 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.core.text.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.ratingChanges
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
+import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.extension.dip
+import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
-import me.proxer.app.util.extension.unsafeLazy
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
@@ -45,18 +50,18 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Ruben Gees
  */
-class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_comment_edit) {
+class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_edit_comment) {
 
     companion object {
-        fun newInstance() = CommentEditFragment().apply {
+        fun newInstance() = EditCommentFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    override val hostingActivity: CommentActivity
-        get() = activity as CommentActivity
+    override val hostingActivity: EditCommentActivity
+        get() = activity as EditCommentActivity
 
-    override val viewModel by sharedViewModel<CommentViewModel> {
+    override val viewModel by sharedViewModel<EditCommentViewModel> {
         parametersOf(id, entryId)
     }
 
@@ -83,9 +88,12 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val right by bindView<ImageButton>(R.id.right)
     private val spoiler by bindView<ImageButton>(R.id.spoiler)
 
-    private val inputMethodManager by unsafeLazy {
-        requireNotNull(requireContext().getSystemService<InputMethodManager>())
-    }
+    private val commentPreviewBottomSheet by bindView<ViewGroup>(R.id.commentPreviewBottomSheet)
+    private val commentPreviewTitle by bindView<TextView>(R.id.commentPreviewTitle)
+    private val commentPreview by bindView<BBCodeView>(R.id.commentPreview)
+    private val commentPreviewEmpty by bindView<TextView>(R.id.commentPreviewEmpty)
+
+    private val commentBottomSheetBehavior get() = BottomSheetBehavior.from(commentPreviewBottomSheet)
 
     private val id: String?
         get() = hostingActivity.id
@@ -97,7 +105,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rules.text = resources.getStringArray(R.array.fragment_comment_rules)
+        rules.text = resources.getStringArray(R.array.fragment_edit_comment_rules)
             .joinTo(SpannableStringBuilder(), "\n\n") {
                 SpannableString(it.parseAsHtml()).apply { this[0..length] = BulletSpan(requireContext().dip(6)) }
             }
@@ -115,11 +123,12 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
         spoiler.setIconicsImage(CommunityMaterial.Icon.cmd_eye_off, 32)
 
+        commentPreview.expandSpoilers = true
+        commentPreviewEmpty.setCompoundDrawables(null, generateEmptyDrawable(), null, null)
+
         rulesContainer.clicks().mergeWith(expandRules.clicks())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
-                clearEditorFocus()
-
                 rules.isVisible = !rules.isVisible
 
                 ViewCompat.animate(expandRules).rotation(if (rules.isVisible) 180f else 0f)
@@ -159,7 +168,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                 PopupMenu(requireContext(), size, Gravity.TOP)
                     .apply {
                         IconicsMenuInflaterUtil.inflate(
-                            menuInflater, requireContext(), R.menu.fragment_comment_size, menu
+                            menuInflater, requireContext(), R.menu.fragment_edit_comment_size, menu
                         )
                     }
                     .apply {
@@ -185,7 +194,7 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                 PopupMenu(requireContext(), color, Gravity.TOP)
                     .apply {
                         IconicsMenuInflaterUtil.inflate(
-                            menuInflater, requireContext(), R.menu.fragment_comment_color, menu
+                            menuInflater, requireContext(), R.menu.fragment_edit_comment_color, menu
                         )
                     }
                     .apply {
@@ -208,12 +217,32 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                     .apply { setForceShowIcon(true) }
                     .show(-dip(48), 0)
             }
+
+        commentPreviewTitle.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe { commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN }
+
+        commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        setHasOptionsMenu(true)
     }
 
-    override fun onPause() {
-        clearEditorFocus()
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_edit_comment, menu, true)
 
-        super.onPause()
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.preview -> commentBottomSheetBehavior.state = when (commentBottomSheetBehavior.state) {
+                BottomSheetBehavior.STATE_HIDDEN -> BottomSheetBehavior.STATE_EXPANDED
+                else -> BottomSheetBehavior.STATE_HIDDEN
+            }
+            R.id.publish -> viewModel.publish()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun showData(data: LocalComment) {
@@ -228,6 +257,18 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         if (editor.text.isBlank() && data.content.isNotBlank()) {
             editor.setText(data.content)
+        }
+
+        if (data.content.isBlank()) {
+            commentPreview.isVisible = false
+            commentPreviewEmpty.isVisible = true
+
+            commentPreview.tree = null
+        } else {
+            commentPreview.isVisible = true
+            commentPreviewEmpty.isVisible = false
+
+            commentPreview.tree = data.parsedContent
         }
     }
 
@@ -255,35 +296,27 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         } else {
             editor.text.insert(0, "$startTag$endTag")
         }
-
-        focusEditor()
     }
 
     private fun getRatingTitle(rating: Int) = when (rating) {
-        1 -> R.string.fragment_comment_rating_title_1
-        2 -> R.string.fragment_comment_rating_title_2
-        3 -> R.string.fragment_comment_rating_title_3
-        4 -> R.string.fragment_comment_rating_title_4
-        5 -> R.string.fragment_comment_rating_title_5
-        6 -> R.string.fragment_comment_rating_title_6
-        7 -> R.string.fragment_comment_rating_title_7
-        8 -> R.string.fragment_comment_rating_title_8
-        9 -> R.string.fragment_comment_rating_title_9
-        10 -> R.string.fragment_comment_rating_title_10
-        else -> R.string.fragment_comment_rating_title_0
+        1 -> R.string.fragment_edit_comment_rating_title_1
+        2 -> R.string.fragment_edit_comment_rating_title_2
+        3 -> R.string.fragment_edit_comment_rating_title_3
+        4 -> R.string.fragment_edit_comment_rating_title_4
+        5 -> R.string.fragment_edit_comment_rating_title_5
+        6 -> R.string.fragment_edit_comment_rating_title_6
+        7 -> R.string.fragment_edit_comment_rating_title_7
+        8 -> R.string.fragment_edit_comment_rating_title_8
+        9 -> R.string.fragment_edit_comment_rating_title_9
+        10 -> R.string.fragment_edit_comment_rating_title_10
+        else -> R.string.fragment_edit_comment_rating_title_0
     }
 
     private fun getColorString(@ColorRes color: Int): String {
         return "#${Integer.toHexString(ContextCompat.getColor(requireContext(), color) and 0x00ffffff)}"
     }
 
-    private fun focusEditor() {
-        editor.requestFocus()
-        inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
-    }
-
-    private fun clearEditorFocus() {
-        editor.clearFocus()
-        inputMethodManager.hideSoftInputFromWindow(editor.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-    }
+    private fun generateEmptyDrawable() = IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_thought_bubble)
+        .iconColor(requireContext())
+        .sizeDp(128)
 }

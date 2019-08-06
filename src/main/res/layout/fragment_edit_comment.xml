@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    tools:context=".comment.CommentEditFragment">
+    tools:context=".comment.EditCommentFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/progress"
@@ -59,7 +59,7 @@
                                 android:layout_marginBottom="8dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
-                                android:contentDescription="@string/fragment_comment_rules_expand_content_description"
+                                android:contentDescription="@string/fragment_edit_comment_rules_expand_content_description"
                                 android:focusable="true"
                                 tools:src="@drawable/ic_japan" />
 
@@ -74,7 +74,7 @@
                                 android:layout_marginEnd="8dp"
                                 android:layout_toEndOf="@+id/expandRules"
                                 android:gravity="center_vertical"
-                                android:text="@string/fragment_comment_rules_title"
+                                android:text="@string/fragment_edit_comment_rules_title"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
                             <TextView
@@ -114,7 +114,7 @@
                                 android:padding="8dp"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="?attr/colorSecondary"
-                                tools:text="@string/fragment_comment_rating_title_8" />
+                                tools:text="@string/fragment_edit_comment_rating_title_8" />
 
                             <me.zhanghai.android.materialratingbar.MaterialRatingBar
                                 android:id="@+id/rating"
@@ -141,7 +141,7 @@
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
-                                android:contentDescription="@string/fragment_comment_rating_clear_content_description"
+                                android:contentDescription="@string/fragment_edit_comment_rating_clear_content_description"
                                 android:visibility="gone"
                                 tools:src="@drawable/ic_japan"
                                 tools:visibility="visible" />
@@ -156,7 +156,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:gravity="top"
-                        android:hint="@string/fragment_comment_edit_hint"
+                        android:hint="@string/fragment_edit_comment_hint"
                         android:importantForAutofill="no"
                         android:inputType="textMultiLine"
                         android:minHeight="300dp"
@@ -197,7 +197,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_bold"
+                        android:contentDescription="@string/fragment_edit_comment_bold"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -211,7 +211,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_italic"
+                        android:contentDescription="@string/fragment_edit_comment_italic"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -225,7 +225,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_underline"
+                        android:contentDescription="@string/fragment_edit_comment_underline"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -239,7 +239,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_strikethrough"
+                        android:contentDescription="@string/fragment_edit_comment_strikethrough"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -253,7 +253,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_size"
+                        android:contentDescription="@string/fragment_edit_comment_size"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -267,7 +267,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_color"
+                        android:contentDescription="@string/fragment_edit_comment_color"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -281,7 +281,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_left"
+                        android:contentDescription="@string/fragment_edit_comment_left"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -295,7 +295,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_center"
+                        android:contentDescription="@string/fragment_edit_comment_center"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -309,7 +309,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_right"
+                        android:contentDescription="@string/fragment_edit_comment_right"
                         tools:src="@drawable/ic_japan" />
 
                     <View
@@ -323,7 +323,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/fragment_comment_edit_spoiler"
+                        android:contentDescription="@string/fragment_edit_comment_spoiler"
                         tools:src="@drawable/ic_japan" />
                 </LinearLayout>
             </HorizontalScrollView>
@@ -331,5 +331,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include layout="@layout/layout_error" />
+
+    <include layout="@layout/fragment_edit_comment_preview" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -525,34 +525,34 @@
     <string name="fragment_industry_link">Link</string>
     <string name="fragment_industry_description">Beschreibung</string>
 
-    <string name="fragment_comment_edit">Bearbeiten</string>
-    <string name="fragment_comment_delete">Löschen</string>
-    <string name="fragment_comment_preview">Vorschau</string>
+    <string name="fragment_edit_comment">Bearbeiten</string>
+    <string name="fragment_edit_comment_delete">Löschen</string>
+    <string name="fragment_edit_comment_preview">Vorschau</string>
 
-    <string name="fragment_comment_rules_title">Regeln</string>
-    <string name="fragment_comment_rules_expand_content_description">Ausklappen</string>
+    <string name="fragment_edit_comment_rules_title">Regeln</string>
+    <string name="fragment_edit_comment_rules_expand_content_description">Ausklappen</string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_1">
+    <string name="fragment_edit_comment_rule_1">
         <![CDATA[
         Inhalte die Spoiler enthalten, aber nicht als Spoiler markiert wurden werden gelöscht!
         Verderbe anderen nicht den Spaß am Anime/Manga.
         ]]>
     </string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_2">
+    <string name="fragment_edit_comment_rule_2">
         <![CDATA[
         Keine Antworten zu anderen Kommentaren! Jeder hat seine eigene Meinung.
         Vergiss nicht, dass du die Kommentare an erster Stelle für DICH schreibst.
         ]]>
     </string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_3">
+    <string name="fragment_edit_comment_rule_3">
         <![CDATA[
         BEGRÜNDE deine Meinung und schreibe so, dass es anderen hilft.
         ]]>
     </string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_4">
+    <string name="fragment_edit_comment_rule_4">
         <![CDATA[
         <u>Sei kritisch.</u> Verteil nicht wahllos hohe Bewertungen.
         Das führt dazu,dass deine Kommentare/Bewertungen nicht ernst genommen werden.
@@ -560,58 +560,61 @@
         ]]>
     </string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_5">
+    <string name="fragment_edit_comment_rule_5">
         <![CDATA[
         Plagiate (Kopien) sind <u>in keinster Weise</u> gestattet (auch mit Quellenangaben)!
         ]]>
     </string>
     <!-- language=HTML -->
-    <string name="fragment_comment_rule_6">
+    <string name="fragment_edit_comment_rule_6">
         <![CDATA[
         Dein Kommentar muss mindestens 300 Zeichen lang sein um öffentlich angezeigt werden.
         ]]>
     </string>
 
-    <string name="fragment_comment_rating_title_0">Bewertung</string>
-    <string name="fragment_comment_rating_title_1">Bewertung: Katastrophal</string>
-    <string name="fragment_comment_rating_title_2">Bewertung: Zeitverschwendung</string>
-    <string name="fragment_comment_rating_title_3">Bewertung: Schwach</string>
-    <string name="fragment_comment_rating_title_4">Bewertung: Unterdurchschnittlich</string>
-    <string name="fragment_comment_rating_title_5">Bewertung: Durchschnittlich</string>
-    <string name="fragment_comment_rating_title_6">Bewertung: Zufriedenstellend</string>
-    <string name="fragment_comment_rating_title_7">Bewertung: Sehenswert</string>
-    <string name="fragment_comment_rating_title_8">Bewertung: Hervorragend</string>
-    <string name="fragment_comment_rating_title_9">Bewertung: Toptitel</string>
-    <string name="fragment_comment_rating_title_10">Bewertung: Meisterwerk</string>
+    <string name="fragment_edit_comment_rating_title_0">Bewertung</string>
+    <string name="fragment_edit_comment_rating_title_1">Bewertung: Katastrophal</string>
+    <string name="fragment_edit_comment_rating_title_2">Bewertung: Zeitverschwendung</string>
+    <string name="fragment_edit_comment_rating_title_3">Bewertung: Schwach</string>
+    <string name="fragment_edit_comment_rating_title_4">Bewertung: Unterdurchschnittlich</string>
+    <string name="fragment_edit_comment_rating_title_5">Bewertung: Durchschnittlich</string>
+    <string name="fragment_edit_comment_rating_title_6">Bewertung: Zufriedenstellend</string>
+    <string name="fragment_edit_comment_rating_title_7">Bewertung: Sehenswert</string>
+    <string name="fragment_edit_comment_rating_title_8">Bewertung: Hervorragend</string>
+    <string name="fragment_edit_comment_rating_title_9">Bewertung: Toptitel</string>
+    <string name="fragment_edit_comment_rating_title_10">Bewertung: Meisterwerk</string>
 
-    <string name="fragment_comment_rating_clear_content_description">Zurücksetzen</string>
-    <string name="fragment_comment_edit_hint">Schreibe hier deinen Kommentar</string>
-    <string name="fragment_comment_edit_bold">Fett</string>
-    <string name="fragment_comment_edit_italic">Kursiv</string>
-    <string name="fragment_comment_edit_underline">Unterstrichen</string>
-    <string name="fragment_comment_edit_strikethrough">Durchgestrichen</string>
-    <string name="fragment_comment_edit_size">Größe</string>
-    <string name="fragment_comment_edit_color">Farbe</string>
-    <string name="fragment_comment_edit_left">Links</string>
-    <string name="fragment_comment_edit_center">Mittig</string>
-    <string name="fragment_comment_edit_right">Rechts</string>
-    <string name="fragment_comment_edit_spoiler">Spoiler</string>
-    <string name="fragment_comment_preview_empty">Hier erscheint eine Vorschau deines Kommentars</string>
-    <string name="fragment_comment_edit_size_huge">Riesig</string>
-    <string name="fragment_comment_edit_size_large">Groß</string>
-    <string name="fragment_comment_edit_size_normal">Normal</string>
-    <string name="fragment_comment_edit_size_small">Klein</string>
-    <string name="fragment_comment_edit_size_tiny">Winzig</string>
-    <string name="fragment_comment_edit_color_red">Rot</string>
-    <string name="fragment_comment_edit_color_purple">Lila</string>
-    <string name="fragment_comment_edit_color_blue">Blau</string>
-    <string name="fragment_comment_edit_color_green">Grün</string>
-    <string name="fragment_comment_edit_color_yellow">Gelb</string>
-    <string name="fragment_comment_edit_color_orange">Orange</string>
-    <string name="fragment_comment_edit_color_grey">Grau</string>
-    <string name="fragment_comment_edit_color_white">Weiß</string>
-    <string name="fragment_comment_draft_saved">Kommentar wurde als Entwurf gespeichert</string>
-    <string name="fragment_comment_published">Kommentar wurde erfolgreich veröffentlicht</string>
+    <string name="fragment_edit_comment_rating_clear_content_description">Zurücksetzen</string>
+
+    <string name="fragment_edit_comment_preview_empty">Hier erscheint eine Vorschau deines Kommentars</string>
+
+    <string name="fragment_edit_comment_hint">Schreibe hier deinen Kommentar</string>
+    <string name="fragment_edit_comment_bold">Fett</string>
+    <string name="fragment_edit_comment_italic">Kursiv</string>
+    <string name="fragment_edit_comment_underline">Unterstrichen</string>
+    <string name="fragment_edit_comment_strikethrough">Durchgestrichen</string>
+    <string name="fragment_edit_comment_size">Größe</string>
+    <string name="fragment_edit_comment_size_huge">Riesig</string>
+    <string name="fragment_edit_comment_size_large">Groß</string>
+    <string name="fragment_edit_comment_size_normal">Normal</string>
+    <string name="fragment_edit_comment_size_small">Klein</string>
+    <string name="fragment_edit_comment_size_tiny">Winzig</string>
+    <string name="fragment_edit_comment_color">Farbe</string>
+    <string name="fragment_edit_comment_color_red">Rot</string>
+    <string name="fragment_edit_comment_color_purple">Lila</string>
+    <string name="fragment_edit_comment_color_blue">Blau</string>
+    <string name="fragment_edit_comment_color_green">Grün</string>
+    <string name="fragment_edit_comment_color_yellow">Gelb</string>
+    <string name="fragment_edit_comment_color_orange">Orange</string>
+    <string name="fragment_edit_comment_color_grey">Grau</string>
+    <string name="fragment_edit_comment_color_white">Weiß</string>
+    <string name="fragment_edit_comment_left">Links</string>
+    <string name="fragment_edit_comment_center">Mittig</string>
+    <string name="fragment_edit_comment_right">Rechts</string>
+    <string name="fragment_edit_comment_spoiler">Spoiler</string>
+
+    <string name="fragment_edit_comment_draft_saved">Kommentar wurde als Entwurf gespeichert</string>
+    <string name="fragment_edit_comment_published">Kommentar wurde erfolgreich veröffentlicht</string>
 
     <string name="fragment_comment_rating_animation">Animation/Bilder</string>
     <string name="fragment_comment_rating_characters">Charaktere</string>
@@ -891,6 +894,7 @@
 
     <string name="action_filter_available">Nur verfügbare anzeigen</string>
 
+    <string name="action_preview">Vorschau</string>
     <string name="action_publish">Veröffentlichen</string>
 
     <string name="action_show_in_browser">Im Browser anzeigen</string>

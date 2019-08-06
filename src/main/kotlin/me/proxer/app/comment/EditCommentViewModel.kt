@@ -22,7 +22,7 @@ import me.proxer.library.enums.UserMediaProgress
 /**
  * @author Ruben Gees
  */
-class CommentViewModel(
+class EditCommentViewModel(
     private val id: String?,
     private val entryId: String?
 ) : BaseViewModel<LocalComment>() {

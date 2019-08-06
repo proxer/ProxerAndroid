@@ -26,7 +26,7 @@ import me.proxer.app.chat.pub.message.ChatReportViewModel
 import me.proxer.app.chat.pub.message.ChatViewModel
 import me.proxer.app.chat.pub.room.ChatRoomViewModel
 import me.proxer.app.chat.pub.room.info.ChatRoomInfoViewModel
-import me.proxer.app.comment.CommentViewModel
+import me.proxer.app.comment.EditCommentViewModel
 import me.proxer.app.forum.TopicViewModel
 import me.proxer.app.info.industry.IndustryInfoViewModel
 import me.proxer.app.info.industry.IndustryProjectViewModel
@@ -272,7 +272,7 @@ private val viewModelModule = module {
     viewModel { (entryId: String, language: Language, episode: Int) -> MangaViewModel(entryId, language, episode) }
     viewModel { (entryId: String, language: AnimeLanguage, episode: Int) -> AnimeViewModel(entryId, language, episode) }
 
-    viewModel { (id: String?, entryId: String?) -> CommentViewModel(id, entryId) }
+    viewModel { (id: String?, entryId: String?) -> EditCommentViewModel(id, entryId) }
 
     viewModel { ServerStatusViewModel() }
 }
