@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -17,7 +18,7 @@ import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import kotterknife.bindView
 import me.proxer.app.R
-import me.proxer.app.base.DrawerActivity
+import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toast
@@ -28,7 +29,7 @@ import org.koin.core.parameter.parametersOf
 /**
  * @author Ruben Gees
  */
-class CommentActivity : DrawerActivity() {
+class CommentActivity : BaseActivity() {
 
     companion object {
         const val COMMENT_REQUEST = 53_454
@@ -58,9 +59,6 @@ class CommentActivity : DrawerActivity() {
         )
     }
 
-    override val contentView: Int
-        get() = R.layout.activity_comment
-
     val id: String?
         get() = intent.getStringExtra(ID_ARGUMENT)
 
@@ -76,6 +74,7 @@ class CommentActivity : DrawerActivity() {
 
     private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
+    private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by bindView(R.id.tabs)
 
@@ -84,6 +83,8 @@ class CommentActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setContentView(R.layout.activity_comment)
+        setSupportActionBar(toolbar)
         setupToolbar()
 
         viewPager.adapter = sectionsPagerAdapter
