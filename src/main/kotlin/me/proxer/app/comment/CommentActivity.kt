@@ -123,14 +123,14 @@ class CommentActivity : DrawerActivity() {
 
     override fun onDestroy() {
         entryId?.also { safeEntryId ->
-            viewModel.data.value?.content?.also { content ->
-                if (viewModel.isUpdate.value == false && content.isNotBlank()) {
-                    storageHelper.putCommentDraft(safeEntryId, content)
+            val content = viewModel.data.value?.content ?: ""
 
-                    toast(R.string.fragment_comment_draft_saved)
-                } else {
-                    storageHelper.deleteCommentDraft(safeEntryId)
-                }
+            if (viewModel.isUpdate.value == false && content.isNotBlank()) {
+                storageHelper.putCommentDraft(safeEntryId, content)
+
+                toast(R.string.fragment_comment_draft_saved)
+            } else {
+                storageHelper.deleteCommentDraft(safeEntryId)
             }
         }
 
