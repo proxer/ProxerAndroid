@@ -26,7 +26,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.widget.ratingChanges
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
@@ -141,11 +140,6 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { counter.text = "${it.length} / 20000" }
 
-        editor.focusChanges()
-            .skipInitialValue()
-            .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { if (it) viewModel.hasFocused = true }
-
         arrayOf(
             bold to "b", italic to "i", underlined to "u", strikethrough to "s",
             left to "left", center to "center", right to "right", spoiler to "spoiler"
@@ -216,14 +210,6 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (viewModel.data.value != null && viewModel.hasFocused) {
-            focusEditor()
-        }
-    }
-
     override fun onPause() {
         clearEditorFocus()
 
@@ -292,8 +278,6 @@ class CommentEditFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     }
 
     private fun focusEditor() {
-        viewModel.hasFocused = true
-
         editor.requestFocus()
         inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
     }
