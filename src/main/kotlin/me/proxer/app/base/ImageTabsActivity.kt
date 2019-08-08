@@ -1,14 +1,10 @@
 package me.proxer.app.base
 
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
-import android.transition.Transition
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
-import androidx.core.view.postDelayed
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.request.target.ImageViewTarget
@@ -58,21 +54,13 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
         setupToolbar()
         setupImage()
-        loadImage()
 
-        if (isTransitionPossible(savedInstanceState) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (isTransitionPossible(savedInstanceState)) {
             supportPostponeEnterTransition()
-
-            window.sharedElementEnterTransition.addListener(object : TransitionListenerWrapper {
-                override fun onTransitionEnd(transition: Transition?) {
-                    window.sharedElementEnterTransition.removeListener(this)
-
-                    viewPager.postDelayed(50) { setupContent(savedInstanceState) }
-                }
-            })
-        } else {
-            setupContent(savedInstanceState)
         }
+
+        setupContent(savedInstanceState)
+        loadImage()
     }
 
     override fun onDestroy() {
@@ -188,15 +176,5 @@ abstract class ImageTabsActivity : DrawerActivity() {
 
     private fun isTransitionPossible(savedInstanceState: Bundle?): Boolean {
         return savedInstanceState == null && ActivityUtils.getTransitionName(this) != null
-    }
-
-    @Suppress("EmptyFunctionBlock")
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
-    interface TransitionListenerWrapper : Transition.TransitionListener {
-        override fun onTransitionEnd(transition: Transition?) {}
-        override fun onTransitionResume(transition: Transition?) {}
-        override fun onTransitionPause(transition: Transition?) {}
-        override fun onTransitionCancel(transition: Transition?) {}
-        override fun onTransitionStart(transition: Transition?) {}
     }
 }

@@ -13,7 +13,9 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.util.Linkify
 import android.widget.ImageView
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.UriCompat
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.engine.GlideException
@@ -23,14 +25,17 @@ import me.proxer.app.BuildConfig.APPLICATION_ID
 import me.proxer.app.GlideRequest
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
+import me.proxer.app.settings.theme.ThemeVariant
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.ProxerException
 import me.proxer.library.util.ProxerUrls.hasProxerHost
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.DefinitionParameters
 import timber.log.Timber
 import java.util.EnumSet
@@ -153,9 +158,22 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
 }
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
-    CustomTabsIntent.Builder(session)
+    val colorScheme = when (getKoin().get<PreferenceHelper>().themeContainer.variant) {
+        ThemeVariant.LIGHT -> CustomTabsIntent.COLOR_SCHEME_LIGHT
+        ThemeVariant.DARK -> CustomTabsIntent.COLOR_SCHEME_DARK
+        ThemeVariant.SYSTEM -> CustomTabsIntent.COLOR_SCHEME_SYSTEM
+    }
+
+    val colorSchemeParams = CustomTabColorSchemeParams.Builder()
         .setToolbarColor(activity.resolveColor(R.attr.colorPrimary))
-        .setSecondaryToolbarColor(activity.resolveColor(R.attr.colorPrimaryDark))
+        .setSecondaryToolbarColor(activity.resolveColor(R.attr.colorPrimary))
+        .setNavigationBarColor(activity.resolveColor(R.attr.colorPrimary))
+        .build()
+
+    CustomTabsIntent.Builder(session)
+        .setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, colorSchemeParams)
+        .setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, colorSchemeParams)
+        .setColorScheme(colorScheme)
         .addDefaultShareMenuItem()
         .enableUrlBarHiding()
         .setShowTitle(true)
@@ -164,7 +182,7 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
             it.intent.addReferer()
 
             CustomTabsHelperFragment.open(activity, it, url.androidUri()) { context, uri ->
-                WebViewActivity.navigateTo(context, uri.toString())
+                WebViewActivity.navigateTo(context, UriCompat.toSafeString(uri))
             }
         }
 }

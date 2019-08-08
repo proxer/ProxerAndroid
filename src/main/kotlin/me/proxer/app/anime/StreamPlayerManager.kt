@@ -2,6 +2,7 @@ package me.proxer.app.anime
 
 import android.app.Activity
 import android.net.Uri
+import androidx.core.net.UriCompat
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -296,7 +297,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
             }
         }
 
-        val mediaInfo = MediaInfo.Builder(uri.toString())
+        val mediaInfo = MediaInfo.Builder(UriCompat.toSafeString(uri))
             .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
             .setContentType(MimeTypes.VIDEO_MP4)
             .setMetadata(mediaMetadata)

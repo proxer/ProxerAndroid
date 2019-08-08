@@ -13,15 +13,15 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "5.6-rc-1"
+    gradleVersion = "5.6-rc-2"
 
     // Core plugins
     androidPluginVersion = "3.6.0-alpha03"
     kotlinVersion = "1.3.50-eap-54"
-    r8Version = "1.5.63"
+    r8Version = "1.5.64"
 
     // Utility plugins
-    versionsPluginVersion = "0.21.0"
+    versionsPluginVersion = "0.22.0"
     detektPluginVersion = "1.0.0-RC16"
     ktlintPluginVersion = "8.2.0"
     androidCommandPluginVersion = "2.1.0"
@@ -29,12 +29,12 @@ ext {
     // Frameworks and compatibility libraries
     koinVersion = "2.0.1"
     appcompatVersion = "1.1.0-rc01"
-    browserVersion = "1.0.0"
-    lifecycleVersion = "2.2.0-alpha02"
-    roomVersion = "2.2.0-alpha01"
+    browserVersion = "1.2.0-alpha07"
+    lifecycleVersion = "2.2.0-alpha03"
+    roomVersion = "2.2.0-alpha02"
     workVersion = "2.2.0-rc01"
-    coreKtxVersion = "1.2.0-alpha02"
-    fragmentKtxVersion = "1.2.0-alpha01"
+    coreKtxVersion = "1.2.0-alpha03"
+    fragmentKtxVersion = "1.2.0-alpha02"
     shareTargetVersion = "1.0.0-alpha02"
     interactiveMediaVersion = "3.11.3"
     castVersion = "17.0.0"
@@ -49,7 +49,7 @@ ext {
     autoDisposeVersion = "1.2.0"
 
     // UI components
-    recyclerviewVersion = "1.1.0-beta01"
+    recyclerviewVersion = "1.1.0-beta02"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
     materialComponentsVersion = "1.1.0-alpha09"
@@ -77,7 +77,7 @@ ext {
     gravitySnapHelperVersion = "2.0"
 
     // Utils
-    proxerLibVersion = "0d5b3b8ffc"
+    proxerLibVersion = "514e4f740d"
     threetenVersion = "1.2.1"
     hawkVersion = "7a1a625455"
     glideVersion = "4.9.0"
