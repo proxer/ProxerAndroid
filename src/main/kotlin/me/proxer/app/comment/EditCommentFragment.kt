@@ -11,6 +11,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.RatingBar
@@ -20,6 +21,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.text.parseAsHtml
 import androidx.core.text.set
@@ -101,14 +103,83 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val entryId: String?
         get() = hostingActivity.entryId
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initUI()
+        initListeners()
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_edit_comment, menu, true)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.preview -> commentBottomSheetBehavior.state = when (commentBottomSheetBehavior.state) {
+                BottomSheetBehavior.STATE_HIDDEN -> BottomSheetBehavior.STATE_EXPANDED
+                else -> BottomSheetBehavior.STATE_HIDDEN
+            }
+            R.id.publish -> viewModel.publish()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun showData(data: LocalComment) {
+        super.showData(data)
+
+        counter.isVisible = true
+        formatterBar.isVisible = true
+
+        ratingTitle.text = getString(getRatingTitle(data.overallRating))
+        rating.rating = data.overallRating / 2f
+        ratingClear.isVisible = data.overallRating > 0f
+
+        if (editor.text.isBlank() && data.content.isNotBlank()) {
+            editor.setText(data.content)
+        }
+
+        if (data.content.isBlank()) {
+            commentPreview.isVisible = false
+            commentPreviewEmpty.isVisible = true
+
+            commentPreview.tree = null
+        } else {
+            commentPreview.isVisible = true
+            commentPreviewEmpty.isVisible = false
+
+            commentPreview.tree = data.parsedContent
+        }
+
+        if (editor.minHeight == -1) {
+            editor.post {
+                if (view != null) {
+                    editor.minHeight = (counter.y - editor.y).toInt()
+                }
+            }
+        }
+    }
+
+    override fun hideData() {
+        editor.text = null
+        counter.isVisible = false
+        formatterBar.isVisible = false
+
+        super.hideData()
+    }
+
+    private fun initUI() {
         rules.text = resources.getStringArray(R.array.fragment_edit_comment_rules)
             .joinTo(SpannableStringBuilder(), "\n\n") {
                 SpannableString(it.parseAsHtml()).apply { this[0..length] = BulletSpan(requireContext().dip(6)) }
             }
+
+        editor.isNestedScrollingEnabled = false
 
         expandRules.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
         ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
@@ -126,9 +197,15 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         commentPreview.expandSpoilers = true
         commentPreviewEmpty.setCompoundDrawables(null, generateEmptyDrawable(), null, null)
 
+        commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun initListeners() {
         rulesContainer.clicks().mergeWith(expandRules.clicks())
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe {
+                editor.clearFocus()
                 rules.isVisible = !rules.isVisible
 
                 ViewCompat.animate(expandRules).rotation(if (rules.isVisible) 180f else 0f)
@@ -147,7 +224,10 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         editor.textChanges()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { counter.text = "${it.length} / 20000" }
+            .subscribe {
+                editor.requestFocus()
+                counter.text = "${it.length} / 20000"
+            }
 
         arrayOf(
             bold to "b", italic to "i", underlined to "u", strikethrough to "s",
@@ -220,64 +300,10 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         commentPreviewTitle.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN }
-
-        commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_edit_comment, menu, true)
-
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.preview -> commentBottomSheetBehavior.state = when (commentBottomSheetBehavior.state) {
-                BottomSheetBehavior.STATE_HIDDEN -> BottomSheetBehavior.STATE_EXPANDED
-                else -> BottomSheetBehavior.STATE_HIDDEN
+            .subscribe {
+                editor.clearFocus()
+                commentBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
-            R.id.publish -> viewModel.publish()
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun showData(data: LocalComment) {
-        super.showData(data)
-
-        counter.isVisible = true
-        formatterBar.isVisible = true
-
-        ratingTitle.text = getString(getRatingTitle(data.overallRating))
-        rating.rating = data.overallRating / 2f
-        ratingClear.isVisible = data.overallRating > 0f
-
-        if (editor.text.isBlank() && data.content.isNotBlank()) {
-            editor.setText(data.content)
-        }
-
-        if (data.content.isBlank()) {
-            commentPreview.isVisible = false
-            commentPreviewEmpty.isVisible = true
-
-            commentPreview.tree = null
-        } else {
-            commentPreview.isVisible = true
-            commentPreviewEmpty.isVisible = false
-
-            commentPreview.tree = data.parsedContent
-        }
-    }
-
-    override fun hideData() {
-        editor.text = null
-        counter.isVisible = false
-        formatterBar.isVisible = false
-
-        super.hideData()
     }
 
     private fun insertTag(tag: String, value: String = "") {
@@ -296,6 +322,9 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         } else {
             editor.text.insert(0, "$startTag$endTag")
         }
+
+        editor.requestFocus()
+        requireContext().getSystemService<InputMethodManager>()?.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun getRatingTitle(rating: Int) = when (rating) {
