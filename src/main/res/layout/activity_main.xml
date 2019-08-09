@@ -24,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:visibility="gone"
-            app:tabMode="auto" />
+            android:visibility="gone" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -2,10 +2,11 @@ package me.proxer.app.ucp
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
@@ -29,13 +30,12 @@ class UcpActivity : DrawerActivity() {
     override val contentView: Int
         get() = R.layout.activity_ucp
 
-    private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter() }
-    private val sectionsTabCallback by unsafeLazy { SectionsTabCallback() }
+    private val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
-    private val viewPager: ViewPager2 by bindView(R.id.viewPager)
+    private val viewPager: ViewPager by bindView(R.id.viewPager)
     private val tabs: TabLayout by bindView(R.id.tabs)
 
-    private var mediator: TabLayoutMediator? = null
+    private var tabLayoutHelper: TabLayoutHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +44,12 @@ class UcpActivity : DrawerActivity() {
 
         viewPager.adapter = sectionsPagerAdapter
 
-        mediator = TabLayoutMediator(tabs, viewPager, sectionsTabCallback).also { it.attach() }
+        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
     }
 
     override fun onDestroy() {
-        mediator?.detach()
-        mediator = null
+        tabLayoutHelper?.release()
+        tabLayoutHelper = null
         viewPager.adapter = null
 
         super.onDestroy()
@@ -60,11 +60,11 @@ class UcpActivity : DrawerActivity() {
         title = getString(R.string.section_ucp)
     }
 
-    private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
 
-        override fun getItemCount() = 5
-
-        override fun createFragment(position: Int) = when (position) {
+        override fun getItem(position: Int) = when (position) {
             0 -> UcpOverviewFragment.newInstance()
             1 -> UcpTopTenFragment.newInstance()
             2 -> UcpMediaListFragment.newInstance(Category.ANIME)
@@ -72,19 +72,16 @@ class UcpActivity : DrawerActivity() {
             4 -> UcpHistoryFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
-    }
 
-    private inner class SectionsTabCallback : TabLayoutMediator.OnConfigureTabCallback {
+        override fun getCount() = 5
 
-        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-            tab.text = when (position) {
-                0 -> getString(R.string.section_ucp_overview)
-                1 -> getString(R.string.section_ucp_top_ten)
-                2 -> getString(R.string.section_user_media_list_anime)
-                3 -> getString(R.string.section_user_media_list_manga)
-                4 -> getString(R.string.section_ucp_history)
-                else -> error("Unknown index passed: $position")
-            }
+        override fun getPageTitle(position: Int): String = when (position) {
+            0 -> getString(R.string.section_ucp_overview)
+            1 -> getString(R.string.section_ucp_top_ten)
+            2 -> getString(R.string.section_user_media_list_anime)
+            3 -> getString(R.string.section_user_media_list_manga)
+            4 -> getString(R.string.section_ucp_history)
+            else -> error("Unknown index passed: $position")
         }
     }
 }

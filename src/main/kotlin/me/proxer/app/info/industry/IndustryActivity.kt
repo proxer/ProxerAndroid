@@ -4,9 +4,8 @@ import android.app.Activity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.app.ShareCompat
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import me.proxer.app.R
 import me.proxer.app.base.ImageTabsActivity
@@ -45,8 +44,7 @@ class IndustryActivity : ImageTabsActivity() {
         }
 
     override val headerImageUrl: HttpUrl by unsafeLazy { ProxerUrls.industryImage(id) }
-    override val sectionsPagerAdapter: FragmentStateAdapter by unsafeLazy { SectionsPagerAdapter() }
-    override val sectionsTabCallback: TabLayoutMediator.OnConfigureTabCallback by unsafeLazy { SectionsTabCallback() }
+    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         IconicsMenuInflaterUtil.inflate(menuInflater, this, R.menu.activity_share, menu, true)
@@ -75,25 +73,22 @@ class IndustryActivity : ImageTabsActivity() {
         title = name
     }
 
-    private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
+        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    ) {
 
-        override fun getItemCount() = 2
-
-        override fun createFragment(position: Int) = when (position) {
+        override fun getItem(position: Int) = when (position) {
             0 -> IndustryInfoFragment.newInstance()
             1 -> IndustryProjectFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
-    }
 
-    private inner class SectionsTabCallback : TabLayoutMediator.OnConfigureTabCallback {
+        override fun getCount() = 2
 
-        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-            tab.text = when (position) {
-                0 -> getString(R.string.section_industry_info)
-                1 -> getString(R.string.section_industry_projects)
-                else -> error("Unknown index passed: $position")
-            }
+        override fun getPageTitle(position: Int): String = when (position) {
+            0 -> getString(R.string.section_industry_info)
+            1 -> getString(R.string.section_industry_projects)
+            else -> error("Unknown index passed: $position")
         }
     }
 }
