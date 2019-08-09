@@ -150,7 +150,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         hasLowMemory = savedInstanceState?.getByte(LOW_MEMORY_STATE) == 1.toByte()
 
         preloader = MangaPreloader()
-        innerAdapter = MangaAdapter(savedInstanceState, isVertical)
+        innerAdapter = MangaAdapter(isVertical)
         adapter = EasyHeaderFooterAdapter(innerAdapter)
 
         innerAdapter.positionResolver = ContainerPositionResolver(adapter)

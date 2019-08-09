@@ -2,8 +2,6 @@ package me.proxer.app.manga
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.os.AsyncTask
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -18,8 +16,6 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.PAN_LIMIT_INSIDE
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.ZOOM_FOCUS_CENTER
-import com.davemorrissey.labs.subscaleview.decoder.SkiaImageDecoder
-import com.davemorrissey.labs.subscaleview.decoder.SkiaPooledImageRegionDecoder
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
@@ -36,16 +32,10 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.manga.MangaAdapter.MangaViewHolder
-import me.proxer.app.manga.decoder.RapidImageDecoder
-import me.proxer.app.manga.decoder.RapidImageNativeDecoder
-import me.proxer.app.manga.decoder.RapidImageRegionDecoder
-import me.proxer.app.manga.decoder.RapidImageRegionNativeDecoder
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.GLUtil
-import me.proxer.app.util.data.ParcelableStringSerializableMap
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.events
-import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
@@ -63,10 +53,9 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>() {
+class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>() {
 
     private companion object {
-        private const val REQUIRES_FALLBACK_STATE = "manga_requires_fallback_state"
         private const val VIEW_TYPE_IMAGE = 1
         private const val VIEW_TYPE_GIF = 2
     }
@@ -79,16 +68,9 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
     var entryId by Delegates.notNull<String>()
     var id by Delegates.notNull<String>()
 
-    private val fallbackMap: ParcelableStringSerializableMap<FallbackStage>
-
     private var lastTouchCoordinates: Pair<Float, Float>? = null
 
     init {
-        fallbackMap = when (savedInstanceState) {
-            null -> ParcelableStringSerializableMap()
-            else -> savedInstanceState.getSafeParcelable(REQUIRES_FALLBACK_STATE)
-        }
-
         setHasStableIds(true)
     }
 
@@ -132,8 +114,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
         }
     }
 
-    override fun saveInstanceState(outState: Bundle) = outState.putParcelable(REQUIRES_FALLBACK_STATE, fallbackMap)
-
     fun setChapter(chapter: Chapter) {
         this.server = chapter.server
         this.entryId = chapter.entryId
@@ -167,33 +147,14 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
             image.isVisible = true
         }
 
-        protected fun handleImageLoadError(error: Exception, position: Int) {
-            // This happens on certain devices with certain images due to a buggy Skia library version.
-            // Fallback to the less efficient, but working RapidDecoder in that case. If the RapidDecoder is already in
-            // use, show the error indicator.
+        protected fun handleImageLoadError(error: Exception) {
             Timber.e(error)
 
             when {
                 error is OutOfMemoryError || error.cause is OutOfMemoryError -> lowMemorySubject.onNext(Unit)
                 else -> {
-                    val key = data[position].decodedName
-
-                    when (fallbackMap[key] ?: FallbackStage.NORMAL) {
-                        FallbackStage.NORMAL -> {
-                            fallbackMap[key] = FallbackStage.RAPID
-
-                            bind(data[position])
-                        }
-                        FallbackStage.RAPID -> {
-                            fallbackMap[key] = FallbackStage.NATIVE
-
-                            bind(data[position])
-                        }
-                        FallbackStage.NATIVE -> {
-                            errorIndicator.isVisible = true
-                            image.isVisible = false
-                        }
-                    }
+                    errorIndicator.isVisible = true
+                    image.isVisible = false
                 }
             }
         }
@@ -239,7 +200,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
         init {
             image.setDoubleTapZoomDuration(shortAnimationTime)
-            image.setExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             image.setDoubleTapZoomStyle(ZOOM_FOCUS_CENTER)
             image.setMaxTileSize(GLUtil.maxTextureSize)
             image.setPanLimit(PAN_LIMIT_INSIDE)
@@ -254,20 +214,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
 
             initListeners()
 
-            when (fallbackMap[item.decodedName] ?: FallbackStage.NORMAL) {
-                FallbackStage.NORMAL -> {
-                    image.setBitmapDecoderFactory { SkiaImageDecoder() }
-                    image.setRegionDecoderFactory { SkiaPooledImageRegionDecoder() }
-                }
-                FallbackStage.RAPID -> {
-                    image.setBitmapDecoderFactory { RapidImageDecoder() }
-                    image.setRegionDecoderFactory { RapidImageRegionDecoder() }
-                }
-                FallbackStage.NATIVE -> {
-                    image.setBitmapDecoderFactory { RapidImageNativeDecoder() }
-                    image.setRegionDecoderFactory { RapidImageRegionNativeDecoder() }
-                }
-            }
+            image.setBitmapDecoderFactory { ImageLibDecoder() }
+            image.setRegionDecoderFactory { ImageLibRegionDecoder() }
 
             glide?.clear(glideTarget)
             glideTarget = GlideFileTarget()
@@ -287,12 +235,8 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                 .also { observable ->
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Error }
                         .map { it as SubsamplingScaleImageViewEventObservable.Event.Error }
-                        .flatMap { event ->
-                            Observable.just(Unit)
-                                .mapAdapterPosition({ adapterPosition }) { event.error to positionResolver.resolve(it) }
-                        }
                         .autoDisposable(this)
-                        .subscribe { (error, position) -> handleImageLoadError(error, position) }
+                        .subscribe { event -> handleImageLoadError(event.error) }
 
                     observable.filter { it is SubsamplingScaleImageViewEventObservable.Event.Ready }
                         .autoDisposable(this)
@@ -346,10 +290,6 @@ class MangaAdapter(savedInstanceState: Bundle?, var isVertical: Boolean) : BaseA
                     }
                 })
         }
-    }
-
-    private enum class FallbackStage {
-        NORMAL, RAPID, NATIVE
     }
 
     private fun Page.url() = ProxerUrls.mangaPageImage(server, entryId, id, decodedName).toString()
