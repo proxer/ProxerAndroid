@@ -27,6 +27,7 @@ import androidx.core.text.parseAsHtml
 import androidx.core.text.set
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jakewharton.rxbinding3.appcompat.itemClicks
 import com.jakewharton.rxbinding3.view.clicks
@@ -67,6 +68,8 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         parametersOf(id, entryId)
     }
 
+    private val scrollContainer by bindView<ViewGroup>(R.id.scrollContainer)
+
     private val rulesContainer by bindView<ViewGroup>(R.id.rulesContainer)
     private val expandRules by bindView<ImageButton>(R.id.expandRules)
     private val rules by bindView<TextView>(R.id.rules)
@@ -78,7 +81,6 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     private val editor by bindView<EditText>(R.id.editor)
     private val counter by bindView<TextView>(R.id.counter)
 
-    private val formatterBar by bindView<ViewGroup>(R.id.formatterBar)
     private val bold by bindView<ImageButton>(R.id.bold)
     private val italic by bindView<ImageButton>(R.id.italic)
     private val underlined by bindView<ImageButton>(R.id.underline)
@@ -133,8 +135,8 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     override fun showData(data: LocalComment) {
         super.showData(data)
 
-        counter.isVisible = true
-        formatterBar.isVisible = true
+        editor.isFocusableInTouchMode = true
+        editor.isFocusable = true
 
         ratingTitle.text = getString(getRatingTitle(data.overallRating))
         rating.rating = data.overallRating / 2f
@@ -166,9 +168,8 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     }
 
     override fun hideData() {
-        editor.text = null
-        counter.isVisible = false
-        formatterBar.isVisible = false
+        editor.isFocusableInTouchMode = false
+        editor.isFocusable = false
 
         super.hideData()
     }
@@ -207,6 +208,8 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             .subscribe {
                 editor.clearFocus()
                 rules.isVisible = !rules.isVisible
+
+                TransitionManager.beginDelayedTransition(scrollContainer)
 
                 ViewCompat.animate(expandRules).rotation(if (rules.isVisible) 180f else 0f)
             }

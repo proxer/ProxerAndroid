@@ -14,9 +14,12 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/contentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -24,10 +27,9 @@
                 android:layout_weight="1">
 
                 <LinearLayout
-                    android:id="@+id/contentContainer"
+                    android:id="@+id/scrollContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
                     android:focusableInTouchMode="true"
                     android:orientation="vertical">
 
@@ -39,59 +41,59 @@
                         android:layout_marginTop="@dimen/screen_vertical_margin"
                         android:layout_marginRight="8dp"
                         android:layout_marginBottom="@dimen/screen_vertical_margin"
-                        android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="8dp">
 
-                        <RelativeLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:animateLayoutChanges="true">
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp">
 
                             <me.proxer.app.ui.view.InfoImageButton
                                 android:id="@+id/expandRules"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignParentTop="true"
                                 android:layout_marginStart="8dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
+                                android:layout_marginEnd="8dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
                                 android:contentDescription="@string/fragment_edit_comment_rules_expand_content_description"
                                 android:focusable="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
                                 tools:src="@drawable/ic_japan" />
 
                             <TextView
                                 android:id="@+id/rulesTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignTop="@+id/expandRules"
-                                android:layout_alignBottom="@+id/expandRules"
-                                android:layout_alignParentEnd="true"
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:layout_toEndOf="@+id/expandRules"
                                 android:gravity="center_vertical"
                                 android:text="@string/fragment_edit_comment_rules_title"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                app:layout_constraintBottom_toBottomOf="@+id/expandRules"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/expandRules"
+                                app:layout_constraintTop_toTopOf="@+id/expandRules" />
 
                             <TextView
                                 android:id="@+id/rules"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/rulesTitle"
-                                android:layout_alignParentEnd="true"
-                                android:layout_margin="8dp"
-                                android:layout_toEndOf="@+id/expandRules"
+                                android:layout_marginTop="8dp"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="@+id/rulesTitle"
+                                app:layout_constraintStart_toStartOf="@+id/rulesTitle"
+                                app:layout_constraintTop_toBottomOf="@+id/rulesTitle"
                                 tools:text="Rule 1: Test\nRule: 2: Test2"
                                 tools:visibility="visible" />
 
-                        </RelativeLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
@@ -102,50 +104,54 @@
                         android:layout_marginBottom="@dimen/screen_vertical_margin"
                         android:padding="8dp">
 
-                        <RelativeLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true">
 
                             <TextView
                                 android:id="@+id/ratingTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentTop="true"
                                 android:padding="8dp"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:textColor="?attr/colorSecondary"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
                                 tools:text="@string/fragment_edit_comment_rating_title_8" />
 
                             <me.zhanghai.android.materialratingbar.MaterialRatingBar
                                 android:id="@+id/rating"
                                 style="@style/Widget.MaterialRatingBar.RatingBar"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/ratingTitle"
+                                android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="8dp"
-                                android:layout_toStartOf="@+id/ratingClear"
                                 android:numStars="5"
                                 android:paddingLeft="-3dp"
                                 android:paddingRight="-3dp"
                                 android:stepSize="0.5"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/ratingClear"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/ratingTitle"
                                 app:mrb_fillBackgroundStars="true" />
 
                             <me.proxer.app.ui.view.InfoImageButton
                                 android:id="@+id/ratingClear"
                                 android:layout_width="32dp"
                                 android:layout_height="0dp"
-                                android:layout_alignTop="@+id/rating"
-                                android:layout_alignBottom="@+id/rating"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:contentDescription="@string/fragment_edit_comment_rating_clear_content_description"
                                 android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="@+id/rating"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/rating"
                                 tools:src="@drawable/ic_japan"
                                 tools:visibility="visible" />
-                        </RelativeLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <EditText
@@ -154,6 +160,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="top"
                         android:background="@null"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:gravity="top"
                         android:hint="@string/fragment_edit_comment_hint"
                         android:importantForAutofill="no"
@@ -179,11 +187,9 @@
                 tools:text="5 / 200" />
 
             <HorizontalScrollView
-                android:id="@+id/formatterBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorBackgroundFloating"
-                android:clipToPadding="false"
                 android:elevation="16dp">
 
                 <LinearLayout
