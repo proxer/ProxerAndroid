@@ -1,6 +1,7 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.graphics.drawable.Drawable
+import android.util.Size
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -8,6 +9,8 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.view.updateLayoutParams
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -31,6 +34,7 @@ import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
+import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import okhttp3.HttpUrl
 import java.io.File
 
@@ -61,14 +65,22 @@ object PdfPrototype : AutoClosingPrototype {
                 val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
                 val parsedUrl = url.toPrefixedUrlOrNull()
 
-                val width = if (parsedUrl == null) null else args[WIDTH_ARGUMENT] as Int?
+                @Suppress("UNCHECKED_CAST")
+                val dimensionMap = args[ImagePrototype.DIMENSION_MAP_ARGUMENT] as MutableMap<String, Size>?
 
-                view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                val width = parsedUrl?.let { dimensionMap?.get(it.toString())?.width }
+                    ?: args[WIDTH_ARGUMENT] as Int?
+                    ?: MATCH_PARENT
 
-                view.setMinimumTileDpi(120)
+                val height = parsedUrl?.let { dimensionMap?.get(it.toString())?.height }
+                    ?: WRAP_CONTENT
+
+                view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
+
                 view.setDoubleTapZoomDuration(view.context.resources.getInteger(android.R.integer.config_shortAnimTime))
+                view.setMinimumTileDpi(196)
 
-                args.glide?.let { loadImage(it, view, parsedUrl) }
+                args.glide?.let { loadImage(it, view, parsedUrl, dimensionMap) }
 
                 view.clicks()
                     .filter { view.getTag(R.id.error_tag) == true }
@@ -76,11 +88,11 @@ object PdfPrototype : AutoClosingPrototype {
                     .subscribe {
                         view.tag = null
 
-                        args.glide?.let { loadImage(it, view, parsedUrl) }
+                        args.glide?.let { loadImage(it, view, parsedUrl, dimensionMap) }
                     }
 
                 view.doOnLayout {
-                    if (width != null && width < view.width) {
+                    if (width < view.width) {
                         view.updateLayoutParams {
                             this.width = width
                         }
@@ -92,9 +104,31 @@ object PdfPrototype : AutoClosingPrototype {
         }
     }
 
-    private fun loadImage(glide: GlideRequests, view: SubsamplingScaleImageView, url: HttpUrl?) = glide
+    private fun loadImage(
+        glide: GlideRequests,
+        view: SubsamplingScaleImageView,
+        url: HttpUrl?,
+        dimensionMap: MutableMap<String, Size>?
+    ) = glide
         .download(url.toString())
-        .into(GlidePdfTarget(view))
+        .listener(object : SimpleGlideRequestListener<File?> {
+            override fun onResourceReady(
+                resource: File?,
+                model: Any?,
+                target: Target<File?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                (target as? GlidePdfTarget)?.view?.also { view ->
+                    if (view.layoutParams.height <= 0) {
+                        findHost(view)?.heightChanges?.onNext(Unit)
+                    }
+                }
+
+                return false
+            }
+        })
+        .into(GlidePdfTarget(view, url.toString(), dimensionMap))
 
     private fun handleLoadError(view: SubsamplingScaleImageView) {
         view.setTag(R.id.error_tag, true)
@@ -109,9 +143,25 @@ object PdfPrototype : AutoClosingPrototype {
         )
     }
 
-    private class GlidePdfTarget(view: SubsamplingScaleImageView) : OriginalSizeGlideTarget<File>() {
+    private fun findHost(view: View): BBCodeView? {
+        var current = view.parent
 
-        private var view: SubsamplingScaleImageView? = view
+        while (current !is BBCodeView && current is ViewGroup) {
+            current = current.parent
+        }
+
+        return current as? BBCodeView
+    }
+
+    private class GlidePdfTarget(
+        view: SubsamplingScaleImageView,
+        private val model: String,
+        private val dimensionMap: MutableMap<String, Size>?
+    ) : OriginalSizeGlideTarget<File>() {
+
+        var view: SubsamplingScaleImageView? = view
+            private set
+
         private var regionDecoder: PDFRegionDecoder? = null
 
         init {
@@ -129,6 +179,8 @@ object PdfPrototype : AutoClosingPrototype {
                             .subscribe {
                                 view.setDoubleTapZoomScale(view.scale * 2.5f)
                                 view.maxScale = view.scale * 2.5f
+
+                                dimensionMap?.put(model, Size(view.width, view.height))
                             }
                     }
             }

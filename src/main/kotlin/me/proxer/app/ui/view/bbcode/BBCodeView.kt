@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Size
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
 import android.view.View.MeasureSpec.UNSPECIFIED
@@ -22,6 +23,7 @@ import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.ui.view.BetterLinkGifAwareEmojiTextView
+import me.proxer.app.ui.view.bbcode.prototype.ImagePrototype.DIMENSION_MAP_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.RootPrototype
 import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype.SPOILER_EXPAND_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.SpoilerPrototype.SPOILER_TEXT_COLOR_ARGUMENT
@@ -29,6 +31,7 @@ import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_APPEARANCE_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_COLOR_ARGUMENT
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype.TEXT_SIZE_ARGUMENT
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.min
 import kotlin.properties.Delegates
 
@@ -59,6 +62,7 @@ class BBCodeView @JvmOverloads constructor(
 
     var maxHeight: Int = Int.MAX_VALUE
 
+    var dimensionMap: ConcurrentHashMap<String, Size>? = null
     var glide: GlideRequests? = null
     var userId: String? = null
     var enableEmotions = false
@@ -136,6 +140,7 @@ class BBCodeView @JvmOverloads constructor(
         args[TEXT_APPEARANCE_ARGUMENT] = textAppearance
         args[SPOILER_TEXT_COLOR_ARGUMENT] = spoilerTextColor
         args[SPOILER_EXPAND_ARGUMENT] = expandSpoilers
+        args[DIMENSION_MAP_ARGUMENT] = dimensionMap
 
         if (existingChild is BetterLinkGifAwareEmojiTextView && firstTreeChild?.prototype === TextPrototype) {
             TextPrototype.applyOnView(this, existingChild, args + firstTreeChild.args)

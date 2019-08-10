@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
+import android.util.Size
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -10,7 +11,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.ViewCompat
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.target.ImageViewTarget
+import com.bumptech.glide.request.target.Target
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
@@ -37,6 +41,8 @@ import okhttp3.HttpUrl
  */
 object ImagePrototype : AutoClosingPrototype {
 
+    const val DIMENSION_MAP_ARGUMENT = "dimension_map"
+
     private const val WIDTH_ARGUMENT = "width"
 
     private val widthAttributeRegex = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
@@ -56,14 +62,22 @@ object ImagePrototype : AutoClosingPrototype {
         val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
         val proxyUrl = url.toPrefixedUrlOrNull()?.let { ProxerUrls.proxyImage(it) }
 
-        val width = if (proxyUrl == null) null else args[WIDTH_ARGUMENT] as Int?
+        @Suppress("UNCHECKED_CAST")
+        val dimensionMap = args[DIMENSION_MAP_ARGUMENT] as MutableMap<String, Size>?
+
+        val width = proxyUrl?.let { dimensionMap?.get(it.toString())?.width }
+            ?: args[WIDTH_ARGUMENT] as Int?
+            ?: MATCH_PARENT
+
+        val height = proxyUrl?.let { dimensionMap?.get(it.toString())?.height }
+            ?: WRAP_CONTENT
 
         return listOf(AppCompatImageView(parent.context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$proxyUrl")
 
-            view.layoutParams = ViewGroup.MarginLayoutParams(width ?: MATCH_PARENT, WRAP_CONTENT)
+            view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
 
-            args.glide?.let { loadImage(it, view, proxyUrl) }
+            args.glide?.let { loadImage(it, view, proxyUrl, dimensionMap) }
 
             (parent.context as? Activity)?.let { context ->
                 view.clicks()
@@ -72,7 +86,7 @@ object ImagePrototype : AutoClosingPrototype {
                         if (view.getTag(R.id.error_tag) == true) {
                             view.tag = null
 
-                            args.glide?.let { loadImage(it, view, proxyUrl) }
+                            args.glide?.let { loadImage(it, view, proxyUrl, dimensionMap) }
                         } else if (view.drawable != null && proxyUrl != null) {
                             ImageDetailActivity.navigateTo(context, proxyUrl, view)
                         }
@@ -81,10 +95,33 @@ object ImagePrototype : AutoClosingPrototype {
         })
     }
 
-    private fun loadImage(glide: GlideRequests, view: ImageView, url: HttpUrl?) = glide
+    private fun loadImage(
+        glide: GlideRequests,
+        view: ImageView,
+        url: HttpUrl?,
+        dimensionMap: MutableMap<String, Size>?
+    ) = glide
         .load(url.toString())
         .centerInside()
         .listener(object : SimpleGlideRequestListener<Drawable?> {
+            override fun onResourceReady(
+                resource: Drawable?,
+                model: Any?,
+                target: Target<Drawable?>?,
+                dataSource: DataSource?,
+                isFirstResource: Boolean
+            ): Boolean {
+                if (resource is Drawable && model is String) {
+                    dimensionMap?.put(model, Size(resource.intrinsicWidth, resource.intrinsicHeight))
+                }
+
+                if (target is ImageViewTarget && target.view.layoutParams.height <= 0) {
+                    findHost(target.view)?.heightChanges?.onNext(Unit)
+                }
+
+                return false
+            }
+
             override fun onLoadFailed(error: GlideException?): Boolean {
                 view.setTag(R.id.error_tag, true)
 
@@ -98,4 +135,14 @@ object ImagePrototype : AutoClosingPrototype {
         )
         .logErrors()
         .into(view)
+
+    private fun findHost(view: View): BBCodeView? {
+        var current = view.parent
+
+        while (current !is BBCodeView && current is ViewGroup) {
+            current = current.parent
+        }
+
+        return current as? BBCodeView
+    }
 }
