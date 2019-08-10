@@ -204,7 +204,7 @@ private val applicationModules = module {
     single { LocalDataInitializer(androidContext(), get()) }
 
     single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
-    single { LoginHandler(get(), get(), get()) }
+    single { LoginHandler(get(), get(), get(), get()) }
 }
 
 private val viewModelModule = module {

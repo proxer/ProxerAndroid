@@ -10,6 +10,7 @@ import me.proxer.app.chat.prv.sync.MessengerNotifications
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
+import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -22,6 +23,7 @@ import me.proxer.library.ProxerApi
 class LoginHandler(
     private val api: ProxerApi,
     private val storageHelper: StorageHelper,
+    private val preferenceHelper: PreferenceHelper,
     private val messengerDao: MessengerDao
 ) {
 
@@ -56,6 +58,10 @@ class LoginHandler(
         MessengerNotifications.cancel(context)
 
         MessengerWorker.cancel()
+
+        if (!preferenceHelper.areNewsNotificationsEnabled) {
+            NotificationWorker.cancel()
+        }
 
         Completable
             .fromAction {
