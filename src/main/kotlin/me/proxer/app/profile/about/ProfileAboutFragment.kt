@@ -34,6 +34,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.proxyIfRequired
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
@@ -128,7 +129,10 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
                         fileExtension == "gif"
                     ) {
                         try {
-                            val imageFile = GlideApp.with(view).download(url.toString()).submit().get()
+                            val imageFile = GlideApp.with(view)
+                                .download(url.proxyIfRequired().toString())
+                                .submit().get()
+
                             val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
 
                             WebResourceResponse(mimeType, "", FileInputStream(imageFile))

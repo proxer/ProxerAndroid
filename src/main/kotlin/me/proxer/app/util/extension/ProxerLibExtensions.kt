@@ -60,6 +60,9 @@ import me.proxer.library.enums.RelationshipStatus
 import me.proxer.library.enums.Season
 import me.proxer.library.enums.SynonymType
 import me.proxer.library.enums.UserMediaProgress
+import me.proxer.library.util.ProxerUrls
+import me.proxer.library.util.ProxerUrls.hasProxerHost
+import okhttp3.HttpUrl
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
@@ -446,3 +449,8 @@ fun Post.toParsedPost(resources: Resources): ParsedPost {
 fun Tag.toParcelableTag() = LocalTag(id, type, name, description, subType, isSpoiler)
 
 fun ChatMessage.toParsedMessage() = ParsedChatMessage(id, userId, username, image, message, action, date.toInstantBP())
+
+fun HttpUrl.proxyIfRequired() = when (this.hasProxerHost) {
+    true -> this
+    false -> ProxerUrls.proxyImage(this)
+}
