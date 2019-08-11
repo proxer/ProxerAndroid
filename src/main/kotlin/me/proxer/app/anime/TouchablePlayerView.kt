@@ -1,6 +1,5 @@
 package me.proxer.app.anime
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -139,8 +138,7 @@ class TouchablePlayerView @JvmOverloads constructor(
         super.onDetachedFromWindow()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
             isScrolling = false
         }
@@ -148,7 +146,7 @@ class TouchablePlayerView @JvmOverloads constructor(
         // We only handle events in the left or right third.
         // Delegate other events to the PlayerView.
         return if (event.x > width / 3 && event.x < width / 3 * 2) {
-            super.onTouchEvent(event)
+            return super.dispatchTouchEvent(event)
         } else {
             gestureDetector.onTouchEvent(event)
         }
