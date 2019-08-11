@@ -1,7 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.graphics.drawable.Drawable
-import android.util.Size
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -66,21 +65,17 @@ object PdfPrototype : AutoClosingPrototype {
                 val parsedUrl = url.toPrefixedUrlOrNull()
 
                 @Suppress("UNCHECKED_CAST")
-                val dimensionMap = args[ImagePrototype.DIMENSION_MAP_ARGUMENT] as MutableMap<String, Size>?
+                val heightMap = args[ImagePrototype.HEIGHT_MAP_ARGUMENT] as MutableMap<String, Int>?
 
-                val width = parsedUrl?.let { dimensionMap?.get(it.toString())?.width }
-                    ?: args[WIDTH_ARGUMENT] as Int?
-                    ?: MATCH_PARENT
-
-                val height = parsedUrl?.let { dimensionMap?.get(it.toString())?.height }
-                    ?: WRAP_CONTENT
+                val width = args[WIDTH_ARGUMENT] as Int? ?: MATCH_PARENT
+                val height = parsedUrl?.let { heightMap?.get(it.toString()) } ?: WRAP_CONTENT
 
                 view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
 
                 view.setDoubleTapZoomDuration(view.context.resources.getInteger(android.R.integer.config_shortAnimTime))
                 view.setMinimumTileDpi(196)
 
-                args.glide?.let { loadImage(it, view, parsedUrl, dimensionMap) }
+                args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
 
                 view.clicks()
                     .filter { view.getTag(R.id.error_tag) == true }
@@ -88,7 +83,7 @@ object PdfPrototype : AutoClosingPrototype {
                     .subscribe {
                         view.tag = null
 
-                        args.glide?.let { loadImage(it, view, parsedUrl, dimensionMap) }
+                        args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
                     }
 
                 view.doOnLayout {
@@ -108,7 +103,7 @@ object PdfPrototype : AutoClosingPrototype {
         glide: GlideRequests,
         view: SubsamplingScaleImageView,
         url: HttpUrl?,
-        dimensionMap: MutableMap<String, Size>?
+        heightMap: MutableMap<String, Int>?
     ) = glide
         .download(url.toString())
         .listener(object : SimpleGlideRequestListener<File?> {
@@ -128,7 +123,7 @@ object PdfPrototype : AutoClosingPrototype {
                 return false
             }
         })
-        .into(GlidePdfTarget(view, url.toString(), dimensionMap))
+        .into(GlidePdfTarget(view, url.toString(), heightMap))
 
     private fun handleLoadError(view: SubsamplingScaleImageView) {
         view.setTag(R.id.error_tag, true)
@@ -156,7 +151,7 @@ object PdfPrototype : AutoClosingPrototype {
     private class GlidePdfTarget(
         view: SubsamplingScaleImageView,
         private val model: String,
-        private val dimensionMap: MutableMap<String, Size>?
+        private val dimensionMap: MutableMap<String, Int>?
     ) : OriginalSizeGlideTarget<File>() {
 
         var view: SubsamplingScaleImageView? = view
@@ -180,7 +175,7 @@ object PdfPrototype : AutoClosingPrototype {
                                 view.setDoubleTapZoomScale(view.scale * 2.5f)
                                 view.maxScale = view.scale * 2.5f
 
-                                dimensionMap?.put(model, Size(view.width, view.height))
+                                dimensionMap?.put(model, view.height)
                             }
                     }
             }

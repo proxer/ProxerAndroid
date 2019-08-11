@@ -2,7 +2,6 @@ package me.proxer.app.ui.view.bbcode.prototype
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import android.util.Size
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -41,7 +40,7 @@ import okhttp3.HttpUrl
  */
 object ImagePrototype : AutoClosingPrototype {
 
-    const val DIMENSION_MAP_ARGUMENT = "dimension_map"
+    const val HEIGHT_MAP_ARGUMENT = "dimension_map"
 
     private const val WIDTH_ARGUMENT = "width"
 
@@ -63,21 +62,17 @@ object ImagePrototype : AutoClosingPrototype {
         val proxyUrl = url.toPrefixedUrlOrNull()?.proxyIfRequired()
 
         @Suppress("UNCHECKED_CAST")
-        val dimensionMap = args[DIMENSION_MAP_ARGUMENT] as MutableMap<String, Size>?
+        val heightMap = args[HEIGHT_MAP_ARGUMENT] as MutableMap<String, Int>?
 
-        val width = proxyUrl?.let { dimensionMap?.get(it.toString())?.width }
-            ?: args[WIDTH_ARGUMENT] as Int?
-            ?: MATCH_PARENT
-
-        val height = proxyUrl?.let { dimensionMap?.get(it.toString())?.height }
-            ?: WRAP_CONTENT
+        val width = args[WIDTH_ARGUMENT] as Int? ?: MATCH_PARENT
+        val height = proxyUrl?.let { heightMap?.get(it.toString()) } ?: WRAP_CONTENT
 
         return listOf(AppCompatImageView(parent.context).also { view: ImageView ->
             ViewCompat.setTransitionName(view, "bb_image_$proxyUrl")
 
             view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
 
-            args.glide?.let { loadImage(it, view, proxyUrl, dimensionMap) }
+            args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
 
             (parent.context as? Activity)?.let { context ->
                 view.clicks()
@@ -86,7 +81,7 @@ object ImagePrototype : AutoClosingPrototype {
                         if (view.getTag(R.id.error_tag) == true) {
                             view.tag = null
 
-                            args.glide?.let { loadImage(it, view, proxyUrl, dimensionMap) }
+                            args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
                         } else if (view.drawable != null && proxyUrl != null) {
                             ImageDetailActivity.navigateTo(context, proxyUrl, view)
                         }
@@ -99,7 +94,7 @@ object ImagePrototype : AutoClosingPrototype {
         glide: GlideRequests,
         view: ImageView,
         url: HttpUrl?,
-        dimensionMap: MutableMap<String, Size>?
+        heightMap: MutableMap<String, Int>?
     ) = glide
         .load(url.toString())
         .centerInside()
@@ -112,7 +107,7 @@ object ImagePrototype : AutoClosingPrototype {
                 isFirstResource: Boolean
             ): Boolean {
                 if (resource is Drawable && model is String) {
-                    dimensionMap?.put(model, Size(resource.intrinsicWidth, resource.intrinsicHeight))
+                    heightMap?.put(model, resource.intrinsicHeight)
                 }
 
                 if (target is ImageViewTarget && target.view.layoutParams.height <= 0) {

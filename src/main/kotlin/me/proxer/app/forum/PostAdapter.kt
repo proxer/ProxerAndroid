@@ -1,6 +1,5 @@
 package me.proxer.app.forum
 
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +38,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
     var glide: GlideRequests? = null
     val profileClickSubject: PublishSubject<Pair<ImageView, ParsedPost>> = PublishSubject.create()
 
-    private val dimensionMap = ConcurrentHashMap<String, Size>()
+    private val heightMap = ConcurrentHashMap<String, Int>()
     private var layoutManager: LayoutManager? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -81,11 +80,11 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
         init {
             post.glide = glide
             post.enableEmotions = true
-            post.dimensionMap = dimensionMap
+            post.heightMap = heightMap
 
             signature.glide = glide
             signature.enableEmotions = true
-            signature.dimensionMap = dimensionMap
+            signature.heightMap = heightMap
 
             thankYouIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
