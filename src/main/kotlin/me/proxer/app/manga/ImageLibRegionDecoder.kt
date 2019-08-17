@@ -44,8 +44,7 @@ class ImageLibRegionDecoder @JvmOverloads @Keep constructor(bitmapConfig: Bitmap
     }
 
     override fun decodeRegion(sRect: Rect, sampleSize: Int): Bitmap {
-        return decoder?.decodeRegion(sRect, bitmapConfig, sampleSize)
-            .let { requireNotNull(it) }
+        return requireNotNull(decoder?.decodeRegion(sRect, bitmapConfig, sampleSize))
     }
 
     override fun recycle() {

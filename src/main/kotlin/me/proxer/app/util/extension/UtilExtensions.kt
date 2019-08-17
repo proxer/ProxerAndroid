@@ -15,7 +15,6 @@ import android.text.util.Linkify
 import android.widget.ImageView
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.net.UriCompat
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.engine.GlideException
@@ -182,7 +181,7 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
             it.intent.addReferer()
 
             CustomTabsHelperFragment.open(activity, it, url.androidUri()) { context, uri ->
-                WebViewActivity.navigateTo(context, UriCompat.toSafeString(uri))
+                WebViewActivity.navigateTo(context, uri.toString())
             }
         }
 }
