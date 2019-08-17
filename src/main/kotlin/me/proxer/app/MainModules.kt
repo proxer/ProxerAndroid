@@ -79,6 +79,7 @@ import okhttp3.Cache
 import okhttp3.ConnectionPool
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
+import okhttp3.brotli.BrotliInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -154,6 +155,7 @@ private val applicationModules = module {
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .addNetworkInterceptor(CacheInterceptor())
+            .addNetworkInterceptor(BrotliInterceptor)
             .addInterceptor(ConnectivityInterceptor(get()))
             .addInterceptor(HttpsUpgradeInterceptor())
             .addInterceptor(UserAgentInterceptor())
