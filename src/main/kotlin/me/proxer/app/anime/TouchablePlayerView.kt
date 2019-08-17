@@ -79,8 +79,6 @@ class TouchablePlayerView @JvmOverloads constructor(
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-            val horizontalMargin = if (DeviceUtils.isLandscape(resources)) width / 16f else 0f
-            val verticalMargin = height / 8f
 
             if (
                 initialEvent == null ||
@@ -88,10 +86,7 @@ class TouchablePlayerView @JvmOverloads constructor(
                 // Ignore small swipes.
                 abs(movingEvent.y - initialEvent.y) <= 40 ||
                 // Ignore horizontal swipes.
-                abs(distanceX) > abs(distanceY) ||
-                // These are likely swipes to show the status/navigation bar. Ignore them.
-                initialEvent.x < horizontalMargin || initialEvent.x > width - horizontalMargin ||
-                initialEvent.y < verticalMargin || initialEvent.y > height - verticalMargin
+                abs(distanceX) > abs(distanceY)
             ) {
                 return false
             }
@@ -143,12 +138,19 @@ class TouchablePlayerView @JvmOverloads constructor(
             isScrolling = false
         }
 
-        // We only handle events in the left or right third.
+        val horizontalMargin = if (DeviceUtils.isLandscape(resources)) width / 16f else 0f
+        val verticalMargin = height / 8f
+
+        val shouldIntercept = (event.x < width / 3 || event.x > width / 3 * 2) &&
+            event.x > horizontalMargin && event.x < width - horizontalMargin &&
+            event.y > verticalMargin && event.y < height - verticalMargin
+
+        // We only handle events in the left or right third, inside the margins.
         // Delegate other events to the PlayerView.
-        return if (event.x > width / 3 && event.x < width / 3 * 2) {
-            return super.dispatchTouchEvent(event)
-        } else {
+        return if (shouldIntercept) {
             gestureDetector.onTouchEvent(event)
+        } else {
+            return super.dispatchTouchEvent(event)
         }
     }
 
