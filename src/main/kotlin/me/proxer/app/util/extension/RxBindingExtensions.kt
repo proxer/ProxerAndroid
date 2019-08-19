@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import io.reactivex.Observable
 import me.proxer.app.util.rx.PreferenceChangeObservable
 import me.proxer.app.util.rx.PreferenceClickObservable
+import me.proxer.app.util.rx.PreviewTimeBarRequestObservable
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.rx.TextViewLinkClickObservable
 import me.proxer.app.util.rx.TextViewLinkLongClickObservable
@@ -48,6 +50,11 @@ inline fun Preference.clicks(noinline handled: (Unit) -> Boolean = { true }): Ob
 @CheckResult
 inline fun SubsamplingScaleImageView.events(): Observable<SubsamplingScaleImageViewEventObservable.Event> {
     return SubsamplingScaleImageViewEventObservable(this)
+}
+
+@CheckResult
+inline fun PreviewTimeBar.loadRequests(): Observable<Long> {
+    return PreviewTimeBarRequestObservable(this)
 }
 
 @CheckResult

@@ -6,8 +6,11 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -36,6 +39,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
+import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+import com.gojuno.koptional.rxjava2.filterSome
+import com.gojuno.koptional.toOptional
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.PlayerView
@@ -57,8 +63,14 @@ import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
+import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
+import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
 import me.proxer.app.SINGLE_CONNECTION_CLIENT
 import me.proxer.app.anime.StreamPlayerManager.PlayerState
@@ -70,8 +82,11 @@ import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTER
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.util.extension.doOnFirst
+import me.proxer.app.util.extension.loadRequests
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.newTask
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.unsafeLazy
@@ -106,17 +121,17 @@ class StreamActivity : BaseActivity() {
     internal val uri: Uri
         get() = requireNotNull(intent.data)
 
+    internal val isProxerStream: Boolean
+        get() = intent.dataString
+            ?.toPrefixedUrlOrNull()
+            ?.hasProxerStreamFileHost
+            ?: false
+
     private val mimeType: String
         get() = requireNotNull(intent.type)
 
     private val isInternalPlayerOnly: Boolean
         get() = intent.getBooleanExtra(INTERNAL_PLAYER_ONLY_EXTRA, false)
-
-    private val isProxerStream: Boolean
-        get() = intent.dataString
-            ?.toPrefixedUrlOrNull()
-            ?.hasProxerStreamFileHost
-            ?: false
 
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
@@ -129,6 +144,7 @@ class StreamActivity : BaseActivity() {
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     private val loading: ProgressBar by bindView(R.id.loading)
+    private val progress: PreviewTimeBar by bindView(R.id.exo_progress)
     private val rewindIndicator: TextView by bindView(R.id.rewindIndicator)
     private val fastForwardIndicator: TextView by bindView(R.id.fastForwardIndicator)
 
@@ -137,9 +153,11 @@ class StreamActivity : BaseActivity() {
     private val controlIcon: ImageView by bindView(R.id.controlIcon)
     private val controlProgress: MaterialProgressBar by bindView(R.id.controlProgress)
     private val controlsContainer: ViewGroup by bindView(R.id.controlsContainer)
+    private val preview: ImageView by bindView(R.id.preview)
 
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
+    private var mediaMetadataRetriever = MediaMetadataRetriever()
 
     private val castStateListener = CastStateListener { newState ->
         if (newState != CastState.NO_DEVICES_AVAILABLE && !preferenceHelper.wasCastIntroductoryOverlayShown) {
@@ -310,6 +328,20 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { toggleOrientation() }
 
+        preview.post {
+            Observable.just(0L).concatWith(progress.loadRequests())
+                .toFlowable(BackpressureStrategy.LATEST)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io(), false, 1)
+                .doOnFirst { mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders()) }
+                .map { getFrameAtTime(it * 1000).toOptional() }
+                .retry()
+                .filterSome()
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(this.scope())
+                .subscribeAndLogErrors { preview.setImageBitmap(it) }
+        }
+
         if (savedInstanceState == null) {
             toggleOrientation()
         }
@@ -365,6 +397,8 @@ class StreamActivity : BaseActivity() {
 
     override fun onDestroy() {
         wakeLock.release()
+
+        mediaMetadataRetriever.release()
 
         introductoryOverlay?.remove()
         introductoryOverlay = null
@@ -597,6 +631,30 @@ class StreamActivity : BaseActivity() {
         .sizeDp(36)
         .paddingDp(4)
         .colorRes(android.R.color.white)
+
+    private fun makeHeaders(): Map<String, String?> {
+        return emptyMap<String, String>()
+            .let {
+                when {
+                    referer != null -> it.plus("Referer" to referer)
+                    else -> it
+                }
+            }
+            .let {
+                when {
+                    isProxerStream -> it.plus("User-Agent" to USER_AGENT)
+                    else -> it.plus("User-Agent" to GENERIC_USER_AGENT)
+                }
+            }
+    }
+
+    private fun getFrameAtTime(timeUs: Long): Bitmap? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            mediaMetadataRetriever.getScaledFrameAtTime(timeUs, 0, preview.width, preview.height)
+        } else {
+            mediaMetadataRetriever.getFrameAtTime(timeUs)
+        }
+    }
 
     private fun canOpenInOtherApp(): Boolean {
         val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer).makeIntent(this)
