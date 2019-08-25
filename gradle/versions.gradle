@@ -17,12 +17,12 @@ ext {
 
     // Core plugins
     androidPluginVersion = "3.6.0-alpha03"
-    kotlinVersion = "1.3.50-eap-86"
+    kotlinVersion = "1.3.50"
     r8Version = "1.5.66"
 
     // Utility plugins
     versionsPluginVersion = "0.22.0"
-    detektPluginVersion = "1.0.0"
+    detektPluginVersion = "1.0.1"
     ktlintPluginVersion = "8.2.0"
     androidCommandPluginVersion = "2.1.0"
 
@@ -31,8 +31,8 @@ ext {
     appcompatVersion = "1.1.0-rc01"
     browserVersion = "1.2.0-alpha07"
     lifecycleVersion = "2.2.0-alpha03"
-    roomVersion = "2.2.0-alpha02"
-    workVersion = "2.2.0"
+    roomVersion = "2.2.0-beta01"
+    workVersion = "2.3.0-alpha01"
     coreKtxVersion = "1.2.0-alpha03"
     fragmentKtxVersion = "1.2.0-alpha02"
     shareTargetVersion = "1.0.0-alpha02"
@@ -54,7 +54,7 @@ ext {
     gridlayoutVersion = "1.0.0"
     materialComponentsVersion = "1.1.0-alpha09"
     preferenceVersion = "1.1.0-rc01"
-    supportPreferenceVersion = "746ffabc50"
+    supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.1-b01"
     communityMaterialTypefaceVersion = "3.5.95.1-kotlin"
     materialDrawerVersion = "7.0.0-rc05"
@@ -76,7 +76,7 @@ ext {
     customtabsHelperVersion = "1.0.6"
     introductionVersion = "2.0.0"
     aspectRatioImageViewVersion = "1.0.8"
-    gravitySnapHelperVersion = "2.0"
+    gravitySnapHelperVersion = "2.1.0"
 
     // Utils
     proxerLibVersion = "514e4f740d"
@@ -98,6 +98,6 @@ ext {
     // Debugging
     customActivityOnCrashVersion = "2.2.0"
     strictModeCompatVersion = "29.0.0"
-    leakCanaryVersion = "2.0-beta-2"
+    leakCanaryVersion = "2.0-beta-3"
     timberVersion = "4.7.1"
 }
