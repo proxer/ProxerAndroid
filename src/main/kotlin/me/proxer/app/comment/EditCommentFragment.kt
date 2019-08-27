@@ -17,8 +17,6 @@ import android.widget.ImageButton
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.annotation.ColorRes
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -43,6 +41,7 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.ui.view.bbcode.BBCodeView
+import me.proxer.app.util.compat.MenuPopupCompat
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.setIconicsImage
@@ -267,7 +266,7 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                                 }
                             }
                     }
-                    .let { MenuPopupHelper(requireContext(), it.menu as MenuBuilder, color) }
+                    .let { MenuPopupCompat(requireContext(), it.menu, color) }
                     .show(-dip(48), 0)
             }
 
@@ -296,8 +295,8 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                                 }
                             }
                     }
-                    .let { MenuPopupHelper(requireContext(), it.menu as MenuBuilder, color) }
-                    .apply { setForceShowIcon(true) }
+                    .let { MenuPopupCompat(requireContext(), it.menu, color) }
+                    .forceShowIcon()
                     .show(-dip(48), 0)
             }
 

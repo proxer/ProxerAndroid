@@ -30,19 +30,6 @@
     public <init>(...);
 }
 
-# Image
--keep class com.hippo.image.StaticImage { *; }
--keep class com.hippo.image.AnimatedImage { *; }
--keep class com.hippo.image.ImageInfo { *; }
-
--keepclassmembers class com.hippo.image.BitmapDecoder {
-    android.graphics.Bitmap createBitmap(int, int, int);
-}
-
--keepclasseswithmembers class com.hippo.image.BitmapRegionDecoder {
-    <init>(...);
-}
-
 # Fix for Community-Material-Typeface
 -keep class com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial { *; }
 

@@ -1,11 +1,6 @@
 buildscript { scriptHandler ->
     apply from: "${projectDir}/gradle/versions.gradle"
     apply from: "${projectDir}/gradle/repositories.gradle", to: scriptHandler
-
-    dependencies {
-        // Manually set the R8 and D8 version to get latest improvements fast.
-        classpath "com.android.tools:r8:$r8Version"
-    }
 }
 
 plugins {

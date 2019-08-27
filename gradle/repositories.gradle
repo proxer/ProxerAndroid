@@ -7,8 +7,6 @@ repositories {
             includeGroupByRegex "zipflinger.*"
             includeGroupByRegex "com\\.android.*"
             includeGroupByRegex "com\\.google\\.android.*"
-
-            excludeModule "com.android.tools", "r8"
         }
     }
 
@@ -47,12 +45,6 @@ repositories {
         url "https://dl.bintray.com/kotlin/kotlin-eap"
         mavenContent { releasesOnly() }
         content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*" }
-    }
-
-    maven {
-        url "https://storage.googleapis.com/r8-releases/raw"
-        mavenContent { releasesOnly() }
-        content { includeModule "com.android.tools", "r8" }
     }
 
     maven {

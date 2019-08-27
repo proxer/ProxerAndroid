@@ -16,9 +16,8 @@ ext {
     gradleVersion = "5.6"
 
     // Core plugins
-    androidPluginVersion = "3.6.0-alpha03"
+    androidPluginVersion = "3.6.0-alpha08"
     kotlinVersion = "1.3.50"
-    r8Version = "1.5.66"
 
     // Utility plugins
     versionsPluginVersion = "0.22.0"
@@ -40,7 +39,7 @@ ext {
     castVersion = "17.0.0"
 
     // RxJava
-    rxJavaVersion = "2.2.11"
+    rxJavaVersion = "2.2.12"
     rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0"
@@ -90,7 +89,7 @@ ext {
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"
     kotterknifeVersion = "2.0"
-    imageDecoderVersion = "77a74668a3"
+    imageDecoderVersion = "a7b102262a"
     concealVersion = "2.0.2"
     betterLinkMovementMethodVersion = "2.2.0"
     jsoupVersion = "1.12.1"
