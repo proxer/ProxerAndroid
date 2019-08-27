@@ -155,11 +155,11 @@ private val applicationModules = module {
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
             .addNetworkInterceptor(CacheInterceptor())
-            .addNetworkInterceptor(BrotliInterceptor)
             .addInterceptor(ConnectivityInterceptor(get()))
             .addInterceptor(HttpsUpgradeInterceptor())
             .addInterceptor(UserAgentInterceptor())
             .addInterceptor(ConnectionCloseInterceptor())
+            .addInterceptor(BrotliInterceptor)
             .cache(Cache(File(androidContext().cacheDir, HTTP_CACHE_NAME), HTTP_CACHE_SIZE))
             .apply {
                 if (loggingInterceptor != null) {

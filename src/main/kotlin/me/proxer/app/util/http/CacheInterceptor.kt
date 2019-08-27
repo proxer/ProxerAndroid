@@ -9,6 +9,8 @@ import okhttp3.Response
 import okio.BufferedSource
 import okio.GzipSource
 import okio.buffer
+import okio.source
+import org.brotli.dec.BrotliInputStream
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -85,7 +87,7 @@ class CacheInterceptor : Interceptor {
         val url = response.request.url.toString()
 
         return when {
-            url.contains(ProxerUrls.apiBase.toString()) -> response.peekBodyAndUseWithGzip {
+            url.contains(ProxerUrls.apiBase.toString()) -> response.peekBodyAndUseEncoded {
                 it.readUtf8(12).matches(apiSuccessRegex)
             } ?: false
 
@@ -104,15 +106,15 @@ class CacheInterceptor : Interceptor {
             .build()
     }
 
-    private inline fun <R> Response.peekBodyAndUseWithGzip(block: (BufferedSource) -> R) = this
+    private inline fun <R> Response.peekBodyAndUseEncoded(block: (BufferedSource) -> R) = this
         .body
         ?.source()
         ?.peek()
         ?.let {
-            if (this.header("Content-Encoding")?.equals("gzip", ignoreCase = true) == true) {
-                GzipSource(it)
-            } else {
-                it
+            when {
+                this.hasContentEncoding("gzip") -> GzipSource(it)
+                this.hasContentEncoding("br") -> BrotliInputStream(it.inputStream()).source()
+                else -> it
             }
         }
         ?.buffer()
@@ -162,6 +164,10 @@ class CacheInterceptor : Interceptor {
             return timeUnitCallback(response)
         }
     }
+}
+
+private fun Response.hasContentEncoding(value: String): Boolean {
+    return this.header("Content-Encoding")?.equals(value, ignoreCase = true) == true
 }
 
 private inline val Response.urlString
