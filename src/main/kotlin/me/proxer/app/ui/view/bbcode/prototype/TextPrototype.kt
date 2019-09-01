@@ -1,6 +1,7 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Build
@@ -13,6 +14,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.TextView
 import androidx.core.content.getSystemService
 import androidx.core.util.PatternsCompat
+import androidx.core.view.ViewCompat
 import androidx.core.widget.TextViewCompat
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
@@ -38,6 +40,12 @@ object TextPrototype : BBPrototype {
     const val TEXT_COLOR_ARGUMENT = "text_color"
     const val TEXT_SIZE_ARGUMENT = "text_size"
     const val TEXT_APPEARANCE_ARGUMENT = "text_appearance"
+
+    private val spannableFactory = object : Spannable.Factory() {
+        override fun newSpannable(source: CharSequence): Spannable {
+            return source as Spannable
+        }
+    }
 
     @SuppressLint("RestrictedApi")
     private val webUrlRegex = PatternsCompat.AUTOLINK_WEB_URL.toRegex()
@@ -66,13 +74,9 @@ object TextPrototype : BBPrototype {
         view: BetterLinkGifAwareEmojiTextView,
         args: BBArgs
     ): BetterLinkGifAwareEmojiTextView {
-        view.setSpannableFactory(object : Spannable.Factory() {
-            override fun newSpannable(source: CharSequence): Spannable {
-                return source as Spannable
-            }
-        })
-
         view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+
+        view.setSpannableFactory(spannableFactory)
         view.setText(args.safeText, TextView.BufferType.SPANNABLE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -99,27 +103,31 @@ object TextPrototype : BBPrototype {
     }
 
     private fun setListeners(parent: BBCodeView, view: BetterLinkGifAwareEmojiTextView) {
-        view.linkClicks(validLinkPredicate)
-            .autoDisposable(ViewScopeProvider.from(parent))
-            .subscribe {
-                val baseActivity = BBUtils.findBaseActivity(parent.context) ?: return@subscribe
+        (parent.context as? Activity)?.runOnUiThread {
+            if (ViewCompat.isAttachedToWindow(view)) {
+                view.linkClicks(validLinkPredicate)
+                    .autoDisposable(ViewScopeProvider.from(parent))
+                    .subscribe {
+                        val baseActivity = BBUtils.findBaseActivity(parent.context) ?: return@subscribe
 
-                when {
-                    it.startsWith("@") -> ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
-                    webUrlRegex.matches(it) -> baseActivity.showPage(it.toPrefixedHttpUrl())
-                }
+                        when {
+                            it.startsWith("@") -> ProfileActivity.navigateTo(baseActivity, null, it.trim().drop(1))
+                            webUrlRegex.matches(it) -> baseActivity.showPage(it.toPrefixedHttpUrl())
+                        }
+
+                        view.linkLongClicks { webUrlRegex.matches(it) }
+                            .autoDisposable(ViewScopeProvider.from(parent))
+                            .subscribe {
+                                val title = view.context.getString(R.string.clipboard_title)
+
+                                parent.context.getSystemService<ClipboardManager>()?.setPrimaryClip(
+                                    ClipData.newPlainText(title, it.toString())
+                                )
+
+                                parent.context.toast(R.string.clipboard_status)
+                            }
+                    }
             }
-
-        view.linkLongClicks { webUrlRegex.matches(it) }
-            .autoDisposable(ViewScopeProvider.from(parent))
-            .subscribe {
-                val title = view.context.getString(R.string.clipboard_title)
-
-                parent.context.getSystemService<ClipboardManager>()?.setPrimaryClip(
-                    ClipData.newPlainText(title, it.toString())
-                )
-
-                parent.context.toast(R.string.clipboard_status)
-            }
+        }
     }
 }
