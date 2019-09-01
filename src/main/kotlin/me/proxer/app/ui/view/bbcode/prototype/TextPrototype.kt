@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Build
+import android.text.Spannable
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.View
 import android.view.ViewGroup
@@ -65,11 +66,17 @@ object TextPrototype : BBPrototype {
         view: BetterLinkGifAwareEmojiTextView,
         args: BBArgs
     ): BetterLinkGifAwareEmojiTextView {
+        view.setSpannableFactory(object : Spannable.Factory() {
+            override fun newSpannable(source: CharSequence): Spannable {
+                return source as Spannable
+            }
+        })
+
         view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-        view.text = args.safeText
+        view.setText(args.safeText, TextView.BufferType.SPANNABLE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            view.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO
+            view.importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
         }
 
         applyStyle(args, view)
