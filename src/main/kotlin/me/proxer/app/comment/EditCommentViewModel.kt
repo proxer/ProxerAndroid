@@ -93,7 +93,7 @@ class EditCommentViewModel(
 
     val isUpdate = MutableLiveData(id.isNullOrBlank().not())
 
-    val publishResult = ResettingMutableLiveData<Unit?>()
+    val publishResult = ResettingMutableLiveData<LocalComment?>()
     val publishError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
     private var updateDisposable: Disposable? = null
@@ -135,8 +135,8 @@ class EditCommentViewModel(
             ?.doAfterTerminate { isLoading.postValue(false) }
             ?.subscribeOn(Schedulers.io())
             ?.subscribeAndLogErrors({
+                publishResult.postValue(data.value)
                 data.postValue(null)
-                publishResult.postValue(Unit)
             }, {
                 publishError.postValue(ErrorUtils.handle(it))
             })
