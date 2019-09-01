@@ -20,7 +20,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.rubensousa.gravitysnaphelper.GravityPagerSnapHelper
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -124,7 +124,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     private var header by Delegates.notNull<MediaControlView>()
     private var footer by Delegates.notNull<MediaControlView>()
 
-    private var gravityPagerSnapHelper: GravityPagerSnapHelper? = null
+    private var gravitySnapHelper: GravitySnapHelper? = null
 
     private var readerOrientation = preferenceHelper.mangaReaderOrientation
         set(value) {
@@ -246,8 +246,8 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     }
 
     override fun onDestroyView() {
-        gravityPagerSnapHelper?.attachToRecyclerView(null)
-        gravityPagerSnapHelper = null
+        gravitySnapHelper?.attachToRecyclerView(null)
+        gravitySnapHelper = null
 
         recyclerView.layoutManager = null
         recyclerView.adapter = null
@@ -496,15 +496,18 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     private fun bindLayoutManager() {
         val state = recyclerView.layoutManager?.onSaveInstanceState()
 
-        gravityPagerSnapHelper?.attachToRecyclerView(null)
-        gravityPagerSnapHelper = null
+        gravitySnapHelper?.attachToRecyclerView(null)
+        gravitySnapHelper = null
 
         recyclerView.recycledViewPool.clear()
 
         recyclerView.layoutManager = MangaLinearLayoutManger(requireContext(), readerOrientation)
 
         if (!isVertical) {
-            gravityPagerSnapHelper = GravityPagerSnapHelper(Gravity.END).apply { attachToRecyclerView(recyclerView) }
+            gravitySnapHelper = GravitySnapHelper(Gravity.END)
+                .apply { maxFlingSizeFraction = 1.0f }
+                .apply { scrollMsPerInch = 50f }
+                .apply { attachToRecyclerView(recyclerView) }
         }
 
         innerAdapter.isVertical = isVertical
