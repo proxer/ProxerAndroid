@@ -19,7 +19,8 @@ class ConnectivityInterceptor(context: Context) : Interceptor, KoinComponent {
 
     private val connectivityManager = requireNotNull(context.getSystemService<ConnectivityManager>())
 
-    private val hasConnectionSettings = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
+    private val hasConnectionSettings = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+        Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY).resolveActivity(context.packageManager) != null ||
         Intent(Settings.ACTION_WIRELESS_SETTINGS).resolveActivity(context.packageManager) != null
 
     override fun intercept(chain: Interceptor.Chain): Response {
