@@ -13,10 +13,10 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "5.6.1"
+    gradleVersion = "5.6.2"
 
     // Core plugins
-    androidPluginVersion = "3.6.0-alpha09"
+    androidPluginVersion = "3.6.0-alpha10"
     kotlinVersion = "1.3.50"
 
     // Utility plugins
@@ -27,15 +27,15 @@ ext {
 
     // Frameworks and compatibility libraries
     koinVersion = "2.0.1"
-    appcompatVersion = "1.1.0-rc01"
+    appcompatVersion = "1.1.0"
     browserVersion = "1.2.0-alpha07"
-    lifecycleVersion = "2.2.0-alpha03"
-    roomVersion = "2.2.0-beta01"
+    lifecycleVersion = "2.2.0-alpha04"
+    roomVersion = "2.2.0-rc01"
     workVersion = "2.3.0-alpha01"
-    coreKtxVersion = "1.2.0-alpha03"
-    fragmentKtxVersion = "1.2.0-alpha02"
-    shareTargetVersion = "1.0.0-alpha02"
-    interactiveMediaVersion = "3.11.3"
+    coreKtxVersion = "1.2.0-alpha04"
+    fragmentKtxVersion = "1.2.0-alpha03"
+    shareTargetVersion = "1.0.0-beta01"
+    interactiveMediaVersion = "3.13.1"
     castVersion = "17.0.0"
 
     // RxJava
@@ -48,15 +48,15 @@ ext {
     autoDisposeVersion = "1.2.0"
 
     // UI components
-    recyclerviewVersion = "1.1.0-beta03"
+    recyclerviewVersion = "1.1.0-beta04"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
-    materialComponentsVersion = "1.1.0-alpha09"
-    preferenceVersion = "1.1.0-rc01"
+    materialComponentsVersion = "1.1.0-alpha10"
+    preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.1-b02"
     communityMaterialTypefaceVersion = "3.5.95.1-kotlin"
-    materialDrawerVersion = "7.0.0-rc06"
+    materialDrawerVersion = "641e870433"
     aboutLibrariesVersion = "7.0.3"
     materializeVersion = "1.2.1"
     crossfaderVersion = "1.6.0"
@@ -83,7 +83,7 @@ ext {
     hawkVersion = "7a1a625455"
     glideVersion = "4.9.0"
     retrofitVersion = "2.6.1"
-    okHttpVersion = "4.1.0"
+    okHttpVersion = "4.1.1"
     okioVersion = "2.3.0"
     moshiVersion = "1.8.0"
     easyHeaderFooterAdapterVersion = "3.0.0"
