@@ -71,21 +71,16 @@
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="Theme.Placeholder.App.Transparent" parent="Base.Theme.App">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="Theme.Placeholder.App.NoBackground" parent="Base.Theme.App">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
     <style name="Theme.Placeholder.App.Splash" parent="Base.Theme.App">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Placeholder.App.Splash.NoBackground" parent="Theme.Placeholder.App.Splash">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
     <style name="Widget.App.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">

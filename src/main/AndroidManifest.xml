@@ -141,9 +141,7 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity
-            android:name=".profile.ProfileActivity"
-            android:theme="@style/Theme.Placeholder.App.Transparent">
+        <activity android:name=".profile.ProfileActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -195,9 +193,7 @@
             android:name=".comment.EditCommentActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".media.MediaActivity"
-            android:theme="@style/Theme.Placeholder.App.Transparent">
+        <activity android:name=".media.MediaActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -217,17 +213,13 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".info.translatorgroup.TranslatorGroupActivity"
-            android:theme="@style/Theme.Placeholder.App.Transparent" />
+        <activity android:name=".info.translatorgroup.TranslatorGroupActivity" />
 
-        <activity
-            android:name=".info.industry.IndustryActivity"
-            android:theme="@style/Theme.Placeholder.App.Transparent" />
+        <activity android:name=".info.industry.IndustryActivity" />
 
         <activity
             android:name=".ui.ImageDetailActivity"
-            android:theme="@style/Theme.Placeholder.App.NoBackground" />
+            android:theme="@style/Theme.Placeholder.App.Splash.NoBackground" />
 
         <activity
             android:name=".anime.StreamActivity"
