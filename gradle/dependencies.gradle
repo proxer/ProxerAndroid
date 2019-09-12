@@ -38,7 +38,7 @@ dependencies {
     implementation "com.mikepenz:iconics-core:$iconicsVersion"
     implementation "com.mikepenz:iconics-views:$iconicsVersion"
     implementation "com.mikepenz:community-material-typeface:$communityMaterialTypefaceVersion"
-    implementation "com.github.rubengees.MaterialDrawer:library:$materialDrawerVersion"
+    implementation "com.mikepenz:materialdrawer:$materialDrawerVersion"
     implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion"
     implementation "com.mikepenz:materialize:$materializeVersion"
     implementation "com.mikepenz:crossfader:$crossfaderVersion@aar"

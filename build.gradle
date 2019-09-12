@@ -132,6 +132,8 @@ android {
         }
     }
 
+    viewBinding.enabled = true
+
     lintOptions {
         mkdir("$buildDir/reports/lint")
 

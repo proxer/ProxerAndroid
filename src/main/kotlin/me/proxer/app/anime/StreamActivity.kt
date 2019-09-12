@@ -72,7 +72,6 @@ import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
-import me.proxer.app.SINGLE_CONNECTION_CLIENT
 import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
@@ -97,7 +96,6 @@ import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -136,7 +134,7 @@ class StreamActivity : BaseActivity() {
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
-    private val client by inject<OkHttpClient>(named(SINGLE_CONNECTION_CLIENT))
+    private val client by inject<OkHttpClient>()
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: TouchablePlayerView by bindView(R.id.player)
