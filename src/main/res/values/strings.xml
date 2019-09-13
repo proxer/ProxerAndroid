@@ -315,6 +315,12 @@
 
     <string name="cancel">Abbrechen</string>
 
+    <string name="activity_update_available">Ein Update ist verfügbar</string>
+    <string name="activity_update_action_download">Herunterladen</string>
+    <string name="activity_update_error">Das Update ist fehlgeschlagen</string>
+    <string name="activity_update_ready">Update ist bereit</string>
+    <string name="activity_update_action_install">Installieren</string>
+
     <string name="activity_prv_messenger_send_to">Senden an…</string>
     <string name="activity_stream_cast_introduction">Tippe hier, um auf dein Google Cast Gerät zu streamen</string>
 

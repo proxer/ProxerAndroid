@@ -35,6 +35,7 @@ ext {
     coreKtxVersion = "1.2.0-alpha04"
     fragmentKtxVersion = "1.2.0-alpha03"
     shareTargetVersion = "1.0.0-beta01"
+    playCoreVersion = "1.6.3"
     interactiveMediaVersion = "3.14.0"
     castVersion = "17.1.0"
 

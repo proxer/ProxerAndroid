@@ -2,6 +2,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
+    implementation "com.google.android.play:core:$playCoreVersion"
     implementation "com.google.android.gms:play-services-cast-framework:$castVersion"
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$interactiveMediaVersion"
 

@@ -26,6 +26,7 @@ import me.proxer.app.settings.theme.ThemeContainer
 import me.proxer.app.settings.theme.ThemeVariant
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ui.view.RatingDialog
+import me.proxer.app.util.InAppUpdateFlow
 import me.proxer.app.util.extension.intentFor
 import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
@@ -60,6 +61,8 @@ class MainActivity : DrawerActivity() {
     val tabs: TabLayout by bindView(R.id.tabs)
 
     private val ucpSettingsViewModel by viewModel<UcpSettingsViewModel>()
+
+    private val inAppUpdateFlow = InAppUpdateFlow()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +108,12 @@ class MainActivity : DrawerActivity() {
         super.onRestoreInstanceState(savedInstanceState)
 
         title = savedInstanceState.getString(TITLE_STATE)
+    }
+
+    override fun onDestroy() {
+        inAppUpdateFlow.stop()
+
+        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -202,6 +211,10 @@ class MainActivity : DrawerActivity() {
 
                 if (!isRootActivity) {
                     drawer.disableSelectivity()
+                }
+
+                if (isRootActivity) {
+                    inAppUpdateFlow.start(this, root)
                 }
             }
         }
