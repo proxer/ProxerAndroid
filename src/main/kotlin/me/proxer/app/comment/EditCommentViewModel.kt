@@ -70,7 +70,7 @@ class EditCommentViewModel(
         get() = data.value
             .let { comment ->
                 when {
-                    (comment == null || comment.content.isBlank() && comment.overallRating == 0) -> null
+                    comment == null || comment.content.isBlank() && comment.overallRating == 0 -> null
                     comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
 
                     comment.mediaProgress == UserMediaProgress.WILL_WATCH -> Single
