@@ -36,7 +36,8 @@ ext {
     fragmentKtxVersion = "1.2.0-alpha03"
     shareTargetVersion = "1.0.0-beta01"
     playCoreVersion = "1.6.3"
-    interactiveMediaVersion = "3.14.0"
+    adsIdentifierVersion = "17.0.0"
+    interactiveMediaVersion = "3.11.3"
     castVersion = "17.1.0"
 
     // RxJava
