@@ -18,10 +18,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.disposables.Disposables
 import timber.log.Timber
 
-fun <T> Flowable<T>.doOnFirst(callback: (T) -> Unit): Flowable<T> {
-    return this.take(1).doOnNext { callback(it) }.concatWith(this)
-}
-
 inline fun Observer<*>.checkMainThread(): Boolean {
     return if (Looper.myLooper() != Looper.getMainLooper()) {
         val threadName = Thread.currentThread().name

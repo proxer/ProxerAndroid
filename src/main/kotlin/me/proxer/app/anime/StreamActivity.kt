@@ -64,7 +64,7 @@ import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Observable
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
@@ -81,7 +81,6 @@ import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTER
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.base.BaseActivity
-import me.proxer.app.util.extension.doOnFirst
 import me.proxer.app.util.extension.loadRequests
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.newTask
@@ -326,14 +325,17 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { toggleOrientation() }
 
+        Completable.fromCallable { mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders()) }
+            .subscribeOn(Schedulers.io())
+            .autoDisposable(this.scope())
+            .subscribeAndLogErrors()
+
         preview.post {
-            Observable.just(0L).concatWith(progress.loadRequests())
+            progress.loadRequests()
                 .toFlowable(BackpressureStrategy.LATEST)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io(), false, 1)
-                .doOnFirst { mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders()) }
                 .map { getFrameAtTime(it * 1000).toOptional() }
-                .retry()
                 .filterSome()
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(this.scope())
