@@ -72,6 +72,10 @@ class EditCommentViewModel(
                 when {
                     (comment == null || comment.content.isBlank() && comment.overallRating == 0) -> null
                     comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
+
+                    comment.mediaProgress == UserMediaProgress.WILL_WATCH -> Single
+                        .error<Optional<Unit>>(CommentInvalidProgressException())
+
                     comment.id.isNotEmpty() -> api.comment.update(comment.id)
                         .comment(comment.content.trim())
                         .rating(comment.overallRating)

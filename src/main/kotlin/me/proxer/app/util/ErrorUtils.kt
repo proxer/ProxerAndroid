@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.upstream.Loader
 import me.proxer.app.R
 import me.proxer.app.auth.LoginDialog
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.comment.CommentInvalidProgressException
 import me.proxer.app.comment.CommentTooLongException
 import me.proxer.app.exception.AgeConfirmationRequiredException
 import me.proxer.app.exception.ChatException
@@ -195,6 +196,7 @@ object ErrorUtils : KoinComponent {
             is MangaNotAvailableException -> R.string.error_manga_not_available
             is MangaLinkException -> R.string.error_manga_link
             is CommentTooLongException -> R.string.error_comment_too_long
+            is CommentInvalidProgressException -> R.string.error_comment_invalid_progress
             else -> R.string.error_unknown
         }
     }

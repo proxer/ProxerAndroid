@@ -137,6 +137,7 @@
     </string>
 
     <string name="error_comment_too_long">Der Kommentar darf maximal 20000 Zeichen lang sein</string>
+    <string name="error_comment_invalid_progress">Es kann kein Kommentar für vermerkte Werke veröffentlich werden</string>
 
     <string name="error_input_empty">Gib etwas ein</string>
     <string name="error_duplicate_participant">Diesen Teilnehmer hast du schon hinzugefügt</string>
