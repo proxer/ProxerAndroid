@@ -13,6 +13,7 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedUserComment
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.CommentContentType
 import org.threeten.bp.Instant
 import kotlin.properties.Delegates
 
@@ -34,7 +35,7 @@ class ProfileCommentViewModel(
                     .category(category)
                     .page(page)
                     .limit(itemsOnPage)
-                    .minimumLength(1)
+                    .hasContent(CommentContentType.COMMENT, CommentContentType.RATING)
                     .buildSingle()
             }
             .observeOn(Schedulers.computation())
