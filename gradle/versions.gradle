@@ -100,5 +100,6 @@ ext {
     customActivityOnCrashVersion = "2.2.0"
     strictModeCompatVersion = "29.0.0"
     leakCanaryVersion = "2.0-beta-3"
+    anrWatchdogVersion = "1.4.0"
     timberVersion = "4.7.1"
 }

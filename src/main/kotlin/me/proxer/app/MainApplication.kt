@@ -11,6 +11,7 @@ import androidx.work.Configuration
 import androidx.work.Logger
 import androidx.work.WorkManager
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.github.anrwatchdog.ANRWatchDog
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
@@ -75,6 +76,7 @@ class MainApplication : Application() {
         initLibs()
         initCache()
         initNightMode()
+        initAnrWatchdog()
 
         loginHandler.listen(this)
     }
@@ -183,6 +185,12 @@ class MainApplication : Application() {
 
         preferenceHelper.themeObservable.subscribe {
             AppCompatDelegate.setDefaultNightMode(it.variant.value)
+        }
+    }
+
+    private fun initAnrWatchdog() {
+        if (BuildConfig.LOG) {
+            ANRWatchDog().setANRListener { Timber.e(it) }.start()
         }
     }
 }

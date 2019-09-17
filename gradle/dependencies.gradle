@@ -87,6 +87,7 @@ dependencies {
 
     implementation "com.kirich1409:strict-mode-compat:$strictModeCompatVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation "com.github.anrwatchdog:anrwatchdog:$anrWatchdogVersion"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
