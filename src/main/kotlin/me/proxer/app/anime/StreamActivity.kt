@@ -66,6 +66,7 @@ import com.uber.autodispose.autoDisposable
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
@@ -155,6 +156,9 @@ class StreamActivity : BaseActivity() {
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
     private var mediaMetadataRetriever = MediaMetadataRetriever()
+
+    private var mediaMetadataRetrieverDisposable: Disposable? = null
+    private var isMediaMetadataRetrieverReady = false
 
     private val castStateListener = CastStateListener { newState ->
         if (newState != CastState.NO_DEVICES_AVAILABLE && !preferenceHelper.wasCastIntroductoryOverlayShown) {
@@ -325,22 +329,7 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { toggleOrientation() }
 
-        Completable.fromCallable { mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders()) }
-            .subscribeOn(Schedulers.io())
-            .autoDisposable(this.scope())
-            .subscribeAndLogErrors()
-
-        preview.post {
-            progress.loadRequests()
-                .toFlowable(BackpressureStrategy.LATEST)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io(), false, 1)
-                .map { getFrameAtTime(it * 1000).toOptional() }
-                .filterSome()
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(this.scope())
-                .subscribeAndLogErrors { preview.setImageBitmap(it) }
-        }
+        initPreview()
 
         if (savedInstanceState == null) {
             toggleOrientation()
@@ -397,8 +386,6 @@ class StreamActivity : BaseActivity() {
 
     override fun onDestroy() {
         wakeLock.release()
-
-        mediaMetadataRetriever.release()
 
         introductoryOverlay?.remove()
         introductoryOverlay = null
@@ -505,6 +492,42 @@ class StreamActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
 
         toggleFullscreen(true)
+    }
+
+    private fun initPreview() {
+        mediaMetadataRetrieverDisposable = Completable
+            .fromAction {
+                try {
+                    mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders())
+                } finally {
+                    // MediaMetadataRetriever does not support interruption and hangs when calling release()
+                    // while setDataSource is still in progress. Wait for it to finish before calling release().
+                    isMediaMetadataRetrieverReady = true
+
+                    if (mediaMetadataRetrieverDisposable?.isDisposed == true) {
+                        Completable.fromAction { mediaMetadataRetriever.release() }
+                            .subscribeOn(Schedulers.io())
+                            .subscribeAndLogErrors()
+                    }
+                }
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .andThen(progress.loadRequests())
+            .toFlowable(BackpressureStrategy.LATEST)
+            .observeOn(Schedulers.io(), false, 1)
+            .map { getFrameAtTime(it * 1000).toOptional() }
+            .filterSome()
+            .doFinally {
+                if (isMediaMetadataRetrieverReady) {
+                    Completable.fromAction { mediaMetadataRetriever.release() }
+                        .subscribeOn(Schedulers.io())
+                        .subscribeAndLogErrors()
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(this.scope())
+            .subscribeAndLogErrors { preview.setImageBitmap(it) }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
