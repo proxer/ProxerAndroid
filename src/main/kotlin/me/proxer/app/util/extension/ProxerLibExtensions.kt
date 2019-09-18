@@ -92,6 +92,7 @@ fun Medium.toAppString(context: Context): String = context.getString(
         Medium.DOUJIN -> R.string.medium_doujin
         Medium.HMANGA -> R.string.medium_h_manga
         Medium.ONESHOT -> R.string.medium_oneshot
+        Medium.OTHER -> R.string.medium_other
     }
 )
 
@@ -160,6 +161,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
 fun Medium.toCategory() = when (this) {
     Medium.ANIMESERIES, Medium.MOVIE, Medium.OVA, Medium.HENTAI -> Category.ANIME
     Medium.MANGASERIES, Medium.ONESHOT, Medium.DOUJIN, Medium.HMANGA -> Category.MANGA
+    else -> error("Invalid medium: $this")
 }
 
 fun Category.toEpisodeAppString(context: Context, number: Int? = null): String = when (number) {
