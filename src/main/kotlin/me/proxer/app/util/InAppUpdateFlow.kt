@@ -2,6 +2,8 @@ package me.proxer.app.util
 
 import android.app.Activity
 import android.view.ViewGroup
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -33,14 +35,16 @@ class InAppUpdateFlow {
     private var snackbar: Snackbar? = null
 
     fun start(context: Activity, rootView: ViewGroup) {
-        appUpdateManager = AppUpdateManagerFactory.create(context).also { appUpdateManager ->
-            successListener = successListener(context, rootView, appUpdateManager)
-            failureListener = failureListener(rootView)
-            progressListener = progressListener(rootView, appUpdateManager)
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+            appUpdateManager = AppUpdateManagerFactory.create(context).also { appUpdateManager ->
+                successListener = successListener(context, rootView, appUpdateManager)
+                failureListener = failureListener()
+                progressListener = progressListener(rootView, appUpdateManager)
 
-            appUpdateManager.appUpdateInfo.addOnSuccessListener(successListener)
-            appUpdateManager.appUpdateInfo.addOnFailureListener(failureListener)
-            appUpdateManager.registerListener(progressListener)
+                appUpdateManager.appUpdateInfo.addOnSuccessListener(successListener)
+                appUpdateManager.appUpdateInfo.addOnFailureListener(failureListener)
+                appUpdateManager.registerListener(progressListener)
+            }
         }
     }
 
@@ -69,10 +73,8 @@ class InAppUpdateFlow {
         }
     }
 
-    private fun failureListener(rootView: ViewGroup) = OnFailureListener { error ->
+    private fun failureListener() = OnFailureListener { error ->
         Timber.e(error)
-
-        snackbar = Snackbar.make(rootView, R.string.activity_update_error, Snackbar.LENGTH_LONG).apply { show() }
     }
 
     private fun progressListener(
