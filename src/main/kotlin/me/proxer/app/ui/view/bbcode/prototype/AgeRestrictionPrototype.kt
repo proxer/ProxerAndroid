@@ -18,8 +18,8 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -29,7 +29,7 @@ object AgeRestrictionPrototype : AutoClosingPrototype, KoinComponent {
     override val startRegex = Regex(" *age18( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *age18 *", REGEX_OPTIONS)
 
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)

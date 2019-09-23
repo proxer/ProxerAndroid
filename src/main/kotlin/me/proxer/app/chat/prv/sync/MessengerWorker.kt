@@ -23,6 +23,7 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.toLocalConference
 import me.proxer.app.util.extension.toLocalMessage
@@ -32,7 +33,6 @@ import me.proxer.library.ProxerException
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import timber.log.Timber
 import java.util.LinkedHashSet
 import java.util.concurrent.TimeUnit
@@ -56,10 +56,10 @@ class MessengerWorker(
             get() = workManager.getWorkInfosForUniqueWork(NAME).get()
                 .all { info -> info.state == WorkInfo.State.RUNNING }
 
-        private val bus by inject<RxBus>()
-        private val workManager by inject<WorkManager>()
-        private val storageHelper by inject<StorageHelper>()
-        private val preferenceHelper by inject<PreferenceHelper>()
+        private val bus by safeInject<RxBus>()
+        private val workManager by safeInject<WorkManager>()
+        private val storageHelper by safeInject<StorageHelper>()
+        private val preferenceHelper by safeInject<PreferenceHelper>()
 
         fun enqueueSynchronizationIfPossible() = when {
             canSchedule() -> enqueueSynchronization()
@@ -119,10 +119,10 @@ class MessengerWorker(
     private val conferenceId: Long
         get() = inputData.getLong(CONFERENCE_ID_ARGUMENT, 0L)
 
-    private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
-    private val messengerDatabase by inject<MessengerDatabase>()
-    private val messengerDao by inject<MessengerDao>()
+    private val api by safeInject<ProxerApi>()
+    private val storageHelper by safeInject<StorageHelper>()
+    private val messengerDatabase by safeInject<MessengerDatabase>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private var currentCall: ProxerCall<*>? = null
 

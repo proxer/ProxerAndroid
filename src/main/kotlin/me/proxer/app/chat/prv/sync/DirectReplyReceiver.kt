@@ -9,9 +9,9 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getSafeCharSequence
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -32,8 +32,8 @@ class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
         }
     }
 
-    private val messengerDao by inject<MessengerDao>()
-    private val storageHelper by inject<StorageHelper>()
+    private val messengerDao by safeInject<MessengerDao>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     override fun onReceive(context: Context, intent: Intent) {
         val conferenceId = intent.getLongExtra(CONFERENCE_ID_EXTRA, -1)

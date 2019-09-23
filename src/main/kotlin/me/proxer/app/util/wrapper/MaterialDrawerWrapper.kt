@@ -30,9 +30,9 @@ import me.proxer.app.util.extension.backgroundColorAttr
 import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.library.util.ProxerUrls
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -58,7 +58,7 @@ class MaterialDrawerWrapper(
             return DrawerItem.fromIdOrNull(idToUse)
         }
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     private val header: AccountHeader
     private val drawer: Drawer

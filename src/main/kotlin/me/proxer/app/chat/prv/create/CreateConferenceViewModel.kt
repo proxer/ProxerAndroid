@@ -17,11 +17,11 @@ import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import me.proxer.library.api.Endpoint
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -32,9 +32,9 @@ class CreateConferenceViewModel : ViewModel(), KoinComponent {
     val result = ResettingMutableLiveData<LocalConference>()
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
 
-    private val bus by inject<RxBus>()
-    private val api by inject<ProxerApi>()
-    private val messengerDao by inject<MessengerDao>()
+    private val bus by safeInject<RxBus>()
+    private val api by safeInject<ProxerApi>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private var newConferenceId: Long? = null
 

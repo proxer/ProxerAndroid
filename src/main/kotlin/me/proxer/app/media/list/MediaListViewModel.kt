@@ -12,6 +12,7 @@ import me.proxer.app.media.TagDao
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.enumSetOf
 import me.proxer.app.util.extension.isAgeRestricted
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalDate
 import me.proxer.app.util.extension.toParcelableTag
@@ -25,7 +26,6 @@ import me.proxer.library.enums.MediaType
 import me.proxer.library.enums.TagRateFilter
 import me.proxer.library.enums.TagSpoilerFilter
 import me.proxer.library.enums.TagType
-import org.koin.core.inject
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import java.util.EnumSet
@@ -92,7 +92,7 @@ class MediaListViewModel(
     val genreData = MutableLiveData<List<LocalTag>>()
     val tagData = MutableLiveData<List<LocalTag>>()
 
-    private val tagDao by inject<TagDao>()
+    private val tagDao by safeInject<TagDao>()
 
     private var tagsDisposable: Disposable? = null
 

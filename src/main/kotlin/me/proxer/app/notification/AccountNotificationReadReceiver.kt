@@ -6,11 +6,11 @@ import android.content.Context
 import android.content.Intent
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import me.proxer.library.enums.NotificationFilter
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -27,7 +27,7 @@ class AccountNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
         )
     }
 
-    private val api by inject<ProxerApi>()
+    private val api by safeInject<ProxerApi>()
 
     override fun onReceive(context: Context, intent: Intent?) {
         Completable

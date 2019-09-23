@@ -15,9 +15,9 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 import me.proxer.app.util.data.PreferenceHelper
+import me.proxer.app.util.extension.safeInject
 import okhttp3.OkHttpClient
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import java.io.InputStream
 
 /**
@@ -32,8 +32,8 @@ class ProxerGlideModule : AppGlideModule(), KoinComponent {
         private const val CACHE_DIR = "glide"
     }
 
-    private val client by inject<OkHttpClient>()
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val client by safeInject<OkHttpClient>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         val cacheDir = when (!Environment.isExternalStorageEmulated() && preferenceHelper.shouldCacheExternally) {

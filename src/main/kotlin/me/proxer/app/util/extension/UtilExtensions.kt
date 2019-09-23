@@ -3,6 +3,7 @@
 package me.proxer.app.util.extension
 
 import android.app.Activity
+import android.content.ComponentCallbacks
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,7 +36,10 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.koin.android.ext.android.getKoin
+import org.koin.core.KoinComponent
 import org.koin.core.parameter.DefinitionParameters
+import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.qualifier.Qualifier
 import timber.log.Timber
 import java.util.EnumSet
 import java.util.regex.Pattern.quote
@@ -155,6 +159,16 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
         }
     }
 }
+
+inline fun <reified T> KoinComponent.safeInject(
+    qualifier: Qualifier? = null,
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
+
+inline fun <reified T> ComponentCallbacks.safeInject(
+    qualifier: Qualifier? = null,
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
 
 private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
     val colorScheme = when (getKoin().get<PreferenceHelper>().themeContainer.variant) {

@@ -33,11 +33,11 @@ import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.backgroundColorAttr
 import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -102,7 +102,7 @@ class ProfileActivity : ImageTabsActivity() {
 
     private val viewModel by viewModel<ProfileViewModel> { parametersOf(userId, username) }
 
-    private val messengerDao by inject<MessengerDao>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private var createChatMenuItem: MenuItem? = null
     private var newGroupMenuItem: MenuItem? = null

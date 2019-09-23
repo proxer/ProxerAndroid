@@ -35,12 +35,12 @@ import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toPrefixedHttpUrl
 import me.proxer.app.util.extension.toast
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -79,8 +79,8 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         }
     }
 
-    private val preferenceHelper by inject<PreferenceHelper>()
-    private val messengerDao by inject<MessengerDao>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 

@@ -3,6 +3,7 @@ package me.proxer.app.settings.status
 import io.reactivex.Single
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.base.BaseViewModel
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toBodySingle
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -12,7 +13,6 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -29,7 +29,7 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
             .map { Jsoup.parse(it) }
             .map { scrape(it) }
 
-    private val client by inject<OkHttpClient>()
+    private val client by safeInject<OkHttpClient>()
 
     private fun constructRequest() = Request.Builder()
         .url(url)

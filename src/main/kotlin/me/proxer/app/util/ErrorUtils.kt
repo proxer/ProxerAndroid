@@ -29,6 +29,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.OPEN_LINK
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
+import me.proxer.app.util.extension.safeInject
 import me.proxer.library.ProxerException
 import me.proxer.library.ProxerException.ErrorType.CANCELLED
 import me.proxer.library.ProxerException.ErrorType.IO
@@ -128,7 +129,6 @@ import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -175,7 +175,7 @@ object ErrorUtils : KoinComponent {
         AUTH_CODE_PENDING, AUTH_CODE_INVALID_NAME, AUTH_CODE_DUPLICATE, LIST_NO_ENTRIES_LEFT
     )
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     fun getMessage(error: Throwable): Int {
         return when (val innermostError = getInnermostError(error)) {

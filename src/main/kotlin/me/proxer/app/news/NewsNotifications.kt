@@ -12,11 +12,11 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.NotificationUtils.NEWS_CHANNEL
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.entity.notifications.NewsArticle
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -25,7 +25,7 @@ object NewsNotifications : KoinComponent {
 
     private const val ID = 1_357_913_213
 
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     fun showOrUpdate(context: Context, news: Collection<NewsArticle>) {
         when (val notification = buildNewsNotification(context, news)) {

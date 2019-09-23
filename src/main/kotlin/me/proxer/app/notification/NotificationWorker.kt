@@ -14,13 +14,13 @@ import me.proxer.app.news.NewsNotifications
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -35,9 +35,9 @@ class NotificationWorker(
     companion object : KoinComponent {
         private const val NAME = "NotificationWorker"
 
-        private val bus by inject<RxBus>()
-        private val workManager by inject<WorkManager>()
-        private val preferenceHelper by inject<PreferenceHelper>()
+        private val bus by safeInject<RxBus>()
+        private val workManager by safeInject<WorkManager>()
+        private val preferenceHelper by safeInject<PreferenceHelper>()
 
         fun enqueueIfPossible(delay: Boolean = false) {
             val areNotificationsEnabled = preferenceHelper.areNewsNotificationsEnabled ||
@@ -69,8 +69,8 @@ class NotificationWorker(
         }
     }
 
-    private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
+    private val api by safeInject<ProxerApi>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     private var currentCall: ProxerCall<*>? = null
 

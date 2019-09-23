@@ -13,8 +13,8 @@ import me.proxer.app.R
 import me.proxer.app.util.compat.TaskDescriptionCompat
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.getSafeStringExtra
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.startActivity
-import org.koin.android.ext.android.inject
 
 /**
  * @author Ruben Gees
@@ -30,7 +30,7 @@ class WebViewActivity : AppCompatActivity() {
     private val url: String
         get() = intent.getSafeStringExtra(URL_EXTRA)
 
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
     private val webView: WebView by bindView(R.id.webview)

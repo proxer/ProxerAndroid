@@ -18,8 +18,8 @@ import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -77,7 +77,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         if (it != null) conference.value = it
     }
 
-    private val messengerDao by inject<MessengerDao>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private val safeConference: LocalConference
         get() = requireNotNull(conference.value)

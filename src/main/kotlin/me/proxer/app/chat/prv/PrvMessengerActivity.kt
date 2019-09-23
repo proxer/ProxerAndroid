@@ -16,8 +16,8 @@ import me.proxer.app.chat.prv.conference.ConferenceFragment
 import me.proxer.app.chat.prv.message.MessengerFragment
 import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.startActivity
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 /**
@@ -50,7 +50,7 @@ class PrvMessengerActivity : DrawerActivity() {
         }
     }
 
-    private val messengerDao by inject<MessengerDao>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

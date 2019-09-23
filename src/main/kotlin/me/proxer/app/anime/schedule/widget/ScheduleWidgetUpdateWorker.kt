@@ -30,6 +30,7 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
@@ -37,7 +38,6 @@ import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -55,7 +55,7 @@ class ScheduleWidgetUpdateWorker(
     companion object : KoinComponent {
         private const val NAME = "ScheduleWidgetUpdateWorker"
 
-        private val workManager by inject<WorkManager>()
+        private val workManager by safeInject<WorkManager>()
 
         private val dayDateTimeFormatter = DateTimeFormatter.ofPattern("dd. MMMM", Locale.GERMANY)
 
@@ -72,8 +72,8 @@ class ScheduleWidgetUpdateWorker(
         }
     }
 
-    private val api by inject<ProxerApi>()
-    private val moshi by inject<Moshi>()
+    private val api by safeInject<ProxerApi>()
+    private val moshi by safeInject<Moshi>()
 
     private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
 

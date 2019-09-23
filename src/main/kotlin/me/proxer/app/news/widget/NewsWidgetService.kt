@@ -4,7 +4,7 @@ import android.content.Intent
 import android.widget.RemoteViewsService
 import com.squareup.moshi.Moshi
 import me.proxer.app.util.extension.getSafeStringArrayExtra
-import org.koin.android.ext.android.inject
+import me.proxer.app.util.extension.safeInject
 
 /**
  * @author Ruben Gees
@@ -15,7 +15,7 @@ class NewsWidgetService : RemoteViewsService() {
         const val ARGUMENT_NEWS = "news"
     }
 
-    private val moshi by inject<Moshi>()
+    private val moshi by safeInject<Moshi>()
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         val news = intent.getSafeStringArrayExtra(ARGUMENT_NEWS)

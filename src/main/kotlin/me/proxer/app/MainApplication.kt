@@ -33,9 +33,9 @@ import me.proxer.app.util.GlideDrawerImageLoader
 import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.isPackageInstalled
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.logging.TimberFileTree
 import me.proxer.app.util.logging.WorkManagerTimberLogger
-import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -50,8 +50,8 @@ class MainApplication : Application() {
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
 
-    private val loginHandler by inject<LoginHandler>()
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val loginHandler by safeInject<LoginHandler>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     override fun onCreate() {
         super.onCreate()

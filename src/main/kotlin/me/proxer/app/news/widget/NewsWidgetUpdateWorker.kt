@@ -27,13 +27,13 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import timber.log.Timber
 
 /**
@@ -47,7 +47,7 @@ class NewsWidgetUpdateWorker(
     companion object : KoinComponent {
         private const val NAME = "NewsWidgetUpdateWorker"
 
-        private val workManager by inject<WorkManager>()
+        private val workManager by safeInject<WorkManager>()
 
         fun enqueueWork() {
             val workRequest = OneTimeWorkRequestBuilder<NewsWidgetUpdateWorker>()
@@ -62,8 +62,8 @@ class NewsWidgetUpdateWorker(
         }
     }
 
-    private val api by inject<ProxerApi>()
-    private val moshi by inject<Moshi>()
+    private val api by safeInject<ProxerApi>()
+    private val moshi by safeInject<Moshi>()
 
     private val appWidgetManager by unsafeLazy { AppWidgetManager.getInstance(applicationContext) }
 

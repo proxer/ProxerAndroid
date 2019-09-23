@@ -22,9 +22,9 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.recursiveChildren
+import me.proxer.app.util.extension.safeInject
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -42,9 +42,9 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
 
     protected open val root: ViewGroup by bindView(R.id.root)
 
-    protected val bus by inject<RxBus>()
-    protected val storageHelper by inject<StorageHelper>()
-    protected val preferenceHelper by inject<PreferenceHelper>()
+    protected val bus by safeInject<RxBus>()
+    protected val storageHelper by safeInject<StorageHelper>()
+    protected val preferenceHelper by safeInject<PreferenceHelper>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 

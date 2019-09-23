@@ -34,13 +34,13 @@ import me.proxer.app.util.data.PreferenceHelper.Companion.THEME
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.clearTop
 import me.proxer.app.util.extension.clicks
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.snackbar
 import net.xpece.android.support.preference.ListPreference
 import net.xpece.android.support.preference.Preference
 import net.xpece.android.support.preference.PreferenceCategory
 import net.xpece.android.support.preference.TwoStatePreference
 import net.xpece.android.support.preference.XpPreferenceFragment
-import org.koin.android.ext.android.inject
 import kotlin.system.exitProcess
 
 /**
@@ -57,9 +57,9 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
     private val hostingActivity: BaseActivity
         get() = activity as MainActivity
 
-    private val packageManager by inject<PackageManager>()
-    private val preferenceHelper by inject<PreferenceHelper>()
-    private val storageHelper by inject<StorageHelper>()
+    private val packageManager by safeInject<PackageManager>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     private val profile by bindPreference<Preference>("profile")
     private val ageConfirmation by bindPreference<TwoStatePreference>(AGE_CONFIRMATION)

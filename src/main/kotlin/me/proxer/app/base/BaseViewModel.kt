@@ -15,10 +15,10 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -32,11 +32,11 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
     protected open val isLoginRequired = false
     protected open val isAgeConfirmationRequired = false
 
-    protected val bus by inject<RxBus>()
-    protected val api by inject<ProxerApi>()
-    protected val storageHelper by inject<StorageHelper>()
-    protected val preferenceHelper by inject<PreferenceHelper>()
-    protected val validators by inject<Validators>()
+    protected val bus by safeInject<RxBus>()
+    protected val api by safeInject<ProxerApi>()
+    protected val storageHelper by safeInject<StorageHelper>()
+    protected val preferenceHelper by safeInject<PreferenceHelper>()
+    protected val validators by safeInject<Validators>()
 
     protected var dataDisposable: Disposable? = null
     protected val disposables = CompositeDisposable()

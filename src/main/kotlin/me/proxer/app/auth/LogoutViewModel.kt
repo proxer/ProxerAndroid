@@ -7,10 +7,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -21,7 +21,7 @@ class LogoutViewModel : ViewModel(), KoinComponent {
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     val isLoading = MutableLiveData<Boolean?>()
 
-    private val api by inject<ProxerApi>()
+    private val api by safeInject<ProxerApi>()
 
     private var dataDisposable: Disposable? = null
 

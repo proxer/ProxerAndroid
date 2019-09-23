@@ -10,9 +10,9 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.safeInject
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
-import org.koin.android.ext.android.inject
 import kotlin.properties.Delegates
 
 /**
@@ -21,9 +21,9 @@ import kotlin.properties.Delegates
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId), CustomTabsAware {
 
-    protected val bus by inject<RxBus>()
-    protected val storageHelper by inject<StorageHelper>()
-    protected val preferenceHelper by inject<PreferenceHelper>()
+    protected val bus by safeInject<RxBus>()
+    protected val storageHelper by safeInject<StorageHelper>()
+    protected val preferenceHelper by safeInject<PreferenceHelper>()
 
     protected open val hostingActivity: BaseActivity
         get() = requireActivity() as BaseActivity

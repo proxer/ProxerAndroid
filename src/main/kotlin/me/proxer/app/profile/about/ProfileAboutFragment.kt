@@ -36,6 +36,7 @@ import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.proxyIfRequired
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.toast
@@ -45,7 +46,6 @@ import me.proxer.library.enums.RelationshipStatus
 import me.proxer.library.util.ProxerUrls
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -80,7 +80,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
     private val username: String?
         get() = hostingActivity.username
 
-    private val client by inject<OkHttpClient>()
+    private val client by safeInject<OkHttpClient>()
 
     private val generalContainer by bindView<ViewGroup>(R.id.generalContainer)
     private val generalTable by bindView<TableLayout>(R.id.generalTable)

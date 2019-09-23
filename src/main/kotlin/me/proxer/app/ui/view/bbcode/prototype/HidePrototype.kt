@@ -18,8 +18,8 @@ import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTION
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -29,7 +29,7 @@ object HidePrototype : AutoClosingPrototype, KoinComponent {
     override val startRegex = Regex(" *hide( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *hide *", REGEX_OPTIONS)
 
-    private val storageHelper by inject<StorageHelper>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = super.makeViews(parent, children, args)

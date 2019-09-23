@@ -45,10 +45,10 @@ import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
@@ -67,7 +67,7 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         get() = activity as CreateConferenceActivity
 
     private val viewModel by viewModel<CreateConferenceViewModel>()
-    private val validators by inject<Validators>()
+    private val validators by safeInject<Validators>()
 
     private val isGroup: Boolean
         get() = hostingActivity.isGroup

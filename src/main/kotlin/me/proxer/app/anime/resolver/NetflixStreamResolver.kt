@@ -7,8 +7,8 @@ import me.proxer.app.exception.StreamResolutionException
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isPackageInstalled
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -19,7 +19,7 @@ object NetflixStreamResolver : StreamResolver() {
 
     override val name = "Netflix"
 
-    private val packageManager by inject<PackageManager>()
+    private val packageManager by safeInject<PackageManager>()
 
     override fun resolve(id: String): Single<StreamResolutionResult> = Single
         .fromCallable {

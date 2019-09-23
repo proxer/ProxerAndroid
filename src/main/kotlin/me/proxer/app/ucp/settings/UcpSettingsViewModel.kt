@@ -10,11 +10,11 @@ import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -25,8 +25,8 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
     val updateError = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
 
-    private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
+    private val api by safeInject<ProxerApi>()
+    private val storageHelper by safeInject<StorageHelper>()
 
     private var disposable: Disposable? = null
 

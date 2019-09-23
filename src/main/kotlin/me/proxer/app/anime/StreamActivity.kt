@@ -85,6 +85,7 @@ import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.loadRequests
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.newTask
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
@@ -95,7 +96,6 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -134,7 +134,7 @@ class StreamActivity : BaseActivity() {
     private val adTag: Uri?
         get() = intent.getParcelableExtra(AD_TAG_EXTRA)
 
-    private val client by inject<OkHttpClient>()
+    private val client by safeInject<OkHttpClient>()
     private val playerManager by unsafeLazy { StreamPlayerManager(this, client, adTag) }
 
     internal val playerView: TouchablePlayerView by bindView(R.id.player)

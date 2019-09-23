@@ -9,12 +9,12 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerException
 import me.proxer.library.ProxerException.ServerErrorType
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 /**
  * @author Ruben Gees
@@ -26,9 +26,9 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val isLoading = MutableLiveData<Boolean?>()
     val isTwoFactorAuthenticationEnabled = MutableLiveData<Boolean?>()
 
-    private val api by inject<ProxerApi>()
-    private val storageHelper by inject<StorageHelper>()
-    private val preferenceHelper by inject<PreferenceHelper>()
+    private val api by safeInject<ProxerApi>()
+    private val storageHelper by safeInject<StorageHelper>()
+    private val preferenceHelper by safeInject<PreferenceHelper>()
 
     private var dataDisposable: Disposable? = null
 

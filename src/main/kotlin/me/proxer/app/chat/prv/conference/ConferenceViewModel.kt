@@ -11,7 +11,7 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.chat.prv.sync.MessengerErrorEvent
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.util.ErrorUtils
-import org.koin.core.inject
+import me.proxer.app.util.extension.safeInject
 import kotlin.properties.Delegates
 
 /**
@@ -39,7 +39,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
             source = messengerDao.getConferencesLiveData(value)
         }
 
-    private val messengerDao by inject<MessengerDao>()
+    private val messengerDao by safeInject<MessengerDao>()
 
     private val sourceObserver = Observer<List<ConferenceWithMessage>?> {
         if (it != null) {
