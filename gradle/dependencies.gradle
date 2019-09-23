@@ -81,9 +81,12 @@ dependencies {
     implementation "com.github.seven332.Image:core:$imageDecoderVersion"
     implementation "com.github.seven332.Image:jpeg:$imageDecoderVersion"
     implementation "com.github.seven332.Image:png:$imageDecoderVersion"
-    implementation "com.github.rubengees:hawk:$hawkVersion"
     implementation "me.saket:better-link-movement-method:$betterLinkMovementMethodVersion"
     implementation "org.jsoup:jsoup:$jsoupVersion"
+
+    implementation("com.github.rubengees:hawk:$hawkVersion") {
+        exclude module: "gson"
+    }
 
     implementation "com.kirich1409:strict-mode-compat:$strictModeCompatVersion"
     implementation "com.jakewharton.timber:timber:$timberVersion"
@@ -101,8 +104,6 @@ dependencies {
 
 configurations {
     all {
-        exclude module: "gson"
-
         resolutionStrategy.dependencySubstitution {
             substitute module("com.squareup.moshi:moshi") with module("com.github.square.moshi:moshi:$moshiVersion")
         }
