@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 9
-    appVersionPatch = 0
+    appVersionPatch = 1
 
     minSdkVersion = 21
     targetSdkVersion = 29
@@ -69,7 +69,7 @@ ext {
     materialDialogsVersion = "3.1.1"
     flexboxVersion = "1.1.1"
     emojiIosVersion = "82a306b659"
-    exoplayerVersion = "2.10.4"
+    exoplayerVersion = "2.10.5"
     previewSeekbarVersion = "2.0.0"
     previewSeekbarExoplayerVersion = "2.8.1.0"
     materialProgressBarVersion = "1.6.1"
