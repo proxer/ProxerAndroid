@@ -187,8 +187,18 @@ private val applicationModules = module {
 
     single { Validators(get(), get()) }
 
-    single { Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME).build() }
-    single { Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME).build() }
+    single {
+        Room.databaseBuilder(androidContext(), MessengerDatabase::class.java, CHAT_DATABASE_NAME)
+            .addMigrations(MessengerDatabase.MIGRATION_1_2)
+            .build()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), TagDatabase::class.java, TAG_DATABASE_NAME)
+            .addMigrations(TagDatabase.MIGRATION_1_2)
+            .build()
+    }
+
     single { get<MessengerDatabase>().dao() }
     single { get<TagDatabase>().dao() }
 
