@@ -80,7 +80,7 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="?attr/colorSecondary" />
 
-                        <WebView
+                        <me.proxer.app.ui.view.ProxerWebView
                             android:id="@+id/about"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

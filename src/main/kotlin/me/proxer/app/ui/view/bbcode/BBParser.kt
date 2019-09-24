@@ -38,6 +38,7 @@ import me.proxer.app.ui.view.bbcode.prototype.UnderlinePrototype
 import me.proxer.app.ui.view.bbcode.prototype.UnorderedListPrototype
 import me.proxer.app.ui.view.bbcode.prototype.UrlPrototype
 import me.proxer.app.ui.view.bbcode.prototype.VideoPrototype
+import me.proxer.app.ui.view.bbcode.prototype.WikiPrototype
 import java.util.regex.Pattern.quote
 
 /**
@@ -57,7 +58,8 @@ object BBParser {
             QuotePrototype, UrlPrototype, QuotePrototype, UrlPrototype, ImagePrototype, DividerPrototype,
             VideoPrototype, TablePrototype, TableRowPrototype, TableCellPrototype, CodePrototype, HidePrototype,
             UnorderedListPrototype, OrderedListPrototype, ListItemPrototype, MapPrototype, AttachmentPrototype,
-            FacebookPrototype, TwitterPrototype, PollPrototype, BreakPrototype, PdfPrototype, AgeRestrictionPrototype
+            FacebookPrototype, TwitterPrototype, PollPrototype, BreakPrototype, PdfPrototype, AgeRestrictionPrototype,
+            WikiPrototype
         )
     )
 

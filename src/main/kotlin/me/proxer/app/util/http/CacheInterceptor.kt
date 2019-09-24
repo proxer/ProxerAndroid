@@ -49,7 +49,8 @@ class CacheInterceptor : Interceptor {
                     now.until(tomorrow, ChronoUnit.SECONDS).toInt()
                 },
                 TimeUnit.SECONDS
-            )
+            ),
+            CacheInfo(ProxerUrls.apiBase.newBuilder().addPathSegments("wiki/content").build(), 5, TimeUnit.MINUTES)
         )
 
         private val excludedFileTypes = listOf(".png", ".jpg", ".jpeg", ".gif", ".webm")

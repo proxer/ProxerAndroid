@@ -2,12 +2,14 @@ package me.proxer.app.ui.view.bbcode
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.View.MeasureSpec.getMode
 import android.view.View.MeasureSpec.getSize
 import android.view.View.MeasureSpec.makeMeasureSpec
+import android.webkit.WebView
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.ColorInt
@@ -123,8 +125,11 @@ class BBCodeView @JvmOverloads constructor(
     }
 
     fun destroyWithRetainingViews() {
-        applyToViews(listOf(this)) { view: ImageView ->
-            glide?.clear(view)
+        applyToAllViews(listOf(this)) { view: View ->
+            when (view) {
+                is ImageView -> glide?.clear(view)
+                is WebView -> view.destroy()
+            }
         }
     }
 
