@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ ${CIRCLE_COMPARE_URL:+1} ]]; then
-	COMMIT_RANGE=$(echo "${CIRCLE_COMPARE_URL}" | cut -d/ -f7)
-	CAPTION=$(git log --pretty=format:"- %s" "${COMMIT_RANGE}" --reverse) || true
-else
-	CAPTION=$(git log -1 --pretty=format:"- %s") || true
-fi
-
-if [[ ${CAPTION:+1} ]]; then
-  CAPTION=$(echo "$CAPTION" | cut -c -1024)
-else
-	CAPTION="No changelog available"
-fi
+CAPTION=$(git log --pretty=format:"- %s" "${COMMIT_RANGE:1:-1}" --reverse)
 
 if [[ ${TELEGRAM_CHAT_ID:+1} ]] && [[ ${TELEGRAM_BOT_ID:+1} ]]; then
     curl -s -S \
@@ -25,5 +14,4 @@ else
     exit -1
 fi
 
-unset COMMIT_RANGE
 unset CAPTION

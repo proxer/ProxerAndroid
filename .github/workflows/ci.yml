@@ -1,0 +1,86 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Install secrets
+        run: .github/workflows/create-secrets.sh
+        env:
+          KEYSTORE: ${{ secrets.KEYSTORE }}
+          SECRETS: ${{ secrets.SECRETS }}
+
+      - name: Build with Gradle
+        run: ./gradlew build bundle -Pkotlin.incremental=false
+        continue-on-error: true
+
+      - name: Store reports
+        uses: actions/upload-artifact@v1
+        with:
+          name: Reports
+          path: build/reports
+      - name: Store outputs
+        uses: actions/upload-artifact@v1
+        with:
+          name: Outputs
+          path: build/outputs
+
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+
+      - id: calculate-commit-range
+        uses: actions/github-script@0.2.0
+        if: github.ref == 'refs/heads/master'
+        with:
+          github-token: ${{github.token}}
+          script: |
+            const query = `{
+               repository(owner: "proxer", name: "ProxerAndroid") {
+                 ref(qualifiedName: "master") {
+                   target {
+                     ... on Commit {
+                       history(first: 20, after: "${context.sha} 0") {
+                         edges {
+                           node {
+                             oid
+                             message
+                             status {
+                               state
+                             }
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+            }`
+
+            const result = await github.graphql(query)
+            const history = result.repository.ref.target.history.edges
+            const firstSuccessfulCommit = history.findIndex(it => it.node.status.state === "SUCCESS")
+
+            if (firstSuccessfulCommit >= 0) {
+              return `${history[firstSuccessfulCommit].node.oid}...${context.sha}`
+            } else {
+              return `${context.sha}~1...${context.sha}`
+            }
+
+      - name: Publish to Telegram
+        if: github.ref == 'refs/heads/master'
+        run: .github/workflows/publish-to-telegram.sh
+        env:
+          COMMIT_RANGE: ${{steps.calculate-commit-range.outputs.result}}
+          TELEGRAM_BOT_ID: ${{ secrets.TELEGRAM_BOT_ID }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
