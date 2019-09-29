@@ -11,13 +11,8 @@ data class ThemeContainer(val theme: Theme, val variant: ThemeVariant) {
         fun fromPreferenceString(value: String): ThemeContainer {
             val split = value.split(DELIMITER)
 
-            val theme = requireNotNull(Theme.values().find { it.preferenceId == split.getOrNull(0) }) {
-                "Invalid preference String $value"
-            }
-
-            val variant = requireNotNull(ThemeVariant.values().find { it.preferenceId == split.getOrNull(1) }) {
-                "Invalid preference String $value"
-            }
+            val theme = Theme.values().find { it.preferenceId == split.getOrNull(0) } ?: Theme.CLASSIC
+            val variant = ThemeVariant.values().find { it.preferenceId == split.getOrNull(1) } ?: ThemeVariant.SYSTEM
 
             return ThemeContainer(theme, variant)
         }
