@@ -24,8 +24,13 @@ class ScheduleWidgetViewsFactory(
     }
 
     override fun hasStableIds() = true
-    override fun getItemId(position: Int) = calendarEntries[position].id.toLong()
     override fun getLoadingView() = null
+
+    override fun getItemId(position: Int) = when {
+        // Workaround Android bug passing too large positions.
+        position <= calendarEntries.lastIndex -> calendarEntries[position].id.toLong()
+        else -> -1L
+    }
 
     override fun getViewAt(position: Int): RemoteViews? {
         // Workaround Android bug passing too large positions.
