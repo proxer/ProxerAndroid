@@ -46,30 +46,30 @@ jobs:
           github-token: ${{github.token}}
           script: |
             const query = `{
-               repository(owner: "proxer", name: "ProxerAndroid") {
-                 ref(qualifiedName: "master") {
-                   target {
-                     ... on Commit {
-                       history(first: 20, after: "${context.sha} 0") {
-                         edges {
-                           node {
-                             oid
-                             message
-                             status {
-                               state
-                             }
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-               }
+              repository(owner: "proxer", name: "ProxerAndroid") {
+                ref(qualifiedName: "master") {
+                  target {
+                    ... on Commit {
+                      history(first: 20, after: "${context.sha} 0") {
+                        edges {
+                          node {
+                            oid
+                            message
+                            status {
+                              state
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }`
 
             const result = await github.graphql(query)
             const history = result.repository.ref.target.history.edges
-            const firstSuccessfulCommit = history.findIndex(it => it.node.status.state === "SUCCESS")
+            const firstSuccessfulCommit = history.findIndex(it => it.node.status && it.node.status.state === "SUCCESS")
 
             if (firstSuccessfulCommit >= 0) {
               return `${history[firstSuccessfulCommit].node.oid}...${context.sha}`
