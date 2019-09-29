@@ -7,7 +7,8 @@ import com.squareup.moshi.JsonClass
  * @author Ruben Gees
  */
 @JsonClass(generateAdapter = true)
-data class LocalUser(
+data class LocalUser
+    (
     @Json(name = "token") val token: String,
     @Json(name = "id") val id: String,
     @Json(name = "name") val name: String,
