@@ -1,5 +1,6 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -8,6 +9,7 @@ import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import me.proxer.app.R
 import me.proxer.app.base.CustomTabsAware
 import me.proxer.app.ui.view.ProxerWebView
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -23,6 +25,8 @@ object WikiPrototype : AutoClosingPrototype, KoinComponent {
 
     override val startRegex = Regex(" *wiki( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *wiki *", BBPrototype.REGEX_OPTIONS)
+
+    private val iFrameRegex = Regex("<iframe.*?src=\"(.*?)\".*?>", RegexOption.DOT_MATCHES_ALL)
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val link = children.firstOrNull()?.args?.text?.toString() ?: ""
@@ -45,22 +49,21 @@ object WikiPrototype : AutoClosingPrototype, KoinComponent {
             view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
 
             get<ProxerApi>().wiki.content(link).buildSingle()
+                .map { it.copy(content = replaceIFrames(view.context, it.content)) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(ViewScopeProvider.from(parent))
-                .subscribeAndLogErrors {
-                    view.loadDataWithBaseURL(
-                        null,
-                        it.content,
-                        "text/html; charset=utf-8",
-                        "utf-8",
-                        null
-                    )
-                }
+                .subscribeAndLogErrors { view.loadHtml(it.content) }
 
             return listOf(view)
         } else {
             return emptyList()
+        }
+    }
+
+    private fun replaceIFrames(context: Context, html: String): String {
+        return html.replace(iFrameRegex) { matchResult ->
+            "<a href=${matchResult.groupValues[1]}>${context.getString(R.string.view_bbcode_wiki_link)}</a>"
         }
     }
 }

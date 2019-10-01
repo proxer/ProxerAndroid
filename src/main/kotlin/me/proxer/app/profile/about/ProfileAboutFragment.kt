@@ -26,7 +26,6 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkLongClicks
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.toast
@@ -35,8 +34,6 @@ import me.proxer.library.enums.Gender
 import me.proxer.library.enums.RelationshipStatus
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import java.math.BigDecimal
-import java.math.MathContext
 
 /**
  * @author Ruben Gees
@@ -90,13 +87,7 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
 
         data.about.let {
             when (it.isNotBlank()) {
-                true -> about.loadDataWithBaseURL(
-                    null,
-                    constructHtmlSkeleton(it),
-                    "text/html; charset=utf-8",
-                    "utf-8",
-                    null
-                )
+                true -> about.loadHtml(it)
                 false -> aboutContainer.isGone = true
             }
         }
@@ -187,36 +178,5 @@ class ProfileAboutFragment : BaseContentFragment<UserAbout>(R.layout.fragment_ab
             }
 
         return tableRow
-    }
-
-    private fun constructHtmlSkeleton(content: String): String {
-        return """
-            <html>
-              <head>
-                <style>
-                  body {
-                    color: ${requireContext().resolveColor(android.R.attr.textColorSecondary).toHtmlColor()};
-                  }
-                  a {
-                    color: ${requireContext().resolveColor(R.attr.colorLink).toHtmlColor()};
-                  }
-                </style>
-              </head>
-              <body>
-                ${content.trim()}
-              </body>
-            </html>
-            """.trimIndent()
-    }
-
-    private fun Int.toHtmlColor(): String {
-        val red = this shr 16 and 0xff
-        val green = this shr 8 and 0xff
-        val blue = this and 0xff
-        val alpha = this shr 24 and 0xff
-
-        val normalizedAlpha = BigDecimal(alpha / 255.0).round(MathContext(2))
-
-        return "rgba($red, $green, $blue, $normalizedAlpha)"
     }
 }

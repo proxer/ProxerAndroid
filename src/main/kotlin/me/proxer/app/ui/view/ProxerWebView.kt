@@ -12,7 +12,9 @@ import android.webkit.WebViewClient
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.USER_AGENT
+import me.proxer.app.R
 import me.proxer.app.util.extension.proxyIfRequired
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.util.ProxerUrls
@@ -22,6 +24,8 @@ import okhttp3.Request
 import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.FileInputStream
+import java.math.BigDecimal
+import java.math.MathContext
 import java.util.Locale
 
 /**
@@ -58,7 +62,48 @@ class ProxerWebView @JvmOverloads constructor(
             .also { it.loadingFinishedSubject.subscribe(loadingFinishedSubject) }
     }
 
-    class ProxerWebClient : WebViewClient(), KoinComponent {
+    fun loadHtml(html: String) {
+        loadDataWithBaseURL(
+            null,
+            constructHtmlSkeleton(html),
+            "text/html; charset=utf-8",
+            "utf-8",
+            null
+        )
+    }
+
+    private fun constructHtmlSkeleton(content: String): String {
+        return """
+            <html>
+              <head>
+                <style>
+                  body {
+                    color: ${context.resolveColor(android.R.attr.textColorSecondary).toHtmlColor()} !important;
+                  }
+                  a {
+                    color: ${context.resolveColor(R.attr.colorLink).toHtmlColor()} !important;
+                  }
+                </style>
+              </head>
+              <body>
+                ${content.trim()}
+              </body>
+            </html>
+            """.trimIndent()
+    }
+
+    private fun Int.toHtmlColor(): String {
+        val red = this shr 16 and 0xff
+        val green = this shr 8 and 0xff
+        val blue = this and 0xff
+        val alpha = this shr 24 and 0xff
+
+        val normalizedAlpha = BigDecimal(alpha / 255.0).round(MathContext(2))
+
+        return "rgba($red, $green, $blue, $normalizedAlpha)"
+    }
+
+    private class ProxerWebClient : WebViewClient(), KoinComponent {
 
         val showPageSubject = PublishSubject.create<HttpUrl>()
         val loadingFinishedSubject = PublishSubject.create<Unit>()
@@ -93,44 +138,63 @@ class ProxerWebView @JvmOverloads constructor(
                     fileExtension == "png" ||
                     fileExtension == "gif"
                 ) {
-                    try {
-                        val imageFile = GlideApp.with(view)
-                            .download(url.proxyIfRequired().toString())
-                            .submit().get()
-
-                        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
-
-                        WebResourceResponse(mimeType, "", FileInputStream(imageFile))
-                    } catch (error: Throwable) {
-                        Timber.e(error)
-
-                        null
-                    }
+                    loadImage(view, url, fileExtension)
                 } else {
-                    return try {
-                        val response = client
-                            .newCall(
-                                Request.Builder()
-                                    .method(request.method, null)
-                                    .url(request.url.toString())
-                                    .apply { request.requestHeaders.onEach { (key, value) -> addHeader(key, value) } }
-                                    .build()
-                            )
-                            .execute()
-
-                        val contentType = response.header("Content-Type")?.split(";") ?: emptyList()
-                        val mimeType = contentType.getOrNull(0)
-                        val encoding = contentType.getOrNull(1)
-
-                        WebResourceResponse(mimeType, encoding, response.body?.byteStream())
-                    } catch (error: Throwable) {
-                        Timber.e(error)
-
-                        null
-                    }
+                    loadResource(request)
                 }
             } else {
                 super.shouldInterceptRequest(view, request)
+            }
+        }
+
+        private fun loadImage(
+            view: WebView,
+            url: HttpUrl,
+            fileExtension: String
+        ): WebResourceResponse? {
+            return try {
+                val imageFile = GlideApp.with(view)
+                    .download(url.proxyIfRequired().toString())
+                    .submit().get()
+
+                val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
+
+                WebResourceResponse(mimeType, "", FileInputStream(imageFile))
+            } catch (error: Throwable) {
+                Timber.e(error)
+
+                null
+            }
+        }
+
+        private fun loadResource(request: WebResourceRequest): WebResourceResponse? {
+            return try {
+                if (!request.method.equals("GET", ignoreCase = false)) {
+                    Timber.w("Requests other than GET are not supported: ${request.method} ${request.url}")
+
+                    null
+                } else {
+                    val response = client
+                        .newCall(
+                            Request.Builder().get()
+                                .url(request.url.toString())
+                                .apply {
+                                    request.requestHeaders.onEach { (key, value) -> addHeader(key, value) }
+                                }
+                                .build()
+                        )
+                        .execute()
+
+                    val contentType = response.header("Content-Type")?.split(";") ?: emptyList()
+                    val mimeType = contentType.getOrNull(0)
+                    val encoding = contentType.getOrNull(1)
+
+                    WebResourceResponse(mimeType, encoding, response.body?.byteStream())
+                }
+            } catch (error: Throwable) {
+                Timber.e(error)
+
+                null
             }
         }
     }
