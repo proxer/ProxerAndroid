@@ -24,20 +24,16 @@ jobs:
         name: Build with Gradle
         run: ./gradlew ktlintCheck detekt build bundle -Dorg.gradle.caching=false
           -Pkotlin.incremental=false -Pkapt.incremental.apt=false
-        continue-on-error: true
-
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps.build) }}
-        run: echo "$STEPS_CONTEXT"
 
       - name: Store reports
         uses: actions/upload-artifact@v1
+        if: always()
         with:
           name: Reports
           path: build/reports
       - name: Store outputs
         uses: actions/upload-artifact@v1
+        if: always()
         with:
           name: Outputs
           path: build/outputs
@@ -45,7 +41,7 @@ jobs:
       - id: calculate-commit-range
         name: Calculate commit range
         uses: actions/github-script@0.2.0
-        if: github.ref == 'refs/heads/master'
+        if: success() && github.ref == 'refs/heads/master'
         with:
           github-token: ${{github.token}}
           script: |
@@ -82,7 +78,7 @@ jobs:
             }
 
       - name: Publish to Telegram
-        if: github.ref == 'refs/heads/master'
+        if: success() && github.ref == 'refs/heads/master'
         run: .github/workflows/publish-to-telegram.sh
         env:
           COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
