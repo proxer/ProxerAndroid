@@ -36,7 +36,10 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments << ["room.incremental": "true"]
+                if (project.property("kapt.incremental.apt").toBoolean() == true) {
+                    arguments << ["room.incremental": "true"]
+                }
+
                 arguments << ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
@@ -215,7 +218,10 @@ detekt {
 }
 
 ktlint {
-    reporters = [org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE]
+    disabledRules = ["import-ordering"]
+    reporters {
+        reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE
+    }
 }
 
 wrapper {

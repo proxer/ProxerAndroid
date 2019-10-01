@@ -22,7 +22,7 @@ ext {
     // Utility plugins
     versionsPluginVersion = "0.25.0"
     detektPluginVersion = "1.0.1"
-    ktlintPluginVersion = "8.2.0"
+    ktlintPluginVersion = "9.0.0"
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
@@ -86,8 +86,8 @@ ext {
     glideVersion = "4.10.0"
     retrofitVersion = "2.6.2"
     okHttpVersion = "4.2.0"
-    okioVersion = "2.3.0"
-    moshiVersion = "52aaf9cc84"
+    okioVersion = "2.4.0"
+    moshiVersion = "7804d74318"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"
     kotterknifeVersion = "2.0"
