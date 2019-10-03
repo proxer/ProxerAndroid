@@ -31,6 +31,9 @@ class TopicActivity : DrawerActivity() {
         private const val CATEGORY_ID_EXTRA = "category_id"
         private const val TOPIC_EXTRA = "topic"
 
+        private const val TOUZAI_PATH = "/touzai"
+        private const val TOUZAI_CATEGORY = "310"
+
         fun navigateTo(context: Activity, id: String, categoryId: String, topic: String? = null) {
             context.startActivity<TopicActivity>(
                 ID_EXTRA to id,
@@ -50,13 +53,19 @@ class TopicActivity : DrawerActivity() {
 
     val id: String
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(2) { "-1" } ?: "-1"
+            intent.action == Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+                true -> intent.data?.getQueryParameter("id") ?: "-1"
+                else -> intent.data?.pathSegments?.getOrNull(2) ?: "-1"
+            }
             else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     val categoryId: String
         get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrElse(1) { "-1" } ?: "-1"
+            intent.action == Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+                true -> TOUZAI_CATEGORY
+                else -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
+            }
             else -> intent.getSafeStringExtra(CATEGORY_ID_EXTRA)
         }
 
