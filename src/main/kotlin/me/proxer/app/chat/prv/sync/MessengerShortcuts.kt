@@ -19,6 +19,7 @@ import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.util.ProxerUrls
 import org.koin.core.KoinComponent
+import kotlin.math.min
 
 /**
  * @author Ruben Gees
@@ -37,9 +38,10 @@ object MessengerShortcuts : KoinComponent {
                 val shortcutManager = requireNotNull(context.getSystemService<ShortcutManager>())
                 val maxShortcuts = ShortcutManagerCompat.getMaxShortcutCountPerActivity(context)
                 val usedShortcuts = shortcutManager.dynamicShortcuts.plus(shortcutManager.manifestShortcuts)
+                    .filterNot { it.categories == setOf(SHARE_TARGET_CATEGORY) }
                     .count { shortcutInfo -> shortcutInfo.activity == componentName }
 
-                maxShortcuts - usedShortcuts
+                min(4, maxShortcuts - usedShortcuts)
             } else {
                 2
             }
@@ -71,7 +73,7 @@ object MessengerShortcuts : KoinComponent {
             val needsUpdate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 val shortcutManager = requireNotNull(context.getSystemService<ShortcutManager>())
 
-                newShortcuts.any { newShortcut -> shortcutManager.dynamicShortcuts.none { it.id == newShortcut.id } }
+                newShortcuts.map { it.id } != shortcutManager.dynamicShortcuts.map { it.id }
             } else {
                 true
             }
