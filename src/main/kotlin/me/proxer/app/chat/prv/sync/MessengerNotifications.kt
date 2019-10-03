@@ -172,8 +172,8 @@ object MessengerNotifications : KoinComponent {
             else -> context.getQuantityString(R.plurals.notification_chat_message_amount, messages.size)
         }
 
-        val icon = buildIndividualIcon(context, conference)
-        val style = buildIndividualStyle(messages, conference, user, icon)
+        val conferenceIcon = buildConferenceIcon(context, conference)
+        val style = buildIndividualStyle(context, messages, conference, user, conferenceIcon)
         val intent = TaskStackBuilder.create(context)
             .addNextIntent(MainActivity.getSectionIntent(context, DrawerItem.MESSENGER))
             .addNextIntent(PrvMessengerActivity.getIntent(context, conference))
@@ -183,7 +183,7 @@ object MessengerNotifications : KoinComponent {
             .setSmallIcon(R.drawable.ic_stat_proxer)
             .setContentTitle(if (conference.isGroup) conference.topic else "")
             .setContentText(content)
-            .setLargeIcon(icon)
+            .setLargeIcon(conferenceIcon)
             .setStyle(style)
             .setContentIntent(intent)
             .setColor(ContextCompat.getColor(context, R.color.primary))
@@ -220,36 +220,27 @@ object MessengerNotifications : KoinComponent {
             .build()
     }
 
-    private fun buildIndividualIcon(context: Context, conference: LocalConference) = when {
-        conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(
-            context, ProxerUrls.userImage(conference.image)
-        )
-
-        else -> {
-            ContextCompat.getColor(context, R.color.primary)
-            IconicsDrawable(context)
-                .icon(
-                    when (conference.isGroup) {
-                        true -> CommunityMaterial.Icon.cmd_account_multiple
-                        false -> CommunityMaterial.Icon.cmd_account
-                    }
-                )
-                .colorRes(R.color.primary)
-                .sizeDp(96)
-                .toBitmap()
-        }
+    private fun buildConferenceIcon(context: Context, conference: LocalConference) = when {
+        conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(conference.image))
+        else -> buildGenericIcon(context, conference.isGroup)
     }
 
     private fun buildIndividualStyle(
+        context: Context,
         messages: List<LocalMessage>,
         conference: LocalConference,
         user: LocalUser,
-        icon: Bitmap?
+        conferenceIcon: Bitmap?
     ): NotificationCompat.MessagingStyle {
+        val personImage = when {
+            user.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(context, ProxerUrls.userImage(user.image))
+            else -> buildGenericIcon(context, false)
+        }
+
         val person = Person.Builder()
-            .apply { if (icon != null) setIcon(IconCompat.createWithBitmap(icon)) }
             .setKey(user.id)
             .setName(user.name)
+            .setIcon(personImage?.toIconCompat())
             .build()
 
         return NotificationCompat.MessagingStyle(person)
@@ -257,14 +248,33 @@ object MessengerNotifications : KoinComponent {
             .setConversationTitle(if (conference.isGroup) conference.topic else "")
             .also {
                 messages.forEach { message ->
+                    val messagePersonIcon = when {
+                        message.userId == user.id -> personImage
+                        else -> conferenceIcon
+                    }
+
                     val messagePerson = Person.Builder()
-                        .setName(message.username)
-                        .setUri(ProxerUrls.userWeb(message.userId, Device.MOBILE).toString())
                         .setKey(message.userId)
+                        .setName(message.username)
+                        .setIcon(messagePersonIcon?.toIconCompat())
+                        .setUri(ProxerUrls.userWeb(message.userId, Device.MOBILE).toString())
                         .build()
 
                     it.addMessage(message.message, message.date.toEpochMilli(), messagePerson)
                 }
             }
     }
+
+    private fun buildGenericIcon(context: Context, isGroup: Boolean) = IconicsDrawable(context)
+        .icon(
+            when (isGroup) {
+                true -> CommunityMaterial.Icon.cmd_account_multiple
+                false -> CommunityMaterial.Icon.cmd_account
+            }
+        )
+        .colorRes(R.color.primary)
+        .sizeDp(96)
+        .toBitmap()
+
+    private fun Bitmap.toIconCompat() = IconCompat.createWithBitmap(this)
 }
