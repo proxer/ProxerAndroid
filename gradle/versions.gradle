@@ -41,7 +41,7 @@ ext {
     castVersion = "17.1.0"
 
     // RxJava
-    rxJavaVersion = "2.2.12"
+    rxJavaVersion = "2.2.13"
     rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.0.0"
@@ -68,7 +68,7 @@ ext {
     tabLayoutHelperVersion = "b1d93a3b83"
     materialDialogsVersion = "3.1.1"
     flexboxVersion = "1.1.1"
-    emojiIosVersion = "82a306b659"
+    emojiIosVersion = "3b132a3cf5"
     exoplayerVersion = "2.10.5"
     previewSeekbarVersion = "2.0.0"
     previewSeekbarExoplayerVersion = "2.8.1.0"
@@ -85,7 +85,7 @@ ext {
     hawkVersion = "7a1a625455"
     glideVersion = "4.10.0"
     retrofitVersion = "2.6.2"
-    okHttpVersion = "4.2.0"
+    okHttpVersion = "4.2.1"
     okioVersion = "2.4.0"
     moshiVersion = "7804d74318"
     easyHeaderFooterAdapterVersion = "3.0.0"
