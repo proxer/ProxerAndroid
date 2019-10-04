@@ -47,7 +47,7 @@ object TablePrototype : AutoClosingPrototype {
             }
 
             if (cells.size < maxSize) {
-                val fillWeight = 1f - (cells.size * weight)
+                val fillWeight = 1f - cells.size * weight
 
                 row.addView(View(row.context), LinearLayout.LayoutParams(0, 0, fillWeight))
             }
