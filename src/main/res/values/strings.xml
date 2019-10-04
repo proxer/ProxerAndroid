@@ -671,7 +671,6 @@
     <string name="view_bbcode_facebook_link">Zum Facebook Post</string>
     <string name="view_bbcode_twitter_link">Zum Tweet</string>
     <string name="view_bbcode_poll_link">Zur Abstimmung</string>
-    <string name="view_bbcode_wiki_link">Zum Inhalt</string>
     <string name="view_bbcode_quote">\@%s schrieb:</string>
     <string name="view_bbcode_hide_login">Dieser Inhalt ist für Gäste nicht sichtbar. Bitte melde dich an, oder
         registriere dich.
@@ -686,6 +685,8 @@
 
     <string name="view_expandable_multi_selection_extend_content_description">Ausklappen</string>
     <string name="view_expandable_multi_selection_reset_content_description">Zurücksetzen</string>
+
+    <string name="view_web_iframe_link">Zum Inhalt</string>
 
     <string name="layout_chat_bar_emoji_content_description">Emoji Auswahl</string>
     <string name="layout_chat_bar_send_content_description">Senden</string>

@@ -9,6 +9,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.bumptech.glide.load.engine.GlideException
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.USER_AGENT
@@ -17,12 +18,14 @@ import me.proxer.app.util.extension.proxyIfRequired
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
+import me.proxer.app.util.wrapper.SimpleGlideRequestListener
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.koin.core.KoinComponent
 import timber.log.Timber
+import java.io.File
 import java.io.FileInputStream
 import java.math.BigDecimal
 import java.math.MathContext
@@ -36,6 +39,11 @@ class ProxerWebView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : WebView(context, attrs, defStyleAttr), KoinComponent {
+
+    private companion object {
+        private val iFrameRegex = Regex("<iframe.*?src=\"(.*?)\".*?>", RegexOption.DOT_MATCHES_ALL)
+        private val imageHttpRegex = Regex("<img.*?src=\"http://.*?\".*?>", RegexOption.DOT_MATCHES_ALL)
+    }
 
     val showPageSubject = PublishSubject.create<HttpUrl>()
     val loadingFinishedSubject = PublishSubject.create<Unit>()
@@ -63,13 +71,29 @@ class ProxerWebView @JvmOverloads constructor(
     }
 
     fun loadHtml(html: String) {
+        val cleanedHtml = constructHtmlSkeleton(upgradeImageLinks(replaceIFrames(context, html)))
+
         loadDataWithBaseURL(
-            null,
-            constructHtmlSkeleton(html),
+            ProxerUrls.webBase.toString(),
+            cleanedHtml,
             "text/html; charset=utf-8",
             "utf-8",
             null
         )
+    }
+
+    private fun replaceIFrames(context: Context, html: String): String {
+        return html.replace(iFrameRegex) { matchResult ->
+            val url = matchResult.groupValues[1]
+
+            """<a href="$url">${context.getString(R.string.view_web_iframe_link)}</a>"""
+        }
+    }
+
+    private fun upgradeImageLinks(html: String): String {
+        return html.replace(imageHttpRegex) { matchResult ->
+            matchResult.value.replaceFirst("http://", "https://")
+        }
     }
 
     private fun constructHtmlSkeleton(content: String): String {
@@ -155,6 +179,13 @@ class ProxerWebView @JvmOverloads constructor(
             return try {
                 val imageFile = GlideApp.with(view)
                     .download(url.proxyIfRequired().toString())
+                    .listener(object : SimpleGlideRequestListener<File> {
+                        override fun onLoadFailed(error: GlideException?): Boolean {
+                            Timber.e(error)
+
+                            return false
+                        }
+                    })
                     .submit().get()
 
                 val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)
@@ -168,12 +199,12 @@ class ProxerWebView @JvmOverloads constructor(
         }
 
         private fun loadResource(request: WebResourceRequest): WebResourceResponse? {
-            return try {
-                if (!request.method.equals("GET", ignoreCase = false)) {
-                    Timber.w("Requests other than GET are not supported: ${request.method} ${request.url}")
+            return if (!request.method.equals("GET", ignoreCase = false)) {
+                Timber.w("Requests other than GET are not supported: ${request.method} ${request.url}")
 
-                    null
-                } else {
+                null
+            } else {
+                try {
                     val response = client
                         .newCall(
                             Request.Builder().get()
@@ -190,11 +221,11 @@ class ProxerWebView @JvmOverloads constructor(
                     val encoding = contentType.getOrNull(1)
 
                     WebResourceResponse(mimeType, encoding, response.body?.byteStream())
-                }
-            } catch (error: Throwable) {
-                Timber.e(error)
+                } catch (error: Throwable) {
+                    Timber.e(error)
 
-                null
+                    null
+                }
             }
         }
     }
