@@ -76,8 +76,8 @@ class ProfileActivity : ImageTabsActivity() {
     }
 
     var userId: String?
-        get() = when {
-            intent.action == Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(1)
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(1)
             else -> intent.getStringExtra(USER_ID_EXTRA)
         }
         set(value) {

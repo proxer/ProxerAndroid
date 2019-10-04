@@ -52,8 +52,8 @@ class TopicActivity : DrawerActivity() {
     }
 
     val id: String
-        get() = when {
-            intent.action == Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
                 true -> intent.data?.getQueryParameter("id") ?: "-1"
                 else -> intent.data?.pathSegments?.getOrNull(2) ?: "-1"
             }
@@ -61,8 +61,8 @@ class TopicActivity : DrawerActivity() {
         }
 
     val categoryId: String
-        get() = when {
-            intent.action == Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+        get() = when (intent.action) {
+            Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
                 true -> TOUZAI_CATEGORY
                 else -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
             }
@@ -98,8 +98,8 @@ class TopicActivity : DrawerActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> topic?.let {
-                val url = when {
-                    intent.action == Intent.ACTION_VIEW -> intent.dataString
+                val url = when (intent.action) {
+                    Intent.ACTION_VIEW -> intent.dataString
                     else -> ProxerUrls.forumWeb(categoryId, id).toString()
                 }
 
