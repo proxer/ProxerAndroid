@@ -1,9 +1,10 @@
 package me.proxer.app.ui.view.bbcode.prototype
 
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import android.widget.TableRow
 import android.widget.TableRow.VERTICAL
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
@@ -24,11 +25,9 @@ object TableCellPrototype : AutoClosingPrototype {
         val childViews = super.makeViews(parent, children, args)
 
         return when (childViews.size) {
-            0, 1 -> childViews.map {
-                it.apply { layoutParams = TableRow.LayoutParams(0, WRAP_CONTENT, 1f) }
-            }
+            0, 1 -> childViews
             else -> listOf(LinearLayout(parent.context).apply {
-                layoutParams = TableRow.LayoutParams(0, WRAP_CONTENT, 1f)
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
                 orientation = VERTICAL
 
                 childViews.forEach { addView(it) }
