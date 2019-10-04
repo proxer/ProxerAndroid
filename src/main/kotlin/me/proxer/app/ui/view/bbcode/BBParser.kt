@@ -63,6 +63,14 @@ object BBParser {
         )
     )
 
+    private val regexCache = mutableMapOf<Set<BBPrototype>, Regex>()
+
+    init {
+        regexCache[textOnlyPrototypes] = constructRegex(textOnlyPrototypes)
+        regexCache[simplePrototypes] = constructRegex(simplePrototypes)
+        regexCache[defaultPrototypes] = constructRegex(defaultPrototypes)
+    }
+
     fun parseSimple(input: String): BBTree {
         return parse(input, simplePrototypes)
     }
@@ -135,7 +143,7 @@ object BBParser {
         return result
     }
 
-    private fun constructRegex(prototypes: Set<BBPrototype>): Regex {
+    private fun constructRegex(prototypes: Set<BBPrototype>) = regexCache.getOrPut(prototypes) {
         val prototypeRegex = prototypes.joinToString("|") {
             when (it.canHaveChildren) {
                 true -> it.startRegex.pattern + "|" + it.endRegex.pattern
@@ -143,7 +151,7 @@ object BBParser {
             }
         }
 
-        return Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
+        Regex("${quote("[")}(($prototypeRegex)?)${quote("]")}", REGEX_OPTIONS)
     }
 
     private fun findFittingTree(tree: BBTree, endTag: String, finishedList: List<BBTree>): BBTree? {
