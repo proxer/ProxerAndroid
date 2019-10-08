@@ -56,3 +56,5 @@ style:
     active: false
   OptionalUnit:
     active: false
+  UseIfInsteadOfWhen:
+    active: false

@@ -21,7 +21,7 @@ ext {
 
     // Utility plugins
     versionsPluginVersion = "0.25.0"
-    detektPluginVersion = "1.1.0"
+    detektPluginVersion = "1.0.1"
     ktlintPluginVersion = "9.0.0"
     androidCommandPluginVersion = "2.1.0"
 
