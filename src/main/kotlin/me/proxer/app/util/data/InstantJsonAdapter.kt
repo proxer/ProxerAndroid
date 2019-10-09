@@ -10,8 +10,8 @@ import org.threeten.bp.Instant
  */
 class InstantJsonAdapter : JsonAdapter<Instant>() {
     override fun fromJson(reader: JsonReader): Instant? {
-        return when {
-            reader.peek() == JsonReader.Token.NULL -> null
+        return when (reader.peek()) {
+            JsonReader.Token.NULL -> null
             else -> Instant.ofEpochMilli(reader.nextLong())
         }
     }

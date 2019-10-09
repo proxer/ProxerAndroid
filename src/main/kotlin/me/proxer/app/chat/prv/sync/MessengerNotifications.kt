@@ -248,8 +248,8 @@ object MessengerNotifications : KoinComponent {
             .setConversationTitle(if (conference.isGroup) conference.topic else "")
             .also {
                 messages.forEach { message ->
-                    val messagePersonIcon = when {
-                        message.userId == user.id -> personImage
+                    val messagePersonIcon = when (message.userId) {
+                        user.id -> personImage
                         else -> conferenceIcon
                     }
 
