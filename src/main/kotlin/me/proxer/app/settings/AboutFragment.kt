@@ -54,8 +54,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             "flexboxlayout", "glide", "hawk", "jsoup", "koptional", "kotterknife", "leakcanary", "materialaboutlibrary",
             "materialpreference", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp",
             "rapiddecoder", "recyclerviewsnap", "retrofit", "rxandroid", "rxbinding", "rxkotlin", "rxjava",
-            "subsamplingpdfdecoder", "subsamplingscaleimageview", "tablayouthelper", "timber", "threeten",
-            "threetenandroidbackport"
+            "subsamplingpdfdecoder", "subsamplingscaleimageview", "timber", "threeten", "threetenandroidbackport"
         )
 
         private val excludedLibraries = arrayOf("fastadapter", "materialize")

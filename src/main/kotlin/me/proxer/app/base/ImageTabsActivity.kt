@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.core.view.ViewCompat
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.request.target.ImageViewTarget
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
-import com.h6ah4i.android.tablayouthelper.TabLayoutHelper
+import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding3.material.offsetChanges
 import com.jakewharton.rxbinding3.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
@@ -30,24 +30,24 @@ import okhttp3.HttpUrl
  */
 abstract class ImageTabsActivity : DrawerActivity() {
 
-    abstract val headerImageUrl: HttpUrl?
-    abstract val sectionsPagerAdapter: PagerAdapter
-
     override val contentView
         get() = R.layout.activity_image_tabs
+
+    protected abstract val headerImageUrl: HttpUrl?
+    protected abstract val sectionsPagerAdapter: FragmentStateAdapter
+    protected abstract val sectionsTabCallback: TabLayoutMediator.TabConfigurationStrategy
 
     protected open val itemToDisplay
         get() = 0
 
-    private var isHeaderImageVisible = true
-
     protected open val collapsingToolbar: CollapsingToolbarLayout by bindView(R.id.collapsingToolbar)
-    protected open val viewPager: ViewPager by bindView(R.id.viewPager)
+    protected open val viewPager: ViewPager2 by bindView(R.id.viewPager)
     protected open val headerImage: ImageView by bindView(R.id.image)
     protected open val tabs: TabLayout by bindView(R.id.tabs)
 
-    protected var tabLayoutHelper: TabLayoutHelper? = null
-        private set
+    private var mediator: TabLayoutMediator? = null
+
+    private var isHeaderImageVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +64,8 @@ abstract class ImageTabsActivity : DrawerActivity() {
     }
 
     override fun onDestroy() {
-        tabLayoutHelper?.release()
-        tabLayoutHelper = null
+        mediator?.detach()
+        mediator = null
         viewPager.adapter = null
 
         super.onDestroy()
@@ -163,13 +163,14 @@ abstract class ImageTabsActivity : DrawerActivity() {
     }
 
     protected open fun setupContent(savedInstanceState: Bundle?) {
+        viewPager.offscreenPageLimit = 2
         viewPager.adapter = sectionsPagerAdapter
 
         if (savedInstanceState == null) {
             viewPager.currentItem = itemToDisplay
         }
 
-        tabLayoutHelper = TabLayoutHelper(tabs, viewPager).apply { isAutoAdjustTabModeEnabled = true }
+        mediator = TabLayoutMediator(tabs, viewPager, sectionsTabCallback).also { it.attach() }
     }
 
     protected open fun loadEmptyImage() {}

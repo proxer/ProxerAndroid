@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -100,14 +101,15 @@ class ProfileActivity : ImageTabsActivity() {
             loadImage()
         }
 
+    override val sectionsPagerAdapter: FragmentStateAdapter by unsafeLazy { SectionsPagerAdapter() }
+    override val sectionsTabCallback: TabLayoutMediator.TabConfigurationStrategy by unsafeLazy { SectionsTabCallback() }
+
     private val viewModel by viewModel<ProfileViewModel> { parametersOf(userId, username) }
 
     private val messengerDao by safeInject<MessengerDao>()
 
     private var createChatMenuItem: MenuItem? = null
     private var newGroupMenuItem: MenuItem? = null
-
-    override val sectionsPagerAdapter by unsafeLazy { SectionsPagerAdapter(supportFragmentManager) }
 
     override val headerImageUrl
         get() = image.let { image ->
@@ -140,7 +142,7 @@ class ProfileActivity : ImageTabsActivity() {
                 if (viewPager.currentItem == 0) {
                     viewPager.currentItem = customItemToDisplay
 
-                    tabLayoutHelper?.updateAllTabs()
+                    sectionsPagerAdapter.notifyDataSetChanged()
                 }
             }
         })
@@ -219,11 +221,11 @@ class ProfileActivity : ImageTabsActivity() {
         }
     }
 
-    inner class SectionsPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
-        fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-    ) {
+    private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
 
-        override fun getItem(position: Int) = when (position) {
+        override fun getItemCount() = 7
+
+        override fun createFragment(position: Int) = when (position) {
             0 -> ProfileInfoFragment.newInstance()
             1 -> ProfileAboutFragment.newInstance()
             2 -> TopTenFragment.newInstance()
@@ -233,18 +235,21 @@ class ProfileActivity : ImageTabsActivity() {
             6 -> HistoryFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
+    }
 
-        override fun getCount() = 7
+    private inner class SectionsTabCallback : TabLayoutMediator.TabConfigurationStrategy {
 
-        override fun getPageTitle(position: Int): String = when (position) {
-            0 -> getString(R.string.section_profile_info)
-            1 -> getString(R.string.section_profile_about)
-            2 -> getString(R.string.section_top_ten)
-            3 -> getString(R.string.section_user_media_list_anime)
-            4 -> getString(R.string.section_user_media_list_manga)
-            5 -> getString(R.string.section_user_comments)
-            6 -> getString(R.string.section_user_history)
-            else -> error("Unknown index passed: $position")
+        override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
+            tab.text = when (position) {
+                0 -> getString(R.string.section_profile_info)
+                1 -> getString(R.string.section_profile_about)
+                2 -> getString(R.string.section_top_ten)
+                3 -> getString(R.string.section_user_media_list_anime)
+                4 -> getString(R.string.section_user_media_list_manga)
+                5 -> getString(R.string.section_user_comments)
+                6 -> getString(R.string.section_user_history)
+                else -> error("Unknown index passed: $position")
+            }
         }
     }
 }
