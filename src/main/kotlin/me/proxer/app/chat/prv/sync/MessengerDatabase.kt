@@ -13,7 +13,7 @@ import me.proxer.app.util.converter.RoomConverters
  * @author Ruben Gees
  */
 @Suppress("UnnecessaryAbstractClass")
-@Database(entities = [LocalConference::class, LocalMessage::class], version = 1)
+@Database(entities = [LocalConference::class, LocalMessage::class], version = 2)
 @TypeConverters(RoomConverters::class)
 abstract class MessengerDatabase : RoomDatabase() {
 
