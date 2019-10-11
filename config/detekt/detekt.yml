@@ -6,6 +6,8 @@ comments:
     searchInNestedClass: false
   UndocumentedPublicFunction:
     active: false
+  UndocumentedPublicProperty:
+    active: false
 
 complexity:
   ComplexCondition:
