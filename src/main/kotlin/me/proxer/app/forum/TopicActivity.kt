@@ -52,21 +52,21 @@ class TopicActivity : DrawerActivity() {
     }
 
     val id: String
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+        get() = when (intent.hasExtra(ID_EXTRA)) {
+            true -> intent.getSafeStringExtra(ID_EXTRA)
+            false -> when (intent.data?.path == TOUZAI_PATH) {
                 true -> intent.data?.getQueryParameter("id") ?: "-1"
                 else -> intent.data?.pathSegments?.getOrNull(2) ?: "-1"
             }
-            else -> intent.getSafeStringExtra(ID_EXTRA)
         }
 
     val categoryId: String
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> when (intent.data?.path == TOUZAI_PATH) {
+        get() = when (intent.hasExtra(CATEGORY_ID_EXTRA)) {
+            true -> intent.getSafeStringExtra(CATEGORY_ID_EXTRA)
+            false -> when (intent.data?.path == TOUZAI_PATH) {
                 true -> TOUZAI_CATEGORY
                 else -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
             }
-            else -> intent.getSafeStringExtra(CATEGORY_ID_EXTRA)
         }
 
     var topic: String?
@@ -97,19 +97,23 @@ class TopicActivity : DrawerActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> topic?.let {
-                val url = when (intent.action) {
-                    Intent.ACTION_VIEW -> intent.dataString
-                    else -> ProxerUrls.forumWeb(categoryId, id).toString()
-                }
+            R.id.action_share -> topic
+                ?.let {
+                    val url = when (intent.action) {
+                        Intent.ACTION_VIEW -> intent.dataString
+                        else -> ProxerUrls.forumWeb(categoryId, id).toString()
+                    }
 
-                ShareCompat.IntentBuilder
-                    .from(this)
-                    .setText(getString(R.string.share_topic, it, url))
-                    .setType("text/plain")
-                    .setChooserTitle(getString(R.string.share_title))
-                    .startChooser()
-            }
+                    it to url
+                }
+                ?.let { (topic, url) ->
+                    ShareCompat.IntentBuilder
+                        .from(this)
+                        .setText(getString(R.string.share_topic, topic, url))
+                        .setType("text/plain")
+                        .setChooserTitle(getString(R.string.share_title))
+                        .startChooser()
+                }
         }
 
         return super.onOptionsItemSelected(item)

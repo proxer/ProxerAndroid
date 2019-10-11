@@ -77,9 +77,9 @@ class MediaActivity : ImageTabsActivity() {
     }
 
     val id: String
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
-            else -> intent.getSafeStringExtra(ID_EXTRA)
+        get() = when (intent.hasExtra(ID_EXTRA)) {
+            true -> intent.getSafeStringExtra(ID_EXTRA)
+            false -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
         }
 
     var name: String?

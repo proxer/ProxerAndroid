@@ -1,7 +1,6 @@
 package me.proxer.app.anime
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -53,15 +52,15 @@ class AnimeActivity : DrawerActivity() {
     }
 
     val id: String
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent?.data?.pathSegments?.getOrNull(1) ?: "-1"
-            else -> intent.getSafeStringExtra(ID_EXTRA)
+        get() = when (intent.hasExtra(ID_EXTRA)) {
+            true -> intent.getSafeStringExtra(ID_EXTRA)
+            false -> intent?.data?.pathSegments?.getOrNull(1) ?: "-1"
         }
 
     var episode: Int
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent?.data?.pathSegments?.getOrNull(2)?.toIntOrNull() ?: 1
-            else -> intent.getIntExtra(EPISODE_EXTRA, 1)
+        get() = when (intent.hasExtra(EPISODE_EXTRA)) {
+            true -> intent.getIntExtra(EPISODE_EXTRA, 1)
+            false -> intent?.data?.pathSegments?.getOrNull(2)?.toIntOrNull() ?: 1
         }
         set(value) {
             intent.putExtra(EPISODE_EXTRA, value)
@@ -70,10 +69,10 @@ class AnimeActivity : DrawerActivity() {
         }
 
     val language: AnimeLanguage
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent?.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum(it) }
+        get() = when (intent.hasExtra(LANGUAGE_EXTRA)) {
+            true -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
+            false -> intent?.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum(it) }
                 ?: AnimeLanguage.ENGLISH_SUB
-            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
         }
 
     var name: String?

@@ -1,7 +1,6 @@
 package me.proxer.app.manga
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -69,15 +68,15 @@ class MangaActivity : BaseActivity() {
     }
 
     val id: String
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
-            else -> intent.getSafeStringExtra(ID_EXTRA)
+        get() = when (intent.hasExtra(ID_EXTRA)) {
+            true -> intent.getSafeStringExtra(ID_EXTRA)
+            false -> intent.data?.pathSegments?.getOrNull(1) ?: "-1"
         }
 
     var episode: Int
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(2)?.toIntOrNull() ?: 1
-            else -> intent.getIntExtra(EPISODE_EXTRA, 1)
+        get() = when (intent.hasExtra(EPISODE_EXTRA)) {
+            true -> intent.getIntExtra(EPISODE_EXTRA, 1)
+            false -> intent.data?.pathSegments?.getOrNull(2)?.toIntOrNull() ?: 1
         }
         set(value) {
             intent.putExtra(EPISODE_EXTRA, value)
@@ -86,10 +85,9 @@ class MangaActivity : BaseActivity() {
         }
 
     val language: Language
-        get() = when (intent.action) {
-            Intent.ACTION_VIEW -> intent.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum(it) }
-                ?: Language.ENGLISH
-            else -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
+        get() = when (intent.hasExtra(LANGUAGE_EXTRA)) {
+            true -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
+            false -> intent.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum(it) } ?: Language.ENGLISH
         }
 
     var chapterTitle: String?
@@ -109,8 +107,8 @@ class MangaActivity : BaseActivity() {
         }
 
     var episodeAmount: Int?
-        get() = when {
-            intent.hasExtra(EPISODE_AMOUNT_EXTRA) -> intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
+        get() = when (intent.hasExtra(EPISODE_AMOUNT_EXTRA)) {
+            true -> intent.getIntExtra(EPISODE_AMOUNT_EXTRA, 1)
             else -> null
         }
         set(value) {
