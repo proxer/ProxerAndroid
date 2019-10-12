@@ -1,7 +1,9 @@
 package me.proxer.app.ui.view
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
+import android.os.Build
 import android.util.AttributeSet
 import android.webkit.MimeTypeMap
 import android.webkit.WebResourceRequest
@@ -38,11 +40,19 @@ class ProxerWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : WebView(context, attrs, defStyleAttr), KoinComponent {
+) : WebView(getFixedContext(context), attrs, defStyleAttr), KoinComponent {
 
     private companion object {
         private val iFrameRegex = Regex("<iframe.*?src=\"(.*?)\".*?>", RegexOption.DOT_MATCHES_ALL)
         private val imageHttpRegex = Regex("<img.*?src=\"http://.*?\".*?>", RegexOption.DOT_MATCHES_ALL)
+
+        // Workaround for a bug in Lollipop.
+        private fun getFixedContext(context: Context) = when (Build.VERSION.SDK_INT) {
+            in Build.VERSION_CODES.LOLLIPOP..Build.VERSION_CODES.LOLLIPOP_MR1 -> context.createConfigurationContext(
+                Configuration()
+            )
+            else -> context
+        }
     }
 
     val showPageSubject = PublishSubject.create<HttpUrl>()
