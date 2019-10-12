@@ -104,8 +104,13 @@ dependencies {
 
 configurations {
     all {
-        resolutionStrategy.dependencySubstitution {
-            substitute module("com.squareup.moshi:moshi") with module("com.github.square.moshi:moshi:$moshiVersion")
+        resolutionStrategy {
+            // Due to a bug with WebView.
+            force "androidx.appcompat:appcompat:1.1.0-rc01"
+
+            dependencySubstitution {
+                substitute module("com.squareup.moshi:moshi") with module("com.github.square.moshi:moshi:$moshiVersion")
+            }
         }
     }
 }
