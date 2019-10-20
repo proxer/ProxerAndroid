@@ -69,7 +69,7 @@ class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
                         requireActivity(), entry.entryId, entry.episode,
                         entry.language.toAnimeLanguage(), entry.name
                     )
-                    Category.MANGA -> MangaActivity.navigateTo(
+                    Category.MANGA, Category.NOVEL -> MangaActivity.navigateTo(
                         requireActivity(), entry.entryId, entry.episode,
                         entry.language.toGeneralLanguage(), null, entry.name
                     )

@@ -84,7 +84,7 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                         requireActivity(), it.entryId, it.episode,
                         it.language.toAnimeLanguage(), it.name
                     )
-                    Category.MANGA -> MangaActivity.navigateTo(
+                    Category.MANGA, Category.NOVEL -> MangaActivity.navigateTo(
                         requireActivity(), it.entryId, it.episode,
                         it.language.toGeneralLanguage(), it.chapterName, it.name
                     )

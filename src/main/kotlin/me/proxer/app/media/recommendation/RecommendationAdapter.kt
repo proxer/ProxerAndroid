@@ -99,7 +99,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             episodes.text = episodes.context.getQuantityString(
                 when (item.category) {
                     Category.ANIME -> R.plurals.media_episode_count
-                    Category.MANGA -> R.plurals.media_chapter_count
+                    Category.MANGA, Category.NOVEL -> R.plurals.media_chapter_count
                 },
                 item.episodeAmount
             )

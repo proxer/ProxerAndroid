@@ -257,7 +257,7 @@ class MediaListFragment : PagedContentFragment<MediaListEntry>(R.layout.fragment
 
         when (category) {
             Category.ANIME -> filterSubMenu.setGroupVisible(R.id.filterManga, false)
-            Category.MANGA -> filterSubMenu.setGroupVisible(R.id.filterAnime, false)
+            Category.MANGA, Category.NOVEL -> filterSubMenu.setGroupVisible(R.id.filterAnime, false)
         }
 
         when (type) {

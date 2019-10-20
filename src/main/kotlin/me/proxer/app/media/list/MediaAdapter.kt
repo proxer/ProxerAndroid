@@ -87,7 +87,7 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
             episodes.text = episodes.context.getQuantityString(
                 when (category) {
                     Category.ANIME -> R.plurals.media_episode_count
-                    Category.MANGA -> R.plurals.media_chapter_count
+                    Category.MANGA, Category.NOVEL -> R.plurals.media_chapter_count
                 }, item.episodeAmount
             )
 

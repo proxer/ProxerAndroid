@@ -246,8 +246,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         result.adaptionInfo.let { adaptionInfo ->
             if (adaptionInfo.id != "0") {
                 val title = getString(R.string.fragment_media_info_adaption_title)
-                val content =
-                    "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
+                val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
 
                 infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
                     tableRow.findViewById<View>(R.id.content).also { contentView ->

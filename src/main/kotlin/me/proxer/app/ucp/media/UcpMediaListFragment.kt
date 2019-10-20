@@ -106,7 +106,7 @@ class UcpMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         val menuToInflate = when (category) {
             Category.ANIME -> R.menu.fragment_user_media_list_anime
-            Category.MANGA -> R.menu.fragment_user_media_list_manga
+            Category.MANGA, Category.NOVEL -> R.menu.fragment_user_media_list_manga
         }
 
         IconicsMenuInflaterUtil.inflate(inflater, requireContext(), menuToInflate, menu, true)
