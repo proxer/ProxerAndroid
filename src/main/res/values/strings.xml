@@ -193,7 +193,7 @@
     <string name="medium_anime_series">Animeserie</string>
     <string name="medium_hentai">Hentai</string>
     <string name="medium_movie">Film</string>
-    <string name="medium_ova">OVA</string>
+    <string name="medium_ova">Special</string>
     <string name="medium_manga_series">Mangaserie</string>
     <string name="medium_lightnovel">Light Novel</string>
     <string name="medium_doujin">Doujinshi</string>
@@ -878,7 +878,7 @@
     <string name="action_filter_manga_series">Mangaserien</string>
     <string name="action_filter_movies">Filme</string>
     <string name="action_filter_one_shots">One-Shots</string>
-    <string name="action_filter_ova">OVA</string>
+    <string name="action_filter_ova">Specials</string>
     <string name="action_filter_anime">Anime</string>
     <string name="action_filter_manga">Manga</string>
 
