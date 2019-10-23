@@ -17,7 +17,7 @@ ext {
 
     // Core plugins
     androidPluginVersion = "3.6.0-beta01"
-    kotlinVersion = "1.3.60-eap-25"
+    kotlinVersion = "1.3.60-eap-76"
 
     // Utility plugins
     versionsPluginVersion = "0.27.0"
@@ -35,7 +35,7 @@ ext {
     coreKtxVersion = "1.2.0-beta01"
     fragmentKtxVersion = "1.2.0-beta02"
     shareTargetVersion = "1.0.0-beta01"
-    playCoreVersion = "1.6.3"
+    playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
     interactiveMediaVersion = "3.11.3"
     castVersion = "17.1.0"
@@ -53,7 +53,7 @@ ext {
     recyclerviewVersion = "1.1.0-beta05"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
-    materialComponentsVersion = "1.1.0-beta01"
+    materialComponentsVersion = "1.2.0-alpha01"
     preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.1"
