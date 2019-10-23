@@ -1,6 +1,5 @@
 repositories {
-    maven {
-        url "https://dl.google.com/dl/android/maven2"
+    google {
         mavenContent { releasesOnly() }
         content {
             includeGroupByRegex "androidx.*"
@@ -22,8 +21,7 @@ repositories {
         }
     }
 
-    maven {
-        url "https://plugins.gradle.org/m2"
+    gradlePluginPortal {
         mavenContent { releasesOnly() }
         content {
             excludeGroupByRegex "androidx.*"
