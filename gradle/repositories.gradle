@@ -46,9 +46,4 @@ repositories {
         mavenContent { releasesOnly() }
         content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*" }
     }
-
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
-        mavenContent { snapshotsOnly() }
-    }
 }
