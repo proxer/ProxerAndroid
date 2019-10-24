@@ -170,34 +170,57 @@ class MediaActivity : ImageTabsActivity() {
         fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
     ) {
 
-        override fun getItem(position: Int) = when (position) {
-            0 -> MediaInfoFragment.newInstance()
-            1 -> CommentsFragment.newInstance()
-            2 -> EpisodeFragment.newInstance()
-            3 -> RelationFragment.newInstance()
-            4 -> RecommendationFragment.newInstance()
-            5 -> DiscussionFragment.newInstance()
-            else -> error("Unknown index passed: $position")
+        override fun getItem(position: Int) = when (category) {
+            Category.ANIME, Category.MANGA -> when (position) {
+                0 -> MediaInfoFragment.newInstance()
+                1 -> CommentsFragment.newInstance()
+                2 -> EpisodeFragment.newInstance()
+                3 -> RelationFragment.newInstance()
+                4 -> RecommendationFragment.newInstance()
+                5 -> DiscussionFragment.newInstance()
+                else -> error("Unknown index passed: $position")
+            }
+            else -> when (position) {
+                0 -> MediaInfoFragment.newInstance()
+                1 -> CommentsFragment.newInstance()
+                2 -> RelationFragment.newInstance()
+                3 -> RecommendationFragment.newInstance()
+                4 -> DiscussionFragment.newInstance()
+                else -> error("Unknown index passed: $position")
+            }
         }
 
         override fun getCount() = when {
-            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> 6
+            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> when (category) {
+                Category.ANIME, Category.MANGA -> 6
+                else -> 5
+            }
             else -> 1
         }
 
-        override fun getPageTitle(position: Int): String = when (position) {
-            0 -> getString(R.string.section_media_info)
-            1 -> getString(R.string.section_comments)
-            2 -> category?.toEpisodeAppString(this@MediaActivity)
-                ?: getString(R.string.category_anime_episodes_title)
-            3 -> getString(R.string.section_relations)
-            4 -> getString(R.string.section_recommendations)
-            5 -> getString(R.string.section_discussions)
-            else -> error("Unknown index passed: $position")
+        override fun getPageTitle(position: Int): String = when (category) {
+            Category.ANIME, Category.MANGA -> when (position) {
+                0 -> getString(R.string.section_media_info)
+                1 -> getString(R.string.section_comments)
+                2 -> category?.toEpisodeAppString(this@MediaActivity)
+                    ?: getString(R.string.category_anime_episodes_title)
+                3 -> getString(R.string.section_relations)
+                4 -> getString(R.string.section_recommendations)
+                5 -> getString(R.string.section_discussions)
+                else -> error("Unknown index passed: $position")
+            }
+            else -> when (position) {
+                0 -> getString(R.string.section_media_info)
+                1 -> getString(R.string.section_comments)
+                2 -> getString(R.string.section_relations)
+                3 -> getString(R.string.section_recommendations)
+                4 -> getString(R.string.section_discussions)
+                else -> error("Unknown index passed: $position")
+            }
         }
 
         fun update() {
-            if (count >= 1) {
+            if (count == 6) {
                 tabs.getTabAt(2)?.text = category?.toEpisodeAppString(this@MediaActivity)
                     ?: getString(R.string.category_anime_episodes_title)
             }
