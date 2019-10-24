@@ -9,7 +9,7 @@ import me.proxer.library.entity.info.RatingDetails
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Medium
 import me.proxer.library.enums.UserMediaProgress
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

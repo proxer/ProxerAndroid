@@ -3,7 +3,7 @@ package me.proxer.app.util.data
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

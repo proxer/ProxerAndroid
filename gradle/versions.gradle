@@ -16,7 +16,7 @@ ext {
     gradleVersion = "6.0-rc-1"
 
     // Core plugins
-    androidPluginVersion = "3.6.0-beta01"
+    androidPluginVersion = "4.0.0-alpha01"
     kotlinVersion = "1.3.60-eap-76"
 
     // Utility plugins
@@ -28,12 +28,12 @@ ext {
     // Frameworks and compatibility libraries
     koinVersion = "2.1.0-alpha-1"
     appcompatVersion = "1.1.0"
-    browserVersion = "1.2.0-alpha08"
-    lifecycleVersion = "2.2.0-beta01"
-    roomVersion = "2.2.0"
-    workVersion = "2.3.0-alpha02"
+    browserVersion = "1.2.0-alpha09"
+    lifecycleVersion = "2.2.0-rc01"
+    roomVersion = "2.2.1"
+    workVersion = "2.3.0-alpha03"
     coreKtxVersion = "1.2.0-beta01"
-    fragmentKtxVersion = "1.2.0-beta02"
+    fragmentKtxVersion = "1.2.0-rc01"
     shareTargetVersion = "1.0.0-beta01"
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
@@ -50,7 +50,7 @@ ext {
     autoDisposeVersion = "1.2.0"
 
     // UI components
-    recyclerviewVersion = "1.1.0-beta05"
+    recyclerviewVersion = "1.1.0-rc01"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
     materialComponentsVersion = "1.2.0-alpha01"
@@ -80,7 +80,6 @@ ext {
 
     // Utils
     proxerLibVersion = "5199ba6920"
-    threetenVersion = "1.2.1"
     hawkVersion = "7a1a625455"
     glideVersion = "4.10.0"
     retrofitVersion = "2.6.2"

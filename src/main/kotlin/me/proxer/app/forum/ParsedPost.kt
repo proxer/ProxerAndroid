@@ -5,7 +5,7 @@ import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.ProxerDateItem
 import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

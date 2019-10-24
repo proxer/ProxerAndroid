@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.squareup.moshi.JsonClass
 import me.proxer.app.util.extension.readStringSafely
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

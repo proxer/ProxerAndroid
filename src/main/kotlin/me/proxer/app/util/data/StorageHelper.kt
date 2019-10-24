@@ -6,7 +6,7 @@ import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
 import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.library.enums.Language
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

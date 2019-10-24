@@ -1,7 +1,7 @@
 package me.proxer.app.anime
 
 import me.proxer.app.anime.resolver.StreamResolutionResult
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

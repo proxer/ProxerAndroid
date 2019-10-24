@@ -1,189 +1,189 @@
 {
-    "formatVersion": 1,
-    "database": {
-        "version": 2,
-        "identityHash": "a4cbee7f7987ad5ebe01e9fc87ff688f",
-        "entities": [
-            {
-                "tableName": "conferences",
-                "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `topic` TEXT NOT NULL, `customTopic` TEXT NOT NULL, `participantAmount` INTEGER NOT NULL, `image` TEXT NOT NULL, `imageType` TEXT NOT NULL, `isGroup` INTEGER NOT NULL, `localIsRead` INTEGER NOT NULL, `isRead` INTEGER NOT NULL, `date` INTEGER NOT NULL, `unreadMessageAmount` INTEGER NOT NULL, `lastReadMessageId` TEXT NOT NULL, `isFullyLoaded` INTEGER NOT NULL)",
-                "fields": [
-                    {
-                        "fieldPath": "id",
-                        "columnName": "id",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "topic",
-                        "columnName": "topic",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "customTopic",
-                        "columnName": "customTopic",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "participantAmount",
-                        "columnName": "participantAmount",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "image",
-                        "columnName": "image",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "imageType",
-                        "columnName": "imageType",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "isGroup",
-                        "columnName": "isGroup",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "localIsRead",
-                        "columnName": "localIsRead",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "isRead",
-                        "columnName": "isRead",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "date",
-                        "columnName": "date",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "unreadMessageAmount",
-                        "columnName": "unreadMessageAmount",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "lastReadMessageId",
-                        "columnName": "lastReadMessageId",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "isFullyLoaded",
-                        "columnName": "isFullyLoaded",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    }
-                ],
-                "primaryKey": {
-                    "columnNames": [
-                        "id"
-                    ],
-                    "autoGenerate": true
-                },
-                "indices": [],
-                "foreignKeys": []
-            },
-            {
-                "tableName": "messages",
-                "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `conferenceId` INTEGER NOT NULL, `userId` TEXT NOT NULL, `username` TEXT NOT NULL, `message` TEXT NOT NULL, `action` TEXT NOT NULL, `date` INTEGER NOT NULL, `device` TEXT NOT NULL, FOREIGN KEY(`conferenceId`) REFERENCES `conferences`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
-                "fields": [
-                    {
-                        "fieldPath": "id",
-                        "columnName": "id",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "conferenceId",
-                        "columnName": "conferenceId",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "userId",
-                        "columnName": "userId",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "username",
-                        "columnName": "username",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "message",
-                        "columnName": "message",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "action",
-                        "columnName": "action",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "date",
-                        "columnName": "date",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "device",
-                        "columnName": "device",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    }
-                ],
-                "primaryKey": {
-                    "columnNames": [
-                        "id"
-                    ],
-                    "autoGenerate": true
-                },
-                "indices": [
-                    {
-                        "name": "index_messages_conferenceId",
-                        "unique": false,
-                        "columnNames": [
-                            "conferenceId"
-                        ],
-                        "createSql": "CREATE INDEX IF NOT EXISTS `index_messages_conferenceId` ON `${TABLE_NAME}` (`conferenceId`)"
-                    }
-                ],
-                "foreignKeys": [
-                    {
-                        "table": "conferences",
-                        "onDelete": "NO ACTION",
-                        "onUpdate": "NO ACTION",
-                        "columns": [
-                            "conferenceId"
-                        ],
-                        "referencedColumns": [
-                            "id"
-                        ]
-                    }
-                ]
-            }
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "a4cbee7f7987ad5ebe01e9fc87ff688f",
+    "entities": [
+      {
+        "tableName": "conferences",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `topic` TEXT NOT NULL, `customTopic` TEXT NOT NULL, `participantAmount` INTEGER NOT NULL, `image` TEXT NOT NULL, `imageType` TEXT NOT NULL, `isGroup` INTEGER NOT NULL, `localIsRead` INTEGER NOT NULL, `isRead` INTEGER NOT NULL, `date` INTEGER NOT NULL, `unreadMessageAmount` INTEGER NOT NULL, `lastReadMessageId` TEXT NOT NULL, `isFullyLoaded` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "topic",
+            "columnName": "topic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customTopic",
+            "columnName": "customTopic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantAmount",
+            "columnName": "participantAmount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageType",
+            "columnName": "imageType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isGroup",
+            "columnName": "isGroup",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localIsRead",
+            "columnName": "localIsRead",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRead",
+            "columnName": "isRead",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unreadMessageAmount",
+            "columnName": "unreadMessageAmount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastReadMessageId",
+            "columnName": "lastReadMessageId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFullyLoaded",
+            "columnName": "isFullyLoaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
         ],
-        "views": [],
-        "setupQueries": [
-            "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-            "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a4cbee7f7987ad5ebe01e9fc87ff688f')"
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "messages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `conferenceId` INTEGER NOT NULL, `userId` TEXT NOT NULL, `username` TEXT NOT NULL, `message` TEXT NOT NULL, `action` TEXT NOT NULL, `date` INTEGER NOT NULL, `device` TEXT NOT NULL, FOREIGN KEY(`conferenceId`) REFERENCES `conferences`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "conferenceId",
+            "columnName": "conferenceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "message",
+            "columnName": "message",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "action",
+            "columnName": "action",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "device",
+            "columnName": "device",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_messages_conferenceId",
+            "unique": false,
+            "columnNames": [
+              "conferenceId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_messages_conferenceId` ON `${TABLE_NAME}` (`conferenceId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "conferences",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "conferenceId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
         ]
-    }
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a4cbee7f7987ad5ebe01e9fc87ff688f')"
+    ]
+  }
 }

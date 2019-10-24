@@ -8,7 +8,7 @@ import com.squareup.moshi.JsonClass
 import me.proxer.app.util.extension.readStringSafely
 import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.messenger.Conference
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

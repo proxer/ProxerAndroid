@@ -40,8 +40,8 @@ import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import org.threeten.bp.Instant
-import org.threeten.bp.temporal.ChronoUnit
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 /**
  * @author Ruben Gees

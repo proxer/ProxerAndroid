@@ -6,7 +6,7 @@ import me.proxer.library.enums.MessageAction
 import me.proxer.library.enums.TagSubType
 import me.proxer.library.enums.TagType
 import me.proxer.library.util.ProxerUtils
-import org.threeten.bp.Instant
+import java.time.Instant
 import java.util.Date
 
 /**

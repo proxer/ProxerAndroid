@@ -16,7 +16,7 @@ import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
 import org.koin.core.KoinComponent
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

@@ -1,64 +1,64 @@
 {
-    "formatVersion": 1,
-    "database": {
-        "version": 2,
-        "identityHash": "66d92ea8674df6747bf870faf2eb49f0",
-        "entities": [
-            {
-                "tableName": "tags",
-                "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `subType` TEXT NOT NULL, `isSpoiler` INTEGER NOT NULL, PRIMARY KEY(`id`))",
-                "fields": [
-                    {
-                        "fieldPath": "id",
-                        "columnName": "id",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "type",
-                        "columnName": "type",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "name",
-                        "columnName": "name",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "description",
-                        "columnName": "description",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "subType",
-                        "columnName": "subType",
-                        "affinity": "TEXT",
-                        "notNull": true
-                    },
-                    {
-                        "fieldPath": "isSpoiler",
-                        "columnName": "isSpoiler",
-                        "affinity": "INTEGER",
-                        "notNull": true
-                    }
-                ],
-                "primaryKey": {
-                    "columnNames": [
-                        "id"
-                    ],
-                    "autoGenerate": false
-                },
-                "indices": [],
-                "foreignKeys": []
-            }
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "66d92ea8674df6747bf870faf2eb49f0",
+    "entities": [
+      {
+        "tableName": "tags",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `subType` TEXT NOT NULL, `isSpoiler` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subType",
+            "columnName": "subType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSpoiler",
+            "columnName": "isSpoiler",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
         ],
-        "views": [],
-        "setupQueries": [
-            "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-            "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66d92ea8674df6747bf870faf2eb49f0')"
-        ]
-    }
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '66d92ea8674df6747bf870faf2eb49f0')"
+    ]
+  }
 }

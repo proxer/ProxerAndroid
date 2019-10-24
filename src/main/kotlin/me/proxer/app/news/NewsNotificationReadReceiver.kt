@@ -11,7 +11,7 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * @author Ruben Gees

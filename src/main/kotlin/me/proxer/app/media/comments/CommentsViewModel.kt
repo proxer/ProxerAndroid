@@ -13,7 +13,7 @@ import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedComment
 import me.proxer.library.enums.CommentSortCriteria
-import org.threeten.bp.Instant
+import java.time.Instant
 import kotlin.properties.Delegates
 
 /**

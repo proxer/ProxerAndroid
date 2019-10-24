@@ -84,9 +84,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import org.threeten.bp.Instant
 import java.io.File
 import java.security.KeyStore
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager

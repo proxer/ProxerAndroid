@@ -16,7 +16,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedMessage
 import me.proxer.app.util.rx.RxRetryWithDelay
 import me.proxer.library.enums.ChatMessageAction
-import org.threeten.bp.Instant
+import java.time.Instant
 import java.util.Collections.emptyList
 import java.util.LinkedList
 import java.util.Queue
