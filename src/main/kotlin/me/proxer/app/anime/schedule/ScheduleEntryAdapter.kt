@@ -42,8 +42,8 @@ import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.Collections
 import java.util.Locale
 import java.util.WeakHashMap

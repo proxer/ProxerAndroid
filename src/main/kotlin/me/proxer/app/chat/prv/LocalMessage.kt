@@ -9,7 +9,7 @@ import me.proxer.app.util.extension.toDate
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import java.time.Instant
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees

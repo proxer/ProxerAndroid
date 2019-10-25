@@ -8,7 +8,7 @@ import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.library.enums.Category
-import java.time.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * @author Ruben Gees

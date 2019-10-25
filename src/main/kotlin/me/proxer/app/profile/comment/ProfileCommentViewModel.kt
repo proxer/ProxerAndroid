@@ -14,7 +14,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedUserComment
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentContentType
-import java.time.Instant
+import org.threeten.bp.Instant
 import kotlin.properties.Delegates
 
 /**

@@ -6,7 +6,7 @@ import me.proxer.library.entity.ProxerDateItem
 import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.entity.ProxerImageItem
 import me.proxer.library.enums.ChatMessageAction
-import java.time.Instant
+import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees

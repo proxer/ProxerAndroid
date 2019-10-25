@@ -16,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.util.Utils
-import java.time.LocalDateTime
+import org.threeten.bp.LocalDateTime
 import kotlin.properties.Delegates
 
 /**

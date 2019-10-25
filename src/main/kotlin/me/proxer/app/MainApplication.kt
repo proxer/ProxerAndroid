@@ -16,6 +16,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
 import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
@@ -133,6 +134,7 @@ class MainApplication : Application() {
     @SuppressLint("RestrictedApi")
     private fun initLibs() {
         WorkManager.initialize(this, Configuration.Builder().build())
+        AndroidThreeTen.init(this)
 
         if (BuildConfig.LOG) {
             Timber.plant(TimberFileTree(this))

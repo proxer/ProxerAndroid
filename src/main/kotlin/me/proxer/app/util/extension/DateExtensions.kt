@@ -4,13 +4,13 @@ package me.proxer.app.util.extension
 
 import android.content.Context
 import me.proxer.app.R
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.Period
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.Period
+import org.threeten.bp.ZoneId
+import org.threeten.bp.temporal.ChronoUnit
 import java.util.Date
 
 private val zeroDate = Date(0)

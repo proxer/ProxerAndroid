@@ -32,8 +32,8 @@ import me.proxer.app.util.wrapper.IntroductionWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Category
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.Instant
-import java.time.temporal.ChronoUnit
+import org.threeten.bp.Instant
+import org.threeten.bp.temporal.ChronoUnit
 
 /**
  * @author Ruben Gees
