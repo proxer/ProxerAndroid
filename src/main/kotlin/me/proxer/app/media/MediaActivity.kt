@@ -96,9 +96,7 @@ class MediaActivity : ImageTabsActivity() {
         set(value) {
             intent.putExtra(CATEGORY_EXTRA, value)
 
-            if (sectionsPagerAdapter.itemCount >= 3) {
-                sectionsPagerAdapter.notifyItemChanged(2)
-            }
+            sectionsPagerAdapter.notifyDataSetChanged()
         }
 
     override val headerImageUrl: HttpUrl by unsafeLazy { ProxerUrls.entryImage(id) }
@@ -194,6 +192,19 @@ class MediaActivity : ImageTabsActivity() {
                 4 -> DiscussionFragment.newInstance()
                 else -> error("Unknown index passed: $position")
             }
+        }
+
+        override fun getItemId(position: Int) = when (category) {
+            Category.ANIME, Category.MANGA -> position.toLong()
+            else -> if (position in 0..1) position.toLong() else position + 1L
+        }
+
+        override fun containsItem(itemId: Long) = when {
+            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> when (category) {
+                Category.ANIME, Category.MANGA -> itemId in 0..5
+                else -> itemId in 0L..1L || itemId in 3L..5L
+            }
+            else -> itemId == 0L
         }
     }
 
