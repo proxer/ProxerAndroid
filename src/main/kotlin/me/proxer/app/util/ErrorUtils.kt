@@ -323,7 +323,9 @@ object ErrorUtils : KoinComponent {
         }
 
         fun toClickListener(activity: BaseActivity) = when (buttonAction) {
-            CAPTCHA -> View.OnClickListener { activity.showPage(ProxerUrls.captchaWeb(Device.MOBILE)) }
+            CAPTCHA -> View.OnClickListener {
+                activity.showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
+            }
             NETWORK_SETTINGS -> View.OnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     activity.startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
@@ -343,7 +345,10 @@ object ErrorUtils : KoinComponent {
         }
 
         fun toIntent() = when (buttonAction) {
-            CAPTCHA -> Intent(Intent.ACTION_VIEW, ProxerUrls.captchaWeb(Device.MOBILE).androidUri())
+            CAPTCHA -> Intent(
+                Intent.ACTION_VIEW,
+                ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE).androidUri()
+            )
             else -> null
         }
 

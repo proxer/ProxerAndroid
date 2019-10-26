@@ -23,6 +23,7 @@ import me.proxer.app.R
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.Utils
 import me.proxer.app.util.compat.isConnected
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.library.enums.Device
@@ -150,7 +151,7 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
                     true -> {
                         isSolvingCaptcha = true
 
-                        showPage(ProxerUrls.captchaWeb(Device.MOBILE))
+                        showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
                     }
                     false -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
                 }

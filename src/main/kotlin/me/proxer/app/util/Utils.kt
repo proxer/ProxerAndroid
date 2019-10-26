@@ -10,6 +10,7 @@ import me.proxer.app.util.extension.androidUri
 import okhttp3.HttpUrl
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
+import java.net.NetworkInterface
 
 /**
  * @author Ruben Gees
@@ -28,6 +29,18 @@ object Utils {
             .get()
     } catch (error: Throwable) {
         Timber.e(error)
+
+        null
+    }
+
+    fun getIpAddress(): String? = try {
+        NetworkInterface.getNetworkInterfaces().asSequence()
+            .flatMap { it.inetAddresses.asSequence() }
+            .filterNot { it.isLoopbackAddress || it.isLinkLocalAddress }
+            .map { it.hostAddress }
+            .firstOrNull()
+    } catch (error: Throwable) {
+        Timber.e("Error trying to get ip address", error)
 
         null
     }
