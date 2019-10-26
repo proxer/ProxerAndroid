@@ -93,7 +93,7 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.loadTags()
 
-        viewModel.genreData.observe(fragment, Observer {
+        viewModel.genreData.observe(fragment.viewLifecycleOwner, Observer {
             if (it != null) {
                 val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
 
@@ -105,7 +105,7 @@ class MediaListSearchBottomSheet private constructor(
             }
         })
 
-        viewModel.tagData.observe(fragment, Observer {
+        viewModel.tagData.observe(fragment.viewLifecycleOwner, Observer {
             if (it != null) {
                 val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
 
