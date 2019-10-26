@@ -40,7 +40,7 @@ object Utils {
             .map { it.hostAddress }
             .firstOrNull()
     } catch (error: Throwable) {
-        Timber.e("Error trying to get ip address", error)
+        Timber.e(error, "Error trying to get ip address")
 
         null
     }
