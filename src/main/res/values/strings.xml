@@ -196,6 +196,8 @@
     <string name="medium_ova">Special</string>
     <string name="medium_manga_series">Mangaserie</string>
     <string name="medium_lightnovel">Light Novel</string>
+    <string name="medium_webnovel">Web Novel</string>
+    <string name="medium_visualnovel">Visual Novel</string>
     <string name="medium_doujin">Doujinshi</string>
     <string name="medium_h_manga">H-Manga</string>
     <string name="medium_oneshot">One-Shot</string>

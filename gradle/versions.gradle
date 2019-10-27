@@ -79,14 +79,14 @@ ext {
     gravitySnapHelperVersion = "2.2.0"
 
     // Utils
-    proxerLibVersion = "891bb378a4"
+    proxerLibVersion = "7eb207867e"
     threetenVersion = "1.2.1"
     hawkVersion = "7a1a625455"
     glideVersion = "4.10.0"
     retrofitVersion = "2.6.2"
     okHttpVersion = "4.2.2"
     okioVersion = "2.4.1"
-    moshiVersion = "870fee4332"
+    moshiVersion = "5912dfaaf6"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"
     kotterknifeVersion = "2.0"

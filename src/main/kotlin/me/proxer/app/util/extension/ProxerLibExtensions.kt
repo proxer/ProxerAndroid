@@ -90,6 +90,8 @@ fun Medium.toAppString(context: Context): String = context.getString(
         Medium.OVA -> R.string.medium_ova
         Medium.MANGASERIES -> R.string.medium_manga_series
         Medium.LIGHTNOVEL -> R.string.medium_lightnovel
+        Medium.WEBNOVEL -> R.string.medium_webnovel
+        Medium.VISUALNOVEL -> R.string.medium_visualnovel
         Medium.DOUJIN -> R.string.medium_doujin
         Medium.HMANGA -> R.string.medium_h_manga
         Medium.ONESHOT -> R.string.medium_oneshot
@@ -162,7 +164,7 @@ fun Country.toAppDrawable(context: Context) = AppCompatResources.getDrawable(
 fun Medium.toCategory() = when (this) {
     Medium.ANIMESERIES, Medium.MOVIE, Medium.OVA, Medium.HENTAI -> Category.ANIME
     Medium.MANGASERIES, Medium.ONESHOT, Medium.DOUJIN, Medium.HMANGA -> Category.MANGA
-    Medium.LIGHTNOVEL -> Category.NOVEL
+    Medium.LIGHTNOVEL, Medium.WEBNOVEL, Medium.VISUALNOVEL -> Category.NOVEL
     Medium.OTHER -> error("Invalid medium: OTHER")
 }
 
