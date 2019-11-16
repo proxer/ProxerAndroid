@@ -1,15 +1,11 @@
 package me.proxer.app.base
 
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.LayoutRes
-import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -24,7 +20,6 @@ import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.Utils
-import me.proxer.app.util.compat.isConnected
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
@@ -53,23 +48,6 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
     private var isSolvingCaptcha: Boolean
         get() = requireArguments().getBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, false)
         set(value) = requireArguments().putBoolean(IS_SOLVING_CAPTCHA_ARGUMENT, value)
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            if (context != null && connectivityManager.isConnected) {
-                bus.post(NetworkConnectedEvent())
-            }
-        }
-    }
-
-    private val connectivityManager
-        get() = requireNotNull(requireContext().getSystemService<ConnectivityManager>())
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), networkCallback)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,12 +95,6 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
 
             bus.post(CaptchaSolvedEvent())
         }
-    }
-
-    override fun onDestroy() {
-        connectivityManager.unregisterNetworkCallback(networkCallback)
-
-        super.onDestroy()
     }
 
     protected open fun showData(data: T) {

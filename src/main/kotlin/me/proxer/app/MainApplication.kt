@@ -4,9 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Environment
 import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.getSystemService
 import androidx.work.Configuration
 import androidx.work.Logger
 import androidx.work.WorkManager
@@ -20,6 +24,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
 import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
+import com.rubengees.rxbus.RxBus
 import com.vanniktech.emoji.EmojiManager
 import com.vanniktech.emoji.ios.IosEmojiProvider
 import io.reactivex.Completable
@@ -29,16 +34,20 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.auth.LoginHandler
+import me.proxer.app.base.NetworkConnectedEvent
 import me.proxer.app.util.GlideDrawerImageLoader
 import me.proxer.app.util.NotificationUtils
+import me.proxer.app.util.compat.isConnected
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.isPackageInstalled
 import me.proxer.app.util.extension.safeInject
+import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.logging.TimberFileTree
 import me.proxer.app.util.logging.WorkManagerTimberLogger
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -50,6 +59,7 @@ class MainApplication : Application() {
         const val GENERIC_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
 
+    private val bus by safeInject<RxBus>()
     private val loginHandler by safeInject<LoginHandler>()
     private val preferenceHelper by safeInject<PreferenceHelper>()
 
@@ -78,7 +88,25 @@ class MainApplication : Application() {
         initNightMode()
         initAnrWatchdog()
 
+        initConnectionManager()
+
         loginHandler.listen(this)
+    }
+
+    private fun initConnectionManager() {
+        val connectivityManager = requireNotNull(getSystemService<ConnectivityManager>())
+
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                if (connectivityManager.isConnected) {
+                    Completable.fromAction { bus.post(NetworkConnectedEvent()) }
+                        .delay(100, TimeUnit.MILLISECONDS)
+                        .subscribeAndLogErrors()
+                }
+            }
+        }
+
+        connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
     }
 
     private fun initGlobalErrorHandler() {
