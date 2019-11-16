@@ -37,3 +37,10 @@
 -keepclasseswithmembers class com.facebook.android.crypto.keychain.SecureRandomFix$LinuxPRNGSecureRandom {
     public <init>(...);
 }
+
+# TODO: Remove once it works without.
+# Workaround crash in Google Cast.
+-keep,allowoptimization class com.google.android.gms.internal.cast.** { *; }
+
+# Ignore warnings about specific classes not being available on Android JDK.
+-dontwarn java.util.concurrent.Flow$*
