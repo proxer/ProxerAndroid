@@ -5,17 +5,18 @@ CHANGELOG=$(git log --pretty=format:"- %s" "${COMMIT_RANGE:1:-1}" --reverse)
 
 if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
   FILE="$(find ./build/outputs/apk/logRelease/ -type f -name "*.apk")"
-  DOWNLOAD_URL=$(curl --silent --show-error --upload-file "${FILE}")
+  FILENAME="$(basename "$FILE")"
+  DOWNLOAD_URL=$(curl --silent --show-error --upload-file "$FILE" https://transfer.sh/"$FILENAME")
 
   curl --silent --show-error --request POST \
-    "${DISCORD_WEBHOOK_URL}" \
+    "$DISCORD_WEBHOOK_URL" \
     --header 'Content-Type: application/json' \
     --data '{
       "embeds": [
           {
-              "title": "'"$(basename "${FILE}")"'",
-              "url": "'"${DOWNLOAD_URL}"'",
-              "description": "'"${CHANGELOG}"'",
+              "title": "'"$(basename "$FILE")"'",
+              "url": "'"$DOWNLOAD_URL"'",
+              "description": "'"$CHANGELOG"'",
               "color": "9047566"
           }
       ]
