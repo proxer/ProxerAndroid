@@ -89,6 +89,12 @@ jobs:
           COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
           TELEGRAM_BOT_ID: ${{ secrets.TELEGRAM_BOT_ID }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Publish to Discord
+        if: success() && github.ref == 'refs/heads/master'
+        run: .github/workflows/publish-to-discord.sh
+        env:
+          COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       # TODO: Github actions do not seem to set the commit status automatically yet. Try without later.
       - name: Set Commit Status
