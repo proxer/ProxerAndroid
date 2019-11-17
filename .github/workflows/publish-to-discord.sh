@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CHANGELOG=$(git log --pretty=format:"- %s" "${COMMIT_RANGE}" --reverse)
+CHANGELOG=$(git log --pretty=format:"- %s" "${COMMIT_RANGE:1:-1}" --reverse)
 
 if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
   FILE="$(find ./build/outputs/apk/logRelease/ -type f -name "*.apk")"
   DOWNLOAD_URL=$(curl --silent --show-error --upload-file "${FILE}")
 
-  curl --request POST \
+  curl --silent --show-error --request POST \
     "${DISCORD_WEBHOOK_URL}" \
     --header 'Content-Type: application/json' \
     --data '{
