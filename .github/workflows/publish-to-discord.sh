@@ -13,12 +13,12 @@ if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
     --header 'Content-Type: application/json' \
     --data '{
       "embeds": [
-          {
-              "title": "'"$(basename "$FILE")"'",
-              "url": "'"$DOWNLOAD_URL"'",
-              "description": "'"$CHANGELOG"'",
-              "color": "9047566"
-          }
+        {
+          "title": "'"$FILENAME"'",
+          "url": "'"$DOWNLOAD_URL"'",
+          "description": "'"${CHANGELOG//$'\n'/\\n}"'",
+          "color": "9047566"
+        }
       ]
     }'
 

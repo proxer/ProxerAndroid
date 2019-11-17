@@ -17,21 +17,11 @@ jobs:
       - name: Set up Gradle Cache
         uses: actions/cache@v1
         with:
-          path: ~/.gradle
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/versions.gradle') }}
+          path: ~/.gradle/caches/modules-2
+          key: ${{ runner.OS }}-gradle-${{ hashFiles('**/versions.gradle') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ hashFiles('**/versions.gradle') }}
-            ${{ runner.OS }}-build-
-
-      - name: Set up Android SDK Cache
-        uses: actions/cache@v1
-        id: cache-android
-        with:
-          path: $ANDROID_HOME/ndk
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/versions.gradle') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ hashFiles('**/versions.gradle') }}
-            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-gradle-${{ hashFiles('**/versions.gradle') }}
+            ${{ runner.OS }}-gradle-
 
       - name: Install secrets
         run: .github/workflows/create-secrets.sh
@@ -42,7 +32,6 @@ jobs:
       - name: Set up SDK
         uses: malinskiy/action-android/install-sdk@release/0.0.2
       - name: Set up NDK
-        if: steps.cache-android.outputs.cache-hit != 'true'
         run: $ANDROID_HOME/tools/bin/sdkmanager "ndk;$(grep "ndkVersion" ./gradle/versions.gradle | sed 's/.*"\(.*\)"/\1/')" --channel=3
 
       - id: build
