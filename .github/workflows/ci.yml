@@ -106,9 +106,9 @@ jobs:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       # TODO: Github actions do not seem to set the commit status automatically yet. Try without later.
-#      - name: Set Commit Status
-#        uses: actions/github-script@0.2.0
-#        with:
-#          github-token: ${{github.token}}
-#          script: |
-#            github.repos.createStatus({owner: "proxer", repo: "ProxerAndroid", sha: context.sha, state: "success"})
+      - name: Set Commit Status
+        uses: actions/github-script@0.2.0
+        with:
+          github-token: ${{github.token}}
+          script: |
+            github.repos.createStatus({owner: "proxer", repo: "ProxerAndroid", sha: context.sha, state: "success"})
