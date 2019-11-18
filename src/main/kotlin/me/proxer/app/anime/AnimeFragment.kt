@@ -1,9 +1,11 @@
 package me.proxer.app.anime
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
@@ -31,6 +33,7 @@ import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.compat.isConnectedToWifi
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
@@ -49,6 +52,8 @@ import kotlin.properties.Delegates
 class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_anime) {
 
     companion object {
+        private var showNoWifiDialog = true
+
         fun newInstance() = AnimeFragment().apply {
             arguments = bundleOf()
         }
@@ -121,7 +126,15 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
 
         innerAdapter.playClickSubject
             .autoDisposable(this.scope())
-            .subscribe { viewModel.resolve(it) }
+            .subscribe {
+                val connectivityManager = requireNotNull(requireContext().getSystemService<ConnectivityManager>())
+
+                if (!connectivityManager.isConnectedToWifi && showNoWifiDialog) {
+                    NoWifiDialog.show(hostingActivity, this, it.id)
+                } else {
+                    viewModel.resolve(it)
+                }
+            }
 
         innerAdapter.loginClickSubject
             .autoDisposable(this.scope())
@@ -305,5 +318,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
         if (viewModel.data.value == null) {
             adapter.header = null
         }
+    }
+
+    fun onConfirmNoWifi(streamId: String, ignoreForThisSession: Boolean = false) {
+        showNoWifiDialog = !ignoreForThisSession
+
+        viewModel.data.value?.streams
+            ?.find { it.id == streamId }
+            ?.let { viewModel.resolve(it) }
     }
 }

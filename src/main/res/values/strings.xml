@@ -362,6 +362,12 @@
     </string>
     <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
 
+    <string name="dialog_no_wifi_content">
+        Du bist nicht mit dem WLAN verbunden. Möchtest du den Stream über mobile Daten abspielen?
+    </string>
+    <string name="dialog_no_wifi_remember">Bis zum Neustart merken</string>
+    <string name="dialog_no_wifi_positive">Abspielen</string>
+
     <string name="dialog_rating_title">Bewertung</string>
     <string name="dialog_rating_content">
         Gefällt dir die App? Hast du Probleme, Kritik oder Verbesserungsvorschläge?
