@@ -312,7 +312,7 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         val startTag = "[$tag${if (value.isNotEmpty()) "=$value" else ""}]"
         val endTag = "[/$tag]"
 
-        if (editor.selectionStart >= 0) {
+        if (editor.selectionStart >= 0 && editor.selectionEnd >= 0) {
             if (editor.selectionStart == editor.selectionEnd) {
                 editor.text.insert(editor.selectionStart, "$startTag$endTag")
             } else {
