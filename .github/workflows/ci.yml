@@ -91,13 +91,6 @@ jobs:
               return `${context.sha}~1...${context.sha}`
             }
 
-      - name: Publish to Telegram
-        if: success() && github.ref == 'refs/heads/master'
-        run: .github/workflows/publish-to-telegram.sh
-        env:
-          COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
-          TELEGRAM_BOT_ID: ${{ secrets.TELEGRAM_BOT_ID }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Publish to Discord
         if: success() && github.ref == 'refs/heads/master'
         run: .github/workflows/publish-to-discord.sh
