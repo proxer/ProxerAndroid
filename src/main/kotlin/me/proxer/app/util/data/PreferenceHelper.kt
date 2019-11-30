@@ -31,6 +31,7 @@ class PreferenceHelper(
 
         const val AGE_CONFIRMATION = "age_confirmation"
         const val AUTO_BOOKMARK = "auto_bookmark"
+        const val CHECK_CELLULAR = "check_cellular"
         const val START_PAGE = "start_page"
         const val THEME = "theme"
         const val NOTIFICATIONS_NEWS = "notifications_news"
@@ -98,6 +99,12 @@ class PreferenceHelper(
 
     val areBookmarksAutomatic
         get() = sharedPreferences.getBoolean(AUTO_BOOKMARK, false)
+
+    var shouldCheckCellular
+        get() = sharedPreferences.getBoolean(CHECK_CELLULAR, true)
+        set(value) {
+            sharedPreferences.edit { putBoolean(CHECK_CELLULAR, value) }
+        }
 
     val startPage
         get() = DrawerItem.fromIdOrDefault(

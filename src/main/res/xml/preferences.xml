@@ -2,9 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:persistent="false"
         android:enabled="false"
         android:key="profile"
+        android:persistent="false"
         android:summary="@string/preference_profile_summary"
         android:title="@string/section_profile_settings" />
 
@@ -22,6 +22,13 @@
             android:summaryOff="@string/preference_auto_bookmark_summary_off"
             android:summaryOn="@string/preference_auto_bookmark_summary_on"
             android:title="@string/preference_auto_bookmark_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="check_cellular"
+            android:summaryOff="@string/preference_check_wifi_summary_off"
+            android:summaryOn="@string/preference_check_wifi_summary_on"
+            android:title="@string/preference_check_wifi_title" />
 
         <SwitchPreference
             android:key="external_cache"
@@ -43,8 +50,8 @@
     <PreferenceCategory android:title="@string/preference_category_design_title">
 
         <Preference
-            android:persistent="false"
             android:key="theme"
+            android:persistent="false"
             android:title="Thema" />
     </PreferenceCategory>
 

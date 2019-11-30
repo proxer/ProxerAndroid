@@ -39,7 +39,11 @@ class NoWifiDialog : BaseDialog() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
         .customView(R.layout.dialog_no_wifi, scrollable = true)
         .positiveButton(R.string.dialog_no_wifi_positive) {
-            (requireTargetFragment() as AnimeFragment).onConfirmNoWifi(streamId, remember.isChecked)
+            if (remember.isChecked) {
+                preferenceHelper.shouldCheckCellular = false
+            }
+
+            (requireTargetFragment() as AnimeFragment).onConfirmNoWifi(streamId)
         }
         .negativeButton(R.string.cancel)
 }

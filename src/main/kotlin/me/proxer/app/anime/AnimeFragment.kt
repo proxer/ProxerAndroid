@@ -33,7 +33,7 @@ import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
-import me.proxer.app.util.compat.isConnectedToWifi
+import me.proxer.app.util.compat.isConnectedToCellular
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.multilineSnackbar
@@ -52,8 +52,6 @@ import kotlin.properties.Delegates
 class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_anime) {
 
     companion object {
-        private var showNoWifiDialog = true
-
         fun newInstance() = AnimeFragment().apply {
             arguments = bundleOf()
         }
@@ -129,7 +127,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
             .subscribe {
                 val connectivityManager = requireNotNull(requireContext().getSystemService<ConnectivityManager>())
 
-                if (!connectivityManager.isConnectedToWifi && showNoWifiDialog) {
+                if (connectivityManager.isConnectedToCellular && preferenceHelper.shouldCheckCellular) {
                     NoWifiDialog.show(hostingActivity, this, it.id)
                 } else {
                     viewModel.resolve(it)
@@ -320,9 +318,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
         }
     }
 
-    fun onConfirmNoWifi(streamId: String, ignoreForThisSession: Boolean = false) {
-        showNoWifiDialog = !ignoreForThisSession
-
+    fun onConfirmNoWifi(streamId: String) {
         viewModel.data.value?.streams
             ?.find { it.id == streamId }
             ?.let { viewModel.resolve(it) }

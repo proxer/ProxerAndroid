@@ -363,9 +363,9 @@
     <string name="dialog_notification_deletion_confirmation_positive">Löschen</string>
 
     <string name="dialog_no_wifi_content">
-        Du bist nicht mit dem WLAN verbunden. Möchtest du den Stream über mobile Daten abspielen?
+        Du bist aktuell über mobile Daten verbunden. Möchtest du den Stream trotzdem abspielen?
     </string>
-    <string name="dialog_no_wifi_remember">Bis zum Neustart merken</string>
+    <string name="dialog_no_wifi_remember">Nicht nochmal fragen</string>
     <string name="dialog_no_wifi_positive">Abspielen</string>
 
     <string name="dialog_rating_title">Bewertung</string>
@@ -761,6 +761,13 @@
     </string>
     <string name="preference_auto_bookmark_summary_off">
         Lesezeichen werden beim Wechseln des Kapitels oder der Episode nicht automatisch gesetzt
+    </string>
+    <string name="preference_check_wifi_title">Warnung bei mobilen Daten</string>
+    <string name="preference_check_wifi_summary_on">
+        Es wird eine Warnung bei der Nutzung von mobilen Daten für Streams angezeigt
+    </string>
+    <string name="preference_check_wifi_summary_off">
+        Es wird keine Warnung bei der Nutzung von mobilen Daten für Streams angezeigt
     </string>
     <string name="preference_external_cache_title">Bilder extern speichern</string>
     <string name="preference_external_cache_summary_off">

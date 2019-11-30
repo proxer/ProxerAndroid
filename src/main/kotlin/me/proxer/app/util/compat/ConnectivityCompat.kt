@@ -13,9 +13,9 @@ val ConnectivityManager.isConnected
         else -> activeNetworkInfo?.isConnectedOrConnecting ?: false
     }
 
-val ConnectivityManager.isConnectedToWifi
+val ConnectivityManager.isConnectedToCellular
     get() = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> getNetworkCapabilities(activeNetwork)
-            ?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
-        else -> getNetworkInfo(ConnectivityManager.TYPE_WIFI)?.isConnectedOrConnecting ?: false
+            ?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+        else -> getNetworkInfo(ConnectivityManager.TYPE_MOBILE)?.isConnectedOrConnecting ?: false
     }
