@@ -43,8 +43,10 @@ class TouchablePlayerView @JvmOverloads constructor(
     private val audioManager = requireNotNull(context.getSystemService<AudioManager>())
     private val notificationManager = requireNotNull(context.getSystemService<NotificationManager>())
 
+    private val safePlayer get() = requireNotNull(player)
+
     private val audioStreamType
-        get() = Util.getStreamTypeForAudioUsage(player.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)
+        get() = Util.getStreamTypeForAudioUsage(safePlayer.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)
 
     private val canChangeAudio
         get() = audioManager.isVolumeFixed.not() ||
@@ -113,7 +115,7 @@ class TouchablePlayerView @JvmOverloads constructor(
 
     private val audioNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            player.playWhenReady = false
+            safePlayer.playWhenReady = false
         }
     }
 
@@ -155,8 +157,8 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     fun rewind(triggerSubject: Boolean = false) {
-        if (player.isCurrentWindowSeekable) {
-            player.seekTo(max(player.currentPosition - 10_000, 0))
+        if (safePlayer.isCurrentWindowSeekable) {
+            safePlayer.seekTo(max(safePlayer.currentPosition - 10_000, 0))
 
             if (triggerSubject) {
                 rewindSubject.onNext(Unit)
@@ -165,16 +167,16 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     fun fastForward(triggerSubject: Boolean = false) {
-        if (player.isCurrentWindowSeekable) {
-            val durationMs = player.duration
+        if (safePlayer.isCurrentWindowSeekable) {
+            val durationMs = safePlayer.duration
 
             val seekPositionMs = if (durationMs != C.TIME_UNSET) {
-                min(player.currentPosition + 10_000, durationMs)
+                min(safePlayer.currentPosition + 10_000, durationMs)
             } else {
-                player.currentPosition + 10_000
+                safePlayer.currentPosition + 10_000
             }
 
-            player.seekTo(seekPositionMs)
+            safePlayer.seekTo(seekPositionMs)
 
             if (triggerSubject) {
                 fastForwardSubject.onNext(Unit)

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.net.Uri
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlaybackException
-import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.audio.AudioAttributes
@@ -13,6 +12,7 @@ import com.google.android.exoplayer2.ext.cast.SessionAvailabilityListener
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.ads.AdsMediaSource
 import com.google.android.exoplayer2.source.dash.DashMediaSource
@@ -20,8 +20,6 @@ import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.util.MimeTypes
@@ -306,10 +304,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     private fun buildLocalPlayer(context: StreamActivity): SimpleExoPlayer {
-        val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
-        val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory)
-
-        return ExoPlayerFactory.newSimpleInstance(context, trackSelector).apply {
+        return SimpleExoPlayer.Builder(context).build().apply {
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(C.CONTENT_TYPE_MOVIE)
                 .setUsage(C.USAGE_MEDIA)
@@ -332,7 +327,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     private class ImaMediaSourceFactory(
         private val okHttpDataSourceFactory: OkHttpDataSourceFactory,
         private val mediaSourceFunction: (DataSource.Factory, Uri) -> MediaSource
-    ) : AdsMediaSource.MediaSourceFactory {
+    ) : MediaSourceFactory {
 
         override fun getSupportedTypes() = intArrayOf(C.TYPE_DASH, C.TYPE_HLS, C.TYPE_OTHER)
         override fun createMediaSource(uri: Uri) = mediaSourceFunction(okHttpDataSourceFactory, uri)
