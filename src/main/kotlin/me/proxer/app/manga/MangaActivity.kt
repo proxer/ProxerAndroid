@@ -13,9 +13,12 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
+import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commitNow
+import com.google.android.material.appbar.AppBarLayout
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -134,18 +137,27 @@ class MangaActivity : BaseActivity() {
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
             .subscribe { visibility ->
+                // If true, no flags for hiding system UI are set. Disable fullscreen and schedule
+                // next fullscreen.
                 if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                    window.decorView.systemUiVisibility = defaultUiFlags()
-
+                    toggleFullscreen(false)
                     toggleFullscreen(true, 2_000)
                 }
             }
+
+        toggleFullscreen(false)
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, MangaFragment.newInstance())
             }
         }
+    }
+
+    override fun onDestroy() {
+        fullscreenHandler.removeCallbacksAndMessages(null)
+
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -184,8 +196,11 @@ class MangaActivity : BaseActivity() {
             obj = fullscreen
         }
 
-        if (!fullscreenHandler.hasMessages(0, fullscreen)) {
-            fullscreenHandler.removeMessages(0)
+        fullscreenHandler.removeMessages(0)
+
+        if (delay <= 0L) {
+            fullscreenHandler.handleMessage(fullscreenMessage)
+        } else {
             fullscreenHandler.sendMessageDelayed(fullscreenMessage, delay)
         }
     }
@@ -206,32 +221,29 @@ class MangaActivity : BaseActivity() {
         supportActionBar?.subtitle = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
     }
 
-    private fun defaultUiFlags(): Int {
-        return window.decorView.systemUiVisibility and
-            SYSTEM_UI_FLAG_LOW_PROFILE.inv() and
-            SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION.inv() and
-            SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN.inv() and
-            SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv() and
-            SYSTEM_UI_FLAG_FULLSCREEN.inv()
-    }
-
-    private fun fullscreenUiFlags(): Int = SYSTEM_UI_FLAG_LOW_PROFILE or
-        SYSTEM_UI_FLAG_LAYOUT_STABLE or
-        SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-        SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-        SYSTEM_UI_FLAG_FULLSCREEN or
-        SYSTEM_UI_FLAG_IMMERSIVE
-
     private class FullscreenHandler(private val activity: WeakReference<MangaActivity>) : Handler() {
         override fun handleMessage(message: Message) {
-            val fullscreen = message.data.getBoolean("fullscreen", true)
-
             this.activity.get()?.apply {
-                if (fullscreen) {
-                    window.decorView.systemUiVisibility = fullscreenUiFlags()
+                if (message.obj as Boolean) {
+                    window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LOW_PROFILE or
+                        SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                        SYSTEM_UI_FLAG_FULLSCREEN or
+                        SYSTEM_UI_FLAG_IMMERSIVE
+
+                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    }
                 } else {
-                    window.decorView.systemUiVisibility = defaultUiFlags()
+                    window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE or
+                        SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        SYSTEM_UI_FLAG_IMMERSIVE
+
+                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
+                    }
                 }
             }
         }
