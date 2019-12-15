@@ -38,10 +38,10 @@ ext {
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
     interactiveMediaVersion = "3.11.3"
-    castVersion = "17.1.0"
+    castVersion = "18.0.0"
 
     // RxJava
-    rxJavaVersion = "2.2.15"
+    rxJavaVersion = "2.2.16"
     rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.1.0"
