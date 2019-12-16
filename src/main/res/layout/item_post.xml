@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/item_margin"
+    android:transitionGroup="true"
     tools:context=".forum.PostAdapter">
 
     <com.google.android.material.card.MaterialCardView
