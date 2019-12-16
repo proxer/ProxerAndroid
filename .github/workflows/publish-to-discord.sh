@@ -6,7 +6,7 @@ CHANGELOG=$(git log --pretty=format:"- %s" "${COMMIT_RANGE:1:-1}" --reverse)
 if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
   FILE="$(find ./build/outputs/apk/logRelease/ -type f -name "*.apk")"
   FILENAME="$(basename "$FILE")"
-  DOWNLOAD_URL=$(curl --silent --show-error --upload-file "$FILE" https://transfer.sh/"$FILENAME")
+  DOWNLOAD_URL=$(curl --silent --show-error "$UPLOAD_URL" --form "apk=@$FILE")
 
   curl --silent --show-error --request POST \
     "$DISCORD_WEBHOOK_URL" \
