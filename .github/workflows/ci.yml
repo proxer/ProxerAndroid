@@ -96,6 +96,7 @@ jobs:
         run: .github/workflows/publish-to-discord.sh
         env:
           COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
+          UPLOAD_URL: ${{ secrets.UPLOAD_URL }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       # TODO: Github actions do not seem to set the commit status automatically yet. Try without later.
