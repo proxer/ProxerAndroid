@@ -21,9 +21,9 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/screen_horizontal_margin"
+                android:layout_marginStart="@dimen/screen_horizontal_margin"
                 android:layout_marginTop="@dimen/screen_vertical_margin"
-                android:layout_marginRight="@dimen/screen_horizontal_margin">
+                android:layout_marginEnd="@dimen/screen_horizontal_margin">
 
                 <TextView
                     android:id="@+id/overallStatus"
@@ -42,9 +42,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
+                android:paddingStart="@dimen/screen_horizontal_margin_with_items"
                 android:paddingTop="@dimen/screen_vertical_margin_with_items"
-                android:paddingRight="@dimen/screen_horizontal_margin_with_items"
+                android:paddingEnd="@dimen/screen_horizontal_margin_with_items"
                 android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:scrollbars="none"
                 tools:listitem="@layout/item_server_status" />

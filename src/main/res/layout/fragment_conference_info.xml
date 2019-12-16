@@ -22,9 +22,9 @@
                 android:layout_height="match_parent"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingStart="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
-                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingEnd="@dimen/screen_horizontal_margin"
                 android:paddingBottom="@dimen/screen_vertical_margin">
 
                 <com.google.android.material.card.MaterialCardView
@@ -50,8 +50,8 @@
                             android:id="@+id/time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
                             android:paddingBottom="8dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             tools:text="Started at 01.01.2016" />

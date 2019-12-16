@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="4dp"
-            android:paddingLeft="4dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -46,7 +45,6 @@
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
             android:background="?attr/colorDivider" />
 
         <LinearLayout

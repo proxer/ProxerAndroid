@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="@dimen/item_margin"
-        android:layout_marginLeft="@dimen/item_margin"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:clickable="true"
         android:focusable="true">
 
@@ -40,7 +38,6 @@
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
                     tools:ignore="ContentDescription"
                     tools:src="@drawable/ic_japan" />
 
@@ -49,8 +46,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textSize="20sp"
@@ -61,8 +58,8 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:importantForAutofill="noExcludeDescendants"
                 app:spoilerTextColor="?android:attr/textColorPrimary"

@@ -26,9 +26,9 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingStart="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
-                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingEnd="@dimen/screen_horizontal_margin"
                 android:paddingBottom="@dimen/screen_vertical_margin"
                 android:visibility="gone"
                 tools:visibility="visible">
@@ -59,9 +59,9 @@
                                 android:id="@+id/ratingContainer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8dp"
+                                android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
-                                android:layout_marginRight="8dp">
+                                android:layout_marginEnd="8dp">
 
                                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                                     android:id="@+id/rating"
@@ -79,10 +79,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="2dp"
-                                android:layout_marginLeft="2dp"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:gravity="center_vertical"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -144,10 +142,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="8dp"
-                                android:layout_marginLeft="8dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
@@ -160,10 +156,8 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginEnd="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
@@ -226,9 +220,9 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginRight="8dp"
+                            android:layout_marginEnd="8dp"
                             android:background="?attr/colorDivider" />
 
                         <LinearLayout

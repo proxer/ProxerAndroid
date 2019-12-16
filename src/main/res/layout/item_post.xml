@@ -31,7 +31,6 @@
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     tools:ignore="ContentDescription"
@@ -60,9 +59,9 @@
                 android:id="@+id/signatureDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/colorDivider" />
 
             <me.proxer.app.ui.view.bbcode.BBCodeView
@@ -76,9 +75,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/colorDivider" />
 
             <LinearLayout
@@ -103,7 +102,6 @@
                     android:layout_height="32dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="4dp"
-                    android:layout_marginLeft="4dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="4dp"
                     tools:ignore="ContentDescription"
@@ -116,7 +114,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
                     android:layout_marginBottom="4dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     tools:text="12" />

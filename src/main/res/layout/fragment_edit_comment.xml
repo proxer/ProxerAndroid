@@ -37,9 +37,9 @@
                         android:id="@+id/rulesContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="@dimen/screen_vertical_margin"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="@dimen/screen_vertical_margin"
                         android:clickable="true"
                         android:focusable="true"
@@ -99,8 +99,8 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="@dimen/screen_vertical_margin"
                         android:padding="8dp">
 
@@ -128,8 +128,8 @@
                                 android:layout_marginEnd="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:numStars="5"
-                                android:paddingLeft="-3dp"
-                                android:paddingRight="-3dp"
+                                android:paddingStart="-3dp"
+                                android:paddingEnd="-3dp"
                                 android:stepSize="0.5"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/ratingClear"
@@ -167,8 +167,8 @@
                         android:importantForAutofill="no"
                         android:inputType="textMultiLine"
                         android:isScrollContainer="false"
-                        android:paddingLeft="@dimen/screen_horizontal_margin"
-                        android:paddingRight="@dimen/screen_horizontal_margin"
+                        android:paddingStart="@dimen/screen_horizontal_margin"
+                        android:paddingEnd="@dimen/screen_horizontal_margin"
                         android:paddingBottom="@dimen/screen_vertical_margin"
                         tools:targetApi="o" />
                 </LinearLayout>
@@ -179,9 +179,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:paddingLeft="@dimen/screen_horizontal_margin"
+                android:paddingStart="@dimen/screen_horizontal_margin"
                 android:paddingTop="@dimen/screen_vertical_margin"
-                android:paddingRight="@dimen/screen_horizontal_margin"
+                android:paddingEnd="@dimen/screen_horizontal_margin"
                 android:paddingBottom="@dimen/screen_vertical_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="5 / 200" />

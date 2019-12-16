@@ -25,8 +25,8 @@
                 android:layout_height="match_parent"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/screen_horizontal_margin_with_items"
-                android:paddingRight="@dimen/screen_horizontal_margin_with_items"
+                android:paddingStart="@dimen/screen_horizontal_margin_with_items"
+                android:paddingEnd="@dimen/screen_horizontal_margin_with_items"
                 android:paddingBottom="@dimen/screen_vertical_margin_with_items"
                 android:visibility="gone"
                 tools:visibility="visible">
@@ -41,8 +41,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/fragment_topten_anime"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -64,8 +64,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="6dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/fragment_topten_manga"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"

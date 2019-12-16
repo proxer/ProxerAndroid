@@ -30,8 +30,8 @@
                 android:id="@+id/topic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="This is the topic" />

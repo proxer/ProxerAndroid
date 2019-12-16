@@ -53,8 +53,8 @@
                 android:layout_alignBottom="@+id/image"
                 android:background="@color/half_transparent"
                 android:gravity="center"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@android:color/white"
@@ -67,9 +67,9 @@
                 android:layout_below="@+id/image"
                 android:layout_alignEnd="@+id/image"
                 android:layout_alignRight="@+id/image"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:gravity="center_vertical|start">
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
@@ -88,9 +88,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ratingContainer"
                 android:minLines="2"
-                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
                 android:paddingTop="8dp"
-                android:paddingRight="8dp"
+                android:paddingEnd="8dp"
                 tools:text="Airing: 12:55\nAvailable: 13:55" />
 
             <View
@@ -108,8 +108,8 @@
                 android:layout_below="@id/divider"
                 android:gravity="center_vertical"
                 android:minLines="2"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:paddingBottom="8dp"
                 tools:text="Aired in 00:01:01:55" />
         </RelativeLayout>

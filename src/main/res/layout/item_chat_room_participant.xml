@@ -13,7 +13,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
@@ -24,10 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/image"
-        android:layout_toRightOf="@+id/image"
         android:orientation="vertical">
 
         <TextView
@@ -36,8 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:gravity="top"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Ruby" />
 
@@ -48,8 +45,8 @@
             android:layout_marginBottom="4dp"
             android:gravity="bottom"
             android:maxLines="3"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             tools:text="This is a status" />
     </LinearLayout>

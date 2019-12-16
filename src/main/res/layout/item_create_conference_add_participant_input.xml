@@ -12,10 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/cancel"
-        android:layout_toLeftOf="@+id/cancel"
         android:hint="@string/fragment_create_conference_add_participant_hint">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -35,7 +33,6 @@
         android:layout_height="48dp"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/accept"
-        android:layout_toLeftOf="@+id/accept"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/fragment_create_conference_cancel_content_description" />
 
@@ -44,7 +41,6 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/fragment_create_conference_accept_description"
