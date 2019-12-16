@@ -135,13 +135,22 @@ class MangaActivity : BaseActivity() {
         updateTitle()
 
         window.decorView.systemUiVisibilityChanges()
+            .skip(1)
             .autoDisposable(this.scope())
             .subscribe { visibility ->
                 // If true, no flags for hiding system UI are set. Disable fullscreen and schedule
                 // next fullscreen.
                 if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
+                    }
+
                     toggleFullscreen(false)
                     toggleFullscreen(true, 2_000)
+                } else {
+                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+                    }
                 }
             }
 
@@ -232,18 +241,10 @@ class MangaActivity : BaseActivity() {
                         SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                         SYSTEM_UI_FLAG_FULLSCREEN or
                         SYSTEM_UI_FLAG_IMMERSIVE
-
-                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    }
                 } else {
                     window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE or
                         SYSTEM_UI_FLAG_LAYOUT_STABLE or
                         SYSTEM_UI_FLAG_IMMERSIVE
-
-                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
-                    }
                 }
             }
         }
