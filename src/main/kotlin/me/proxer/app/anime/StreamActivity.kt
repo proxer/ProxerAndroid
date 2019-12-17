@@ -30,7 +30,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -42,7 +41,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
-import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -97,7 +95,6 @@ import me.zhanghai.android.materialprogressbar.ThinCircularProgressDrawable
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -173,10 +170,6 @@ class StreamActivity : BaseActivity() {
     private val hideControlHandler = Handler()
     private val animationHandler = Handler()
 
-    private val wakeLock by lazy {
-        StreamWakeLock(requireNotNull(getSystemService()), requireNotNull(getSystemService()), "$packageName:Player")
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -209,6 +202,7 @@ class StreamActivity : BaseActivity() {
             .subscribe {
                 when (it) {
                     PlayerState.PLAYING -> {
+                        playerView.keepScreenOn = true
                         play.contentDescription = getString(R.string.exoplayer_pause_description)
                         play.setImageState(intArrayOf(R.attr.state_pause), true)
 
@@ -216,6 +210,7 @@ class StreamActivity : BaseActivity() {
                         play.isVisible = true
                     }
                     PlayerState.PAUSING -> {
+                        playerView.keepScreenOn = false
                         play.contentDescription = getString(R.string.exoplayer_play_description)
                         play.setImageState(intArrayOf(-R.attr.state_pause), true)
 
@@ -223,31 +218,11 @@ class StreamActivity : BaseActivity() {
                         play.isVisible = true
                     }
                     PlayerState.LOADING -> {
+                        playerView.keepScreenOn = true
                         loading.isVisible = true
                         play.isVisible = false
                     }
                     null -> error("playerState is null")
-                }
-
-                when (it) {
-                    PlayerState.PLAYING, PlayerState.LOADING -> {
-                        playerView.keepScreenOn = true
-
-                        val duration = playerManager.currentPlayer.duration.let { duration ->
-                            if (duration == C.TIME_UNSET) {
-                                TimeUnit.SECONDS.toMillis(30)
-                            } else {
-                                duration - playerManager.currentPlayer.currentPosition + TimeUnit.MINUTES.toMillis(2)
-                            }
-                        }
-
-                        wakeLock.acquire(duration)
-                    }
-                    PlayerState.PAUSING -> {
-                        playerView.keepScreenOn = false
-
-                        wakeLock.release()
-                    }
                 }
 
                 if ((controlsContainer.parent as? View)?.isVisible?.not() != false) {
@@ -385,8 +360,6 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        wakeLock.release()
-
         introductoryOverlay?.remove()
         introductoryOverlay = null
 

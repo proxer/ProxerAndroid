@@ -2,10 +2,7 @@ package me.proxer.app.anime
 
 import android.app.Activity
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.database.ContentObserver
 import android.media.AudioManager
 import android.os.Build.VERSION
@@ -113,23 +110,15 @@ class TouchablePlayerView @JvmOverloads constructor(
         }
     }
 
-    private val audioNoisyReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            safePlayer.playWhenReady = false
-        }
-    }
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
         localVolume = audioManager.getStreamVolume(audioStreamType).toFloat()
 
         context.contentResolver.registerContentObserver(System.CONTENT_URI, true, settingsChangeObserver)
-        context.registerReceiver(audioNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
     }
 
     override fun onDetachedFromWindow() {
-        context.unregisterReceiver(audioNoisyReceiver)
         context.contentResolver.unregisterContentObserver(settingsChangeObserver)
 
         super.onDetachedFromWindow()
