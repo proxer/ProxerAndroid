@@ -50,14 +50,11 @@ object DeviceUtils {
             result++
         }
 
-        if (isLandscape(activity.resources)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                if (!activity.isInMultiWindowMode) {
-                    result++
-                }
-            } else {
-                result++
-            }
+        if (
+            isLandscape(activity.resources) &&
+            (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || !activity.isInMultiWindowMode)
+        ) {
+            result++
         }
 
         return result

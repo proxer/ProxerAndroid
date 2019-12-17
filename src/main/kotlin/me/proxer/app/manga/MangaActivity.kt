@@ -1,6 +1,8 @@
 package me.proxer.app.manga
 
 import android.app.Activity
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -19,6 +21,9 @@ import androidx.core.app.ShareCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commitNow
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
+import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.systemUiVisibilityChanges
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
@@ -137,22 +142,7 @@ class MangaActivity : BaseActivity() {
         window.decorView.systemUiVisibilityChanges()
             .skip(1)
             .autoDisposable(this.scope())
-            .subscribe { visibility ->
-                // If true, no flags for hiding system UI are set. Disable fullscreen and schedule
-                // next fullscreen.
-                if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL
-                    }
-
-                    toggleFullscreen(false)
-                    toggleFullscreen(true, 2_000)
-                } else {
-                    toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
-                    }
-                }
-            }
+            .subscribe { handleUIChange() }
 
         toggleFullscreen(false)
 
@@ -199,6 +189,12 @@ class MangaActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+
+        handleUIChange()
+    }
+
     fun toggleFullscreen(fullscreen: Boolean, delay: Long = 0) {
         val fullscreenMessage = Message().apply {
             what = 0
@@ -230,10 +226,39 @@ class MangaActivity : BaseActivity() {
         supportActionBar?.subtitle = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
     }
 
+    private fun handleUIChange() {
+        val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
+        val isInFullscreenMode = window.decorView.systemUiVisibility and SYSTEM_UI_FLAG_FULLSCREEN != 0
+
+        toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+            scrollFlags = when {
+                isInMultiWindowMode -> SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+                isInFullscreenMode -> SCROLL_FLAG_SCROLL
+                else -> SCROLL_FLAG_NO_SCROLL
+            }
+        }
+
+        if (isInFullscreenMode) {
+            if (isInMultiWindowMode) {
+                toggleFullscreen(false)
+            } else {
+                toggleFullscreen(true)
+            }
+        } else {
+            toggleFullscreen(false)
+
+            if (!isInMultiWindowMode) {
+                toggleFullscreen(true, 2_000)
+            }
+        }
+    }
+
     private class FullscreenHandler(private val activity: WeakReference<MangaActivity>) : Handler() {
         override fun handleMessage(message: Message) {
             this.activity.get()?.apply {
-                if (message.obj as Boolean) {
+                val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
+
+                if (message.obj as Boolean && !isInMultiWindowMode) {
                     window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LOW_PROFILE or
                         SYSTEM_UI_FLAG_LAYOUT_STABLE or
                         SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
