@@ -54,7 +54,7 @@ ext {
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.0.0"
-    materialComponentsVersion = "1.2.0-alpha02"
+    materialComponentsVersion = "1.2.0-alpha03"
     preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.2"
