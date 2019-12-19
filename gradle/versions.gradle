@@ -13,10 +13,10 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.0.1"
+    gradleVersion = "6.1-rc-1"
 
     // Core plugins
-    androidPluginVersion = "3.6.0-beta05"
+    androidPluginVersion = "3.6.0-rc01"
     kotlinVersion = "1.3.61"
 
     // Utility plugins
@@ -28,12 +28,12 @@ ext {
     // Frameworks and compatibility libraries
     koinVersion = "2.1.0-alpha-8"
     appcompatVersion = "1.2.0-alpha01"
-    browserVersion = "1.2.0-rc01"
+    browserVersion = "1.2.0"
     lifecycleVersion = "2.2.0-rc03"
-    roomVersion = "2.2.2"
-    workVersion = "2.3.0-beta01"
+    roomVersion = "2.2.3"
+    workVersion = "2.3.0-beta02"
     coreKtxVersion = "1.2.0-rc01"
-    fragmentKtxVersion = "1.2.0-rc03"
+    fragmentKtxVersion = "1.2.0-rc04"
     shareTargetVersion = "1.0.0-rc01"
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
@@ -50,7 +50,7 @@ ext {
     autoDisposeVersion = "1.2.0"
 
     // UI components
-    recyclerviewVersion = "1.1.0"
+    recyclerviewVersion = "1.2.0-alpha01"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.0.0"
@@ -59,7 +59,7 @@ ext {
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.2"
     communityMaterialTypefaceVersion = "3.5.95.1-kotlin"
-    materialDrawerVersion = "7.0.0-rc08"
+    materialDrawerVersion = "7.0.0-rc09"
     aboutLibrariesVersion = "7.0.4"
     materializeVersion = "1.2.1"
     crossfaderVersion = "1.6.0"
