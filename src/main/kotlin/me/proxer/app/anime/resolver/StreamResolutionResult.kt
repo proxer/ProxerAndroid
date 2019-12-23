@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import me.proxer.app.anime.StreamActivity
+import me.proxer.app.anime.stream.StreamActivity
 import me.proxer.app.base.CustomTabsAware
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.androidUri

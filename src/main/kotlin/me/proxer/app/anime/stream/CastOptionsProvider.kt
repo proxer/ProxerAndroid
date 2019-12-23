@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.stream
 
 import android.content.Context
 import com.google.android.gms.cast.CastMediaControlIntent

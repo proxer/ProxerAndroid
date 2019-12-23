@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@android:color/black"
-    tools:context=".anime.StreamActivity"
+    tools:context=".anime.stream.StreamActivity"
     tools:ignore="Overdraw">
 
-    <me.proxer.app.anime.TouchablePlayerView
+    <me.proxer.app.anime.stream.TouchablePlayerView
         android:id="@+id/player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

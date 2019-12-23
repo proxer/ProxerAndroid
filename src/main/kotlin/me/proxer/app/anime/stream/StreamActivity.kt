@@ -1,4 +1,4 @@
-package me.proxer.app.anime
+package me.proxer.app.anime.stream
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
@@ -71,7 +71,6 @@ import me.proxer.app.GlideApp
 import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
-import me.proxer.app.anime.StreamPlayerManager.PlayerState
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.COVER_EXTRA
@@ -79,6 +78,7 @@ import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISO
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTERNAL_PLAYER_ONLY_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
+import me.proxer.app.anime.stream.StreamPlayerManager.PlayerState
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.util.extension.loadRequests
 import me.proxer.app.util.extension.logErrors
@@ -116,7 +116,7 @@ class StreamActivity : BaseActivity() {
     internal val uri: Uri
         get() = requireNotNull(intent.data)
 
-    internal val isProxerStream: Boolean
+    private val isProxerStream: Boolean
         get() = intent.dataString
             ?.toPrefixedUrlOrNull()
             ?.hasProxerStreamFileHost
