@@ -725,7 +725,6 @@
         <item quantity="other">%d News</item>
     </plurals>
 
-    <string name="notification_chat_error_title">Fehler beim Abrufen der Nachrichten</string>
     <string name="notification_chat_read_action">Gelesen</string>
     <plurals name="notification_chat_conference_amount">
         <item quantity="one">in einem Chat</item>
@@ -738,7 +737,6 @@
 
     <string name="notification_account_title">Account Benachrichtigung</string>
     <string name="notification_account_read_action">Gelesen</string>
-    <string name="notification_account_error_title">Fehler beim Abrufen der Benachrichtigungen</string>
     <plurals name="notification_account_amount">
         <item quantity="one">Eine Benachrichtigung</item>
         <item quantity="other">%d Benachrichtigungen</item>

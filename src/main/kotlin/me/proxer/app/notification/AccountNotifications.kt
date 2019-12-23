@@ -9,8 +9,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.text.parseAsHtml
 import me.proxer.app.R
-import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.NotificationUtils
 import me.proxer.app.util.NotificationUtils.PROFILE_CHANNEL
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.ProxerNotification
@@ -34,21 +32,6 @@ object AccountNotifications : KoinComponent {
             null -> NotificationManagerCompat.from(context).cancel(ID)
             else -> NotificationManagerCompat.from(context).notify(ID, notification)
         }
-    }
-
-    fun showError(context: Context, error: Throwable) {
-        val errorAction = ErrorUtils.handle(error)
-
-        val intent = errorAction.toIntent()?.let {
-            PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-
-        NotificationUtils.showErrorNotification(
-            context, ID, PROFILE_CHANNEL,
-            context.getString(R.string.notification_account_error_title),
-            context.getString(errorAction.message),
-            intent
-        )
     }
 
     fun cancel(context: Context) = NotificationManagerCompat.from(context).cancel(ID)

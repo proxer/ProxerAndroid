@@ -19,7 +19,6 @@ import me.proxer.app.exception.ChatException
 import me.proxer.app.exception.ChatMessageException
 import me.proxer.app.exception.ChatSendMessageException
 import me.proxer.app.exception.ChatSynchronizationException
-import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.WorkerUtils
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
@@ -188,14 +187,9 @@ class MessengerWorker(
             }
         }
 
-        return if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
-            if (canShowNotification()) {
-                MessengerNotifications.showError(applicationContext, error)
-            }
-
-            SynchronizationResult.ERROR
-        } else {
-            SynchronizationResult.NO_CHANGES
+        return when (WorkerUtils.shouldRetryForError(error)) {
+            true -> SynchronizationResult.NO_CHANGES
+            false -> SynchronizationResult.ERROR
         }
     }
 
@@ -209,9 +203,9 @@ class MessengerWorker(
             }
         }
 
-        return when (!isStopped && ErrorUtils.isIpBlockedError(error)) {
-            true -> SynchronizationResult.ERROR
-            false -> SynchronizationResult.NO_CHANGES
+        return when (WorkerUtils.shouldRetryForError(error)) {
+            true -> SynchronizationResult.NO_CHANGES
+            false -> SynchronizationResult.ERROR
         }
     }
 

@@ -102,12 +102,10 @@ class NotificationWorker(
     } catch (error: Throwable) {
         Timber.e(error)
 
-        if (!isStopped && WorkerUtils.shouldShowError(runAttemptCount, error)) {
-            AccountNotifications.showError(applicationContext, error)
-
-            Result.failure()
-        } else {
+        if (WorkerUtils.shouldRetryForError(error)) {
             Result.retry()
+        } else {
+            Result.failure()
         }
     }
 

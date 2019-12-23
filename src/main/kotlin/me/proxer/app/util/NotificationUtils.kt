@@ -2,12 +2,8 @@ package me.proxer.app.util
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import me.proxer.app.R
 
@@ -39,32 +35,5 @@ object NotificationUtils {
                     }
                 ))
         }
-    }
-
-    fun showErrorNotification(
-        context: Context,
-        id: Int,
-        channel: String,
-        title: String,
-        content: String,
-        intent: PendingIntent? = null
-    ) {
-        NotificationManagerCompat.from(context).notify(
-            id,
-            NotificationCompat.Builder(context, channel)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(title)
-                        .bigText(content)
-                )
-                .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setSmallIcon(R.drawable.ic_stat_proxer)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(intent)
-                .setAutoCancel(true)
-                .build()
-        )
     }
 }
