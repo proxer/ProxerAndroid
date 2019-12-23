@@ -7,7 +7,7 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 29
     compileSdkVersion = 29
-    ndkVersion = "21.0.5935234"
+    ndkVersion = "21.0.6011959-rc2"
 
     // Java
     javaVersion = JavaVersion.VERSION_1_8
