@@ -18,7 +18,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-import android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+import android.view.View.SYSTEM_UI_FLAG_IMMERSIVE
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -523,7 +523,7 @@ class StreamActivity : BaseActivity() {
                 SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                 SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                SYSTEM_UI_FLAG_IMMERSIVE
             else -> SYSTEM_UI_FLAG_VISIBLE
         }
     }

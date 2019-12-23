@@ -1,5 +1,6 @@
 package me.proxer.app.anime.stream
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
@@ -78,10 +79,11 @@ class TouchablePlayerView @JvmOverloads constructor(
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-
             if (
                 initialEvent == null ||
                 movingEvent == null ||
+                // Ignore swipes inside of margin.
+                !shouldHandle(initialEvent) ||
                 // Ignore small swipes.
                 abs(movingEvent.y - initialEvent.y) <= 40 ||
                 // Ignore horizontal swipes.
@@ -92,8 +94,10 @@ class TouchablePlayerView @JvmOverloads constructor(
 
             isScrolling = true
 
-            if (initialEvent.x > width / 2 && canChangeAudio) {
-                adjustVolume(distanceY)
+            if (initialEvent.x > width / 2) {
+                if (canChangeAudio) {
+                    adjustVolume(distanceY)
+                }
             } else {
                 adjustBrightness(distanceY)
             }
@@ -124,24 +128,16 @@ class TouchablePlayerView @JvmOverloads constructor(
         super.onDetachedFromWindow()
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP) {
             isScrolling = false
         }
 
-        val horizontalMargin = if (DeviceUtils.isLandscape(resources)) width / 16f else 0f
-        val verticalMargin = height / 8f
-
-        val shouldIntercept = (event.x < width / 3 || event.x > width / 3 * 2) &&
-            event.x > horizontalMargin && event.x < width - horizontalMargin &&
-            event.y > verticalMargin && event.y < height - verticalMargin
-
-        // We only handle events in the left or right third, inside the margins.
-        // Delegate other events to the PlayerView.
-        return if (shouldIntercept) {
-            gestureDetector.onTouchEvent(event)
+        return if (gestureDetector.onTouchEvent(event)) {
+            true
         } else {
-            return super.dispatchTouchEvent(event)
+            super.onTouchEvent(event)
         }
     }
 
@@ -171,6 +167,15 @@ class TouchablePlayerView @JvmOverloads constructor(
                 fastForwardSubject.onNext(Unit)
             }
         }
+    }
+
+    private fun shouldHandle(event: MotionEvent): Boolean {
+        val horizontalMargin = if (DeviceUtils.isLandscape(resources)) width / 16f else 0f
+        val verticalMargin = height / 8f
+
+        return (event.x < width / 3 || event.x > width / 3 * 2) &&
+            event.x > horizontalMargin && event.x < width - horizontalMargin &&
+            event.y > verticalMargin && event.y < height - verticalMargin
     }
 
     private fun adjustVolume(distanceY: Float) {
