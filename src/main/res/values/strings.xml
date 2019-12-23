@@ -58,7 +58,12 @@
     <string name="error_io">Es gab ein Problem bei der Datenübertragung. Versuche es erneut</string>
     <string name="error_parsing">Der Server hat beschädigte Daten gesendet. Versuche es erneut</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreten. Versuche es erneut</string>
-    <string name="error_ssl">Die Sicherheitszertifikate sind ungültig. Überprüfe ob es ein Update für die App gibt
+    <string name="error_ssl">
+        Die Sicherheitszertifikate sind ungültig. Überprüfe ob es ein Update für die App gibt
+    </string>
+    <string name="error_internal">
+        Der Server hat einen internen Fehler gemeldet. Möglicherweise ist gerade eine Wartung im Gange.
+        Versuche es später erneut
     </string>
 
     <string name="error_no_network">Dein Gerät ist nicht mit dem Internet verbunden</string>

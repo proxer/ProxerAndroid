@@ -82,6 +82,7 @@ import me.proxer.library.ProxerException.ServerErrorType.INFO_INVALID_ID
 import me.proxer.library.ProxerException.ServerErrorType.INFO_INVALID_TYPE
 import me.proxer.library.ProxerException.ServerErrorType.INFO_LOGIN_REQUIRED
 import me.proxer.library.ProxerException.ServerErrorType.INSUFFICIENT_PERMISSIONS
+import me.proxer.library.ProxerException.ServerErrorType.INTERNAL
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_API_CLASS
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_API_FUNCTION
 import me.proxer.library.ProxerException.ServerErrorType.INVALID_TOKEN
@@ -205,10 +206,6 @@ object ErrorUtils : KoinComponent {
         it is ProxerException && it.serverErrorType == IP_BLOCKED
     }
 
-    fun isNetworkError(error: Throwable) = getInnermostError(error).let {
-        it is IOException || it is ProxerException && (it.errorType == IO || it.errorType == TIMEOUT)
-    }
-
     fun handle(error: Throwable): ErrorAction {
         val innermostError = getInnermostError(error)
         val errorMessage = getMessage(innermostError)
@@ -283,6 +280,7 @@ object ErrorUtils : KoinComponent {
             COMMENT_INSUFFICIENT_PERMISSIONS -> R.string.error_comment_no_permissions
             COMMENT_NOT_ACTIVE_YET -> R.string.error_comment_not_active_yet
             IP_AUTHENTICATION_REQUIRED -> R.string.error_login_ip_authentication
+            INTERNAL -> R.string.error_internal
             in apiErrors -> R.string.error_api
             in maintenanceErrors -> R.string.error_maintenance
             in loginErrors -> R.string.error_login
