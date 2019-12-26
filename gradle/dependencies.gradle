@@ -101,3 +101,10 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 }
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("com.squareup.moshi:moshi") with module("com.github.square.moshi:moshi:40a829ef18")
+        substitute module("com.squareup.moshi:moshi-kotlin-codegen") with module("com.github.square.moshi:moshi-kotlin-codegen:40a829ef18")
+    }
+}
