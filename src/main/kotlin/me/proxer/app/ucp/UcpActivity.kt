@@ -10,7 +10,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.ucp.overview.UcpOverviewFragment
-import me.proxer.app.ucp.topten.UcpTopTenFragment
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.unsafeLazy
 
@@ -60,11 +59,10 @@ class UcpActivity : DrawerActivity() {
 
     private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
 
-        override fun getItemCount() = 2
+        override fun getItemCount() = 1
 
         override fun createFragment(position: Int) = when (position) {
             0 -> UcpOverviewFragment.newInstance()
-            1 -> UcpTopTenFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
     }
@@ -74,7 +72,6 @@ class UcpActivity : DrawerActivity() {
         override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
             tab.text = when (position) {
                 0 -> getString(R.string.section_ucp_overview)
-                1 -> getString(R.string.section_ucp_top_ten)
                 else -> error("Unknown index passed: $position")
             }
         }

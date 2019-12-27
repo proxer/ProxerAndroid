@@ -52,7 +52,6 @@ import me.proxer.app.profile.settings.ProfileSettingsViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
-import me.proxer.app.ucp.topten.UcpTopTenViewModel
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.InstantJsonAdapter
@@ -235,7 +234,6 @@ private val viewModelModule = module {
     viewModel { ScheduleViewModel() }
 
     viewModel { UcpOverviewViewModel() }
-    viewModel { UcpTopTenViewModel() }
     viewModel { ProfileSettingsViewModel() }
     viewModel { (userId: String?, username: String?) -> ProfileAboutViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> ProfileViewModel(userId, username) }

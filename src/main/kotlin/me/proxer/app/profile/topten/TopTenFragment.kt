@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -21,6 +23,7 @@ import me.proxer.app.profile.topten.TopTenViewModel.ZippedTopTenResult
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.extension.multilineSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
@@ -67,17 +70,25 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>(R.layout.fragment
         Observable.merge(animeAdapter.clickSubject, mangaAdapter.clickSubject)
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
-                MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category, view)
+                if (item is LocalTopTenEntry.Ucp) {
+                    MediaActivity.navigateTo(requireActivity(), item.entryId, item.name, item.category, view)
+                } else {
+                    MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.category, view)
+                }
             }
+
+        Observable.merge(animeAdapter.deleteSubject, mangaAdapter.deleteSubject)
+            .autoDisposable(this.scope())
+            .subscribe { viewModel.addItemToDelete(it) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val spanCount = DeviceUtils.calculateSpanAmount(requireActivity()) + 1
+
         animeAdapter.glide = GlideApp.with(this)
         mangaAdapter.glide = GlideApp.with(this)
-
-        val spanCount = DeviceUtils.calculateSpanAmount(requireActivity()) + 1
 
         animeRecyclerView.isNestedScrollingEnabled = false
         animeRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
@@ -86,6 +97,15 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>(R.layout.fragment
         mangaRecyclerView.isNestedScrollingEnabled = false
         mangaRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         mangaRecyclerView.adapter = mangaAdapter
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_topten_entry_removal, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onDestroyView() {

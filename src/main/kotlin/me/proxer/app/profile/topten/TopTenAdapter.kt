@@ -3,11 +3,14 @@ package me.proxer.app.profile.topten
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
 import kotterknife.bindView
@@ -18,16 +21,17 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.topten.TopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.mapAdapterPosition
-import me.proxer.library.entity.user.TopTenEntry
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class TopTenAdapter : BaseAdapter<TopTenEntry, ViewHolder>() {
+class TopTenAdapter : BaseAdapter<LocalTopTenEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<ImageView, TopTenEntry>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<ImageView, LocalTopTenEntry>> = PublishSubject.create()
+    val deleteSubject: PublishSubject<LocalTopTenEntry> = PublishSubject.create()
 
     init {
         setHasStableIds(true)
@@ -52,8 +56,13 @@ class TopTenAdapter : BaseAdapter<TopTenEntry, ViewHolder>() {
         internal val container: ViewGroup by bindView(R.id.container)
         internal val image: ImageView by bindView(R.id.image)
         internal val title: TextView by bindView(R.id.title)
+        internal val deleteButton: ImageButton by bindView(R.id.deleteButton)
 
-        fun bind(item: TopTenEntry) {
+        init {
+            deleteButton.setIconicsImage(CommunityMaterial.Icon2.cmd_star_off, 48)
+        }
+
+        fun bind(item: LocalTopTenEntry) {
             container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
@@ -63,7 +72,21 @@ class TopTenAdapter : BaseAdapter<TopTenEntry, ViewHolder>() {
 
             title.text = item.name
 
-            glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
+            if (item is LocalTopTenEntry.Ucp) {
+                deleteButton.isVisible = true
+
+                deleteButton.clicks()
+                    .mapAdapterPosition({ adapterPosition }) { data[it] }
+                    .autoDisposable(this)
+                    .subscribe(deleteSubject)
+
+                glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
+            } else {
+                deleteButton.setOnClickListener(null)
+                deleteButton.isVisible = false
+
+                glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
+            }
         }
     }
 }

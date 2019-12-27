@@ -40,6 +40,15 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@android:color/white"
                 tools:text="Some title" />
+
+            <me.proxer.app.ui.view.InfoImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/title"
+                android:layout_centerHorizontal="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/fragment_ucp_topten_delete_content_description" />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

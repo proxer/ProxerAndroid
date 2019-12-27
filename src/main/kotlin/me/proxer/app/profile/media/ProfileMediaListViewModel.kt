@@ -65,12 +65,12 @@ class ProfileMediaListViewModel(
         if (old != new) reload()
     }
 
+    private val deletionQueue = UniqueQueue<LocalUserMediaListEntry>()
+    private var deletionDisposable: Disposable? = null
+
     init {
         disposables += storageHelper.isLoggedInObservable.subscribe { reload() }
     }
-
-    private val deletionQueue = UniqueQueue<LocalUserMediaListEntry>()
-    private var deletionDisposable: Disposable? = null
 
     override fun onCleared() {
         deletionDisposable?.dispose()

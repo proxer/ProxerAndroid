@@ -25,6 +25,7 @@ import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.profile.history.LocalUserHistoryEntry
 import me.proxer.app.profile.media.LocalUserMediaListEntry
 import me.proxer.app.profile.settings.LocalProfileSettings
+import me.proxer.app.profile.topten.LocalTopTenEntry
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.toBBTree
 import me.proxer.app.ui.view.bbcode.toSimpleBBTree
@@ -44,6 +45,8 @@ import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
 import me.proxer.library.entity.ucp.UcpHistoryEntry
 import me.proxer.library.entity.ucp.UcpSettings
+import me.proxer.library.entity.ucp.UcpTopTenEntry
+import me.proxer.library.entity.user.TopTenEntry
 import me.proxer.library.entity.user.UserComment
 import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.entity.user.UserMediaListEntry
@@ -474,6 +477,9 @@ fun UserHistoryEntry.toLocalEntry() = LocalUserHistoryEntry(id, entryId, name, l
 fun UcpHistoryEntry.toLocalEntryUcp() = LocalUserHistoryEntry.Ucp(
     id, entryId, name, language, medium, category, episode, date
 )
+
+fun TopTenEntry.toLocalEntry() = LocalTopTenEntry(id, name, category, medium)
+fun UcpTopTenEntry.toLocalEntryUcp() = LocalTopTenEntry.Ucp(id, name, category, medium, entryId)
 
 fun HttpUrl.proxyIfRequired() = when (this.hasProxerHost) {
     true -> this
