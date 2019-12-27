@@ -27,29 +27,25 @@ class TopTenViewModel(
 ) : BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
-        get() {
-            val user = storageHelper.user
+        get() = when (storageHelper.user?.matches(userId, username) == true) {
+            true -> api.ucp.topTen().buildSingle()
+                .map { entries -> entries.map { it.toLocalEntryUcp() } }
+                .map {
+                    val animeList = it.filter { entry -> entry.category == Category.ANIME }
+                    val mangaList = it.filter { entry -> entry.category == Category.MANGA }
 
-            return when (user?.matches(userId, username) == true) {
-                true -> api.ucp.topTen().buildSingle()
-                    .map { entries -> entries.map { it.toLocalEntryUcp() } }
-                    .map {
-                        val animeList = it.filter { entry -> entry.category == Category.ANIME }
-                        val mangaList = it.filter { entry -> entry.category == Category.MANGA }
-
-                        ZippedTopTenResult(animeList, mangaList)
-                    }
-                false -> {
-                    val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
-
-                    Singles.zip(
-                        partialSingle(includeHentai, Category.ANIME),
-                        partialSingle(includeHentai, Category.MANGA),
-                        zipper = { animeEntries, mangaEntries ->
-                            ZippedTopTenResult(animeEntries, mangaEntries)
-                        }
-                    )
+                    ZippedTopTenResult(animeList, mangaList)
                 }
+            false -> {
+                val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
+
+                Singles.zip(
+                    partialSingle(includeHentai, Category.ANIME),
+                    partialSingle(includeHentai, Category.MANGA),
+                    zipper = { animeEntries, mangaEntries ->
+                        ZippedTopTenResult(animeEntries, mangaEntries)
+                    }
+                )
             }
         }
 

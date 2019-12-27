@@ -20,9 +20,7 @@ class HistoryViewModel(
     override val dataSingle: Single<List<LocalUserHistoryEntry>>
         get() = Single.fromCallable { validate() }
             .flatMap {
-                val user = storageHelper.user
-
-                when (user?.id == userId || user?.name?.equals(username, ignoreCase = true) == true) {
+                when (storageHelper.user?.matches(userId, username) == true) {
                     true -> api.ucp.history()
                         .page(page)
                         .limit(itemsOnPage)

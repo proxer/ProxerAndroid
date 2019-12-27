@@ -33,9 +33,7 @@ class ProfileMediaListViewModel(
     override val dataSingle: Single<List<LocalUserMediaListEntry>>
         get() = Single.fromCallable { validate() }
             .flatMap {
-                val user = storageHelper.user
-
-                when (user?.id == userId || user?.name?.equals(username, ignoreCase = true) == true) {
+                when (storageHelper.user?.matches(userId, username) == true) {
                     true -> api.ucp.mediaList()
                         .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
                         .category(category)
