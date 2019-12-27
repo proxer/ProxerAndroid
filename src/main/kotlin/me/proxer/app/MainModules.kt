@@ -50,7 +50,6 @@ import me.proxer.app.profile.history.HistoryViewModel
 import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
-import me.proxer.app.ucp.history.UcpHistoryViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
@@ -235,7 +234,6 @@ private val viewModelModule = module {
 
     viewModel { ScheduleViewModel() }
 
-    viewModel { UcpHistoryViewModel() }
     viewModel { UcpOverviewViewModel() }
     viewModel { UcpTopTenViewModel() }
     viewModel { UcpSettingsViewModel() }

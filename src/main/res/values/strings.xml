@@ -23,7 +23,6 @@
 
     <string name="section_ucp_overview">Übersicht</string>
     <string name="section_ucp_top_ten">Favoriten</string>
-    <string name="section_ucp_history">Chronik</string>
 
     <string name="section_profile_info">Profil</string>
     <string name="section_profile_about">Infos</string>
@@ -501,7 +500,8 @@
     <string name="fragment_history_entry_status_anime">Folge %d</string>
     <string name="fragment_history_entry_status_manga">Kapitel %d</string>
 
-    <string name="fragment_ucp_history_entry_status">%1$d - %2$s</string>
+    <string name="fragment_ucp_history_entry_status_anime">Folge %1$d - %2$s</string>
+    <string name="fragment_ucp_history_entry_status_manga">Kapitel %1$d - %2$s</string>
 
     <string name="fragment_anime_empty_subgroup">Keine angegeben</string>
     <string name="fragment_anime_next_episode">Nächste Episode</string>

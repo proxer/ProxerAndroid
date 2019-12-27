@@ -1,8 +1,11 @@
 package me.proxer.app.profile.history
 
-import me.proxer.app.base.PagedContentViewModel
-import me.proxer.library.api.PagingLimitEndpoint
-import me.proxer.library.entity.user.UserHistoryEntry
+import io.reactivex.Single
+import io.reactivex.rxkotlin.plusAssign
+import me.proxer.app.base.PagedViewModel
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.toLocalEntry
+import me.proxer.app.util.extension.toLocalEntryUcp
 
 /**
  * @author Ruben Gees
@@ -10,11 +13,31 @@ import me.proxer.library.entity.user.UserHistoryEntry
 class HistoryViewModel(
     private val userId: String?,
     private val username: String?
-) : PagedContentViewModel<UserHistoryEntry>() {
+) : PagedViewModel<LocalUserHistoryEntry>() {
 
     override val itemsOnPage = 50
 
-    override val endpoint: PagingLimitEndpoint<List<UserHistoryEntry>>
-        get() = api.user.history(userId, username)
-            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
+    override val dataSingle: Single<List<LocalUserHistoryEntry>>
+        get() = Single.fromCallable { validate() }
+            .flatMap {
+                val user = storageHelper.user
+
+                when (user?.id == userId || user?.name?.equals(username, ignoreCase = true) == true) {
+                    true -> api.ucp.history()
+                        .page(page)
+                        .limit(itemsOnPage)
+                        .buildSingle()
+                        .map { entries -> entries.map { it.toLocalEntryUcp() } }
+                    false -> api.user.history(userId, username)
+                        .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
+                        .page(page)
+                        .limit(itemsOnPage)
+                        .buildSingle()
+                        .map { entries -> entries.map { it.toLocalEntry() } }
+                }
+            }
+
+    init {
+        disposables += storageHelper.isLoggedInObservable.subscribe { reload() }
+    }
 }

@@ -22,6 +22,7 @@ import me.proxer.app.forum.TopicMetaData
 import me.proxer.app.media.LocalTag
 import me.proxer.app.media.comments.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
+import me.proxer.app.profile.history.LocalUserHistoryEntry
 import me.proxer.app.profile.media.LocalUserMediaListEntry
 import me.proxer.app.ucp.settings.LocalUcpSettings
 import me.proxer.app.ui.view.bbcode.BBArgs
@@ -41,8 +42,10 @@ import me.proxer.library.entity.manga.Chapter
 import me.proxer.library.entity.manga.Page
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
+import me.proxer.library.entity.ucp.UcpHistoryEntry
 import me.proxer.library.entity.ucp.UcpSettings
 import me.proxer.library.entity.user.UserComment
+import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.CalendarDay
@@ -464,6 +467,12 @@ fun UserMediaListEntry.toLocalEntry() = LocalUserMediaListEntry(
 
 fun UserMediaListEntry.toLocalEntryUcp() = LocalUserMediaListEntry.Ucp(
     id, name, episodeAmount, medium, state, commentId, commentContent, mediaProgress, episode, rating
+)
+
+fun UserHistoryEntry.toLocalEntry() = LocalUserHistoryEntry(id, entryId, name, language, medium, category, episode)
+
+fun UcpHistoryEntry.toLocalEntryUcp() = LocalUserHistoryEntry.Ucp(
+    id, entryId, name, language, medium, category, episode, date
 )
 
 fun HttpUrl.proxyIfRequired() = when (this.hasProxerHost) {

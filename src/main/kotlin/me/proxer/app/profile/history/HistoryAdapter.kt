@@ -18,20 +18,20 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.history.HistoryAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
+import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.mapAdapterPosition
 import me.proxer.app.util.extension.toAppString
-import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
+class HistoryAdapter : BaseAdapter<LocalUserHistoryEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<ImageView, UserHistoryEntry>> = PublishSubject.create()
-    val longClickSubject: PublishSubject<Pair<ImageView, UserHistoryEntry>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<ImageView, LocalUserHistoryEntry>> = PublishSubject.create()
+    val longClickSubject: PublishSubject<Pair<ImageView, LocalUserHistoryEntry>> = PublishSubject.create()
 
     init {
         setHasStableIds(false)
@@ -59,7 +59,7 @@ class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
         internal val image: ImageView by bindView(R.id.image)
         internal val status: TextView by bindView(R.id.status)
 
-        fun bind(item: UserHistoryEntry) {
+        fun bind(item: LocalUserHistoryEntry) {
             container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
@@ -74,13 +74,24 @@ class HistoryAdapter : BaseAdapter<UserHistoryEntry, ViewHolder>() {
 
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
-            status.text = status.context.getString(
-                when (item.category) {
-                    Category.ANIME -> R.string.fragment_history_entry_status_anime
-                    Category.MANGA, Category.NOVEL -> R.string.fragment_history_entry_status_manga
-                },
-                item.episode
-            )
+
+            status.text = when (item is LocalUserHistoryEntry.Ucp) {
+                true -> status.context.getString(
+                    when (item.category) {
+                        Category.ANIME -> R.string.fragment_ucp_history_entry_status_anime
+                        Category.MANGA, Category.NOVEL -> R.string.fragment_ucp_history_entry_status_manga
+                    },
+                    item.episode,
+                    item.date.distanceInWordsToNow(status.context)
+                )
+                false -> status.context.getString(
+                    when (item.category) {
+                        Category.ANIME -> R.string.fragment_history_entry_status_anime
+                        Category.MANGA, Category.NOVEL -> R.string.fragment_history_entry_status_manga
+                    },
+                    item.episode
+                )
+            }
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.entryId))
         }

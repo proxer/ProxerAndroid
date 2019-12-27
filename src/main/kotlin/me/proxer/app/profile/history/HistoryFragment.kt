@@ -16,7 +16,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
-import me.proxer.library.entity.user.UserHistoryEntry
 import me.proxer.library.enums.Category
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -25,7 +24,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class HistoryFragment : PagedContentFragment<UserHistoryEntry>() {
+class HistoryFragment : PagedContentFragment<LocalUserHistoryEntry>() {
 
     companion object {
         fun newInstance() = HistoryFragment().apply {
