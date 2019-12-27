@@ -6,7 +6,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -16,9 +18,9 @@ import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.DeviceUtils
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.UserMediaListFilterType
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,7 +30,7 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
+class ProfileMediaListFragment : PagedContentFragment<LocalUserMediaListEntry>() {
 
     companion object {
         private const val CATEGORY_ARGUMENT = "category"
@@ -86,6 +88,12 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
                 MediaActivity.navigateTo(requireActivity(), item.id, item.name, item.medium.toCategory(), view)
             }
 
+        innerAdapter.deleteClickSubject
+            .autoDisposable(this.scope())
+            .subscribe {
+                viewModel.addItemToDelete(it)
+            }
+
         setHasOptionsMenu(true)
     }
 
@@ -93,6 +101,15 @@ class ProfileMediaListFragment : PagedContentFragment<UserMediaListEntry>() {
         super.onViewCreated(view, savedInstanceState)
 
         innerAdapter.glide = GlideApp.with(this)
+
+        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hostingActivity.multilineSnackbar(
+                    getString(R.string.error_media_entry_deletion, getString(it.message)),
+                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                )
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

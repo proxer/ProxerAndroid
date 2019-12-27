@@ -10,12 +10,10 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.DrawerActivity
 import me.proxer.app.ucp.history.UcpHistoryFragment
-import me.proxer.app.ucp.media.UcpMediaListFragment
 import me.proxer.app.ucp.overview.UcpOverviewFragment
 import me.proxer.app.ucp.topten.UcpTopTenFragment
 import me.proxer.app.util.extension.startActivity
 import me.proxer.app.util.extension.unsafeLazy
-import me.proxer.library.enums.Category
 
 /**
  * @author Ruben Gees
@@ -63,14 +61,12 @@ class UcpActivity : DrawerActivity() {
 
     private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
 
-        override fun getItemCount() = 5
+        override fun getItemCount() = 3
 
         override fun createFragment(position: Int) = when (position) {
             0 -> UcpOverviewFragment.newInstance()
             1 -> UcpTopTenFragment.newInstance()
-            2 -> UcpMediaListFragment.newInstance(Category.ANIME)
-            3 -> UcpMediaListFragment.newInstance(Category.MANGA)
-            4 -> UcpHistoryFragment.newInstance()
+            2 -> UcpHistoryFragment.newInstance()
             else -> error("Unknown index passed: $position")
         }
     }
@@ -81,9 +77,7 @@ class UcpActivity : DrawerActivity() {
             tab.text = when (position) {
                 0 -> getString(R.string.section_ucp_overview)
                 1 -> getString(R.string.section_ucp_top_ten)
-                2 -> getString(R.string.section_user_media_list_anime)
-                3 -> getString(R.string.section_user_media_list_manga)
-                4 -> getString(R.string.section_ucp_history)
+                2 -> getString(R.string.section_ucp_history)
                 else -> error("Unknown index passed: $position")
             }
         }

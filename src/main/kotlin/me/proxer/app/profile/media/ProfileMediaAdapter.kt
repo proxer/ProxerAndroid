@@ -3,6 +3,7 @@ package me.proxer.app.profile.media
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -11,6 +12,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
@@ -22,20 +24,21 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.media.ProfileMediaAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toCategory
 import me.proxer.app.util.extension.toEpisodeAppString
-import me.proxer.library.entity.user.UserMediaListEntry
 import me.proxer.library.util.ProxerUrls
 
 /**
  * @author Ruben Gees
  */
-class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
+class ProfileMediaAdapter : BaseAdapter<LocalUserMediaListEntry, ViewHolder>() {
 
     var glide: GlideRequests? = null
-    val clickSubject: PublishSubject<Pair<ImageView, UserMediaListEntry>> = PublishSubject.create()
+    val clickSubject: PublishSubject<Pair<ImageView, LocalUserMediaListEntry>> = PublishSubject.create()
+    val deleteClickSubject: PublishSubject<LocalUserMediaListEntry> = PublishSubject.create()
 
     init {
         setHasStableIds(true)
@@ -65,8 +68,13 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
         internal val state: ImageView by bindView(R.id.state)
         internal val ratingContainer: ViewGroup by bindView(R.id.ratingContainer)
         internal val rating: RatingBar by bindView(R.id.rating)
+        internal val delete: ImageButton by bindView(R.id.delete)
 
-        fun bind(item: UserMediaListEntry) {
+        init {
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 48)
+        }
+
+        fun bind(item: LocalUserMediaListEntry) {
             container.clicks()
                 .mapAdapterPosition({ adapterPosition }) { image to data[it] }
                 .autoDisposable(this)
@@ -84,6 +92,18 @@ class ProfileMediaAdapter : BaseAdapter<UserMediaListEntry, ViewHolder>() {
                 rating.rating = item.rating.toFloat() / 2.0f
             } else {
                 ratingContainer.isGone = true
+            }
+
+            if (item is LocalUserMediaListEntry.Ucp) {
+                delete.isVisible = true
+
+                delete.clicks()
+                    .mapAdapterPosition({ adapterPosition }) { data[it] }
+                    .autoDisposable(this)
+                    .subscribe(deleteClickSubject)
+            } else {
+                delete.setOnClickListener(null)
+                delete.isVisible = false
             }
 
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))

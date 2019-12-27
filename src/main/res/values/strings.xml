@@ -190,7 +190,7 @@
     <string name="error_comment_deletion">Der Kommentar konnte nicht gelöscht werden: %s</string>
     <string name="error_notification_deletion">Die Benachrichtigung konnte nicht gelöscht werden: %s</string>
     <string name="error_bookmark_deletion">Das Lesezeichen konnte nicht entfernt werden: %s</string>
-    <string name="error_ucp_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
+    <string name="error_media_entry_deletion">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_topten_entry_removal">Der Eintrag konnte nicht entfernt werden: %s</string>
     <string name="error_chat_send_message">Die Nachricht konnte nicht versandt werden: %s</string>
     <string name="error_undo">Dia Aktion konnte nicht rückgängig gemacht werden: %s</string>

@@ -51,7 +51,6 @@ import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
 import me.proxer.app.ucp.history.UcpHistoryViewModel
-import me.proxer.app.ucp.media.UcpMediaListViewModel
 import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ucp.topten.UcpTopTenViewModel
@@ -74,7 +73,6 @@ import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.CommentSortCriteria
 import me.proxer.library.enums.Language
-import me.proxer.library.enums.UserMediaListFilterType
 import okhttp3.Cache
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
@@ -245,9 +243,6 @@ private val viewModelModule = module {
     viewModel { (userId: String?, username: String?) -> ProfileViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> TopTenViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> HistoryViewModel(userId, username) }
-    viewModel { (category: Category, filter: UserMediaListFilterType?) ->
-        UcpMediaListViewModel(category, filter)
-    }
 
     viewModel { parameterList ->
         ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])
