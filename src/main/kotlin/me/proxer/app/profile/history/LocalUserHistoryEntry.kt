@@ -6,6 +6,9 @@ import me.proxer.library.enums.MediaLanguage
 import me.proxer.library.enums.Medium
 import java.util.Date
 
+/**
+ * @author Ruben Gees
+ */
 open class LocalUserHistoryEntry(
     override val id: String,
     open val entryId: String,
@@ -43,8 +46,8 @@ open class LocalUserHistoryEntry(
     }
 
     override fun toString(): String {
-        return "LocalUserHistoryEntry(id='$id', entryId='$entryId', name='$name', language=$language, medium=$medium, " +
-            "category=$category, episode=$episode)"
+        return "LocalUserHistoryEntry(id='$id', entryId='$entryId', name='$name', language=$language, " +
+            "medium=$medium, category=$category, episode=$episode)"
     }
 
     data class Ucp(

@@ -48,7 +48,7 @@
                 android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/fragment_ucp_topten_delete_content_description" />
+                android:contentDescription="@string/fragment_topten_delete_content_description" />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

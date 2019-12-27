@@ -184,8 +184,6 @@
 
         <activity android:name=".chat.pub.room.info.ChatRoomInfoActivity" />
 
-        <activity android:name=".ucp.UcpActivity" />
-
         <activity android:name=".profile.settings.ProfileSettingsActivity" />
 
         <activity

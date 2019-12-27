@@ -13,7 +13,6 @@ import me.proxer.app.auth.LogoutDialog
 import me.proxer.app.notification.NotificationActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.settings.ProfileSettingsActivity
-import me.proxer.app.ucp.UcpActivity
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.AccountItem
 import kotlin.properties.Delegates
@@ -78,7 +77,6 @@ abstract class DrawerActivity : BaseActivity() {
         AccountItem.LOGOUT -> LogoutDialog.show(this)
         AccountItem.USER -> showProfilePage()
         AccountItem.NOTIFICATIONS -> NotificationActivity.navigateTo(this)
-        AccountItem.UCP -> UcpActivity.navigateTo(this)
         AccountItem.PROFILE_SETTINGS -> ProfileSettingsActivity.navigateTo(this)
     }
 

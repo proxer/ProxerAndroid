@@ -42,15 +42,15 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="ucp_settings_constraint_titles">
-        <item>@string/ucp_settings_constraint_default</item>
-        <item>@string/ucp_settings_constraint_friend</item>
-        <item>@string/ucp_settings_constraint_logged_in_users</item>
-        <item>@string/ucp_settings_constraint_everyone</item>
-        <item>@string/ucp_settings_constraint_private</item>
+    <string-array name="profile_settings_constraint_titles">
+        <item>@string/profile_settings_constraint_default</item>
+        <item>@string/profile_settings_constraint_friend</item>
+        <item>@string/profile_settings_constraint_logged_in_users</item>
+        <item>@string/profile_settings_constraint_everyone</item>
+        <item>@string/profile_settings_constraint_private</item>
     </string-array>
 
-    <string-array name="ucp_settings_constraint_values">
+    <string-array name="profile_settings_constraint_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -58,27 +58,27 @@
         <item>4</item>
     </string-array>
 
-    <string-array name="ucp_settings_friend_request_constraint_titles">
-        <item>@string/ucp_settings_constraint_default</item>
-        <item>@string/ucp_settings_constraint_everyone</item>
-        <item>@string/ucp_settings_constraint_nobody</item>
+    <string-array name="profile_settings_friend_request_constraint_titles">
+        <item>@string/profile_settings_constraint_default</item>
+        <item>@string/profile_settings_constraint_everyone</item>
+        <item>@string/profile_settings_constraint_nobody</item>
     </string-array>
 
-    <string-array name="ucp_settings_friend_request_constraint_values">
+    <string-array name="profile_settings_friend_request_constraint_values">
         <item>0</item>
         <item>3</item>
         <item>4</item>
     </string-array>
 
-    <string-array name="ucp_settings_video_ads_interval_titles">
-        <item>@string/ucp_settings_interval_never</item>
-        <item>@string/ucp_settings_interval_always</item>
-        <item>@string/ucp_settings_interval_often</item>
-        <item>@string/ucp_settings_interval_sometimes</item>
-        <item>@string/ucp_settings_interval_rarely</item>
+    <string-array name="profile_settings_video_ads_interval_titles">
+        <item>@string/profile_settings_interval_never</item>
+        <item>@string/profile_settings_interval_always</item>
+        <item>@string/profile_settings_interval_often</item>
+        <item>@string/profile_settings_interval_sometimes</item>
+        <item>@string/profile_settings_interval_rarely</item>
     </string-array>
 
-    <string-array name="ucp_settings_video_ads_interval_values">
+    <string-array name="profile_settings_video_ads_interval_values">
         <item>0</item>
         <item>1</item>
         <item>3</item>

@@ -4,6 +4,9 @@ import me.proxer.library.entity.ProxerIdItem
 import me.proxer.library.enums.Category
 import me.proxer.library.enums.Medium
 
+/**
+ * @author Ruben Gees
+ */
 open class LocalTopTenEntry(
     override val id: String,
     open val name: String,

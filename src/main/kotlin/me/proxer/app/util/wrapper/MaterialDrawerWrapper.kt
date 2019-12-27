@@ -275,10 +275,6 @@ class MaterialDrawerWrapper(
                     .withIcon(CommunityMaterial.Icon.cmd_account_settings)
                     .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
                 ProfileSettingDrawerItem()
-                    .withName(R.string.section_ucp)
-                    .withIcon(CommunityMaterial.Icon.cmd_account_key)
-                    .withIdentifier(AccountItem.UCP.id),
-                ProfileSettingDrawerItem()
                     .withName(R.string.section_logout)
                     .withIcon(CommunityMaterial.Icon.cmd_account_remove)
                     .withIdentifier(AccountItem.LOGOUT.id)
@@ -355,7 +351,6 @@ class MaterialDrawerWrapper(
         USER(102L),
         LOGOUT(103L),
         NOTIFICATIONS(104L),
-        UCP(105L),
         PROFILE_SETTINGS(106L);
 
         companion object {

@@ -5,6 +5,9 @@ import me.proxer.library.enums.MediaState
 import me.proxer.library.enums.Medium
 import me.proxer.library.enums.UserMediaProgress
 
+/**
+ * @author Ruben Gees
+ */
 open class LocalUserMediaListEntry(
     override val id: String,
     open val name: String,

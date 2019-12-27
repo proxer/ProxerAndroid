@@ -23,7 +23,7 @@ class StorageHelper(
         const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
         const val CHAT_INTERVAL = "chat_interval"
         const val CONFERENCES_SYNCHRONIZED = "conferences_synchronized"
-        const val LAST_UCP_SETTINGS_UPDATE_DATE = "last_ucp_settings_update_date"
+        const val LAST_PROFILE_SETTINGS_UPDATE_DATE = "last_ucp_settings_update_date"
         const val LAST_AD_ALERT_DATE = "last_ad_alert_date"
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
         const val COMMENT_DRAFT_PREFIX = "comment_draft_"
@@ -47,7 +47,7 @@ class StorageHelper(
         get() = Hawk.get(PROFILE_SETTINGS) ?: LocalProfileSettings.default()
         set(value) {
             putOrThrow(PROFILE_SETTINGS, value)
-            putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
+            putOrThrow(LAST_PROFILE_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
         }
 
     val isLoggedIn: Boolean
@@ -82,7 +82,7 @@ class StorageHelper(
         }
 
     val lastUcpSettingsUpdateDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_UCP_SETTINGS_UPDATE_DATE, 0L))
+        get() = Instant.ofEpochMilli(Hawk.get(LAST_PROFILE_SETTINGS_UPDATE_DATE, 0L))
 
     var lastAdAlertDate: Instant
         get() = Instant.ofEpochMilli(Hawk.get(LAST_AD_ALERT_DATE, 0L))

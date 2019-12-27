@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.uber.autodispose.android.lifecycle.scope
@@ -16,23 +17,24 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.profile.ProfileViewModel
+import me.proxer.app.profile.ProfileViewModel.UserInfoWrapper
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
-import me.proxer.library.entity.user.UserInfo
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
  */
-class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_profile) {
+class ProfileInfoFragment : BaseContentFragment<UserInfoWrapper>(R.layout.fragment_profile) {
 
     companion object {
         private const val RANK_FORUM_ID = "207664"
         private const val RANK_FORUM_CATEGORY_ID = "79"
         private const val RANK_FORUM_TOPIC = "Rangpunkte und Ränge"
+        private const val DATE_FORMAT = "%.1f"
 
         private val rankRegex = Regex(".+", RegexOption.DOT_MATCHES_ALL)
 
@@ -66,6 +68,12 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
     private val statusContainer: ViewGroup by bindView(R.id.statusContainer)
     private val statusText: TextView by bindView(R.id.statusText)
 
+    private val watchedEpisodesContainer: ViewGroup by bindView(R.id.watchedEpisodesContainer)
+    private val episodesRow: TextView by bindView(R.id.episodesRow)
+    private val minutesRow: TextView by bindView(R.id.minutesRow)
+    private val hoursRow: TextView by bindView(R.id.hoursRow)
+    private val daysRow: TextView by bindView(R.id.daysRow)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -82,27 +90,43 @@ class ProfileInfoFragment : BaseContentFragment<UserInfo>(R.layout.fragment_prof
             }
     }
 
-    override fun showData(data: UserInfo) {
+    override fun showData(data: UserInfoWrapper) {
         super.showData(data)
 
-        val totalPoints = data.animePoints + data.mangaPoints + data.uploadPoints + data.forumPoints +
-            data.infoPoints + data.miscPoints
+        val (userInfo, watchedEpisodes) = data
 
-        animePointsRow.text = data.animePoints.toString()
-        mangaPointsRow.text = data.mangaPoints.toString()
-        uploadPointsRow.text = data.uploadPoints.toString()
-        forumPointsRow.text = data.forumPoints.toString()
-        infoPointsRow.text = data.infoPoints.toString()
-        miscellaneousPointsRow.text = data.miscPoints.toString()
+        val totalPoints = userInfo.animePoints + userInfo.mangaPoints + userInfo.uploadPoints +
+            userInfo.forumPoints + userInfo.infoPoints + userInfo.miscPoints
+
+        animePointsRow.text = userInfo.animePoints.toString()
+        mangaPointsRow.text = userInfo.mangaPoints.toString()
+        uploadPointsRow.text = userInfo.uploadPoints.toString()
+        forumPointsRow.text = userInfo.forumPoints.toString()
+        infoPointsRow.text = userInfo.infoPoints.toString()
+        miscellaneousPointsRow.text = userInfo.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
         rank.text = rankToString(totalPoints).linkify(web = false, mentions = false, custom = *arrayOf(rankRegex))
 
-        if (data.status.isBlank()) {
+        if (userInfo.status.isBlank()) {
             statusContainer.isGone = true
         } else {
-            val rawText = data.status + " - " + data.lastStatusChange.distanceInWordsToNow(requireContext())
+            val rawText = userInfo.status + " - " + userInfo.lastStatusChange.distanceInWordsToNow(requireContext())
 
             statusText.text = rawText.linkify(mentions = false)
+        }
+
+        if (watchedEpisodes != null) {
+            val minutes = watchedEpisodes * 20
+            val hours = minutes / 60f
+            val days = hours / 24f
+
+            watchedEpisodesContainer.isVisible = true
+            episodesRow.text = watchedEpisodes.toString()
+            minutesRow.text = minutes.toString()
+            hoursRow.text = DATE_FORMAT.format(hours)
+            daysRow.text = DATE_FORMAT.format(days)
+        } else {
+            watchedEpisodesContainer.isVisible = false
         }
     }
 

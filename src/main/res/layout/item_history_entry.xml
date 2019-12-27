@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/item_margin"
-    tools:context=".ucp.history.UcpHistoryAdapter">
+    tools:context=".profile.history.HistoryAdapter">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/container"

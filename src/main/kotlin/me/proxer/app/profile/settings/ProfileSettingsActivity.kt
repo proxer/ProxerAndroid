@@ -24,7 +24,7 @@ class ProfileSettingsActivity : DrawerActivity() {
     }
 
     override val contentView: Int
-        get() = R.layout.activity_ucp_settings
+        get() = R.layout.activity_profile_settings
 
     private val viewModel by viewModel<ProfileSettingsViewModel>()
 

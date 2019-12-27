@@ -78,8 +78,8 @@ class HistoryAdapter : BaseAdapter<LocalUserHistoryEntry, ViewHolder>() {
             status.text = when (item is LocalUserHistoryEntry.Ucp) {
                 true -> status.context.getString(
                     when (item.category) {
-                        Category.ANIME -> R.string.fragment_ucp_history_entry_status_anime
-                        Category.MANGA, Category.NOVEL -> R.string.fragment_ucp_history_entry_status_manga
+                        Category.ANIME -> R.string.fragment_history_entry_ucp_status_anime
+                        Category.MANGA, Category.NOVEL -> R.string.fragment_history_entry_ucp_status_manga
                     },
                     item.episode,
                     item.date.distanceInWordsToNow(status.context)

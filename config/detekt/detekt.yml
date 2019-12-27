@@ -49,6 +49,8 @@ potential-bugs:
     active: false
 
 style:
+  DataClassContainsFunctions:
+    active: false
   ExpressionBodySyntax:
     active: false
   ForbiddenComment:

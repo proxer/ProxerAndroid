@@ -60,7 +60,7 @@ class MainActivity : DrawerActivity() {
 
     val tabs: TabLayout by bindView(R.id.tabs)
 
-    private val ucpSettingsViewModel by viewModel<ProfileSettingsViewModel>()
+    private val profileSettingsViewModel by viewModel<ProfileSettingsViewModel>()
 
     private val inAppUpdateFlow = InAppUpdateFlow()
 
@@ -79,7 +79,7 @@ class MainActivity : DrawerActivity() {
             val threshold = Instant.now().minus(5, ChronoUnit.MINUTES)
 
             if (threshold.isAfter(lastUcpSettingsUpdate)) {
-                ucpSettingsViewModel.refresh()
+                profileSettingsViewModel.refresh()
             }
         }
 

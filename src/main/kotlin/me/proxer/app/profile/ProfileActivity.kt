@@ -132,10 +132,10 @@ class ProfileActivity : ImageTabsActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.data.observe(this, Observer { data ->
-            data?.let {
-                userId = data.id
-                username = data.username
-                image = data.image
+            data?.let { (userInfo) ->
+                userId = userInfo.id
+                username = userInfo.username
+                image = userInfo.image
 
                 updateMenuItems()
 

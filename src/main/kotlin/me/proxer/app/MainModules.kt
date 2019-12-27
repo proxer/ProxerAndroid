@@ -51,7 +51,6 @@ import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.settings.ProfileSettingsViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
-import me.proxer.app.ucp.overview.UcpOverviewViewModel
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.InstantJsonAdapter
@@ -233,12 +232,11 @@ private val viewModelModule = module {
 
     viewModel { ScheduleViewModel() }
 
-    viewModel { UcpOverviewViewModel() }
-    viewModel { ProfileSettingsViewModel() }
     viewModel { (userId: String?, username: String?) -> ProfileAboutViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> ProfileViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> TopTenViewModel(userId, username) }
     viewModel { (userId: String?, username: String?) -> HistoryViewModel(userId, username) }
+    viewModel { ProfileSettingsViewModel() }
 
     viewModel { parameterList ->
         ProfileMediaListViewModel(parameterList[0], parameterList[1], parameterList[2], parameterList[3])

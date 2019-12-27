@@ -40,6 +40,14 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_profile_points"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/colorSecondary" />
+
                         <TableLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -214,15 +222,134 @@
                     android:id="@+id/statusContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/item_margin">
+                    android:layout_marginTop="@dimen/item_margin"
+                    android:layout_marginBottom="@dimen/item_margin">
 
-                    <me.proxer.app.ui.view.BetterLinkTextView
-                        android:id="@+id/statusText"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_profile_status"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/colorSecondary" />
+
+                        <me.proxer.app.ui.view.BetterLinkTextView
+                            android:id="@+id/statusText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            tools:text="This is a test: https://github.com/proxer/ProxerAndroid - 2 days ago" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/watchedEpisodesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_margin"
+                    android:layout_marginBottom="@dimen/item_margin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:text="@string/fragment_profile_episode_counter"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/colorSecondary" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:stretchColumns="0">
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_epsiode_counter_episodes"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/episodesRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_epsiode_counter_minutes"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/minutesRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_epsiode_counter_hours"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/hoursRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+
+                            <TableRow>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/fragment_profile_epsiode_counter_days"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                                <TextView
+                                    android:id="@+id/daysRow"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:gravity="end"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    tools:text="100" />
+                            </TableRow>
+                        </TableLayout>
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
