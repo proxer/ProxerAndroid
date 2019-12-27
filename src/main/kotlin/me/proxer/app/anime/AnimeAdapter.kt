@@ -233,7 +233,7 @@ class AnimeAdapter(
 
             val shouldShowAdAlert = ProxerStreamResolver.supports(item.hosterName) &&
                 threshold.isBefore(Instant.now()) &&
-                storageHelper.ucpSettings.adInterval <= 0
+                storageHelper.profileSettings.adInterval <= 0
 
             return if (shouldShowAdAlert) {
                 adAlert.isVisible = true

@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.settings
+package me.proxer.app.profile.settings
 
 import android.os.Bundle
 import android.view.View
@@ -22,15 +22,15 @@ import java.util.Locale
 /**
  * @author Ruben Gees
  */
-class UcpSettingsFragment : XpPreferenceFragment() {
+class ProfileSettingsFragment : XpPreferenceFragment() {
 
     companion object {
-        fun newInstance() = UcpSettingsFragment().apply {
+        fun newInstance() = ProfileSettingsFragment().apply {
             arguments = bundleOf()
         }
     }
 
-    private val viewModel by sharedViewModel<UcpSettingsViewModel>()
+    private val viewModel by sharedViewModel<ProfileSettingsViewModel>()
 
     private val bannerAdsEnabled by bindPreference<SwitchPreference>("banner_ads_enabled")
     private val videoAdsInterval by bindPreference<ListPreference>("video_ads_interval")
@@ -113,30 +113,30 @@ class UcpSettingsFragment : XpPreferenceFragment() {
         super.onDestroyView()
     }
 
-    private fun showData(ucpSettings: LocalUcpSettings) {
-        bannerAdsEnabled.isChecked = ucpSettings.shouldShowAds
-        videoAdsInterval.setValue(normalizeAdInterval(ucpSettings.adInterval).toString())
-        profile.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.profileVisibility))
-        topten.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.topTenVisibility))
-        anime.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.animeVisibility))
-        manga.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.mangaVisibility))
-        comment.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.commentVisibility))
-        forum.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.forumVisibility))
-        friend.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.friendVisibility))
-        friendRequest.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.friendRequestConstraint))
-        about.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.aboutVisibility))
-        history.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.historyVisibility))
-        guestBook.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.guestBookVisibility))
-        guestBookEntry.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.guestBookEntryConstraint))
-        gallery.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.galleryVisibility))
-        article.setValue(ProxerUtils.getSafeApiEnumName(ucpSettings.articleVisibility))
+    private fun showData(profileSettings: LocalProfileSettings) {
+        bannerAdsEnabled.isChecked = profileSettings.shouldShowAds
+        videoAdsInterval.setValue(normalizeAdInterval(profileSettings.adInterval).toString())
+        profile.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.profileVisibility))
+        topten.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.topTenVisibility))
+        anime.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.animeVisibility))
+        manga.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.mangaVisibility))
+        comment.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.commentVisibility))
+        forum.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.forumVisibility))
+        friend.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.friendVisibility))
+        friendRequest.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.friendRequestConstraint))
+        about.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.aboutVisibility))
+        history.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.historyVisibility))
+        guestBook.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.guestBookVisibility))
+        guestBookEntry.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.guestBookEntryConstraint))
+        gallery.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.galleryVisibility))
+        article.setValue(ProxerUtils.getSafeApiEnumName(profileSettings.articleVisibility))
 
         updateVideoAdsIntervalSummary()
     }
 
     private fun initPreference(
         preference: Preference,
-        copyCallback: (LocalUcpSettings, UcpSettingConstraint) -> LocalUcpSettings
+        copyCallback: (LocalProfileSettings, UcpSettingConstraint) -> LocalProfileSettings
     ) = preference.changes<String>()
         .autoDisposable(this.scope())
         .subscribe {

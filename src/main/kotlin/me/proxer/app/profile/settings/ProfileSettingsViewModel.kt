@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.settings
+package me.proxer.app.profile.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,9 +19,9 @@ import org.koin.core.KoinComponent
 /**
  * @author Ruben Gees
  */
-class UcpSettingsViewModel : ViewModel(), KoinComponent {
+class ProfileSettingsViewModel : ViewModel(), KoinComponent {
 
-    val data = MutableLiveData<LocalUcpSettings>()
+    val data = MutableLiveData<LocalProfileSettings>()
     val error = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
     val updateError = ResettingMutableLiveData<ErrorUtils.ErrorAction>()
 
@@ -31,7 +31,7 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
     private var disposable: Disposable? = null
 
     init {
-        data.value = storageHelper.ucpSettings
+        data.value = storageHelper.profileSettings
 
         refresh()
     }
@@ -48,7 +48,7 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
         disposable = api.ucp.settings()
             .buildSingle()
             .map { it.toLocalSettings() }
-            .doOnSuccess { storageHelper.ucpSettings = it }
+            .doOnSuccess { storageHelper.profileSettings = it }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -62,13 +62,13 @@ class UcpSettingsViewModel : ViewModel(), KoinComponent {
             })
     }
 
-    fun update(newData: LocalUcpSettings) {
+    fun update(newData: LocalProfileSettings) {
         data.value = newData
 
         disposable?.dispose()
         disposable = api.ucp.setSettings(newData.toNonLocalSettings())
             .buildOptionalSingle()
-            .doOnSuccess { storageHelper.ucpSettings = newData }
+            .doOnSuccess { storageHelper.profileSettings = newData }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {

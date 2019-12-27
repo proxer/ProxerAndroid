@@ -19,12 +19,12 @@ import me.proxer.app.chat.ChatContainerFragment
 import me.proxer.app.media.list.MediaListFragment
 import me.proxer.app.news.NewsFragment
 import me.proxer.app.notification.NotificationWorker
+import me.proxer.app.profile.settings.ProfileSettingsViewModel
 import me.proxer.app.settings.AboutFragment
 import me.proxer.app.settings.SettingsFragment
 import me.proxer.app.settings.theme.Theme
 import me.proxer.app.settings.theme.ThemeContainer
 import me.proxer.app.settings.theme.ThemeVariant
-import me.proxer.app.ucp.settings.UcpSettingsViewModel
 import me.proxer.app.ui.view.RatingDialog
 import me.proxer.app.util.InAppUpdateFlow
 import me.proxer.app.util.extension.intentFor
@@ -60,7 +60,7 @@ class MainActivity : DrawerActivity() {
 
     val tabs: TabLayout by bindView(R.id.tabs)
 
-    private val ucpSettingsViewModel by viewModel<UcpSettingsViewModel>()
+    private val ucpSettingsViewModel by viewModel<ProfileSettingsViewModel>()
 
     private val inAppUpdateFlow = InAppUpdateFlow()
 

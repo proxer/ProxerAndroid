@@ -16,8 +16,8 @@ import me.proxer.app.R
 import me.proxer.app.base.BaseActivity
 import me.proxer.app.chat.prv.sync.MessengerWorker
 import me.proxer.app.notification.NotificationWorker
+import me.proxer.app.profile.settings.ProfileSettingsActivity
 import me.proxer.app.settings.theme.ThemeDialog
-import me.proxer.app.ucp.settings.UcpSettingsActivity
 import me.proxer.app.util.KotterKnifePreference
 import me.proxer.app.util.bindPreference
 import me.proxer.app.util.data.PreferenceHelper
@@ -92,7 +92,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
         profile.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { UcpSettingsActivity.navigateTo(requireActivity()) }
+            .subscribe { ProfileSettingsActivity.navigateTo(requireActivity()) }
 
         ageConfirmation.clicks()
             .autoDisposable(viewLifecycleOwner.scope())

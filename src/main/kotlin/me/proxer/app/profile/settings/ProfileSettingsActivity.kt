@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.settings
+package me.proxer.app.profile.settings
 
 import android.app.Activity
 import android.os.Bundle
@@ -17,16 +17,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 /**
  * @author Ruben Gees
  */
-class UcpSettingsActivity : DrawerActivity() {
+class ProfileSettingsActivity : DrawerActivity() {
 
     companion object {
-        fun navigateTo(context: Activity) = context.startActivity<UcpSettingsActivity>()
+        fun navigateTo(context: Activity) = context.startActivity<ProfileSettingsActivity>()
     }
 
     override val contentView: Int
         get() = R.layout.activity_ucp_settings
 
-    private val viewModel by viewModel<UcpSettingsViewModel>()
+    private val viewModel by viewModel<ProfileSettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +60,7 @@ class UcpSettingsActivity : DrawerActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
-                replace(R.id.container, UcpSettingsFragment.newInstance())
+                replace(R.id.container, ProfileSettingsFragment.newInstance())
             }
         }
     }

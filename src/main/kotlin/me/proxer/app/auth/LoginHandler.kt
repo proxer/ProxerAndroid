@@ -47,7 +47,7 @@ class LoginHandler(
             .buildSingle()
             .subscribeOn(Schedulers.io())
             .subscribeAndLogErrors {
-                storageHelper.ucpSettings = it.toLocalSettings()
+                storageHelper.profileSettings = it.toLocalSettings()
             }
     }
 

@@ -24,7 +24,7 @@ import me.proxer.app.media.comments.ParsedComment
 import me.proxer.app.profile.comment.ParsedUserComment
 import me.proxer.app.profile.history.LocalUserHistoryEntry
 import me.proxer.app.profile.media.LocalUserMediaListEntry
-import me.proxer.app.ucp.settings.LocalUcpSettings
+import me.proxer.app.profile.settings.LocalProfileSettings
 import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.toBBTree
 import me.proxer.app.ui.view.bbcode.toSimpleBBTree
@@ -417,7 +417,7 @@ fun Conference.toLocalConference(isFullyLoaded: Boolean) = LocalConference(
     unreadMessageAmount, lastReadMessageId, isFullyLoaded
 )
 
-fun UcpSettings.toLocalSettings() = LocalUcpSettings(
+fun UcpSettings.toLocalSettings() = LocalProfileSettings(
     profileVisibility, topTenVisibility, animeVisibility, mangaVisibility, commentVisibility, forumVisibility,
     friendVisibility, friendRequestConstraint, aboutVisibility, historyVisibility, guestBookVisibility,
     guestBookEntryConstraint, galleryVisibility, articleVisibility, isHideTags, isShowAds, adInterval

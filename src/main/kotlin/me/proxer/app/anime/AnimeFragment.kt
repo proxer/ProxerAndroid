@@ -27,7 +27,7 @@ import me.proxer.app.base.BaseAdapter.ContainerPositionResolver
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.info.translatorgroup.TranslatorGroupActivity
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.ucp.settings.UcpSettingsActivity
+import me.proxer.app.profile.settings.ProfileSettingsActivity
 import me.proxer.app.ui.view.MediaControlView
 import me.proxer.app.ui.view.MediaControlView.SimpleEpisodeInfo
 import me.proxer.app.util.ErrorUtils
@@ -144,7 +144,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
 
         innerAdapter.setAdIntervalClickSubject
             .autoDisposable(this.scope())
-            .subscribe { UcpSettingsActivity.navigateTo(requireActivity()) }
+            .subscribe { ProfileSettingsActivity.navigateTo(requireActivity()) }
 
         storageHelper.isLoggedInObservable
             .observeOn(AndroidSchedulers.mainThread())

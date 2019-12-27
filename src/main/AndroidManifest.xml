@@ -186,7 +186,7 @@
 
         <activity android:name=".ucp.UcpActivity" />
 
-        <activity android:name=".ucp.settings.UcpSettingsActivity" />
+        <activity android:name=".profile.settings.ProfileSettingsActivity" />
 
         <activity
             android:name=".comment.EditCommentActivity"

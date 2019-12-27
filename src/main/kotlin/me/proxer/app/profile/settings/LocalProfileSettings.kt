@@ -1,4 +1,4 @@
-package me.proxer.app.ucp.settings
+package me.proxer.app.profile.settings
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -10,7 +10,7 @@ import me.proxer.library.enums.UcpSettingConstraint.DEFAULT
  * @author Ruben Gees
  */
 @JsonClass(generateAdapter = true)
-data class LocalUcpSettings(
+data class LocalProfileSettings(
     @Json(name = "profileVisibility") val profileVisibility: UcpSettingConstraint,
     @Json(name = "topTenVisibility") val topTenVisibility: UcpSettingConstraint,
     @Json(name = "animeVisibility") val animeVisibility: UcpSettingConstraint,
@@ -31,7 +31,7 @@ data class LocalUcpSettings(
 ) {
 
     companion object {
-        fun default() = LocalUcpSettings(
+        fun default() = LocalProfileSettings(
             DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT,
             DEFAULT, DEFAULT, shouldHideTags = false, shouldShowAds = false, adInterval = 3
         )

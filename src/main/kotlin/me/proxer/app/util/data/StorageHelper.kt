@@ -4,7 +4,7 @@ import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
-import me.proxer.app.ucp.settings.LocalUcpSettings
+import me.proxer.app.profile.settings.LocalProfileSettings
 import me.proxer.library.enums.Language
 import org.threeten.bp.Instant
 
@@ -18,7 +18,7 @@ class StorageHelper(
 
     internal companion object {
         const val USER = "user"
-        const val UCP_SETTINGS = "ucp_settings"
+        const val PROFILE_SETTINGS = "ucp_settings"
         const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
         const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
         const val CHAT_INTERVAL = "chat_interval"
@@ -43,10 +43,10 @@ class StorageHelper(
             putOrThrow(USER, value)
         }
 
-    var ucpSettings: LocalUcpSettings
-        get() = Hawk.get(UCP_SETTINGS) ?: LocalUcpSettings.default()
+    var profileSettings: LocalProfileSettings
+        get() = Hawk.get(PROFILE_SETTINGS) ?: LocalProfileSettings.default()
         set(value) {
-            putOrThrow(UCP_SETTINGS, value)
+            putOrThrow(PROFILE_SETTINGS, value)
             putOrThrow(LAST_UCP_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
         }
 
