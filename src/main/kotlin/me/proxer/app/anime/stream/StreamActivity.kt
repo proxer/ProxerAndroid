@@ -467,11 +467,16 @@ class StreamActivity : BaseActivity() {
         toggleFullscreen(true)
     }
 
+    @Suppress("TooGenericExceptionThrown")
     private fun initPreview() {
         mediaMetadataRetrieverDisposable = Completable
             .fromAction {
                 try {
                     mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders())
+                } catch (error: Throwable) {
+                    // MediaMetadataRetriever throws IllegalArgumentExceptions on some devices due to bugs in the
+                    // implementation. Ignore these by rethrowing a generic RuntimeException.
+                    throw RuntimeException(error)
                 } finally {
                     // MediaMetadataRetriever does not support interruption and hangs when calling release()
                     // while setDataSource is still in progress. Wait for it to finish before calling release().
