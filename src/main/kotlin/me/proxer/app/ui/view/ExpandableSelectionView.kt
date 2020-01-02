@@ -97,8 +97,8 @@ class ExpandableSelectionView @JvmOverloads constructor(
             resetButton.isGone = true
         }
 
-        resetButton.setIconicsImage(CommunityMaterial.Icon2.cmd_undo, 32)
-        toggleButton.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+        resetButton.setIconicsImage(CommunityMaterial.Icon.cmd_undo, 32)
+        toggleButton.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32)
     }
 
     override fun onAttachedToWindow() {

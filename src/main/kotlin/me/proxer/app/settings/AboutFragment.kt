@@ -129,7 +129,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_version_title)
             .subText(BuildConfig.VERSION_NAME)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context))
             .setOnClickAction {
                 val title = getString(R.string.clipboard_title)
 
@@ -142,7 +142,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_licenses_title)
             .subText(R.string.about_licenses_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_clipboard_text).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_clipboard_text).iconColor(context))
             .setOnClickAction {
                 LibsBuilder()
                     .withAutoDetect(false)
@@ -161,13 +161,13 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_source_code)
             .subText(R.string.about_source_code_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_code_braces).iconColor(context))
             .setOnClickAction { showPage(repositoryLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_server_status)
             .subText(R.string.about_server_status_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_server).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_server).iconColor(context))
             .setOnClickAction { ServerStatusActivity.navigateTo(requireActivity()) }
             .build()
     )
@@ -176,13 +176,13 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_facebook_title)
             .subText(R.string.about_facebook_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_facebook).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_facebook).iconColor(context))
             .setOnClickAction { showPage(facebookLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_twitter_title)
             .subText(R.string.about_twitter_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_twitter).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).iconColor(context))
             .setOnClickAction { showPage(twitterLink) }
             .build(),
         MaterialAboutActionItem.Builder()
@@ -194,7 +194,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_discord_title)
             .subText(R.string.about_discord_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_discord).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_discord).iconColor(context))
             .setOnClickAction { showPage(discordLink) }
             .build()
     )
@@ -208,7 +208,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
             .subText(R.string.about_support_message_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_email).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_email).iconColor(context))
             .setOnClickAction {
                 Completable
                     .fromAction {
@@ -227,7 +227,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_forum_title)
             .subText(R.string.about_support_forum_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_forum).iconColor(context))
             .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
             .build()
     )
@@ -236,7 +236,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_developer_github_title)
             .subText(developerGithubName)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github_circle).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_github_circle).iconColor(context))
             .setOnClickAction { showPage("https://github.com/$developerGithubName".toPrefixedHttpUrl()) }
             .build(),
         MaterialAboutActionItem.Builder()

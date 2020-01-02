@@ -104,7 +104,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
             }
 
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 96, 16, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())
@@ -115,7 +115,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
         }
 
         private fun generateModeratorDrawable(context: Context) = IconicsDrawable(context)
-            .icon(CommunityMaterial.Icon2.cmd_star)
+            .icon(CommunityMaterial.Icon.cmd_star)
             .sizeDp(32)
             .paddingDp(8)
             .colorAttr(context, R.attr.colorSecondary)

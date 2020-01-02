@@ -58,7 +58,7 @@ ext {
     preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.2"
-    communityMaterialTypefaceVersion = "3.5.95.1-kotlin"
+    communityMaterialTypefaceVersion = "3.7.95.3-kotlin"
     materialDrawerVersion = "7.0.0-rc09"
     aboutLibrariesVersion = "7.1.0"
     materializeVersion = "1.2.1"
@@ -84,7 +84,7 @@ ext {
     hawkVersion = "7a1a625455"
     glideVersion = "4.10.0"
     retrofitVersion = "2.7.0"
-    okHttpVersion = "4.2.2"
+    okHttpVersion = "4.3.0"
     okioVersion = "2.4.1"
     moshiVersion = "1.9.2"
     easyHeaderFooterAdapterVersion = "3.0.0"
@@ -98,7 +98,7 @@ ext {
     // Debugging
     customActivityOnCrashVersion = "2.2.0"
     strictModeCompatVersion = "29.0.0"
-    leakCanaryVersion = "2.0"
+    leakCanaryVersion = "2.1"
     anrWatchdogVersion = "1.4.0"
     timberVersion = "4.7.1"
 }

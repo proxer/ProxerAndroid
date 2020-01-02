@@ -177,16 +177,16 @@ class StreamActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         setupUi()
 
-        fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+        fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen))
         controlProgress.progressDrawable = ThinCircularProgressDrawable(this)
         controlProgress.showProgressBackground = false
 
         rewindIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind), null, null
+            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_rewind), null, null
         )
 
         fastForwardIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_fast_forward), null, null
+            null, generateIndicatorIcon(CommunityMaterial.Icon4.cmd_fast_forward), null, null
         )
 
         playerManager.playerReadySubject
@@ -259,10 +259,10 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe {
                 val icon = when {
-                    it <= 0 -> CommunityMaterial.Icon2.cmd_volume_mute
-                    it <= 33 -> CommunityMaterial.Icon2.cmd_volume_low
-                    it <= 66 -> CommunityMaterial.Icon2.cmd_volume_medium
-                    else -> CommunityMaterial.Icon2.cmd_volume_high
+                    it <= 0 -> CommunityMaterial.Icon.cmd_volume_mute
+                    it <= 33 -> CommunityMaterial.Icon.cmd_volume_low
+                    it <= 66 -> CommunityMaterial.Icon.cmd_volume_medium
+                    else -> CommunityMaterial.Icon.cmd_volume_high
                 }
 
                 updateControl(it, icon)
@@ -272,9 +272,9 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe {
                 val icon = when {
-                    it <= 33 -> CommunityMaterial.Icon.cmd_brightness_5
-                    it <= 66 -> CommunityMaterial.Icon.cmd_brightness_6
-                    else -> CommunityMaterial.Icon.cmd_brightness_7
+                    it <= 33 -> CommunityMaterial.Icon4.cmd_brightness_5
+                    it <= 66 -> CommunityMaterial.Icon4.cmd_brightness_6
+                    else -> CommunityMaterial.Icon4.cmd_brightness_7
                 }
 
                 updateControl(it, icon)
@@ -513,11 +513,11 @@ class StreamActivity : BaseActivity() {
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen))
         } else {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
-            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen_exit))
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen_exit))
         }
     }
 

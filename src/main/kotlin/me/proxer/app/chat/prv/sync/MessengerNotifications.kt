@@ -251,8 +251,8 @@ object MessengerNotifications : KoinComponent {
     private fun buildGenericIcon(context: Context, isGroup: Boolean) = IconicsDrawable(context)
         .icon(
             when (isGroup) {
-                true -> CommunityMaterial.Icon.cmd_account_multiple
-                false -> CommunityMaterial.Icon.cmd_account
+                true -> CommunityMaterial.Icon4.cmd_account_multiple
+                false -> CommunityMaterial.Icon4.cmd_account
             }
         )
         .colorRes(R.color.primary)

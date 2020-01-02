@@ -71,7 +71,7 @@ class BookmarkAdapter : BaseAdapter<Bookmark, BookmarkAdapter.ViewHolder>() {
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setIconicsImage(CommunityMaterial.Icon.cmd_bookmark_remove, 48)
+            delete.setIconicsImage(CommunityMaterial.Icon4.cmd_bookmark_remove, 48)
         }
 
         fun bind(item: Bookmark) {

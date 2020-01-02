@@ -71,7 +71,7 @@ class ProfileMediaAdapter : BaseAdapter<LocalUserMediaListEntry, ViewHolder>() {
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 48)
+            delete.setIconicsImage(CommunityMaterial.Icon3.cmd_close_circle, 48)
         }
 
         fun bind(item: LocalUserMediaListEntry) {

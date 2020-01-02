@@ -135,8 +135,8 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
                 val icon = when (messageFromUser) {
                     true -> when (item.message.messageId < 0) {
-                        true -> CommunityMaterial.Icon.cmd_clock_outline
-                        false -> CommunityMaterial.Icon.cmd_check
+                        true -> CommunityMaterial.Icon3.cmd_clock_outline
+                        false -> CommunityMaterial.Icon3.cmd_check
                     }
                     false -> null
                 }
@@ -191,9 +191,9 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
                     .colorAttr(image.context, R.attr.colorSecondary)
 
                 if (item.conference.isGroup) {
-                    icon.icon(CommunityMaterial.Icon.cmd_account_multiple)
+                    icon.icon(CommunityMaterial.Icon4.cmd_account_multiple)
                 } else {
-                    icon.icon(CommunityMaterial.Icon.cmd_account)
+                    icon.icon(CommunityMaterial.Icon4.cmd_account)
                 }
 
                 image.setImageDrawable(icon)

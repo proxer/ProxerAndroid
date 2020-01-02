@@ -246,7 +246,7 @@ class MaterialDrawerWrapper(
                     .withIdentifier(AccountItem.GUEST.id),
                 ProfileSettingDrawerItem()
                     .withName(R.string.section_login)
-                    .withIcon(CommunityMaterial.Icon.cmd_account_key)
+                    .withIcon(CommunityMaterial.Icon4.cmd_account_key)
                     .withIdentifier(AccountItem.LOGIN.id)
             )
             else -> mutableListOf(
@@ -256,7 +256,7 @@ class MaterialDrawerWrapper(
                     .apply {
                         if (it.image.isBlank()) {
                             withIcon(
-                                IconicsDrawable(context, CommunityMaterial.Icon.cmd_account)
+                                IconicsDrawable(context, CommunityMaterial.Icon4.cmd_account)
                                     .sizeDp(48)
                                     .colorAttr(context, R.attr.colorOnPrimary)
                                     .backgroundColorAttr(context, R.attr.colorPrimary)
@@ -268,15 +268,15 @@ class MaterialDrawerWrapper(
                     .withIdentifier(AccountItem.USER.id),
                 ProfileSettingDrawerItem()
                     .withName(R.string.section_notifications)
-                    .withIcon(CommunityMaterial.Icon.cmd_bell_outline)
+                    .withIcon(CommunityMaterial.Icon4.cmd_bell_outline)
                     .withIdentifier(AccountItem.NOTIFICATIONS.id),
                 ProfileSettingDrawerItem()
                     .withName(R.string.section_profile_settings)
-                    .withIcon(CommunityMaterial.Icon.cmd_account_settings)
+                    .withIcon(CommunityMaterial.Icon4.cmd_account_settings)
                     .withIdentifier(AccountItem.PROFILE_SETTINGS.id),
                 ProfileSettingDrawerItem()
                     .withName(R.string.section_logout)
-                    .withIcon(CommunityMaterial.Icon.cmd_account_remove)
+                    .withIcon(CommunityMaterial.Icon4.cmd_account_remove)
                     .withIdentifier(AccountItem.LOGOUT.id)
             )
         }
@@ -295,22 +295,22 @@ class MaterialDrawerWrapper(
             .withIdentifier(DrawerItem.CHAT.id),
         PrimaryDrawerItem()
             .withName(R.string.section_bookmarks)
-            .withIcon(CommunityMaterial.Icon.cmd_bookmark)
+            .withIcon(CommunityMaterial.Icon4.cmd_bookmark)
             .withSelectable(isMain)
             .withIdentifier(DrawerItem.BOOKMARKS.id),
         PrimaryDrawerItem()
             .withName(R.string.section_anime)
-            .withIcon(CommunityMaterial.Icon2.cmd_television)
+            .withIcon(CommunityMaterial.Icon.cmd_television)
             .withSelectable(isMain)
             .withIdentifier(DrawerItem.ANIME.id),
         PrimaryDrawerItem()
             .withName(R.string.section_schedule)
-            .withIcon(CommunityMaterial.Icon.cmd_calendar)
+            .withIcon(CommunityMaterial.Icon4.cmd_calendar)
             .withSelectable(isMain)
             .withIdentifier(DrawerItem.SCHEDULE.id),
         PrimaryDrawerItem()
             .withName(R.string.section_manga)
-            .withIcon(CommunityMaterial.Icon.cmd_book_open_page_variant)
+            .withIcon(CommunityMaterial.Icon4.cmd_book_open_page_variant)
             .withSelectable(isMain)
             .withIdentifier(DrawerItem.MANGA.id)
     )
@@ -323,7 +323,7 @@ class MaterialDrawerWrapper(
             .withIdentifier(DrawerItem.INFO.id),
         PrimaryDrawerItem()
             .withName(R.string.section_settings)
-            .withIcon(CommunityMaterial.Icon2.cmd_settings)
+            .withIcon(CommunityMaterial.Icon.cmd_settings)
             .withSelectable(isMain)
             .withIdentifier(DrawerItem.SETTINGS.id)
     )

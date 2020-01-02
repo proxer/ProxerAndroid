@@ -200,7 +200,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
 
         innerAdapter.glide = GlideApp.with(this)
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
             .skip(1)
@@ -342,7 +342,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
     private fun updateIcons(disabledColor: Boolean) {
         val emojiButtonIcon: IIcon = when (emojiPopup.isShowing) {
             true -> CommunityMaterial.Icon2.cmd_keyboard
-            false -> CommunityMaterial.Icon.cmd_emoticon
+            false -> CommunityMaterial.Icon4.cmd_emoticon
         }
 
         emojiButton.setImageDrawable(
@@ -359,7 +359,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send)
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
                 .colorAttr(
                     requireContext(),
                     when (disabledColor) {

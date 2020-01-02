@@ -261,7 +261,7 @@ class ScheduleWidgetUpdateWorker(
 
         views.setImageViewBitmap(
             R.id.refresh,
-            IconicsDrawable(applicationContext, CommunityMaterial.Icon2.cmd_refresh)
+            IconicsDrawable(applicationContext, CommunityMaterial.Icon.cmd_refresh)
                 .colorRes(android.R.color.white)
                 .sizeDp(32)
                 .paddingDp(8)

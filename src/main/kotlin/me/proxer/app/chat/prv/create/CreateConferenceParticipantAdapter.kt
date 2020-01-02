@@ -75,7 +75,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
+            delete.setIconicsImage(CommunityMaterial.Icon3.cmd_close, 48, 16)
         }
 
         fun bind(item: Participant) {
@@ -93,7 +93,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
             username.text = item.username
 
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 96, 16, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

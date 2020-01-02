@@ -59,7 +59,7 @@ class TopTenAdapter : BaseAdapter<LocalTopTenEntry, ViewHolder>() {
         internal val deleteButton: ImageButton by bindView(R.id.deleteButton)
 
         init {
-            deleteButton.setIconicsImage(CommunityMaterial.Icon2.cmd_star_off, 48)
+            deleteButton.setIconicsImage(CommunityMaterial.Icon.cmd_star_off, 48)
         }
 
         fun bind(item: LocalTopTenEntry) {

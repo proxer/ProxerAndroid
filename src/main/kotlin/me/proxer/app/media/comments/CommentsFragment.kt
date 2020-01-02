@@ -147,7 +147,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
 
         create.setImageDrawable(
             IconicsDrawable(requireContext())
-                .icon(CommunityMaterial.Icon2.cmd_pencil)
+                .icon(CommunityMaterial.Icon3.cmd_pencil)
                 .colorAttr(requireContext(), R.attr.colorOnPrimary)
                 .sizeDp(64)
                 .paddingDp(8)

@@ -37,13 +37,13 @@ object IntroductionWrapper {
                         image.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_proxer))
                     }
                     1 -> image.setImageDrawable(
-                        IconicsDrawable(image.context, CommunityMaterial.Icon.cmd_bell_outline)
+                        IconicsDrawable(image.context, CommunityMaterial.Icon4.cmd_bell_outline)
                             .sizeDp(256)
                             .paddingDp(padding / 2)
                             .colorRes(R.color.on_primary)
                     )
                     2 -> image.setImageDrawable(
-                        IconicsDrawable(image.context, CommunityMaterial.Icon2.cmd_theme_light_dark)
+                        IconicsDrawable(image.context, CommunityMaterial.Icon.cmd_theme_light_dark)
                             .sizeDp(256)
                             .paddingDp(padding / 2)
                             .colorRes(R.color.on_primary)

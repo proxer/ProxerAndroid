@@ -270,7 +270,7 @@ class MessengerAdapter(
 
         init {
             sendStatus?.setImageDrawable(
-                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock_outline)
+                IconicsDrawable(text.context, CommunityMaterial.Icon3.cmd_clock_outline)
                     .sizeDp(16)
                     .iconColor(text.context)
             )
