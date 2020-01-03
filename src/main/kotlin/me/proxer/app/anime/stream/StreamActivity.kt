@@ -6,13 +6,11 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Size
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -39,8 +37,6 @@ import com.afollestad.materialdialogs.callbacks.onCancel
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
-import com.gojuno.koptional.rxjava2.filterSome
-import com.gojuno.koptional.toOptional
 import com.google.android.exoplayer2.ext.cast.CastPlayer
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -61,15 +57,8 @@ import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotterknife.bindView
 import me.proxer.app.GlideApp
-import me.proxer.app.MainApplication.Companion.GENERIC_USER_AGENT
-import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.R
 import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
@@ -152,10 +141,6 @@ class StreamActivity : BaseActivity() {
 
     private var mediaRouteButton: MenuItem? = null
     private var introductoryOverlay: IntroductoryOverlay? = null
-    private var mediaMetadataRetriever = MediaMetadataRetriever()
-
-    private var mediaMetadataRetrieverDisposable: Disposable? = null
-    private var isMediaMetadataRetrieverReady = false
 
     private val castStateListener = CastStateListener { newState ->
         if (newState != CastState.NO_DEVICES_AVAILABLE && !preferenceHelper.wasCastIntroductoryOverlayShown) {
@@ -304,7 +289,14 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { toggleOrientation() }
 
-        initPreview()
+        PreviewLoader
+            .loadFrames(
+                progress.loadRequests(),
+                { Size(preview.width, preview.height) },
+                PreviewLoader.PreviewMetaData(uri, referer, isProxerStream)
+            )
+            .autoDisposable(this.scope())
+            .subscribeAndLogErrors { preview.setImageBitmap(it) }
 
         if (savedInstanceState == null) {
             toggleOrientation()
@@ -467,47 +459,6 @@ class StreamActivity : BaseActivity() {
         toggleFullscreen(true)
     }
 
-    @Suppress("TooGenericExceptionThrown")
-    private fun initPreview() {
-        mediaMetadataRetrieverDisposable = Completable
-            .fromAction {
-                try {
-                    mediaMetadataRetriever.setDataSource(uri.toString(), makeHeaders())
-                } catch (error: Throwable) {
-                    // MediaMetadataRetriever throws IllegalArgumentExceptions on some devices due to bugs in the
-                    // implementation. Ignore these by rethrowing a generic RuntimeException.
-                    throw RuntimeException(error)
-                } finally {
-                    // MediaMetadataRetriever does not support interruption and hangs when calling release()
-                    // while setDataSource is still in progress. Wait for it to finish before calling release().
-                    isMediaMetadataRetrieverReady = true
-
-                    if (mediaMetadataRetrieverDisposable?.isDisposed == true) {
-                        Completable.fromAction { mediaMetadataRetriever.release() }
-                            .subscribeOn(Schedulers.io())
-                            .subscribeAndLogErrors()
-                    }
-                }
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .andThen(progress.loadRequests())
-            .toFlowable(BackpressureStrategy.LATEST)
-            .observeOn(Schedulers.io(), false, 1)
-            .map { getFrameAtTime(it * 1000).toOptional() }
-            .filterSome()
-            .doFinally {
-                if (isMediaMetadataRetrieverReady) {
-                    Completable.fromAction { mediaMetadataRetriever.release() }
-                        .subscribeOn(Schedulers.io())
-                        .subscribeAndLogErrors()
-                }
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .autoDisposable(this.scope())
-            .subscribeAndLogErrors { preview.setImageBitmap(it) }
-    }
-
     @SuppressLint("SourceLockedOrientationActivity")
     private fun toggleOrientation() {
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
@@ -632,30 +583,6 @@ class StreamActivity : BaseActivity() {
         .sizeDp(36)
         .paddingDp(4)
         .colorRes(android.R.color.white)
-
-    private fun makeHeaders(): Map<String, String?> {
-        return emptyMap<String, String>()
-            .let {
-                when {
-                    referer != null -> it.plus("Referer" to referer)
-                    else -> it
-                }
-            }
-            .let {
-                when {
-                    isProxerStream -> it.plus("User-Agent" to USER_AGENT)
-                    else -> it.plus("User-Agent" to GENERIC_USER_AGENT)
-                }
-            }
-    }
-
-    private fun getFrameAtTime(timeUs: Long): Bitmap? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            mediaMetadataRetriever.getScaledFrameAtTime(timeUs, 0, preview.width, preview.height)
-        } else {
-            mediaMetadataRetriever.getFrameAtTime(timeUs)
-        }
-    }
 
     private fun canOpenInOtherApp(): Boolean {
         val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer).makeIntent(this)
