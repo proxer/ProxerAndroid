@@ -205,8 +205,6 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
             image.setPanLimit(PAN_LIMIT_INSIDE)
             image.setMinimumTileDpi(196)
             image.setMinimumDpi(90)
-
-            image.isExifInterfaceEnabled = false
         }
 
         override fun bind(item: Page) {
