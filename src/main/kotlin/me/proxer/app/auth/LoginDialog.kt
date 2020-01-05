@@ -47,14 +47,15 @@ class LoginDialog : BaseDialog() {
 
     private val viewModel by viewModel<LoginViewModel>()
 
-    private val username: TextInputEditText by bindView(R.id.username)
-    private val password: TextInputEditText by bindView(R.id.password)
-    private val secret: TextInputEditText by bindView(R.id.secret)
-    private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
-    private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
     private val inputContainer: ViewGroup by bindView(R.id.inputContainer)
-    private val progress: ProgressBar by bindView(R.id.progress)
+    private val usernameContainer: TextInputLayout by bindView(R.id.usernameContainer)
+    private val username: TextInputEditText by bindView(R.id.username)
+    private val passwordContainer: TextInputLayout by bindView(R.id.passwordContainer)
+    private val password: TextInputEditText by bindView(R.id.password)
+    private val secretContainer: TextInputLayout by bindView(R.id.secretContainer)
+    private val secret: TextInputEditText by bindView(R.id.secret)
     private val registrationInfo: TextView by bindView(R.id.registrationInfo)
+    private val progress: ProgressBar by bindView(R.id.progress)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,7 +136,7 @@ class LoginDialog : BaseDialog() {
         })
 
         viewModel.isTwoFactorAuthenticationEnabled.observe(dialogLifecycleOwner, Observer {
-            secret.isVisible = it == true
+            secretContainer.isVisible = it == true
             secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
             password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO
         })

@@ -67,9 +67,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/secretContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/dialog_login_secret_hint">
+            android:hint="@string/dialog_login_secret_hint"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/secret"
@@ -81,14 +84,13 @@
                 android:importantForAutofill="yes"
                 android:inputType="numberPassword"
                 android:maxLines="1"
-                android:visibility="gone"
-                tools:ignore="UnusedAttribute"
-                tools:visibility="visible" />
+                tools:ignore="UnusedAttribute" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <me.proxer.app.ui.view.BetterLinkTextView
             android:id="@+id/registrationInfo"
             android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             tools:ignore="UnusedAttribute"
