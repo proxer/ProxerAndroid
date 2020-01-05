@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Size
@@ -377,6 +378,12 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
+
+        handleUIChange()
+    }
+
     @Suppress("SwallowedException")
     internal fun getSafeCastContext(): CastContext? {
         val availabilityResult = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
@@ -436,22 +443,7 @@ class StreamActivity : BaseActivity() {
 
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
-            .subscribe { visibility ->
-                if (playerManager.isPlayingAd.not()) {
-                    // If true, no flags for hiding system UI are set. Show the controls.
-                    if (visibility and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                        playerView.showController()
-                        toolbar.isVisible = true
-                    } else {
-                        playerView.hideController()
-                        toolbar.isVisible = false
-                    }
-                } else {
-                    adFullscreenHandler.postDelayed(3_000) {
-                        toggleFullscreen(true)
-                    }
-                }
-            }
+            .subscribe { handleUIChange() }
 
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
@@ -472,9 +464,30 @@ class StreamActivity : BaseActivity() {
         }
     }
 
+    private fun handleUIChange() {
+        val isInFullscreenMode = window.decorView.systemUiVisibility and SYSTEM_UI_FLAG_FULLSCREEN != 0
+
+        if (playerManager.isPlayingAd.not()) {
+            // If true, no flags for hiding system UI are set. Show the controls.
+            if (isInFullscreenMode) {
+                playerView.hideController()
+                toolbar.isVisible = false
+            } else {
+                playerView.showController()
+                toolbar.isVisible = true
+            }
+        } else {
+            adFullscreenHandler.postDelayed(3_000) {
+                toggleFullscreen(true)
+            }
+        }
+    }
+
     private fun toggleFullscreen(fullscreen: Boolean) {
+        val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
+
         window.decorView.systemUiVisibility = when {
-            fullscreen -> SYSTEM_UI_FLAG_LOW_PROFILE or
+            fullscreen && !isInMultiWindowMode -> SYSTEM_UI_FLAG_LOW_PROFILE or
                 SYSTEM_UI_FLAG_FULLSCREEN or
                 SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 SYSTEM_UI_FLAG_HIDE_NAVIGATION or
