@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.1-rc-1"
+    gradleVersion = "6.1-rc-2"
 
     // Core plugins
     androidPluginVersion = "3.6.0-rc01"
@@ -26,14 +26,14 @@ ext {
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.1.0-alpha-8"
+    koinVersion = "2.1.0-alpha-10"
     appcompatVersion = "1.2.0-alpha01"
-    browserVersion = "1.2.0"
+    browserVersion = "1.3.0-alpha01"
     lifecycleVersion = "2.2.0-rc03"
     roomVersion = "2.2.3"
-    workVersion = "2.3.0-beta02"
+    workVersion = "2.3.0-rc01"
     coreKtxVersion = "1.2.0-rc01"
-    fragmentKtxVersion = "1.2.0-rc04"
+    fragmentKtxVersion = "1.2.0-rc05"
     shareTargetVersion = "1.0.0-rc01"
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
@@ -60,7 +60,7 @@ ext {
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.2"
     communityMaterialTypefaceVersion = "3.7.95.3-kotlin"
-    materialDrawerVersion = "7.0.0-rc09"
+    materialDrawerVersion = "7.0.0"
     aboutLibrariesVersion = "7.1.0"
     materializeVersion = "1.2.1"
     crossfaderVersion = "1.6.0"
