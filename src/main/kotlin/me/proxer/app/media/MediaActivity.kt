@@ -166,12 +166,15 @@ class MediaActivity : ImageTabsActivity() {
 
     private inner class SectionsPagerAdapter : FragmentStateAdapter(supportFragmentManager, lifecycle) {
 
-        override fun getItemCount() = when {
-            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> when (category) {
-                Category.ANIME, Category.MANGA -> 6
-                else -> 5
+        override fun getItemCount(): Int {
+            return when {
+                viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> when (category) {
+                    Category.ANIME, Category.MANGA -> 6
+                    Category.NOVEL -> 5
+                    null -> 1
+                }
+                else -> 1
             }
-            else -> 1
         }
 
         override fun createFragment(position: Int) = when (category) {
@@ -184,7 +187,7 @@ class MediaActivity : ImageTabsActivity() {
                 5 -> DiscussionFragment.newInstance()
                 else -> error("Unknown index passed: $position")
             }
-            else -> when (position) {
+            Category.NOVEL -> when (position) {
                 0 -> MediaInfoFragment.newInstance()
                 1 -> CommentsFragment.newInstance()
                 2 -> RelationFragment.newInstance()
@@ -192,19 +195,19 @@ class MediaActivity : ImageTabsActivity() {
                 4 -> DiscussionFragment.newInstance()
                 else -> error("Unknown index passed: $position")
             }
+            null -> MediaInfoFragment.newInstance()
         }
 
         override fun getItemId(position: Int) = when (category) {
             Category.ANIME, Category.MANGA -> position.toLong()
-            else -> if (position in 0..1) position.toLong() else position + 1L
+            Category.NOVEL -> position.toLong()
+            null -> -1L
         }
 
-        override fun containsItem(itemId: Long) = when {
-            viewModel.data.value != null || preferenceHelper.isAgeRestrictedMediaAllowed -> when (category) {
-                Category.ANIME, Category.MANGA -> itemId in 0..5
-                else -> itemId in 0L..1L || itemId in 3L..5L
-            }
-            else -> itemId == 0L
+        override fun containsItem(itemId: Long) = when (category) {
+            Category.ANIME, Category.MANGA -> itemId in 0..5
+            Category.NOVEL -> itemId in 0..4
+            null -> itemId == -1L
         }
     }
 
