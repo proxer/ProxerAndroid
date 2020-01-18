@@ -44,9 +44,9 @@ object ImagePrototype : AutoClosingPrototype {
 
     private const val WIDTH_ARGUMENT = "width"
 
-    private val widthAttributeRegex = Regex("size *= *(.+?)( |$)", REGEX_OPTIONS)
+    private val widthAttributeRegex = Regex("(?:size)? *= *(.+?)( |$)", REGEX_OPTIONS)
 
-    override val startRegex = Regex(" *img( .*?)?", REGEX_OPTIONS)
+    override val startRegex = Regex(" *img *=? *\"?.*?\"?( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *img *", REGEX_OPTIONS)
 
     override fun construct(code: String, parent: BBTree): BBTree {
