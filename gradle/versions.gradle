@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.1-rc-2"
+    gradleVersion = "6.1"
 
     // Core plugins
     androidPluginVersion = "3.6.0-rc01"
@@ -21,7 +21,7 @@ ext {
 
     // Utility plugins
     versionsPluginVersion = "0.27.0"
-    detektPluginVersion = "1.3.1"
+    detektPluginVersion = "1.4.0"
     ktlintPluginVersion = "9.1.1"
     androidCommandPluginVersion = "2.1.0"
 
@@ -41,7 +41,7 @@ ext {
     castVersion = "18.0.0"
 
     // RxJava
-    rxJavaVersion = "2.2.16"
+    rxJavaVersion = "2.2.17"
     rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.1.0"
@@ -68,7 +68,7 @@ ext {
     subsamplingScaleImageViewVersion = "3.10.0"
     subsamplingPdfDecoderVersion = "ad07ddf671"
     materialDialogsVersion = "3.1.1"
-    flexboxVersion = "2.0.0"
+    flexboxVersion = "2.0.1"
     emojiIosVersion = "489bd66043"
     exoplayerVersion = "2.11.1"
     previewSeekbarVersion = "09eec85551"
