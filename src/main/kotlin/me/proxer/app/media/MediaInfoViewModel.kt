@@ -86,12 +86,16 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
     fun note() = updateUserInfo(UserInfoUpdateType.NOTE)
     fun markAsFavorite() = updateUserInfo(UserInfoUpdateType.FAVORITE)
     fun markAsFinished() = updateUserInfo(UserInfoUpdateType.FINISHED)
+    fun subscribe() = updateUserInfo(UserInfoUpdateType.SUBSCRIBE)
+    fun unsubscribe() = updateUserInfo(UserInfoUpdateType.UNSUBSCRIBE)
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {
             UserInfoUpdateType.NOTE -> api.info.note(entryId)
             UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId)
             UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId)
+            UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId)
+            UserInfoUpdateType.UNSUBSCRIBE -> api.info.unsubscribe(entryId)
         }
 
         userInfoDisposable?.dispose()
@@ -130,10 +134,16 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             else -> data.isTopTen
         }
 
-        MediaUserInfo(isNoted, isFinished, data.isCanceled, isTopTen)
+        val isSubscribed = when (updateType) {
+            UserInfoUpdateType.SUBSCRIBE -> true
+            UserInfoUpdateType.UNSUBSCRIBE -> false
+            else -> data.isSubscribed
+        }
+
+        MediaUserInfo(isNoted, isFinished, data.isCanceled, isTopTen, isSubscribed)
     }
 
     private enum class UserInfoUpdateType {
-        NOTE, FAVORITE, FINISHED
+        NOTE, FAVORITE, FINISHED, SUBSCRIBE, UNSUBSCRIBE
     }
 }

@@ -101,6 +101,8 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
     private val favor: ImageView by bindView(R.id.favor)
     private val finishContainer: ViewGroup by bindView(R.id.finishContainer)
     private val finish: ImageView by bindView(R.id.finish)
+    private val subscribeContainer: ViewGroup by bindView(R.id.subscribeContainer)
+    private val subscribe: ImageView by bindView(R.id.subscribe)
 
     private val description: TextView by bindView(R.id.description)
 
@@ -122,6 +124,16 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         finishContainer.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.markAsFinished() }
+
+        subscribeContainer.clicks()
+            .autoDisposable(viewLifecycleOwner.scope())
+            .subscribe {
+                if (viewModel.userInfoData.value?.isSubscribed == true) {
+                    viewModel.unsubscribe()
+                } else {
+                    viewModel.subscribe()
+                }
+            }
 
         unratedTags.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -448,9 +460,11 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         val noteColor = if (userInfo?.isNoted == true) R.attr.colorSecondary else R.attr.colorIcon
         val favorColor = if (userInfo?.isTopTen == true) R.attr.colorSecondary else R.attr.colorIcon
         val finishColor = if (userInfo?.isFinished == true) R.attr.colorSecondary else R.attr.colorIcon
+        val subscribeColor = if (userInfo?.isSubscribed == true) R.attr.colorSecondary else R.attr.colorIcon
 
         note.setIconicsImage(CommunityMaterial.Icon3.cmd_clock, 24, 0, noteColor)
         favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)
         finish.setIconicsImage(CommunityMaterial.Icon3.cmd_check, 24, 0, finishColor)
+        subscribe.setIconicsImage(CommunityMaterial.Icon2.cmd_newspaper, 24, 0, subscribeColor)
     }
 }

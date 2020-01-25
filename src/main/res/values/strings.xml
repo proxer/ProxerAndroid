@@ -464,6 +464,7 @@
     <string name="fragment_media_info_note">Vermerken</string>
     <string name="fragment_media_info_favor">Favorisieren</string>
     <string name="fragment_media_info_finish">Abgeschlossen</string>
+    <string name="fragment_media_info_subscribe">Abonnieren</string>
     <string name="fragment_media_info_tags_spoiler_hide">Spoiler Tags verstecken</string>
     <string name="fragment_media_info_tags_spoiler_show">Spoiler Tags anzeigen</string>
     <string name="fragment_media_info_tags_unrated_hide">Unbewertete Tags verstecken</string>

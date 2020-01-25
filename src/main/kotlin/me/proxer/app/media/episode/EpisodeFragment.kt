@@ -5,12 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.jakewharton.rxbinding3.view.clicks
+import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,13 +25,16 @@ import me.proxer.app.anime.AnimeActivity
 import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
+import me.proxer.app.media.MediaInfoViewModel
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
+import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
+import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.enableFastScroll
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.Category
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.concurrent.TimeUnit
@@ -47,6 +54,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
     override val isSwipeToRefreshEnabled = false
 
     override val viewModel by viewModel<EpisodeViewModel> { parametersOf(id) }
+    private val mediaInfoViewModel by sharedViewModel<MediaInfoViewModel>()
 
     override val hostingActivity: MediaActivity
         get() = activity as MediaActivity
@@ -128,6 +136,18 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                 recyclerView.stopScroll()
                 layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
+
+        mediaInfoViewModel.userInfoData.observe(viewLifecycleOwner, Observer {
+            if (it?.isSubscribed == true) {
+                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_check)
+                    .colorAttr(requireContext(), R.attr.colorOnPrimary)
+                    .sizeDp(18)
+
+                errorButton.setCompoundDrawables(null, null, icon, null)
+            } else {
+                errorButton.setCompoundDrawables(null, null, null, null)
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -155,13 +175,26 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                         Category.ANIME, null -> R.string.error_no_data_episodes
                         Category.MANGA, Category.NOVEL -> R.string.error_no_data_chapters
                     },
-                    ACTION_MESSAGE_HIDE
+                    R.string.fragment_media_info_subscribe,
+                    ButtonAction.SUBSCRIBE
                 )
             )
         }
 
         recyclerView.post {
             if (view != null) updateScrollToBottomVisibility(false)
+        }
+    }
+
+    override fun showError(action: ErrorAction) {
+        super.showError(action)
+
+        if (action.buttonAction == ButtonAction.SUBSCRIBE) {
+            errorButton.clicks()
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                .subscribe {
+                    mediaInfoViewModel.subscribe()
+                }
         }
     }
 

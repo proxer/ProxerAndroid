@@ -119,13 +119,14 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
         errorButton.clicks()
             .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
             .subscribe {
-                when (action.message == R.string.error_captcha) {
-                    true -> {
+                when (action.buttonAction) {
+                    ErrorAction.ButtonAction.CAPTCHA -> {
                         isSolvingCaptcha = true
 
                         showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
                     }
-                    false -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
+                    null -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
+                    else -> Unit
                 }
             }
     }

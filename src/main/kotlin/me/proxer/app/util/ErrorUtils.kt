@@ -350,6 +350,6 @@ object ErrorUtils : KoinComponent {
             else -> null
         }
 
-        enum class ButtonAction { CAPTCHA, NETWORK_SETTINGS, LOGIN, AGE_CONFIRMATION, OPEN_LINK }
+        enum class ButtonAction { CAPTCHA, NETWORK_SETTINGS, LOGIN, AGE_CONFIRMATION, OPEN_LINK, SUBSCRIBE }
     }
 }
