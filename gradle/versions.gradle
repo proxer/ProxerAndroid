@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.1"
+    gradleVersion = "6.1.1"
 
     // Core plugins
     androidPluginVersion = "3.6.0-rc01"
@@ -29,11 +29,11 @@ ext {
     koinVersion = "2.1.0-alpha-10"
     appcompatVersion = "1.2.0-alpha01"
     browserVersion = "1.3.0-alpha01"
-    lifecycleVersion = "2.2.0-rc03"
+    lifecycleVersion = "2.2.0"
     roomVersion = "2.2.3"
-    workVersion = "2.3.0-rc01"
+    workVersion = "2.3.0"
     coreKtxVersion = "1.2.0-rc01"
-    fragmentKtxVersion = "1.2.0-rc05"
+    fragmentKtxVersion = "1.2.0"
     shareTargetVersion = "1.0.0-rc01"
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
@@ -55,7 +55,7 @@ ext {
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.0.0"
     exifinterfaceVersion = "1.2.0-beta01"
-    materialComponentsVersion = "1.2.0-alpha03"
+    materialComponentsVersion = "1.2.0-alpha04"
     preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "4.0.2"
@@ -80,7 +80,7 @@ ext {
     gravitySnapHelperVersion = "2.2.0"
 
     // Utils
-    proxerLibVersion = "40f3b5ed77"
+    proxerLibVersion = "32eee3f55b"
     threetenVersion = "1.2.2"
     hawkVersion = "7a1a625455"
     glideVersion = "4.11.0"
