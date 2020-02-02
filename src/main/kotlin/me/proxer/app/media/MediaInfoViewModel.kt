@@ -95,7 +95,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId)
             UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId)
             UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId)
-            UserInfoUpdateType.UNSUBSCRIBE -> api.info.unsubscribe(entryId)
+            UserInfoUpdateType.UNSUBSCRIBE -> api.ucp.deleteSubscription(entryId)
         }
 
         userInfoDisposable?.dispose()
