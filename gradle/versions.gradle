@@ -13,27 +13,27 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.1.1"
+    gradleVersion = "6.2-rc-1"
 
     // Core plugins
-    androidPluginVersion = "3.6.0-rc02"
+    androidPluginVersion = "3.6.0-rc03"
     kotlinVersion = "1.3.61"
 
     // Utility plugins
     versionsPluginVersion = "0.27.0"
-    detektPluginVersion = "1.4.0"
+    detektPluginVersion = "1.5.1"
     ktlintPluginVersion = "9.1.1"
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.1.0-alpha-10"
+    koinVersion = "2.1.0-beta-1"
     appcompatVersion = "1.2.0-alpha02"
     browserVersion = "1.3.0-alpha01"
     lifecycleVersion = "2.2.0"
     roomVersion = "2.2.3"
-    workVersion = "2.3.0"
+    workVersion = "2.3.1"
     coreKtxVersion = "1.3.0-alpha01"
-    fragmentKtxVersion = "1.2.0"
+    fragmentKtxVersion = "1.2.1"
     shareTargetVersion = "1.0.0-rc01"
     playCoreVersion = "1.6.4"
     adsIdentifierVersion = "17.0.0"
@@ -67,7 +67,7 @@ ext {
     materialAboutVersion = "2.4.2"
     subsamplingScaleImageViewVersion = "3.10.0"
     subsamplingPdfDecoderVersion = "ad07ddf671"
-    materialDialogsVersion = "3.1.1"
+    materialDialogsVersion = "3.2.1"
     flexboxVersion = "2.0.1"
     emojiIosVersion = "489bd66043"
     exoplayerVersion = "2.11.1"
@@ -76,7 +76,7 @@ ext {
     materialRatingBarVersion = "1005cd342e"
     customtabsHelperVersion = "1.0.6"
     introductionVersion = "2.0.0"
-    aspectRatioImageViewVersion = "1.0.8"
+    aspectRatioImageViewVersion = "1.0.9"
     gravitySnapHelperVersion = "2.2.0"
 
     // Utils
@@ -94,12 +94,12 @@ ext {
     imageDecoderVersion = "a7b102262a"
     concealVersion = "2.0.2"
     betterLinkMovementMethodVersion = "2.2.0"
-    jsoupVersion = "1.12.1"
+    jsoupVersion = "1.12.2"
 
     // Debugging
     customActivityOnCrashVersion = "2.2.0"
     strictModeCompatVersion = "29.0.0"
-    leakCanaryVersion = "2.1"
+    leakCanaryVersion = "2.2"
     anrWatchdogVersion = "1.4.0"
     timberVersion = "4.7.1"
 }
