@@ -203,11 +203,9 @@ kapt {
 
 detekt {
     version = detektPluginVersion
-    parallel = true
-    failFast = true
+    buildUponDefaultConfig = true
 
     config = files("$projectDir/config/detekt/detekt.yml")
-    input = files("$projectDir/src/main/kotlin")
 
     reports {
         xml.destination = file("$buildDir/reports/detekt/detekt.xml")

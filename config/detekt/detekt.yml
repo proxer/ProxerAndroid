@@ -1,64 +1,16 @@
-comments:
-  UndocumentedPublicClass:
-    searchInInnerClass: false
-    searchInInnerInterface: false
-    searchInInnerObject: false
-    searchInNestedClass: false
-  UndocumentedPublicFunction:
-    active: false
-  UndocumentedPublicProperty:
-    active: false
-
 complexity:
-  ComplexCondition:
-    active: false
-  ComplexMethod:
-    active: false
-  LabeledExpression:
-    active: false
-  LargeClass:
-    active: false
-  LongMethod:
-    active: false
-  LongParameterList:
-    active: false
-  NestedBlockDepth:
-    active: false
-  StringLiteralDuplication:
-    active: false
-  TooManyFunctions:
-    active: false
+  active: false
 
 exceptions:
-  SwallowedException:
-    ignoredExceptionTypes: 'ActivityNotFoundException,NoSuchAlgorithmException,NumberFormatException,
-                            PackageManager.NameNotFoundException,UnsupportedEncodingException'
   TooGenericExceptionCaught:
     active: false
-
-naming:
-  FunctionMaxLength:
-    maximumFunctionNameLength: 40
 
 performance:
   SpreadOperator:
     active: false
 
-potential-bugs:
-  UnsafeCast:
-    active: false
-
 style:
-  DataClassContainsFunctions:
-    active: false
-  ExpressionBodySyntax:
-    active: false
-  ForbiddenComment:
-    active: true
-    values: 'FIXME:,STOPSHIP:'
   MagicNumber:
     active: false
-  OptionalUnit:
-    active: false
-  UseIfInsteadOfWhen:
+  ForbiddenComment:
     active: false
