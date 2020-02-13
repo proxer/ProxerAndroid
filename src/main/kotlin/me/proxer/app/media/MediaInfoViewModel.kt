@@ -86,8 +86,14 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
     fun note() = updateUserInfo(UserInfoUpdateType.NOTE)
     fun markAsFavorite() = updateUserInfo(UserInfoUpdateType.FAVORITE)
     fun markAsFinished() = updateUserInfo(UserInfoUpdateType.FINISHED)
-    fun subscribe() = updateUserInfo(UserInfoUpdateType.SUBSCRIBE)
-    fun unsubscribe() = updateUserInfo(UserInfoUpdateType.UNSUBSCRIBE)
+
+    fun toggleSubscription() {
+        if (userInfoData.value?.isSubscribed == true) {
+            updateUserInfo(UserInfoUpdateType.UNSUBSCRIBE)
+        } else {
+            updateUserInfo(UserInfoUpdateType.SUBSCRIBE)
+        }
+    }
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {

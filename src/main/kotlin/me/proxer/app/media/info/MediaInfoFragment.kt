@@ -127,13 +127,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
 
         subscribeContainer.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe {
-                if (viewModel.userInfoData.value?.isSubscribed == true) {
-                    viewModel.unsubscribe()
-                } else {
-                    viewModel.subscribe()
-                }
-            }
+            .subscribe { viewModel.toggleSubscription() }
 
         unratedTags.clicks()
             .autoDisposable(viewLifecycleOwner.scope())

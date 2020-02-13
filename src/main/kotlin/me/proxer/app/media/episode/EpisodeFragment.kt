@@ -192,9 +192,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
         if (action.buttonAction == ButtonAction.SUBSCRIBE) {
             errorButton.clicks()
                 .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                .subscribe {
-                    mediaInfoViewModel.subscribe()
-                }
+                .subscribe { mediaInfoViewModel.toggleSubscription() }
         }
     }
 
