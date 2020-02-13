@@ -125,8 +125,7 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
 
                         showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
                     }
-                    null -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
-                    else -> Unit
+                    else -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
                 }
             }
     }
