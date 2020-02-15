@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.2-rc-1"
+    gradleVersion = "6.2-rc-3"
 
     // Core plugins
     androidPluginVersion = "3.6.0-rc03"
@@ -22,7 +22,7 @@ ext {
     // Utility plugins
     versionsPluginVersion = "0.27.0"
     detektPluginVersion = "1.5.1"
-    ktlintPluginVersion = "9.1.1"
+    ktlintPluginVersion = "9.2.1"
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
@@ -35,7 +35,7 @@ ext {
     coreKtxVersion = "1.3.0-alpha01"
     fragmentKtxVersion = "1.2.1"
     shareTargetVersion = "1.0.0-rc01"
-    playCoreVersion = "1.6.4"
+    playCoreVersion = "1.6.5"
     adsIdentifierVersion = "17.0.0"
     interactiveMediaVersion = "3.11.3"
     castVersion = "18.0.0"
@@ -70,7 +70,7 @@ ext {
     materialDialogsVersion = "3.2.1"
     flexboxVersion = "2.0.1"
     emojiIosVersion = "489bd66043"
-    exoplayerVersion = "2.11.1"
+    exoplayerVersion = "2.11.2"
     previewSeekbarVersion = "09eec85551"
     materialProgressBarVersion = "1.6.1"
     materialRatingBarVersion = "1005cd342e"
