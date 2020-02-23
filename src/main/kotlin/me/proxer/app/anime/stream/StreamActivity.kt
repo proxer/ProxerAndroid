@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -29,6 +30,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -137,7 +139,6 @@ class StreamActivity : BaseActivity() {
     private val fullscreen: ImageButton by bindView(R.id.fullscreen)
     private val controlIcon: ImageView by bindView(R.id.controlIcon)
     private val controlProgress: MaterialProgressBar by bindView(R.id.controlProgress)
-    private val controlsContainer: ViewGroup by bindView(R.id.controlsContainer)
     private val preview: ImageView by bindView(R.id.preview)
 
     private var mediaRouteButton: MenuItem? = null
@@ -155,6 +156,12 @@ class StreamActivity : BaseActivity() {
     private val adFullscreenHandler = Handler()
     private val hideControlHandler = Handler()
     private val animationHandler = Handler()
+
+    private val wifiLock by lazy {
+        requireNotNull(getSystemService<WifiManager>())
+            .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "$packageName:Player")
+            .apply { setReferenceCounted(false) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,34 +193,8 @@ class StreamActivity : BaseActivity() {
         playerManager.playerStateSubject
             .autoDisposable(this.scope())
             .subscribe {
-                when (it) {
-                    PlayerState.PLAYING -> {
-                        playerView.keepScreenOn = true
-                        play.contentDescription = getString(R.string.exoplayer_pause_description)
-                        play.setImageState(intArrayOf(R.attr.state_pause), true)
-
-                        loading.isVisible = false
-                        play.isVisible = true
-                    }
-                    PlayerState.PAUSING -> {
-                        playerView.keepScreenOn = false
-                        play.contentDescription = getString(R.string.exoplayer_play_description)
-                        play.setImageState(intArrayOf(-R.attr.state_pause), true)
-
-                        loading.isVisible = false
-                        play.isVisible = true
-                    }
-                    PlayerState.LOADING -> {
-                        playerView.keepScreenOn = true
-                        loading.isVisible = true
-                        play.isVisible = false
-                    }
-                    null -> error("playerState is null")
-                }
-
-                if ((controlsContainer.parent as? View)?.isVisible?.not() != false) {
-                    play.jumpDrawablesToCurrentState()
-                }
+                handlePlayerState(it)
+                handleWifiLock(it)
             }
 
         playerManager.errorSubject
@@ -353,6 +334,8 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        wifiLock.release()
+
         introductoryOverlay?.remove()
         introductoryOverlay = null
 
@@ -505,6 +488,43 @@ class StreamActivity : BaseActivity() {
         } else {
             playerView.controllerHideOnTouch = true
             playerView.controllerShowTimeoutMs = 2_000
+        }
+    }
+
+    private fun handlePlayerState(state: PlayerState) {
+        when (state) {
+            PlayerState.PLAYING -> {
+                playerView.keepScreenOn = true
+                play.contentDescription = getString(R.string.exoplayer_pause_description)
+                play.setImageState(intArrayOf(R.attr.state_pause), true)
+
+                loading.isVisible = false
+                play.isVisible = true
+            }
+            PlayerState.PAUSING -> {
+                playerView.keepScreenOn = false
+                play.contentDescription = getString(R.string.exoplayer_play_description)
+                play.setImageState(intArrayOf(-R.attr.state_pause), true)
+
+                loading.isVisible = false
+                play.isVisible = true
+            }
+            PlayerState.LOADING -> {
+                playerView.keepScreenOn = true
+                loading.isVisible = true
+                play.isVisible = false
+            }
+        }
+    }
+
+    private fun handleWifiLock(state: PlayerState) {
+        when (state) {
+            PlayerState.PLAYING, PlayerState.LOADING -> {
+                wifiLock.acquire()
+            }
+            PlayerState.PAUSING -> {
+                wifiLock.release()
+            }
         }
     }
 
