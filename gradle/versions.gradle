@@ -7,13 +7,13 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 29
     compileSdkVersion = 29
-    ndkVersion = "21.0.6011959-rc2"
+    ndkVersion = "21.0.6113669"
 
     // Java
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.2-rc-3"
+    gradleVersion = "6.2"
 
     // Core plugins
     androidPluginVersion = "3.6.0-rc03"
@@ -69,7 +69,7 @@ ext {
     subsamplingPdfDecoderVersion = "ad07ddf671"
     materialDialogsVersion = "3.3.0"
     flexboxVersion = "2.0.1"
-    emojiIosVersion = "489bd66043"
+    emojiIosVersion = "d13e8fa273"
     exoplayerVersion = "2.11.3"
     previewSeekbarVersion = "09eec85551"
     materialProgressBarVersion = "1.6.1"

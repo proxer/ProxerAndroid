@@ -32,11 +32,6 @@ jobs:
           KEYSTORE: ${{ secrets.KEYSTORE }}
           SECRETS: ${{ secrets.SECRETS }}
 
-      - name: Set up SDK
-        uses: malinskiy/action-android/install-sdk@0.0.5
-      - name: Set up NDK
-        run: $ANDROID_HOME/tools/bin/sdkmanager "ndk;$(grep "ndkVersion" ./gradle/versions.gradle | sed 's/.*"\(.*\)-.*"/\1/' | sed 's/-.*//')" --channel=3
-
       - id: build
         name: Build with Gradle
         run: ./gradlew ktlintCheck detekt build bundle
