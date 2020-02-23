@@ -67,8 +67,10 @@ jobs:
                           node {
                             oid
                             message
-                            status {
-                              state
+                            checkSuites(first: 5) {
+                              nodes {
+                                conclusion
+                              }
                             }
                           }
                         }
@@ -79,9 +81,9 @@ jobs:
               }
             }`
 
-            const result = await github.graphql(query)
+            const result = await github.graphql(query, { previews: "antiope" })
             const history = result.repository.ref.target.history.edges
-            const firstSuccessfulCommit = history.findIndex(it => it.node.status && it.node.status.state === "SUCCESS")
+            const firstSuccessfulCommit = history.findIndex(it => it.node.checkSuites.nodes.every(check => check.conclusion !== "FAILURE"))
 
             if (firstSuccessfulCommit >= 0) {
               return `${history[firstSuccessfulCommit].node.oid}...${context.sha}`
