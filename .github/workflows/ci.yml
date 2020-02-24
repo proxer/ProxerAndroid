@@ -81,7 +81,7 @@ jobs:
               }
             }`
 
-            const result = await github.graphql(query, { previews: "antiope" })
+            const result = await github.graphql(query, { mediaType: { previews: ["antiope"] } })
             const history = result.repository.ref.target.history.edges
             const firstSuccessfulCommit = history.findIndex(it => it.node.checkSuites.nodes.every(check => check.conclusion !== "FAILURE"))
 
