@@ -10,7 +10,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - uses: gradle/wrapper-validation-action@v1.0.2
+      - name: Check Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1.0.2
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1.3.0
