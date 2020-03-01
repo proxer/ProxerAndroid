@@ -69,6 +69,7 @@ jobs:
         uses: actions/github-script@0.8.0
         with:
           github-token: ${{github.token}}
+          previews: 'antiope-preview'
           script: |
             const query = `{
               repository(owner: "proxer", name: "ProxerAndroid") {
@@ -94,8 +95,10 @@ jobs:
               }
             }`;
 
-            const result = await github.graphql(query, null, {
-              Accept: "application/vnd.github.antiope-preview+json"
+            const result = await github.graphql(query, {
+              headers: {
+                Accept: "application/vnd.github.antiope-preview+json"
+              }
             });
 
             const history = result.repository.ref.target.history.edges;
