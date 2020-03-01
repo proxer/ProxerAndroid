@@ -65,6 +65,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: Outputs
+          path: build/outputs
 
       - id: calculate-commit-range
         name: Calculate commit range
