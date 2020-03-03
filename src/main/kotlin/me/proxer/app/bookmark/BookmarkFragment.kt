@@ -5,14 +5,21 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import androidx.transition.TransitionManager
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
+import com.jakewharton.rxbinding3.view.actionViewEvents
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.anime.AnimeActivity
@@ -29,6 +36,7 @@ import me.proxer.library.entity.ucp.Bookmark
 import me.proxer.library.enums.Category
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -37,6 +45,7 @@ import kotlin.properties.Delegates
 class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
     companion object {
+        private const val SEARCH_QUERY_ARGUMENT = "search_query"
         private const val CATEGORY_ARGUMENT = "category"
         private const val FILTER_AVAILABLE_ARGUMENT = "filter_available"
 
@@ -45,15 +54,27 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         }
     }
 
-    override val emptyDataMessage = R.string.error_no_data_bookmark
+    override val emptyDataMessage
+        get() = when (searchQuery.isNullOrBlank()) {
+            true -> R.string.error_no_data_bookmark
+            false -> R.string.error_no_data_search
+        }
 
-    override val viewModel by viewModel<BookmarkViewModel> { parametersOf(category, filterAvailable) }
+    override val viewModel by viewModel<BookmarkViewModel> { parametersOf(searchQuery, category, filterAvailable) }
 
     override val layoutManager by unsafeLazy {
         StaggeredGridLayoutManager(DeviceUtils.calculateSpanAmount(requireActivity()) + 1, VERTICAL)
     }
 
     override var innerAdapter by Delegates.notNull<BookmarkAdapter>()
+
+    private var searchQuery: String?
+        get() = requireArguments().getString(SEARCH_QUERY_ARGUMENT, null)
+        set(value) {
+            requireArguments().putString(SEARCH_QUERY_ARGUMENT, value)
+
+            viewModel.searchQuery = value
+        }
 
     private var category: Category?
         get() = requireArguments().getSerializable(CATEGORY_ARGUMENT) as? Category
@@ -70,6 +91,10 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
             viewModel.filterAvailable = value
         }
+
+    private val toolbar by unsafeLazy { requireActivity().findViewById<Toolbar>(R.id.toolbar) }
+
+    private var searchView by Delegates.notNull<SearchView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,6 +175,40 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
         }
 
         menu.findItem(R.id.filterAvailable).isChecked = filterAvailable == true
+
+        menu.findItem(R.id.search).let { searchItem ->
+            searchView = searchItem.actionView as SearchView
+
+            searchItem.actionViewEvents()
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                .subscribe { event ->
+                    if (event.menuItem.isActionViewExpanded) {
+                        searchQuery = null
+                    }
+
+                    TransitionManager.endTransitions(toolbar)
+                    TransitionManager.beginDelayedTransition(toolbar)
+                }
+
+            searchView.queryTextChangeEvents()
+                .skipInitialValue()
+                .debounce(500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                .subscribe { event ->
+                    if (event.isSubmitted) {
+                        searchView.clearFocus()
+                    }
+
+                    searchQuery = event.queryText.toString().trim()
+                }
+
+            searchQuery?.let {
+                searchItem.expandActionView()
+                searchView.setQuery(it, false)
+                searchView.clearFocus()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

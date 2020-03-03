@@ -35,4 +35,14 @@
                 android:title="@string/action_filter_available" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/action_search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:ico_color="?attr/colorOnPrimary"
+        app:ico_icon="cmd_magnify"
+        app:ico_padding="2dp"
+        app:ico_size="24dp"
+        app:showAsAction="always|collapseActionView" />
 </menu>

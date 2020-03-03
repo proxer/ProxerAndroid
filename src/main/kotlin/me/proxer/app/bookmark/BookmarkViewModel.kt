@@ -18,13 +18,18 @@ import kotlin.properties.Delegates
 /**
  * @author Ruben Gees
  */
-class BookmarkViewModel(category: Category?, filterAvailable: Boolean) : PagedContentViewModel<Bookmark>() {
+class BookmarkViewModel(
+    searchQuery: String?,
+    category: Category?,
+    filterAvailable: Boolean
+) : PagedContentViewModel<Bookmark>() {
 
     override val itemsOnPage = 30
     override val isLoginRequired = true
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp.bookmarks()
+            .name(searchQuery)
             .category(category)
             .filterAvailable(if (filterAvailable) true else null)
 
@@ -32,6 +37,10 @@ class BookmarkViewModel(category: Category?, filterAvailable: Boolean) : PagedCo
 
     val undoData = ResettingMutableLiveData<Unit?>()
     val undoError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
+
+    var searchQuery by Delegates.observable(searchQuery) { _, old, new ->
+        if (old != new && !(old.isNullOrBlank() && new.isNullOrBlank())) reload()
+    }
 
     var category by Delegates.observable(category) { _, old, new ->
         if (old != new) reload()

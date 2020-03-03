@@ -220,7 +220,9 @@ private val viewModelModule = module {
     viewModel { (chatRoomId: String) -> ChatViewModel(chatRoomId) }
     viewModel { (chatRoomId: String) -> ChatRoomInfoViewModel(chatRoomId) }
 
-    viewModel { (category: Category, filterAvailable: Boolean) -> BookmarkViewModel(category, filterAvailable) }
+    viewModel { (searchQuery: String?, category: Category, filterAvailable: Boolean) ->
+        BookmarkViewModel(searchQuery, category, filterAvailable)
+    }
 
     viewModel { parameterList ->
         MediaListViewModel(
