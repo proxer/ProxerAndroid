@@ -15,7 +15,7 @@ repositories {
             excludeGroupByRegex "androidx.*"
             excludeGroupByRegex "zipflinger.*"
             excludeGroupByRegex "com\\.android.*"
-            excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko|anrwatchdog).*"
+            excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko|anrwatchdog|pengrad).*"
             excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
             excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*"
         }

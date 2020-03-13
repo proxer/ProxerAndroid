@@ -101,6 +101,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+
+    compileOnly "com.github.pengrad:jdk9-deps:$jdkDeps9Version"
 }
 
 configurations.all {
