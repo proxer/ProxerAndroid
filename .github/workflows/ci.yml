@@ -107,9 +107,13 @@ jobs:
 
             const history = result.repository.ref.target.history.edges;
 
-            const firstSuccessfulCommit = history.findIndex(it =>
-              it.node.checkSuites.nodes.every(check => check.conclusion !== "FAILURE")
-            );
+            const firstSuccessfulCommit = history.findIndex(it => {
+              const nodes = it.node.checkSuites.nodes;
+
+              return (
+                nodes.length > 0 && nodes.every(check => check.conclusion !== "FAILURE")
+              );
+            });
 
             if (firstSuccessfulCommit >= 0) {
               return `${history[firstSuccessfulCommit].node.oid}...${context.sha}`;
