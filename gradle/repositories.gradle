@@ -38,10 +38,4 @@ repositories {
         mavenContent { releasesOnly() }
         content { includeGroupByRegex "com\\.github.*" }
     }
-
-    maven {
-        url "https://dl.bintray.com/kotlin/kotlin-eap"
-        mavenContent { releasesOnly() }
-        content { includeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*" }
-    }
 }

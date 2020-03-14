@@ -95,7 +95,8 @@ class MangaActivity : BaseActivity() {
     val language: Language
         get() = when (intent.hasExtra(LANGUAGE_EXTRA)) {
             true -> intent.getSerializableExtra(LANGUAGE_EXTRA) as Language
-            false -> intent.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum(it) } ?: Language.ENGLISH
+            false -> intent.data?.pathSegments?.getOrNull(3)?.let { ProxerUtils.toApiEnum<Language>(it) }
+                ?: Language.ENGLISH
         }
 
     var chapterTitle: String?
