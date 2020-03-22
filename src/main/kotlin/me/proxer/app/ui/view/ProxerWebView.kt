@@ -48,8 +48,6 @@ class ProxerWebView @JvmOverloads constructor(
     val showPageSubject = PublishSubject.create<HttpUrl>()
     val loadingFinishedSubject = PublishSubject.create<Unit>()
 
-    private val client by safeInject<OkHttpClient>()
-
     init {
         setBackgroundColor(Color.TRANSPARENT)
         setInitialScale(1)

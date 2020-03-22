@@ -29,7 +29,7 @@ class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWi
             .flatMap {
                 if (!MessengerWorker.isRunning) MessengerWorker.enqueueSynchronization()
 
-                Single.never<List<ConferenceWithMessage>>()
+                Single.never()
             }
 
     var searchQuery: String = searchQuery

@@ -41,10 +41,8 @@ class TouchablePlayerView @JvmOverloads constructor(
     private val audioManager = requireNotNull(context.getSystemService<AudioManager>())
     private val notificationManager = requireNotNull(context.getSystemService<NotificationManager>())
 
-    private val safePlayer get() = requireNotNull(player)
-
     private val audioStreamType
-        get() = Util.getStreamTypeForAudioUsage(safePlayer.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)
+        get() = Util.getStreamTypeForAudioUsage(player?.audioComponent?.audioAttributes?.usage ?: C.USAGE_MEDIA)
 
     private val canChangeAudio
         get() = audioManager.isVolumeFixed.not() ||
@@ -142,7 +140,9 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     fun rewind(triggerSubject: Boolean = false) {
-        if (safePlayer.isCurrentWindowSeekable) {
+        val safePlayer = player
+
+        if (safePlayer != null && safePlayer.isCurrentWindowSeekable) {
             safePlayer.seekTo(max(safePlayer.currentPosition - 10_000, 0))
 
             if (triggerSubject) {
@@ -152,7 +152,9 @@ class TouchablePlayerView @JvmOverloads constructor(
     }
 
     fun fastForward(triggerSubject: Boolean = false) {
-        if (safePlayer.isCurrentWindowSeekable) {
+        val safePlayer = player
+
+        if (safePlayer != null && safePlayer.isCurrentWindowSeekable) {
             val durationMs = safePlayer.duration
 
             val seekPositionMs = if (durationMs != C.TIME_UNSET) {

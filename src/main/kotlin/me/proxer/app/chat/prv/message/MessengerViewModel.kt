@@ -46,7 +46,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
                     else -> if (!hasReachedEnd) MessengerWorker.enqueueMessageLoad(safeConference.id)
                 }
 
-                Single.never<List<LocalMessage>>()
+                Single.never()
             }
 
     private val dataSource: (List<LocalMessage>?) -> Unit = {

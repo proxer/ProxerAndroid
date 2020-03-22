@@ -1,7 +1,6 @@
 package me.proxer.app.comment
 
 import androidx.lifecycle.MutableLiveData
-import com.gojuno.koptional.Optional
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Single
@@ -71,10 +70,10 @@ class EditCommentViewModel(
             .let { comment ->
                 when {
                     comment == null || comment.content.isBlank() && comment.overallRating == 0 -> null
-                    comment.content.length > MAX_LENGTH -> Single.error<Optional<Unit>>(CommentTooLongException())
+                    comment.content.length > MAX_LENGTH -> Single.error(CommentTooLongException())
 
                     comment.mediaProgress == UserMediaProgress.WILL_WATCH -> Single
-                        .error<Optional<Unit>>(CommentInvalidProgressException())
+                        .error(CommentInvalidProgressException())
 
                     comment.id.isNotEmpty() -> api.comment.update(comment.id)
                         .comment(comment.content.trim())

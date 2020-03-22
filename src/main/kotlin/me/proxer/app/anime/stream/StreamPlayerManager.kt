@@ -29,6 +29,7 @@ import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaMetadata
 import com.google.android.gms.cast.MediaQueueItem
 import com.google.android.gms.common.images.WebImage
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.MainApplication.Companion.USER_AGENT
 import me.proxer.app.util.DefaultActivityLifecycleCallbacks
@@ -47,7 +48,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         private const val LAST_POSITION_EXTRA = "last_position"
     }
 
-    val playerReadySubject = PublishSubject.create<Player>()
+    private val localPlayer = buildLocalPlayer(context)
+    private val castPlayer = buildCastPlayer(context)
+
+    val playerReadySubject = BehaviorSubject.createDefault<Player>(localPlayer)
     val playerStateSubject = PublishSubject.create<PlayerState>()
     val errorSubject = PublishSubject.create<ErrorUtils.ErrorAction>()
 
@@ -125,9 +129,6 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     }
 
     private val client = buildClient(rawClient)
-
-    private val localPlayer = buildLocalPlayer(context)
-    private val castPlayer = buildCastPlayer(context)
 
     private var adsLoader: ImaAdsLoader? = when {
         adTag != null -> ImaAdsLoader(context, adTag).apply {

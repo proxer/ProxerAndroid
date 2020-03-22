@@ -74,6 +74,7 @@ import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.anime.stream.StreamPlayerManager.PlayerState
 import me.proxer.app.base.BaseActivity
+import me.proxer.app.util.extension.getSafeStringExtra
 import me.proxer.app.util.extension.loadRequests
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.newTask
@@ -100,20 +101,20 @@ class StreamActivity : BaseActivity() {
         private const val RESUME_DIALOG_SHOWN = "resume_dialog_shown"
     }
 
-    internal val id: String?
-        get() = intent.getStringExtra(ID_EXTRA)
+    internal val id: String
+        get() = intent.getSafeStringExtra(ID_EXTRA)
 
-    internal val name: String?
-        get() = intent.getStringExtra(NAME_EXTRA)
+    internal val name: String
+        get() = intent.getSafeStringExtra(NAME_EXTRA)
 
-    internal val episode: Int?
-        get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
+    internal val episode: Int
+        get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) 1 else it }
 
-    internal val language: AnimeLanguage?
-        get() = intent.getSerializableExtra(LANGUAGE_EXTRA) as? AnimeLanguage
+    internal val language: AnimeLanguage
+        get() = intent.getSerializableExtra(LANGUAGE_EXTRA) as AnimeLanguage
 
     internal val coverUri: Uri?
-        get() = intent.getParcelableExtra<Uri>(COVER_EXTRA)
+        get() = intent.getParcelableExtra(COVER_EXTRA)
 
     internal val referer: String?
         get() = intent.getStringExtra(REFERER_EXTRA)
@@ -343,21 +344,13 @@ class StreamActivity : BaseActivity() {
 
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
-        val safeId = id
-        val safeEpisode = episode
-        val safeLanguage = language
+        val lastPosition = storageHelper.getLastAnimePosition(id, episode, language)
 
-        if (safeId != null && safeEpisode != null && safeLanguage != null) {
-            val lastPosition = storageHelper.getLastAnimePosition(safeId, safeEpisode, safeLanguage)
+        if (lastPosition != null && lastPosition > 0) {
+            if (!resumeDialogShown) {
+                resumeDialogShown = true
 
-            if (lastPosition != null && lastPosition > 0) {
-                if (!resumeDialogShown) {
-                    resumeDialogShown = true
-
-                    StreamResumeDialog.show(this, lastPosition)
-                } else {
-                    playerManager.play()
-                }
+                StreamResumeDialog.show(this, lastPosition)
             } else {
                 playerManager.play()
             }
@@ -371,13 +364,10 @@ class StreamActivity : BaseActivity() {
 
         playerManager.pause()
 
-        val safeId = id
-        val safeEpisode = episode
-        val safeLanguage = language
         val lastPosition = playerManager.currentPlayer.currentPosition
 
-        if (safeId != null && safeEpisode != null && safeLanguage != null && lastPosition > 0) {
-            storageHelper.putLastAnimePosition(safeId, safeEpisode, safeLanguage, lastPosition)
+        if (lastPosition > 0) {
+            storageHelper.putLastAnimePosition(id, episode, language, lastPosition)
         }
 
         super.onStop()
@@ -445,7 +435,7 @@ class StreamActivity : BaseActivity() {
     private fun setupUi() {
         title = name
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.subtitle = episode?.let { Category.ANIME.toEpisodeAppString(this, it) }
+        supportActionBar?.subtitle = Category.ANIME.toEpisodeAppString(this, episode)
 
         coverUri?.also {
             GlideApp.with(playerView)

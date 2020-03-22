@@ -39,7 +39,7 @@ class MangaViewModel(
 
     override val dataSingle: Single<MangaChapterInfo>
         get() = Single.fromCallable { validate() }
-            .flatMap<EntryCore> { entrySingle() }
+            .flatMap { entrySingle() }
             .doOnSuccess {
                 if (it.isAgeRestricted && !preferenceHelper.isAgeRestrictedMediaAllowed) {
                     throw AgeConfirmationRequiredException()
