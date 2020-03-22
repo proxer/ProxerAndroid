@@ -17,7 +17,6 @@ repositories {
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko|anrwatchdog|pengrad).*"
             excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
-            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*"
         }
     }
 
@@ -29,7 +28,6 @@ repositories {
             excludeGroupByRegex "com\\.github\\.(?!ben-manes).*"
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.google\\.android\\.*"
-            excludeVersionByRegex "org\\.jetbrains\\.kotlin.*", ".*kotlin.*", ".*-eap-.*"
         }
     }
 

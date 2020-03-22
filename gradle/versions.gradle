@@ -13,29 +13,29 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.3-rc-1"
+    gradleVersion = "6.3-rc-4"
 
     // Core plugins
-    androidPluginVersion = "4.0.0-beta02"
+    androidPluginVersion = "4.0.0-beta03"
     kotlinVersion = "1.3.70"
 
     // Utility plugins
     versionsPluginVersion = "0.28.0"
-    detektPluginVersion = "1.7.0-beta1"
+    detektPluginVersion = "1.7.0"
     ktlintPluginVersion = "9.2.1"
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.1.3"
+    koinVersion = "2.1.4"
     appcompatVersion = "1.2.0-alpha03"
     browserVersion = "1.3.0-alpha01"
     lifecycleVersion = "2.2.0"
-    roomVersion = "2.2.4"
+    roomVersion = "2.2.5"
     workVersion = "2.4.0-alpha01"
     coreKtxVersion = "1.3.0-alpha02"
-    fragmentKtxVersion = "1.3.0-alpha01"
+    fragmentKtxVersion = "1.3.0-alpha02"
     shareTargetVersion = "1.0.0-rc01"
-    playCoreVersion = "1.7.0"
+    playCoreVersion = "1.7.1"
     adsIdentifierVersion = "17.0.0"
     interactiveMediaVersion = "3.11.3"
     castVersion = "18.1.0"
@@ -84,8 +84,8 @@ ext {
     threetenVersion = "1.2.2"
     hawkVersion = "7a1a625455"
     glideVersion = "4.11.0"
-    retrofitVersion = "2.7.1"
-    okHttpVersion = "4.4.0"
+    retrofitVersion = "2.7.2"
+    okHttpVersion = "4.4.1"
     okioVersion = "2.4.1"
     moshiVersion = "1.9.2"
     easyHeaderFooterAdapterVersion = "3.0.0"
@@ -94,11 +94,11 @@ ext {
     imageDecoderVersion = "a7b102262a"
     concealVersion = "2.0.2"
     betterLinkMovementMethodVersion = "2.2.0"
-    jsoupVersion = "1.12.2"
+    jsoupVersion = "1.13.1"
     jdkDeps9Version = "1.0"
 
     // Debugging
-    customActivityOnCrashVersion = "2.2.0"
+    customActivityOnCrashVersion = "2.3.0"
     strictModeCompatVersion = "29.0.0"
     leakCanaryVersion = "2.2"
     anrWatchdogVersion = "1.4.0"
