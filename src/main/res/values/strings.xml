@@ -133,7 +133,7 @@
         Möglicherweise wurde es entfernt oder der Server hat Probleme
     </string>
     <string name="error_manga_link">
-        Dieses Kapitel ist aufgrund von einer Lizensierung nicht im internen Reader verfügbar
+        Dieses Kapitel ist aufgrund einer Lizenzierung nicht im internen Reader verfügbar
     </string>
 
     <string name="error_comment_too_long">Der Kommentar darf maximal 20000 Zeichen lang sein</string>
