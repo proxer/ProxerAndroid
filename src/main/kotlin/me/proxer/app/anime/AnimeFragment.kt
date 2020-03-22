@@ -201,7 +201,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
             result?.let {
                 when (result) {
                     is StreamResolutionResult.Video -> result.play(
-                        requireContext(), name, episode, ProxerUrls.entryImage(id).androidUri(), true
+                        requireContext(), id, name, episode, language, ProxerUrls.entryImage(id).androidUri(), true
                     )
                     is StreamResolutionResult.Link -> result.show(this)
                     is StreamResolutionResult.App -> result.navigate(requireContext())

@@ -67,7 +67,9 @@ import me.proxer.app.anime.resolver.StreamResolutionResult
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.AD_TAG_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.COVER_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.EPISODE_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.ID_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.INTERNAL_PLAYER_ONLY_EXTRA
+import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.LANGUAGE_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.NAME_EXTRA
 import me.proxer.app.anime.resolver.StreamResolutionResult.Video.Companion.REFERER_EXTRA
 import me.proxer.app.anime.stream.StreamPlayerManager.PlayerState
@@ -80,6 +82,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls.hasProxerStreamFileHost
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
@@ -93,11 +96,21 @@ import timber.log.Timber
  */
 class StreamActivity : BaseActivity() {
 
+    private companion object {
+        private const val RESUME_DIALOG_SHOWN = "resume_dialog_shown"
+    }
+
+    internal val id: String?
+        get() = intent.getStringExtra(ID_EXTRA)
+
     internal val name: String?
         get() = intent.getStringExtra(NAME_EXTRA)
 
     internal val episode: Int?
         get() = intent.getIntExtra(EPISODE_EXTRA, -1).let { if (it <= 0) null else it }
+
+    internal val language: AnimeLanguage?
+        get() = intent.getSerializableExtra(LANGUAGE_EXTRA) as? AnimeLanguage
 
     internal val coverUri: Uri?
         get() = intent.getParcelableExtra<Uri>(COVER_EXTRA)
@@ -162,6 +175,12 @@ class StreamActivity : BaseActivity() {
             .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "$packageName:Player")
             .apply { setReferenceCounted(false) }
     }
+
+    private var resumeDialogShown: Boolean
+        get() = intent?.getBooleanExtra(RESUME_DIALOG_SHOWN, false) ?: false
+        set(value) {
+            intent?.putExtra(RESUME_DIALOG_SHOWN, value)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -280,6 +299,8 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribeAndLogErrors { preview.setImageBitmap(it) }
 
+        playerManager.init()
+
         if (savedInstanceState == null) {
             toggleOrientation()
         }
@@ -322,13 +343,42 @@ class StreamActivity : BaseActivity() {
 
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
-        playerManager.play()
+        val safeId = id
+        val safeEpisode = episode
+        val safeLanguage = language
+
+        if (safeId != null && safeEpisode != null && safeLanguage != null) {
+            val lastPosition = storageHelper.getLastAnimePosition(safeId, safeEpisode, safeLanguage)
+
+            if (lastPosition != null && lastPosition > 0) {
+                if (!resumeDialogShown) {
+                    resumeDialogShown = true
+
+                    StreamResumeDialog.show(this, lastPosition)
+                } else {
+                    playerManager.play()
+                }
+            } else {
+                playerManager.play()
+            }
+        } else {
+            playerManager.play()
+        }
     }
 
     override fun onStop() {
         getSafeCastContext()?.removeCastStateListener(castStateListener)
 
         playerManager.pause()
+
+        val safeId = id
+        val safeEpisode = episode
+        val safeLanguage = language
+        val lastPosition = playerManager.currentPlayer.currentPosition
+
+        if (safeId != null && safeEpisode != null && safeLanguage != null && lastPosition > 0) {
+            storageHelper.putLastAnimePosition(safeId, safeEpisode, safeLanguage, lastPosition)
+        }
 
         super.onStop()
     }
@@ -365,6 +415,14 @@ class StreamActivity : BaseActivity() {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
         handleUIChange()
+    }
+
+    fun playContinue(position: Long) {
+        playerManager.play(position)
+    }
+
+    fun playFromStart() {
+        playerManager.play()
     }
 
     @Suppress("SwallowedException")

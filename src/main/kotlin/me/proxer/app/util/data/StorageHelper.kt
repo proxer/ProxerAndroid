@@ -5,6 +5,7 @@ import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.exception.StorageException
 import me.proxer.app.profile.settings.LocalProfileSettings
+import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Language
 import org.threeten.bp.Instant
 
@@ -28,6 +29,7 @@ class StorageHelper(
         const val MESSAGE_DRAFT_PREFIX = "message_draft_"
         const val COMMENT_DRAFT_PREFIX = "comment_draft_"
         const val LAST_MANGA_PAGE_PREFIX = "last_manga_page_"
+        const val LAST_ANIME_POSITION_PREFIX = "last_anime_time_"
 
         private const val DEFAULT_CHAT_INTERVAL = 10_000L
         private const val MAX_CHAT_INTERVAL = 850_000L
@@ -118,6 +120,14 @@ class StorageHelper(
 
     fun getLastMangaPage(id: String, chapter: Int, language: Language): Int? {
         return Hawk.get("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language")
+    }
+
+    fun putLastAnimePosition(id: String, episode: Int, language: AnimeLanguage, position: Long) {
+        putOrThrow("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language", position)
+    }
+
+    fun getLastAnimePosition(id: String, episode: Int, language: AnimeLanguage): Long? {
+        return Hawk.get("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language")
     }
 
     private fun <T> putOrThrow(key: String, value: T) {

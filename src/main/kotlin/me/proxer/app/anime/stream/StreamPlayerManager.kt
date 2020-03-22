@@ -182,17 +182,19 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         context.application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
 
-    fun play() {
-        if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
+    fun init() {
+        playerReadySubject.onNext(localPlayer)
+    }
+
+    fun play(position: Long? = null) {
+        if (position != null && position > 0) {
+            currentPlayer.seekTo(position)
+        } else if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
             currentPlayer.seekTo(lastPosition)
         }
 
         if (isFirstStart || wasPlaying) {
             currentPlayer.playWhenReady = true
-
-            if (isFirstStart) {
-                playerReadySubject.onNext(localPlayer)
-            }
         }
     }
 

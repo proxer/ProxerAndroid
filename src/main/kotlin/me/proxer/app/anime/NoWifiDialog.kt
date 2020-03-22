@@ -12,8 +12,6 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.getSafeString
-import me.proxer.app.util.extension.unsafeLazy
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -28,8 +26,6 @@ class NoWifiDialog : BaseDialog() {
             .apply { setTargetFragment(fragment, 0) }
             .show(activity.supportFragmentManager, "no_wifi_dialog")
     }
-
-    private val viewModel by unsafeLazy { requireTargetFragment().viewModel<AnimeViewModel>().value }
 
     private val remember by bindView<CheckBox>(R.id.remember)
 

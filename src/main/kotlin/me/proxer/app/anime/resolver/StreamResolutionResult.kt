@@ -8,6 +8,7 @@ import me.proxer.app.anime.stream.StreamActivity
 import me.proxer.app.base.CustomTabsAware
 import me.proxer.app.util.extension.addReferer
 import me.proxer.app.util.extension.androidUri
+import me.proxer.library.enums.AnimeLanguage
 import okhttp3.HttpUrl
 
 /**
@@ -24,8 +25,10 @@ sealed class StreamResolutionResult {
     ) : StreamResolutionResult() {
 
         companion object {
+            const val ID_EXTRA = "id"
             const val NAME_EXTRA = "name"
             const val EPISODE_EXTRA = "episode"
+            const val LANGUAGE_EXTRA = "language"
             const val COVER_EXTRA = "cover"
             const val REFERER_EXTRA = "referer"
             const val AD_TAG_EXTRA = "ad_tag"
@@ -41,26 +44,32 @@ sealed class StreamResolutionResult {
 
         fun makeIntent(
             context: Context,
+            id: String? = null,
             name: String? = null,
             episode: Int? = null,
+            language: AnimeLanguage? = null,
             coverUri: Uri? = null,
             forceInternal: Boolean = false
         ): Intent {
             return intent
                 .apply { if (forceInternal) component = ComponentName(context, StreamActivity::class.java) }
+                .apply { if (id != null) putExtra(ID_EXTRA, id) }
                 .apply { if (name != null) putExtra(NAME_EXTRA, name) }
                 .apply { if (episode != null) putExtra(EPISODE_EXTRA, episode) }
+                .apply { if (language != null) putExtra(LANGUAGE_EXTRA, language) }
                 .apply { if (coverUri != null) putExtra(COVER_EXTRA, coverUri) }
         }
 
         fun play(
             context: Context,
+            id: String?,
             name: String?,
             episode: Int?,
+            language: AnimeLanguage? = null,
             coverUri: Uri? = null,
             forceInternal: Boolean = false
         ) {
-            context.startActivity(makeIntent(context, name, episode, coverUri, forceInternal))
+            context.startActivity(makeIntent(context, id, name, episode, language, coverUri, forceInternal))
         }
     }
 
