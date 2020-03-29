@@ -115,8 +115,6 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
                 castPlayer?.setSessionAvailabilityListener(null)
 
-                adsLoader?.removeCallback(adCallbacks)
-
                 adsLoader?.release()
                 adsLoader = null
             }
@@ -128,17 +126,9 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     private val localPlayer = buildLocalPlayer(context)
     private val castPlayer = buildCastPlayer(context)
 
-    private val adCallbacks = object : DefaultVideoAdPlayerCallback {
-        override fun onEnded() {
-            currentPlayer.seekTo(lastPosition)
-        }
-    }
-
     private var adsLoader: ImaAdsLoader? = when {
         adTag != null -> ImaAdsLoader(context, adTag).apply {
             setPlayer(localPlayer)
-
-            addCallback(adCallbacks)
         }
         else -> null
     }
@@ -198,7 +188,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
             lastPosition = position
         }
 
-        if (!isFirstStart && currentPlayer.currentPosition <= 0 && lastPosition > 0) {
+        if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
             currentPlayer.seekTo(lastPosition)
         }
 
