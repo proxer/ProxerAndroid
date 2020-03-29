@@ -97,10 +97,6 @@ import timber.log.Timber
  */
 class StreamActivity : BaseActivity() {
 
-    private companion object {
-        private const val RESUME_DIALOG_SHOWN = "resume_dialog_shown"
-    }
-
     internal val id: String
         get() = intent.getSafeStringExtra(ID_EXTRA)
 
@@ -176,12 +172,6 @@ class StreamActivity : BaseActivity() {
             .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "$packageName:Player")
             .apply { setReferenceCounted(false) }
     }
-
-    private var resumeDialogShown: Boolean
-        get() = intent?.getBooleanExtra(RESUME_DIALOG_SHOWN, false) ?: false
-        set(value) {
-            intent?.putExtra(RESUME_DIALOG_SHOWN, value)
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -300,8 +290,6 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribeAndLogErrors { preview.setImageBitmap(it) }
 
-        playerManager.init()
-
         if (savedInstanceState == null) {
             toggleOrientation()
         }
@@ -344,19 +332,7 @@ class StreamActivity : BaseActivity() {
 
         getSafeCastContext()?.addCastStateListener(castStateListener)
 
-        val lastPosition = storageHelper.getLastAnimePosition(id, episode, language)
-
-        if (lastPosition != null && lastPosition > 0) {
-            if (!resumeDialogShown) {
-                resumeDialogShown = true
-
-                StreamResumeDialog.show(this, lastPosition)
-            } else {
-                playerManager.play()
-            }
-        } else {
-            playerManager.play()
-        }
+        playerManager.play(storageHelper.getLastAnimePosition(id, episode, language))
     }
 
     override fun onStop() {
@@ -405,14 +381,6 @@ class StreamActivity : BaseActivity() {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
         handleUIChange()
-    }
-
-    fun playContinue(position: Long) {
-        playerManager.play(position)
-    }
-
-    fun playFromStart() {
-        playerManager.play()
     }
 
     @Suppress("SwallowedException")

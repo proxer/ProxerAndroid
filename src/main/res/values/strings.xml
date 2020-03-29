@@ -368,10 +368,6 @@
     <string name="dialog_no_wifi_remember">Nicht nochmal fragen</string>
     <string name="dialog_no_wifi_positive">Abspielen</string>
 
-    <string name="dialog_stream_resume_message">Möchtest du den Stream bei %1$s fortsetzen?</string>
-    <string name="dialog_stream_resume_positive">Fortsetzen</string>
-    <string name="dialog_stream_resume_negative">Von vorne starten</string>
-
     <string name="dialog_rating_title">Bewertung</string>
     <string name="dialog_rating_content">
         Gefällt dir die App? Hast du Probleme, Kritik oder Verbesserungsvorschläge?

@@ -48,13 +48,6 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         private const val LAST_POSITION_EXTRA = "last_position"
     }
 
-    private val localPlayer = buildLocalPlayer(context)
-    private val castPlayer = buildCastPlayer(context)
-
-    val playerReadySubject = BehaviorSubject.createDefault<Player>(localPlayer)
-    val playerStateSubject = PublishSubject.create<PlayerState>()
-    val errorSubject = PublishSubject.create<ErrorUtils.ErrorAction>()
-
     private val weakContext = WeakReference(context)
 
     private val castSessionAvailabilityListener = object : SessionAvailabilityListener {
@@ -122,6 +115,8 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
                 castPlayer?.setSessionAvailabilityListener(null)
 
+                adsLoader?.removeCallback(adCallbacks)
+
                 adsLoader?.release()
                 adsLoader = null
             }
@@ -130,9 +125,20 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
     private val client = buildClient(rawClient)
 
+    private val localPlayer = buildLocalPlayer(context)
+    private val castPlayer = buildCastPlayer(context)
+
+    private val adCallbacks = object : DefaultVideoAdPlayerCallback {
+        override fun onEnded() {
+            currentPlayer.seekTo(lastPosition)
+        }
+    }
+
     private var adsLoader: ImaAdsLoader? = when {
         adTag != null -> ImaAdsLoader(context, adTag).apply {
             setPlayer(localPlayer)
+
+            addCallback(adCallbacks)
         }
         else -> null
     }
@@ -174,6 +180,10 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
     val isPlayingAd: Boolean
         get() = localPlayer.isPlayingAd
 
+    val playerReadySubject = BehaviorSubject.createDefault<Player>(localPlayer)
+    val playerStateSubject = PublishSubject.create<PlayerState>()
+    val errorSubject = PublishSubject.create<ErrorUtils.ErrorAction>()
+
     init {
         localPlayer.addListener(eventListener)
         castPlayer?.addListener(eventListener)
@@ -183,14 +193,12 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
         context.application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
     }
 
-    fun init() {
-        playerReadySubject.onNext(localPlayer)
-    }
-
     fun play(position: Long? = null) {
-        if (position != null && position > 0) {
-            currentPlayer.seekTo(position)
-        } else if (currentPlayer.currentPosition <= 0 && lastPosition > 0) {
+        if (isFirstStart && position != null) {
+            lastPosition = position
+        }
+
+        if (!isFirstStart && currentPlayer.currentPosition <= 0 && lastPosition > 0) {
             currentPlayer.seekTo(lastPosition)
         }
 
