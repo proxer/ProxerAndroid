@@ -27,7 +27,7 @@ import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.getSafeParcelable
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.entity.notifications.NewsArticle
 import me.proxer.library.util.ProxerUrls
@@ -115,17 +115,17 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
 
         private fun initListeners() {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
             image.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(imageClickSubject)
 
             expand.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it].id }
                 .autoDisposable(this)
                 .subscribe {
                     expansionMap.putOrRemove(it)

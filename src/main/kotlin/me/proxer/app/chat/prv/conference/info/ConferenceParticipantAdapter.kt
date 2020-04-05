@@ -29,7 +29,7 @@ import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.messenger.ConferenceParticipant
@@ -74,7 +74,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
 
         fun bind(item: ConferenceParticipant) {
             itemView.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(participantClickSubject)
 

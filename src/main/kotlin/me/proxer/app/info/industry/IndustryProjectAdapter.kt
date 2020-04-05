@@ -20,7 +20,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.info.industry.IndustryProjectAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.list.IndustryProject
 import me.proxer.library.util.ProxerUrls
@@ -63,7 +63,7 @@ class IndustryProjectAdapter : BaseAdapter<IndustryProject, ViewHolder>() {
 
         fun bind(item: IndustryProject) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

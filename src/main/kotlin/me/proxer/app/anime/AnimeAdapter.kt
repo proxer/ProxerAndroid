@@ -34,7 +34,7 @@ import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkClicks
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -174,9 +174,9 @@ class AnimeAdapter(
         }
 
         private fun initListeners(loginRequired: Boolean) {
-            // Subtract 1 from the adapterPosition, since we have a header.
+            // Subtract 1 from the bindingAdapterPosition, since we have a header.
             nameContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) {
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) {
                     val resolvedPosition = positionResolver.resolve(it)
 
                     Triple(expandedItemId, data[resolvedPosition].id, resolvedPosition)
@@ -197,31 +197,31 @@ class AnimeAdapter(
                 }
 
             uploaderText.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .subscribe(uploaderClickSubject)
 
             translatorGroup.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .subscribe(translatorGroupClickSubject)
 
             dismissAdAlert.clicks()
-                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { positionResolver.resolve(it) }
                 .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe()
 
             setAdInterval.clicks()
-                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { positionResolver.resolve(it) }
                 .doOnNext { storageHelper.lastAdAlertDate = Instant.now() }
                 .doAfterNext { notifyItemChanged(it) }
                 .autoDisposable(this)
                 .subscribe(setAdIntervalClickSubject)
 
             play.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[positionResolver.resolve(it)] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[positionResolver.resolve(it)] }
                 .autoDisposable(this)
                 .apply { if (loginRequired) subscribe(loginClickSubject) else subscribe(playClickSubject) }
         }

@@ -19,7 +19,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.history.HistoryAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.distanceInWordsToNow
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
@@ -61,12 +61,12 @@ class HistoryAdapter : BaseAdapter<LocalUserHistoryEntry, ViewHolder>() {
 
         fun bind(item: LocalUserHistoryEntry) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
             container.longClicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(longClickSubject)
 

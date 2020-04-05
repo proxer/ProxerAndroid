@@ -25,7 +25,7 @@ import me.proxer.app.util.data.ParcelableStringBooleanMap
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.getSafeParcelable
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
@@ -91,7 +91,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
 
         fun bind(item: EpisodeRow) {
             titleContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it].number.toString() to it }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it].number.toString() to it }
                 .autoDisposable(this)
                 .subscribe { (number, position) ->
                     expansionMap.putOrRemove(number)
@@ -136,7 +136,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
                 )
 
                 languageContainer.clicks()
-                    .mapAdapterPosition({ adapterPosition }) { language to data[it] }
+                    .mapBindingAdapterPosition({ bindingAdapterPosition }) { language to data[it] }
                     .autoDisposable(this)
                     .subscribe(languageClickSubject)
 

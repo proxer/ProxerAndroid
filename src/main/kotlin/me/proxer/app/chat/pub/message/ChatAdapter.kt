@@ -35,7 +35,7 @@ import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
@@ -268,12 +268,12 @@ class ChatAdapter(
 
         internal open fun bind(message: ParsedChatMessage, marginTop: Int, marginBottom: Int) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerClick(root, it) }
 
             container.longClicks { onContainerLongClickHandled(root) }
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerLongClick(root, it) }
 
@@ -365,7 +365,7 @@ class ChatAdapter(
             super.bind(message, marginTop, marginBottom)
 
             titleContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(titleClickSubject)
 

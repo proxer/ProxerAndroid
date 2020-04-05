@@ -49,7 +49,7 @@ class ScheduleAdapter : BaseAdapter<Pair<CalendarDay, List<CalendarEntry>>, View
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
-        withSafeAdapterPosition(holder) {
+        withSafeBindingAdapterPosition(holder) {
             layoutManagerStates[data[it].first] = holder.childRecyclerView.safeLayoutManager.onSaveInstanceState()
         }
 

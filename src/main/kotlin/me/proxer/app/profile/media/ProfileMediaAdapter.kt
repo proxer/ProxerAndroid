@@ -23,7 +23,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.media.ProfileMediaAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
@@ -76,7 +76,7 @@ class ProfileMediaAdapter : BaseAdapter<LocalUserMediaListEntry, ViewHolder>() {
 
         fun bind(item: LocalUserMediaListEntry) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
@@ -98,7 +98,7 @@ class ProfileMediaAdapter : BaseAdapter<LocalUserMediaListEntry, ViewHolder>() {
                 delete.isVisible = true
 
                 delete.clicks()
-                    .mapAdapterPosition({ adapterPosition }) { data[it] }
+                    .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                     .autoDisposable(this)
                     .subscribe(deleteClickSubject)
             } else {

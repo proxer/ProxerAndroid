@@ -20,7 +20,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.profile.topten.TopTenAdapter.ViewHolder
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
@@ -64,7 +64,7 @@ class TopTenAdapter : BaseAdapter<LocalTopTenEntry, ViewHolder>() {
 
         fun bind(item: LocalTopTenEntry) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
@@ -76,7 +76,7 @@ class TopTenAdapter : BaseAdapter<LocalTopTenEntry, ViewHolder>() {
                 deleteButton.isVisible = true
 
                 deleteButton.clicks()
-                    .mapAdapterPosition({ adapterPosition }) { data[it] }
+                    .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                     .autoDisposable(this)
                     .subscribe(deleteSubject)
 

@@ -33,7 +33,7 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.iconColor
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toLocalDateTime
@@ -278,12 +278,12 @@ class MessengerAdapter(
 
         internal open fun bind(message: LocalMessage, marginTop: Int, marginBottom: Int) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerClick(root, it) }
 
             container.longClicks { onContainerLongClickHandled(root) }
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe { onContainerLongClick(root, it) }
 
@@ -384,7 +384,7 @@ class MessengerAdapter(
             super.bind(message, marginTop, marginBottom)
 
             titleContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(titleClickSubject)
 

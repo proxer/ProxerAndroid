@@ -21,7 +21,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.create.CreateConferenceParticipantAdapter.ViewHolder
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 
@@ -80,7 +80,7 @@ class CreateConferenceParticipantAdapter(savedInstanceState: Bundle?) : BaseAdap
 
         fun bind(item: Participant) {
             delete.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] to it }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] to it }
                 .autoDisposable(this)
                 .subscribe { (removedParticipant, position) ->
                     data = data - removedParticipant

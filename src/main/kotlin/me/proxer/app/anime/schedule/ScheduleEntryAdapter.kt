@@ -38,7 +38,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.util.DeviceUtils
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.formattedDistanceTo
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.library.entity.media.CalendarEntry
 import me.proxer.library.util.ProxerUrls
@@ -157,7 +157,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
 
         fun bind(item: CalendarEntry) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

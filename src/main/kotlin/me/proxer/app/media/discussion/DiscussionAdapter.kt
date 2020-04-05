@@ -18,7 +18,7 @@ import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.discussion.DiscussionAdapter.ViewHolder
 import me.proxer.app.util.extension.fastText
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.library.entity.info.ForumDiscussion
 
 /**
@@ -46,7 +46,7 @@ class DiscussionAdapter : BaseAdapter<ForumDiscussion, ViewHolder>() {
 
         fun bind(item: ForumDiscussion) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

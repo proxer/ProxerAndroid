@@ -11,7 +11,7 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.settings.theme.ThemeAdapter.ViewHolder
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 
 /**
  * @author Ruben Gees
@@ -50,14 +50,14 @@ class ThemeAdapter(currentThemeContainer: ThemeContainer) : BaseAdapter<Theme, V
             val drawable = TwoColorSelectableDrawable(
                 item.primaryColor(themeButton.context),
                 item.secondaryColor(themeButton.context),
-                if (selectedIndex == adapterPosition) item.colorOnSecondary(themeButton.context) else null
+                if (selectedIndex == bindingAdapterPosition) item.colorOnSecondary(themeButton.context) else null
             )
 
             themeButton.contentDescription = themeButton.context.getString(item.themeName)
             themeButton.setImageDrawable(drawable)
 
             themeButton.clicks()
-                .mapAdapterPosition({ adapterPosition }) { it }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { it }
                 .autoDisposable(this)
                 .subscribe {
                     val previous = selectedIndex

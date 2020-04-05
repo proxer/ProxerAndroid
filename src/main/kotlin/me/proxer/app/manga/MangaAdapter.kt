@@ -37,7 +37,7 @@ import me.proxer.app.util.GLUtil
 import me.proxer.app.util.extension.decodedName
 import me.proxer.app.util.extension.events
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.touchesMonitored
@@ -164,7 +164,7 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
             // Rebind on itemView clicks.
             // This only emits if the image is not visible, which is the case if an error occurred.
             itemView.clicks()
-                .mapAdapterPosition({ positionResolver.resolve(adapterPosition) }) { data[it] }
+                .mapBindingAdapterPosition({ positionResolver.resolve(bindingAdapterPosition) }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(this::bind)
 
@@ -179,7 +179,7 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
                 .subscribe { lastTouchCoordinates = it }
 
             image.clicks()
-                .mapAdapterPosition({ adapterPosition }) { positionResolver.resolve(it) }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { positionResolver.resolve(it) }
                 .flatMap { position ->
                     Observable.just(lastTouchCoordinates.toOptional())
                         .filterSome()

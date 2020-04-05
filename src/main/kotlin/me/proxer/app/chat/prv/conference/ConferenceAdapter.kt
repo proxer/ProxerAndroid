@@ -35,7 +35,7 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toLocalDateTime
@@ -85,7 +85,7 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
         fun bind(item: ConferenceWithMessage) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

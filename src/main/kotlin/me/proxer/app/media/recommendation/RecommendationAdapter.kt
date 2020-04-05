@@ -29,7 +29,7 @@ import me.proxer.app.media.recommendation.RecommendationAdapter.ViewHolder
 import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getQuantityString
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.info.Recommendation
@@ -88,7 +88,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
 
         fun bind(item: Recommendation) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

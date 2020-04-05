@@ -25,7 +25,7 @@ import me.proxer.app.forum.PostAdapter.ViewHolder
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.library.util.ProxerUrls
 import java.util.concurrent.ConcurrentHashMap
@@ -91,7 +91,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
 
         fun bind(item: ParsedPost) {
             userContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(profileClickSubject)
 

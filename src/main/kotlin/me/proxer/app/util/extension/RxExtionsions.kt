@@ -31,11 +31,11 @@ inline fun Observer<*>.checkMainThread(): Boolean {
     }
 }
 
-inline fun <reified I, reified O> Observable<I>.mapAdapterPosition(
-    noinline adapterPosition: (I) -> Int,
+inline fun <reified I, reified O> Observable<I>.mapBindingAdapterPosition(
+    noinline bindingAdapterPosition: (I) -> Int,
     noinline mapper: (Int) -> O
 ): Observable<O> {
-    return this.map(adapterPosition)
+    return this.map(bindingAdapterPosition)
         .filter { it != RecyclerView.NO_POSITION }
         .map(mapper)
 }

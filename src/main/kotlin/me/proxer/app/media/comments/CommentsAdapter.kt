@@ -30,7 +30,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
 import me.proxer.app.util.extension.logErrors
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.unsafeLazy
@@ -166,12 +166,12 @@ class CommentsAdapter(
 
         private fun initListeners() {
             titleContainer.clicks()
-                .mapAdapterPosition({ adapterPosition }) { image to data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { image to data[it] }
                 .autoDisposable(this)
                 .subscribe(profileClickSubject)
 
             expand.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it].id }
                 .autoDisposable(this)
                 .subscribe {
                     expansionMap.putOrRemove(it)
@@ -180,17 +180,17 @@ class CommentsAdapter(
                 }
 
             edit.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(editClickSubject)
 
             delete.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(deleteClickSubject)
 
             comment.heightChanges
-                .mapAdapterPosition({ adapterPosition }) { data[it].id }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it].id }
                 .autoDisposable(this)
                 .subscribe {
                     when (comment.maxHeight >= maxHeight) {

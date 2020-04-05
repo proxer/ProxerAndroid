@@ -20,7 +20,7 @@ import me.proxer.app.chat.pub.room.ChatRoomAdapter.ViewHolder
 import me.proxer.app.util.extension.fastText
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.chat.ChatRoom
 import okhttp3.HttpUrl
@@ -49,7 +49,7 @@ class ChatRoomAdapter : BaseAdapter<ChatRoom, ViewHolder>() {
 
         fun bind(item: ChatRoom) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 

@@ -17,7 +17,7 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.notification.NotificationAdapter.ViewHolder
 import me.proxer.app.util.extension.ProxerNotification
 import me.proxer.app.util.extension.distanceInWordsToNow
-import me.proxer.app.util.extension.mapAdapterPosition
+import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.setIconicsImage
 
 /**
@@ -51,12 +51,12 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
 
         fun bind(item: ProxerNotification) {
             container.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(clickSubject)
 
             delete.clicks()
-                .mapAdapterPosition({ adapterPosition }) { data[it] }
+                .mapBindingAdapterPosition({ bindingAdapterPosition }) { data[it] }
                 .autoDisposable(this)
                 .subscribe(deleteClickSubject)
 
