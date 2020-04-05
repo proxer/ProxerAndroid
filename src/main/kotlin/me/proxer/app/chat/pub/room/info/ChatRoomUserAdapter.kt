@@ -16,6 +16,7 @@ import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
@@ -26,11 +27,11 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.pub.room.info.ChatRoomUserAdapter.ViewHolder
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapBindingAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.library.entity.chat.ChatRoomUser
@@ -114,10 +115,11 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
             }
         }
 
-        private fun generateModeratorDrawable(context: Context) = IconicsDrawable(context)
-            .icon(CommunityMaterial.Icon.cmd_star)
-            .sizeDp(32)
-            .paddingDp(8)
-            .colorAttr(context, R.attr.colorSecondary)
+        private fun generateModeratorDrawable(context: Context) = IconicsDrawable(context).apply {
+            icon = CommunityMaterial.Icon.cmd_star
+            colorInt = context.resolveColor(R.attr.colorSecondary)
+            paddingDp = 8
+            sizeDp = 32
+        }
     }
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import me.proxer.app.R
 import me.proxer.app.R.id.description
 import me.proxer.app.R.id.post
@@ -193,17 +194,17 @@ fun Category.toEpisodeAppString(context: Context, number: Int? = null): String =
 }
 
 @Suppress("USELESS_CAST")
-fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context)
-    .iconColor(context)
-    .icon(
-        when (this) {
-            MediaState.PRE_AIRING -> CommunityMaterial.Icon3.cmd_radio_tower as IIcon
-            MediaState.FINISHED -> CommunityMaterial.Icon4.cmd_book
-            MediaState.AIRING -> CommunityMaterial.Icon4.cmd_book_open_variant
-            MediaState.CANCELLED -> CommunityMaterial.Icon3.cmd_close
-            MediaState.CANCELLED_SUB -> CommunityMaterial.Icon3.cmd_close
-        }
-    )
+fun MediaState.toAppDrawable(context: Context): IconicsDrawable = IconicsDrawable(context).apply {
+    icon = when (this@toAppDrawable) {
+        MediaState.PRE_AIRING -> CommunityMaterial.Icon3.cmd_radio_tower as IIcon
+        MediaState.FINISHED -> CommunityMaterial.Icon4.cmd_book
+        MediaState.AIRING -> CommunityMaterial.Icon4.cmd_book_open_variant
+        MediaState.CANCELLED -> CommunityMaterial.Icon3.cmd_close
+        MediaState.CANCELLED_SUB -> CommunityMaterial.Icon3.cmd_close
+    }
+
+    colorInt = context.resolveColor(R.attr.colorIcon)
+}
 
 fun UserMediaProgress.toEpisodeAppString(
     context: Context,

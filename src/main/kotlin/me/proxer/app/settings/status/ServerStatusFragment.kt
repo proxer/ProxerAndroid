@@ -62,11 +62,12 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>(R.layout.fr
             false -> getString(R.string.fragment_server_status_overall_offline)
         }
 
-        val overallStatusIcon = IconicsDrawable(requireContext())
-            .icon(if (allServersOnline) CommunityMaterial.Icon4.cmd_earth else CommunityMaterial.Icon4.cmd_earth_off)
-            .colorRes(if (allServersOnline) R.color.md_green_500 else R.color.md_red_500)
-            .sizeDp(48)
-            .paddingDp(12)
+        val overallStatusIcon = IconicsDrawable(requireContext()).apply {
+            icon = if (allServersOnline) CommunityMaterial.Icon4.cmd_earth else CommunityMaterial.Icon4.cmd_earth_off
+            colorRes = if (allServersOnline) R.color.md_green_500 else R.color.md_red_500
+            paddingDp = 12
+            sizeDp = 48
+        }
 
         overallStatus.text = overallStatusText
         overallStatus.setCompoundDrawablesWithIntrinsicBounds(overallStatusIcon, null, null, null)

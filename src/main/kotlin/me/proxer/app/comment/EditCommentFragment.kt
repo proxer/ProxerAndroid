@@ -34,6 +34,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -43,7 +44,7 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.util.compat.MenuPopupCompat
 import me.proxer.app.util.extension.dip
-import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -347,7 +348,9 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
         return "#${Integer.toHexString(ContextCompat.getColor(requireContext(), color) and 0x00ffffff)}"
     }
 
-    private fun generateEmptyDrawable() = IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_thought_bubble)
-        .iconColor(requireContext())
-        .sizeDp(128)
+    private fun generateEmptyDrawable() = IconicsDrawable(requireContext()).apply {
+        icon = CommunityMaterial.Icon.cmd_thought_bubble
+        colorInt = requireContext().resolveColor(R.attr.colorIcon)
+        sizeDp = 128
+    }
 }

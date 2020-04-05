@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
@@ -34,9 +35,9 @@ import me.proxer.app.comment.EditCommentActivity
 import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.getSafeParcelableExtra
 import me.proxer.app.util.extension.multilineSnackbar
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
@@ -146,11 +147,11 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         })
 
         create.setImageDrawable(
-            IconicsDrawable(requireContext())
-                .icon(CommunityMaterial.Icon3.cmd_pencil)
-                .colorAttr(requireContext(), R.attr.colorOnPrimary)
-                .sizeDp(64)
-                .paddingDp(8)
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_pencil).apply {
+                colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
+                paddingDp = 8
+                sizeDp = 64
+            }
         )
 
         create.clicks()

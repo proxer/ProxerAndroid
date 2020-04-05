@@ -85,7 +85,7 @@ class ProfileMediaAdapter : BaseAdapter<LocalUserMediaListEntry, ViewHolder>() {
             title.text = item.name
             medium.text = item.medium.toAppString(medium.context)
             status.text = item.mediaProgress.toEpisodeAppString(status.context, item.episode, item.medium.toCategory())
-            state.setImageDrawable(item.state.toAppDrawable(state.context).sizeDp(16))
+            state.setImageDrawable(item.state.toAppDrawable(state.context).apply { sizeDp = 16 })
 
             if (item.rating > 0) {
                 ratingContainer.isVisible = true

@@ -22,6 +22,7 @@ import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -41,8 +42,6 @@ import me.proxer.app.exception.InvalidInputException
 import me.proxer.app.exception.TopicEmptyException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.Validators
-import me.proxer.app.util.extension.colorAttr
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
@@ -416,17 +415,19 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         }
 
         emojiButton.setImageDrawable(
-            IconicsDrawable(requireContext(), emojiButtonIcon)
-                .iconColor(requireContext())
-                .sizeDp(32)
-                .paddingDp(6)
+            IconicsDrawable(requireContext(), emojiButtonIcon).apply {
+                colorInt = requireContext().resolveColor(R.attr.colorIcon)
+                paddingDp = 6
+                sizeDp = 32
+            }
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
-                .colorAttr(requireContext(), R.attr.colorSecondary)
-                .sizeDp(32)
-                .paddingDp(4)
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send).apply {
+                colorInt = requireContext().resolveColor(R.attr.colorSecondary)
+                paddingDp = 4
+                sizeDp = 32
+            }
         )
     }
 }

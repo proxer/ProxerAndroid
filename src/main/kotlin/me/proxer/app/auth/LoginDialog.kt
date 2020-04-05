@@ -19,6 +19,7 @@ import com.jakewharton.rxbinding3.widget.editorActionEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -26,9 +27,9 @@ import kotterknife.bindView
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
 import me.proxer.app.util.extension.dip
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.linkify
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeText
 import me.proxer.app.util.extension.toast
 import me.proxer.library.util.ProxerUrls
@@ -171,8 +172,9 @@ class LoginDialog : BaseDialog() {
         container.error = errorText
     }
 
-    private fun generateInfoDrawable() = IconicsDrawable(requireContext())
-        .icon(CommunityMaterial.Icon2.cmd_information_outline)
-        .iconColor(requireContext())
-        .sizeDp(20)
+    private fun generateInfoDrawable() = IconicsDrawable(requireContext()).apply {
+        icon = CommunityMaterial.Icon2.cmd_information_outline
+        colorInt = requireContext().resolveColor(R.attr.colorIcon)
+        sizeDp = 20
+    }
 }

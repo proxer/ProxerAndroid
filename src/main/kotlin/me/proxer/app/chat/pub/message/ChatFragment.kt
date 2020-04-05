@@ -26,6 +26,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
@@ -39,7 +40,6 @@ import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.isAtTop
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
@@ -346,29 +346,27 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         }
 
         emojiButton.setImageDrawable(
-            IconicsDrawable(requireContext(), emojiButtonIcon)
-                .colorAttr(
-                    requireContext(),
-                    when (disabledColor) {
-                        true -> R.attr.colorIconDisabled
-                        false -> R.attr.colorIcon
-                    }
-                )
-                .sizeDp(32)
-                .paddingDp(6)
+            IconicsDrawable(requireContext(), emojiButtonIcon).apply {
+                colorInt = when (disabledColor) {
+                    true -> requireContext().resolveColor(R.attr.colorIconDisabled)
+                    false -> requireContext().resolveColor(R.attr.colorIcon)
+                }
+
+                paddingDp = 6
+                sizeDp = 32
+            }
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send)
-                .colorAttr(
-                    requireContext(),
-                    when (disabledColor) {
-                        true -> R.attr.colorIconDisabled
-                        false -> R.attr.colorSecondary
-                    }
-                )
-                .sizeDp(32)
-                .paddingDp(4)
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send).apply {
+                colorInt = when (disabledColor) {
+                    true -> requireContext().resolveColor(R.attr.colorIconDisabled)
+                    false -> requireContext().resolveColor(R.attr.colorIcon)
+                }
+
+                paddingDp = 4
+                sizeDp = 32
+            }
         )
     }
 

@@ -16,6 +16,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
@@ -29,7 +30,7 @@ import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.ui.view.bbcode.BBUtils
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype.Companion.REGEX_OPTIONS
 import me.proxer.app.util.extension.events
-import me.proxer.app.util.extension.iconColor
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
 import me.proxer.app.util.rx.SubsamplingScaleImageViewEventObservable
 import me.proxer.app.util.wrapper.OriginalSizeGlideTarget
@@ -130,10 +131,10 @@ object PdfPrototype : AutoClosingPrototype {
 
         view.setImage(
             ImageSource.bitmap(
-                IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh)
-                    .iconColor(view.context)
-                    .sizeDp(32)
-                    .toBitmap()
+                IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh).apply {
+                    colorInt = view.context.resolveColor(R.attr.colorIcon)
+                    sizeDp = 32
+                }.toBitmap()
             )
         )
     }

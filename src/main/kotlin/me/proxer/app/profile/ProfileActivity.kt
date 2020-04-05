@@ -13,6 +13,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
+import com.mikepenz.iconics.utils.backgroundColorInt
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import io.reactivex.Completable
@@ -31,9 +33,8 @@ import me.proxer.app.profile.media.ProfileMediaListFragment
 import me.proxer.app.profile.topten.TopTenFragment
 import me.proxer.app.util.ActivityUtils
 import me.proxer.app.util.DeviceUtils
-import me.proxer.app.util.extension.backgroundColorAttr
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.intentFor
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
@@ -199,12 +200,13 @@ class ProfileActivity : ImageTabsActivity() {
         // If it is null, it means we just have'nt loaded it yet.
         if (image != null) {
             headerImage.setImageDrawable(
-                IconicsDrawable(headerImage.context)
-                    .icon(CommunityMaterial.Icon4.cmd_account)
-                    .sizeDp((DeviceUtils.getScreenWidth(this) * 0.75).toInt())
-                    .paddingDp(32)
-                    .colorAttr(headerImage.context, R.attr.colorPrimary)
-                    .backgroundColorAttr(headerImage.context, R.attr.colorPrimaryLight)
+                IconicsDrawable(headerImage.context, CommunityMaterial.Icon4.cmd_account).apply {
+                    backgroundColorInt = headerImage.context.resolveColor(R.attr.colorPrimaryLight)
+                    colorInt = headerImage.context.resolveColor(R.attr.colorPrimary)
+
+                    sizeDp = (DeviceUtils.getScreenWidth(headerImage.context) * 0.75).toInt()
+                    paddingDp = 32
+                }
             )
         }
     }

@@ -58,7 +58,7 @@ ext {
     materialComponentsVersion = "1.2.0-alpha05"
     preferenceVersion = "1.1.0"
     supportPreferenceVersion = "6d5ebc7934"
-    iconicsVersion = "4.0.2"
+    iconicsVersion = "5.0.1"
     communityMaterialTypefaceVersion = "3.7.95.3-kotlin"
     materialDrawerVersion = "7.0.0"
     aboutLibrariesVersion = "7.1.0"

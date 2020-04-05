@@ -18,6 +18,7 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.BuildConfig
@@ -32,7 +33,6 @@ import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
@@ -129,7 +129,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_version_title)
             .subText(BuildConfig.VERSION_NAME)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_tag).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction {
                 val title = getString(R.string.clipboard_title)
 
@@ -142,7 +144,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_licenses_title)
             .subText(R.string.about_licenses_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_clipboard_text).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_clipboard_text).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction {
                 LibsBuilder()
                     .withAutoDetect(false)
@@ -161,13 +165,17 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_source_code)
             .subText(R.string.about_source_code_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_code_braces).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon3.cmd_code_braces).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage(repositoryLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_server_status)
             .subText(R.string.about_server_status_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_server).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_server).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { ServerStatusActivity.navigateTo(requireActivity()) }
             .build()
     )
@@ -176,39 +184,51 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_facebook_title)
             .subText(R.string.about_facebook_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_facebook).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_facebook).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage(facebookLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_twitter_title)
             .subText(R.string.about_twitter_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_twitter).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage(twitterLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_youtube_title)
             .subText(R.string.about_youtube_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_youtube).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_youtube).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage(youtubeLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_discord_title)
             .subText(R.string.about_discord_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_discord).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_discord).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage(discordLink) }
             .build()
     )
 
     private fun buildSupportItems(context: Context) = listOf(
         MaterialAboutActionItem.Builder()
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_information).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_information).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .subText(R.string.about_support_info)
             .setOnClickAction { showPage(teamLink) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
             .subText(R.string.about_support_message_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_email).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_email).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction {
                 Completable
                     .fromAction {
@@ -227,7 +247,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_forum_title)
             .subText(R.string.about_support_forum_description)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_forum).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_forum).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
             .build()
     )
@@ -236,7 +258,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         MaterialAboutActionItem.Builder()
             .text(R.string.about_developer_github_title)
             .subText(developerGithubName)
-            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_github_circle).iconColor(context))
+            .icon(IconicsDrawable(context, CommunityMaterial.Icon4.cmd_github_circle).apply {
+                colorInt = context.resolveColor(R.attr.colorIcon)
+            })
             .setOnClickAction { showPage("https://github.com/$developerGithubName".toPrefixedHttpUrl()) }
             .build(),
         MaterialAboutActionItem.Builder()

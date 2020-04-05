@@ -616,10 +616,11 @@ class StreamActivity : BaseActivity() {
 
         controlProgress.progress = value
         controlIcon.setImageDrawable(
-            IconicsDrawable(this, icon)
-                .sizeDp(64)
-                .paddingDp(12)
-                .colorRes(android.R.color.white)
+            IconicsDrawable(this, icon).apply {
+                colorRes = android.R.color.white
+                sizeDp = 64
+                paddingDp = 12
+            }
         )
 
         hideControlHandler.postDelayed(1_000) {
@@ -628,10 +629,11 @@ class StreamActivity : BaseActivity() {
         }
     }
 
-    private fun generateIndicatorIcon(icon: IIcon) = IconicsDrawable(this, icon)
-        .sizeDp(36)
-        .paddingDp(4)
-        .colorRes(android.R.color.white)
+    private fun generateIndicatorIcon(icon: IIcon) = IconicsDrawable(this, icon).apply {
+        colorRes = android.R.color.white
+        paddingDp = 4
+        sizeDp = 36
+    }
 
     private fun canOpenInOtherApp(): Boolean {
         val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer).makeIntent(this)
@@ -654,8 +656,9 @@ class StreamActivity : BaseActivity() {
         }
     }
 
-    private fun generateControllerIcon(icon: IIcon) = IconicsDrawable(this, icon)
-        .sizeDp(44)
-        .paddingDp(8)
-        .colorRes(android.R.color.white)
+    private fun generateControllerIcon(icon: IIcon) = IconicsDrawable(this, icon).apply {
+        colorRes = android.R.color.white
+        paddingDp = 8
+        sizeDp = 44
+    }
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.colorRes
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
@@ -26,10 +27,10 @@ import me.proxer.app.R
 import me.proxer.app.base.AutoDisposeViewHolder
 import me.proxer.app.base.BaseAdapter
 import me.proxer.app.media.recommendation.RecommendationAdapter.ViewHolder
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
 import me.proxer.app.util.extension.getQuantityString
 import me.proxer.app.util.extension.mapBindingAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toAppDrawable
 import me.proxer.app.util.extension.toAppString
 import me.proxer.library.entity.info.Recommendation
@@ -133,26 +134,28 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             glide?.defaultLoad(image, ProxerUrls.entryImage(item.id))
         }
 
-        private fun generateUpvotesImage(userVoted: Boolean = false) = IconicsDrawable(upvotesImage.context)
-            .icon(CommunityMaterial.Icon.cmd_thumb_up)
-            .sizeDp(32)
-            .paddingDp(4)
-            .apply {
-                when (userVoted) {
-                    true -> colorRes(R.color.md_green_500)
-                    false -> colorAttr(upvotesImage.context, R.attr.colorIcon)
-                }
+        private fun generateUpvotesImage(userVoted: Boolean = false) = IconicsDrawable(upvotesImage.context).apply {
+            icon = CommunityMaterial.Icon.cmd_thumb_up
+
+            colorInt = when (userVoted) {
+                true -> ContextCompat.getColor(upvotesImage.context, R.color.md_green_500)
+                false -> upvotesImage.context.resolveColor(R.attr.colorIcon)
             }
 
-        private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context)
-            .icon(CommunityMaterial.Icon.cmd_thumb_down)
-            .sizeDp(32)
-            .paddingDp(4)
-            .apply {
-                when (userVoted) {
-                    true -> colorRes(R.color.md_red_500)
-                    false -> colorAttr(upvotesImage.context, R.attr.colorIcon)
-                }
+            paddingDp = 4
+            sizeDp = 32
+        }
+
+        private fun generateDownvotesImage(userVoted: Boolean = false) = IconicsDrawable(downvotesImage.context).apply {
+            icon = CommunityMaterial.Icon.cmd_thumb_down
+
+            colorInt = when (userVoted) {
+                true -> ContextCompat.getColor(upvotesImage.context, R.color.md_red_500)
+                false -> upvotesImage.context.resolveColor(R.attr.colorIcon)
             }
+
+            paddingDp = 4
+            sizeDp = 32
+        }
     }
 }

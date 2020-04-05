@@ -14,6 +14,7 @@ import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
@@ -28,8 +29,8 @@ import me.proxer.app.media.MediaActivity
 import me.proxer.app.media.MediaInfoViewModel
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.enableFastScroll
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
@@ -139,9 +140,10 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
 
         mediaInfoViewModel.userInfoData.observe(viewLifecycleOwner, Observer {
             if (it?.isSubscribed == true) {
-                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_check)
-                    .colorAttr(requireContext(), R.attr.colorOnPrimary)
-                    .sizeDp(18)
+                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_check).apply {
+                    colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
+                    sizeDp = 18
+                }
 
                 errorButton.setCompoundDrawables(null, null, icon, null)
             } else {

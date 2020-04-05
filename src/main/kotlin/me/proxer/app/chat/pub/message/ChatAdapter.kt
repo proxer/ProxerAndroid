@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.longClicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.PublishSubject
@@ -33,7 +34,6 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
 import me.proxer.app.util.extension.getSafeParcelable
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapBindingAdapterPosition
 import me.proxer.app.util.extension.resolveColor
@@ -260,9 +260,10 @@ class ChatAdapter(
 
         init {
             sendStatus?.setImageDrawable(
-                IconicsDrawable(text.context, CommunityMaterial.Icon3.cmd_clock_outline)
-                    .sizeDp(16)
-                    .iconColor(text.context)
+                IconicsDrawable(text.context, CommunityMaterial.Icon3.cmd_clock_outline).apply {
+                    colorInt = text.context.resolveColor(R.attr.colorIcon)
+                    sizeDp = 16
+                }
             )
         }
 

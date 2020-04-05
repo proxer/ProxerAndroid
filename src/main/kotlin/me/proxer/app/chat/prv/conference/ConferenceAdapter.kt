@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.iconics.utils.sizePx
@@ -30,12 +31,11 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.conference.ConferenceAdapter.ViewHolder
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.distanceInWordsToNow
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.logErrors
 import me.proxer.app.util.extension.mapBindingAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.sp
 import me.proxer.app.util.extension.toAppString
 import me.proxer.app.util.extension.toLocalDateTime
@@ -185,15 +185,15 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
 
         private fun bindImage(item: ConferenceWithMessage) {
             if (item.conference.image.isBlank()) {
-                val icon = IconicsDrawable(image.context)
-                    .sizeDp(96)
-                    .paddingDp(16)
-                    .colorAttr(image.context, R.attr.colorSecondary)
+                val icon = IconicsDrawable(image.context).apply {
+                    icon = when {
+                        item.conference.isGroup -> CommunityMaterial.Icon4.cmd_account_multiple
+                        else -> CommunityMaterial.Icon4.cmd_account
+                    }
 
-                if (item.conference.isGroup) {
-                    icon.icon(CommunityMaterial.Icon4.cmd_account_multiple)
-                } else {
-                    icon.icon(CommunityMaterial.Icon4.cmd_account)
+                    colorInt = image.context.resolveColor(R.attr.colorSecondary)
+                    paddingDp = 16
+                    sizeDp = 96
                 }
 
                 image.setImageDrawable(icon)
@@ -206,9 +206,10 @@ class ConferenceAdapter(private val storageHelper: StorageHelper) : BaseAdapter<
             }
         }
 
-        private fun generateMessageStatusDrawable(context: Context, icon: IIcon) = IconicsDrawable(context)
-            .icon(icon)
-            .iconColor(context)
-            .sizePx(context.sp(14))
+        private fun generateMessageStatusDrawable(context: Context, icon: IIcon) = IconicsDrawable(context).apply {
+            this.icon = icon
+            colorInt = context.resolveColor(R.attr.colorIcon)
+            sizePx = context.sp(14)
+        }
     }
 }

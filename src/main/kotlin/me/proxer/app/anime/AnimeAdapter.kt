@@ -13,9 +13,9 @@ import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import com.jakewharton.rxbinding3.view.clicks
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.IconicsSize
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.autoDisposable
@@ -30,11 +30,10 @@ import me.proxer.app.base.BaseAdapter
 import me.proxer.app.ui.view.BetterLinkTextView
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.colorAttr
 import me.proxer.app.util.extension.defaultLoad
-import me.proxer.app.util.extension.iconColor
 import me.proxer.app.util.extension.linkClicks
 import me.proxer.app.util.extension.mapBindingAdapterPosition
+import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.toLocalDateTime
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.util.ProxerUrls
@@ -287,17 +286,18 @@ class AnimeAdapter(
         }
 
         private fun generatePlayDrawable(): IconicsDrawable {
-            return IconicsDrawable(play.context)
-                .icon(CommunityMaterial.Icon3.cmd_play)
-                .sizeDp(28)
-                .paddingDp(8)
-                .colorAttr(play.context, R.attr.colorOnPrimary)
+            return IconicsDrawable(play.context, CommunityMaterial.Icon3.cmd_play).apply {
+                colorInt = play.context.resolveColor(R.attr.colorOnPrimary)
+                paddingDp = 8
+                sizeDp = 28
+            }
         }
 
         private fun generateInfoDrawable(icon: IIcon): IconicsDrawable {
-            return IconicsDrawable(info.context, icon)
-                .size(IconicsSize.dp(26))
-                .iconColor(info.context)
+            return IconicsDrawable(info.context, icon).apply {
+                colorInt = info.context.resolveColor(R.attr.colorIcon)
+                sizeDp = 26
+            }
         }
     }
 
