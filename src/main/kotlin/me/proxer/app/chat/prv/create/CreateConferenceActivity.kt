@@ -43,20 +43,15 @@ class CreateConferenceActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupToolbar()
+        title = when (isGroup) {
+            true -> getString(R.string.action_create_group)
+            false -> getString(R.string.action_create_chat)
+        }
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, CreateConferenceFragment.newInstance())
             }
-        }
-    }
-
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = when (isGroup) {
-            true -> getString(R.string.action_create_group)
-            false -> getString(R.string.action_create_chat)
         }
     }
 }

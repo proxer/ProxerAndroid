@@ -138,7 +138,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             icon = CommunityMaterial.Icon.cmd_thumb_up
 
             colorInt = when (userVoted) {
-                true -> ContextCompat.getColor(upvotesImage.context, R.color.md_green_500)
+                true -> ContextCompat.getColor(upvotesImage.context, R.color.green_500)
                 false -> upvotesImage.context.resolveColor(R.attr.colorIcon)
             }
 
@@ -150,7 +150,7 @@ class RecommendationAdapter : BaseAdapter<Recommendation, ViewHolder>() {
             icon = CommunityMaterial.Icon.cmd_thumb_down
 
             colorInt = when (userVoted) {
-                true -> ContextCompat.getColor(upvotesImage.context, R.color.md_red_500)
+                true -> ContextCompat.getColor(upvotesImage.context, R.color.red_500)
                 false -> upvotesImage.context.resolveColor(R.attr.colorIcon)
             }
 

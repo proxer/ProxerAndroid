@@ -34,17 +34,12 @@ class ChatRoomInfoActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupToolbar()
+        title = chatRoomName
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, ChatRoomInfoFragment.newInstance())
             }
         }
-    }
-
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = chatRoomName
     }
 }

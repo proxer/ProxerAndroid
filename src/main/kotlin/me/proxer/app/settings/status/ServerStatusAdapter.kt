@@ -55,7 +55,7 @@ class ServerStatusAdapter : BaseAdapter<ServerStatus, ViewHolder>() {
 
             status.setImageDrawable(
                 IconicsDrawable(status.context, statusIcon).apply {
-                    colorRes = if (item.online) R.color.md_green_500 else R.color.md_red_500
+                    colorRes = if (item.online) R.color.green_500 else R.color.red_500
                     paddingDp = 8
                     sizeDp = 32
                 }

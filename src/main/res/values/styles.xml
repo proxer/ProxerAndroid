@@ -33,15 +33,8 @@
         <item name="about_libraries_dividerLight_openSource">?attr/colorDivider</item>
         <item name="about_libraries_dividerDark_openSource">?attr/colorDivider</item>
 
-        <item name="material_drawer_legacy_style">true</item>
-        <item name="material_drawer_background">?android:attr/windowBackground</item>
-        <item name="material_drawer_primary_text">?android:attr/textColorPrimary</item>
-        <item name="material_drawer_primary_icon">?attr/colorIcon</item>
-        <item name="material_drawer_secondary_text">?android:attr/textColorTertiary</item>
-        <item name="material_drawer_selected">?attr/colorSelectedBackground</item>
-        <item name="material_drawer_selected_legacy">?attr/colorSelectedBackground</item>
-        <item name="material_drawer_selected_text">?attr/colorSecondary</item>
-        <item name="material_drawer_divider">?attr/colorDivider</item>
+        <item name="materialDrawerStyle">@style/Widget.App.MaterialDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.App.MaterialDrawerHeaderStyle</item>
 
         <item name="md_color_button_text">?attr/colorSecondary</item>
 
@@ -125,5 +118,16 @@
 
     <style name="Widget.App.ActionMode" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">?attr/colorPrimaryLight</item>
+    </style>
+
+    <style name="Widget.App.MaterialDrawerStyle" parent="Widget.MaterialDrawerStyle">
+        <item name="materialDrawerDividerColor">?attr/colorSurface</item>
+        <item name="materialDrawerSelectedBackgroundColor">?colorSecondary</item>
+    </style>
+
+    <style name="Widget.App.MaterialDrawerHeaderStyle" parent="Widget.MaterialDrawerHeaderStyle">
+        <item name="materialDrawerCompactStyle">true</item>
+        <item name="materialDrawerHeaderSelectionText">?attr/colorOnPrimary</item>
+        <item name="materialDrawerHeaderSelectionSubtext">?attr/colorOnPrimary</item>
     </style>
 </resources>

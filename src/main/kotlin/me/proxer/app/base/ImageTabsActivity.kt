@@ -152,7 +152,6 @@ abstract class ImageTabsActivity : DrawerActivity() {
             root.requestApplyInsets()
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         collapsingToolbar.isTitleEnabled = false
 
         appbar.offsetChanges()

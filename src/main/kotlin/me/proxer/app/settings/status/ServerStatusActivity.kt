@@ -24,10 +24,9 @@ class ServerStatusActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_default)
-
         setSupportActionBar(toolbar)
-        setTitle(R.string.section_server_status)
 
+        title = getString(R.string.section_server_status)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {

@@ -28,17 +28,12 @@ class ConferenceInfoActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupToolbar()
+        title = conference.topic
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, ConferenceInfoFragment.newInstance())
             }
         }
-    }
-
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = conference.topic
     }
 }

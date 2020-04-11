@@ -53,7 +53,6 @@ class ChatActivity : DrawerActivity() {
     }
 
     private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = chatRoomName
 
         toolbar.clicks()

@@ -131,7 +131,6 @@ class AnimeActivity : DrawerActivity() {
     }
 
     private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.clicks()
             .autoDisposable(this.scope())
             .subscribe {

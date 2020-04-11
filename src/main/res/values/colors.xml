@@ -23,6 +23,17 @@
     <color name="icon">#8A000000</color>
     <color name="icon_disabled">#4C000000</color>
 
+    <color name="green_500">#4CAF50</color>
+    <color name="red_500">#F44336</color>
+
+    <color name="green_600">#43A047</color>
+    <color name="red_600">#E53935</color>
+    <color name="purple_600">#8E24AA</color>
+    <color name="blue_600">#1E88E5</color>
+    <color name="yellow_600">#FDD835</color>
+    <color name="orange_600">#FB8C00</color>
+    <color name="grey_600">#757575</color>
+
     <color name="half_transparent">#7F000000</color>
 
     <color name="fastscroll_track">#1F000000</color>

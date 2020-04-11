@@ -55,8 +55,6 @@ class PrvMessengerActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         if (supportFragmentManager.fragments.isEmpty()) {
             val conference = intent.getParcelableExtra<LocalConference>(CONFERENCE_EXTRA)
             val initialMessage = intent.getStringExtra(Intent.EXTRA_TEXT)

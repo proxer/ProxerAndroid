@@ -70,10 +70,6 @@ class MainActivity : DrawerActivity() {
         supportPostponeEnterTransition()
         displayFirstPage(savedInstanceState)
 
-        if (!isRootActivity) {
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
-
         if (isRootActivity && savedInstanceState == null && storageHelper.isLoggedIn) {
             val lastUcpSettingsUpdate = storageHelper.lastUcpSettingsUpdateDate
             val threshold = Instant.now().minus(5, ChronoUnit.MINUTES)
@@ -209,10 +205,6 @@ class MainActivity : DrawerActivity() {
 
                 setFragment(itemToLoad)
 
-                if (!isRootActivity) {
-                    drawer.disableSelectivity()
-                }
-
                 if (isRootActivity) {
                     inAppUpdateFlow.start(this, root)
                 }
@@ -243,7 +235,7 @@ class MainActivity : DrawerActivity() {
         }
     }
 
-    override fun handleDrawerItemClick(item: DrawerItem) = when (isRootActivity || item == drawer.currentItem) {
+    override fun handleDrawerItemClick(item: DrawerItem) = when (isRootActivity /*|| item == drawer.currentItem*/) {
         true -> setFragment(item)
         false -> super.handleDrawerItemClick(item)
     }

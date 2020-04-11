@@ -5,7 +5,7 @@
     <item
         android:id="@+id/red"
         android:title="@string/fragment_edit_comment_color_red"
-        app:ico_color="@color/md_red_600"
+        app:ico_color="@color/red_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -14,7 +14,7 @@
     <item
         android:id="@+id/purple"
         android:title="@string/fragment_edit_comment_color_purple"
-        app:ico_color="@color/md_purple_600"
+        app:ico_color="@color/purple_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -23,7 +23,7 @@
     <item
         android:id="@+id/blue"
         android:title="@string/fragment_edit_comment_color_blue"
-        app:ico_color="@color/md_blue_600"
+        app:ico_color="@color/blue_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -32,7 +32,7 @@
     <item
         android:id="@+id/green"
         android:title="@string/fragment_edit_comment_color_green"
-        app:ico_color="@color/md_green_600"
+        app:ico_color="@color/green_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -41,7 +41,7 @@
     <item
         android:id="@+id/yellow"
         android:title="@string/fragment_edit_comment_color_yellow"
-        app:ico_color="@color/md_yellow_600"
+        app:ico_color="@color/yellow_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -50,7 +50,7 @@
     <item
         android:id="@+id/orange"
         android:title="@string/fragment_edit_comment_color_orange"
-        app:ico_color="@color/md_orange_600"
+        app:ico_color="@color/orange_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"
@@ -59,7 +59,7 @@
     <item
         android:id="@+id/grey"
         android:title="@string/fragment_edit_comment_color_grey"
-        app:ico_color="@color/md_grey_600"
+        app:ico_color="@color/grey_600"
         app:ico_icon="cmd_circle"
         app:ico_padding="2dp"
         app:ico_size="24dp"

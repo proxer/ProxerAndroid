@@ -31,7 +31,7 @@ class ProfileSettingsActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupToolbar()
+        title = getString(R.string.section_profile_settings)
 
         viewModel.error.observe(this, Observer {
             it?.let {
@@ -63,10 +63,5 @@ class ProfileSettingsActivity : DrawerActivity() {
                 replace(R.id.container, ProfileSettingsFragment.newInstance())
             }
         }
-    }
-
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.section_profile_settings)
     }
 }

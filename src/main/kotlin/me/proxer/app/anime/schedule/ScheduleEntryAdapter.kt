@@ -249,7 +249,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         val airedText = status.context.getString(R.string.fragment_schedule_aired)
 
                         status.text = SpannableString(airedText).apply {
-                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
+                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.green_500))
 
                             this[0..length] = span
                         }
@@ -257,7 +257,7 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                         val uploadedText = status.context.getString(R.string.fragment_schedule_uploaded)
 
                         status.text = SpannableString(uploadedText).apply {
-                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.md_green_500))
+                            val span = ForegroundColorSpan(ContextCompat.getColor(status.context, R.color.green_500))
 
                             this[0..length] = span
                         }

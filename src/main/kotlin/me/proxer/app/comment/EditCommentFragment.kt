@@ -285,14 +285,14 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                             .autoDisposable(viewLifecycleOwner.scope())
                             .subscribe {
                                 when (it.itemId) {
-                                    R.id.red -> insertTag("color", getColorString(R.color.md_red_600))
-                                    R.id.purple -> insertTag("color", getColorString(R.color.md_purple_600))
-                                    R.id.blue -> insertTag("color", getColorString(R.color.md_blue_600))
-                                    R.id.green -> insertTag("color", getColorString(R.color.md_green_600))
-                                    R.id.yellow -> insertTag("color", getColorString(R.color.md_yellow_600))
-                                    R.id.orange -> insertTag("color", getColorString(R.color.md_orange_600))
-                                    R.id.grey -> insertTag("color", getColorString(R.color.md_grey_600))
-                                    R.id.white -> insertTag("color", getColorString(R.color.md_white_1000))
+                                    R.id.red -> insertTag("color", getColorString(R.color.red_600))
+                                    R.id.purple -> insertTag("color", getColorString(R.color.purple_600))
+                                    R.id.blue -> insertTag("color", getColorString(R.color.blue_600))
+                                    R.id.green -> insertTag("color", getColorString(R.color.green_600))
+                                    R.id.yellow -> insertTag("color", getColorString(R.color.yellow_600))
+                                    R.id.orange -> insertTag("color", getColorString(R.color.orange_600))
+                                    R.id.grey -> insertTag("color", getColorString(R.color.grey_600))
+                                    R.id.white -> insertTag("color", getColorString(android.R.color.white))
                                 }
                             }
                     }

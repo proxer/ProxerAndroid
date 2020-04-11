@@ -22,17 +22,12 @@ class NotificationActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupToolbar()
+        title = getString(R.string.section_notifications)
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, NotificationFragment.newInstance())
             }
         }
-    }
-
-    private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.section_notifications)
     }
 }

@@ -120,7 +120,6 @@ class TopicActivity : DrawerActivity() {
     }
 
     private fun setupToolbar() {
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = topic
 
         toolbar.clicks()
