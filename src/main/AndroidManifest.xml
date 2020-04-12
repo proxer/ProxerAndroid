@@ -317,6 +317,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".settings.ProxerLibsActivity" />
+
         <activity android:name=".ui.WebViewActivity" />
 
         <service

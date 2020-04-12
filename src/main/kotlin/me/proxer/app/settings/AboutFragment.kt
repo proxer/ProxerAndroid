@@ -14,7 +14,6 @@ import com.danielstone.materialaboutlibrary.MaterialAboutFragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
-import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
@@ -31,7 +30,6 @@ import me.proxer.app.chat.prv.sync.MessengerDao
 import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
-import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.openHttpPage
 import me.proxer.app.util.extension.resolveColor
@@ -49,16 +47,6 @@ import kotlin.properties.Delegates
 class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
 
     companion object {
-        private val libraries = arrayOf(
-            "aspectratioimageview", "autodispose", "betterlinkmovementmethod", "customtabshelper", "exoplayer",
-            "flexboxlayout", "glide", "hawk", "jsoup", "koptional", "kotterknife", "leakcanary", "materialaboutlibrary",
-            "materialpreference", "materialdialogs", "materialprogressbar", "materialratingbar", "moshi", "okhttp",
-            "rapiddecoder", "recyclerviewsnap", "retrofit", "rxandroid", "rxbinding", "rxkotlin", "rxjava",
-            "subsamplingpdfdecoder", "subsamplingscaleimageview", "timber", "threeten", "threetenandroidbackport"
-        )
-
-        private val excludedLibraries = arrayOf("fastadapter", "materialize")
-
         private val teamLink = "https://proxer.me/team?device=default".toPrefixedHttpUrl()
         private val facebookLink = "https://facebook.com/Anime.Proxer.Me".toPrefixedHttpUrl()
         private val twitterLink = "https://twitter.com/proxerme".toPrefixedHttpUrl()
@@ -78,7 +66,6 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         }
     }
 
-    private val preferenceHelper by safeInject<PreferenceHelper>()
     private val messengerDao by safeInject<MessengerDao>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
@@ -154,11 +141,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                     .withAboutVersionShown(false)
                     .withAboutIconShown(false)
                     .withVersionShown(false)
-                    .withLibraries(*libraries)
-                    .withExcludedLibraries(*excludedLibraries)
-                    .withFields(R.string::class.java.fields)
-                    .withActivityTheme(preferenceHelper.themeContainer.theme.main)
-                    .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                    .withOwnLibsActivityClass(ProxerLibsActivity::class.java)
                     .withActivityTitle(getString(R.string.about_licenses_activity_title))
                     .start(requireActivity())
             }.build(),
