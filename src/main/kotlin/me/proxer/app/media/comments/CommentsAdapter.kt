@@ -127,10 +127,10 @@ class CommentsAdapter(
         init {
             comment.glide = glide
 
-            edit.setIconicsImage(CommunityMaterial.Icon3.cmd_pencil, 32)
-            delete.setIconicsImage(CommunityMaterial.Icon4.cmd_delete, 32)
-            expand.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32)
-            upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
+            edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32)
+            expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+            upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedComment) {
@@ -243,7 +243,7 @@ class CommentsAdapter(
 
         private fun bindImage(item: ParsedComment) {
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 32, 4, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

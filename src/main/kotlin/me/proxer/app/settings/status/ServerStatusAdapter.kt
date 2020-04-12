@@ -39,14 +39,14 @@ class ServerStatusAdapter : BaseAdapter<ServerStatus, ViewHolder>() {
 
         fun bind(item: ServerStatus) {
             val typeIcon: IIcon = when (item.type) {
-                ServerType.MAIN -> CommunityMaterial.Icon.cmd_server_network
-                ServerType.MANGA -> CommunityMaterial.Icon4.cmd_book_open_page_variant
-                ServerType.STREAM -> CommunityMaterial.Icon.cmd_television
+                ServerType.MAIN -> CommunityMaterial.Icon2.cmd_server_network
+                ServerType.MANGA -> CommunityMaterial.Icon.cmd_book_open_page_variant
+                ServerType.STREAM -> CommunityMaterial.Icon2.cmd_television
             }
 
             val statusIcon = when (item.online) {
-                true -> CommunityMaterial.Icon4.cmd_earth
-                false -> CommunityMaterial.Icon4.cmd_earth_off
+                true -> CommunityMaterial.Icon.cmd_earth
+                false -> CommunityMaterial.Icon.cmd_earth_off
             }
 
             icon.setIconicsImage(typeIcon, sizeDp = 32)

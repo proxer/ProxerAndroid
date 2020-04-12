@@ -46,7 +46,7 @@ class NotificationAdapter : BaseAdapter<ProxerNotification, ViewHolder>() {
         internal val delete: ImageButton by bindView(R.id.delete)
 
         init {
-            delete.setIconicsImage(CommunityMaterial.Icon4.cmd_delete, 32, 4)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32, 4)
         }
 
         fun bind(item: ProxerNotification) {

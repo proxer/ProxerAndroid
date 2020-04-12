@@ -122,10 +122,10 @@ class ProfileCommentAdapter(
 
             image.isGone = true
 
-            edit.setIconicsImage(CommunityMaterial.Icon3.cmd_pencil, 32)
-            delete.setIconicsImage(CommunityMaterial.Icon4.cmd_delete, 32)
-            expand.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32)
-            upvoteIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
+            edit.setIconicsImage(CommunityMaterial.Icon2.cmd_pencil, 32)
+            delete.setIconicsImage(CommunityMaterial.Icon.cmd_delete, 32)
+            expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+            upvoteIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedUserComment) {

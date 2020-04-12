@@ -109,7 +109,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        scrollToBottom.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
+        scrollToBottom.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32, colorAttr = R.attr.colorOnSurface)
 
         recyclerView.scrollEvents()
             .skip(1)
@@ -140,7 +140,7 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
 
         mediaInfoViewModel.userInfoData.observe(viewLifecycleOwner, Observer {
             if (it?.isSubscribed == true) {
-                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_check).apply {
+                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_check).apply {
                     colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
                     sizeDp = 18
                 }

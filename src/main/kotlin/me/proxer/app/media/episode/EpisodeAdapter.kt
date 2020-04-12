@@ -86,7 +86,7 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
         internal val languages: ViewGroup by bindView(R.id.languages)
 
         init {
-            watched.setIconicsImage(CommunityMaterial.Icon3.cmd_check, 24, 0)
+            watched.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0)
         }
 
         fun bind(item: EpisodeRow) {

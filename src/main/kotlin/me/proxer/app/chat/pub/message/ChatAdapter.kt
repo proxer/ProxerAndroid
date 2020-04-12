@@ -260,7 +260,7 @@ class ChatAdapter(
 
         init {
             sendStatus?.setImageDrawable(
-                IconicsDrawable(text.context, CommunityMaterial.Icon3.cmd_clock_outline).apply {
+                IconicsDrawable(text.context, CommunityMaterial.Icon.cmd_clock_outline).apply {
                     colorInt = text.context.resolveColor(R.attr.colorIcon)
                     sizeDp = 16
                 }
@@ -376,7 +376,7 @@ class ChatAdapter(
             title.requestLayout()
 
             if (message.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 32, 4, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(message.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

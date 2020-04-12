@@ -86,7 +86,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             signature.enableEmotions = true
             signature.heightMap = heightMap
 
-            thankYouIcon.setIconicsImage(CommunityMaterial.Icon.cmd_thumb_up, 32)
+            thankYouIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedPost) {
@@ -130,7 +130,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
 
         private fun bindImage(item: ParsedPost) {
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 32, 4, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 32, 4, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

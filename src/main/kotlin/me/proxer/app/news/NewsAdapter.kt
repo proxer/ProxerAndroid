@@ -95,7 +95,7 @@ class NewsAdapter(savedInstanceState: Bundle?) : BaseAdapter<NewsArticle, NewsAd
         internal val time: TextView by bindView(R.id.time)
 
         init {
-            expand.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32)
+            expand.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
         }
 
         fun bind(item: NewsArticle) {

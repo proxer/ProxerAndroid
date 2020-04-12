@@ -312,7 +312,7 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
                 .setUsage(C.USAGE_MEDIA)
                 .build()
 
-            setHandleWakeLock(true)
+            setWakeMode(C.WAKE_MODE_NETWORK)
             setHandleAudioBecomingNoisy(true)
             setAudioAttributes(audioAttributes, true)
         }

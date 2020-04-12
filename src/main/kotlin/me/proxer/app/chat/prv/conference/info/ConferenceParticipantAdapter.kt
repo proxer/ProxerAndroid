@@ -93,7 +93,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 username.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     null,
-                    IconicsDrawable(username.context, CommunityMaterial.Icon.cmd_star).apply {
+                    IconicsDrawable(username.context, CommunityMaterial.Icon2.cmd_star).apply {
                         colorInt = image.context.resolveColor(R.attr.colorSecondary)
                         paddingDp = 8
                         sizeDp = 32
@@ -112,7 +112,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
             }
 
             if (item.image.isBlank()) {
-                image.setIconicsImage(CommunityMaterial.Icon4.cmd_account, 96, 16, R.attr.colorSecondary)
+                image.setIconicsImage(CommunityMaterial.Icon.cmd_account, 96, 16, R.attr.colorSecondary)
             } else {
                 glide?.load(ProxerUrls.userImage(item.image).toString())
                     ?.transition(DrawableTransitionOptions.withCrossFade())

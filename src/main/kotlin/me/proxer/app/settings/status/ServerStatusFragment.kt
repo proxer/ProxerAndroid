@@ -63,7 +63,7 @@ class ServerStatusFragment : BaseContentFragment<List<ServerStatus>>(R.layout.fr
         }
 
         val overallStatusIcon = IconicsDrawable(requireContext()).apply {
-            icon = if (allServersOnline) CommunityMaterial.Icon4.cmd_earth else CommunityMaterial.Icon4.cmd_earth_off
+            icon = if (allServersOnline) CommunityMaterial.Icon.cmd_earth else CommunityMaterial.Icon.cmd_earth_off
             colorRes = if (allServersOnline) R.color.green_500 else R.color.red_500
             paddingDp = 12
             sizeDp = 48

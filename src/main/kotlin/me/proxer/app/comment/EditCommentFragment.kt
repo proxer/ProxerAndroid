@@ -182,18 +182,18 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         editor.isNestedScrollingEnabled = false
 
-        expandRules.setIconicsImage(CommunityMaterial.Icon3.cmd_chevron_down, 32)
-        ratingClear.setIconicsImage(CommunityMaterial.Icon3.cmd_close_circle, 32, paddingDp = 4)
-        bold.setIconicsImage(CommunityMaterial.Icon4.cmd_format_bold, 32)
-        italic.setIconicsImage(CommunityMaterial.Icon4.cmd_format_italic, 32)
-        underlined.setIconicsImage(CommunityMaterial.Icon4.cmd_format_underline, 32)
-        strikethrough.setIconicsImage(CommunityMaterial.Icon4.cmd_format_strikethrough_variant, 32)
-        size.setIconicsImage(CommunityMaterial.Icon4.cmd_format_size, 32)
-        color.setIconicsImage(CommunityMaterial.Icon4.cmd_format_color_fill, 32)
-        left.setIconicsImage(CommunityMaterial.Icon4.cmd_format_align_left, 32)
-        center.setIconicsImage(CommunityMaterial.Icon4.cmd_format_align_center, 32)
-        right.setIconicsImage(CommunityMaterial.Icon4.cmd_format_align_right, 32)
-        spoiler.setIconicsImage(CommunityMaterial.Icon4.cmd_eye_off, 32)
+        expandRules.setIconicsImage(CommunityMaterial.Icon.cmd_chevron_down, 32)
+        ratingClear.setIconicsImage(CommunityMaterial.Icon.cmd_close_circle, 32, paddingDp = 4)
+        bold.setIconicsImage(CommunityMaterial.Icon.cmd_format_bold, 32)
+        italic.setIconicsImage(CommunityMaterial.Icon.cmd_format_italic, 32)
+        underlined.setIconicsImage(CommunityMaterial.Icon.cmd_format_underline, 32)
+        strikethrough.setIconicsImage(CommunityMaterial.Icon.cmd_format_strikethrough_variant, 32)
+        size.setIconicsImage(CommunityMaterial.Icon.cmd_format_size, 32)
+        color.setIconicsImage(CommunityMaterial.Icon.cmd_format_color_fill, 32)
+        left.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_left, 32)
+        center.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_center, 32)
+        right.setIconicsImage(CommunityMaterial.Icon.cmd_format_align_right, 32)
+        spoiler.setIconicsImage(CommunityMaterial.Icon.cmd_eye_off, 32)
 
         commentPreview.expandSpoilers = true
         commentPreviewEmpty.setCompoundDrawables(null, generateEmptyDrawable(), null, null)
@@ -349,7 +349,7 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
     }
 
     private fun generateEmptyDrawable() = IconicsDrawable(requireContext()).apply {
-        icon = CommunityMaterial.Icon.cmd_thought_bubble
+        icon = CommunityMaterial.Icon2.cmd_thought_bubble
         colorInt = requireContext().resolveColor(R.attr.colorIcon)
         sizeDp = 128
     }

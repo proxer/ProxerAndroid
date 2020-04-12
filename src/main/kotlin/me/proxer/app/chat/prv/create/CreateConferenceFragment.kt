@@ -228,13 +228,13 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
     private fun initFooter() {
         addParticipantImage.setIconicsImage(
             when (isGroup) {
-                true -> CommunityMaterial.Icon4.cmd_account_plus
-                false -> CommunityMaterial.Icon4.cmd_account_multiple_plus
+                true -> CommunityMaterial.Icon.cmd_account_plus
+                false -> CommunityMaterial.Icon.cmd_account_multiple_plus
             }, 96, 16
         )
 
-        acceptParticipant.setIconicsImage(CommunityMaterial.Icon3.cmd_check, 48, 16)
-        cancelParticipant.setIconicsImage(CommunityMaterial.Icon3.cmd_close, 48, 16)
+        acceptParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_check, 48, 16)
+        cancelParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_close, 48, 16)
 
         addParticipantFooter.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -411,7 +411,7 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
     private fun updateIcons() {
         val emojiButtonIcon: IIcon = when (emojiPopup.isShowing) {
             true -> CommunityMaterial.Icon2.cmd_keyboard
-            false -> CommunityMaterial.Icon4.cmd_emoticon
+            false -> CommunityMaterial.Icon.cmd_emoticon
         }
 
         emojiButton.setImageDrawable(
@@ -423,7 +423,7 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_send).apply {
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send).apply {
                 colorInt = requireContext().resolveColor(R.attr.colorSecondary)
                 paddingDp = 4
                 sizeDp = 32

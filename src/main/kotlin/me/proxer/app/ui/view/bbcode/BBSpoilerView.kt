@@ -103,7 +103,7 @@ internal class BBSpoilerView @JvmOverloads constructor(
 
     private fun updateToggleButtonIcon() {
         toggleButton.setImageDrawable(
-            IconicsDrawable(context, CommunityMaterial.Icon3.cmd_chevron_down).apply {
+            IconicsDrawable(context, CommunityMaterial.Icon.cmd_chevron_down).apply {
                 colorInt = spoilerTextColor
                 paddingDp = 8
                 sizeDp = 32

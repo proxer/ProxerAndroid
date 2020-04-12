@@ -200,7 +200,7 @@ class ProfileActivity : ImageTabsActivity() {
         // If it is null, it means we just have'nt loaded it yet.
         if (image != null) {
             headerImage.setImageDrawable(
-                IconicsDrawable(headerImage.context, CommunityMaterial.Icon4.cmd_account).apply {
+                IconicsDrawable(headerImage.context, CommunityMaterial.Icon.cmd_account).apply {
                     backgroundColorInt = headerImage.context.resolveColor(R.attr.colorPrimaryLight)
                     colorInt = headerImage.context.resolveColor(R.attr.colorPrimary)
 

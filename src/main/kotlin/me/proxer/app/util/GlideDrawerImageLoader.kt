@@ -30,7 +30,7 @@ class GlideDrawerImageLoader : AbstractDrawerImageLoader() {
     override fun cancel(imageView: ImageView) = GlideApp.with(imageView).clear(imageView)
 
     override fun placeholder(ctx: Context, tag: String?): IconicsDrawable = IconicsDrawable(ctx).apply {
-        icon = CommunityMaterial.Icon4.cmd_account
+        icon = CommunityMaterial.Icon.cmd_account
         backgroundColorInt = ctx.resolveColor(R.attr.colorPrimary)
         colorInt = ctx.resolveColor(R.attr.colorOnPrimary)
         sizeDp = 48

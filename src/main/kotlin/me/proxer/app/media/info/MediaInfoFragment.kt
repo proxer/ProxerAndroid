@@ -456,9 +456,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         val finishColor = if (userInfo?.isFinished == true) R.attr.colorSecondary else R.attr.colorIcon
         val subscribeColor = if (userInfo?.isSubscribed == true) R.attr.colorSecondary else R.attr.colorIcon
 
-        note.setIconicsImage(CommunityMaterial.Icon3.cmd_clock, 24, 0, noteColor)
-        favor.setIconicsImage(CommunityMaterial.Icon.cmd_star, 24, 0, favorColor)
-        finish.setIconicsImage(CommunityMaterial.Icon3.cmd_check, 24, 0, finishColor)
+        note.setIconicsImage(CommunityMaterial.Icon.cmd_clock, 24, 0, noteColor)
+        favor.setIconicsImage(CommunityMaterial.Icon2.cmd_star, 24, 0, favorColor)
+        finish.setIconicsImage(CommunityMaterial.Icon.cmd_check, 24, 0, finishColor)
         subscribe.setIconicsImage(CommunityMaterial.Icon2.cmd_newspaper, 24, 0, subscribeColor)
     }
 }

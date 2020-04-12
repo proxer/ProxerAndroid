@@ -257,7 +257,7 @@ class AnimeAdapter(
                     info.isVisible = true
                     info.setText(R.string.fragment_anime_stream_login_required_warning)
                     info.setCompoundDrawablesWithIntrinsicBounds(
-                        generateInfoDrawable(CommunityMaterial.Icon4.cmd_alert), null, null, null
+                        generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
                     )
                 } else {
                     play.setText(R.string.fragment_anime_stream_play)
@@ -286,7 +286,7 @@ class AnimeAdapter(
         }
 
         private fun generatePlayDrawable(): IconicsDrawable {
-            return IconicsDrawable(play.context, CommunityMaterial.Icon3.cmd_play).apply {
+            return IconicsDrawable(play.context, CommunityMaterial.Icon2.cmd_play).apply {
                 colorInt = play.context.resolveColor(R.attr.colorOnPrimary)
                 paddingDp = 8
                 sizeDp = 28

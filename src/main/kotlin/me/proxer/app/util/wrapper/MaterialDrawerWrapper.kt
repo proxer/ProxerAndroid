@@ -197,7 +197,7 @@ class MaterialDrawerWrapper(
                 },
                 ProfileSettingDrawerItem().apply {
                     nameRes = R.string.section_login
-                    iconicsIcon = CommunityMaterial.Icon4.cmd_account_key
+                    iconicsIcon = CommunityMaterial.Icon.cmd_account_key
                     identifier = ProfileItem.LOGIN.id
                 }
             )
@@ -208,7 +208,7 @@ class MaterialDrawerWrapper(
                     identifier = ProfileItem.USER.id
 
                     if (it.image.isBlank()) {
-                        iconDrawable = IconicsDrawable(context, CommunityMaterial.Icon4.cmd_account).apply {
+                        iconDrawable = IconicsDrawable(context, CommunityMaterial.Icon.cmd_account).apply {
                             backgroundColorInt = context.resolveColor(R.attr.colorPrimary)
                             colorInt = context.resolveColor(R.attr.colorOnPrimary)
                             sizeDp = 48
@@ -219,17 +219,17 @@ class MaterialDrawerWrapper(
                 },
                 ProfileSettingDrawerItem().apply {
                     nameRes = R.string.section_notifications
-                    iconicsIcon = CommunityMaterial.Icon4.cmd_bell_outline
+                    iconicsIcon = CommunityMaterial.Icon.cmd_bell_outline
                     identifier = ProfileItem.NOTIFICATIONS.id
                 },
                 ProfileSettingDrawerItem().apply {
                     nameRes = R.string.section_profile_settings
-                    iconicsIcon = CommunityMaterial.Icon4.cmd_account_settings
+                    iconicsIcon = CommunityMaterial.Icon.cmd_account_settings
                     identifier = ProfileItem.PROFILE_SETTINGS.id
                 },
                 ProfileSettingDrawerItem().apply {
                     nameRes = R.string.section_logout
-                    iconicsIcon = CommunityMaterial.Icon4.cmd_account_remove
+                    iconicsIcon = CommunityMaterial.Icon.cmd_account_remove
                     identifier = ProfileItem.LOGOUT.id
                 }
             )
@@ -251,25 +251,25 @@ class MaterialDrawerWrapper(
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_bookmarks
-            iconicsIcon = CommunityMaterial.Icon4.cmd_bookmark
+            iconicsIcon = CommunityMaterial.Icon.cmd_bookmark
             identifier = DrawerItem.BOOKMARKS.id
             isSelectable = isMain
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_anime
-            iconicsIcon = CommunityMaterial.Icon.cmd_television
+            iconicsIcon = CommunityMaterial.Icon2.cmd_television
             identifier = DrawerItem.ANIME.id
             isSelectable = isMain
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_schedule
-            iconicsIcon = CommunityMaterial.Icon4.cmd_calendar
+            iconicsIcon = CommunityMaterial.Icon.cmd_calendar
             identifier = DrawerItem.SCHEDULE.id
             isSelectable = isMain
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_manga
-            iconicsIcon = CommunityMaterial.Icon4.cmd_book_open_page_variant
+            iconicsIcon = CommunityMaterial.Icon.cmd_book_open_page_variant
             identifier = DrawerItem.MANGA.id
             isSelectable = isMain
         }
@@ -284,7 +284,7 @@ class MaterialDrawerWrapper(
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_settings
-            iconicsIcon = CommunityMaterial.Icon.cmd_settings
+            iconicsIcon = CommunityMaterial.Icon.cmd_cog
             isSelectable = isMain
             identifier = DrawerItem.SETTINGS.id
         }

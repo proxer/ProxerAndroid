@@ -125,7 +125,7 @@ object ImagePrototype : AutoClosingPrototype {
             }
         })
         .error(
-            IconicsDrawable(view.context, CommunityMaterial.Icon.cmd_refresh).apply {
+            IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh).apply {
                 colorInt = view.context.resolveColor(R.attr.colorIcon)
                 sizeDp = 32
             }

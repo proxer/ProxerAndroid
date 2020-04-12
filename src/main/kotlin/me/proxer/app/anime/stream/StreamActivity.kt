@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -30,7 +29,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -167,12 +165,6 @@ class StreamActivity : BaseActivity() {
     private val hideControlHandler = Handler()
     private val animationHandler = Handler()
 
-    private val wifiLock by lazy {
-        requireNotNull(getSystemService<WifiManager>())
-            .createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "$packageName:Player")
-            .apply { setReferenceCounted(false) }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -180,16 +172,16 @@ class StreamActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         setupUi()
 
-        fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen))
+        fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
         controlProgress.progressDrawable = ThinCircularProgressDrawable(this)
         controlProgress.showProgressBackground = false
 
         rewindIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_rewind), null, null
+            null, generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind), null, null
         )
 
         fastForwardIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon4.cmd_fast_forward), null, null
+            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_fast_forward), null, null
         )
 
         playerManager.playerReadySubject
@@ -204,7 +196,6 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe {
                 handlePlayerState(it)
-                handleWifiLock(it)
             }
 
         playerManager.errorSubject
@@ -236,10 +227,10 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe {
                 val icon = when {
-                    it <= 0 -> CommunityMaterial.Icon.cmd_volume_mute
-                    it <= 33 -> CommunityMaterial.Icon.cmd_volume_low
-                    it <= 66 -> CommunityMaterial.Icon.cmd_volume_medium
-                    else -> CommunityMaterial.Icon.cmd_volume_high
+                    it <= 0 -> CommunityMaterial.Icon2.cmd_volume_mute
+                    it <= 33 -> CommunityMaterial.Icon2.cmd_volume_low
+                    it <= 66 -> CommunityMaterial.Icon2.cmd_volume_medium
+                    else -> CommunityMaterial.Icon2.cmd_volume_high
                 }
 
                 updateControl(it, icon)
@@ -249,9 +240,9 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe {
                 val icon = when {
-                    it <= 33 -> CommunityMaterial.Icon4.cmd_brightness_5
-                    it <= 66 -> CommunityMaterial.Icon4.cmd_brightness_6
-                    else -> CommunityMaterial.Icon4.cmd_brightness_7
+                    it <= 33 -> CommunityMaterial.Icon.cmd_brightness_5
+                    it <= 66 -> CommunityMaterial.Icon.cmd_brightness_6
+                    else -> CommunityMaterial.Icon.cmd_brightness_7
                 }
 
                 updateControl(it, icon)
@@ -350,8 +341,6 @@ class StreamActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        wifiLock.release()
-
         introductoryOverlay?.remove()
         introductoryOverlay = null
 
@@ -455,11 +444,11 @@ class StreamActivity : BaseActivity() {
         if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen))
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen))
         } else {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
-            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon4.cmd_fullscreen_exit))
+            fullscreen.setImageDrawable(generateControllerIcon(CommunityMaterial.Icon.cmd_fullscreen_exit))
         }
     }
 
@@ -529,17 +518,6 @@ class StreamActivity : BaseActivity() {
                 playerView.keepScreenOn = true
                 loading.isVisible = true
                 play.isVisible = false
-            }
-        }
-    }
-
-    private fun handleWifiLock(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING, PlayerState.LOADING -> {
-                wifiLock.acquire()
-            }
-            PlayerState.PAUSING -> {
-                wifiLock.release()
             }
         }
     }
