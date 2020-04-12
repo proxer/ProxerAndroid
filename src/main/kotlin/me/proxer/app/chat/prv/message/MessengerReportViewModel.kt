@@ -1,4 +1,4 @@
-package me.proxer.app.chat.pub.message
+package me.proxer.app.chat.prv.message
 
 import com.gojuno.koptional.Optional
 import io.reactivex.Single
@@ -8,11 +8,11 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.library.ProxerApi
 import org.koin.core.KoinComponent
 
-class ChatReportViewModel : ReportViewModel(), KoinComponent {
+class MessengerReportViewModel : ReportViewModel(), KoinComponent {
 
     private val api by safeInject<ProxerApi>()
 
     override fun reportSingle(id: String, message: String): Single<Optional<Unit>> {
-        return api.chat.reportMessage(id, message).buildOptionalSingle()
+        return api.messenger.report(id, message).buildOptionalSingle()
     }
 }

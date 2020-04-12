@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -189,6 +190,8 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
         innerAdapter.mentionsClickSubject
             .autoDisposable(this.scope())
             .subscribe { ProfileActivity.navigateTo(requireActivity(), username = it) }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -267,6 +270,20 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
         viewModel.draft.observe(viewLifecycleOwner, Observer {
             if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        IconicsMenuInflaterUtil.inflate(inflater, requireContext(), R.menu.fragment_messenger, menu, true)
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.report -> MessengerReportDialog.show(hostingActivity, conference.id.toString())
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {
