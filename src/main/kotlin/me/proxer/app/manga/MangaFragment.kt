@@ -21,9 +21,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-import com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.iconics.utils.IconicsMenuInflaterUtil
 import com.rubengees.easyheaderfooteradapter.EasyHeaderFooterAdapter
@@ -281,7 +278,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
                 }
 
                 bindOrientationOptionsItem()
-                bindToolbar()
                 bindHeaderAndFooterHeight()
                 bindLayoutManager()
 
@@ -311,8 +307,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     override fun showData(data: MangaChapterInfo) {
         super.showData(data)
 
-        hostingActivity.toggleFullscreen(true)
-        bindToolbar()
+        hostingActivity.onContentShow()
 
         chapterTitle = data.chapter.title
         episodeAmount = data.episodeAmount
@@ -343,8 +338,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     }
 
     override fun hideData() {
-        bindToolbar()
-
         preloader.cancel()
         innerAdapter.swapDataAndNotifyWithDiffing(emptyList())
 
@@ -359,7 +352,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
     override fun showError(action: ErrorUtils.ErrorAction) {
         super.showError(action)
 
-        hostingActivity.toggleFullscreen(false)
+        hostingActivity.onContentHide()
 
         action.data[ErrorUtils.CHAPTER_TITLE_DATA_KEY].let {
             chapterTitle = it as? String
@@ -513,15 +506,6 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         innerAdapter.isVertical = isVertical
 
         recyclerView.safeLayoutManager.onRestoreInstanceState(state)
-    }
-
-    private fun bindToolbar() {
-        toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-            scrollFlags = when (isVertical && viewModel.data.value != null && viewModel.error.value == null) {
-                true -> SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-                false -> 0
-            }
-        }
     }
 
     private fun bindHeaderAndFooterHeight() {

@@ -5,7 +5,6 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Message
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -16,8 +15,11 @@ import android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 import android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
+import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ShareCompat
+import androidx.core.os.postDelayed
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commitNow
 import com.google.android.material.appbar.AppBarLayout
@@ -40,7 +42,6 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
-import java.lang.ref.WeakReference
 
 /**
  * @author Ruben Gees
@@ -129,21 +130,20 @@ class MangaActivity : BaseActivity() {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val fullscreenHandler = FullscreenHandler(WeakReference(this))
+    private val fullscreenHandler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
 
         setContentView(R.layout.activity_manga)
         setSupportActionBar(toolbar)
 
         setupToolbar()
         updateTitle()
-
-        window.decorView.systemUiVisibilityChanges()
-            .skip(1)
-            .autoDisposable(this.scope())
-            .subscribe { handleUIChange() }
 
         toggleFullscreen(false)
 
@@ -193,21 +193,67 @@ class MangaActivity : BaseActivity() {
     override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean, newConfig: Configuration?) {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
-        handleUIChange()
+        if (!isInMultiWindowMode) {
+            toggleFullscreen(true)
+        }
     }
 
-    fun toggleFullscreen(fullscreen: Boolean, delay: Long = 0) {
-        val fullscreenMessage = Message().apply {
-            what = 0
-            obj = fullscreen
+    fun onContentShow() {
+        fullscreenHandler.removeCallbacksAndMessages(null)
+
+        toggleFullscreen(true)
+
+        window.decorView.systemUiVisibilityChanges()
+            .autoDisposable(this.scope())
+            .subscribe {
+                if (it and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
+                    toggleFullscreen(false)
+
+                    fullscreenHandler.postDelayed(3000) {
+                        onContentShow()
+                    }
+                } else {
+                    toggleFullscreen(true)
+                }
+            }
+    }
+
+    fun onContentHide() {
+        fullscreenHandler.removeCallbacksAndMessages(null)
+        window.decorView.setOnSystemUiVisibilityChangeListener(null)
+
+        toggleFullscreen(false)
+    }
+
+    private fun toggleFullscreen(fullscreen: Boolean) {
+        val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
+
+        if (fullscreen && !isInMultiWindowMode) {
+            window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LOW_PROFILE or
+                SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                SYSTEM_UI_FLAG_FULLSCREEN or
+                SYSTEM_UI_FLAG_IMMERSIVE
+
+            toolbar.isVisible = false
+        } else {
+            window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE or
+                SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                SYSTEM_UI_FLAG_IMMERSIVE
+
+            toolbar.isVisible = true
         }
 
-        fullscreenHandler.removeMessages(0)
-
-        if (delay <= 0L) {
-            fullscreenHandler.handleMessage(fullscreenMessage)
+        if (isInMultiWindowMode) {
+            toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
+            }
         } else {
-            fullscreenHandler.sendMessageDelayed(fullscreenMessage, delay)
+            toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
+                scrollFlags = SCROLL_FLAG_NO_SCROLL
+            }
         }
     }
 
@@ -225,54 +271,5 @@ class MangaActivity : BaseActivity() {
     private fun updateTitle() {
         title = name
         supportActionBar?.subtitle = chapterTitle ?: Category.MANGA.toEpisodeAppString(this, episode)
-    }
-
-    private fun handleUIChange() {
-        val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
-        val isInFullscreenMode = window.decorView.systemUiVisibility and SYSTEM_UI_FLAG_FULLSCREEN != 0
-
-        toolbar.updateLayoutParams<AppBarLayout.LayoutParams> {
-            scrollFlags = when {
-                isInMultiWindowMode -> SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
-                isInFullscreenMode -> SCROLL_FLAG_SCROLL
-                else -> SCROLL_FLAG_NO_SCROLL
-            }
-        }
-
-        if (isInFullscreenMode) {
-            if (isInMultiWindowMode) {
-                toggleFullscreen(false)
-            } else {
-                toggleFullscreen(true)
-            }
-        } else {
-            toggleFullscreen(false)
-
-            if (!isInMultiWindowMode) {
-                toggleFullscreen(true, 2_000)
-            }
-        }
-    }
-
-    private class FullscreenHandler(private val activity: WeakReference<MangaActivity>) : Handler() {
-        override fun handleMessage(message: Message) {
-            this.activity.get()?.apply {
-                val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
-
-                if (message.obj as Boolean && !isInMultiWindowMode) {
-                    window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_LOW_PROFILE or
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                        SYSTEM_UI_FLAG_FULLSCREEN or
-                        SYSTEM_UI_FLAG_IMMERSIVE
-                } else {
-                    window.decorView.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE or
-                        SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        SYSTEM_UI_FLAG_IMMERSIVE
-                }
-            }
-        }
     }
 }
