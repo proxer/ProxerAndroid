@@ -160,18 +160,24 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
                 val parentWidth = recyclerView.width
                 val normalizedParentHeight = parentHeight / 2
 
+                val widthPart = parentWidth / 4
+                val heightPart = parentHeight / 4
+
                 // Add one to the position to account for the header.
                 when (readerOrientation) {
                     MangaReaderOrientation.LEFT_TO_RIGHT -> when {
-                        xCoordinate < parentWidth / 3 -> recyclerView.smoothScrollToPosition(position - 1 + 1)
+                        xCoordinate < widthPart -> recyclerView.smoothScrollToPosition(position - 1 + 1)
+                        xCoordinate >= widthPart && xCoordinate < widthPart * 3 -> hostingActivity.toggleFullscreen()
                         else -> recyclerView.smoothScrollToPosition(position + 1 + 1)
                     }
                     MangaReaderOrientation.RIGHT_TO_LEFT -> when {
-                        xCoordinate < parentWidth / 3 -> recyclerView.smoothScrollToPosition(position + 1 + 1)
+                        xCoordinate < widthPart -> recyclerView.smoothScrollToPosition(position + 1 + 1)
+                        xCoordinate >= widthPart && xCoordinate < widthPart * 3 -> hostingActivity.toggleFullscreen()
                         else -> recyclerView.smoothScrollToPosition(position - 1 + 1)
                     }
                     MangaReaderOrientation.VERTICAL -> when {
-                        yCoordinate < parentHeight / 3 -> recyclerView.smoothScrollBy(0, -normalizedParentHeight)
+                        yCoordinate < heightPart -> recyclerView.smoothScrollBy(0, -normalizedParentHeight)
+                        yCoordinate >= heightPart && yCoordinate < heightPart * 3 -> hostingActivity.toggleFullscreen()
                         else -> recyclerView.smoothScrollBy(0, normalizedParentHeight)
                     }
                 }

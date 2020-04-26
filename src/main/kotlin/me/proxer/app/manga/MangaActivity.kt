@@ -145,7 +145,7 @@ class MangaActivity : BaseActivity() {
         setupToolbar()
         updateTitle()
 
-        toggleFullscreen(false)
+        setFullscreen(false)
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
@@ -194,26 +194,26 @@ class MangaActivity : BaseActivity() {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
         if (!isInMultiWindowMode) {
-            toggleFullscreen(true)
+            setFullscreen(true)
         }
     }
 
     fun onContentShow() {
         fullscreenHandler.removeCallbacksAndMessages(null)
 
-        toggleFullscreen(true)
+        setFullscreen(true)
 
         window.decorView.systemUiVisibilityChanges()
             .autoDisposable(this.scope())
             .subscribe {
                 if (it and SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                    toggleFullscreen(false)
+                    setFullscreen(false)
 
                     fullscreenHandler.postDelayed(3000) {
                         onContentShow()
                     }
                 } else {
-                    toggleFullscreen(true)
+                    setFullscreen(true)
                 }
             }
     }
@@ -222,10 +222,18 @@ class MangaActivity : BaseActivity() {
         fullscreenHandler.removeCallbacksAndMessages(null)
         window.decorView.setOnSystemUiVisibilityChangeListener(null)
 
-        toggleFullscreen(false)
+        setFullscreen(false)
     }
 
-    private fun toggleFullscreen(fullscreen: Boolean) {
+    fun toggleFullscreen() {
+        fullscreenHandler.removeCallbacksAndMessages(null)
+
+        val isFullscreen = window.decorView.systemUiVisibility and SYSTEM_UI_FLAG_FULLSCREEN != 0
+
+        setFullscreen(!isFullscreen)
+    }
+
+    private fun setFullscreen(fullscreen: Boolean) {
         val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
 
         if (fullscreen && !isInMultiWindowMode) {
