@@ -49,7 +49,7 @@ import me.proxer.app.util.extension.toLocalDateTimeBP
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.entity.info.EntryCore
 import me.proxer.library.enums.Language
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.properties.Delegates
 
@@ -67,7 +67,7 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         }
     }
 
-    override val viewModel by viewModel<MangaViewModel> { parametersOf(id, language, episode) }
+    override val viewModel by sharedViewModel<MangaViewModel> { parametersOf(id, language, episode) }
 
     override val hostingActivity: MangaActivity
         get() = activity as MangaActivity

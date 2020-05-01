@@ -42,6 +42,8 @@ import me.proxer.library.enums.Category
 import me.proxer.library.enums.Language
 import me.proxer.library.util.ProxerUrls
 import me.proxer.library.util.ProxerUtils
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * @author Ruben Gees
@@ -128,6 +130,8 @@ class MangaActivity : BaseActivity() {
             }
         }
 
+    private val viewModel by viewModel<MangaViewModel> { parametersOf(id, language, episode) }
+
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
     private val fullscreenHandler = Handler()
@@ -145,12 +149,20 @@ class MangaActivity : BaseActivity() {
         setupToolbar()
         updateTitle()
 
-        setFullscreen(false)
-
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {
                 replace(R.id.container, MangaFragment.newInstance())
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (viewModel.data.value != null) {
+            setFullscreen(true)
+        } else {
+            setFullscreen(false)
         }
     }
 
@@ -194,7 +206,11 @@ class MangaActivity : BaseActivity() {
         super.onMultiWindowModeChanged(isInMultiWindowMode, newConfig)
 
         if (!isInMultiWindowMode) {
-            setFullscreen(true)
+            if (viewModel.data.value != null) {
+                setFullscreen(true)
+            } else {
+                setFullscreen(false)
+            }
         }
     }
 
