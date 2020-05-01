@@ -108,7 +108,6 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .build())
         .build()
 
-    override fun getTheme() = R.style.Fragment_App_AboutFragment
     override fun shouldAnimate() = false
 
     private fun buildInfoItems(context: Context) = listOf(

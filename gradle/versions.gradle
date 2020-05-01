@@ -13,10 +13,10 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.4-rc-2"
+    gradleVersion = "6.4-rc-4"
 
     // Core plugins
-    androidPluginVersion = "4.0.0-beta04"
+    androidPluginVersion = "4.0.0-beta05"
     kotlinVersion = "1.3.72"
 
     // Utility plugins
@@ -31,9 +31,9 @@ ext {
     browserVersion = "1.3.0-alpha01"
     lifecycleVersion = "2.2.0"
     roomVersion = "2.2.5"
-    workVersion = "2.4.0-alpha02"
+    workVersion = "2.4.0-alpha03"
     coreKtxVersion = "1.3.0-rc01"
-    fragmentKtxVersion = "1.3.0-alpha03"
+    fragmentKtxVersion = "1.3.0-alpha04"
     shareTargetVersion = "1.0.0-rc01"
     playCoreVersion = "1.7.2"
     adsIdentifierVersion = "17.0.0"
@@ -45,12 +45,12 @@ ext {
     rxKotlinVersion = "2.4.0"
     rxAndroidVersion = "2.1.1"
     rxBindingVersion = "3.1.0"
-    rxPreferencesVersion = "2.0.0"
+    rxPreferencesVersion = "2.0.1-beta1"
     rxBusVersion = "2.0.0"
     autoDisposeVersion = "1.2.0"
 
     // UI components
-    recyclerviewVersion = "1.2.0-alpha02"
+    recyclerviewVersion = "1.2.0-alpha03"
     cardviewVersion = "1.0.0"
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.1.0-alpha01"
@@ -63,16 +63,16 @@ ext {
     materialDrawerVersion = "8.0.1"
     aboutLibrariesVersion = "8.1.2"
     crossfaderVersion = "1.6.0"
-    materialAboutVersion = "2.4.2"
+    materialAboutVersion = "3.1.2"
     subsamplingScaleImageViewVersion = "3.10.0"
     subsamplingPdfDecoderVersion = "ad07ddf671"
     materialDialogsVersion = "3.3.0"
     flexboxVersion = "2.0.1"
-    emojiIosVersion = "d13e8fa273"
+    emojiIosVersion = "9058c30868"
     exoplayerVersion = "2.11.4"
     previewSeekbarVersion = "09eec85551"
     materialProgressBarVersion = "1.6.1"
-    materialRatingBarVersion = "1005cd342e"
+    materialRatingBarVersion = "1.4.0"
     customtabsHelperVersion = "1.0.6"
     introductionVersion = "2.0.0"
     aspectRatioImageViewVersion = "1.0.9"
@@ -80,12 +80,12 @@ ext {
 
     // Utils
     proxerLibVersion = "f0c9accb2e"
-    threetenVersion = "1.2.3"
+    threetenVersion = "1.2.4"
     hawkVersion = "7a1a625455"
     glideVersion = "4.11.0"
     retrofitVersion = "2.8.1"
-    okHttpVersion = "4.5.0"
-    okioVersion = "2.4.1"
+    okHttpVersion = "4.6.0"
+    okioVersion = "2.6.0"
     moshiVersion = "1.9.2"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.6.0"

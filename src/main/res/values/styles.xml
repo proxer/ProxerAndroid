@@ -26,13 +26,6 @@
         <item name="asp_preferenceIconTint">?attr/colorSecondary</item>
         <item name="asp_preferenceDialogIconTint">?asp_preferenceIconTint</item>
 
-        <!--        <item name="about_libraries_card">?attr/colorSurface</item>-->
-        <!--        <item name="about_libraries_text_description">?android:attr/textColorPrimary</item>-->
-        <!--        <item name="about_libraries_title_openSource">?android:attr/textColorPrimary</item>-->
-        <!--        <item name="about_libraries_text_openSource">?android:attr/textColorSecondary</item>-->
-        <!--        <item name="about_libraries_dividerLight_openSource">?attr/colorDivider</item>-->
-        <!--        <item name="about_libraries_dividerDark_openSource">?attr/colorDivider</item>-->
-
         <item name="materialDrawerStyle">@style/Widget.App.MaterialDrawerStyle</item>
         <item name="materialDrawerHeaderStyle">@style/Widget.App.MaterialDrawerHeaderStyle</item>
 
@@ -59,8 +52,6 @@
         <item name="colorFastscrollTrack">@color/fastscroll_track</item>
         <item name="colorFastscrollThumb">@color/fastscroll_thumb</item>
     </style>
-
-    <style name="Fragment.App.AboutFragment" parent="Theme.Mal.Light.DarkActionBar" />
 
     <style name="ThemeOverlay.App" parent="@style/ThemeOverlay.MaterialComponents.Light" />
 

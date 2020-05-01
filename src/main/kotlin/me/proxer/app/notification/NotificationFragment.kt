@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -54,6 +55,10 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
             .autoDisposable(this.scope())
             .subscribe { viewModel.addItemToDelete(it) }
 
+        setFragmentResultListener(NotificationDeletionConfirmationDialog.DELETE_ALL_RESULT) { _, _ ->
+            viewModel.deleteAll()
+        }
+
         setHasOptionsMenu(true)
     }
 
@@ -79,7 +84,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete_all -> if (!innerAdapter.isEmpty()) {
-                NotificationDeletionConfirmationDialog.show(hostingActivity, this)
+                NotificationDeletionConfirmationDialog.show(hostingActivity)
             }
         }
 

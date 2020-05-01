@@ -130,6 +130,7 @@ class MainActivity : DrawerActivity() {
         }
     }
 
+    @Suppress("DEPRECATION") // TODO: Wait for stable release and fix in introduction.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

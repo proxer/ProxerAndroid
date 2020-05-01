@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
@@ -24,31 +24,11 @@ import org.koin.core.parameter.parametersOf
 class EditCommentActivity : BaseActivity() {
 
     companion object {
-        const val COMMENT_REQUEST = 53_454
         const val COMMENT_EXTRA = "comment"
 
         private const val ID_ARGUMENT = "id"
         private const val ENTRY_ID_ARGUMENT = "entry_id"
         private const val NAME_ARGUMENT = "name_id"
-
-        fun navigateTo(context: Activity, id: String? = null, entryId: String? = null, name: String? = null) {
-            context.startActivityForResult(getIntent(context, id, entryId, name), COMMENT_REQUEST)
-        }
-
-        fun navigateTo(context: Fragment, id: String? = null, entryId: String? = null, name: String? = null) {
-            context.startActivityForResult(getIntent(context.requireContext(), id, entryId, name), COMMENT_REQUEST)
-        }
-
-        private fun getIntent(
-            context: Context,
-            id: String? = null,
-            entryId: String? = null,
-            name: String? = null
-        ) = context.intentFor<EditCommentActivity>(
-            ID_ARGUMENT to id,
-            ENTRY_ID_ARGUMENT to entryId,
-            NAME_ARGUMENT to name
-        )
     }
 
     val id: String?
@@ -129,5 +109,24 @@ class EditCommentActivity : BaseActivity() {
     private fun setupToolbar() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.subtitle = name?.trim()
+    }
+
+    class Contract : ActivityResultContract<Contract.Input, LocalComment>() {
+
+        override fun createIntent(context: Context, input: Input) = context.intentFor<EditCommentActivity>(
+            ID_ARGUMENT to input.id,
+            ENTRY_ID_ARGUMENT to input.entryId,
+            NAME_ARGUMENT to input.name
+        )
+
+        override fun parseResult(resultCode: Int, intent: Intent?): LocalComment? {
+            if (resultCode != Activity.RESULT_OK) {
+                return null
+            }
+
+            return intent?.getParcelableExtra(COMMENT_EXTRA)
+        }
+
+        data class Input(val id: String? = null, val entryId: String? = null, val name: String? = null)
     }
 }

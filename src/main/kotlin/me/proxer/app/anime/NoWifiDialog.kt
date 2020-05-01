@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import kotterknife.bindView
@@ -19,11 +19,12 @@ import me.proxer.app.util.extension.getSafeString
 class NoWifiDialog : BaseDialog() {
 
     companion object {
+        const val STREAM_ID_RESULT = "stream_id"
+
         private const val STREAM_ID_ARGUMENT = "stream_id"
 
-        fun show(activity: AppCompatActivity, fragment: Fragment, streamId: String) = NoWifiDialog()
+        fun show(activity: AppCompatActivity, streamId: String) = NoWifiDialog()
             .apply { arguments = bundleOf(STREAM_ID_ARGUMENT to streamId) }
-            .apply { setTargetFragment(fragment, 0) }
             .show(activity.supportFragmentManager, "no_wifi_dialog")
     }
 
@@ -39,7 +40,7 @@ class NoWifiDialog : BaseDialog() {
                 preferenceHelper.shouldCheckCellular = false
             }
 
-            (requireTargetFragment() as AnimeFragment).onConfirmNoWifi(streamId)
+            setFragmentResult(STREAM_ID_RESULT, bundleOf(STREAM_ID_RESULT to streamId))
         }
         .negativeButton(R.string.cancel)
 }

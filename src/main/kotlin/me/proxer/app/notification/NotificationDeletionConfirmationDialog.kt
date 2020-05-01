@@ -3,12 +3,11 @@ package me.proxer.app.notification
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.afollestad.materialdialogs.MaterialDialog
 import me.proxer.app.R
 import me.proxer.app.base.BaseDialog
-import me.proxer.app.util.extension.unsafeLazy
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * @author Ruben Gees
@@ -16,15 +15,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class NotificationDeletionConfirmationDialog : BaseDialog() {
 
     companion object {
-        fun show(activity: AppCompatActivity, fragment: Fragment) = NotificationDeletionConfirmationDialog()
-            .apply { setTargetFragment(fragment, 0) }
+        const val DELETE_ALL_RESULT = "delete_all"
+
+        fun show(activity: AppCompatActivity) = NotificationDeletionConfirmationDialog()
             .show(activity.supportFragmentManager, "notification_deletion_confirmation_dialog")
     }
 
-    private val viewModel by unsafeLazy { requireTargetFragment().viewModel<NotificationViewModel>().value }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialDialog(requireContext())
         .message(R.string.dialog_notification_deletion_confirmation_content)
-        .positiveButton(R.string.dialog_notification_deletion_confirmation_positive) { viewModel.deleteAll() }
+        .positiveButton(R.string.dialog_notification_deletion_confirmation_positive) {
+            setFragmentResult(DELETE_ALL_RESULT, bundleOf())
+        }
         .negativeButton(R.string.cancel)
 }

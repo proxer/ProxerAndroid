@@ -109,6 +109,4 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
     }
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit
-
-    protected fun requireTargetFragment() = requireNotNull(targetFragment)
 }

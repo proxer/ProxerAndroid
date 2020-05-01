@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -128,7 +129,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                 val connectivityManager = requireNotNull(requireContext().getSystemService<ConnectivityManager>())
 
                 if (connectivityManager.isConnectedToCellular && preferenceHelper.shouldCheckCellular) {
-                    NoWifiDialog.show(hostingActivity, this, it.id)
+                    NoWifiDialog.show(hostingActivity, it.id)
                 } else {
                     viewModel.resolve(it)
                 }
@@ -154,6 +155,12 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                     adapter.notifyItemRangeChanged(1, innerAdapter.itemCount + 1)
                 }
             }
+
+        setFragmentResultListener(NoWifiDialog.STREAM_ID_RESULT) { _, bundle ->
+            viewModel.data.value?.streams
+                ?.find { it.id == bundle.getString(NoWifiDialog.STREAM_ID_RESULT) }
+                ?.let { viewModel.resolve(it) }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -316,11 +323,5 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
         if (viewModel.data.value == null) {
             adapter.header = null
         }
-    }
-
-    fun onConfirmNoWifi(streamId: String) {
-        viewModel.data.value?.streams
-            ?.find { it.id == streamId }
-            ?.let { viewModel.resolve(it) }
     }
 }

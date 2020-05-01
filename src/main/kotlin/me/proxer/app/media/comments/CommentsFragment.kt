@@ -1,7 +1,5 @@
 package me.proxer.app.media.comments
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -32,10 +30,8 @@ import me.proxer.app.GlideApp
 import me.proxer.app.R
 import me.proxer.app.base.PagedContentFragment
 import me.proxer.app.comment.EditCommentActivity
-import me.proxer.app.comment.LocalComment
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.profile.ProfileActivity
-import me.proxer.app.util.extension.getSafeParcelableExtra
 import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -92,6 +88,16 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
 
     private val create by bindView<FloatingActionButton>(R.id.create)
 
+    private val editComment = registerForActivityResult(EditCommentActivity.Contract()) { comment ->
+        if (comment != null) {
+            Single.fromCallable { comment }
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .autoDisposable(this.scope())
+                .subscribeAndLogErrors { viewModel.updateComment(it) }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -109,7 +115,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         innerAdapter.editClickSubject
             .autoDisposable(this.scope())
             .subscribe {
-                EditCommentActivity.navigateTo(this, it.id, it.entryId, name)
+                editComment.launch(EditCommentActivity.Contract.Input(it.id, it.entryId, name))
             }
 
         innerAdapter.deleteClickSubject
@@ -156,7 +162,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
 
         create.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { EditCommentActivity.navigateTo(this, entryId = id, name = name) }
+            .subscribe { editComment.launch(EditCommentActivity.Contract.Input(entryId = id, name = name)) }
 
         TooltipCompat.setTooltipText(create, getString(R.string.action_write_comment))
     }
@@ -165,16 +171,6 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         innerAdapter.categoryCallback = null
 
         super.onDestroy()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == EditCommentActivity.COMMENT_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-            Single.fromCallable { data.getSafeParcelableExtra<LocalComment>(EditCommentActivity.COMMENT_EXTRA) }
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .autoDisposable(this.scope())
-                .subscribeAndLogErrors { viewModel.updateComment(it) }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
