@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package me.proxer.app.util.compat
 
 import android.app.Activity
@@ -25,7 +27,6 @@ object TaskDescriptionCompat {
                 primaryColor
             )
         } else {
-            @Suppress("DEPRECATION")
             ActivityManager.TaskDescription(
                 activity.getString(R.string.app_name),
                 BitmapFactory.decodeResource(activity.resources, activityInfo.icon),
