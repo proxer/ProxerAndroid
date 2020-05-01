@@ -24,6 +24,7 @@ import android.view.View.SYSTEM_UI_FLAG_LOW_PROFILE
 import android.view.View.SYSTEM_UI_FLAG_VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -167,6 +168,10 @@ class StreamActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
 
         setContentView(R.layout.activity_stream)
         setSupportActionBar(toolbar)
@@ -417,16 +422,16 @@ class StreamActivity : BaseActivity() {
             toolbar.isVisible = it == View.VISIBLE
         }
 
+        // Nobody understands fitsSystemWindows so this can probably be done better, but seems to work for now.
         ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
-            val newInsets = ViewCompat.onApplyWindowInsets(root, insets)
-
-            if (newInsets.isConsumed) {
-                return@setOnApplyWindowInsetsListener newInsets
+            toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.systemWindowInsetTop
+                leftMargin = insets.systemWindowInsetLeft
+                rightMargin = insets.systemWindowInsetRight
+                bottomMargin = insets.systemWindowInsetBottom
             }
 
-            ViewCompat.dispatchApplyWindowInsets(toolbar, newInsets)
-
-            if (newInsets.isConsumed) newInsets.consumeSystemWindowInsets() else newInsets
+            insets
         }
 
         window.decorView.systemUiVisibilityChanges()
