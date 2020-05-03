@@ -160,9 +160,9 @@ class MangaActivity : BaseActivity() {
         super.onResume()
 
         if (viewModel.data.value != null) {
-            setFullscreen(true)
+            onContentShow()
         } else {
-            setFullscreen(false)
+            onContentHide()
         }
     }
 
