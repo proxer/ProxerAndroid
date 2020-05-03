@@ -394,7 +394,7 @@
     <string name="dialog_link_check_message">
         <![CDATA[
         Links können zu schädlichen Seiten wie Spam oder Phishing führen. Dieser Link führt zu <b>%s</b>. Auch wenn der
-        Link nicht als schädlich bekannt ist, solltest du immer vorsichtig sein
+        Link nicht als schädlich bekannt ist, solltest du immer vorsichtig sein.
         ]]>
     </string>
     <string name="dialog_link_check_progress">Überprüfe…</string>
