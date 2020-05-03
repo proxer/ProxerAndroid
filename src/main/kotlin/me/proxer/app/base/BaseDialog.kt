@@ -12,7 +12,7 @@ import kotterknife.KotterKnife
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
-import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.handleLink
 import me.proxer.app.util.extension.safeInject
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -37,7 +37,9 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
     protected val storageHelper by safeInject<StorageHelper>()
     protected val preferenceHelper by safeInject<PreferenceHelper>()
 
-    private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
+    protected var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
+        private set
+
     private var lifecycleRegistry: LifecycleRegistry? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +107,7 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
     }
 
     override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
+        customTabsHelper.handleLink(requireActivity(), url, forceBrowser)
     }
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit

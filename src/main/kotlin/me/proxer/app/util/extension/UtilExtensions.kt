@@ -18,6 +18,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.target.Target
@@ -26,6 +27,7 @@ import me.proxer.app.GlideRequest
 import me.proxer.app.GlideRequests
 import me.proxer.app.R
 import me.proxer.app.settings.theme.ThemeVariant
+import me.proxer.app.ui.LinkCheckDialog
 import me.proxer.app.ui.WebViewActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.data.PreferenceHelper
@@ -35,6 +37,7 @@ import me.proxer.library.util.ProxerUrls.hasProxerHost
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.core.KoinComponent
 import org.koin.core.parameter.DefinitionParameters
@@ -136,14 +139,21 @@ inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
     return constructor.newInstance(parameters)
 }
 
-fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forceBrowser: Boolean = false) {
+fun CustomTabsHelperFragment.handleLink(activity: FragmentActivity, url: HttpUrl, forceBrowser: Boolean = false) {
     if (forceBrowser) {
-        doOpenHttpPage(activity, url)
+        openHttpPage(activity, url)
     } else {
         val nativePackages = Utils.getNativeAppPackage(activity, url)
 
         when (nativePackages.isEmpty()) {
-            true -> doOpenHttpPage(activity, url)
+            true -> {
+                val preferenceHelper = activity.get<PreferenceHelper>()
+
+                when (!url.hasProxerHost && preferenceHelper.shouldCheckLinks) {
+                    true -> LinkCheckDialog.show(activity, url)
+                    false -> openHttpPage(activity, url)
+                }
+            }
             false -> {
                 val intent = when (nativePackages.contains(APPLICATION_ID)) {
                     true -> Intent(Intent.ACTION_VIEW, url.androidUri()).setPackage(APPLICATION_ID)
@@ -160,17 +170,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl, forc
     }
 }
 
-inline fun <reified T> KoinComponent.safeInject(
-    qualifier: Qualifier? = null,
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
-
-inline fun <reified T> ComponentCallbacks.safeInject(
-    qualifier: Qualifier? = null,
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
-
-private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: HttpUrl) {
+fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
     val colorScheme = when (getKoin().get<PreferenceHelper>().themeContainer.variant) {
         ThemeVariant.LIGHT -> CustomTabsIntent.COLOR_SCHEME_LIGHT
         ThemeVariant.DARK -> CustomTabsIntent.COLOR_SCHEME_DARK
@@ -199,3 +199,13 @@ private fun CustomTabsHelperFragment.doOpenHttpPage(activity: Activity, url: Htt
             }
         }
 }
+
+inline fun <reified T> KoinComponent.safeInject(
+    qualifier: Qualifier? = null,
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
+
+inline fun <reified T> ComponentCallbacks.safeInject(
+    qualifier: Qualifier? = null,
+    noinline parameters: ParametersDefinition? = null
+): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }

@@ -30,6 +30,7 @@ class PreferenceHelper(
         const val LAST_NEWS_DATE = "last_news_date"
 
         const val AGE_CONFIRMATION = "age_confirmation"
+        const val LINK_CHECK = "check_links"
         const val AUTO_BOOKMARK = "auto_bookmark"
         const val CHECK_CELLULAR = "check_cellular"
         const val START_PAGE = "start_page"
@@ -89,6 +90,12 @@ class PreferenceHelper(
         get() = sharedPreferences.getBoolean(AGE_CONFIRMATION, false)
         set(value) {
             sharedPreferences.edit { putBoolean(AGE_CONFIRMATION, value) }
+        }
+
+    var shouldCheckLinks
+        get() = sharedPreferences.getBoolean(LINK_CHECK, true)
+        set(value) {
+            sharedPreferences.edit { putBoolean(LINK_CHECK, value) }
         }
 
     val isAgeRestrictedMediaAllowedObservable = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)

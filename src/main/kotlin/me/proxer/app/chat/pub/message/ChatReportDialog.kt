@@ -11,9 +11,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ChatReportDialog : ReportDialog() {
 
     companion object {
-        fun show(activity: AppCompatActivity, messageId: String) = ChatReportDialog().apply {
-            arguments = bundleOf(ID_ARGUMENT to messageId)
-        }.show(activity.supportFragmentManager, "chat_report_dialog")
+        fun show(activity: AppCompatActivity, messageId: String) = ChatReportDialog()
+            .apply { arguments = bundleOf(ID_ARGUMENT to messageId) }
+            .show(activity.supportFragmentManager, "chat_report_dialog")
     }
 
     override val viewModel by viewModel<ChatReportViewModel>()

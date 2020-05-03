@@ -390,6 +390,18 @@
     </string>
     <string name="dialog_comment_delete_positive">Löschen</string>
 
+    <!-- language=HTML -->
+    <string name="dialog_link_check_message">
+        <![CDATA[
+        Links können zu schädlichen Seiten wie Spam oder Phishing führen. Dieser Link führt zu <b>%s</b>. Auch wenn der
+        Link nicht als schädlich bekannt ist, solltest du immer vorsichtig sein
+        ]]>
+    </string>
+    <string name="dialog_link_check_progress">Überprüfe…</string>
+    <string name="dialog_link_check_secure">Dieser Link ist nicht als schädlich bekannt</string>
+    <string name="dialog_link_check_not_secure">Dieser Link ist als schädlich bekannt</string>
+    <string name="dialog_link_check_positive">Öffnen</string>
+
     <string name="fragment_bookmark_delete_message">Lesezeichen gelöscht</string>
     <string name="fragment_bookmark_delete_content_description">Löschen</string>
 
@@ -766,6 +778,13 @@
     </string>
     <string name="preference_check_wifi_summary_off">
         Es wird keine Warnung bei der Nutzung von mobilen Daten für Streams angezeigt
+    </string>
+    <string name="preference_check_links_title">Externe Links überprüfen</string>
+    <string name="preference_check_links_summary_on">
+        Externe Links werden überprüft
+    </string>
+    <string name="preference_check_links_summary_off">
+        Externe Links werden nicht überprüft
     </string>
     <string name="preference_external_cache_title">Bilder extern speichern</string>
     <string name="preference_external_cache_summary_off">

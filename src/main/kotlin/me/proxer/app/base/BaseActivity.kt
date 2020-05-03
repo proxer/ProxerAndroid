@@ -20,7 +20,7 @@ import me.proxer.app.util.compat.TaskDescriptionCompat
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
-import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.handleLink
 import me.proxer.app.util.extension.recursiveChildren
 import me.proxer.app.util.extension.safeInject
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
@@ -97,7 +97,7 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
     }
 
     override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.openHttpPage(this, url, forceBrowser)
+        customTabsHelper.handleLink(this, url, forceBrowser)
     }
 
     fun snackbar(

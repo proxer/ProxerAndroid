@@ -31,7 +31,7 @@ import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.extension.androidUri
-import me.proxer.app.util.extension.openHttpPage
+import me.proxer.app.util.extension.handleLink
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -87,7 +87,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
     }
 
     override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.openHttpPage(requireActivity(), url, forceBrowser)
+        customTabsHelper.handleLink(requireActivity(), url, forceBrowser)
     }
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()

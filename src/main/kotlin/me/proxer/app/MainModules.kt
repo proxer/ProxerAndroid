@@ -52,6 +52,7 @@ import me.proxer.app.profile.media.ProfileMediaListViewModel
 import me.proxer.app.profile.settings.ProfileSettingsViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
+import me.proxer.app.ui.LinkCheckViewModel
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.InstantJsonAdapter
@@ -270,6 +271,8 @@ private val viewModelModule = module {
     viewModel { (id: String?, entryId: String?) -> EditCommentViewModel(id, entryId) }
 
     viewModel { ServerStatusViewModel() }
+
+    viewModel { LinkCheckViewModel() }
 }
 
 val koinModules = listOf(applicationModules, viewModelModule)
