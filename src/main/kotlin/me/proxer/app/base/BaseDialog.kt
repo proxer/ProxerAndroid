@@ -106,8 +106,8 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.handleLink(requireActivity(), url, forceBrowser)
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean, skipCheck: Boolean) {
+        customTabsHelper.handleLink(requireActivity(), url, forceBrowser, skipCheck)
     }
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit

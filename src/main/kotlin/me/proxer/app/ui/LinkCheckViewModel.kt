@@ -21,6 +21,13 @@ class LinkCheckViewModel : ViewModel(), KoinComponent {
 
     private var checkDisposable: Disposable? = null
 
+    override fun onCleared() {
+        checkDisposable?.dispose()
+        checkDisposable = null
+
+        super.onCleared()
+    }
+
     fun check(link: HttpUrl) {
         checkDisposable?.dispose()
 

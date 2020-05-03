@@ -139,8 +139,13 @@ inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
     return constructor.newInstance(parameters)
 }
 
-fun CustomTabsHelperFragment.handleLink(activity: FragmentActivity, url: HttpUrl, forceBrowser: Boolean = false) {
-    if (forceBrowser) {
+fun CustomTabsHelperFragment.handleLink(
+    activity: FragmentActivity,
+    url: HttpUrl,
+    forceBrowser: Boolean = false,
+    skipCheck: Boolean = false
+) {
+    if (forceBrowser || skipCheck) {
         openHttpPage(activity, url)
     } else {
         val nativePackages = Utils.getNativeAppPackage(activity, url)

@@ -335,7 +335,7 @@ object ErrorUtils : KoinComponent {
             AGE_CONFIRMATION -> View.OnClickListener { AgeConfirmationDialog.show(activity) }
             OPEN_LINK -> data[LINK_DATA_KEY].let { link ->
                 when (link) {
-                    is HttpUrl -> View.OnClickListener { activity.showPage(link) }
+                    is HttpUrl -> View.OnClickListener { activity.showPage(link, skipCheck = true) }
                     else -> null
                 }
             }

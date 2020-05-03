@@ -96,8 +96,8 @@ abstract class BaseActivity : AppCompatActivity(), CustomTabsAware {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.handleLink(this, url, forceBrowser)
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean, skipCheck: Boolean) {
+        customTabsHelper.handleLink(this, url, forceBrowser, skipCheck)
     }
 
     fun snackbar(

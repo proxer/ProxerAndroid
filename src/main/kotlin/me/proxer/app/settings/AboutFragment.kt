@@ -86,8 +86,8 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         return customTabsHelper.mayLaunchUrl(url.androidUri(), bundleOf(), emptyList())
     }
 
-    override fun showPage(url: HttpUrl, forceBrowser: Boolean) {
-        customTabsHelper.handleLink(requireActivity(), url, forceBrowser)
+    override fun showPage(url: HttpUrl, forceBrowser: Boolean, skipCheck: Boolean) {
+        customTabsHelper.handleLink(requireActivity(), url, forceBrowser, skipCheck)
     }
 
     override fun getMaterialAboutList(context: Context): MaterialAboutList = MaterialAboutList.Builder()
