@@ -47,7 +47,7 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion"
     implementation "com.mikepenz:crossfader:$crossfaderVersion@aar"
     implementation "com.github.daniel-stoneuk:material-about-library:$materialAboutVersion"
-    implementation "com.davemorrissey.labs:subsampling-scale-image-view-androidx:$subsamplingScaleImageViewVersion"
+    implementation "com.github.rubengees:subsampling-scale-image-view:$subsamplingScaleImageViewVersion"
     implementation "com.github.num42:subsampling-pdf-decoder:$subsamplingPdfDecoderVersion"
     implementation "com.afollestad.material-dialogs:core:$materialDialogsVersion"
     implementation "com.google.android:flexbox:$flexboxVersion"

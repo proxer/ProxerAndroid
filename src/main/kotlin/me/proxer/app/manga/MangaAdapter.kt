@@ -205,15 +205,17 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
             image.setPanLimit(PAN_LIMIT_INSIDE)
             image.setMinimumTileDpi(196)
             image.setMinimumDpi(90)
+
+            image.setBitmapDecoderFactory { ImageLibDecoder() }
+            image.setRegionDecoderFactory { ImageLibRegionDecoder() }
         }
 
         override fun bind(item: Page) {
             super.bind(item)
 
-            initListeners()
+            image.recycle()
 
-            image.setBitmapDecoderFactory { ImageLibDecoder() }
-            image.setRegionDecoderFactory { ImageLibRegionDecoder() }
+            initListeners()
 
             glide?.clear(glideTarget)
             glideTarget = GlideFileTarget()
