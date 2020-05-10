@@ -378,6 +378,7 @@ fun MessageAction.toAppString(context: Context, username: String, message: Strin
     MessageAction.REMOVE_USER -> context.getString(R.string.action_conference_delete_user, "@$username", "@$message")
     MessageAction.SET_LEADER -> context.getString(R.string.action_conference_set_leader, "@$username", "@$message")
     MessageAction.SET_TOPIC -> context.getString(R.string.action_conference_set_topic, "@$username", message)
+    MessageAction.EXIT -> context.getString(R.string.action_conference_exit, "@$message")
     MessageAction.NONE -> message
 }
 

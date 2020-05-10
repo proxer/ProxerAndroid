@@ -35,7 +35,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         set(value) = Unit
 
     override val data = MediatorLiveData<List<LocalMessage>>()
-    val conference = MediatorLiveData<LocalConference>()
+    val conference = MediatorLiveData<LocalConference?>()
     val draft = ResettingMutableLiveData<String?>()
 
     override val dataSingle: Single<List<LocalMessage>>
@@ -74,7 +74,7 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     private val conferenceSource: (LocalConference?) -> Unit = {
-        if (it != null) conference.value = it
+        conference.value = it
     }
 
     private val messengerDao by safeInject<MessengerDao>()

@@ -933,6 +933,7 @@
     <string name="action_conference_delete_user">%1$s hat %2$s aus der Konferenz entfernt</string>
     <string name="action_conference_set_leader">%1$s hat %2$s als neuen Konferenzleiter bestimmt</string>
     <string name="action_conference_set_topic">%1$s hat den Konferenztitel in %2$s geändert</string>
+    <string name="action_conference_exit">%1$s hat die Konferenz verlassen</string>
 
     <string name="action_filter_available">Nur verfügbare anzeigen</string>
 

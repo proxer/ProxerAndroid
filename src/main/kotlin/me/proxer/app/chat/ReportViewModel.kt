@@ -2,7 +2,6 @@ package me.proxer.app.chat
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gojuno.koptional.Optional
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -48,5 +47,5 @@ abstract class ReportViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    protected abstract fun reportSingle(id: String, message: String): Single<Optional<Unit>>
+    protected abstract fun reportSingle(id: String, message: String): Single<*>
 }

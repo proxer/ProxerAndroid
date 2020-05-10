@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.RoomWarnings
 import androidx.room.Transaction
 import io.reactivex.Maybe
+import io.reactivex.Single
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.ConferenceWithMessage
 import me.proxer.app.chat.prv.LocalConference
@@ -153,6 +154,9 @@ abstract class MessengerDao : KoinComponent {
 
     @Query("UPDATE conferences SET isFullyLoaded = 1 WHERE id = :conferenceId")
     abstract fun markConferenceAsFullyLoaded(conferenceId: Long)
+
+    @Query("DELETE FROM conferences WHERE id = :id")
+    abstract fun deleteConferenceByIdSingle(id: String): Single<Int>
 
     @Query("DELETE FROM conferences")
     abstract fun clearConferences()

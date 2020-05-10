@@ -206,7 +206,12 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
         }
 
         viewModel.conference.observe(viewLifecycleOwner, Observer {
-            it?.let { conference = it }
+            if (it != null) {
+                conference = it
+            } else {
+                // The conference has been deleted.
+                requireActivity().finish()
+            }
         })
 
         toolbar.clicks()
