@@ -1,6 +1,7 @@
 package me.proxer.app.chat.prv.message
 
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.gojuno.koptional.rxjava2.filterSome
 import com.gojuno.koptional.toOptional
 import io.reactivex.Completable
@@ -35,8 +36,9 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
         set(value) = Unit
 
     override val data = MediatorLiveData<List<LocalMessage>>()
-    val conference = MediatorLiveData<LocalConference?>()
+    val conference = MediatorLiveData<LocalConference>()
     val draft = ResettingMutableLiveData<String?>()
+    val deleted = MutableLiveData<Unit?>()
 
     override val dataSingle: Single<List<LocalMessage>>
         get() = Single.fromCallable { validators.validateLogin() }
@@ -74,7 +76,8 @@ class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<Lo
     }
 
     private val conferenceSource: (LocalConference?) -> Unit = {
-        conference.value = it
+        if (it != null) conference.value = it
+        else deleted.value = Unit
     }
 
     private val messengerDao by safeInject<MessengerDao>()
