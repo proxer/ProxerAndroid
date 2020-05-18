@@ -14,7 +14,7 @@ import okhttp3.Request
 object Mp4UploadStreamResolver : StreamResolver() {
 
     private val packedRegex = Regex("return p.*?'(.*?)',(\\d+),(\\d+),'(.*?)'")
-    private val urlRegex = Regex("player.src\\(\"(.*?\")\\)")
+    private val urlRegex = Regex("src:\"(.*?)\"")
 
     override val name = "MP4Upload"
 
