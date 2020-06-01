@@ -70,7 +70,7 @@ class IndustryInfoFragment : BaseContentFragment<Industry>(R.layout.fragment_ind
             .map { it.toPrefixedUrlOrNull().toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { showPage(it) }
+            .subscribe { showPage(it, skipCheck = true) }
 
         link.linkLongClicks()
             .autoDisposable(viewLifecycleOwner.scope())

@@ -113,7 +113,7 @@ class LoginDialog : BaseDialog() {
         registrationInfo.linkClicks()
             .map { ProxerUrls.registerWeb() }
             .autoDisposable(dialogLifecycleOwner.scope())
-            .subscribe { showPage(it) }
+            .subscribe { showPage(it, skipCheck = true) }
     }
 
     private fun setupViewModel() {

@@ -49,7 +49,7 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
 
         innerAdapter.clickSubject
             .autoDisposable(this.scope())
-            .subscribe { showPage(it.contentLink) }
+            .subscribe { showPage(it.contentLink, skipCheck = true) }
 
         innerAdapter.deleteClickSubject
             .autoDisposable(this.scope())

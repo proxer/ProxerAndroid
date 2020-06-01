@@ -68,7 +68,7 @@ class TranslatorGroupInfoFragment : BaseContentFragment<TranslatorGroup>(R.layou
             .map { it.toPrefixedUrlOrNull().toOptional() }
             .filterSome()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { showPage(it) }
+            .subscribe { showPage(it, skipCheck = true) }
 
         link.linkLongClicks()
             .autoDisposable(viewLifecycleOwner.scope())

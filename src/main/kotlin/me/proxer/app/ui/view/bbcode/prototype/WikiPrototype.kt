@@ -36,7 +36,7 @@ object WikiPrototype : AutoClosingPrototype, KoinComponent {
 
             view.showPageSubject
                 .autoDisposable(ViewScopeProvider.from(parent))
-                .subscribe { (parent.context as? CustomTabsAware)?.showPage(it) }
+                .subscribe { (parent.context as? CustomTabsAware)?.showPage(it, skipCheck = true) }
 
             view.loadingFinishedSubject
                 .autoDisposable(ViewScopeProvider.from(parent))

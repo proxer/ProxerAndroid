@@ -76,7 +76,7 @@ sealed class StreamResolutionResult {
     class Link(private val url: HttpUrl) : StreamResolutionResult() {
 
         fun show(customTabsAware: CustomTabsAware) {
-            customTabsAware.showPage(url)
+            customTabsAware.showPage(url, skipCheck = true)
         }
     }
 

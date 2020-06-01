@@ -322,7 +322,7 @@ object ErrorUtils : KoinComponent {
 
         fun toClickListener(activity: BaseActivity) = when (buttonAction) {
             CAPTCHA -> View.OnClickListener {
-                activity.showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
+                activity.showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE), skipCheck = true)
             }
             NETWORK_SETTINGS -> View.OnClickListener {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

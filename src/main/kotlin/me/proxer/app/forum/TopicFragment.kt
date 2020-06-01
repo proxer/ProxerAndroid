@@ -98,10 +98,14 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
                         .setQueryParameter("device", ProxerUtils.getSafeApiEnumName(Device.MOBILE))
                         .build()
 
-                    showPage(mobileUrl, true)
+                    showPage(mobileUrl, forceBrowser = true, skipCheck = true)
                 } else {
                     viewModel.metaData.value?.categoryId?.also { categoryId ->
-                        showPage(ProxerUrls.forumWeb(categoryId, id, Device.MOBILE), true)
+                        showPage(
+                            ProxerUrls.forumWeb(categoryId, id, Device.MOBILE),
+                            forceBrowser = true,
+                            skipCheck = true
+                        )
                     }
                 }
             }

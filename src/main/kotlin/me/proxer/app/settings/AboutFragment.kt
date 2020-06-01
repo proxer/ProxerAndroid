@@ -150,7 +150,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_code_braces).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage(repositoryLink) }
+            .setOnClickAction { showPage(repositoryLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_server_status)
@@ -169,7 +169,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_facebook).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage(facebookLink) }
+            .setOnClickAction { showPage(facebookLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_twitter_title)
@@ -177,7 +177,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_twitter).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage(twitterLink) }
+            .setOnClickAction { showPage(twitterLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_youtube_title)
@@ -185,7 +185,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon2.cmd_youtube).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage(youtubeLink) }
+            .setOnClickAction { showPage(youtubeLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_discord_title)
@@ -193,7 +193,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_discord).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage(discordLink) }
+            .setOnClickAction { showPage(discordLink, skipCheck = true) }
             .build()
     )
 
@@ -203,7 +203,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
             .subText(R.string.about_support_info)
-            .setOnClickAction { showPage(teamLink) }
+            .setOnClickAction { showPage(teamLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(R.string.about_support_message_title)
@@ -243,7 +243,12 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(IconicsDrawable(context, CommunityMaterial.Icon.cmd_github).apply {
                 colorInt = context.resolveColor(R.attr.colorIcon)
             })
-            .setOnClickAction { showPage("https://github.com/$developerGithubName".toPrefixedHttpUrl()) }
+            .setOnClickAction {
+                showPage(
+                    "https://github.com/$developerGithubName".toPrefixedHttpUrl(),
+                    skipCheck = true
+                )
+            }
             .build(),
         MaterialAboutActionItem.Builder()
             .text(getString(R.string.about_developer_proxer_title))

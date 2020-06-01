@@ -123,7 +123,7 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
                     ErrorAction.ButtonAction.CAPTCHA -> {
                         isSolvingCaptcha = true
 
-                        showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE))
+                        showPage(ProxerUrls.captchaWeb(Utils.getIpAddress(), Device.MOBILE), skipCheck = true)
                     }
                     else -> action.toClickListener(hostingActivity)?.onClick(errorButton) ?: viewModel.load()
                 }

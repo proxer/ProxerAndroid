@@ -141,7 +141,7 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
 
         innerAdapter.linkClickSubject
             .autoDisposable(this.scope())
-            .subscribe { showPage(it) }
+            .subscribe { showPage(it, skipCheck = true) }
 
         innerAdapter.setAdIntervalClickSubject
             .autoDisposable(this.scope())

@@ -145,7 +145,7 @@ fun CustomTabsHelperFragment.handleLink(
     forceBrowser: Boolean = false,
     skipCheck: Boolean = false
 ) {
-    if (forceBrowser || skipCheck) {
+    if (forceBrowser) {
         openHttpPage(activity, url)
     } else {
         val nativePackages = Utils.getNativeAppPackage(activity, url)
@@ -154,7 +154,7 @@ fun CustomTabsHelperFragment.handleLink(
             true -> {
                 val preferenceHelper = activity.get<PreferenceHelper>()
 
-                when (!url.hasProxerHost && preferenceHelper.shouldCheckLinks) {
+                when (!skipCheck && !url.hasProxerHost && preferenceHelper.shouldCheckLinks) {
                     true -> LinkCheckDialog.show(activity, url)
                     false -> openHttpPage(activity, url)
                 }
