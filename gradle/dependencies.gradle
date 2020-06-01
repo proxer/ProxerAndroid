@@ -35,6 +35,7 @@ dependencies {
     implementation "androidx.gridlayout:gridlayout:$gridlayoutVersion"
     implementation "androidx.viewpager2:viewpager2:$viewpagerVersion"
     implementation "androidx.exifinterface:exifinterface:$exifinterfaceVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constaintLayoutVersion"
     implementation "com.google.android.material:material:$materialComponentsVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
     implementation "com.github.consp1racy.android-support-preference:support-preference:$supportPreferenceVersion"
