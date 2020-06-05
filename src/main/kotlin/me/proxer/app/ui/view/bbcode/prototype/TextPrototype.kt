@@ -33,7 +33,7 @@ import me.proxer.app.util.extension.toast
 /**
  * @author Ruben Gees
  */
-object TextPrototype : BBPrototype {
+object TextPrototype : BBPrototype, ContentPrototype {
 
     const val TEXT_COLOR_ARGUMENT = "text_color"
     const val TEXT_SIZE_ARGUMENT = "text_size"
@@ -61,6 +61,10 @@ object TextPrototype : BBPrototype {
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         return listOf(makeView(parent, args))
+    }
+
+    override fun isBlank(args: BBArgs): Boolean {
+        return args.text?.isBlank() != false
     }
 
     fun makeView(parent: BBCodeView, args: BBArgs): TextView {

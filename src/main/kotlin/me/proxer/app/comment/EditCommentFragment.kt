@@ -48,7 +48,6 @@ import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.setIconicsImage
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -146,7 +145,7 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             editor.setText(data.content)
         }
 
-        if (data.content.isBlank()) {
+        if (data.parsedContent.isBlank()) {
             commentPreview.isVisible = false
             commentPreviewEmpty.isVisible = true
 
@@ -221,7 +220,6 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
 
         editor.textChanges()
             .skipInitialValue()
-            .debounce(500, TimeUnit.MILLISECONDS)
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.updateContent(it.toString()) }
 
@@ -317,17 +315,22 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             if (editor.selectionStart == editor.selectionEnd) {
                 editor.text.insert(editor.selectionStart, "$startTag$endTag")
             } else {
-                editor.text.insert(editor.selectionStart, startTag)
                 editor.text.insert(editor.selectionEnd, endTag)
+                editor.text.insert(editor.selectionStart, startTag)
             }
-
-            editor.setSelection(editor.selectionEnd - endTag.length)
         } else {
             editor.text.insert(0, "$startTag$endTag")
         }
 
-        editor.requestFocus()
-        requireContext().getSystemService<InputMethodManager>()?.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
+        editor.post {
+            if (view != null) {
+                editor.setSelection(editor.selectionEnd - endTag.length)
+                editor.requestFocus()
+
+                requireContext().getSystemService<InputMethodManager>()
+                    ?.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
     }
 
     private fun getRatingTitle(rating: Int) = when (rating) {

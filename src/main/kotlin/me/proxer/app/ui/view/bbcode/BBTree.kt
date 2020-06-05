@@ -2,6 +2,7 @@ package me.proxer.app.ui.view.bbcode
 
 import me.proxer.app.ui.view.bbcode.prototype.BBPrototype
 import me.proxer.app.ui.view.bbcode.prototype.ConditionalTextMutatorPrototype
+import me.proxer.app.ui.view.bbcode.prototype.ContentPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextMutatorPrototype
 import me.proxer.app.ui.view.bbcode.prototype.TextPrototype
 import me.proxer.app.util.extension.unsafeLazy
@@ -21,6 +22,14 @@ class BBTree(
     fun makeViews(parent: BBCodeView, args: BBArgs) = prototype.makeViews(parent, children, args + this.args)
 
     fun optimize(args: BBArgs = BBArgs()) = recursiveOptimize(args).first()
+
+    fun isBlank(): Boolean {
+        if (prototype is ContentPrototype && !prototype.isBlank(args)) {
+            return false
+        }
+
+        return children.all { it.isBlank() }
+    }
 
     private fun recursiveOptimize(args: BBArgs): List<BBTree> {
         val recursiveNewChildren by unsafeLazy { getRecursiveChildren(children) }
