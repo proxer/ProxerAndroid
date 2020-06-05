@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.5-rc-1"
+    gradleVersion = "6.5"
 
     // Core plugins
     androidPluginVersion = "4.0.0"
@@ -55,7 +55,7 @@ ext {
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.1.0-alpha01"
     exifinterfaceVersion = "1.3.0-alpha01"
-    materialComponentsVersion = "1.2.0-beta01"
+    materialComponentsVersion = "1.3.0-alpha01"
     constaintLayoutVersion = "2.0.0-beta6"
     preferenceVersion = "1.1.1"
     supportPreferenceVersion = "6d5ebc7934"
