@@ -118,6 +118,7 @@ class CommentsAdapter(
 
         internal val comment: BBCodeView by bindView(R.id.comment)
         internal val expand: ImageButton by bindView(R.id.expand)
+        internal val divider: View by bindView(R.id.divider)
 
         internal val time: TextView by bindView(R.id.time)
         internal val progress: TextView by bindView(R.id.progress)
@@ -150,8 +151,11 @@ class CommentsAdapter(
             bindRatingRow(ratingMusicRow, ratingMusic, item.ratingDetails.music.toFloat())
             bindRatingRow(ratingOverallRow, ratingOverall, item.overallRating.toFloat() / 2.0f)
 
+            comment.isVisible = !item.parsedContent.isBlank()
             comment.userId = item.authorId
             comment.tree = item.parsedContent
+
+            divider.isVisible = !item.parsedContent.isBlank()
 
             time.text = item.date.distanceInWordsToNow(time.context)
             progress.text = item.mediaProgress.toEpisodeAppString(

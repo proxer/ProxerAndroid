@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -106,180 +107,190 @@
                     tools:text="12" />
             </RelativeLayout>
 
-            <TableLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="0"
-                android:stretchColumns="1">
+                android:layout_marginHorizontal="4dp"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorDivider"
+                app:strokeWidth="1dp">
 
-                <TableRow android:id="@+id/ratingGenreRow">
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shrinkColumns="0"
+                    android:stretchColumns="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_genre"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    <TableRow android:id="@+id/ratingGenreRow">
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
-
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingGenre"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_genre"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TableRow android:id="@+id/ratingStoryRow">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_story"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingGenre"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
+                    <TableRow android:id="@+id/ratingStoryRow">
 
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingStory"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_story"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TableRow android:id="@+id/ratingAnimationRow">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_animation"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingStory"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
+                    <TableRow android:id="@+id/ratingAnimationRow">
 
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingAnimation"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_animation"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TableRow android:id="@+id/ratingCharactersRow">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_characters"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingAnimation"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
+                    <TableRow android:id="@+id/ratingCharactersRow">
 
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingCharacters"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_characters"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TableRow android:id="@+id/ratingMusicRow">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_music"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingCharacters"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
+                    <TableRow android:id="@+id/ratingMusicRow">
 
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingMusic"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_music"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TableRow android:id="@+id/ratingOverallRow">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp"
-                        android:text="@string/fragment_comment_rating_overall"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingMusic"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="8dp">
+                    <TableRow android:id="@+id/ratingOverallRow">
 
-                        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-                            android:id="@+id/ratingOverall"
-                            style="?attr/ratingBarStyleSmall"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.1" />
-                    </FrameLayout>
-                </TableRow>
-            </TableLayout>
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp"
+                            android:text="@string/fragment_comment_rating_overall"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="8dp">
+
+                            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                                android:id="@+id/ratingOverall"
+                                style="?attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:stepSize="0.1" />
+                        </FrameLayout>
+                    </TableRow>
+                </TableLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <me.proxer.app.ui.view.bbcode.BBCodeView
                 android:id="@+id/comment"
@@ -303,6 +314,7 @@
                 tools:ignore="ContentDescription" />
 
             <View
+                android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginStart="8dp"
