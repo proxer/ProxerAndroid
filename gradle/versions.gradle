@@ -37,7 +37,7 @@ ext {
     shareTargetVersion = "1.0.0"
     playCoreVersion = "1.7.3"
     adsIdentifierVersion = "17.0.0"
-    interactiveMediaVersion = "3.11.3"
+    interactiveMediaVersion = "3.14.0"
     castVersion = "18.1.0"
 
     // RxJava
@@ -61,7 +61,7 @@ ext {
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "5.0.3"
     communityMaterialTypefaceVersion = "5.0.45.1-kotlin"
-    materialDrawerVersion = "8.0.3"
+    materialDrawerVersion = "8.1.1"
     aboutLibrariesVersion = "8.1.6"
     crossfaderVersion = "1.6.0"
     materialAboutVersion = "3.1.2"
@@ -70,7 +70,7 @@ ext {
     materialDialogsVersion = "3.3.0"
     flexboxVersion = "2.0.1"
     emojiIosVersion = "9058c30868"
-    exoplayerVersion = "2.11.4"
+    exoplayerVersion = "2.11.5"
     previewSeekbarVersion = "09eec85551"
     materialProgressBarVersion = "1.6.1"
     materialRatingBarVersion = "1.4.0"
