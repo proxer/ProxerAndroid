@@ -23,8 +23,6 @@ jobs:
         with:
           path: ~/.gradle/caches
           key: ${{ runner.OS }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.OS }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Install secrets
         run: .github/workflows/create-secrets.sh
