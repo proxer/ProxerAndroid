@@ -192,8 +192,8 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         .setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, colorSchemeParams)
         .setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, colorSchemeParams)
         .setColorScheme(colorScheme)
-        .addDefaultShareMenuItem()
-        .enableUrlBarHiding()
+        .setDefaultShareMenuItemEnabled(true)
+        .setUrlBarHidingEnabled(true)
         .setShowTitle(true)
         .build()
         .let {

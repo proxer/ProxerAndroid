@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
@@ -134,7 +135,7 @@ class MangaActivity : BaseActivity() {
 
     private val toolbar: Toolbar by bindView(R.id.toolbar)
 
-    private val fullscreenHandler = Handler()
+    private val fullscreenHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -96,6 +96,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
     implementation "com.github.anrwatchdog:anrwatchdog:$anrWatchdogVersion"
 
+    implementation "com.squareup.leakcanary:plumber-android:$leakCanaryVersion"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
     releaseImplementation "cat.ereza:customactivityoncrash:$customActivityOnCrashVersion"

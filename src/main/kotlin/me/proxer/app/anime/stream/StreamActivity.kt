@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Size
 import android.view.Menu
 import android.view.MenuItem
@@ -161,10 +162,10 @@ class StreamActivity : BaseActivity() {
 
     private val animationTime by unsafeLazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
 
-    private val hideIndicatorHandler = Handler()
-    private val adFullscreenHandler = Handler()
-    private val hideControlHandler = Handler()
-    private val animationHandler = Handler()
+    private val hideIndicatorHandler = Handler(Looper.getMainLooper())
+    private val adFullscreenHandler = Handler(Looper.getMainLooper())
+    private val hideControlHandler = Handler(Looper.getMainLooper())
+    private val animationHandler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -538,7 +539,7 @@ class StreamActivity : BaseActivity() {
         } else if (safeMediaRouteButton != null && safeMediaRouteButton.isVisible) {
             toggleStableControls(true)
 
-            Handler().postDelayed(50) {
+            Handler(Looper.getMainLooper()).postDelayed(50) {
                 preferenceHelper.wasCastIntroductoryOverlayShown = true
 
                 introductoryOverlay = IntroductoryOverlay.Builder(this, safeMediaRouteButton)
