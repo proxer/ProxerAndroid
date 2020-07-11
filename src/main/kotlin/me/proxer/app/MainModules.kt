@@ -1,9 +1,10 @@
 package me.proxer.app
 
-import android.content.Context
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import androidx.room.Room
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.rubengees.rxbus.RxBus
@@ -88,12 +89,16 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
-const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
-const val HAWK_RX_PREFERENCES = "hawkRxPreferences"
+private const val DEFAULT_PREFERENCES = "defaultPreferences"
+private const val STORAGE_PREFERENCES = "storagePreferences"
+
+private const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
+private const val STORAGE_RX_PREFERENCES = "storageRxPreferences"
+
+private const val STORAGE_PREFERENCES_NAME = "me.proxer.encrypted_preferences.xml"
 
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
-private const val HAWK_PREFERENCE_NAME = "Hawk2"
 
 private const val HTTP_CACHE_SIZE = 1_024L * 1_024L * 10L
 private const val HTTP_CACHE_NAME = "http"
@@ -103,16 +108,26 @@ private const val API_TOKEN_HEADER = "proxer-api-token"
 private val headersToRedact = listOf("proxer-api-key", "set-cookie")
 
 private val applicationModules = module {
-    single { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
     single { androidContext().packageManager }
 
-    single(named(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get()) }
-    single(named(HAWK_RX_PREFERENCES)) {
-        RxSharedPreferences.create(androidContext().getSharedPreferences(HAWK_PREFERENCE_NAME, Context.MODE_PRIVATE))
+    single(named(DEFAULT_PREFERENCES)) { PreferenceManager.getDefaultSharedPreferences(androidContext()) }
+    single(named(STORAGE_PREFERENCES)) {
+        val masterKey = MasterKey.Builder(androidContext())
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        EncryptedSharedPreferences.create(
+            androidContext(), STORAGE_PREFERENCES_NAME, masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 
-    single { StorageHelper(get(), get(named(HAWK_RX_PREFERENCES))) }
-    single { PreferenceHelper(get(), get(named(DEFAULT_RX_PREFERENCES)), get()) }
+    single(named(DEFAULT_RX_PREFERENCES)) { RxSharedPreferences.create(get(named(DEFAULT_PREFERENCES))) }
+    single(named(STORAGE_RX_PREFERENCES)) { RxSharedPreferences.create(get(named(STORAGE_PREFERENCES))) }
+
+    single { PreferenceHelper(get(), get(named(DEFAULT_RX_PREFERENCES)), get(named(DEFAULT_PREFERENCES))) }
+    single { StorageHelper(get(), get(named(STORAGE_RX_PREFERENCES)), get(named(STORAGE_PREFERENCES)), get()) }
 
     single { RxBus() }
 
@@ -200,7 +215,7 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { LocalDataInitializer(androidContext(), get()) }
+    single { LocalDataInitializer(androidContext(), get(), get(named(STORAGE_PREFERENCES))) }
 
     single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
     single { LoginHandler(get(), get(), get(), get()) }

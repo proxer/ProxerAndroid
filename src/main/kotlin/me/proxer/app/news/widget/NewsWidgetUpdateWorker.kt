@@ -7,6 +7,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.view.View
 import android.widget.RemoteViews
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -35,6 +36,7 @@ import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import org.koin.core.KoinComponent
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -56,6 +58,7 @@ class NewsWidgetUpdateWorker(
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
                 )
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .build()
 
             workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()

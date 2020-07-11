@@ -1,9 +1,11 @@
 package me.proxer.app.util.data
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.orhanobut.hawk.Hawk
+import com.squareup.moshi.Moshi
+import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.auth.LocalUser
-import me.proxer.app.exception.StorageException
 import me.proxer.app.profile.settings.LocalProfileSettings
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Language
@@ -14,7 +16,9 @@ import org.threeten.bp.Instant
  */
 class StorageHelper(
     initializer: LocalDataInitializer,
-    rxPreferences: RxSharedPreferences
+    rxPreferences: RxSharedPreferences,
+    private val sharedPreferences: SharedPreferences,
+    private val moshi: Moshi
 ) {
 
     internal companion object {
@@ -40,20 +44,38 @@ class StorageHelper(
     }
 
     var user: LocalUser?
-        get() = Hawk.get(USER)
+        get() {
+            return sharedPreferences.getString(USER, null)
+                ?.let { moshi.adapter(LocalUser::class.java).fromJson(it) }
+        }
         set(value) {
-            putOrThrow(USER, value)
+            sharedPreferences.edit(commit = true) {
+                if (value != null) {
+                    putString(USER, moshi.adapter(LocalUser::class.java).toJson(value))
+                } else {
+                    // Due to a bug in androidx-securty-crypto, we can't remove the entry here because then then
+                    // no listener is called.
+                    // TODO: Remove instead of put once fixed.
+                    putString(USER, null)
+                }
+            }
         }
 
     var profileSettings: LocalProfileSettings
-        get() = Hawk.get(PROFILE_SETTINGS) ?: LocalProfileSettings.default()
+        get() {
+            return sharedPreferences.getString(PROFILE_SETTINGS, null)
+                ?.let { moshi.adapter(LocalProfileSettings::class.java).fromJson(it) }
+                ?: LocalProfileSettings.default()
+        }
         set(value) {
-            putOrThrow(PROFILE_SETTINGS, value)
-            putOrThrow(LAST_PROFILE_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
+            sharedPreferences.edit {
+                putString(PROFILE_SETTINGS, moshi.adapter(LocalProfileSettings::class.java).toJson(value))
+                putLong(LAST_PROFILE_SETTINGS_UPDATE_DATE, Instant.now().toEpochMilli())
+            }
         }
 
     val isLoggedIn: Boolean
-        get() = Hawk.contains(USER)
+        get() = sharedPreferences.contains(USER)
 
     val isLoggedInObservable = rxPreferences.getString(USER)
         .asObservable()
@@ -61,80 +83,87 @@ class StorageHelper(
         .map { it.isNotBlank() }
         .publish()
         .autoConnect()
+        .observeOn(AndroidSchedulers.mainThread())
 
     var lastNotificationsDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_NOTIFICATIONS_DATE, 0L))
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_NOTIFICATIONS_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_NOTIFICATIONS_DATE, value.toEpochMilli())
+            sharedPreferences.edit { putLong(LAST_NOTIFICATIONS_DATE, value.toEpochMilli()) }
         }
 
     var lastChatMessageDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_CHAT_MESSAGE_DATE, 0L))
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_CHAT_MESSAGE_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_CHAT_MESSAGE_DATE, value.toEpochMilli())
+            sharedPreferences.edit { putLong(LAST_CHAT_MESSAGE_DATE, value.toEpochMilli()) }
         }
 
     val chatInterval: Long
-        get() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+        get() = sharedPreferences.getLong(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
 
     var areConferencesSynchronized: Boolean
-        get() = Hawk.get(CONFERENCES_SYNCHRONIZED, false)
+        get() = sharedPreferences.getBoolean(CONFERENCES_SYNCHRONIZED, false)
         set(value) {
-            putOrThrow(CONFERENCES_SYNCHRONIZED, value)
+            sharedPreferences.edit { putBoolean(CONFERENCES_SYNCHRONIZED, value) }
         }
 
     val lastUcpSettingsUpdateDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_PROFILE_SETTINGS_UPDATE_DATE, 0L))
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_PROFILE_SETTINGS_UPDATE_DATE, 0L))
 
     var lastAdAlertDate: Instant
-        get() = Instant.ofEpochMilli(Hawk.get(LAST_AD_ALERT_DATE, 0L))
+        get() = Instant.ofEpochMilli(sharedPreferences.getLong(LAST_AD_ALERT_DATE, 0L))
         set(value) {
-            putOrThrow(LAST_AD_ALERT_DATE, value.toEpochMilli())
+            sharedPreferences.edit { putLong(LAST_AD_ALERT_DATE, value.toEpochMilli()) }
         }
 
-    fun incrementChatInterval() = Hawk.get(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL).let {
+    fun incrementChatInterval() = chatInterval.let {
         if (it < MAX_CHAT_INTERVAL) {
-            putOrThrow(CHAT_INTERVAL, (it * 1.5f).toLong())
+            sharedPreferences.edit { putLong(CHAT_INTERVAL, (it * 1.5f).toLong()) }
         }
     }
 
-    fun reset() = Hawk.deleteAll()
+    fun reset() = sharedPreferences.edit {
+        sharedPreferences.all.forEach { (key) -> remove(key) }
+    }
 
-    fun resetChatInterval() = putOrThrow(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+    fun resetChatInterval() = sharedPreferences.edit {
+        putLong(CHAT_INTERVAL, DEFAULT_CHAT_INTERVAL)
+    }
 
-    fun putMessageDraft(id: String, draft: String) = putOrThrow("$MESSAGE_DRAFT_PREFIX$id", draft)
+    fun putMessageDraft(id: String, draft: String) = sharedPreferences.edit {
+        putString("$MESSAGE_DRAFT_PREFIX$id", draft)
+    }
 
-    fun getMessageDraft(id: String): String? = Hawk.get("$MESSAGE_DRAFT_PREFIX$id")
+    fun getMessageDraft(id: String): String? = sharedPreferences.getString("$MESSAGE_DRAFT_PREFIX$id", null)
 
-    fun deleteMessageDraft(id: String) = deleteOrThrow("$MESSAGE_DRAFT_PREFIX$id")
+    fun deleteMessageDraft(id: String) = sharedPreferences.edit {
+        remove("$MESSAGE_DRAFT_PREFIX$id")
+    }
 
-    fun putCommentDraft(entryId: String, draft: String) = putOrThrow("$COMMENT_DRAFT_PREFIX$entryId", draft)
+    fun putCommentDraft(entryId: String, draft: String) = sharedPreferences.edit {
+        putString("$COMMENT_DRAFT_PREFIX$entryId", draft)
+    }
 
-    fun getCommentDraft(entryId: String): String? = Hawk.get("$COMMENT_DRAFT_PREFIX$entryId")
+    fun getCommentDraft(entryId: String): String? = sharedPreferences.getString("$COMMENT_DRAFT_PREFIX$entryId", null)
 
-    fun deleteCommentDraft(entryId: String) = deleteOrThrow("$COMMENT_DRAFT_PREFIX$entryId")
+    fun deleteCommentDraft(entryId: String) = sharedPreferences.edit {
+        remove("$COMMENT_DRAFT_PREFIX$entryId")
+    }
 
     fun putLastMangaPage(id: String, chapter: Int, language: Language, page: Int) {
-        putOrThrow("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", page)
+        sharedPreferences.edit { putInt("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", page) }
     }
 
     fun getLastMangaPage(id: String, chapter: Int, language: Language): Int? {
-        return Hawk.get("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language")
+        return sharedPreferences.getInt("${LAST_MANGA_PAGE_PREFIX}_${id}_${chapter}_$language", -1)
+            .let { if (it == -1) null else it }
     }
 
     fun putLastAnimePosition(id: String, episode: Int, language: AnimeLanguage, position: Long) {
-        putOrThrow("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language", position)
+        sharedPreferences.edit { putLong("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language", position) }
     }
 
     fun getLastAnimePosition(id: String, episode: Int, language: AnimeLanguage): Long? {
-        return Hawk.get("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language")
-    }
-
-    private fun <T> putOrThrow(key: String, value: T) {
-        if (!Hawk.put(key, value)) throw StorageException("Could not persist $key")
-    }
-
-    private fun deleteOrThrow(key: String) {
-        if (!Hawk.delete(key)) throw StorageException("Could not delete $key")
+        return sharedPreferences.getLong("${LAST_ANIME_POSITION_PREFIX}_${id}_${episode}_$language", -1)
+            .let { if (it == -1L) null else it }
     }
 }

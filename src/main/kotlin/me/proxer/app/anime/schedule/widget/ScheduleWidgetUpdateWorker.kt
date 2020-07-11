@@ -10,6 +10,7 @@ import android.os.HandlerThread
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.os.postDelayed
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -43,6 +44,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Ruben Gees
@@ -66,6 +68,7 @@ class ScheduleWidgetUpdateWorker(
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
                 )
+                .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .build()
 
             workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()

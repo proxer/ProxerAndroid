@@ -2,19 +2,27 @@ package me.proxer.app.util.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.orhanobut.hawk.Hawk
+import me.proxer.app.auth.LocalUser
+import me.proxer.app.profile.settings.LocalProfileSettings
+import java.io.File
 
 /**
  * @author Ruben Gees
  */
-class LocalDataInitializer(private val context: Context, private val jsonParser: HawkMoshiParser) {
+class LocalDataInitializer(
+    private val context: Context,
+    private val jsonParser: HawkMoshiParser,
+    private val storagePreferences: SharedPreferences
+) {
 
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 5
+        private const val currentVersion = 6
     }
 
     @Volatile
@@ -24,6 +32,7 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
         if (!isInitialized) {
             synchronized(this) {
                 if (!isInitialized) {
+                    // TODO: Remove Hawk in next version.
                     initHawk()
 
                     val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -35,6 +44,10 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
 
                     if (previousVersion <= 4) {
                         migrate4To5(preferences)
+                    }
+
+                    if (previousVersion <= 5) {
+                        migrate5To6(storagePreferences)
                     }
 
                     if (previousVersion != currentVersion) {
@@ -87,5 +100,30 @@ class LocalDataInitializer(private val context: Context, private val jsonParser:
         Hawk.delete("last_news_date")
 
         Hawk.delete(VERSION)
+    }
+
+    private fun migrate5To6(storagePreferences: SharedPreferences) {
+        // This migrates Hawk to the new androidx-security-crypto library.
+        storagePreferences.edit(commit = true) {
+            Hawk.keys().forEach {
+                when (val value = Hawk.get<Any>(it)) {
+                    is String -> putString(it, value)
+                    is Int -> putInt(it, value)
+                    is Long -> putLong(it, value)
+                    is LocalUser -> putString(it, jsonParser.toJson(value))
+                    is LocalProfileSettings -> putString(it, jsonParser.toJson(value))
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.deleteSharedPreferences("Hawk2")
+            context.deleteSharedPreferences("crypto.KEY_256")
+        } else {
+            arrayOf("shared_prefs/Hawk2.xml", "shared_prefs/crypto.KEY_256.xml")
+                .map { File(context.filesDir.parent, it) }
+                .filter { it.exists() }
+                .forEach { it.delete() }
+        }
     }
 }
