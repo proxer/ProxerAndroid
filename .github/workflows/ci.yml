@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v2.3.1
 
       - name: Check Gradle wrapper
         uses: gradle/wrapper-validation-action@v1.0.3
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Gradle Cache
         uses: actions/cache@v2.0.0
         with:
-          path: ~/.gradle/caches
+          path: ~/.gradle
           key: ${{ runner.OS }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Install secrets
@@ -55,9 +55,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.2.0
+        uses: actions/checkout@v2.3.1
         with:
-          fetch-depth: '0'
+          fetch-depth: 0
 
       - name: Download outputs
         uses: actions/download-artifact@v2
