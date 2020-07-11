@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v2.0.0
         with:
           path: ~/.gradle
-          key: ${{ runner.OS }}-gradle-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          key: ${{ runner.OS }}-gradle-
 
       - name: Install secrets
         run: .github/workflows/create-secrets.sh
