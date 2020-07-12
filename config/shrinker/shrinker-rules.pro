@@ -39,6 +39,12 @@
 }
 
 # TODO: Remove once it works without.
+# Fix for Google Tink.
+-keepclassmembers class * extends com.google.crypto.tink.shaded.protobuf.GeneratedMessageLite {
+    <fields>;
+}
+
+# TODO: Remove once it works without.
 # Workaround crash in Google Cast.
 -keep,allowoptimization class com.google.android.gms.internal.cast.** { *; }
 
