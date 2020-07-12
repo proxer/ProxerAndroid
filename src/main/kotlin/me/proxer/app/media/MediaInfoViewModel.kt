@@ -1,6 +1,7 @@
 package me.proxer.app.media
 
 import androidx.lifecycle.MutableLiveData
+import com.gojuno.koptional.Some
 import com.gojuno.koptional.rxjava2.filterSome
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -84,8 +85,15 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
     }
 
     fun note() = updateUserInfo(UserInfoUpdateType.NOTE)
-    fun markAsFavorite() = updateUserInfo(UserInfoUpdateType.FAVORITE)
     fun markAsFinished() = updateUserInfo(UserInfoUpdateType.FINISHED)
+
+    fun toggleFavorite() {
+        if (userInfoData.value?.isTopTen == true) {
+            updateUserInfo(UserInfoUpdateType.UNFAVORITE)
+        } else {
+            updateUserInfo(UserInfoUpdateType.FAVORITE)
+        }
+    }
 
     fun toggleSubscription() {
         if (userInfoData.value?.isSubscribed == true) {
@@ -97,17 +105,26 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {
-            UserInfoUpdateType.NOTE -> api.info.note(entryId)
-            UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId)
-            UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId)
-            UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId)
-            UserInfoUpdateType.UNSUBSCRIBE -> api.ucp.deleteSubscription(entryId)
+            UserInfoUpdateType.NOTE -> api.info.note(entryId).buildOptionalSingle()
+            UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId).buildOptionalSingle()
+            UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId).buildOptionalSingle()
+            UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId).buildOptionalSingle()
+            UserInfoUpdateType.UNSUBSCRIBE -> api.ucp.deleteSubscription(entryId).buildOptionalSingle()
+            UserInfoUpdateType.UNFAVORITE -> api.ucp.topTen().buildSingle().flatMap { topTenEntries ->
+                val topTenId = topTenEntries.find { topTenEntry -> topTenEntry.entryId == entryId }?.id
+
+                if (topTenId != null) {
+                    api.ucp.deleteFavorite(topTenId).buildOptionalSingle()
+                } else {
+                    Single.just(Some(Unit))
+                }
+            }
         }
 
         userInfoDisposable?.dispose()
         userInfoUpdateDisposable?.dispose()
         userInfoUpdateDisposable = Single.fromCallable { validators.validateLogin() }
-            .flatMap { endpoint.buildOptionalSingle() }
+            .flatMap { endpoint }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors({
@@ -137,6 +154,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
         val isTopTen = when (updateType) {
             UserInfoUpdateType.FAVORITE -> true
+            UserInfoUpdateType.UNFAVORITE -> false
             else -> data.isTopTen
         }
 
@@ -150,6 +168,6 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
     }
 
     private enum class UserInfoUpdateType {
-        NOTE, FAVORITE, FINISHED, SUBSCRIBE, UNSUBSCRIBE
+        NOTE, FAVORITE, UNFAVORITE, FINISHED, SUBSCRIBE, UNSUBSCRIBE
     }
 }

@@ -119,7 +119,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
 
         favorContainer.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
-            .subscribe { viewModel.markAsFavorite() }
+            .subscribe { viewModel.toggleFavorite() }
 
         finishContainer.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
