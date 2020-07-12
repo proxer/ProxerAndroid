@@ -9,12 +9,12 @@ if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
 
     echo "Uploading apk..."
 
-    DOWNLOAD_URL=$(curl --silent --show-error "$UPLOAD_URL" --form "apk=@$FILE")
+    DOWNLOAD_URL=$(curl --silent --show-error --fail "$UPLOAD_URL" --form "apk=@$FILE")
 
     echo "Publishing apk..."
     echo "$CHANGELOG"
 
-    curl --silent --show-error --request POST \
+    curl --silent --show-error --fail --request POST \
         "$DISCORD_WEBHOOK_URL" \
         --header 'Content-Type: application/json' \
         --data '{
@@ -29,10 +29,11 @@ if [[ ${DISCORD_WEBHOOK_URL:+1} ]]; then
     }'
 
     unset FILE
+    unset FILENAME
     unset DOWNLOAD_URL
 else
     echo "DISCORD_WEBHOOK_URL not set."
     exit 1
 fi
 
-unset CAPTION
+unset CHANGELOG
