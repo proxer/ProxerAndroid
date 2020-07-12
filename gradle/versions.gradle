@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.5"
+    gradleVersion = "6.5.1"
 
     // Core plugins
     androidPluginVersion = "4.0.0"
@@ -57,7 +57,7 @@ ext {
     viewpagerVersion = "1.1.0-alpha01"
     exifinterfaceVersion = "1.3.0-alpha01"
     materialComponentsVersion = "1.3.0-alpha01"
-    constaintLayoutVersion = "2.0.0-beta7"
+    constaintLayoutVersion = "2.0.0-beta8"
     preferenceVersion = "1.1.1"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "5.0.3"
@@ -71,7 +71,7 @@ ext {
     materialDialogsVersion = "3.3.0"
     flexboxVersion = "2.0.1"
     emojiIosVersion = "9058c30868"
-    exoplayerVersion = "2.11.6"
+    exoplayerVersion = "2.11.7"
     previewSeekbarVersion = "09eec85551"
     materialProgressBarVersion = "1.6.1"
     materialRatingBarVersion = "1.4.0"
