@@ -71,7 +71,7 @@ class ScheduleWidgetUpdateWorker(
                 .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.SECONDS)
                 .build()
 
-            workManager.beginUniqueWork(NAME, ExistingWorkPolicy.REPLACE, workRequest).enqueue()
+            workManager.beginUniqueWork(NAME, ExistingWorkPolicy.KEEP, workRequest).enqueue()
         }
     }
 

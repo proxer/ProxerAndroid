@@ -101,6 +101,7 @@ class PreferenceHelper(
     val isAgeRestrictedMediaAllowedObservable = rxSharedPreferences.getBoolean(AGE_CONFIRMATION, false)
         .asObservable()
         .skip(1)
+        .distinctUntilChanged()
         .publish()
         .autoConnect()
 
@@ -163,6 +164,7 @@ class PreferenceHelper(
         .asObservable()
         .skip(1)
         .map { ThemeContainer.fromPreferenceString(it) }
+        .distinctUntilChanged()
         .publish()
         .autoConnect()
 

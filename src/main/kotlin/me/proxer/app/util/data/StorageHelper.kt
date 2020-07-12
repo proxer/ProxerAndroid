@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.squareup.moshi.Moshi
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.profile.settings.LocalProfileSettings
@@ -75,12 +76,13 @@ class StorageHelper(
         }
 
     val isLoggedIn: Boolean
-        get() = sharedPreferences.contains(USER)
+        get() = sharedPreferences.getString(USER, null) != null
 
-    val isLoggedInObservable = rxPreferences.getString(USER)
+    val isLoggedInObservable: Observable<Boolean> = rxPreferences.getString(USER)
         .asObservable()
         .skip(1)
         .map { it.isNotBlank() }
+        .distinctUntilChanged()
         .publish()
         .autoConnect()
         .observeOn(AndroidSchedulers.mainThread())
