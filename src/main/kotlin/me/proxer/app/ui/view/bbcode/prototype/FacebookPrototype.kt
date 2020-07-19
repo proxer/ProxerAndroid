@@ -21,9 +21,10 @@ object FacebookPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (val parsedUrl = url.toPrefixedUrlOrNull()) {
             null -> text
-            else -> text.toSpannableStringBuilder()
-                .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_facebook_link))
-                .linkifyUrl(parsedUrl)
+            else ->
+                text.toSpannableStringBuilder()
+                    .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_facebook_link))
+                    .linkifyUrl(parsedUrl)
         }
     }
 }

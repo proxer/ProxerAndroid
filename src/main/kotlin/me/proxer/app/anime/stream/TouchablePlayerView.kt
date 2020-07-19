@@ -51,58 +51,61 @@ class TouchablePlayerView @JvmOverloads constructor(
     private var localVolume = 0f
     private var isScrolling = false
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+    private val gestureDetector = GestureDetector(
+        context,
+        object : GestureDetector.SimpleOnGestureListener() {
 
-        override fun onDown(event: MotionEvent) = true
+            override fun onDown(event: MotionEvent) = true
 
-        override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-            performClick()
+            override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
+                performClick()
 
-            return true
-        }
-
-        override fun onDoubleTap(event: MotionEvent): Boolean {
-            if (event.x > width / 2) {
-                fastForward(triggerSubject = true)
-            } else {
-                rewind(triggerSubject = true)
+                return true
             }
 
-            return true
-        }
-
-        override fun onScroll(
-            initialEvent: MotionEvent?,
-            movingEvent: MotionEvent?,
-            distanceX: Float,
-            distanceY: Float
-        ): Boolean {
-            if (
-                initialEvent == null ||
-                movingEvent == null ||
-                // Ignore swipes inside of margin.
-                !shouldHandle(initialEvent) ||
-                // Ignore small swipes.
-                abs(movingEvent.y - initialEvent.y) <= 40 ||
-                // Ignore horizontal swipes.
-                abs(distanceX) > abs(distanceY)
-            ) {
-                return false
-            }
-
-            isScrolling = true
-
-            if (initialEvent.x > width / 2) {
-                if (canChangeAudio) {
-                    adjustVolume(distanceY)
+            override fun onDoubleTap(event: MotionEvent): Boolean {
+                if (event.x > width / 2) {
+                    fastForward(triggerSubject = true)
+                } else {
+                    rewind(triggerSubject = true)
                 }
-            } else {
-                adjustBrightness(distanceY)
+
+                return true
             }
 
-            return true
+            override fun onScroll(
+                initialEvent: MotionEvent?,
+                movingEvent: MotionEvent?,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
+                if (
+                    initialEvent == null ||
+                    movingEvent == null ||
+                    // Ignore swipes inside of margin.
+                    !shouldHandle(initialEvent) ||
+                    // Ignore small swipes.
+                    abs(movingEvent.y - initialEvent.y) <= 40 ||
+                    // Ignore horizontal swipes.
+                    abs(distanceX) > abs(distanceY)
+                ) {
+                    return false
+                }
+
+                isScrolling = true
+
+                if (initialEvent.x > width / 2) {
+                    if (canChangeAudio) {
+                        adjustVolume(distanceY)
+                    }
+                } else {
+                    adjustBrightness(distanceY)
+                }
+
+                return true
+            }
         }
-    })
+    )
 
     private val settingsChangeObserver = object : ContentObserver(handler) {
         override fun onChange(selfChange: Boolean) {

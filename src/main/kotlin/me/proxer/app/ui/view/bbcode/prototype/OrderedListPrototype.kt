@@ -24,29 +24,35 @@ object OrderedListPrototype : AutoClosingPrototype {
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val childViews = children.filter { it.prototype == ListItemPrototype }.flatMap { it.makeViews(parent, args) }
 
-        return listOf(LinearLayout(parent.context).apply {
-            val eightDip = dip(8)
+        return listOf(
+            LinearLayout(parent.context).apply {
+                val eightDip = dip(8)
 
-            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-            orientation = VERTICAL
+                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                orientation = VERTICAL
 
-            @Suppress("ExplicitItLambdaParameter") // TODO: False positive. Remove once fixed.
-            childViews.forEachIndexed { index, it ->
-                addView(LinearLayout(parent.context).apply {
-                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                    orientation = HORIZONTAL
+                @Suppress("ExplicitItLambdaParameter") // TODO: False positive. Remove once fixed.
+                childViews.forEachIndexed { index, it ->
+                    addView(
+                        LinearLayout(parent.context).apply {
+                            layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                            orientation = HORIZONTAL
 
-                    addView(TextPrototype.makeView(parent, args + BBArgs(text = "${index + 1}.")).apply {
-                        layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
-                            setMargins(0, 0, eightDip, 0)
+                            addView(
+                                TextPrototype.makeView(parent, args + BBArgs(text = "${index + 1}.")).apply {
+                                    layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
+                                        setMargins(0, 0, eightDip, 0)
 
-                            gravity = CENTER
+                                        gravity = CENTER
+                                    }
+                                }
+                            )
+
+                            addView(it)
                         }
-                    })
-
-                    addView(it)
-                })
+                    )
+                }
             }
-        })
+        )
     }
 }

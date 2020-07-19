@@ -61,42 +61,46 @@ object PdfPrototype : AutoClosingPrototype {
 
         return when {
             childViews.isEmpty() -> childViews
-            else -> listOf(SubsamplingScaleImageView(parent.context).also { view: SubsamplingScaleImageView ->
-                val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
-                val parsedUrl = url.toPrefixedUrlOrNull()
+            else -> listOf(
+                SubsamplingScaleImageView(parent.context).also { view: SubsamplingScaleImageView ->
+                    val url = (childViews.firstOrNull() as? TextView)?.text.toString().trim()
+                    val parsedUrl = url.toPrefixedUrlOrNull()
 
-                @Suppress("UNCHECKED_CAST")
-                val heightMap = args[ImagePrototype.HEIGHT_MAP_ARGUMENT] as MutableMap<String, Int>?
+                    @Suppress("UNCHECKED_CAST")
+                    val heightMap = args[ImagePrototype.HEIGHT_MAP_ARGUMENT] as MutableMap<String, Int>?
 
-                val width = args[WIDTH_ARGUMENT] as Int? ?: MATCH_PARENT
-                val height = parsedUrl?.let { heightMap?.get(it.toString()) } ?: WRAP_CONTENT
+                    val width = args[WIDTH_ARGUMENT] as Int? ?: MATCH_PARENT
+                    val height = parsedUrl?.let { heightMap?.get(it.toString()) } ?: WRAP_CONTENT
 
-                view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
+                    view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
 
-                view.setDoubleTapZoomDuration(view.context.resources.getInteger(android.R.integer.config_shortAnimTime))
-                view.setMinimumTileDpi(196)
+                    val animationDuration = view.context.resources.getInteger(android.R.integer.config_shortAnimTime)
 
-                args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
+                    view.setDoubleTapZoomDuration(animationDuration)
+                    view.setMinimumTileDpi(196)
 
-                view.clicks()
-                    .filter { view.getTag(R.id.error_tag) == true }
-                    .autoDisposable(ViewScopeProvider.from(parent))
-                    .subscribe {
-                        view.tag = null
+                    args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
 
-                        args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
-                    }
+                    view.clicks()
+                        .filter { view.getTag(R.id.error_tag) == true }
+                        .autoDisposable(ViewScopeProvider.from(parent))
+                        .subscribe {
+                            view.tag = null
 
-                view.doOnLayout {
-                    if (width < view.width) {
-                        view.updateLayoutParams {
-                            this.width = width
+                            args.glide?.let { loadImage(it, view, parsedUrl, heightMap) }
                         }
 
-                        view.requestLayout()
+                    view.doOnLayout {
+                        if (width < view.width) {
+                            view.updateLayoutParams {
+                                this.width = width
+                            }
+
+                            view.requestLayout()
+                        }
                     }
                 }
-            })
+            )
         }
     }
 

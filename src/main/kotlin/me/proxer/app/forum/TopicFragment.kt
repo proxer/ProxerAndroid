@@ -77,9 +77,12 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.metaData.observe(viewLifecycleOwner, Observer {
-            it?.let { topic = it.subject }
-        })
+        viewModel.metaData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let { topic = it.subject }
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

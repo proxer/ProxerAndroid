@@ -21,9 +21,10 @@ object TwitterPrototype : TextMutatorPrototype, AutoClosingPrototype {
 
         return when (val url = "https://twitter.com/i/web/status/$id".toHttpUrlOrNull()) {
             null -> text
-            else -> text.toSpannableStringBuilder()
-                .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_twitter_link))
-                .linkifyUrl(url)
+            else ->
+                text.toSpannableStringBuilder()
+                    .replace(0, text.length, args.safeResources.getString(R.string.view_bbcode_twitter_link))
+                    .linkifyUrl(url)
         }
     }
 }

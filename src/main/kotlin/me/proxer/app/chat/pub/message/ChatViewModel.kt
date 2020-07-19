@@ -74,19 +74,22 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
             }
             .doOnSuccess { if (pollingDisposable == null) startPolling() }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                currentFirstId = findFirstRemoteId(it) ?: "0"
+            .subscribeAndLogErrors(
+                {
+                    currentFirstId = findFirstRemoteId(it) ?: "0"
 
-                refreshError.value = null
-                error.value = null
-                data.value = it
-            }, {
-                if (data.value?.size ?: 0 > 0) {
-                    refreshError.value = ErrorUtils.handle(it)
-                } else {
-                    error.value = ErrorUtils.handle(it)
+                    refreshError.value = null
+                    error.value = null
+                    data.value = it
+                },
+                {
+                    if (data.value?.size ?: 0 > 0) {
+                        refreshError.value = ErrorUtils.handle(it)
+                    } else {
+                        error.value = ErrorUtils.handle(it)
+                    }
                 }
-            })
+            )
     }
 
     fun loadDraft() {
@@ -163,16 +166,18 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
             when (existingData) {
                 null -> newData
                 else -> when (currentId) {
-                    "0" -> newData + existingData
-                        .asSequence()
-                        .dropWhile { it.id.toLong() < 0 }
-                        .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
-                        .toList()
-                    else -> existingData
-                        .asSequence()
-                        .dropWhile { it.id.toLong() < 0 }
-                        .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
-                        .toList() + newData
+                    "0" ->
+                        newData + existingData
+                            .asSequence()
+                            .dropWhile { it.id.toLong() < 0 }
+                            .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
+                            .toList()
+                    else ->
+                        existingData
+                            .asSequence()
+                            .dropWhile { it.id.toLong() < 0 }
+                            .filter { oldItem -> newData.none { newItem -> oldItem.id == newItem.id } }
+                            .toList() + newData
                 }
             }
         }
@@ -216,20 +221,23 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
                 .retryWhen(RxRetryWithDelay(2, 3_000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    it.toNullable()?.let { id ->
-                        sentMessageIds.add(id)
+                .subscribeAndLogErrors(
+                    {
+                        it.toNullable()?.let { id ->
+                            sentMessageIds.add(id)
 
-                        startPolling(true)
-                        doSendMessages()
+                            startPolling(true)
+                            doSendMessages()
+                        }
+                    },
+                    {
+                        data.value =
+                            data.value?.dropWhile { message -> message.id.toLong() < 0 }
+                        sendMessageQueue.clear()
+
+                        sendMessageError.value = ErrorUtils.handle(it)
                     }
-                }, {
-                    data.value =
-                        data.value?.dropWhile { message -> message.id.toLong() < 0 }
-                    sendMessageQueue.clear()
-
-                    sendMessageError.value = ErrorUtils.handle(it)
-                })
+                )
         }
     }
 

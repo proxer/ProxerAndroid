@@ -176,6 +176,7 @@ class SettingsFragment : XpPreferenceFragment(), OnSharedPreferenceChangeListene
 
                 startActivity(intent)
                 exitProcess(0)
-            })
+            }
+        )
     }
 }

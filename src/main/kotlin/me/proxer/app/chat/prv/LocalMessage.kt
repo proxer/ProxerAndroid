@@ -16,11 +16,13 @@ import org.threeten.bp.Instant
  */
 @Entity(
     tableName = "messages",
-    foreignKeys = [ForeignKey(
-        entity = LocalConference::class,
-        parentColumns = ["id"],
-        childColumns = ["conferenceId"]
-    )],
+    foreignKeys = [
+        ForeignKey(
+            entity = LocalConference::class,
+            parentColumns = ["id"],
+            childColumns = ["conferenceId"]
+        )
+    ],
     indices = [Index("conferenceId")]
 )
 data class LocalMessage(

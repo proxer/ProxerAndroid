@@ -98,14 +98,17 @@ class TopTenFragment : BaseContentFragment<ZippedTopTenResult>(R.layout.fragment
         mangaRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
         mangaRecyclerView.adapter = mangaAdapter
 
-        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_topten_entry_removal, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.itemDeletionError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_topten_entry_removal, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
     }
 
     override fun onDestroyView() {

@@ -132,21 +132,24 @@ class ProfileActivity : ImageTabsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.data.observe(this, Observer { data ->
-            data?.let { (userInfo) ->
-                userId = userInfo.id
-                username = userInfo.username
-                image = userInfo.image
+        viewModel.data.observe(
+            this,
+            Observer { data ->
+                data?.let { (userInfo) ->
+                    userId = userInfo.id
+                    username = userInfo.username
+                    image = userInfo.image
 
-                updateMenuItems()
+                    updateMenuItems()
 
-                if (viewPager.currentItem == 0) {
-                    viewPager.currentItem = customItemToDisplay
+                    if (viewPager.currentItem == 0) {
+                        viewPager.currentItem = customItemToDisplay
 
-                    sectionsPagerAdapter.notifyDataSetChanged()
+                        sectionsPagerAdapter.notifyDataSetChanged()
+                    }
                 }
             }
-        })
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

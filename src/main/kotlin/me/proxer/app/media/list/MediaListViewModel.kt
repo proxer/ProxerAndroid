@@ -111,13 +111,14 @@ class MediaListViewModel(
             .fromCallable { tagDao.getTags() }
             .flatMap { cachedTags ->
                 when {
-                    shouldUpdateTags() || cachedTags.isEmpty() -> tagSingle()
-                        .map { remoteTags -> remoteTags.map { it.toParcelableTag() } }
-                        .doOnSuccess {
-                            tagDao.replaceTags(it)
+                    shouldUpdateTags() || cachedTags.isEmpty() ->
+                        tagSingle()
+                            .map { remoteTags -> remoteTags.map { it.toParcelableTag() } }
+                            .doOnSuccess {
+                                tagDao.replaceTags(it)
 
-                            preferenceHelper.lastTagUpdateDate = Instant.now()
-                        }
+                                preferenceHelper.lastTagUpdateDate = Instant.now()
+                            }
                     else -> Single.just(cachedTags)
                 }
             }

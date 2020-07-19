@@ -45,9 +45,10 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         return applyToAllViews(childViews) { view: View ->
             when (view) {
                 is TextView -> view.text = mutate(view.text.toSpannableStringBuilder(), args)
-                else -> view.clicks()
-                    .autoDisposable(ViewScopeProvider.from(parent))
-                    .subscribe { BBUtils.findBaseActivity(view.context)?.showPage(url) }
+                else ->
+                    view.clicks()
+                        .autoDisposable(ViewScopeProvider.from(parent))
+                        .subscribe { BBUtils.findBaseActivity(view.context)?.showPage(url) }
             }
         }
     }

@@ -111,7 +111,7 @@ class ProxerWebView @JvmOverloads constructor(
                 ${content.trim()}
               </body>
             </html>
-            """.trimIndent()
+        """.trimIndent()
     }
 
     private fun Int.toHtmlColor(): String {

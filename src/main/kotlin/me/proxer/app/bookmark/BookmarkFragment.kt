@@ -136,33 +136,42 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
 
         innerAdapter.glide = GlideApp.with(this)
 
-        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_bookmark_deletion, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.itemDeletionError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_bookmark_deletion, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
 
-        viewModel.undoData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    R.string.fragment_bookmark_delete_message,
-                    Snackbar.LENGTH_LONG, R.string.action_undo,
-                    View.OnClickListener { viewModel.undo() }
-                )
+        viewModel.undoData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        R.string.fragment_bookmark_delete_message,
+                        Snackbar.LENGTH_LONG, R.string.action_undo,
+                        View.OnClickListener { viewModel.undo() }
+                    )
+                }
             }
-        })
+        )
 
-        viewModel.undoError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_undo, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.undoError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_undo, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

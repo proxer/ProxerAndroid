@@ -57,16 +57,19 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     isLoading.value = true
                 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    success.value = Unit
-                }, {
-                    if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
-                        preferenceHelper.isTwoFactorAuthenticationEnabled = true
-                        isTwoFactorAuthenticationEnabled.value = true
-                    }
+                .subscribeAndLogErrors(
+                    {
+                        success.value = Unit
+                    },
+                    {
+                        if (it is ProxerException && it.serverErrorType == ServerErrorType.USER_2FA_SECRET_REQUIRED) {
+                            preferenceHelper.isTwoFactorAuthenticationEnabled = true
+                            isTwoFactorAuthenticationEnabled.value = true
+                        }
 
-                    error.value = ErrorUtils.handle(it)
-                })
+                        error.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 }

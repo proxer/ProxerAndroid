@@ -62,37 +62,43 @@ class LinkCheckDialog : BaseDialog() {
 
         text.text = getString(R.string.dialog_link_check_message, link.toString()).parseAsHtml()
 
-        viewModel.data.observe(dialogLifecycleOwner, Observer {
-            if (it != null) {
-                if (it) {
-                    progressText.setText(R.string.dialog_link_check_secure)
+        viewModel.data.observe(
+            dialogLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    if (it) {
+                        progressText.setText(R.string.dialog_link_check_secure)
 
-                    progressIcon.isVisible = true
-                    progressIcon.setImageDrawable(
-                        IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_check).apply {
-                            colorRes = R.color.green_500
-                        }
-                    )
-                } else {
-                    progressText.setText(R.string.dialog_link_check_not_secure)
+                        progressIcon.isVisible = true
+                        progressIcon.setImageDrawable(
+                            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_check).apply {
+                                colorRes = R.color.green_500
+                            }
+                        )
+                    } else {
+                        progressText.setText(R.string.dialog_link_check_not_secure)
 
-                    progressIcon.isVisible = true
-                    progressIcon.setImageDrawable(
-                        IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_alert).apply {
-                            colorRes = R.color.red_500
-                        }
-                    )
+                        progressIcon.isVisible = true
+                        progressIcon.setImageDrawable(
+                            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_alert).apply {
+                                colorRes = R.color.red_500
+                            }
+                        )
+                    }
                 }
             }
-        })
+        )
 
-        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            progress.isVisible = it == true
+        viewModel.isLoading.observe(
+            dialogLifecycleOwner,
+            Observer {
+                progress.isVisible = it == true
 
-            if (it == true) {
-                progressText.setText(R.string.dialog_link_check_progress)
+                if (it == true) {
+                    progressText.setText(R.string.dialog_link_check_progress)
+                }
             }
-        })
+        )
 
         if (savedInstanceState == null) {
             viewModel.check(link)

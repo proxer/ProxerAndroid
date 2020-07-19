@@ -143,14 +143,17 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { create.translationY = it }
 
-        viewModel.itemDeletionError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_comment_deletion, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.itemDeletionError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_comment_deletion, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
 
         create.setImageDrawable(
             IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_pencil).apply {

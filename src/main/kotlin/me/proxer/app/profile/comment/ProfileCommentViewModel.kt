@@ -59,11 +59,14 @@ class ProfileCommentViewModel(
             .doOnSuccess { storageHelper.deleteCommentDraft(comment.entryId) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
-                data.value = data.value?.filter { it.id != comment.id }
-            }, {
-                itemDeletionError.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    data.value = data.value?.filter { it.id != comment.id }
+                },
+                {
+                    itemDeletionError.value = ErrorUtils.handle(it)
+                }
+            )
     }
 
     fun updateComment(comment: LocalComment) {

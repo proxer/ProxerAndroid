@@ -36,40 +36,48 @@ object HidePrototype : AutoClosingPrototype, KoinComponent {
 
         return when {
             childViews.isEmpty() -> childViews
-            !storageHelper.isLoggedIn -> listOf(FrameLayout(parent.context).apply {
-                val text = parent.context.getString(R.string.view_bbcode_hide_login)
+            !storageHelper.isLoggedIn -> listOf(
+                FrameLayout(parent.context).apply {
+                    val text = parent.context.getString(R.string.view_bbcode_hide_login)
 
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
-                addView(TextPrototype.makeView(parent, args + BBArgs(text = text)).apply {
-                    setTag(R.id.ignore_tag, Unit)
+                    addView(
+                        TextPrototype.makeView(parent, args + BBArgs(text = text)).apply {
+                            setTag(R.id.ignore_tag, Unit)
 
-                    gravity = CENTER
-                })
-            })
-            else -> listOf(LinearLayout(parent.context).apply {
-                val fourDip = dip(4)
-                val text = parent.context.getString(R.string.view_bbcode_login)
+                            gravity = CENTER
+                        }
+                    )
+                }
+            )
+            else -> listOf(
+                LinearLayout(parent.context).apply {
+                    val fourDip = dip(4)
+                    val text = parent.context.getString(R.string.view_bbcode_login)
 
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                orientation = VERTICAL
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    orientation = VERTICAL
 
-                setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
+                    setPadding(fourDip, fourDip, fourDip, fourDip)
+                    setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
 
-                addView(TextPrototype.makeView(parent, args + BBArgs(text = text)).apply {
-                    setTag(R.id.ignore_tag, Unit)
+                    addView(
+                        TextPrototype.makeView(parent, args + BBArgs(text = text)).apply {
+                            setTag(R.id.ignore_tag, Unit)
 
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
-                        updateMargins(bottom = fourDip * 4)
-                    }
+                            layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                                updateMargins(bottom = fourDip * 4)
+                            }
 
-                    typeface = Typeface.DEFAULT_BOLD
-                    gravity = CENTER
-                })
+                            typeface = Typeface.DEFAULT_BOLD
+                            gravity = CENTER
+                        }
+                    )
 
-                childViews.forEach { addView(it) }
-            })
+                    childViews.forEach { addView(it) }
+                }
+            )
         }
     }
 }

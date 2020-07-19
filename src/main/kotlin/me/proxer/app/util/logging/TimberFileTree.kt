@@ -36,9 +36,12 @@ class TimberFileTree(context: Context) : Timber.Tree() {
         Completable
             .fromAction { internalLog(tag, message) }
             .subscribeOn(Schedulers.from(executor))
-            .subscribe({}, {
-                Log.e(TimberFileTree::class.java.name, "Failure while logging to file", it)
-            })
+            .subscribe(
+                {},
+                {
+                    Log.e(TimberFileTree::class.java.name, "Failure while logging to file", it)
+                }
+            )
     }
 
     @SuppressLint("LogNotTimber")

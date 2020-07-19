@@ -88,14 +88,17 @@ abstract class PagedContentFragment<T>(
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.loadIfPossible() }
 
-        viewModel.refreshError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
-                    it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.refreshError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
+                        it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
     }
 
     override fun onDestroyView() {

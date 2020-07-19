@@ -27,18 +27,19 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         get() = Single.fromCallable { validators.validateLogin() }
             .flatMap {
                 when (page) {
-                    0 -> api.notifications.notifications()
-                        .markAsRead(true)
-                        .page(page)
-                        .filter(NotificationFilter.UNREAD)
-                        .limit(Int.MAX_VALUE)
-                        .buildSingle()
-                        .doOnSuccess { items -> firstPageItemAmount = items.size }
-                        .flatMap { unreadResult ->
-                            readSingle().map { readResult ->
-                                mergeNewDataWithExistingData(unreadResult, readResult, 0)
+                    0 ->
+                        api.notifications.notifications()
+                            .markAsRead(true)
+                            .page(page)
+                            .filter(NotificationFilter.UNREAD)
+                            .limit(Int.MAX_VALUE)
+                            .buildSingle()
+                            .doOnSuccess { items -> firstPageItemAmount = items.size }
+                            .flatMap { unreadResult ->
+                                readSingle().map { readResult ->
+                                    mergeNewDataWithExistingData(unreadResult, readResult, 0)
+                                }
                             }
-                        }
                     else -> readSingle()
                 }
             }
@@ -96,11 +97,14 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
             .buildOptionalSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
-                data.value = emptyList()
-            }, {
-                deletionError.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    data.value = emptyList()
+                },
+                {
+                    deletionError.value = ErrorUtils.handle(it)
+                }
+            )
     }
 
     private fun doItemDeletion() {
@@ -112,15 +116,18 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    data.value = data.value?.filterNot { newItem -> newItem == item }
+                .subscribeAndLogErrors(
+                    {
+                        data.value = data.value?.filterNot { newItem -> newItem == item }
 
-                    doItemDeletion()
-                }, {
-                    deletionQueue.clear()
+                        doItemDeletion()
+                    },
+                    {
+                        deletionQueue.clear()
 
-                    deletionError.value = ErrorUtils.handle(it)
-                })
+                        deletionError.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 

@@ -82,10 +82,11 @@ class NotificationWorker(
 
     override fun doWork() = try {
         val notificationInfo = when (storageHelper.isLoggedIn) {
-            true -> api.notifications.notificationInfo()
-                .build()
-                .also { currentCall = it }
-                .execute()
+            true ->
+                api.notifications.notificationInfo()
+                    .build()
+                    .also { currentCall = it }
+                    .execute()
             false -> null
         }
 
@@ -115,16 +116,17 @@ class NotificationWorker(
         val lastNewsDate = preferenceHelper.lastNewsDate
         val newNews = when (notificationInfo?.newsAmount) {
             0 -> emptyList()
-            else -> api.notifications.news()
-                .page(0)
-                .limit(notificationInfo?.newsAmount ?: 100)
-                .build()
-                .also { currentCall = it }
-                .safeExecute()
-                .asSequence()
-                .filter { it.date.toInstantBP().isAfter(lastNewsDate) }
-                .sortedByDescending { it.date }
-                .toList()
+            else ->
+                api.notifications.news()
+                    .page(0)
+                    .limit(notificationInfo?.newsAmount ?: 100)
+                    .build()
+                    .also { currentCall = it }
+                    .safeExecute()
+                    .asSequence()
+                    .filter { it.date.toInstantBP().isAfter(lastNewsDate) }
+                    .sortedByDescending { it.date }
+                    .toList()
         }
 
         newNews.firstOrNull()?.date?.toInstantBP()?.let {
@@ -140,13 +142,14 @@ class NotificationWorker(
         val lastNotificationsDate = storageHelper.lastNotificationsDate
         val newNotifications = when (notificationInfo.notificationAmount) {
             0 -> emptyList()
-            else -> api.notifications.notifications()
-                .page(0)
-                .limit(notificationInfo.notificationAmount)
-                .filter(NotificationFilter.UNREAD)
-                .build()
-                .also { currentCall = it }
-                .safeExecute()
+            else ->
+                api.notifications.notifications()
+                    .page(0)
+                    .limit(notificationInfo.notificationAmount)
+                    .filter(NotificationFilter.UNREAD)
+                    .build()
+                    .also { currentCall = it }
+                    .safeExecute()
         }
 
         newNotifications.firstOrNull()?.date?.toInstantBP()?.let {

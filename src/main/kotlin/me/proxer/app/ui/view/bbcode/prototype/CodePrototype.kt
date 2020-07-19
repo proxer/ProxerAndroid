@@ -34,27 +34,31 @@ object CodePrototype : AutoClosingPrototype {
 
         return when (childViews.size) {
             0 -> childViews
-            1 -> listOf(FrameLayout(parent.context).apply {
-                val fourDip = dip(4)
+            1 -> listOf(
+                FrameLayout(parent.context).apply {
+                    val fourDip = dip(4)
 
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
-                setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
+                    setPadding(fourDip, fourDip, fourDip, fourDip)
+                    setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
 
-                childViews.forEach { addView(it) }
-            })
-            else -> listOf(LinearLayout(parent.context).apply {
-                val fourDip = dip(4)
+                    childViews.forEach { addView(it) }
+                }
+            )
+            else -> listOf(
+                LinearLayout(parent.context).apply {
+                    val fourDip = dip(4)
 
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                orientation = VERTICAL
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    orientation = VERTICAL
 
-                setPadding(fourDip, fourDip, fourDip, fourDip)
-                setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
+                    setPadding(fourDip, fourDip, fourDip, fourDip)
+                    setBackgroundColor(parent.context.resolveColor(R.attr.colorSelectedSurface))
 
-                childViews.forEach { addView(it) }
-            })
+                    childViews.forEach { addView(it) }
+                }
+            )
         }
     }
 }

@@ -33,7 +33,8 @@ object NotificationUtils {
                     NotificationChannel(CHAT_CHANNEL, chatTitle, NotificationManager.IMPORTANCE_HIGH).apply {
                         description = context.getString(R.string.notification_channel_chat_description)
                     }
-                ))
+                )
+            )
         }
     }
 }

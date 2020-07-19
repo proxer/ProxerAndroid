@@ -93,29 +93,35 @@ class MediaListSearchBottomSheet private constructor(
 
         viewModel.loadTags()
 
-        viewModel.genreData.observe(fragment.viewLifecycleOwner, Observer {
-            if (it != null) {
-                val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
+        viewModel.genreData.observe(
+            fragment.viewLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
 
-                fragment.genreSelector.items = items
-                fragment.excludedGenreSelector.items = items
+                    fragment.genreSelector.items = items
+                    fragment.excludedGenreSelector.items = items
 
-                fragment.genreSelector.isVisible = true
-                fragment.excludedGenreSelector.isVisible = true
+                    fragment.genreSelector.isVisible = true
+                    fragment.excludedGenreSelector.isVisible = true
+                }
             }
-        })
+        )
 
-        viewModel.tagData.observe(fragment.viewLifecycleOwner, Observer {
-            if (it != null) {
-                val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
+        viewModel.tagData.observe(
+            fragment.viewLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    val items = it.map { tag -> ExpandableSelectionView.Item(tag.name, tag.description) }
 
-                fragment.tagSelector.items = items
-                fragment.excludedTagSelector.items = items
+                    fragment.tagSelector.items = items
+                    fragment.excludedTagSelector.items = items
 
-                fragment.tagSelector.isVisible = true
-                fragment.excludedTagSelector.isVisible = true
+                    fragment.tagSelector.isVisible = true
+                    fragment.excludedTagSelector.isVisible = true
+                }
             }
-        })
+        )
     }
 
     private fun initClickSubscriptions() {
@@ -171,9 +177,11 @@ class MediaListSearchBottomSheet private constructor(
         fragment.fskSelector.selectionChangeSubject
             .autoDisposable(fragment.viewLifecycleOwner.scope())
             .subscribeAndLogErrors { selections ->
-                fragment.fskConstraints = enumSetOf(selections.map {
-                    ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
-                })
+                fragment.fskConstraints = enumSetOf(
+                    selections.map {
+                        ProxerLibExtensions.fskConstraintFromAppString(fragment.requireContext(), it)
+                    }
+                )
             }
 
         fragment.tagSelector.selectionChangeSubject

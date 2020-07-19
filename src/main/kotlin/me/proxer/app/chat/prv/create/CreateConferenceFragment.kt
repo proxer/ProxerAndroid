@@ -188,26 +188,35 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         initSendButton()
         initTopicInput()
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
-            progress.isEnabled = it == true
-            progress.isRefreshing = it == true
-        })
-
-        viewModel.result.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                requireActivity().finish()
-
-                PrvMessengerActivity.navigateTo(requireActivity(), it)
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer {
+                progress.isEnabled = it == true
+                progress.isRefreshing = it == true
             }
-        })
+        )
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.result.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    requireActivity().finish()
+
+                    PrvMessengerActivity.navigateTo(requireActivity(), it)
+                }
             }
-        })
+        )
+
+        viewModel.error.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -230,7 +239,8 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
             when (isGroup) {
                 true -> CommunityMaterial.Icon.cmd_account_plus
                 false -> CommunityMaterial.Icon.cmd_account_multiple_plus
-            }, 96, 16
+            },
+            96, 16
         )
 
         acceptParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_check, 48, 16)

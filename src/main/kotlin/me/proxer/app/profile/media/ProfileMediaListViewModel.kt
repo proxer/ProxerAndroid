@@ -34,22 +34,24 @@ class ProfileMediaListViewModel(
         get() = Single.fromCallable { validate() }
             .flatMap {
                 when (storageHelper.user?.matches(userId, username) == true) {
-                    true -> api.ucp.mediaList()
-                        .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
-                        .category(category)
-                        .filter(filter)
-                        .page(page)
-                        .limit(itemsOnPage)
-                        .buildSingle()
-                        .map { entries -> entries.map { it.toLocalEntryUcp() } }
-                    false -> api.user.mediaList(userId, username)
-                        .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
-                        .category(category)
-                        .filter(filter)
-                        .page(page)
-                        .limit(itemsOnPage)
-                        .buildSingle()
-                        .map { entries -> entries.map { it.toLocalEntry() } }
+                    true ->
+                        api.ucp.mediaList()
+                            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
+                            .category(category)
+                            .filter(filter)
+                            .page(page)
+                            .limit(itemsOnPage)
+                            .buildSingle()
+                            .map { entries -> entries.map { it.toLocalEntryUcp() } }
+                    false ->
+                        api.user.mediaList(userId, username)
+                            .includeHentai(preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn)
+                            .category(category)
+                            .filter(filter)
+                            .page(page)
+                            .limit(itemsOnPage)
+                            .buildSingle()
+                            .map { entries -> entries.map { it.toLocalEntry() } }
                 }
             }
 
@@ -93,15 +95,18 @@ class ProfileMediaListViewModel(
                 .buildOptionalSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    data.value = data.value?.filterNot { newItem -> newItem == item }
+                .subscribeAndLogErrors(
+                    {
+                        data.value = data.value?.filterNot { newItem -> newItem == item }
 
-                    doItemDeletion()
-                }, {
-                    deletionQueue.clear()
+                        doItemDeletion()
+                    },
+                    {
+                        deletionQueue.clear()
 
-                    itemDeletionError.value = ErrorUtils.handle(it)
-                })
+                        itemDeletionError.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 }

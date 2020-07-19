@@ -119,16 +119,19 @@ class AnimeViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { isLoading.value = true }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                resolutionError.value = null
-                resolutionResult.value = it
-            }, {
-                resolutionResult.value = null
-                resolutionError.value = when (it) {
-                    is AppRequiredException -> AppRequiredErrorAction(it.name, it.appPackage)
-                    else -> ErrorUtils.handle(it)
+            .subscribeAndLogErrors(
+                {
+                    resolutionError.value = null
+                    resolutionResult.value = it
+                },
+                {
+                    resolutionResult.value = null
+                    resolutionError.value = when (it) {
+                        is AppRequiredException -> AppRequiredErrorAction(it.name, it.appPackage)
+                        else -> ErrorUtils.handle(it)
+                    }
                 }
-            })
+            )
     }
 
     fun markAsFinished() = updateUserState(api.info.markAsFinished(entryId))
@@ -174,12 +177,15 @@ class AnimeViewModel(
             .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
-                userStateError.value = null
-                userStateData.value = Unit
-            }, {
-                userStateData.value = null
-                userStateError.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    userStateError.value = null
+                    userStateData.value = Unit
+                },
+                {
+                    userStateData.value = null
+                    userStateError.value = ErrorUtils.handle(it)
+                }
+            )
     }
 }

@@ -481,12 +481,13 @@ class StreamActivity : BaseActivity() {
         val isInMultiWindowMode = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && this.isInMultiWindowMode
 
         window.decorView.systemUiVisibility = when {
-            fullscreen && !isInMultiWindowMode -> SYSTEM_UI_FLAG_LOW_PROFILE or
-                SYSTEM_UI_FLAG_FULLSCREEN or
-                SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                SYSTEM_UI_FLAG_IMMERSIVE
+            fullscreen && !isInMultiWindowMode ->
+                SYSTEM_UI_FLAG_LOW_PROFILE or
+                    SYSTEM_UI_FLAG_FULLSCREEN or
+                    SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    SYSTEM_UI_FLAG_IMMERSIVE
             else -> SYSTEM_UI_FLAG_VISIBLE
         }
     }

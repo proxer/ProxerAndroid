@@ -222,20 +222,26 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
         recyclerView.itemAnimator = null
         recyclerView.adapter = adapter
 
-        viewModel.userStateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+        viewModel.userStateData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+                }
             }
-        })
+        )
 
-        viewModel.userStateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.userStateError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_set_user_info, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
     }
 
     override fun onStop() {

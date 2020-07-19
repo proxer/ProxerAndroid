@@ -63,24 +63,33 @@ abstract class BaseContentFragment<T>(@LayoutRes contentLayoutId: Int) : BaseFra
             .autoDisposable(viewLifecycleOwner.scope())
             .subscribe { viewModel.refresh() }
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                null -> hideError()
-                else -> showError(it)
+        viewModel.error.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it) {
+                    null -> hideError()
+                    else -> showError(it)
+                }
             }
-        })
+        )
 
-        viewModel.data.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                null -> hideData()
-                else -> showData(it)
+        viewModel.data.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it) {
+                    null -> hideData()
+                    else -> showData(it)
+                }
             }
-        })
+        )
 
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
-            progress.isEnabled = it == true || isSwipeToRefreshEnabled
-            progress.isRefreshing = it == true
-        })
+        viewModel.isLoading.observe(
+            viewLifecycleOwner,
+            Observer {
+                progress.isEnabled = it == true || isSwipeToRefreshEnabled
+                progress.isRefreshing = it == true
+            }
+        )
 
         if (viewModel.isLoading.value != true && viewModel.data.value == null && viewModel.error.value == null) {
             viewModel.load()

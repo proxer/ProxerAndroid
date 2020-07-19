@@ -68,27 +68,29 @@ object ImagePrototype : AutoClosingPrototype {
         val width = args[WIDTH_ARGUMENT] as Int? ?: MATCH_PARENT
         val height = proxyUrl?.let { heightMap?.get(it.toString()) } ?: WRAP_CONTENT
 
-        return listOf(AppCompatImageView(parent.context).also { view: ImageView ->
-            ViewCompat.setTransitionName(view, "bb_image_$proxyUrl")
+        return listOf(
+            AppCompatImageView(parent.context).also { view: ImageView ->
+                ViewCompat.setTransitionName(view, "bb_image_$proxyUrl")
 
-            view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
+                view.layoutParams = ViewGroup.MarginLayoutParams(width, height)
 
-            args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
+                args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
 
-            (parent.context as? Activity)?.let { context ->
-                view.clicks()
-                    .autoDisposable(ViewScopeProvider.from(parent))
-                    .subscribe {
-                        if (view.getTag(R.id.error_tag) == true) {
-                            view.tag = null
+                (parent.context as? Activity)?.let { context ->
+                    view.clicks()
+                        .autoDisposable(ViewScopeProvider.from(parent))
+                        .subscribe {
+                            if (view.getTag(R.id.error_tag) == true) {
+                                view.tag = null
 
-                            args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
-                        } else if (view.drawable != null && proxyUrl != null) {
-                            ImageDetailActivity.navigateTo(context, proxyUrl, view)
+                                args.glide?.let { loadImage(it, view, proxyUrl, heightMap) }
+                            } else if (view.drawable != null && proxyUrl != null) {
+                                ImageDetailActivity.navigateTo(context, proxyUrl, view)
+                            }
                         }
-                    }
+                }
             }
-        })
+        )
     }
 
     private fun loadImage(

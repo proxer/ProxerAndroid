@@ -88,7 +88,8 @@ class MediaAdapter(private val category: Category) : BaseAdapter<MediaListEntry,
                 when (category) {
                     Category.ANIME -> R.plurals.media_episode_count
                     Category.MANGA, Category.NOVEL -> R.plurals.media_chapter_count
-                }, item.episodeAmount
+                },
+                item.episodeAmount
             )
 
             item.languages

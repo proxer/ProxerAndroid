@@ -53,35 +53,44 @@ class EditCommentActivity : BaseActivity() {
         setSupportActionBar(toolbar)
         setupToolbar()
 
-        viewModel.isUpdate.observe(this, Observer {
-            title = getString(
-                when (it) {
-                    true -> R.string.action_update_comment
-                    false -> R.string.action_create_comment
-                }
-            )
-        })
-
-        viewModel.publishResult.observe(this, Observer {
-            if (it != null) {
-                viewModel.data.value?.also { comment ->
-                    setResult(Activity.RESULT_OK, Intent().putExtra(COMMENT_EXTRA, comment))
-                }
-
-                toast(R.string.fragment_edit_comment_published)
-
-                finish()
-            }
-        })
-
-        viewModel.publishError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(
-                    getString(R.string.error_comment_publish, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(this)
+        viewModel.isUpdate.observe(
+            this,
+            Observer {
+                title = getString(
+                    when (it) {
+                        true -> R.string.action_update_comment
+                        false -> R.string.action_create_comment
+                    }
                 )
             }
-        })
+        )
+
+        viewModel.publishResult.observe(
+            this,
+            Observer {
+                if (it != null) {
+                    viewModel.data.value?.also { comment ->
+                        setResult(Activity.RESULT_OK, Intent().putExtra(COMMENT_EXTRA, comment))
+                    }
+
+                    toast(R.string.fragment_edit_comment_published)
+
+                    finish()
+                }
+            }
+        )
+
+        viewModel.publishError.observe(
+            this,
+            Observer {
+                it?.let {
+                    multilineSnackbar(
+                        getString(R.string.error_comment_publish, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(this)
+                    )
+                }
+            }
+        )
 
         if (savedInstanceState == null) {
             supportFragmentManager.commitNow {

@@ -204,47 +204,59 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
 
-        viewModel.resolutionResult.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
-                when (result) {
-                    is StreamResolutionResult.Video -> result.play(
-                        requireContext(), id, name, episode, language, ProxerUrls.entryImage(id).androidUri(), true
-                    )
-                    is StreamResolutionResult.Link -> result.show(this)
-                    is StreamResolutionResult.App -> result.navigate(requireContext())
-                    is StreamResolutionResult.Message -> error(
-                        "ResolutionResult of type Message should be shown inline"
+        viewModel.resolutionResult.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                result?.let {
+                    when (result) {
+                        is StreamResolutionResult.Video -> result.play(
+                            requireContext(), id, name, episode, language, ProxerUrls.entryImage(id).androidUri(), true
+                        )
+                        is StreamResolutionResult.Link -> result.show(this)
+                        is StreamResolutionResult.App -> result.navigate(requireContext())
+                        is StreamResolutionResult.Message -> error(
+                            "ResolutionResult of type Message should be shown inline"
+                        )
+                    }
+                }
+            }
+        )
+
+        viewModel.resolutionError.observe(
+            viewLifecycleOwner,
+            Observer { errorAction ->
+                errorAction?.let {
+                    when (it) {
+                        is AppRequiredErrorAction -> it.showDialog(hostingActivity)
+                        else -> hostingActivity.multilineSnackbar(
+                            it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                            it.toClickListener(hostingActivity)
+                        )
+                    }
+                }
+            }
+        )
+
+        viewModel.userStateData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+                }
+            }
+        )
+
+        viewModel.userStateError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_set_user_info, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
                     )
                 }
             }
-        })
-
-        viewModel.resolutionError.observe(viewLifecycleOwner, Observer { errorAction ->
-            errorAction?.let {
-                when (it) {
-                    is AppRequiredErrorAction -> it.showDialog(hostingActivity)
-                    else -> hostingActivity.multilineSnackbar(
-                        it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
-                        it.toClickListener(hostingActivity)
-                    )
-                }
-            }
-        })
-
-        viewModel.userStateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
-            }
-        })
-
-        viewModel.userStateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
-            }
-        })
+        )
     }
 
     override fun onDestroyView() {

@@ -39,10 +39,13 @@ class LinkCheckViewModel : ViewModel(), KoinComponent {
                 data.value = null
             }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                data.value = it.isSecure
-            }, {
-                data.value = false
-            })
+            .subscribeAndLogErrors(
+                {
+                    data.value = it.isSecure
+                },
+                {
+                    data.value = false
+                }
+            )
     }
 }

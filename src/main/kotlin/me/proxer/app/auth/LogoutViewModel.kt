@@ -44,11 +44,14 @@ class LogoutViewModel : ViewModel(), KoinComponent {
                     isLoading.value = true
                 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    success.value = Unit
-                }, {
-                    error.value = ErrorUtils.handle(it)
-                })
+                .subscribeAndLogErrors(
+                    {
+                        success.value = Unit
+                    },
+                    {
+                        error.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 }

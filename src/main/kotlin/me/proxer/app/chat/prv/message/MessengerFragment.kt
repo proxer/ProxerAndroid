@@ -205,13 +205,19 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
             messageInput.setText(initialMessage)
         }
 
-        viewModel.conference.observe(viewLifecycleOwner, Observer {
-            conference = it
-        })
+        viewModel.conference.observe(
+            viewLifecycleOwner,
+            Observer {
+                conference = it
+            }
+        )
 
-        viewModel.deleted.observe(viewLifecycleOwner, Observer {
-            requireActivity().finish()
-        })
+        viewModel.deleted.observe(
+            viewLifecycleOwner,
+            Observer {
+                requireActivity().finish()
+            }
+        )
 
         toolbar.clicks()
             .autoDisposable(viewLifecycleOwner.scope())
@@ -271,9 +277,12 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
             viewModel.loadDraft()
         }
 
-        viewModel.draft.observe(viewLifecycleOwner, Observer {
-            if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
-        })
+        viewModel.draft.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

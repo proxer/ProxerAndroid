@@ -22,7 +22,7 @@ ext {
     // Utility plugins
     versionsPluginVersion = "0.28.0"
     detektPluginVersion = "1.10.0"
-    ktlintPluginVersion = "9.2.1"
+    ktlintPluginVersion = "9.3.0"
     androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries

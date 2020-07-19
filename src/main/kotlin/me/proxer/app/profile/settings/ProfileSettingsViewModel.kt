@@ -55,11 +55,14 @@ class ProfileSettingsViewModel : ViewModel(), KoinComponent {
                 error.value = null
                 updateError.value = null
             }
-            .subscribeAndLogErrors({
-                data.value = it
-            }, {
-                error.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    data.value = it
+                },
+                {
+                    error.value = ErrorUtils.handle(it)
+                }
+            )
     }
 
     fun update(newData: LocalProfileSettings) {
@@ -75,9 +78,12 @@ class ProfileSettingsViewModel : ViewModel(), KoinComponent {
                 error.value = null
                 updateError.value = null
             }
-            .subscribeAndLogErrors({}, {
-                updateError.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {},
+                {
+                    updateError.value = ErrorUtils.handle(it)
+                }
+            )
     }
 
     fun retryUpdate() {

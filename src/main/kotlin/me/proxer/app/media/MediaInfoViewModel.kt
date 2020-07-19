@@ -127,17 +127,20 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             .flatMap { endpoint }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
-                userInfoUpdateError.value = null
-                userInfoUpdateData.value = Unit
+            .subscribeAndLogErrors(
+                {
+                    userInfoUpdateError.value = null
+                    userInfoUpdateData.value = Unit
 
-                userInfoData.value?.also {
-                    userInfoData.value = applyMediaUserInfoChanges(it, updateType)
+                    userInfoData.value?.also {
+                        userInfoData.value = applyMediaUserInfoChanges(it, updateType)
+                    }
+                },
+                {
+                    userInfoUpdateData.value = null
+                    userInfoUpdateError.value = ErrorUtils.handle(it)
                 }
-            }, {
-                userInfoUpdateData.value = null
-                userInfoUpdateError.value = ErrorUtils.handle(it)
-            })
+            )
     }
 
     private fun applyMediaUserInfoChanges(data: MediaUserInfo, updateType: UserInfoUpdateType) = data.let {

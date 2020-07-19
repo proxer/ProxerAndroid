@@ -72,20 +72,23 @@ class EditCommentViewModel(
                     comment == null || comment.content.isBlank() && comment.overallRating == 0 -> null
                     comment.content.length > MAX_LENGTH -> Single.error(CommentTooLongException())
 
-                    comment.mediaProgress == UserMediaProgress.WILL_WATCH -> Single
-                        .error(CommentInvalidProgressException())
+                    comment.mediaProgress == UserMediaProgress.WILL_WATCH ->
+                        Single
+                            .error(CommentInvalidProgressException())
 
-                    comment.id.isNotEmpty() -> api.comment.update(comment.id)
-                        .comment(comment.content.trim())
-                        .rating(comment.overallRating)
-                        .buildOptionalSingle()
-
-                    else -> when (val it = entryId) {
-                        null -> null
-                        else -> api.comment.create(it)
+                    comment.id.isNotEmpty() ->
+                        api.comment.update(comment.id)
                             .comment(comment.content.trim())
                             .rating(comment.overallRating)
                             .buildOptionalSingle()
+
+                    else -> when (val it = entryId) {
+                        null -> null
+                        else ->
+                            api.comment.create(it)
+                                .comment(comment.content.trim())
+                                .rating(comment.overallRating)
+                                .buildOptionalSingle()
                     }
                 }
             }
@@ -137,12 +140,15 @@ class EditCommentViewModel(
             ?.doOnSubscribe { publishError.postValue(null) }
             ?.doAfterTerminate { isLoading.postValue(false) }
             ?.subscribeOn(Schedulers.io())
-            ?.subscribeAndLogErrors({
-                publishResult.postValue(data.value)
-                data.postValue(null)
-            }, {
-                publishError.postValue(ErrorUtils.handle(it))
-            })
+            ?.subscribeAndLogErrors(
+                {
+                    publishResult.postValue(data.value)
+                    data.postValue(null)
+                },
+                {
+                    publishError.postValue(ErrorUtils.handle(it))
+                }
+            )
     }
 
     private val Throwable.isInvalidCommentError

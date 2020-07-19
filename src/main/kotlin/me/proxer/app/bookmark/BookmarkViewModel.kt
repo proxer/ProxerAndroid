@@ -90,16 +90,19 @@ class BookmarkViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { undoError.value = null }
                 .doOnEvent { _, _ -> undoData.value = null }
-                .subscribeAndLogErrors({
-                    data.value = listOf(safeUndoItem) + (data.value ?: emptyList())
+                .subscribeAndLogErrors(
+                    {
+                        data.value = listOf(safeUndoItem) + (data.value ?: emptyList())
 
-                    // Explicitly hide error (if no other, real error was present) to remove no data message
-                    if (error.value == null) {
-                        error.value = null
+                        // Explicitly hide error (if no other, real error was present) to remove no data message
+                        if (error.value == null) {
+                            error.value = null
+                        }
+                    },
+                    {
+                        undoError.value = ErrorUtils.handle(it)
                     }
-                }, {
-                    undoError.value = ErrorUtils.handle(it)
-                })
+                )
         }
     }
 
@@ -115,18 +118,21 @@ class BookmarkViewModel(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { undoData.value = null }
-                .subscribeAndLogErrors({
-                    undoItem = item
+                .subscribeAndLogErrors(
+                    {
+                        undoItem = item
 
-                    undoData.value = Unit
-                    data.value = data.value?.filterNot { newItem -> newItem == item }
+                        undoData.value = Unit
+                        data.value = data.value?.filterNot { newItem -> newItem == item }
 
-                    doItemDeletion()
-                }, {
-                    deletionQueue.clear()
+                        doItemDeletion()
+                    },
+                    {
+                        deletionQueue.clear()
 
-                    itemDeletionError.value = ErrorUtils.handle(it)
-                })
+                        itemDeletionError.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 

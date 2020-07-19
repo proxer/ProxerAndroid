@@ -15,7 +15,8 @@ val ConnectivityManager.isConnected
 
 val ConnectivityManager.isConnectedToCellular
     get() = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> getNetworkCapabilities(activeNetwork)
-            ?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
+            getNetworkCapabilities(activeNetwork)
+                ?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
         else -> getNetworkInfo(ConnectivityManager.TYPE_MOBILE)?.isConnectedOrConnecting ?: false
     }

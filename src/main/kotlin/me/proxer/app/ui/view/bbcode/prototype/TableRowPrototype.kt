@@ -24,12 +24,14 @@ object TableRowPrototype : AutoClosingPrototype {
 
         return when (childViews.size) {
             0 -> emptyList()
-            else -> listOf(LinearLayout(parent.context).apply {
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                orientation = HORIZONTAL
+            else -> listOf(
+                LinearLayout(parent.context).apply {
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    orientation = HORIZONTAL
 
-                childViews.forEach { addView(it) }
-            })
+                    childViews.forEach { addView(it) }
+                }
+            )
         }
     }
 }

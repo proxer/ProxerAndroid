@@ -117,30 +117,42 @@ class LoginDialog : BaseDialog() {
     }
 
     private fun setupViewModel() {
-        viewModel.success.observe(dialogLifecycleOwner, Observer {
-            it?.let {
-                dismiss()
+        viewModel.success.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let {
+                    dismiss()
+                }
             }
-        })
+        )
 
-        viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let {
-                viewModel.error.value = null
+        viewModel.error.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let {
+                    viewModel.error.value = null
 
-                requireContext().toast(it.message)
+                    requireContext().toast(it.message)
+                }
             }
-        })
+        )
 
-        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            inputContainer.isGone = it == true
-            progress.isVisible = it == true
-        })
+        viewModel.isLoading.observe(
+            dialogLifecycleOwner,
+            Observer {
+                inputContainer.isGone = it == true
+                progress.isVisible = it == true
+            }
+        )
 
-        viewModel.isTwoFactorAuthenticationEnabled.observe(dialogLifecycleOwner, Observer {
-            secretContainer.isVisible = it == true
-            secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
-            password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO
-        })
+        viewModel.isTwoFactorAuthenticationEnabled.observe(
+            dialogLifecycleOwner,
+            Observer {
+                secretContainer.isVisible = it == true
+                secret.imeOptions = if (it == true) EditorInfo.IME_ACTION_GO else EditorInfo.IME_ACTION_NEXT
+                password.imeOptions = if (it == true) EditorInfo.IME_ACTION_NEXT else EditorInfo.IME_ACTION_GO
+            }
+        )
     }
 
     private fun validateAndLogin() {

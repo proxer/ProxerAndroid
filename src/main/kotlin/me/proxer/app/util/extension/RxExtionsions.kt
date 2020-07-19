@@ -57,9 +57,12 @@ inline fun <T> Observable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Un
 }
 
 inline fun <T> Observable<T>.subscribeAndLogErrors(): Disposable? {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> Flowable<T>.subscribeAndLogErrors(
@@ -79,9 +82,12 @@ inline fun <T> Flowable<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit
 }
 
 inline fun <T> Flowable<T>.subscribeAndLogErrors(): Disposable? {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(
@@ -101,9 +107,12 @@ inline fun <T> Single<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit):
 }
 
 inline fun <T> Single<T>.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun Completable.subscribeAndLogErrors(
@@ -123,9 +132,12 @@ inline fun Completable.subscribeAndLogErrors(noinline onSuccess: () -> Unit): Di
 }
 
 inline fun Completable.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> Maybe<T>.subscribeAndLogErrors(
@@ -145,9 +157,12 @@ inline fun <T> Maybe<T>.subscribeAndLogErrors(noinline onSuccess: (T) -> Unit): 
 }
 
 inline fun <T> Maybe<T>.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(
@@ -167,9 +182,12 @@ inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSucc
 }
 
 inline fun <T> ObservableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> FlowableSubscribeProxy<T>.subscribeAndLogErrors(
@@ -189,9 +207,12 @@ inline fun <T> FlowableSubscribeProxy<T>.subscribeAndLogErrors(noinline onSucces
 }
 
 inline fun <T> FlowableSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(
@@ -211,9 +232,12 @@ inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(noinline onSuccess:
 }
 
 inline fun <T> SingleSubscribeProxy<T>.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(
@@ -233,7 +257,10 @@ inline fun CompletableSubscribeProxy.subscribeAndLogErrors(noinline onSuccess: (
 }
 
 inline fun CompletableSubscribeProxy.subscribeAndLogErrors(): Disposable {
-    return this.subscribe({}, {
-        Timber.e(it)
-    })
+    return this.subscribe(
+        {},
+        {
+            Timber.e(it)
+        }
+    )
 }

@@ -28,14 +28,15 @@ class TopTenViewModel(
 
     override val dataSingle: Single<ZippedTopTenResult>
         get() = when (storageHelper.user?.matches(userId, username) == true) {
-            true -> api.ucp.topTen().buildSingle()
-                .map { entries -> entries.map { it.toLocalEntryUcp() } }
-                .map {
-                    val animeList = it.filter { entry -> entry.category == Category.ANIME }
-                    val mangaList = it.filter { entry -> entry.category == Category.MANGA }
+            true ->
+                api.ucp.topTen().buildSingle()
+                    .map { entries -> entries.map { it.toLocalEntryUcp() } }
+                    .map {
+                        val animeList = it.filter { entry -> entry.category == Category.ANIME }
+                        val mangaList = it.filter { entry -> entry.category == Category.MANGA }
 
-                    ZippedTopTenResult(animeList, mangaList)
-                }
+                        ZippedTopTenResult(animeList, mangaList)
+                    }
             false -> {
                 val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
 
@@ -99,15 +100,18 @@ class TopTenViewModel(
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeAndLogErrors({
-                    data.value = it
+                .subscribeAndLogErrors(
+                    {
+                        data.value = it
 
-                    doItemDeletion()
-                }, {
-                    deletionQueue.clear()
+                        doItemDeletion()
+                    },
+                    {
+                        deletionQueue.clear()
 
-                    itemDeletionError.value = ErrorUtils.handle(it)
-                })
+                        itemDeletionError.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 

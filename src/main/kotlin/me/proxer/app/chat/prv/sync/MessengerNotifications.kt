@@ -132,9 +132,11 @@ object MessengerNotifications : KoinComponent {
                         else -> "${conference.topic} "
                     }
 
-                    it.addLine(SpannableString(sender + message.message).apply {
-                        this[0..sender.length] = StyleSpan(Typeface.BOLD)
-                    })
+                    it.addLine(
+                        SpannableString(sender + message.message).apply {
+                            this[0..sender.length] = StyleSpan(Typeface.BOLD)
+                        }
+                    )
                 }
             }
         }

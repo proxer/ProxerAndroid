@@ -59,9 +59,12 @@ class ProfileSettingsFragment : XpPreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.data.observe(viewLifecycleOwner, Observer {
-            showData(it)
-        })
+        viewModel.data.observe(
+            viewLifecycleOwner,
+            Observer {
+                showData(it)
+            }
+        )
 
         bannerAdsEnabled.changes<Boolean>()
             .autoDisposable(this.scope())

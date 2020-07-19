@@ -104,19 +104,20 @@ class MessengerAdapter(
             result = MessageType.ACTION.type
         } else {
             when {
-                position - 1 < 0 -> result = if (position + 1 >= itemCount) {
-                    MessageType.SINGLE.type // The item is the only one.
-                } else {
-                    val next = data[position + 1]
-
-                    if (next.userId == current.userId && next.action == MessageAction.NONE) {
-                        MessageType.BOTTOM.type /* The item is the bottommost item and has an item from the same
-                                                   user above. */
+                position - 1 < 0 ->
+                    result = if (position + 1 >= itemCount) {
+                        MessageType.SINGLE.type // The item is the only one.
                     } else {
-                        MessageType.SINGLE.type /* The item is the bottommost item and doesn't have an item from
+                        val next = data[position + 1]
+
+                        if (next.userId == current.userId && next.action == MessageAction.NONE) {
+                            MessageType.BOTTOM.type /* The item is the bottommost item and has an item from the same
+                                                   user above. */
+                        } else {
+                            MessageType.SINGLE.type /* The item is the bottommost item and doesn't have an item from
                                                    the same user above. */
+                        }
                     }
-                }
                 position + 1 >= itemCount -> {
                     val previous = data[position - 1]
 
@@ -159,11 +160,12 @@ class MessengerAdapter(
         val inflater = LayoutInflater.from(parent.context)
 
         return when (MessageType.from(viewType)) {
-            MessageType.TOP, MessageType.SINGLE -> if (isGroup) {
-                MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single, parent, false))
-            } else {
-                MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
-            }
+            MessageType.TOP, MessageType.SINGLE ->
+                if (isGroup) {
+                    MessageTitleViewHolder(inflater.inflate(R.layout.item_message_single, parent, false))
+                } else {
+                    MessageViewHolder(inflater.inflate(R.layout.item_message, parent, false))
+                }
             MessageType.BOTTOM, MessageType.INNER -> MessageViewHolder(
                 inflater.inflate(R.layout.item_message, parent, false)
             )

@@ -97,23 +97,24 @@ class TopicActivity : DrawerActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> topic
-                ?.let {
-                    val url = when (intent.action) {
-                        Intent.ACTION_VIEW -> intent.dataString
-                        else -> ProxerUrls.forumWeb(categoryId, id).toString()
-                    }
+            R.id.action_share ->
+                topic
+                    ?.let {
+                        val url = when (intent.action) {
+                            Intent.ACTION_VIEW -> intent.dataString
+                            else -> ProxerUrls.forumWeb(categoryId, id).toString()
+                        }
 
-                    it to url
-                }
-                ?.let { (topic, url) ->
-                    ShareCompat.IntentBuilder
-                        .from(this)
-                        .setText(getString(R.string.share_topic, topic, url))
-                        .setType("text/plain")
-                        .setChooserTitle(getString(R.string.share_title))
-                        .startChooser()
-                }
+                        it to url
+                    }
+                    ?.let { (topic, url) ->
+                        ShareCompat.IntentBuilder
+                            .from(this)
+                            .setText(getString(R.string.share_topic, topic, url))
+                            .setType("text/plain")
+                            .setChooserTitle(getString(R.string.share_title))
+                            .startChooser()
+                    }
         }
 
         return super.onOptionsItemSelected(item)

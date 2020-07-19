@@ -69,22 +69,31 @@ abstract class ReportDialog : BaseDialog() {
             .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe { setError(messageContainer, null) }
 
-        viewModel.data.observe(dialogLifecycleOwner, Observer {
-            it?.let { dismiss() }
-        })
-
-        viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let {
-                viewModel.error.value = null
-
-                requireContext().toast(it.message)
+        viewModel.data.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let { dismiss() }
             }
-        })
+        )
 
-        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            inputContainer.isGone = it == true
-            progress.isVisible = it == true
-        })
+        viewModel.error.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let {
+                    viewModel.error.value = null
+
+                    requireContext().toast(it.message)
+                }
+            }
+        )
+
+        viewModel.isLoading.observe(
+            dialogLifecycleOwner,
+            Observer {
+                inputContainer.isGone = it == true
+                progress.isVisible = it == true
+            }
+        )
     }
 
     private fun validateAndSendReport() {

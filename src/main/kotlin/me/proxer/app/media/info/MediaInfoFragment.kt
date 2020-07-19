@@ -145,24 +145,33 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
                 viewModel.data.value?.let { entry -> bindTags(entry) }
             }
 
-        viewModel.userInfoData.observe(viewLifecycleOwner, Observer {
-            bindUserInfo(it)
-        })
-
-        viewModel.userInfoUpdateData.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+        viewModel.userInfoData.observe(
+            viewLifecycleOwner,
+            Observer {
+                bindUserInfo(it)
             }
-        })
+        )
 
-        viewModel.userInfoUpdateError.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.userInfoUpdateData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+                }
             }
-        })
+        )
+
+        viewModel.userInfoUpdateError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_set_user_info, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
+            }
+        )
     }
 
     override fun showData(data: Entry) {
@@ -254,24 +263,26 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
                 val title = getString(R.string.fragment_media_info_adaption_title)
                 val content = "${adaptionInfo.name} (${adaptionInfo.medium?.toAppString(requireContext())})"
 
-                infoTable.addView(constructInfoTableRow(title, content).also { tableRow ->
-                    tableRow.findViewById<View>(R.id.content).also { contentView ->
-                        val selectableItemBackground = TypedValue().apply {
-                            requireContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
-                        }
-
-                        contentView.setBackgroundResource(selectableItemBackground.resourceId)
-
-                        contentView.clicks()
-                            .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                            .subscribe {
-                                MediaActivity.navigateTo(
-                                    requireActivity(),
-                                    adaptionInfo.id, adaptionInfo.name, adaptionInfo.medium?.toCategory()
-                                )
+                infoTable.addView(
+                    constructInfoTableRow(title, content).also { tableRow ->
+                        tableRow.findViewById<View>(R.id.content).also { contentView ->
+                            val selectableItemBackground = TypedValue().apply {
+                                requireContext().theme.resolveAttribute(R.attr.selectableItemBackground, this, true)
                             }
+
+                            contentView.setBackgroundResource(selectableItemBackground.resourceId)
+
+                            contentView.clicks()
+                                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                                .subscribe {
+                                    MediaActivity.navigateTo(
+                                        requireActivity(),
+                                        adaptionInfo.id, adaptionInfo.name, adaptionInfo.medium?.toCategory()
+                                    )
+                                }
+                        }
                     }
-                })
+                )
             }
         }
     }

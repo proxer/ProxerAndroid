@@ -138,18 +138,21 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                 layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
 
-        mediaInfoViewModel.userInfoData.observe(viewLifecycleOwner, Observer {
-            if (it?.isSubscribed == true) {
-                val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_check).apply {
-                    colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
-                    sizeDp = 18
-                }
+        mediaInfoViewModel.userInfoData.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it?.isSubscribed == true) {
+                    val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_check).apply {
+                        colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
+                        sizeDp = 18
+                    }
 
-                errorButton.setCompoundDrawables(null, null, icon, null)
-            } else {
-                errorButton.setCompoundDrawables(null, null, null, null)
+                    errorButton.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    errorButton.setCompoundDrawables(null, null, null, null)
+                }
             }
-        })
+        )
     }
 
     override fun onDestroyView() {

@@ -123,12 +123,15 @@ class MangaViewModel(
             .flatMap { endpoint.buildOptionalSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeAndLogErrors({
-                userStateError.value = null
-                userStateData.value = Unit
-            }, {
-                userStateData.value = null
-                userStateError.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    userStateError.value = null
+                    userStateData.value = Unit
+                },
+                {
+                    userStateData.value = null
+                    userStateError.value = ErrorUtils.handle(it)
+                }
+            )
     }
 }

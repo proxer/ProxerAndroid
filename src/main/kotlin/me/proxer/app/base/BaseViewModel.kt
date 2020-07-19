@@ -87,13 +87,16 @@ abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
                 data.value = null
             }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                error.value = null
-                data.value = it
-            }, {
-                data.value = null
-                error.value = ErrorUtils.handle(it)
-            })
+            .subscribeAndLogErrors(
+                {
+                    error.value = null
+                    data.value = it
+                },
+                {
+                    data.value = null
+                    error.value = ErrorUtils.handle(it)
+                }
+            )
     }
 
     open fun loadIfPossible() {

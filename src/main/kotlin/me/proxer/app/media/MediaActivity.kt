@@ -121,16 +121,19 @@ class MediaActivity : ImageTabsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.data.observe(this, Observer { entry ->
-            if (entry != null) {
-                name = entry.name
-                category = entry.category
+        viewModel.data.observe(
+            this,
+            Observer { entry ->
+                if (entry != null) {
+                    name = entry.name
+                    category = entry.category
 
-                if (viewPager.currentItem == 0) {
-                    viewPager.currentItem = customItemToDisplay
+                    if (viewPager.currentItem == 0) {
+                        viewPager.currentItem = customItemToDisplay
+                    }
                 }
             }
-        })
+        )
 
         preferenceHelper.isAgeRestrictedMediaAllowedObservable
             .autoDisposable(this.scope())
@@ -218,8 +221,9 @@ class MediaActivity : ImageTabsActivity() {
                 Category.ANIME, Category.MANGA -> when (position) {
                     0 -> getString(R.string.section_media_info)
                     1 -> getString(R.string.section_comments)
-                    2 -> category?.toEpisodeAppString(this@MediaActivity)
-                        ?: getString(R.string.category_anime_episodes_title)
+                    2 ->
+                        category?.toEpisodeAppString(this@MediaActivity)
+                            ?: getString(R.string.category_anime_episodes_title)
                     3 -> getString(R.string.section_relations)
                     4 -> getString(R.string.section_recommendations)
                     5 -> getString(R.string.section_discussions)

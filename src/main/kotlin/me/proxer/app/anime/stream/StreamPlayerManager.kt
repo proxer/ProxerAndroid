@@ -267,11 +267,13 @@ class StreamPlayerManager(context: StreamActivity, rawClient: OkHttpClient, adTa
 
     private fun buildLocalMediaSource(dataSourceFactory: DataSource.Factory, uri: Uri): MediaSource {
         return when (val streamType = Util.inferContentType(uri)) {
-            C.TYPE_SS -> SsMediaSource.Factory(DefaultSsChunkSource.Factory(dataSourceFactory), dataSourceFactory)
-                .createMediaSource(uri)
+            C.TYPE_SS ->
+                SsMediaSource.Factory(DefaultSsChunkSource.Factory(dataSourceFactory), dataSourceFactory)
+                    .createMediaSource(uri)
 
-            C.TYPE_DASH -> DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
-                .createMediaSource(uri)
+            C.TYPE_DASH ->
+                DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
+                    .createMediaSource(uri)
 
             C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
 

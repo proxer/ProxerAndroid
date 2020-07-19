@@ -53,12 +53,15 @@ object Mp4UploadStreamResolver : StreamResolver() {
         .map { StreamResolutionResult.Video(it, "video/mp4") }
 
     private fun unpack(p: String, a: Int, c: Int, k: List<String>): String {
-        return (c - 1 downTo 0).fold(p, { acc, next ->
-            if (k[next].isNotEmpty()) {
-                acc.replace(Regex("\\b" + next.toString(a) + "\\b"), k[next])
-            } else {
-                acc
+        return (c - 1 downTo 0).fold(
+            p,
+            { acc, next ->
+                if (k[next].isNotEmpty()) {
+                    acc.replace(Regex("\\b" + next.toString(a) + "\\b"), k[next])
+                } else {
+                    acc
+                }
             }
-        })
+        )
     }
 }

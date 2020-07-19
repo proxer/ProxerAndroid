@@ -253,18 +253,24 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
                 actionMode?.invalidate()
             }
 
-        viewModel.sendMessageError.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                hostingActivity.multilineSnackbar(
-                    getString(R.string.error_chat_send_message, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
-                )
+        viewModel.sendMessageError.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it != null) {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_chat_send_message, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
             }
-        })
+        )
 
-        viewModel.draft.observe(viewLifecycleOwner, Observer {
-            if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
-        })
+        viewModel.draft.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it != null && messageInput.safeText.isBlank()) messageInput.setText(it)
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

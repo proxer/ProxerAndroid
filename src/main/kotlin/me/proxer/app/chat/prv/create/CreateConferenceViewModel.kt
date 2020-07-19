@@ -118,13 +118,16 @@ class CreateConferenceViewModel : ViewModel(), KoinComponent {
                 result.value = null
                 error.value = null
             }
-            .subscribeAndLogErrors({
-                newConferenceId = it.toLong()
+            .subscribeAndLogErrors(
+                {
+                    newConferenceId = it.toLong()
 
-                MessengerWorker.enqueueSynchronization()
-            }, {
-                isLoading.value = false
-                error.value = ErrorUtils.handle(it)
-            })
+                    MessengerWorker.enqueueSynchronization()
+                },
+                {
+                    isLoading.value = false
+                    error.value = ErrorUtils.handle(it)
+                }
+            )
     }
 }

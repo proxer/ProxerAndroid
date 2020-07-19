@@ -99,9 +99,10 @@ class MessengerWorker(
                         .build()
                 )
                 .apply { if (startTime != null) setInitialDelay(startTime, TimeUnit.MILLISECONDS) }
-                .setInputData(Data.Builder()
-                    .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
-                    .build()
+                .setInputData(
+                    Data.Builder()
+                        .apply { if (conferenceId != null) putLong(CONFERENCE_ID_ARGUMENT, conferenceId) }
+                        .build()
                 )
                 .build()
 
@@ -133,16 +134,18 @@ class MessengerWorker(
         if (!storageHelper.isLoggedIn) return Result.failure()
 
         val synchronizationResult = when (conferenceId) {
-            0L -> try {
-                handleSynchronization()
-            } catch (error: Throwable) {
-                handleSynchronizationError(error)
-            }
-            else -> try {
-                handleLoadMoreMessages(conferenceId)
-            } catch (error: Throwable) {
-                handleLoadMoreMessagesError(error)
-            }
+            0L ->
+                try {
+                    handleSynchronization()
+                } catch (error: Throwable) {
+                    handleSynchronizationError(error)
+                }
+            else ->
+                try {
+                    handleLoadMoreMessages(conferenceId)
+                } catch (error: Throwable) {
+                    handleLoadMoreMessagesError(error)
+                }
         }
 
         reschedule(synchronizationResult)
@@ -323,7 +326,8 @@ class MessengerWorker(
                         ProxerException.ErrorType.SERVER,
                         ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE,
                         result
-                    ), messageId
+                    ),
+                    messageId
                 )
             }
         }

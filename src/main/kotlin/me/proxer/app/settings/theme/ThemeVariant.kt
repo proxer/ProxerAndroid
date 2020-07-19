@@ -16,7 +16,8 @@ enum class ThemeVariant(
     LIGHT("0", R.string.theme_variant_light, AppCompatDelegate.MODE_NIGHT_NO),
     DARK("1", R.string.theme_variant_dark, AppCompatDelegate.MODE_NIGHT_YES),
     SYSTEM(
-        "2", null, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        "2", null,
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         } else {
             AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY

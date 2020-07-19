@@ -30,12 +30,14 @@ object RootPrototype : BBPrototype {
 
         val result = when (views.size) {
             0, 1 -> views
-            else -> listOf(LinearLayout(parent.context).apply {
-                layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
-                orientation = VERTICAL
+            else -> listOf(
+                LinearLayout(parent.context).apply {
+                    layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                    orientation = VERTICAL
 
-                views.forEach { addView(it) }
-            })
+                    views.forEach { addView(it) }
+                }
+            )
         }
 
         return applyOnViews(result, args)

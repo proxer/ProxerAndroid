@@ -55,18 +55,20 @@ internal inline fun CharSequence.toSpannableStringBuilder() = this as? Spannable
     ?: SpannableStringBuilder(this)
 
 internal fun SpannableStringBuilder.trimStartSafely() = when (firstOrNull()?.isWhitespace()) {
-    true -> indices
-        .firstOrNull { !this[it].isWhitespace() }
-        ?.let { delete(0, it) }
-        ?: apply { clear() }
+    true ->
+        indices
+            .firstOrNull { !this[it].isWhitespace() }
+            ?.let { delete(0, it) }
+            ?: apply { clear() }
     else -> this
 }
 
 internal fun SpannableStringBuilder.trimEndSafely() = when (lastOrNull()?.isWhitespace()) {
-    true -> indices.reversed()
-        .firstOrNull { !this[it].isWhitespace() }
-        ?.let { delete(it + 1, length) }
-        ?: apply { clear() }
+    true ->
+        indices.reversed()
+            .firstOrNull { !this[it].isWhitespace() }
+            ?.let { delete(it + 1, length) }
+            ?: apply { clear() }
     else -> this
 }
 

@@ -39,11 +39,14 @@ abstract class ReportViewModel : ViewModel(), KoinComponent {
                     isLoading.value = true
                 }
                 .doAfterTerminate { isLoading.value = false }
-                .subscribeAndLogErrors({
-                    data.value = Unit
-                }, {
-                    error.value = ErrorUtils.handle(it)
-                })
+                .subscribeAndLogErrors(
+                    {
+                        data.value = Unit
+                    },
+                    {
+                        error.value = ErrorUtils.handle(it)
+                    }
+                )
         }
     }
 

@@ -33,25 +33,31 @@ class ProfileSettingsActivity : DrawerActivity() {
 
         title = getString(R.string.section_profile_settings)
 
-        viewModel.error.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(
-                    getString(R.string.error_refresh, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage,
-                    it.toClickListener(this) ?: View.OnClickListener { viewModel.refresh() }
-                )
+        viewModel.error.observe(
+            this,
+            Observer {
+                it?.let {
+                    multilineSnackbar(
+                        getString(R.string.error_refresh, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage,
+                        it.toClickListener(this) ?: View.OnClickListener { viewModel.refresh() }
+                    )
+                }
             }
-        })
+        )
 
-        viewModel.updateError.observe(this, Observer {
-            it?.let {
-                multilineSnackbar(
-                    getString(R.string.error_set_user_info, getString(it.message)),
-                    Snackbar.LENGTH_LONG, it.buttonMessage,
-                    it.toClickListener(this) ?: View.OnClickListener { viewModel.retryUpdate() }
-                )
+        viewModel.updateError.observe(
+            this,
+            Observer {
+                it?.let {
+                    multilineSnackbar(
+                        getString(R.string.error_set_user_info, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage,
+                        it.toClickListener(this) ?: View.OnClickListener { viewModel.retryUpdate() }
+                    )
+                }
             }
-        })
+        )
 
         storageHelper.isLoggedInObservable
             .filter { it.not() }

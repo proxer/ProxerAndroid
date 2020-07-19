@@ -100,19 +100,20 @@ class ChatAdapter(
         var result: Int
 
         when {
-            position - 1 < 0 -> result = if (position + 1 >= itemCount) {
-                MessageType.SINGLE.type // The item is the only one.
-            } else {
-                val next = data[position + 1]
-
-                if (next.userId == current.userId) {
-                    MessageType.BOTTOM.type /* The item is the bottommost item and has an item from the same
-                                                   user above. */
+            position - 1 < 0 ->
+                result = if (position + 1 >= itemCount) {
+                    MessageType.SINGLE.type // The item is the only one.
                 } else {
-                    MessageType.SINGLE.type /* The item is the bottommost item and doesn't have an item from
+                    val next = data[position + 1]
+
+                    if (next.userId == current.userId) {
+                        MessageType.BOTTOM.type /* The item is the bottommost item and has an item from the same
+                                                   user above. */
+                    } else {
+                        MessageType.SINGLE.type /* The item is the bottommost item and doesn't have an item from
                                                    the same user above. */
+                    }
                 }
-            }
             position + 1 >= itemCount -> {
                 val previous = data[position - 1]
 

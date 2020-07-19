@@ -39,17 +39,20 @@ abstract class PagedViewModel<T> : BaseViewModel<List<T>>() {
                 isLoading.value = true
             }
             .doAfterTerminate { isLoading.value = false }
-            .subscribeAndLogErrors({
-                refreshError.value = null
-                error.value = null
-                data.value = it
-            }, {
-                if (currentPage == 0 && data.value?.size ?: 0 > 0) {
-                    refreshError.value = ErrorUtils.handle(it)
-                } else {
-                    error.value = ErrorUtils.handle(it)
+            .subscribeAndLogErrors(
+                {
+                    refreshError.value = null
+                    error.value = null
+                    data.value = it
+                },
+                {
+                    if (currentPage == 0 && data.value?.size ?: 0 > 0) {
+                        refreshError.value = ErrorUtils.handle(it)
+                    } else {
+                        error.value = ErrorUtils.handle(it)
+                    }
                 }
-            })
+            )
     }
 
     override fun loadIfPossible() {

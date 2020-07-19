@@ -120,22 +120,25 @@ class MainApplication : Application() {
     }
 
     private fun initSecurity() {
-        ProviderInstaller.installIfNeededAsync(this, object : ProviderInstaller.ProviderInstallListener {
-            override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
-                GoogleApiAvailability.getInstance().apply {
-                    Timber.e("Error installing security patches with error code $errorCode")
+        ProviderInstaller.installIfNeededAsync(
+            this,
+            object : ProviderInstaller.ProviderInstallListener {
+                override fun onProviderInstallFailed(errorCode: Int, recoveryIntent: Intent?) {
+                    GoogleApiAvailability.getInstance().apply {
+                        Timber.e("Error installing security patches with error code $errorCode")
 
-                    if (
-                        isUserResolvableError(errorCode) &&
-                        packageManager.isPackageInstalled(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE)
-                    ) {
-                        showErrorNotification(this@MainApplication, errorCode)
+                        if (
+                            isUserResolvableError(errorCode) &&
+                            packageManager.isPackageInstalled(GooglePlayServicesUtil.GOOGLE_PLAY_STORE_PACKAGE)
+                        ) {
+                            showErrorNotification(this@MainApplication, errorCode)
+                        }
                     }
                 }
-            }
 
-            override fun onProviderInstalled() = Unit
-        })
+                override fun onProviderInstalled() = Unit
+            }
+        )
     }
 
     private fun enableStrictModeForDebug() {
@@ -178,8 +181,9 @@ class MainApplication : Application() {
             when (error) {
                 is UndeliverableException -> Timber.e(error, "Can't deliver error")
                 is InterruptedException -> Timber.w(error)
-                else -> Thread.currentThread().uncaughtExceptionHandler
-                    ?.uncaughtException(Thread.currentThread(), error)
+                else ->
+                    Thread.currentThread().uncaughtExceptionHandler
+                        ?.uncaughtException(Thread.currentThread(), error)
             }
         }
 

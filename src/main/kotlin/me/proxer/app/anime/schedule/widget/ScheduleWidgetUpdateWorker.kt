@@ -180,17 +180,18 @@ class ScheduleWidgetUpdateWorker(
 
         val position = when (calendarEntries.isEmpty()) {
             true -> 0
-            false -> calendarEntries
-                .indexOfFirst { it.date.isAfter(Instant.now()) }
-                .let {
-                    when (it < 0) {
-                        true -> when (Instant.now().isAfter(calendarEntries.last().date)) {
-                            true -> calendarEntries.lastIndex
-                            false -> 0
+            false ->
+                calendarEntries
+                    .indexOfFirst { it.date.isAfter(Instant.now()) }
+                    .let {
+                        when (it < 0) {
+                            true -> when (Instant.now().isAfter(calendarEntries.last().date)) {
+                                true -> calendarEntries.lastIndex
+                                false -> 0
+                            }
+                            false -> it
                         }
-                        false -> it
                     }
-                }
         }
 
         bindBaseLayout(id, views)

@@ -39,21 +39,30 @@ class LogoutDialog : BaseDialog() {
     override fun onDialogCreated(savedInstanceState: Bundle?) {
         super.onDialogCreated(savedInstanceState)
 
-        viewModel.success.observe(dialogLifecycleOwner, Observer {
-            it?.let { dismiss() }
-        })
-
-        viewModel.error.observe(dialogLifecycleOwner, Observer {
-            it?.let {
-                viewModel.error.value = null
-
-                requireContext().toast(it.message)
+        viewModel.success.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let { dismiss() }
             }
-        })
+        )
 
-        viewModel.isLoading.observe(dialogLifecycleOwner, Observer {
-            content.isGone = it == true
-            progress.isVisible = it == true
-        })
+        viewModel.error.observe(
+            dialogLifecycleOwner,
+            Observer {
+                it?.let {
+                    viewModel.error.value = null
+
+                    requireContext().toast(it.message)
+                }
+            }
+        )
+
+        viewModel.isLoading.observe(
+            dialogLifecycleOwner,
+            Observer {
+                content.isGone = it == true
+                progress.isVisible = it == true
+            }
+        )
     }
 }
