@@ -5,17 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding3.recyclerview.scrollEvents
 import com.jakewharton.rxbinding3.view.clicks
-import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.colorInt
-import com.mikepenz.iconics.utils.sizeDp
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,14 +26,19 @@ import me.proxer.app.base.BaseContentFragment
 import me.proxer.app.manga.MangaActivity
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.media.MediaInfoViewModel
+import me.proxer.app.media.episode.BookmarkLanguageDialog.Companion.LANGUAGE_RESULT
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.extension.enableFastScroll
-import me.proxer.app.util.extension.resolveColor
+import me.proxer.app.util.extension.getSafeString
+import me.proxer.app.util.extension.multilineSnackbar
 import me.proxer.app.util.extension.setIconicsImage
+import me.proxer.app.util.extension.snackbar
 import me.proxer.app.util.extension.toAnimeLanguage
 import me.proxer.app.util.extension.toGeneralLanguage
 import me.proxer.library.enums.Category
+import me.proxer.library.enums.MediaLanguage
+import me.proxer.library.util.ProxerUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -47,6 +51,8 @@ import kotlin.properties.Delegates
 class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_episode) {
 
     companion object {
+        private const val LANGUAGES_EXTRA = "languages"
+
         fun newInstance() = EpisodeFragment().apply {
             arguments = bundleOf()
         }
@@ -68,6 +74,18 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
 
     private val category: Category?
         get() = hostingActivity.category
+
+    private var languages: Set<MediaLanguage>?
+        get() = requireArguments().getStringArrayList(LANGUAGES_EXTRA)
+            ?.map { ProxerUtils.toSafeApiEnum<MediaLanguage>(it) }
+            ?.toSet()
+        set(value) {
+            val stringLanguages = value
+                ?.let { enums -> enums.map { ProxerUtils.getSafeApiEnumName(it) } }
+                ?: emptyList()
+
+            requireArguments().putStringArrayList(LANGUAGES_EXTRA, ArrayList(stringLanguages))
+        }
 
     private val layoutManager by lazy { LinearLayoutManager(context) }
     private var adapter by Delegates.notNull<EpisodeAdapter>()
@@ -138,21 +156,50 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                 layoutManager.scrollToPositionWithOffset(targetPosition, 0)
             }
 
-        mediaInfoViewModel.userInfoData.observe(
+        mediaInfoViewModel.data.observe(
             viewLifecycleOwner,
             Observer {
-                if (it?.isSubscribed == true) {
-                    val icon = IconicsDrawable(requireContext(), CommunityMaterial.Icon.cmd_check).apply {
-                        colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
-                        sizeDp = 18
-                    }
+                if (it != null) {
+                    languages = it.languages
 
-                    errorButton.setCompoundDrawables(null, null, icon, null)
-                } else {
-                    errorButton.setCompoundDrawables(null, null, null, null)
+                    updateBookmarkErrorButton()
                 }
             }
         )
+
+        viewModel.bookmarkData.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.snackbar(R.string.fragment_set_user_info_success)
+                }
+            }
+        )
+
+        viewModel.bookmarkError.observe(
+            viewLifecycleOwner,
+            Observer {
+                it?.let {
+                    hostingActivity.multilineSnackbar(
+                        getString(R.string.error_set_user_info, getString(it.message)),
+                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                    )
+                }
+            }
+        )
+
+        storageHelper.isLoggedInObservable
+            .autoDisposable(this.scope())
+            .subscribe { updateBookmarkErrorButton() }
+
+        setFragmentResultListener(LANGUAGE_RESULT) { _, bundle ->
+            val language = ProxerUtils.toSafeApiEnum<MediaLanguage>(bundle.getSafeString(LANGUAGE_RESULT))
+            val safeCategory = category
+
+            if (safeCategory != null) {
+                viewModel.bookmark(1, language, safeCategory)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -180,8 +227,8 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                         Category.ANIME, null -> R.string.error_no_data_episodes
                         Category.MANGA, Category.NOVEL -> R.string.error_no_data_chapters
                     },
-                    R.string.fragment_media_info_subscribe,
-                    ButtonAction.SUBSCRIBE
+                    R.string.fragment_media_info_bookmark,
+                    ButtonAction.BOOKMARK
                 )
             )
         }
@@ -194,10 +241,24 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
     override fun showError(action: ErrorAction) {
         super.showError(action)
 
-        if (action.buttonAction == ButtonAction.SUBSCRIBE) {
-            errorButton.clicks()
-                .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                .subscribe { mediaInfoViewModel.toggleSubscription() }
+        if (action.buttonAction == ButtonAction.BOOKMARK) {
+            updateBookmarkErrorButton()
+        }
+    }
+
+    private fun updateBookmarkErrorButton() {
+        if (errorButton.text == getString(R.string.fragment_media_info_bookmark)) {
+            val safeLanguages = languages
+
+            if (safeLanguages != null && category != null && storageHelper.isLoggedIn) {
+                errorButton.isVisible = true
+
+                errorButton.clicks()
+                    .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
+                    .subscribe { BookmarkLanguageDialog.show(requireActivity(), safeLanguages) }
+            } else {
+                errorButton.isVisible = false
+            }
         }
     }
 
