@@ -249,13 +249,20 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
     private fun updateBookmarkErrorButton() {
         if (errorButton.text == getString(R.string.fragment_media_info_bookmark)) {
             val safeLanguages = languages
+            val safeCategory = category
 
-            if (safeLanguages != null && category != null && storageHelper.isLoggedIn) {
+            if (!safeLanguages.isNullOrEmpty() && safeCategory != null && storageHelper.isLoggedIn) {
                 errorButton.isVisible = true
 
                 errorButton.clicks()
                     .autoDisposable(viewLifecycleOwner.scope(Lifecycle.Event.ON_DESTROY))
-                    .subscribe { BookmarkLanguageDialog.show(requireActivity(), safeLanguages) }
+                    .subscribe {
+                        if (safeLanguages.size == 1) {
+                            viewModel.bookmark(1, safeLanguages.first(), safeCategory)
+                        } else {
+                            BookmarkLanguageDialog.show(requireActivity(), safeLanguages)
+                        }
+                    }
             } else {
                 errorButton.isVisible = false
             }
