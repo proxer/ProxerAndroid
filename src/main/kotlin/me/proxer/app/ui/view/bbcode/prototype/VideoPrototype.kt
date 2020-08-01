@@ -34,13 +34,12 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
         val type = args[TYPE_ARGUMENT] as String?
         val urlOrId = text.trim()
 
-        return when (
-            val url = when {
-                type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
-                else -> urlOrId.toString()
-            }
-                .toPrefixedUrlOrNull()
-            ) {
+        val url = when {
+            type?.equals(TYPE_YOUTUBE, ignoreCase = true) == true -> "$TYPE_YOUTUBE_URL$urlOrId"
+            else -> urlOrId.toString()
+        }.toPrefixedUrlOrNull()
+
+        return when (url) {
             null -> text
             else ->
                 text.toSpannableStringBuilder()
