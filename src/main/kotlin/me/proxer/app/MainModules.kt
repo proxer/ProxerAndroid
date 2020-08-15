@@ -55,17 +55,8 @@ import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
 import me.proxer.app.ui.LinkCheckViewModel
 import me.proxer.app.util.Validators
-import me.proxer.app.util.data.HawkMoshiParser
-import me.proxer.app.util.data.InstantJsonAdapter
-import me.proxer.app.util.data.LocalDataInitializer
-import me.proxer.app.util.data.PreferenceHelper
-import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.http.CacheInterceptor
-import me.proxer.app.util.http.ConnectionCloseInterceptor
-import me.proxer.app.util.http.ConnectivityInterceptor
-import me.proxer.app.util.http.HttpsUpgradeInterceptor
-import me.proxer.app.util.http.TaggedSocketFactory
-import me.proxer.app.util.http.UserAgentInterceptor
+import me.proxer.app.util.data.*
+import me.proxer.app.util.http.*
 import me.proxer.app.util.logging.HttpTimberLogger
 import me.proxer.library.LoginTokenManager
 import me.proxer.library.ProxerApi
@@ -190,8 +181,9 @@ private val applicationModules = module {
 
     single {
         ProxerApi.Builder(BuildConfig.PROXER_API_KEY)
-            .userAgent(USER_AGENT)
+            .enableRateLimitProtection()
             .loginTokenManager(get())
+            .userAgent(USER_AGENT)
             .client(get())
             .moshi(get())
             .build()

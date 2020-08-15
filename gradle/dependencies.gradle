@@ -1,5 +1,5 @@
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
 
     implementation "com.google.android.play:core:$playCoreVersion"

@@ -119,6 +119,7 @@
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
     <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
+    <string name="error_rate_limit">Du machst derzeit viele Anfragen. Bitte warte einen Moment um die Server zu schonen</string>
     <string name="error_age_confirmation_needed">Für diesen Inhalt musst du bestätigen, dass du mindestens 18
         Jahre alt bist
     </string>

@@ -29,8 +29,8 @@ class InAppUpdateFlow {
     private var appUpdateManager: AppUpdateManager? = null
 
     private var successListener: OnSuccessListener<AppUpdateInfo>? = null
-    private var failureListener: OnFailureListener? = null
     private var progressListener: InstallStateUpdatedListener? = null
+    private var failureListener: OnFailureListener? = null
 
     private var snackbar: Snackbar? = null
 
@@ -38,12 +38,12 @@ class InAppUpdateFlow {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
             appUpdateManager = AppUpdateManagerFactory.create(context).also { appUpdateManager ->
                 successListener = successListener(context, rootView, appUpdateManager)
-                failureListener = failureListener()
                 progressListener = progressListener(rootView, appUpdateManager)
+                failureListener = failureListener()
 
                 appUpdateManager.appUpdateInfo.addOnSuccessListener(successListener)
-                appUpdateManager.appUpdateInfo.addOnFailureListener(failureListener)
-                appUpdateManager.registerListener(progressListener)
+                appUpdateManager.appUpdateInfo.addOnFailureListener(requireNotNull(failureListener))
+                appUpdateManager.registerListener(requireNotNull(progressListener))
             }
         }
     }
@@ -96,7 +96,7 @@ class InAppUpdateFlow {
     }
 
     fun stop() {
-        appUpdateManager?.unregisterListener(progressListener)
+        progressListener?.also { appUpdateManager?.unregisterListener(it) }
         snackbar?.dismiss()
 
         appUpdateManager = null
