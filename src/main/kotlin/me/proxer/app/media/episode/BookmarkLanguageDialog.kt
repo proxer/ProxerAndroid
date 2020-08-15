@@ -53,7 +53,7 @@ class BookmarkLanguageDialog : BaseDialog() {
         val adapter = LanguageAdapter(languages.toList())
 
         adapter.clickSubject
-            .autoDisposable(this.scope())
+            .autoDisposable(dialogLifecycleOwner.scope())
             .subscribe {
                 setFragmentResult(LANGUAGE_RESULT, bundleOf(LANGUAGE_RESULT to ProxerUtils.getSafeApiEnumName(it)))
 
