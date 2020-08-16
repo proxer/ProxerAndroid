@@ -99,7 +99,7 @@ ext {
     jdkDeps9Version = "1.0"
 
     // Debugging
-    customActivityOnCrashVersion = "2.4.0"
+    customActivityOnCrashVersion = "2.3.0"
     strictModeCompatVersion = "30.1.1"
     leakCanaryVersion = "2.4"
     anrWatchdogVersion = "1.4.0"
