@@ -27,7 +27,7 @@ object VideoPrototype : TextMutatorPrototype, AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val type = BBUtils.cutAttribute(code, attributeRegex)
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(TYPE_ARGUMENT to type)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(TYPE_ARGUMENT to type)))
     }
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {

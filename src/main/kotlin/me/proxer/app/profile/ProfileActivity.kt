@@ -172,7 +172,9 @@ class ProfileActivity : ImageTabsActivity() {
                             messengerDao.findConferenceForUser(safeUsername).let { existingChat ->
                                 when (existingChat) {
                                     null -> CreateConferenceActivity.navigateTo(
-                                        this, false, Participant(safeUsername, safeImage)
+                                        this,
+                                        false,
+                                        Participant(safeUsername, safeImage)
                                     )
                                     else -> PrvMessengerActivity.navigateTo(this, existingChat)
                                 }

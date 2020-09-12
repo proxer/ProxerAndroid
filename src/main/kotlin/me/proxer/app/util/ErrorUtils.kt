@@ -145,7 +145,12 @@ object ErrorUtils : KoinComponent {
     const val LINK_DATA_KEY = "link"
 
     private val apiErrors = arrayOf(
-        UNKNOWN_API, API_REMOVED, INVALID_API_CLASS, INVALID_API_FUNCTION, INSUFFICIENT_PERMISSIONS, FUNCTION_BLOCKED,
+        UNKNOWN_API,
+        API_REMOVED,
+        INVALID_API_CLASS,
+        INVALID_API_FUNCTION,
+        INSUFFICIENT_PERMISSIONS,
+        FUNCTION_BLOCKED,
         COMMENT_SAVE_ERROR
     )
 

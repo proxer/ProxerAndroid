@@ -106,12 +106,19 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
             .subscribe {
                 when (it.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(
-                        requireActivity(), it.entryId, it.episode,
-                        it.language.toAnimeLanguage(), it.name
+                        requireActivity(),
+                        it.entryId,
+                        it.episode,
+                        it.language.toAnimeLanguage(),
+                        it.name
                     )
                     Category.MANGA, Category.NOVEL -> MangaActivity.navigateTo(
-                        requireActivity(), it.entryId, it.episode,
-                        it.language.toGeneralLanguage(), it.chapterName, it.name
+                        requireActivity(),
+                        it.entryId,
+                        it.episode,
+                        it.language.toGeneralLanguage(),
+                        it.chapterName,
+                        it.name
                     )
                 }
             }
@@ -142,7 +149,9 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_bookmark_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }
@@ -154,7 +163,8 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         R.string.fragment_bookmark_delete_message,
-                        Snackbar.LENGTH_LONG, R.string.action_undo,
+                        Snackbar.LENGTH_LONG,
+                        R.string.action_undo,
                         View.OnClickListener { viewModel.undo() }
                     )
                 }
@@ -167,7 +177,9 @@ class BookmarkFragment : PagedContentFragment<Bookmark>() {
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_undo, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

@@ -65,12 +65,19 @@ class HistoryFragment : PagedContentFragment<LocalUserHistoryEntry>() {
             .subscribe { (_, entry) ->
                 when (entry.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(
-                        requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toAnimeLanguage(), entry.name
+                        requireActivity(),
+                        entry.entryId,
+                        entry.episode,
+                        entry.language.toAnimeLanguage(),
+                        entry.name
                     )
                     Category.MANGA, Category.NOVEL -> MangaActivity.navigateTo(
-                        requireActivity(), entry.entryId, entry.episode,
-                        entry.language.toGeneralLanguage(), null, entry.name
+                        requireActivity(),
+                        entry.entryId,
+                        entry.episode,
+                        entry.language.toGeneralLanguage(),
+                        null,
+                        entry.name
                     )
                 }
             }

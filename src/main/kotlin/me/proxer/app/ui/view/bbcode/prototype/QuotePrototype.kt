@@ -30,7 +30,7 @@ object QuotePrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val quote = BBUtils.cutAttribute(code, quoteAttributeRegex)
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(QUOTE_ARGUMENT to quote)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(QUOTE_ARGUMENT to quote)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {

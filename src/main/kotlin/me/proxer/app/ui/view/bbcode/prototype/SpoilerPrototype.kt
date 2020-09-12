@@ -26,7 +26,7 @@ object SpoilerPrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val title = BBUtils.cutAttribute(code, attributeRegex)
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(TITLE_ARGUMENT to title)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(TITLE_ARGUMENT to title)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {

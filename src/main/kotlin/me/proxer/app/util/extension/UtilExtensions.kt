@@ -90,13 +90,15 @@ inline fun GlideRequests.defaultLoad(view: ImageView, url: HttpUrl): Target<Draw
     .logErrors()
     .into(view)
 
-inline fun <T> GlideRequest<T>.logErrors(): GlideRequest<T> = this.addListener(object : SimpleGlideRequestListener<T> {
-    override fun onLoadFailed(error: GlideException?): Boolean {
-        if (error != null) Timber.e(error)
+inline fun <T> GlideRequest<T>.logErrors(): GlideRequest<T> = this.addListener(
+    object : SimpleGlideRequestListener<T> {
+        override fun onLoadFailed(error: GlideException?): Boolean {
+            if (error != null) Timber.e(error)
 
-        return false
+            return false
+        }
     }
-})
+)
 
 inline fun HttpUrl.androidUri(): Uri = Uri.parse(toString())
 

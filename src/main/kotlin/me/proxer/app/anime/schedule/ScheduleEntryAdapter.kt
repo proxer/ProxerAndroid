@@ -229,7 +229,9 @@ class ScheduleEntryAdapter : BaseAdapter<CalendarEntry, ViewHolder>() {
                 }
             } else {
                 val airingUploadText = airingInfo.context.getString(
-                    R.string.fragment_schedule_airing_upload, airingDateText, uploadDateText
+                    R.string.fragment_schedule_airing_upload,
+                    airingDateText,
+                    uploadDateText
                 )
 
                 airingInfo.text = SpannableString(airingUploadText).apply {

@@ -39,7 +39,8 @@ class ProfileSettingsActivity : DrawerActivity() {
                 it?.let {
                     multilineSnackbar(
                         getString(R.string.error_refresh, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage,
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
                         it.toClickListener(this) ?: View.OnClickListener { viewModel.refresh() }
                     )
                 }
@@ -52,7 +53,8 @@ class ProfileSettingsActivity : DrawerActivity() {
                 it?.let {
                     multilineSnackbar(
                         getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage,
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
                         it.toClickListener(this) ?: View.OnClickListener { viewModel.retryUpdate() }
                     )
                 }

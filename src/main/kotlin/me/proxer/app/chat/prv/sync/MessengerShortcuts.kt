@@ -87,7 +87,8 @@ object MessengerShortcuts : KoinComponent {
 
     private fun getConferenceIcon(context: Context, conference: LocalConference) = when {
         conference.image.isNotBlank() -> Utils.getCircleBitmapFromUrl(
-            context, ProxerUrls.userImage(conference.image)
+            context,
+            ProxerUrls.userImage(conference.image)
         )
         conference.isGroup -> BitmapFactory.decodeResource(context.resources, R.drawable.ic_shortcut_messenger_group)
         else -> BitmapFactory.decodeResource(context.resources, R.drawable.ic_shortcut_messenger_person)

@@ -11,8 +11,13 @@ class HttpsUpgradeInterceptor : Interceptor {
 
     private companion object {
         private val upgradableHosts = listOf(
-            "www.mp4upload.com", "www.dailymotion.com", "embed.yourupload.com", "www.yourupload.com",
-            ProxerUrls.webBase.host, ProxerUrls.cdnBase.host, ProxerUrls.streamBase.host
+            "www.mp4upload.com",
+            "www.dailymotion.com",
+            "embed.yourupload.com",
+            "www.yourupload.com",
+            ProxerUrls.webBase.host,
+            ProxerUrls.cdnBase.host,
+            ProxerUrls.streamBase.host
         )
     }
 

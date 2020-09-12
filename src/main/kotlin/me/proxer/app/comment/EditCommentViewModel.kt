@@ -30,9 +30,13 @@ class EditCommentViewModel(
         private const val MAX_LENGTH = 20_000
 
         private val defaultComment = LocalComment(
-            id = "", entryId = "", mediaProgress = UserMediaProgress.WATCHED,
+            id = "",
+            entryId = "",
+            mediaProgress = UserMediaProgress.WATCHED,
             ratingDetails = RatingDetails(genre = 0, story = 0, animation = 0, characters = 0, music = 0),
-            content = "", overallRating = 0, episode = 0
+            content = "",
+            overallRating = 0,
+            episode = 0
         )
     }
 

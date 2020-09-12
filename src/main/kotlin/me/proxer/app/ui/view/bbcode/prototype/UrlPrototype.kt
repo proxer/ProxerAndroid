@@ -35,7 +35,7 @@ object UrlPrototype : ConditionalTextMutatorPrototype, AutoClosingPrototype {
         val url = BBUtils.cutAttribute(code, attributeRegex)?.trim() ?: ""
         val parsedUrl = url.toPrefixedUrlOrNull() ?: invalidUrl
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(URL_ARGUMENT to parsedUrl)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(URL_ARGUMENT to parsedUrl)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {

@@ -257,12 +257,18 @@ class AnimeAdapter(
                     info.isVisible = true
                     info.setText(R.string.fragment_anime_stream_login_required_warning)
                     info.setCompoundDrawablesWithIntrinsicBounds(
-                        generateInfoDrawable(CommunityMaterial.Icon.cmd_alert), null, null, null
+                        generateInfoDrawable(CommunityMaterial.Icon.cmd_alert),
+                        null,
+                        null,
+                        null
                     )
                 } else {
                     play.setText(R.string.fragment_anime_stream_play)
                     play.setCompoundDrawablesWithIntrinsicBounds(
-                        generatePlayDrawable(), null, null, null
+                        generatePlayDrawable(),
+                        null,
+                        null,
+                        null
                     )
 
                     when {
@@ -270,7 +276,10 @@ class AnimeAdapter(
                             info.isVisible = true
                             info.setText(R.string.fragment_anime_stream_official_info)
                             info.setCompoundDrawablesWithIntrinsicBounds(
-                                generateInfoDrawable(CommunityMaterial.Icon2.cmd_information), null, null, null
+                                generateInfoDrawable(CommunityMaterial.Icon2.cmd_information),
+                                null,
+                                null,
+                                null
                             )
                         }
                         else -> info.isVisible = false

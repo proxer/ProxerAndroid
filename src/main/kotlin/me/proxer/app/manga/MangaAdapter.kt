@@ -279,16 +279,18 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
                 ?.asGif()
                 ?.load(item.url())
                 ?.logErrors()
-                ?.into(object : ImageViewTarget<GifDrawable>(image) {
-                    override fun setResource(resource: GifDrawable?) {
-                        view.setImageDrawable(resource)
-                    }
+                ?.into(
+                    object : ImageViewTarget<GifDrawable>(image) {
+                        override fun setResource(resource: GifDrawable?) {
+                            view.setImageDrawable(resource)
+                        }
 
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        errorIndicator.isVisible = true
-                        image.isVisible = false
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+                            errorIndicator.isVisible = true
+                            image.isVisible = false
+                        }
                     }
-                })
+                )
         }
     }
 

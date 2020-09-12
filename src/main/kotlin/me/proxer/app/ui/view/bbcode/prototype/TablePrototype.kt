@@ -38,7 +38,7 @@ object TablePrototype : AutoClosingPrototype {
 
     private fun assignWeights(childViews: List<View>): List<View> {
         val rows = childViews.filterIsInstance(LinearLayout::class.java).map { it to it.children.toList() }
-        val maxSize = rows.map { (_, cells) -> cells.size }.max() ?: 1
+        val maxSize = rows.map { (_, cells) -> cells.size }.maxOrNull() ?: 1
         val weight = 1f / maxSize
 
         rows.forEach { (row, cells) ->

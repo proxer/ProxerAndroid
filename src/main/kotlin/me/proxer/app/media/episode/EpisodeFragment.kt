@@ -106,12 +106,21 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
             .subscribe { (language, episode) ->
                 when (episode.category) {
                     Category.ANIME -> AnimeActivity.navigateTo(
-                        requireActivity(), id, episode.number,
-                        language.toAnimeLanguage(), name, episode.episodeAmount
+                        requireActivity(),
+                        id,
+                        episode.number,
+                        language.toAnimeLanguage(),
+                        name,
+                        episode.episodeAmount
                     )
                     Category.MANGA, Category.NOVEL -> MangaActivity.navigateTo(
-                        requireActivity(), id, episode.number,
-                        language.toGeneralLanguage(), episode.title, name, episode.episodeAmount
+                        requireActivity(),
+                        id,
+                        episode.number,
+                        language.toGeneralLanguage(),
+                        episode.title,
+                        name,
+                        episode.episodeAmount
                     )
                 }
             }
@@ -182,7 +191,9 @@ class EpisodeFragment : BaseContentFragment<List<EpisodeRow>>(R.layout.fragment_
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

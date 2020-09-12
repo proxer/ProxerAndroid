@@ -53,7 +53,10 @@ class ConferenceInfoFragment : BaseContentFragment<ConferenceInfo>(R.layout.frag
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 ProfileActivity.navigateTo(
-                    requireActivity(), item.id, item.username, item.image,
+                    requireActivity(),
+                    item.id,
+                    item.username,
+                    item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null
                 )
             }

@@ -130,19 +130,21 @@ abstract class ImageTabsActivity : DrawerActivity() {
             GlideApp.with(this)
                 .load(headerImageUrl.toString())
                 .logErrors()
-                .into(object : ImageViewTarget<Drawable>(headerImage) {
-                    override fun setResource(resource: Drawable?) {
-                        headerImage.setImageDrawable(resource)
+                .into(
+                    object : ImageViewTarget<Drawable>(headerImage) {
+                        override fun setResource(resource: Drawable?) {
+                            headerImage.setImageDrawable(resource)
 
-                        if (resource != null) {
+                            if (resource != null) {
+                                supportStartPostponedEnterTransition()
+                            }
+                        }
+
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
                             supportStartPostponedEnterTransition()
                         }
                     }
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        supportStartPostponedEnterTransition()
-                    }
-                })
+                )
         }
     }
 

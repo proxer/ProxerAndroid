@@ -53,7 +53,8 @@ object AccountNotifications : KoinComponent {
                 content = notifications.first().text.parseAsHtml()
 
                 intent = PendingIntent.getActivity(
-                    context, ID,
+                    context,
+                    ID,
                     Intent(Intent.ACTION_VIEW, notifications.first().contentLink.androidUri()),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -67,7 +68,8 @@ object AccountNotifications : KoinComponent {
                 content = notificationAmount
 
                 intent = PendingIntent.getActivity(
-                    context, ID,
+                    context,
+                    ID,
                     NotificationActivity.getIntent(context),
                     PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -84,7 +86,7 @@ object AccountNotifications : KoinComponent {
         }
 
         val shouldAlert = notifications
-            .maxBy { it.date }
+            .maxByOrNull { it.date }
             ?.date?.toInstantBP()
             ?.isAfter(storageHelper.lastNotificationsDate)
             ?: true
@@ -95,7 +97,8 @@ object AccountNotifications : KoinComponent {
             .setContentText(content)
             .setContentIntent(intent)
             .addAction(
-                R.drawable.ic_stat_check, context.getString(R.string.notification_account_read_action),
+                R.drawable.ic_stat_check,
+                context.getString(R.string.notification_account_read_action),
                 AccountNotificationReadReceiver.getPendingIntent(context)
             )
             .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)

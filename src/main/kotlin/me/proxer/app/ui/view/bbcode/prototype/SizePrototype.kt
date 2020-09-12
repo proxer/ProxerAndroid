@@ -31,7 +31,7 @@ object SizePrototype : TextMutatorPrototype {
                 this,
                 parent,
                 args = BBArgs(
-                    custom = *arrayOf(
+                    custom = arrayOf(
                         SIZE_ARGUMENT to value.substringBeforeLast("px").toFloat(),
                         SIZE_TYPE_ARGUMENT to SizeType.ABSOLUTE
                     )
@@ -52,7 +52,7 @@ object SizePrototype : TextMutatorPrototype {
                 this,
                 parent,
                 args = BBArgs(
-                    custom = *arrayOf(
+                    custom = arrayOf(
                         SIZE_ARGUMENT to size,
                         SIZE_TYPE_ARGUMENT to SizeType.RELATIVE
                     )

@@ -53,7 +53,9 @@ class NewsFragment : PagedContentFragment<NewsArticle>() {
             .autoDisposable(this.scope())
             .subscribe { (view, article) ->
                 ImageDetailActivity.navigateTo(
-                    requireActivity(), ProxerUrls.newsImage(article.id, article.image), view
+                    requireActivity(),
+                    ProxerUrls.newsImage(article.id, article.image),
+                    view
                 )
             }
     }

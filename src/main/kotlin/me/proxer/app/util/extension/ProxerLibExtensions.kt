@@ -429,7 +429,14 @@ fun UcpSettings.toLocalSettings() = LocalProfileSettings(
 )
 
 fun Message.toLocalMessage() = LocalMessage(
-    id.toLong(), conferenceId.toLong(), userId, username, message, action, date.toInstantBP(), device
+    id.toLong(),
+    conferenceId.toLong(),
+    userId,
+    username,
+    message,
+    action,
+    date.toInstantBP(),
+    device
 )
 
 fun Comment.toParsedComment() = ParsedComment(
@@ -438,7 +445,13 @@ fun Comment.toParsedComment() = ParsedComment(
 )
 
 fun Comment.toLocalComment() = LocalComment(
-    id, entryId, mediaProgress, ratingDetails, content, overallRating, episode
+    id,
+    entryId,
+    mediaProgress,
+    ratingDetails,
+    content,
+    overallRating,
+    episode
 )
 
 fun UserComment.toParsedUserComment() = ParsedUserComment(
@@ -447,7 +460,14 @@ fun UserComment.toParsedUserComment() = ParsedUserComment(
 )
 
 fun Topic.toTopicMetaData() = TopicMetaData(
-    categoryId, categoryName, firstPostDate, lastPostDate, hits, isLocked, post, subject
+    categoryId,
+    categoryName,
+    firstPostDate,
+    lastPostDate,
+    hits,
+    isLocked,
+    post,
+    subject
 )
 
 fun Post.toParsedPost(resources: Resources): ParsedPost {
@@ -477,7 +497,14 @@ fun UserMediaListEntry.toLocalEntryUcp() = LocalUserMediaListEntry.Ucp(
 fun UserHistoryEntry.toLocalEntry() = LocalUserHistoryEntry(id, entryId, name, language, medium, category, episode)
 
 fun UcpHistoryEntry.toLocalEntryUcp() = LocalUserHistoryEntry.Ucp(
-    id, entryId, name, language, medium, category, episode, date
+    id,
+    entryId,
+    name,
+    language,
+    medium,
+    category,
+    episode,
+    date
 )
 
 fun TopTenEntry.toLocalEntry() = LocalTopTenEntry(id, name, category, medium)

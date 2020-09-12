@@ -57,7 +57,11 @@ class RecommendationFragment : BaseContentFragment<List<Recommendation>>(R.layou
             .autoDisposable(this.scope())
             .subscribe { (view, recommendation) ->
                 MediaActivity.navigateTo(
-                    requireActivity(), recommendation.id, recommendation.name, recommendation.category, view
+                    requireActivity(),
+                    recommendation.id,
+                    recommendation.name,
+                    recommendation.category,
+                    view
                 )
             }
     }

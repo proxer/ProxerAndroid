@@ -107,7 +107,10 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
             .autoDisposable(this.scope())
             .subscribe { (view, comment) ->
                 ProfileActivity.navigateTo(
-                    requireActivity(), comment.authorId, comment.author, comment.image,
+                    requireActivity(),
+                    comment.authorId,
+                    comment.author,
+                    comment.image,
                     if (view.drawable != null && comment.image.isNotBlank()) view else null
                 )
             }
@@ -149,7 +152,9 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_comment_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

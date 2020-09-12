@@ -100,7 +100,11 @@ class MessengerFragment : PagedContentFragment<LocalMessage>(R.layout.fragment_m
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
             IconicsMenuInflaterUtil.inflate(
-                mode.menuInflater, requireContext(), R.menu.fragment_messenger_cab, menu, true
+                mode.menuInflater,
+                requireContext(),
+                R.menu.fragment_messenger_cab,
+                menu,
+                true
             )
 
             return true

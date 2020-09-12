@@ -158,7 +158,7 @@ class MessengerWorker(
 
         storageHelper.areConferencesSynchronized = true
 
-        val maxNewDate = newConferencesAndMessages.flatMap { it.value }.maxBy { it.date }?.date
+        val maxNewDate = newConferencesAndMessages.flatMap { it.value }.maxByOrNull { it.date }?.date
 
         if (!isStopped && newConferencesAndMessages.isNotEmpty()) {
             bus.post(SynchronizationEvent())
@@ -215,7 +215,7 @@ class MessengerWorker(
     private fun handleLoadMoreMessages(conferenceId: Long): SynchronizationResult {
         val fetchedMessages = loadMoreMessages(conferenceId)
 
-        fetchedMessages.maxBy { it.date }?.date?.toInstantBP()?.let { mostRecentDate ->
+        fetchedMessages.maxByOrNull { it.date }?.date?.toInstantBP()?.let { mostRecentDate ->
             if (mostRecentDate.isAfter(storageHelper.lastChatMessageDate)) {
                 storageHelper.lastChatMessageDate = mostRecentDate
             }

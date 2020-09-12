@@ -91,7 +91,10 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
 
             if (item.isModerator) {
                 username.setCompoundDrawablesWithIntrinsicBounds(
-                    null, null, generateModeratorDrawable(username.context), null
+                    null,
+                    null,
+                    generateModeratorDrawable(username.context),
+                    null
                 )
             } else {
                 username.setCompoundDrawables(null, null, null, null)

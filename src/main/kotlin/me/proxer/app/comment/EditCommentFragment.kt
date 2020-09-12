@@ -231,8 +231,14 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
             }
 
         arrayOf(
-            bold to "b", italic to "i", underlined to "u", strikethrough to "s",
-            left to "left", center to "center", right to "right", spoiler to "spoiler"
+            bold to "b",
+            italic to "i",
+            underlined to "u",
+            strikethrough to "s",
+            left to "left",
+            center to "center",
+            right to "right",
+            spoiler to "spoiler"
         ).forEach { (button, tag) ->
             button.clicks()
                 .autoDisposable(viewLifecycleOwner.scope())
@@ -249,7 +255,10 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                 PopupMenu(requireContext(), size, Gravity.TOP)
                     .apply {
                         IconicsMenuInflaterUtil.inflate(
-                            menuInflater, requireContext(), R.menu.fragment_edit_comment_size, menu
+                            menuInflater,
+                            requireContext(),
+                            R.menu.fragment_edit_comment_size,
+                            menu
                         )
                     }
                     .apply {
@@ -275,7 +284,10 @@ class EditCommentFragment : BaseContentFragment<LocalComment>(R.layout.fragment_
                 PopupMenu(requireContext(), color, Gravity.TOP)
                     .apply {
                         IconicsMenuInflaterUtil.inflate(
-                            menuInflater, requireContext(), R.menu.fragment_edit_comment_color, menu
+                            menuInflater,
+                            requireContext(),
+                            R.menu.fragment_edit_comment_color,
+                            menu
                         )
                     }
                     .apply {

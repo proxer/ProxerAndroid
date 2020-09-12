@@ -237,7 +237,9 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }
@@ -421,8 +423,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 setMargins(
-                    horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin
+                    horizontalMargin,
+                    verticalMargin,
+                    horizontalMargin,
+                    verticalMargin
                 )
             }
         }
@@ -432,8 +436,10 @@ class MangaFragment : BaseContentFragment<MangaChapterInfo>(R.layout.fragment_ma
 
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 setMargins(
-                    horizontalMargin, verticalMargin,
-                    horizontalMargin, verticalMargin
+                    horizontalMargin,
+                    verticalMargin,
+                    horizontalMargin,
+                    verticalMargin
                 )
             }
         }

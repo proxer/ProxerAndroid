@@ -81,7 +81,8 @@ object MessengerNotifications : KoinComponent {
         val conferenceAmount = filteredConferenceMap.size
         val messageAmountText = context.getQuantityString(R.plurals.notification_chat_message_amount, messageAmount)
         val conferenceAmountText = context.getQuantityString(
-            R.plurals.notification_chat_conference_amount, conferenceAmount
+            R.plurals.notification_chat_conference_amount,
+            conferenceAmount
         )
 
         val title = context.getString(R.string.app_name)
@@ -90,7 +91,7 @@ object MessengerNotifications : KoinComponent {
 
         val shouldAlert = conferenceMap.keys
             .map { it.date }
-            .maxBy { it }
+            .maxByOrNull { it }
             ?.isAfter(storageHelper.lastChatMessageDate)
             ?: true
 

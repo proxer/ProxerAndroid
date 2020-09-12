@@ -93,8 +93,10 @@ abstract class PagedContentFragment<T>(
             Observer {
                 it?.let {
                     hostingActivity.multilineSnackbar(
-                        getString(R.string.error_refresh, getString(it.message)), Snackbar.LENGTH_LONG,
-                        it.buttonMessage, it.toClickListener(hostingActivity)
+                        getString(R.string.error_refresh, getString(it.message)),
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

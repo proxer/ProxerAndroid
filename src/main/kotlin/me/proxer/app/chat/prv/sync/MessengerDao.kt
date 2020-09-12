@@ -27,8 +27,14 @@ abstract class MessengerDao : KoinComponent {
     @Transaction
     open fun insertMessageToSend(user: LocalUser, text: String, conferenceId: Long): LocalMessage {
         val message = LocalMessage(
-            calculateNextMessageToSendId(), conferenceId, user.id, user.name,
-            text, MessageAction.NONE, Instant.now(), Device.MOBILE
+            calculateNextMessageToSendId(),
+            conferenceId,
+            user.id,
+            user.name,
+            text,
+            MessageAction.NONE,
+            Instant.now(),
+            Device.MOBILE
         )
 
         insertMessage(message)

@@ -132,7 +132,10 @@ class EpisodeAdapter(savedInstanceState: Bundle?) : BaseAdapter<EpisodeRow, View
 
                 languageView.text = language.toAppString(languageView.context)
                 languageView.setCompoundDrawablesWithIntrinsicBounds(
-                    language.toGeneralLanguage().toAppDrawable(languageView.context), null, null, null
+                    language.toGeneralLanguage().toAppDrawable(languageView.context),
+                    null,
+                    null,
+                    null
                 )
 
                 languageContainer.clicks()

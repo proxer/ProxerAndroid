@@ -245,7 +245,9 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                         messengerDao.findConferenceForUser(developerProxerName).let { existingConference ->
                             when (existingConference) {
                                 null -> CreateConferenceActivity.navigateTo(
-                                    requireActivity(), false, Participant(developerProxerName)
+                                    requireActivity(),
+                                    false,
+                                    Participant(developerProxerName)
                                 )
                                 else -> PrvMessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
@@ -288,7 +290,8 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .icon(
                 ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
                     colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                        context.resolveColor(R.attr.colorIcon), BlendModeCompat.SRC_IN
+                        context.resolveColor(R.attr.colorIcon),
+                        BlendModeCompat.SRC_IN
                     )
                 }
             )

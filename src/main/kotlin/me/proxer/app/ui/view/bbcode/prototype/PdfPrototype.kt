@@ -53,7 +53,7 @@ object PdfPrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val width = BBUtils.cutAttribute(code, widthAttributeRegex)?.toIntOrNull()
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(WIDTH_ARGUMENT to width)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
@@ -111,23 +111,25 @@ object PdfPrototype : AutoClosingPrototype {
         heightMap: MutableMap<String, Int>?
     ) = glide
         .download(url.toString())
-        .listener(object : SimpleGlideRequestListener<File?> {
-            override fun onResourceReady(
-                resource: File?,
-                model: Any?,
-                target: Target<File?>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                (target as? GlidePdfTarget)?.view?.also { view ->
-                    if (view.layoutParams.height <= 0) {
-                        findHost(view)?.heightChanges?.onNext(Unit)
+        .listener(
+            object : SimpleGlideRequestListener<File?> {
+                override fun onResourceReady(
+                    resource: File?,
+                    model: Any?,
+                    target: Target<File?>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    (target as? GlidePdfTarget)?.view?.also { view ->
+                        if (view.layoutParams.height <= 0) {
+                            findHost(view)?.heightChanges?.onNext(Unit)
+                        }
                     }
-                }
 
-                return false
+                    return false
+                }
             }
-        })
+        )
         .into(GlidePdfTarget(view, url.toString(), heightMap))
 
     private fun handleLoadError(view: SubsamplingScaleImageView) {

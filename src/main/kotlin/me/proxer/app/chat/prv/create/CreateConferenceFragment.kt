@@ -149,12 +149,14 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         addParticipantFooter = inflater.inflate(
             R.layout.item_create_conference_add_participant,
-            container, false
+            container,
+            false
         ) as ViewGroup
 
         addParticipantInputFooter = inflater.inflate(
             R.layout.item_create_conference_add_participant_input,
-            container, false
+            container,
+            false
         ) as ViewGroup
 
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -212,7 +214,10 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
             Observer {
                 it?.let {
                     hostingActivity.multilineSnackbar(
-                        it.message, Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        it.message,
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }
@@ -240,7 +245,8 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
                 true -> CommunityMaterial.Icon.cmd_account_plus
                 false -> CommunityMaterial.Icon.cmd_account_multiple_plus
             },
-            96, 16
+            96,
+            16
         )
 
         acceptParticipant.setIconicsImage(CommunityMaterial.Icon.cmd_check, 48, 16)
@@ -328,7 +334,9 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
                     }
                     else -> ErrorUtils.handle(it).let { action ->
                         hostingActivity.multilineSnackbar(
-                            action.message, Snackbar.LENGTH_LONG, action.buttonMessage,
+                            action.message,
+                            Snackbar.LENGTH_LONG,
+                            action.buttonMessage,
                             action.toClickListener(hostingActivity)
                         )
                     }

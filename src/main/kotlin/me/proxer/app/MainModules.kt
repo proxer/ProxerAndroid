@@ -117,7 +117,9 @@ private val applicationModules = module {
             .build()
 
         EncryptedSharedPreferences.create(
-            androidContext(), STORAGE_PREFERENCES_NAME, masterKey,
+            androidContext(),
+            STORAGE_PREFERENCES_NAME,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )

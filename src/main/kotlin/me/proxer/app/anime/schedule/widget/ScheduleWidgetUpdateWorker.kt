@@ -107,8 +107,12 @@ class ScheduleWidgetUpdateWorker(
                     .filter { it.date.toLocalDateTimeBP().dayOfMonth == LocalDate.now().dayOfMonth }
                     .map {
                         SimpleCalendarEntry(
-                            it.id, it.entryId, it.name, it.episode,
-                            it.date.toInstantBP(), it.uploadDate.toInstantBP()
+                            it.id,
+                            it.entryId,
+                            it.name,
+                            it.episode,
+                            it.date.toInstantBP(),
+                            it.uploadDate.toInstantBP()
                         )
                     }
                     .toList()

@@ -95,15 +95,18 @@ class ProxerWebView @JvmOverloads constructor(
     }
 
     private fun constructHtmlSkeleton(content: String): String {
+        val secondaryColor = context.resolveColor(android.R.attr.textColorSecondary).toHtmlColor()
+        val linkColor = context.resolveColor(R.attr.colorLink).toHtmlColor()
+
         return """
             <html>
               <head>
                 <style>
                   body {
-                    color: ${context.resolveColor(android.R.attr.textColorSecondary).toHtmlColor()} !important;
+                    color: $secondaryColor !important;
                   }
                   a {
-                    color: ${context.resolveColor(R.attr.colorLink).toHtmlColor()} !important;
+                    color: $linkColor !important;
                   }
                 </style>
               </head>
@@ -177,13 +180,15 @@ class ProxerWebView @JvmOverloads constructor(
             return try {
                 val imageFile = GlideApp.with(view)
                     .download(url.proxyIfRequired().toString())
-                    .listener(object : SimpleGlideRequestListener<File> {
-                        override fun onLoadFailed(error: GlideException?): Boolean {
-                            Timber.e(error)
+                    .listener(
+                        object : SimpleGlideRequestListener<File> {
+                            override fun onLoadFailed(error: GlideException?): Boolean {
+                                Timber.e(error)
 
-                            return false
+                                return false
+                            }
                         }
-                    })
+                    )
                     .submit().get()
 
                 val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension)

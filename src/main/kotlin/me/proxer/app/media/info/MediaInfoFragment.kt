@@ -167,7 +167,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }
@@ -204,7 +206,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         ratingAmount.isVisible = true
         ratingAmount.text = requireContext().resources.getQuantityString(
             R.plurals.fragment_media_info_rate_count,
-            result.ratingAmount, result.rating, result.ratingAmount
+            result.ratingAmount,
+            result.rating,
+            result.ratingAmount
         )
     } else {
         ratingContainer.isGone = true
@@ -277,7 +281,9 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
                                 .subscribe {
                                     MediaActivity.navigateTo(
                                         requireActivity(),
-                                        adaptionInfo.id, adaptionInfo.name, adaptionInfo.medium?.toCategory()
+                                        adaptionInfo.id,
+                                        adaptionInfo.name,
+                                        adaptionInfo.medium?.toCategory()
                                     )
                                 }
                         }

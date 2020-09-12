@@ -24,12 +24,14 @@ abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapt
     override fun getItemCount() = data.size
 
     open fun swapDataAndNotifyWithDiffing(newData: List<T>) {
-        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun areItemsTheSame(old: Int, new: Int) = areItemsTheSame(data[old], newData[new])
-            override fun areContentsTheSame(old: Int, new: Int) = areContentsTheSame(data[old], newData[new])
-            override fun getOldListSize() = data.size
-            override fun getNewListSize() = newData.size
-        })
+        val diffResult = DiffUtil.calculateDiff(
+            object : DiffUtil.Callback() {
+                override fun areItemsTheSame(old: Int, new: Int) = areItemsTheSame(data[old], newData[new])
+                override fun areContentsTheSame(old: Int, new: Int) = areContentsTheSame(data[old], newData[new])
+                override fun getOldListSize() = data.size
+                override fun getNewListSize() = newData.size
+            }
+        )
 
         data = ArrayList(newData)
 

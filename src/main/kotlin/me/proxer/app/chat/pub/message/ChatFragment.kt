@@ -146,7 +146,10 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 ProfileActivity.navigateTo(
-                    requireActivity(), item.userId, item.username, item.image,
+                    requireActivity(),
+                    item.userId,
+                    item.username,
+                    item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null
                 )
             }
@@ -259,7 +262,9 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
                 if (it != null) {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_chat_send_message, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

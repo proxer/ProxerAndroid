@@ -210,7 +210,13 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                 result?.let {
                     when (result) {
                         is StreamResolutionResult.Video -> result.play(
-                            requireContext(), id, name, episode, language, ProxerUrls.entryImage(id).androidUri(), true
+                            requireContext(),
+                            id,
+                            name,
+                            episode,
+                            language,
+                            ProxerUrls.entryImage(id).androidUri(),
+                            true
                         )
                         is StreamResolutionResult.Link -> result.show(this)
                         is StreamResolutionResult.App -> result.navigate(requireContext())
@@ -229,7 +235,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                     when (it) {
                         is AppRequiredErrorAction -> it.showDialog(hostingActivity)
                         else -> hostingActivity.multilineSnackbar(
-                            it.message, Snackbar.LENGTH_LONG, it.buttonMessage,
+                            it.message,
+                            Snackbar.LENGTH_LONG,
+                            it.buttonMessage,
                             it.toClickListener(hostingActivity)
                         )
                     }
@@ -252,7 +260,9 @@ class AnimeFragment : BaseContentFragment<AnimeStreamInfo>(R.layout.fragment_ani
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_set_user_info, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

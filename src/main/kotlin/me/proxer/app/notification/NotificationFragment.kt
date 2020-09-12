@@ -71,7 +71,9 @@ class NotificationFragment : PagedContentFragment<ProxerNotification>() {
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_notification_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

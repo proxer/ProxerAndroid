@@ -37,7 +37,7 @@ object GLUtil {
                 }
             }
             .map { it.first() }
-            .max()
+            .maxOrNull()
 
         egl.eglTerminate(display)
 

@@ -33,6 +33,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.afollestad.materialdialogs.MaterialDialog
@@ -183,11 +184,17 @@ class StreamActivity : BaseActivity() {
         controlProgress.showProgressBackground = false
 
         rewindIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind), null, null
+            null,
+            generateIndicatorIcon(CommunityMaterial.Icon2.cmd_rewind),
+            null,
+            null
         )
 
         fastForwardIndicator.setCompoundDrawables(
-            null, generateIndicatorIcon(CommunityMaterial.Icon.cmd_fast_forward), null, null
+            null,
+            generateIndicatorIcon(CommunityMaterial.Icon.cmd_fast_forward),
+            null,
+            null
         )
 
         playerManager.playerReadySubject
@@ -404,17 +411,19 @@ class StreamActivity : BaseActivity() {
             GlideApp.with(playerView)
                 .load(coverUri)
                 .logErrors()
-                .into(object : CustomViewTarget<PlayerView, Drawable>(playerView) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) = Unit
+                .into(
+                    object : CustomViewTarget<PlayerView, Drawable>(playerView) {
+                        override fun onLoadFailed(errorDrawable: Drawable?) = Unit
 
-                    override fun onResourceCleared(placeholder: Drawable?) {
-                        playerView.defaultArtwork = null
-                    }
+                        override fun onResourceCleared(placeholder: Drawable?) {
+                            playerView.defaultArtwork = null
+                        }
 
-                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                        playerView.defaultArtwork = resource
+                        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                            playerView.defaultArtwork = resource
+                        }
                     }
-                })
+                )
         }
 
         playerView.setControllerVisibilityListener {
@@ -425,11 +434,13 @@ class StreamActivity : BaseActivity() {
 
         // Nobody understands fitsSystemWindows so this can probably be done better, but seems to work for now.
         ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
+            val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
             toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.systemWindowInsetTop
-                leftMargin = insets.systemWindowInsetLeft
-                rightMargin = insets.systemWindowInsetRight
-                bottomMargin = insets.systemWindowInsetBottom
+                topMargin = systemInsets.top
+                leftMargin = systemInsets.left
+                rightMargin = systemInsets.right
+                bottomMargin = systemInsets.bottom
             }
 
             insets
@@ -576,7 +587,8 @@ class StreamActivity : BaseActivity() {
 
         if (animate) {
             view.background.state = intArrayOf(
-                android.R.attr.state_pressed, android.R.attr.state_enabled
+                android.R.attr.state_pressed,
+                android.R.attr.state_enabled
             )
 
             animationHandler.postDelayed(animationTime) {

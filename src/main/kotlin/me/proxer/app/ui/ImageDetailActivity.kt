@@ -53,15 +53,17 @@ class ImageDetailActivity : BaseActivity() {
         GlideApp.with(this)
             .load(url)
             .logErrors()
-            .into(object : ImageViewTarget<Drawable>(image) {
-                override fun setResource(resource: Drawable?) {
-                    image.setImageDrawable(resource)
+            .into(
+                object : ImageViewTarget<Drawable>(image) {
+                    override fun setResource(resource: Drawable?) {
+                        image.setImageDrawable(resource)
 
-                    if (resource != null) {
-                        supportStartPostponedEnterTransition()
+                        if (resource != null) {
+                            supportStartPostponedEnterTransition()
+                        }
                     }
                 }
-            })
+            )
 
         root.clicks()
             .autoDisposable(this.scope())

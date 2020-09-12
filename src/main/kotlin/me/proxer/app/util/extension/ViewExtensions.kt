@@ -98,16 +98,20 @@ fun RecyclerView.enableFastScroll() {
     try {
         val initFastScrollerMethod = RecyclerView::class.java.getDeclaredMethod(
             "initFastScroller",
-            StateListDrawable::class.java, Drawable::class.java,
-            StateListDrawable::class.java, Drawable::class.java
+            StateListDrawable::class.java,
+            Drawable::class.java,
+            StateListDrawable::class.java,
+            Drawable::class.java
         ).apply {
             isAccessible = true
         }
 
         initFastScrollerMethod.invoke(
             this,
-            thumbDrawableSelector, trackDrawable,
-            thumbDrawableSelector, trackDrawable
+            thumbDrawableSelector,
+            trackDrawable,
+            thumbDrawableSelector,
+            trackDrawable
         )
     } catch (error: Exception) {
         Timber.e(error, "Could not enable fast scroll")

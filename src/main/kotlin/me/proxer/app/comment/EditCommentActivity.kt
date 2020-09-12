@@ -86,7 +86,9 @@ class EditCommentActivity : BaseActivity() {
                 it?.let {
                     multilineSnackbar(
                         getString(R.string.error_comment_publish, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(this)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(this)
                     )
                 }
             }

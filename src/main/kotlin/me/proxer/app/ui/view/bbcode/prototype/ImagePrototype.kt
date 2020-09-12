@@ -53,7 +53,7 @@ object ImagePrototype : AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val width = BBUtils.cutAttribute(code, widthAttributeRegex)?.toIntOrNull()
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(WIDTH_ARGUMENT to width)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(WIDTH_ARGUMENT to width)))
     }
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
@@ -101,31 +101,33 @@ object ImagePrototype : AutoClosingPrototype {
     ) = glide
         .load(url.toString())
         .centerInside()
-        .listener(object : SimpleGlideRequestListener<Drawable?> {
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable?>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                if (resource is Drawable && model is String) {
-                    heightMap?.put(model, resource.intrinsicHeight)
+        .listener(
+            object : SimpleGlideRequestListener<Drawable?> {
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable?>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    if (resource is Drawable && model is String) {
+                        heightMap?.put(model, resource.intrinsicHeight)
+                    }
+
+                    if (target is ImageViewTarget && target.view.layoutParams.height <= 0) {
+                        findHost(target.view)?.heightChanges?.onNext(Unit)
+                    }
+
+                    return false
                 }
 
-                if (target is ImageViewTarget && target.view.layoutParams.height <= 0) {
-                    findHost(target.view)?.heightChanges?.onNext(Unit)
+                override fun onLoadFailed(error: GlideException?): Boolean {
+                    view.setTag(R.id.error_tag, true)
+
+                    return false
                 }
-
-                return false
             }
-
-            override fun onLoadFailed(error: GlideException?): Boolean {
-                view.setTag(R.id.error_tag, true)
-
-                return false
-            }
-        })
+        )
         .error(
             IconicsDrawable(view.context, CommunityMaterial.Icon2.cmd_refresh).apply {
                 colorInt = view.context.resolveColor(R.attr.colorIcon)

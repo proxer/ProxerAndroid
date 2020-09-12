@@ -105,7 +105,7 @@ class ProfileInfoFragment : BaseContentFragment<UserInfoWrapper>(R.layout.fragme
         infoPointsRow.text = userInfo.infoPoints.toString()
         miscellaneousPointsRow.text = userInfo.miscPoints.toString()
         totalPointsRow.text = totalPoints.toString()
-        rank.text = rankToString(totalPoints).linkify(web = false, mentions = false, custom = *arrayOf(rankRegex))
+        rank.text = rankToString(totalPoints).linkify(web = false, mentions = false, custom = arrayOf(rankRegex))
 
         if (userInfo.status.isBlank()) {
             statusContainer.isGone = true

@@ -90,7 +90,7 @@ class LoginDialog : BaseDialog() {
 
         registrationInfo.compoundDrawablePadding = dip(12)
         registrationInfo.text = requireContext().getString(R.string.dialog_login_registration)
-            .linkify(web = false, mentions = false, custom = *arrayOf(websiteRegex))
+            .linkify(web = false, mentions = false, custom = arrayOf(websiteRegex))
 
         registrationInfo.setCompoundDrawables(generateInfoDrawable(), null, null, null)
     }

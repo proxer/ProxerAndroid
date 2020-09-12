@@ -49,7 +49,10 @@ class ChatRoomInfoFragment : BaseContentFragment<List<ChatRoomUser>>(R.layout.fr
             .autoDisposable(this.scope())
             .subscribe { (view, item) ->
                 ProfileActivity.navigateTo(
-                    requireActivity(), item.id, item.name, item.image,
+                    requireActivity(),
+                    item.id,
+                    item.name,
+                    item.image,
                     if (view.drawable != null && item.image.isNotBlank()) view else null
                 )
             }

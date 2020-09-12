@@ -17,7 +17,8 @@ object TaskDescriptionCompat {
 
     fun setTaskDescription(activity: Activity, @ColorInt primaryColor: Int) {
         val activityInfo = activity.packageManager.getActivityInfo(
-            activity.componentName, PackageManager.GET_META_DATA
+            activity.componentName,
+            PackageManager.GET_META_DATA
         )
 
         val taskDescription = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -64,7 +64,10 @@ class TopicFragment : PagedContentFragment<ParsedPost>() {
             .autoDisposable(this.scope())
             .subscribe { (view, post) ->
                 ProfileActivity.navigateTo(
-                    requireActivity(), post.userId, post.username, post.image,
+                    requireActivity(),
+                    post.userId,
+                    post.username,
+                    post.image,
                     if (view.drawable != null && post.image.isNotBlank()) view else null
                 )
             }

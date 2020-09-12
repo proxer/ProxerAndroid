@@ -88,7 +88,7 @@ object NewsNotifications : KoinComponent {
         }
 
         val shouldAlert = news
-            .maxBy { it.date }
+            .maxByOrNull { it.date }
             ?.date?.toInstantBP()
             ?.isAfter(preferenceHelper.lastNewsDate)
             ?: true
@@ -99,7 +99,8 @@ object NewsNotifications : KoinComponent {
             .setContentText(content)
             .setContentIntent(intent)
             .addAction(
-                R.drawable.ic_stat_check, context.getString(R.string.notification_news_read_action),
+                R.drawable.ic_stat_check,
+                context.getString(R.string.notification_news_read_action),
                 NewsNotificationReadReceiver.getPendingIntent(context)
             )
             .setDefaults(if (shouldAlert) Notification.DEFAULT_ALL else 0)

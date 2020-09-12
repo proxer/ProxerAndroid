@@ -123,7 +123,9 @@ class ProfileCommentFragment : PagedContentFragment<ParsedUserComment>() {
                 it?.let {
                     hostingActivity.multilineSnackbar(
                         getString(R.string.error_comment_deletion, getString(it.message)),
-                        Snackbar.LENGTH_LONG, it.buttonMessage, it.toClickListener(hostingActivity)
+                        Snackbar.LENGTH_LONG,
+                        it.buttonMessage,
+                        it.toClickListener(hostingActivity)
                     )
                 }
             }

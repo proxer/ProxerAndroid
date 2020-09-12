@@ -40,6 +40,13 @@ data class LocalMessage(
     val styledMessage = message.toSimpleBBTree()
 
     fun toNonLocalMessage() = Message(
-        id.toString(), conferenceId.toString(), userId, username, message, action, date.toDate(), device
+        id.toString(),
+        conferenceId.toString(),
+        userId,
+        username,
+        message,
+        action,
+        date.toDate(),
+        device
     )
 }

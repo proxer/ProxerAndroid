@@ -30,7 +30,7 @@ object MapPrototype : TextMutatorPrototype, AutoClosingPrototype {
     override fun construct(code: String, parent: BBTree): BBTree {
         val zoom = BBUtils.cutAttribute(code, zoomAttributeRegex)?.toIntOrNull()
 
-        return BBTree(this, parent, args = BBArgs(custom = *arrayOf(ZOOM_ARGUMENT to zoom)))
+        return BBTree(this, parent, args = BBArgs(custom = arrayOf(ZOOM_ARGUMENT to zoom)))
     }
 
     override fun mutate(text: SpannableStringBuilder, args: BBArgs): SpannableStringBuilder {
