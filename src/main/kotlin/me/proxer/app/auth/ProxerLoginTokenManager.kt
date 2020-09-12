@@ -8,7 +8,7 @@ import me.proxer.library.LoginTokenManager
  */
 class ProxerLoginTokenManager(private val storageHelper: StorageHelper) : LoginTokenManager {
 
-    override fun provide() = storageHelper.user?.token
+    override fun provide() = storageHelper.user?.token ?: storageHelper.temporaryToken
 
     override fun persist(loginToken: String?) {
         when (loginToken) {

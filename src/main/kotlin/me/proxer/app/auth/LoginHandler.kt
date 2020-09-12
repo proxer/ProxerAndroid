@@ -12,9 +12,7 @@ import me.proxer.app.notification.AccountNotifications
 import me.proxer.app.notification.NotificationWorker
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
 
 /**
@@ -42,13 +40,6 @@ class LoginHandler(
     private fun onLogin() {
         MessengerWorker.enqueueSynchronizationIfPossible()
         NotificationWorker.enqueueIfPossible()
-
-        api.ucp.settings()
-            .buildSingle()
-            .subscribeOn(Schedulers.io())
-            .subscribeAndLogErrors {
-                storageHelper.profileSettings = it.toLocalSettings()
-            }
     }
 
     private fun onLogout(context: Context) {

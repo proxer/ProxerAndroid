@@ -11,6 +11,7 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerException
 import me.proxer.library.ProxerException.ServerErrorType
@@ -48,8 +49,17 @@ class LoginViewModel : ViewModel(), KoinComponent {
             dataDisposable?.dispose()
             dataDisposable = api.user.login(username, password)
                 .secretKey(secretKey)
-                .buildSingle()
-                .doOnSuccess { storageHelper.user = LocalUser(it.loginToken, it.id, username, it.image) }
+                .buildSingle().doOnSuccess { user ->
+                    storageHelper.temporaryToken = user.loginToken
+                }
+                .flatMap { user -> api.ucp.settings().buildSingle().map { settings -> user to settings } }
+                .doOnSuccess { (user, settings) ->
+                    storageHelper.user = LocalUser(user.loginToken, user.id, username, user.image)
+                    storageHelper.profileSettings = settings.toLocalSettings()
+                }
+                .doFinally {
+                    storageHelper.temporaryToken = null
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

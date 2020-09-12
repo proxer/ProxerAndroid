@@ -24,6 +24,7 @@ class StorageHelper(
 
     internal companion object {
         const val USER = "user"
+        const val TEMPORARY_TOKEN = "temporary_token"
         const val PROFILE_SETTINGS = "ucp_settings"
         const val LAST_NOTIFICATIONS_DATE = "last_notifications_date"
         const val LAST_CHAT_MESSAGE_DATE = "last_chat_date"
@@ -53,11 +54,30 @@ class StorageHelper(
             sharedPreferences.edit(commit = true) {
                 if (value != null) {
                     putString(USER, moshi.adapter(LocalUser::class.java).toJson(value))
+                    remove(TEMPORARY_TOKEN)
                 } else {
                     // Due to a bug in androidx-securty-crypto, we can't remove the entry here because then then
                     // no listener is called.
                     // TODO: Remove instead of put once fixed.
                     putString(USER, null)
+                }
+            }
+        }
+
+    /**
+     * Special token to use when no user is set. Used for checking if a token is valid before saving the actual user
+     * and thus updating the UI.
+     */
+    var temporaryToken: String?
+        get() {
+            return sharedPreferences.getString(TEMPORARY_TOKEN, null)
+        }
+        set(value) {
+            sharedPreferences.edit(commit = true) {
+                if (value != null) {
+                    putString(TEMPORARY_TOKEN, value)
+                } else {
+                    remove(TEMPORARY_TOKEN)
                 }
             }
         }
