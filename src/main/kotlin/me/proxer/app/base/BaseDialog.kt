@@ -12,7 +12,7 @@ import kotterknife.KotterKnife
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
-import me.proxer.app.util.extension.handleLink
+import me.proxer.app.util.extension.fallbackHandleLink
 import me.proxer.app.util.extension.safeInject
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment
 import okhttp3.HttpUrl
@@ -107,7 +107,7 @@ abstract class BaseDialog : DialogFragment(), CustomTabsAware {
     }
 
     override fun showPage(url: HttpUrl, forceBrowser: Boolean, skipCheck: Boolean) {
-        customTabsHelper.handleLink(requireActivity(), url, forceBrowser, skipCheck)
+        customTabsHelper.fallbackHandleLink(requireActivity(), url, forceBrowser, skipCheck)
     }
 
     open fun onDialogCreated(savedInstanceState: Bundle?) = Unit

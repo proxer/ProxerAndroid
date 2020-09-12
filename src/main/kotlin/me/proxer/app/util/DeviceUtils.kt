@@ -4,8 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Point
 import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.content.getSystemService
 import me.proxer.app.R
@@ -19,13 +20,37 @@ object DeviceUtils {
 
     fun isLargeTablet(context: Context) = context.resources.getBoolean(R.bool.is_large_tablet)
 
-    fun getScreenWidth(context: Context) = Point()
-        .apply { requireNotNull(context.getSystemService<WindowManager>()).defaultDisplay.getSize(this) }
-        .x
+    @Suppress("DEPRECATION")
+    fun getScreenWidth(context: Context): Int {
+        val windowManager = requireNotNull(context.getSystemService<WindowManager>())
 
-    fun getScreenHeight(context: Context) = Point()
-        .apply { requireNotNull(context.getSystemService<WindowManager>()).defaultDisplay.getSize(this) }
-        .y
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+
+            windowMetrics.bounds.width() - insets.left - insets.right
+        } else {
+            DisplayMetrics()
+                .apply { windowManager.defaultDisplay.getMetrics(this) }
+                .widthPixels
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    fun getScreenHeight(context: Context): Int {
+        val windowManager = requireNotNull(context.getSystemService<WindowManager>())
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+
+            windowMetrics.bounds.height() - insets.top - insets.bottom
+        } else {
+            DisplayMetrics()
+                .apply { windowManager.defaultDisplay.getMetrics(this) }
+                .heightPixels
+        }
+    }
 
     fun getVerticalMargin(context: Context, withItems: Boolean = true) = context.resources.getDimensionPixelSize(
         when (withItems) {

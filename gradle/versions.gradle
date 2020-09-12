@@ -5,8 +5,8 @@ ext {
     appVersionPatch = 6
 
     minSdkVersion = 21
-    targetSdkVersion = 29
-    compileSdkVersion = 29
+    targetSdkVersion = 30
+    compileSdkVersion = 30
     ndkVersion = "21.3.6528147"
 
     // Java

@@ -3,12 +3,14 @@
 package me.proxer.app.util.extension
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.ComponentCallbacks
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -141,7 +143,7 @@ inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
     return constructor.newInstance(parameters)
 }
 
-fun CustomTabsHelperFragment.handleLink(
+fun CustomTabsHelperFragment.fallbackHandleLink(
     activity: FragmentActivity,
     url: HttpUrl,
     forceBrowser: Boolean = false,
@@ -154,11 +156,21 @@ fun CustomTabsHelperFragment.handleLink(
 
         when (nativePackages.isEmpty()) {
             true -> {
-                val preferenceHelper = activity.get<PreferenceHelper>()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    // In Android 11+ we can not query the packages beforehand so we need to try and fallback if no
+                    // activity can handle the url.
+                    val intent = Intent(Intent.ACTION_VIEW, url.androidUri()).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
 
-                when (!skipCheck && !url.hasProxerHost && preferenceHelper.shouldCheckLinks) {
-                    true -> LinkCheckDialog.show(activity, url)
-                    false -> openHttpPage(activity, url)
+                    try {
+                        activity.startActivity(intent.addReferer())
+                    } catch (ignored: ActivityNotFoundException) {
+                        fallbackHandleLink(activity, url, skipCheck)
+                    }
+                } else {
+                    fallbackHandleLink(activity, url, skipCheck)
                 }
             }
             false -> {
@@ -174,6 +186,19 @@ fun CustomTabsHelperFragment.handleLink(
                 activity.startActivity(intent.addReferer())
             }
         }
+    }
+}
+
+private fun CustomTabsHelperFragment.fallbackHandleLink(
+    activity: FragmentActivity,
+    url: HttpUrl,
+    skipCheck: Boolean = false
+) {
+    val preferenceHelper = activity.get<PreferenceHelper>()
+
+    when (!skipCheck && !url.hasProxerHost && preferenceHelper.shouldCheckLinks) {
+        true -> LinkCheckDialog.show(activity, url)
+        false -> openHttpPage(activity, url)
     }
 }
 

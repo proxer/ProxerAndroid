@@ -96,6 +96,7 @@ import timber.log.Timber
 /**
  * @author Ruben Gees
  */
+@Suppress("DEPRECATION") // TODO: Wait for androidx fullscreen support library.
 class StreamActivity : BaseActivity() {
 
     internal val id: String
@@ -437,10 +438,10 @@ class StreamActivity : BaseActivity() {
             val systemInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
             toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = systemInsets.top
-                leftMargin = systemInsets.left
-                rightMargin = systemInsets.right
-                bottomMargin = systemInsets.bottom
+                topMargin = systemInsets.top - toolbar.paddingTop
+                leftMargin = systemInsets.left - toolbar.paddingLeft
+                rightMargin = systemInsets.right - toolbar.paddingRight
+                bottomMargin = systemInsets.bottom - toolbar.paddingBottom
             }
 
             insets
