@@ -89,12 +89,10 @@ abstract class MessengerDao : KoinComponent {
         """
             SELECT * FROM conferences
             LEFT JOIN (
-                SELECT * FROM (
-                    SELECT id AS messageId, conferenceId, userId, message AS messageText, username,
-                           `action` as messageAction from messages
-                    ORDER BY date DESC, id
-                )
+                SELECT id AS messageId, conferenceId, userId, message AS messageText, username,
+                       `action` as messageAction from messages
                 GROUP BY conferenceId
+                ORDER BY date DESC, id
             ) AS messages
             ON conferences.id = messages.conferenceId
             WHERE topic LIKE '%' || :searchQuery || '%'
