@@ -86,23 +86,20 @@ abstract class MessengerDao : KoinComponent {
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query(
-        "SELECT * " +
-            "FROM conferences " +
-            "LEFT JOIN ( " +
-            "SELECT * FROM ( " +
-            "SELECT id AS messageId, " +
-            "conferenceId, " +
-            "userId, " +
-            "message AS messageText, " +
-            "username, " +
-            "`action` as messageAction from messages " +
-            "ORDER BY date, id) " +
-            "GROUP BY conferenceId) AS messages " +
-            "ON conferences.id = messages.conferenceId " +
-            "WHERE topic LIKE '%' " +
-            "|| :searchQuery " +
-            "|| '%' " +
-            "ORDER  BY date DESC"
+        """
+            SELECT * FROM conferences
+            LEFT JOIN (
+                SELECT * FROM (
+                    SELECT id AS messageId, conferenceId, userId, message AS messageText, username,
+                           `action` as messageAction from messages
+                    ORDER BY date DESC, id
+                )
+                GROUP BY conferenceId
+            ) AS messages
+            ON conferences.id = messages.conferenceId
+            WHERE topic LIKE '%' || :searchQuery || '%'
+            ORDER BY date DESC
+            """
     )
     abstract fun getConferencesLiveData(searchQuery: String): LiveData<List<ConferenceWithMessage>?>
 
