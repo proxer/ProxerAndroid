@@ -92,6 +92,7 @@ abstract class MessengerDao : KoinComponent {
                 SELECT id AS messageId, conferenceId, userId, message AS messageText, username,
                        `action` as messageAction from messages
                 GROUP BY conferenceId
+                HAVING MAX(date)
                 ORDER BY date DESC, id
             ) AS messages
             ON conferences.id = messages.conferenceId
