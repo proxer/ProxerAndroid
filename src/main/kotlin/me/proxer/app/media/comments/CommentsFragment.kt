@@ -161,7 +161,7 @@ class CommentsFragment : PagedContentFragment<ParsedComment>(R.layout.fragment_c
         )
 
         create.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_pencil).apply {
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_pencil).apply {
                 colorInt = requireContext().resolveColor(R.attr.colorOnPrimary)
                 paddingDp = 8
                 sizeDp = 64

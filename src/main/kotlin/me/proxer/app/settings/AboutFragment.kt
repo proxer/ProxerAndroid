@@ -124,7 +124,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_version_title)
             .subText(BuildConfig.VERSION_NAME)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_tag).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon3.cmd_tag).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -170,7 +170,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_server_status)
             .subText(R.string.about_server_status_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_server).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon3.cmd_server).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -183,7 +183,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_facebook_title)
             .subText(R.string.about_facebook_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon.cmd_facebook).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_facebook).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -193,7 +193,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_twitter_title)
             .subText(R.string.about_twitter_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_twitter).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon3.cmd_twitter).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -203,7 +203,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_youtube_title)
             .subText(R.string.about_youtube_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_youtube).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon3.cmd_youtube).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -260,7 +260,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_support_forum_title)
             .subText(R.string.about_support_forum_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon.cmd_forum).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_forum).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
@@ -273,7 +273,7 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_developer_github_title)
             .subText(developerGithubName)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon.cmd_github).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_github).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )

@@ -86,7 +86,7 @@ class PostAdapter : BaseAdapter<ParsedPost, ViewHolder>() {
             signature.enableEmotions = true
             signature.heightMap = heightMap
 
-            thankYouIcon.setIconicsImage(CommunityMaterial.Icon2.cmd_thumb_up, 32)
+            thankYouIcon.setIconicsImage(CommunityMaterial.Icon3.cmd_thumb_up, 32)
         }
 
         fun bind(item: ParsedPost) {

@@ -239,13 +239,13 @@ class MaterialDrawerWrapper(
     private fun generateDrawerItems() = arrayOf(
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_news
-            iconicsIcon = CommunityMaterial.Icon2.cmd_newspaper
+            iconicsIcon = CommunityMaterial.Icon3.cmd_newspaper
             identifier = DrawerItem.NEWS.id
             isSelectable = isMain
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_chat
-            iconicsIcon = CommunityMaterial.Icon2.cmd_message_text
+            iconicsIcon = CommunityMaterial.Icon3.cmd_message_text
             identifier = DrawerItem.CHAT.id
             isSelectable = isMain
         },
@@ -257,7 +257,7 @@ class MaterialDrawerWrapper(
         },
         PrimaryDrawerItem().apply {
             nameRes = R.string.section_anime
-            iconicsIcon = CommunityMaterial.Icon2.cmd_television
+            iconicsIcon = CommunityMaterial.Icon3.cmd_television
             identifier = DrawerItem.ANIME.id
             isSelectable = isMain
         },

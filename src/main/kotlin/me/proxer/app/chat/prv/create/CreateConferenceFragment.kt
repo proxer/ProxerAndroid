@@ -441,7 +441,7 @@ class CreateConferenceFragment : BaseFragment(R.layout.fragment_create_conferenc
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send).apply {
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_send).apply {
                 colorInt = requireContext().resolveColor(R.attr.colorSecondary)
                 paddingDp = 4
                 sizeDp = 32

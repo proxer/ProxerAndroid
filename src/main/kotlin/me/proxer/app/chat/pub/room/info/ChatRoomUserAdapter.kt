@@ -119,7 +119,7 @@ class ChatRoomUserAdapter : BaseAdapter<ChatRoomUser, ViewHolder>() {
         }
 
         private fun generateModeratorDrawable(context: Context) = IconicsDrawable(context).apply {
-            icon = CommunityMaterial.Icon2.cmd_star
+            icon = CommunityMaterial.Icon3.cmd_star
             colorInt = context.resolveColor(R.attr.colorSecondary)
             paddingDp = 8
             sizeDp = 32

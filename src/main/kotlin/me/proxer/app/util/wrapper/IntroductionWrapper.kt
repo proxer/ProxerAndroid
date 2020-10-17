@@ -45,7 +45,7 @@ object IntroductionWrapper {
                             }
                         )
                         2 -> image.setImageDrawable(
-                            IconicsDrawable(image.context, CommunityMaterial.Icon2.cmd_theme_light_dark).apply {
+                            IconicsDrawable(image.context, CommunityMaterial.Icon3.cmd_theme_light_dark).apply {
                                 colorRes = R.color.on_primary
                                 paddingDp = padding / 2
                                 sizeDp = 256

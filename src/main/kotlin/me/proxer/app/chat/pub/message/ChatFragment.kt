@@ -369,7 +369,7 @@ class ChatFragment : PagedContentFragment<ParsedChatMessage>(R.layout.fragment_c
         )
 
         sendButton.setImageDrawable(
-            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_send).apply {
+            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_send).apply {
                 colorInt = when (disabledColor) {
                     true -> requireContext().resolveColor(R.attr.colorIconDisabled)
                     false -> requireContext().resolveColor(R.attr.colorIcon)

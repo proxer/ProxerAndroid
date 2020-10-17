@@ -129,7 +129,7 @@ class MangaAdapter(var isVertical: Boolean) : BaseAdapter<Page, MangaViewHolder>
         private val screenWidth = DeviceUtils.getScreenWidth(itemView.context)
 
         init {
-            errorIndicator.setIconicsImage(CommunityMaterial.Icon2.cmd_refresh, 64)
+            errorIndicator.setIconicsImage(CommunityMaterial.Icon3.cmd_refresh, 64)
         }
 
         open fun bind(item: Page) {

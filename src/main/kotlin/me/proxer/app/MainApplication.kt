@@ -22,7 +22,6 @@ import com.google.android.gms.security.ProviderInstaller
 import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kirillr.strictmodehelper.StrictModeCompat
-import com.mikepenz.iconics.Iconics
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import com.rubengees.rxbus.RxBus
 import com.vanniktech.emoji.EmojiManager
@@ -189,8 +188,6 @@ class MainApplication : Application() {
 
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
         RxAndroidPlugins.setMainThreadSchedulerHandler { AndroidSchedulers.from(Looper.getMainLooper(), true) }
-
-        Iconics.init(this)
 
         SubsamplingScaleImageView.setPreferredBitmapConfig(Bitmap.Config.RGB_565)
         DrawerImageLoader.init(GlideDrawerImageLoader())

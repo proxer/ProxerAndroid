@@ -295,7 +295,7 @@ class AnimeAdapter(
         }
 
         private fun generatePlayDrawable(): IconicsDrawable {
-            return IconicsDrawable(play.context, CommunityMaterial.Icon2.cmd_play).apply {
+            return IconicsDrawable(play.context, CommunityMaterial.Icon3.cmd_play).apply {
                 colorInt = play.context.resolveColor(R.attr.colorOnPrimary)
                 paddingDp = 8
                 sizeDp = 28

@@ -71,7 +71,7 @@ class LinkCheckDialog : BaseDialog() {
 
                         progressIcon.isVisible = true
                         progressIcon.setImageDrawable(
-                            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_check).apply {
+                            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_shield_check).apply {
                                 colorRes = R.color.green_500
                             }
                         )
@@ -80,7 +80,7 @@ class LinkCheckDialog : BaseDialog() {
 
                         progressIcon.isVisible = true
                         progressIcon.setImageDrawable(
-                            IconicsDrawable(requireContext(), CommunityMaterial.Icon2.cmd_shield_alert).apply {
+                            IconicsDrawable(requireContext(), CommunityMaterial.Icon3.cmd_shield_alert).apply {
                                 colorRes = R.color.red_500
                             }
                         )

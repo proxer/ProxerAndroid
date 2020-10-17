@@ -6,6 +6,7 @@ repositories {
             includeGroupByRegex "zipflinger.*"
             includeGroupByRegex "com\\.android.*"
             includeGroupByRegex "com\\.google\\.android.*"
+            includeModuleByRegex "org\\.jetbrains\\.kotlin.*", "kotlin-symbol-processing-api"
         }
     }
 
@@ -17,6 +18,7 @@ repositories {
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.github\\.(?!bumptech|rubensousa|shyiko|anrwatchdog|pengrad).*"
             excludeModuleByRegex "com\\.google\\.android\\.*", "(?!flexbox).*"
+            excludeModuleByRegex "org\\.jetbrains\\.kotlin.*", "kotlin-symbol-processing-api"
         }
     }
 
@@ -28,6 +30,7 @@ repositories {
             excludeGroupByRegex "com\\.github\\.(?!ben-manes).*"
             excludeGroupByRegex "com\\.android.*"
             excludeGroupByRegex "com\\.google\\.android\\.*"
+            excludeModuleByRegex "org\\.jetbrains\\.kotlin.*", "kotlin-symbol-processing-api"
         }
     }
 

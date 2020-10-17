@@ -93,7 +93,7 @@ class ConferenceParticipantAdapter : BaseAdapter<ConferenceParticipant, ViewHold
                 username.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     null,
-                    IconicsDrawable(username.context, CommunityMaterial.Icon2.cmd_star).apply {
+                    IconicsDrawable(username.context, CommunityMaterial.Icon3.cmd_star).apply {
                         colorInt = image.context.resolveColor(R.attr.colorSecondary)
                         paddingDp = 8
                         sizeDp = 32
