@@ -14,7 +14,7 @@ import okhttp3.Request
 object Mp4UploadStreamResolver : StreamResolver() {
 
     private val packedRegex = Regex("return p.*?'(.*?)',(\\d+),(\\d+),'(.*?)'")
-    private val urlRegex = Regex("src:\"(.*?)\"")
+    private val urlRegex = Regex("player.src\\(\"(.*?)\"\\)")
 
     override val name = "MP4Upload"
 
@@ -50,7 +50,14 @@ object Mp4UploadStreamResolver : StreamResolver() {
 
             url.toPrefixedUrlOrNull() ?: throw StreamResolutionException()
         }
-        .map { StreamResolutionResult.Video(it, "video/mp4") }
+        .map {
+            StreamResolutionResult.Video(
+                it,
+                "video/mp4",
+                referer = "https://www.mp4upload.com/",
+                internalPlayerOnly = true
+            )
+        }
 
     private fun unpack(p: String, a: Int, c: Int, k: List<String>): String {
         return (c - 1 downTo 0).fold(
