@@ -23,11 +23,5 @@
 
     <exclude
         domain="sharedpref"
-        path="androidx.work.util.id.xml" />
-    <exclude
-        domain="sharedpref"
-        path="Hawk2.xml" />
-    <exclude
-        domain="sharedpref"
-        path="crypto.KEY_256.xml" />
+        path="me.proxer.encrypted_preferences.xml" />
 </full-backup-content>
