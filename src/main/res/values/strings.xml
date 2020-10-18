@@ -380,7 +380,10 @@
 
     <string name="dialog_chat_report_title">Nachricht melden</string>
     <string name="dialog_chat_report_positive">Senden</string>
-    <string name="dialog_chat_report_message_hint">Nachricht an den Moderator</string>
+    <string name="dialog_chat_report_message_hint">
+        Mobbing, Extremismus, Beleidigungen usw. haben auf Proxer nichts zu suchen.
+        Trage eine kurze Erklärung für den Moderator ein
+    </string>
     <string name="dialog_chat_error_message">Bitte gib eine Nachricht an</string>
 
     <!-- language=HTML -->
