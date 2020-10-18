@@ -10,14 +10,7 @@ import android.os.HandlerThread
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.os.postDelayed
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.colorRes
@@ -30,20 +23,15 @@ import me.proxer.app.R
 import me.proxer.app.media.MediaActivity
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
-import me.proxer.app.util.extension.intentFor
-import me.proxer.app.util.extension.safeInject
-import me.proxer.app.util.extension.toInstantBP
-import me.proxer.app.util.extension.toLocalDateTimeBP
-import me.proxer.app.util.extension.unsafeLazy
+import me.proxer.app.util.extension.*
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
-import org.koin.core.KoinComponent
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -52,9 +40,9 @@ import java.util.concurrent.TimeUnit
 class ScheduleWidgetUpdateWorker(
     context: Context,
     workerParams: WorkerParameters
-) : Worker(context, workerParams), KoinComponent {
+) : Worker(context, workerParams) {
 
-    companion object : KoinComponent {
+    companion object {
         private const val NAME = "ScheduleWidgetUpdateWorker"
 
         private val workManager by safeInject<WorkManager>()

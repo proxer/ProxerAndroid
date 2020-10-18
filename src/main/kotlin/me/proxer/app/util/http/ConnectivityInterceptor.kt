@@ -10,12 +10,11 @@ import me.proxer.app.exception.NotConnectedException
 import me.proxer.app.util.compat.isConnected
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class ConnectivityInterceptor(context: Context) : Interceptor, KoinComponent {
+class ConnectivityInterceptor(context: Context) : Interceptor {
 
     private val connectivityManager = requireNotNull(context.getSystemService<ConnectivityManager>())
 

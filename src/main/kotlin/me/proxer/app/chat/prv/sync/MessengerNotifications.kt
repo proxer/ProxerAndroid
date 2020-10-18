@@ -8,11 +8,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.text.SpannableString
 import android.text.style.StyleSpan
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.Person
-import androidx.core.app.RemoteInput
-import androidx.core.app.TaskStackBuilder
+import androidx.core.app.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.text.set
@@ -35,12 +31,11 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-object MessengerNotifications : KoinComponent {
+object MessengerNotifications {
 
     private const val GROUP = "chat"
     private const val ID = 782_373_275

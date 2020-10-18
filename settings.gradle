@@ -17,8 +17,6 @@ pluginManagement { scriptHandler ->
         eachPlugin {
             if (requested.id.id == "com.android.application") {
                 useModule("com.android.tools.build:gradle:${androidPluginVersion}")
-            } else if (requested.id.id == "com.novoda.android-command") {
-                useModule("com.novoda:gradle-android-command-plugin:${androidCommandPluginVersion}")
             }
         }
     }

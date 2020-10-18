@@ -5,12 +5,11 @@ import io.reactivex.Single
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.ProxerApi
 import okhttp3.OkHttpClient
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-abstract class StreamResolver : KoinComponent {
+abstract class StreamResolver {
 
     abstract val name: String
 

@@ -6,9 +6,8 @@ import me.proxer.app.chat.ReportViewModel
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.ProxerApi
-import org.koin.core.KoinComponent
 
-class ChatReportViewModel : ReportViewModel(), KoinComponent {
+class ChatReportViewModel : ReportViewModel() {
 
     private val api by safeInject<ProxerApi>()
 

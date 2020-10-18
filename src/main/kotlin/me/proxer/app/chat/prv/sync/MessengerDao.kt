@@ -2,12 +2,7 @@ package me.proxer.app.chat.prv.sync
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.RoomWarnings
-import androidx.room.Transaction
+import androidx.room.*
 import io.reactivex.Maybe
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.ConferenceWithMessage
@@ -15,14 +10,13 @@ import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
 import me.proxer.library.enums.Device
 import me.proxer.library.enums.MessageAction
-import org.koin.core.KoinComponent
 import org.threeten.bp.Instant
 
 /**
  * @author Ruben Gees
  */
 @Dao
-abstract class MessengerDao : KoinComponent {
+abstract class MessengerDao {
 
     @Transaction
     open fun insertMessageToSend(user: LocalUser, text: String, conferenceId: Long): LocalMessage {

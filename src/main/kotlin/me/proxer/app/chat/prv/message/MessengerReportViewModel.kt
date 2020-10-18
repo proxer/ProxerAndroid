@@ -7,9 +7,8 @@ import me.proxer.app.chat.prv.sync.MessengerDatabase
 import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.ProxerApi
-import org.koin.core.KoinComponent
 
-class MessengerReportViewModel : ReportViewModel(), KoinComponent {
+class MessengerReportViewModel : ReportViewModel() {
 
     private val api by safeInject<ProxerApi>()
     private val messengerDao by safeInject<MessengerDao>()

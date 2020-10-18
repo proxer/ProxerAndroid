@@ -18,13 +18,12 @@ import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.util.Utils
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.util.ProxerUrls
-import org.koin.core.KoinComponent
 import kotlin.math.min
 
 /**
  * @author Ruben Gees
  */
-object MessengerShortcuts : KoinComponent {
+object MessengerShortcuts {
 
     private const val SHARE_TARGET_CATEGORY = "me.proxer.app.sharingshortcuts.category.TEXT_SHARE_TARGET"
 

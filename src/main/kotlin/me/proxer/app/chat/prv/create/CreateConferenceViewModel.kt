@@ -21,12 +21,11 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import me.proxer.library.api.Endpoint
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class CreateConferenceViewModel : ViewModel(), KoinComponent {
+class CreateConferenceViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>()
     val result = ResettingMutableLiveData<LocalConference>()

@@ -8,12 +8,11 @@ import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class MessengerNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
+class MessengerNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
         private const val CONFERENCE_ID_EXTRA = "conference_id"

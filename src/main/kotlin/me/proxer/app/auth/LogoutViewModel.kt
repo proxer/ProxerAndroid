@@ -10,12 +10,11 @@ import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class LogoutViewModel : ViewModel(), KoinComponent {
+class LogoutViewModel : ViewModel() {
 
     val success = MutableLiveData<Unit?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()

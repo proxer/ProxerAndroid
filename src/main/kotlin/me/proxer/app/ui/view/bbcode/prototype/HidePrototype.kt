@@ -19,12 +19,11 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-object HidePrototype : AutoClosingPrototype, KoinComponent {
+object HidePrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *hide( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *hide *", REGEX_OPTIONS)

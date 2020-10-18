@@ -3,12 +3,7 @@ package me.proxer.app.ui.view
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.webkit.MimeTypeMap
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import com.bumptech.glide.load.engine.GlideException
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideApp
@@ -23,13 +18,12 @@ import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.math.BigDecimal
 import java.math.MathContext
-import java.util.Locale
+import java.util.*
 
 /**
  * @author Ruben Gees
@@ -38,7 +32,7 @@ class ProxerWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : WebView(context, attrs, defStyleAttr), KoinComponent {
+) : WebView(context, attrs, defStyleAttr) {
 
     private companion object {
         private val iFrameRegex = Regex("<iframe.*?src=\"(.*?)\".*?>", RegexOption.DOT_MATCHES_ALL)
@@ -128,7 +122,7 @@ class ProxerWebView @JvmOverloads constructor(
         return "rgba($red, $green, $blue, $normalizedAlpha)"
     }
 
-    private class ProxerWebClient : WebViewClient(), KoinComponent {
+    private class ProxerWebClient : WebViewClient() {
 
         val showPageSubject = PublishSubject.create<HttpUrl>()
         val loadingFinishedSubject = PublishSubject.create<Unit>()

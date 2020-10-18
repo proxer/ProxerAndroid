@@ -4,7 +4,6 @@ package me.proxer.app.util.extension
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.ComponentCallbacks
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -41,12 +40,12 @@ import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
-import org.koin.core.KoinComponent
+import org.koin.core.context.GlobalContext
 import org.koin.core.parameter.DefinitionParameters
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 import timber.log.Timber
-import java.util.EnumSet
+import java.util.*
 import java.util.regex.Pattern.quote
 
 val MENTIONS_REGEX = Regex("@(?:.*?)(?:(?:(?! )(?!${quote(".")} )(?!${quote(".")}\n)(?!\n)).)*").toPattern()
@@ -136,11 +135,7 @@ inline fun Intent.addReferer(): Intent {
 // TODO: https://github.com/InsertKoinIO/koin/issues/303
 @Suppress("UNCHECKED_CAST")
 inline fun unsafeParametersOf(vararg parameters: Any?): DefinitionParameters {
-    val constructor = DefinitionParameters::class.java.getConstructor(Array<Any?>::class.java)
-
-    constructor.isAccessible = true
-
-    return constructor.newInstance(parameters)
+    return DefinitionParameters(parameters.toList())
 }
 
 fun CustomTabsHelperFragment.fallbackHandleLink(
@@ -232,12 +227,7 @@ fun CustomTabsHelperFragment.openHttpPage(activity: Activity, url: HttpUrl) {
         }
 }
 
-inline fun <reified T> KoinComponent.safeInject(
+inline fun <reified T> safeInject(
     qualifier: Qualifier? = null,
     noinline parameters: ParametersDefinition? = null
-): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
-
-inline fun <reified T> ComponentCallbacks.safeInject(
-    qualifier: Qualifier? = null,
-    noinline parameters: ParametersDefinition? = null
-): Lazy<T> = lazy { getKoin().get(qualifier, parameters) }
+): Lazy<T> = lazy { GlobalContext.get().get(qualifier, parameters) }

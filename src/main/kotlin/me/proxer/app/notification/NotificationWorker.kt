@@ -1,14 +1,7 @@
 package me.proxer.app.notification
 
 import android.content.Context
-import androidx.work.BackoffPolicy
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications
@@ -21,7 +14,6 @@ import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerCall
 import me.proxer.library.entity.notifications.NotificationInfo
 import me.proxer.library.enums.NotificationFilter
-import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -31,9 +23,9 @@ import java.util.concurrent.TimeUnit
 class NotificationWorker(
     context: Context,
     workerParams: WorkerParameters
-) : Worker(context, workerParams), KoinComponent {
+) : Worker(context, workerParams) {
 
-    companion object : KoinComponent {
+    companion object {
         private const val NAME = "NotificationWorker"
 
         private val bus by safeInject<RxBus>()

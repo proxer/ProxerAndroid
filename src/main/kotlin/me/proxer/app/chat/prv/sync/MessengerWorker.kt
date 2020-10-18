@@ -1,15 +1,7 @@
 package me.proxer.app.chat.prv.sync
 
 import android.content.Context
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.chat.prv.LocalConference
 import me.proxer.app.chat.prv.LocalMessage
@@ -31,9 +23,8 @@ import me.proxer.library.ProxerCall
 import me.proxer.library.ProxerException
 import me.proxer.library.entity.messenger.Conference
 import me.proxer.library.entity.messenger.Message
-import org.koin.core.KoinComponent
 import timber.log.Timber
-import java.util.LinkedHashSet
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -42,9 +33,9 @@ import java.util.concurrent.TimeUnit
 class MessengerWorker(
     context: Context,
     workerParams: WorkerParameters
-) : Worker(context, workerParams), KoinComponent {
+) : Worker(context, workerParams) {
 
-    companion object : KoinComponent {
+    companion object {
         const val CONFERENCES_ON_PAGE = 48
         const val MESSAGES_ON_PAGE = 30
 

@@ -18,12 +18,11 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-abstract class BaseViewModel<T> : ViewModel(), KoinComponent {
+abstract class BaseViewModel<T> : ViewModel() {
 
     open val data = MutableLiveData<T?>()
     open val error = MutableLiveData<ErrorUtils.ErrorAction?>()

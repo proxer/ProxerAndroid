@@ -16,12 +16,11 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.toInstantBP
 import me.proxer.app.util.wrapper.MaterialDrawerWrapper.DrawerItem
 import me.proxer.library.entity.notifications.NewsArticle
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-object NewsNotifications : KoinComponent {
+object NewsNotifications {
 
     private const val ID = 1_357_913_213
 

@@ -11,12 +11,11 @@ import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.getSafeCharSequence
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class DirectReplyReceiver : BroadcastReceiver(), KoinComponent {
+class DirectReplyReceiver : BroadcastReceiver() {
 
     companion object {
         const val REMOTE_REPLY_EXTRA = "remote_reply"

@@ -10,9 +10,8 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import okhttp3.HttpUrl
-import org.koin.core.KoinComponent
 
-class LinkCheckViewModel : ViewModel(), KoinComponent {
+class LinkCheckViewModel : ViewModel() {
 
     val data = MutableLiveData<Boolean?>()
     val isLoading = MutableLiveData<Boolean?>()

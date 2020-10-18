@@ -19,12 +19,11 @@ import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-object AgeRestrictionPrototype : AutoClosingPrototype, KoinComponent {
+object AgeRestrictionPrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *age18( .*?)?", REGEX_OPTIONS)
     override val endRegex = Regex("/ *age18 *", REGEX_OPTIONS)

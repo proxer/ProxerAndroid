@@ -10,12 +10,11 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
 import me.proxer.library.enums.NotificationFilter
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class AccountNotificationReadReceiver : BroadcastReceiver(), KoinComponent {
+class AccountNotificationReadReceiver : BroadcastReceiver() {
 
     companion object {
         fun getPendingIntent(context: Context): PendingIntent = PendingIntent.getBroadcast(

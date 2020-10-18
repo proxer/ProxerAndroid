@@ -15,12 +15,11 @@ import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
 import me.proxer.library.ProxerException
 import me.proxer.library.ProxerException.ServerErrorType
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-class LoginViewModel : ViewModel(), KoinComponent {
+class LoginViewModel : ViewModel() {
 
     val success = MutableLiveData<Unit?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()

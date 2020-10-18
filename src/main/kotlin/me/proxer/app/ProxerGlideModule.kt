@@ -17,7 +17,6 @@ import com.bumptech.glide.request.RequestOptions
 import me.proxer.app.util.data.PreferenceHelper
 import me.proxer.app.util.extension.safeInject
 import okhttp3.OkHttpClient
-import org.koin.core.KoinComponent
 import java.io.InputStream
 
 /**
@@ -25,7 +24,7 @@ import java.io.InputStream
  */
 @GlideModule
 @Excludes(OkHttpLibraryGlideModule::class)
-class ProxerGlideModule : AppGlideModule(), KoinComponent {
+class ProxerGlideModule : AppGlideModule() {
 
     private companion object {
         private const val CACHE_SIZE = 1_024L * 1_024L * 250L

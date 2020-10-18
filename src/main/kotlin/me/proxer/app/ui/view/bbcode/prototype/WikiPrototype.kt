@@ -14,15 +14,16 @@ import me.proxer.app.ui.view.bbcode.BBArgs
 import me.proxer.app.ui.view.bbcode.BBCodeView
 import me.proxer.app.ui.view.bbcode.BBTree
 import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
-import org.koin.core.KoinComponent
-import org.koin.core.get
 
-object WikiPrototype : AutoClosingPrototype, KoinComponent {
+object WikiPrototype : AutoClosingPrototype {
 
     override val startRegex = Regex(" *wiki( .*?)?", BBPrototype.REGEX_OPTIONS)
     override val endRegex = Regex("/ *wiki *", BBPrototype.REGEX_OPTIONS)
+
+    private val api by safeInject<ProxerApi>()
 
     override fun makeViews(parent: BBCodeView, children: List<BBTree>, args: BBArgs): List<View> {
         val link = children.firstOrNull()?.args?.text?.toString() ?: ""
@@ -44,7 +45,7 @@ object WikiPrototype : AutoClosingPrototype, KoinComponent {
 
             view.layoutParams = ViewGroup.MarginLayoutParams(MATCH_PARENT, height)
 
-            get<ProxerApi>().wiki.content(link).buildSingle()
+            api.wiki.content(link).buildSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .autoDisposable(ViewScopeProvider.from(parent))

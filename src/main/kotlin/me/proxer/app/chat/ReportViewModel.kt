@@ -8,12 +8,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.extension.subscribeAndLogErrors
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
  */
-abstract class ReportViewModel : ViewModel(), KoinComponent {
+abstract class ReportViewModel : ViewModel() {
 
     val data = MutableLiveData<Unit?>()
     val error = MutableLiveData<ErrorUtils.ErrorAction?>()

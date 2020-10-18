@@ -18,13 +18,7 @@ import com.mikepenz.materialdrawer.interfaces.ICrossfader
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.IProfile
-import com.mikepenz.materialdrawer.model.interfaces.descriptionRes
-import com.mikepenz.materialdrawer.model.interfaces.iconDrawable
-import com.mikepenz.materialdrawer.model.interfaces.iconRes
-import com.mikepenz.materialdrawer.model.interfaces.iconUrl
-import com.mikepenz.materialdrawer.model.interfaces.nameRes
-import com.mikepenz.materialdrawer.model.interfaces.nameText
+import com.mikepenz.materialdrawer.model.interfaces.*
 import com.mikepenz.materialdrawer.util.addItems
 import com.mikepenz.materialdrawer.util.addStickyDrawerItems
 import com.mikepenz.materialdrawer.util.getStickyFooterPositionByIdentifier
@@ -41,7 +35,6 @@ import me.proxer.app.util.extension.dip
 import me.proxer.app.util.extension.resolveColor
 import me.proxer.app.util.extension.safeInject
 import me.proxer.library.util.ProxerUrls
-import org.koin.core.KoinComponent
 
 /**
  * @author Ruben Gees
@@ -52,7 +45,7 @@ class MaterialDrawerWrapper(
     toolbar: Toolbar,
     savedInstanceState: Bundle?,
     private val isMain: Boolean
-) : KoinComponent {
+) {
 
     val itemClickSubject: PublishSubject<DrawerItem> = PublishSubject.create()
     val profileClickSubject: PublishSubject<ProfileItem> = PublishSubject.create()
