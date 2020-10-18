@@ -2,6 +2,8 @@ package me.proxer.app.util.logging
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -16,23 +18,29 @@ import java.util.concurrent.Executors
 /**
  * @author Ruben Gees
  */
-class TimberFileTree(context: Context) : Timber.Tree() {
+@SuppressLint("LogNotTimber")
+class TimberFileTree(private val context: Context) : Timber.Tree() {
 
     private companion object {
-        private const val LOGS_DIRECTORY = "logs"
+        private const val LOGS_DIRECTORY = "Proxer.Me Logs"
         private const val ROTATION_THRESHOLD = 7L
 
         private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         private val executor = Executors.newSingleThreadExecutor()
     }
 
-    private val resolvedLogsDirectory = File(context.getExternalFilesDir(null), LOGS_DIRECTORY)
-        .also { it.mkdirs() }
+    @Suppress("DEPRECATION") // What is Android even doing?
+    private val downloadsDirectory = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+    private val resolvedLogsDirectory = File(downloadsDirectory, LOGS_DIRECTORY).also { it.mkdirs() }
 
     override fun isLoggable(tag: String?, priority: Int) = priority >= Log.INFO
 
-    @SuppressLint("CheckResult", "LogNotTimber")
+    @SuppressLint("CheckResult")
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        if (!resolvedLogsDirectory.canWrite()) {
+            return
+        }
+
         Completable
             .fromAction { internalLog(tag, message) }
             .subscribeOn(Schedulers.from(executor))
@@ -44,7 +52,6 @@ class TimberFileTree(context: Context) : Timber.Tree() {
             )
     }
 
-    @SuppressLint("LogNotTimber")
     private fun internalLog(tag: String?, message: String) {
         val currentLogFiles = resolvedLogsDirectory.listFiles() ?: emptyArray()
         val currentDateTime = LocalDateTime.now()
