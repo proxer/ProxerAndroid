@@ -319,6 +319,8 @@
         <item quantity="other">%d Episoden</item>
     </plurals>
 
+    <string name="scroll_to_bottom_content_description">Nach unten scrollen</string>
+
     <string name="cancel">Abbrechen</string>
 
     <string name="activity_update_available">Ein Update ist verfügbar</string>
