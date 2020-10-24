@@ -42,6 +42,12 @@
 # Workaround crash in Google Cast.
 -keep,allowoptimization class com.google.android.gms.internal.cast.** { *; }
 
+# TODO: Remove once it works without.
+# Workaround R8 bug removing a needed Drawable.
+-keep,allowoptimization class com.mikepenz.materialdrawer.util.DrawerUtils {
+    public handleFooterView(...);
+ }
+
 # Ignore warnings about specific classes not being available on Android JDK.
 -dontwarn java.util.concurrent.Flow$*
 
