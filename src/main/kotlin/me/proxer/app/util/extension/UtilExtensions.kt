@@ -45,7 +45,7 @@ import org.koin.core.parameter.DefinitionParameters
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 import timber.log.Timber
-import java.util.*
+import java.util.EnumSet
 import java.util.regex.Pattern.quote
 
 val MENTIONS_REGEX = Regex("@(?:.*?)(?:(?:(?! )(?!${quote(".")} )(?!${quote(".")}\n)(?!\n)).)*").toPattern()

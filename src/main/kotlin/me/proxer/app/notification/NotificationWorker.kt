@@ -1,7 +1,14 @@
 package me.proxer.app.notification
 
 import android.content.Context
-import androidx.work.*
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 import com.rubengees.rxbus.RxBus
 import me.proxer.app.news.NewsNotificationEvent
 import me.proxer.app.news.NewsNotifications

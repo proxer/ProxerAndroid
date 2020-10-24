@@ -2,7 +2,12 @@ package me.proxer.app.chat.prv.sync
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.RoomWarnings
+import androidx.room.Transaction
 import io.reactivex.Maybe
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.chat.prv.ConferenceWithMessage

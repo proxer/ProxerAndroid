@@ -8,7 +8,11 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.buildSingle
+import me.proxer.app.util.extension.safeInject
+import me.proxer.app.util.extension.subscribeAndLogErrors
+import me.proxer.app.util.extension.toLocalSettings
 import me.proxer.library.ProxerApi
 
 /**

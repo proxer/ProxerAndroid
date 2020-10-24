@@ -11,7 +11,11 @@ import androidx.core.text.parseAsHtml
 import me.proxer.app.R
 import me.proxer.app.util.NotificationUtils.PROFILE_CHANNEL
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.*
+import me.proxer.app.util.extension.ProxerNotification
+import me.proxer.app.util.extension.androidUri
+import me.proxer.app.util.extension.getQuantityString
+import me.proxer.app.util.extension.safeInject
+import me.proxer.app.util.extension.toInstantBP
 
 /**
  * @author Ruben Gees

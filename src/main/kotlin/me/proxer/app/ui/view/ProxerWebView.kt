@@ -3,7 +3,12 @@ package me.proxer.app.ui.view
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import android.webkit.*
+import android.webkit.MimeTypeMap
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.bumptech.glide.load.engine.GlideException
 import io.reactivex.subjects.PublishSubject
 import me.proxer.app.GlideApp
@@ -23,7 +28,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.math.BigDecimal
 import java.math.MathContext
-import java.util.*
+import java.util.Locale
 
 /**
  * @author Ruben Gees
