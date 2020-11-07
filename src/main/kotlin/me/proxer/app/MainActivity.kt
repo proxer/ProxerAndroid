@@ -1,8 +1,14 @@
 package me.proxer.app
 
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
@@ -58,7 +64,7 @@ class MainActivity : DrawerActivity() {
     override val isRootActivity get() = intent.action != Intent.ACTION_VIEW && !intent.hasExtra(SECTION_EXTRA)
     override val isMainActivity = true
 
-    val tabs: TabLayout by bindView(R.id.tabs)
+    internal val tabs: TabLayout by bindView(R.id.tabs)
 
     private val profileSettingsViewModel by viewModel<ProfileSettingsViewModel>()
 
@@ -66,6 +72,12 @@ class MainActivity : DrawerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (BuildConfig.LOG && VERSION.SDK_INT >= VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(WRITE_EXTERNAL_STORAGE), 1)
+            }
+        }
 
         supportPostponeEnterTransition()
         displayFirstPage(savedInstanceState)

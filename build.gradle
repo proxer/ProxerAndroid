@@ -60,9 +60,8 @@ android {
         }
 
         logRelease {
-            setRoot "src/release"
-
             java.srcDirs = release.java.srcDirs
+            main.res.srcDirs += release.res.srcDirs
         }
     }
 

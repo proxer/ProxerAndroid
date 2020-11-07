@@ -167,7 +167,7 @@ class MainApplication : Application() {
         AndroidThreeTen.init(this)
 
         if (BuildConfig.LOG) {
-            Timber.plant(TimberFileTree(this))
+            Timber.plant(TimberFileTree())
 
             if (BuildConfig.DEBUG) {
                 Timber.plant(Timber.DebugTree())

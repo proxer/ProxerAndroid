@@ -1,7 +1,6 @@
 package me.proxer.app.util.logging
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
@@ -19,7 +18,7 @@ import java.util.concurrent.Executors
  * @author Ruben Gees
  */
 @SuppressLint("LogNotTimber")
-class TimberFileTree(private val context: Context) : Timber.Tree() {
+class TimberFileTree : Timber.Tree() {
 
     private companion object {
         private const val LOGS_DIRECTORY = "Proxer.Me Logs"
@@ -30,8 +29,9 @@ class TimberFileTree(private val context: Context) : Timber.Tree() {
     }
 
     @Suppress("DEPRECATION") // What is Android even doing?
-    private val downloadsDirectory = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
-    private val resolvedLogsDirectory = File(downloadsDirectory, LOGS_DIRECTORY).also { it.mkdirs() }
+    private val downloadsDirectory
+        get() = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+    private val resolvedLogsDirectory get() = File(downloadsDirectory, LOGS_DIRECTORY).also { it.mkdirs() }
 
     override fun isLoggable(tag: String?, priority: Int) = priority >= Log.INFO
 
