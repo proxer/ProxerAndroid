@@ -61,7 +61,7 @@ android {
 
         logRelease {
             java.srcDirs = release.java.srcDirs
-            main.res.srcDirs += release.res.srcDirs
+            res.srcDirs = release.res.srcDirs
         }
     }
 
