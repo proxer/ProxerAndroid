@@ -23,7 +23,6 @@ ext {
     versionsPluginVersion = "0.33.0"
     detektPluginVersion = "1.14.1"
     ktlintPluginVersion = "9.4.1"
-    androidCommandPluginVersion = "2.1.0"
 
     // Frameworks and compatibility libraries
     koinVersion = "2.2.0-rc-3"
