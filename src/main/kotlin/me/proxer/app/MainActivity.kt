@@ -73,9 +73,12 @@ class MainActivity : DrawerActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Request storage permission for writing logs in debug variants.
         if (BuildConfig.LOG && VERSION.SDK_INT >= VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(WRITE_EXTERNAL_STORAGE), 1)
+            if (VERSION.SDK_INT >= VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, arrayOf(WRITE_EXTERNAL_STORAGE), 1)
+                }
             }
         }
 

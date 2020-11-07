@@ -8,13 +8,7 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
-    <application tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.crash.CrashActivity"
-            android:process=":error_activity">
-            <intent-filter>
-                <action android:name="cat.ereza.customactivityoncrash.ERROR" />
-            </intent-filter>
-        </activity>
-    </application>
+    <application
+        android:requestLegacyExternalStorage="true"
+        tools:ignore="GoogleAppIndexingWarning" />
 </manifest>

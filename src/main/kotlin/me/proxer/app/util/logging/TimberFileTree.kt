@@ -31,6 +31,7 @@ class TimberFileTree : Timber.Tree() {
     @Suppress("DEPRECATION") // What is Android even doing?
     private val downloadsDirectory
         get() = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+
     private val resolvedLogsDirectory get() = File(downloadsDirectory, LOGS_DIRECTORY).also { it.mkdirs() }
 
     override fun isLoggable(tag: String?, priority: Int) = priority >= Log.INFO
