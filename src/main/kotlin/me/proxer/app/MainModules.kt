@@ -1,7 +1,6 @@
 package me.proxer.app
 
 import android.content.res.Resources
-import android.os.Build
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -55,6 +54,7 @@ import me.proxer.app.profile.settings.ProfileSettingsViewModel
 import me.proxer.app.profile.topten.TopTenViewModel
 import me.proxer.app.settings.status.ServerStatusViewModel
 import me.proxer.app.ui.LinkCheckViewModel
+import me.proxer.app.util.Mp4UploadTrustManagerWorkaround
 import me.proxer.app.util.Validators
 import me.proxer.app.util.data.HawkMoshiParser
 import me.proxer.app.util.data.InstantJsonAdapter
@@ -87,7 +87,6 @@ import org.koin.dsl.module
 import org.threeten.bp.Instant
 import java.io.File
 import java.security.KeyStore
-import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
@@ -162,38 +161,10 @@ private val applicationModules = module {
             else -> null
         }
 
-        val trustManager = object : X509TrustManager {
-            private val platformTrustManager = Platform.get().platformTrustManager()
-
-            override fun getAcceptedIssuers(): Array<X509Certificate> = platformTrustManager.acceptedIssuers
-
-            override fun checkClientTrusted(certs: Array<X509Certificate>, authType: String) {
-                platformTrustManager.checkClientTrusted(certs, authType)
-            }
-
-            override fun checkServerTrusted(certs: Array<X509Certificate>, authType: String) {
-                val mp4UploadCert = certs.find { it.subjectDN.name == "CN=*.mp4upload.com" }
-
-                if (mp4UploadCert != null) {
-                    // The certificate chain of MP4Upload contains an expired cross-signed certificate which incorrectly
-                    // leads to an error on older Android Versions.
-                    // Avoid checking the entire chain here to workaround that.
-                    //
-                    // THIS IS A SECURITY ISSUE AND NEEDS TO BE REMOVED AS SOON AS POSSIBLE.
-                    mp4UploadCert.checkValidity()
-                } else {
-                    platformTrustManager.checkServerTrusted(certs, authType)
-                }
-            }
-        }
+        val trustManager = Mp4UploadTrustManagerWorkaround.create()
 
         OkHttpClient.Builder()
-            .apply {
-                // Tested: Only necessary on Lollipop.
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    sslSocketFactory(Platform.get().newSslSocketFactory(trustManager), trustManager)
-                }
-            }
+            .sslSocketFactory(Platform.get().newSslSocketFactory(trustManager), trustManager)
             .connectionSpecs(listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.CLEARTEXT))
             .socketFactory(TaggedSocketFactory())
             .connectTimeout(5, TimeUnit.SECONDS)

@@ -152,7 +152,16 @@ class MainApplication : Application() {
                 .build()
 
             val vmPolicy = StrictModeCompat.VmPolicy.Builder()
-                .detectAll()
+                .detectActivityLeaks()
+                .detectCleartextNetwork()
+                .detectFileUriExposure()
+                .detectLeakedClosableObjects()
+                .detectLeakedRegistrationObjects()
+                .detectLeakedSqlLiteObjects()
+                .detectContentUriWithoutPermission()
+                .detectNonSdkApiUsage()
+                .detectImplicitDirectBoot()
+                .detectCredentialProtectedWhileLocked()
                 .penaltyLog()
                 .build()
 
