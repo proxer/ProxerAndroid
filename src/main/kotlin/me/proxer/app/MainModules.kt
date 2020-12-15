@@ -97,7 +97,7 @@ private const val STORAGE_PREFERENCES = "storagePreferences"
 private const val DEFAULT_RX_PREFERENCES = "defaultRxPreferences"
 private const val STORAGE_RX_PREFERENCES = "storageRxPreferences"
 
-private const val STORAGE_PREFERENCES_NAME = "me.proxer.encrypted_preferences.xml"
+private const val STORAGE_PREFERENCES_NAME = "me.proxer.encrypted_preferences"
 
 private const val CHAT_DATABASE_NAME = "chat.db"
 private const val TAG_DATABASE_NAME = "tag.db"
@@ -223,7 +223,15 @@ private val applicationModules = module {
     single { get<TagDatabase>().dao() }
 
     single { HawkMoshiParser(get()) }
-    single { LocalDataInitializer(androidContext(), get(), get(named(STORAGE_PREFERENCES))) }
+
+    single {
+        LocalDataInitializer(
+            androidContext(),
+            get(),
+            get(named(DEFAULT_PREFERENCES)),
+            get(named(STORAGE_PREFERENCES))
+        )
+    }
 
     single<LoginTokenManager> { ProxerLoginTokenManager(get()) }
     single { LoginHandler(get(), get(), get(), get()) }

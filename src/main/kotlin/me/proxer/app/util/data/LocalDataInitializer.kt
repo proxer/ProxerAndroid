@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.orhanobut.hawk.Hawk
 import me.proxer.app.auth.LocalUser
 import me.proxer.app.profile.settings.LocalProfileSettings
@@ -16,13 +17,14 @@ import java.io.File
 class LocalDataInitializer(
     private val context: Context,
     private val jsonParser: HawkMoshiParser,
+    private val preferences: SharedPreferences,
     private val storagePreferences: SharedPreferences
 ) {
 
     private companion object {
         private const val VERSION = "version"
 
-        private const val currentVersion = 6
+        private const val currentVersion = 7
     }
 
     @Volatile
@@ -35,7 +37,6 @@ class LocalDataInitializer(
                     // TODO: Remove Hawk in next version.
                     initHawk()
 
-                    val preferences = PreferenceManager.getDefaultSharedPreferences(context)
                     val previousVersion = Hawk.get<Int>(VERSION) ?: preferences.getInt(VERSION, 0)
 
                     if (previousVersion <= 3) {
@@ -48,6 +49,10 @@ class LocalDataInitializer(
 
                     if (previousVersion <= 5) {
                         migrate5To6(storagePreferences)
+                    }
+
+                    if (previousVersion <= 6) {
+                        migrate6To7(storagePreferences)
                     }
 
                     if (previousVersion != currentVersion) {
@@ -124,6 +129,41 @@ class LocalDataInitializer(
                 .map { File(context.filesDir.parent, it) }
                 .filter { it.exists() }
                 .forEach { it.delete() }
+        }
+    }
+
+    private fun migrate6To7(storagePreferences: SharedPreferences) {
+        // The preference filename was incorrect in the previous version.
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        val previousPreferences = EncryptedSharedPreferences.create(
+            context,
+            "me.proxer.encrypted_preferences.xml",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+
+        storagePreferences.edit(commit = true) {
+            previousPreferences.all.forEach { (key, value) ->
+                when (value) {
+                    is String -> putString(key, value)
+                    is Int -> putInt(key, value)
+                    is Long -> putLong(key, value)
+                    is LocalUser -> putString(key, jsonParser.toJson(value))
+                    is LocalProfileSettings -> putString(key, jsonParser.toJson(value))
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.deleteSharedPreferences("me.proxer.encrypted_preferences.xml")
+        } else {
+            File(context.filesDir.parent, "shared_prefs/me.proxer.encrypted_preferences.xml.xml")
+                .let { if (it.exists()) it else null }
+                ?.delete()
         }
     }
 }
