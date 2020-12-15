@@ -40,6 +40,7 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.Category
 import me.proxer.library.util.ProxerUrls
+import okhttp3.HttpUrl
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -112,7 +113,7 @@ class ProfileActivity : ImageTabsActivity() {
     private var createChatMenuItem: MenuItem? = null
     private var newGroupMenuItem: MenuItem? = null
 
-    override val headerImageUrl
+    override val headerImageUrl: HttpUrl?
         get() = image.let { image ->
             if (image == null || image.isBlank()) null else ProxerUrls.userImage(image)
         }

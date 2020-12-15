@@ -27,19 +27,21 @@ class UniqueQueue<T> : Queue<T> {
     override fun peek() = internalList.firstOrNull()
 
     override fun offer(element: T): Boolean {
+        val previousSize = internalList.size
+
         internalList.add(element)
 
-        return true
+        return previousSize != internalList.size
     }
 
-    override fun poll() = iterator().let { iterator ->
+    override fun poll(): T? = iterator().let { iterator ->
         when {
             iterator.hasNext() -> iterator.next().apply { iterator.remove() }
             else -> null
         }
     }
 
-    override fun remove() = iterator().let { iterator ->
+    override fun remove(): T = iterator().let { iterator ->
         when {
             iterator.hasNext() -> iterator.next().apply { iterator.remove() }
             else -> throw NoSuchElementException()

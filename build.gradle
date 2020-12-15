@@ -214,9 +214,16 @@ detekt {
 }
 
 ktlint {
+    version = ktlintVersion
     disabledRules = ["import-ordering"]
     reporters {
         reporter org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        it.candidate.version.contains("alpha")
     }
 }
 
