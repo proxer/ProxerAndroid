@@ -103,7 +103,7 @@ android {
                 obfuscate true
                 optimizeCode true
                 removeUnusedCode true
-                removeUnusedResources false // TODO: Broken (again)
+                removeUnusedResources true
                 proguardFile "config/shrinker/shrinker-rules.pro"
             }
 
@@ -124,7 +124,7 @@ android {
                 obfuscate true
                 optimizeCode true
                 removeUnusedCode true
-                removeUnusedResources false // TODO: Broken (again)
+                removeUnusedResources true
                 proguardFile "config/shrinker/shrinker-rules.pro"
             }
 
