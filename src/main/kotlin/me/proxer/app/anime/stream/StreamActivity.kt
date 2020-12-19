@@ -99,6 +99,10 @@ import timber.log.Timber
 @Suppress("DEPRECATION") // TODO: Wait for androidx fullscreen support library.
 class StreamActivity : BaseActivity() {
 
+    companion object {
+        private const val PREVIEW_MIME_TYPE = "video/mp4"
+    }
+
     internal val id: String
         get() = intent.getSafeStringExtra(ID_EXTRA)
 
@@ -286,14 +290,16 @@ class StreamActivity : BaseActivity() {
             .autoDisposable(this.scope())
             .subscribe { toggleOrientation() }
 
-        PreviewLoader
-            .loadFrames(
-                progress.loadRequests(),
-                { Size(preview.width, preview.height) },
-                PreviewLoader.PreviewMetaData(uri, referer, isProxerStream)
-            )
-            .autoDisposable(this.scope())
-            .subscribeAndLogErrors { preview.setImageBitmap(it) }
+        if (mimeType == PREVIEW_MIME_TYPE) {
+            PreviewLoader
+                .loadFrames(
+                    progress.loadRequests(),
+                    { Size(preview.width, preview.height) },
+                    PreviewLoader.PreviewMetaData(uri, referer, isProxerStream)
+                )
+                .autoDisposable(this.scope())
+                .subscribeAndLogErrors { preview.setImageBitmap(it) }
+        }
 
         if (savedInstanceState == null) {
             toggleOrientation()
