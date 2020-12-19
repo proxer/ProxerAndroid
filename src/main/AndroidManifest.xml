@@ -28,7 +28,6 @@
         android:name=".MainApplication"
         android:allowBackup="true"
         android:appCategory="social"
-        android:extractNativeLibs="false"
         android:fullBackupContent="@xml/backup_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

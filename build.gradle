@@ -154,6 +154,10 @@ android {
     }
 
     packagingOptions {
+        jniLibs {
+            useLegacyPackaging false
+        }
+
         exclude "META-INF/*.kotlin_module"
         exclude "META-INF/*.version"
         exclude "META-INF/rxkotlin.properties"

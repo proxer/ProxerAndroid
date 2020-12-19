@@ -11,6 +11,7 @@
     <!-- Disable checks not working properly. -->
     <issue id="IconExpectedSize" severity="ignore" />
     <issue id="NullSafeMutableLiveData" severity="ignore" />
+    <issue id="UnpackedNativeCode" severity="ignore" />
 
     <!-- Ignore errors about packages not contained in Android. These are safe. -->
     <issue id="InvalidPackage" severity="error">
