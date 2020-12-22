@@ -13,7 +13,7 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.8-rc-3"
+    gradleVersion = "6.8-rc-4"
 
     // Core plugins
     androidPluginVersion = "4.2.0-beta02"
@@ -26,7 +26,7 @@ ext {
     ktlintVersion = "0.40.0"
 
     // Frameworks and compatibility libraries
-    koinVersion = "2.2.1"
+    koinVersion = "2.2.2"
     appcompatVersion = "1.3.0-alpha02"
     browserVersion = "1.3.0"
     lifecycleVersion = "2.2.0"
@@ -56,13 +56,13 @@ ext {
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.1.0-alpha01"
     exifinterfaceVersion = "1.3.2"
-    materialComponentsVersion = "1.3.0-alpha04"
+    materialComponentsVersion = "1.3.0-beta01"
     constaintLayoutVersion = "2.1.0-alpha1"
     preferenceVersion = "1.1.1"
     supportPreferenceVersion = "6d5ebc7934"
     iconicsVersion = "5.2.1"
     communityMaterialTypefaceVersion = "5.8.55.0-kotlin"
-    materialDrawerVersion = "8.3.0"
+    materialDrawerVersion = "8.3.1"
     aboutLibrariesVersion = "8.6.3"
     crossfaderVersion = "1.6.0"
     materialAboutVersion = "3.2.0-rc01"
