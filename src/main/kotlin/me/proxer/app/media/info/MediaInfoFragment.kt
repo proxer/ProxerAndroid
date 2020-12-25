@@ -438,7 +438,7 @@ class MediaInfoFragment : BaseContentFragment<Entry>(R.layout.fragment_media_inf
         onClick: ((T) -> Unit)? = null
     ) {
         layout.post {
-            if (layout.width <= 0 || view == null) return@post
+            if (layout.width <= 0 || view == null || view?.isAttachedToWindow != true) return@post
             if (layout.childCount > 0) layout.removeAllViews()
 
             for ((index, mappedItem) in items.asSequence().map(mapFunction).withIndex().toList()) {
