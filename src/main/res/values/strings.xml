@@ -116,12 +116,14 @@
     <string name="error_comment_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Kommentar</string>
     <string name="error_comment_not_active_yet">Dieses Werk kann noch nicht bewertet werden</string>
 
+    <string name="error_wiki_no_permissions">Du hast nicht die nötigen Berechtigungen für diesen Artikel</string>
+
     <string name="error_login">Du bist nicht angemeldet</string>
     <string name="error_login_required">Für diesen Bereich musst du dich anmelden</string>
     <string name="error_captcha">Es wurden zu viele Anfragen gemacht</string>
     <string name="error_rate_limit">Du machst derzeit viele Anfragen. Bitte warte einen Moment um die Server zu schonen</string>
-    <string name="error_age_confirmation_needed">Für diesen Inhalt musst du bestätigen, dass du mindestens 18
-        Jahre alt bist
+    <string name="error_age_confirmation_needed">
+        Für diesen Inhalt musst du bestätigen, dass du mindestens 18 Jahre alt bist
     </string>
     <string name="error_refresh">Aktualisierung fehlgeschlagen: %s</string>
 
@@ -151,6 +153,10 @@
         Der Hoster ist (temporär) nicht verfügbar. Versuche es später erneut
     </string>
     <string name="error_video_unknown">Es gab ein unbekanntes Problem mit dem Hoster. Versuche es später erneut</string>
+
+    <string name="error_media_removed_due_to_copyright">
+        Dieses Werk ist aufgrund von einer Lizenzierung in der App nicht verfügbar
+    </string>
 
     <string name="error_no_data">Keine Daten</string>
     <string name="error_no_data_news">Derzeit sind keine News verfügbar</string>

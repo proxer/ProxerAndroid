@@ -27,6 +27,7 @@ import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.LOGIN
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.NETWORK_SETTINGS
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction.OPEN_LINK
 import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_DEFAULT
+import me.proxer.app.util.ErrorUtils.ErrorAction.Companion.ACTION_MESSAGE_HIDE
 import me.proxer.app.util.data.StorageHelper
 import me.proxer.app.util.extension.androidUri
 import me.proxer.app.util.extension.safeInject
@@ -103,6 +104,7 @@ import me.proxer.library.ProxerException.ServerErrorType.LOGIN_MISSING_CREDENTIA
 import me.proxer.library.ProxerException.ServerErrorType.MANGA_INVALID_CHAPTER
 import me.proxer.library.ProxerException.ServerErrorType.MEDIA_INVALID_ENTRY
 import me.proxer.library.ProxerException.ServerErrorType.MEDIA_INVALID_STYLE
+import me.proxer.library.ProxerException.ServerErrorType.MEDIA_REMOVED_DUE_TO_COPYRIGHT
 import me.proxer.library.ProxerException.ServerErrorType.MESSAGES_EXCEEDED_MAXIMUM_USERS
 import me.proxer.library.ProxerException.ServerErrorType.MESSAGES_INVALID_CONFERENCE
 import me.proxer.library.ProxerException.ServerErrorType.MESSAGES_INVALID_MESSAGE
@@ -127,6 +129,8 @@ import me.proxer.library.ProxerException.ServerErrorType.USER_2FA_SECRET_REQUIRE
 import me.proxer.library.ProxerException.ServerErrorType.USER_ACCOUNT_BLOCKED
 import me.proxer.library.ProxerException.ServerErrorType.USER_ACCOUNT_EXPIRED
 import me.proxer.library.ProxerException.ServerErrorType.USER_INSUFFICIENT_PERMISSIONS
+import me.proxer.library.ProxerException.ServerErrorType.WIKI_INVALID_PERMISSIONS
+import me.proxer.library.ProxerException.ServerErrorType.WIKI_INVALID_TITLE
 import me.proxer.library.enums.Device
 import me.proxer.library.util.ProxerUrls
 import okhttp3.HttpUrl
@@ -168,7 +172,7 @@ object ErrorUtils {
         CHAT_INVALID_ROOM, CHAT_INVALID_MESSAGE, CHAT_LOGIN_REQUIRED, CHAT_INVALID_THANK_YOU, CHAT_INVALID_INPUT,
         INFO_DELETE_COMMENT_INVALID_INPUT, UCP_INVALID_SETTINGS, COMMENT_INVALID_ID, COMMENT_INVALID_COMMENT,
         COMMENT_INVALID_RATING, COMMENT_INVALID_EPISODE, COMMENT_INVALID_STATUS, COMMENT_INVALID_ENTRY_ID,
-        COMMENT_INVALID_CONTENT, COMMENT_ALREADY_EXISTS
+        COMMENT_INVALID_CONTENT, COMMENT_ALREADY_EXISTS, WIKI_INVALID_TITLE
     )
 
     private val invalidIdErrors = arrayOf(
@@ -218,6 +222,7 @@ object ErrorUtils {
         val buttonMessage = when (innermostError) {
             is ProxerException -> when (innermostError.serverErrorType) {
                 IP_BLOCKED -> R.string.error_action_captcha
+                MEDIA_REMOVED_DUE_TO_COPYRIGHT -> ACTION_MESSAGE_HIDE
                 in loginErrors -> R.string.error_action_login
                 else -> ACTION_MESSAGE_DEFAULT
             }
@@ -284,8 +289,10 @@ object ErrorUtils {
             CHAT_INVALID_PERMISSIONS, CHAT_NO_PERMISSIONS -> R.string.error_chat_no_permissions
             FORUM_INVALID_PERMISSIONS -> R.string.error_forum_no_permissions
             COMMENT_INSUFFICIENT_PERMISSIONS -> R.string.error_comment_no_permissions
+            WIKI_INVALID_PERMISSIONS -> R.string.error_wiki_no_permissions
             COMMENT_NOT_ACTIVE_YET -> R.string.error_comment_not_active_yet
             IP_AUTHENTICATION_REQUIRED -> R.string.error_login_ip_authentication
+            MEDIA_REMOVED_DUE_TO_COPYRIGHT -> R.string.error_media_removed_due_to_copyright
             INTERNAL -> R.string.error_internal
             in apiErrors -> R.string.error_api
             in maintenanceErrors -> R.string.error_maintenance
