@@ -2,7 +2,6 @@ package me.proxer.app.media
 
 import androidx.lifecycle.MutableLiveData
 import com.gojuno.koptional.Some
-import com.gojuno.koptional.rxjava2.filterSome
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,7 +14,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isTrulyAgeRestricted
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -42,8 +40,7 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
             .doAfterSuccess {
                 if (storageHelper.isLoggedIn) {
                     userInfoDisposable = api.info.userInfo(entryId)
-                        .buildOptionalSingle()
-                        .filterSome()
+                        .buildSingle()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeAndLogErrors { userInfoData.value = it }
@@ -105,16 +102,16 @@ class MediaInfoViewModel(private val entryId: String) : BaseViewModel<Entry>() {
 
     private fun updateUserInfo(updateType: UserInfoUpdateType) {
         val endpoint = when (updateType) {
-            UserInfoUpdateType.NOTE -> api.info.note(entryId).buildOptionalSingle()
-            UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId).buildOptionalSingle()
-            UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId).buildOptionalSingle()
-            UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId).buildOptionalSingle()
-            UserInfoUpdateType.UNSUBSCRIBE -> api.ucp.deleteSubscription(entryId).buildOptionalSingle()
+            UserInfoUpdateType.NOTE -> api.info.note(entryId).buildSingle()
+            UserInfoUpdateType.FAVORITE -> api.info.markAsFavorite(entryId).buildSingle()
+            UserInfoUpdateType.FINISHED -> api.info.markAsFinished(entryId).buildSingle()
+            UserInfoUpdateType.SUBSCRIBE -> api.info.subscribe(entryId).buildSingle()
+            UserInfoUpdateType.UNSUBSCRIBE -> api.ucp.deleteSubscription(entryId).buildSingle()
             UserInfoUpdateType.UNFAVORITE -> api.ucp.topTen().buildSingle().flatMap { topTenEntries ->
                 val topTenId = topTenEntries.find { topTenEntry -> topTenEntry.entryId == entryId }?.id
 
                 if (topTenId != null) {
-                    api.ucp.deleteFavorite(topTenId).buildOptionalSingle()
+                    api.ucp.deleteFavorite(topTenId).buildSingle()
                 } else {
                     Single.just(Some(Unit))
                 }

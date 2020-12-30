@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
-import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.ProxerApi
@@ -35,7 +35,7 @@ class LogoutViewModel : ViewModel() {
         if (isLoading.value != true) {
             dataDisposable?.dispose()
             dataDisposable = api.user.logout()
-                .buildOptionalSingle()
+                .buildSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

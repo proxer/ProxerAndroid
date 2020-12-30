@@ -9,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalComment
@@ -84,7 +83,7 @@ class EditCommentViewModel(
                         api.comment.update(comment.id)
                             .comment(comment.content.trim())
                             .rating(comment.overallRating)
-                            .buildOptionalSingle()
+                            .buildSingle()
 
                     else -> when (val it = entryId) {
                         null -> null
@@ -92,7 +91,7 @@ class EditCommentViewModel(
                             api.comment.create(it)
                                 .comment(comment.content.trim())
                                 .rating(comment.overallRating)
-                                .buildOptionalSingle()
+                                .buildSingle()
                     }
                 }
             }

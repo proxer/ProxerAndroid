@@ -8,7 +8,7 @@ import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
-import me.proxer.app.util.extension.buildOptionalSingle
+import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.api.PagingLimitEndpoint
 import me.proxer.library.entity.ucp.Bookmark
@@ -114,7 +114,7 @@ class BookmarkViewModel(
             undoItem = null
 
             deletionDisposable = api.ucp.deleteBookmark(item.id)
-                .buildOptionalSingle()
+                .buildSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { undoData.value = null }
@@ -138,5 +138,5 @@ class BookmarkViewModel(
 
     private fun bookmarkSingle(bookmark: Bookmark) = api.ucp
         .setBookmark(bookmark.entryId, bookmark.episode, bookmark.language, bookmark.category)
-        .buildOptionalSingle()
+        .buildSingle()
 }

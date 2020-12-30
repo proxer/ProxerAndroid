@@ -8,7 +8,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.StorageHelper
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
@@ -69,7 +68,7 @@ class ProfileSettingsViewModel : ViewModel() {
 
         disposable?.dispose()
         disposable = api.ucp.setSettings(newData.toNonLocalSettings())
-            .buildOptionalSingle()
+            .buildSingle()
             .doOnSuccess { storageHelper.profileSettings = newData }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

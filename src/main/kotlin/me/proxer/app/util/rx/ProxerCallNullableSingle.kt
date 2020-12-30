@@ -1,5 +1,7 @@
 package me.proxer.app.util.rx
 
+import com.gojuno.koptional.Optional
+import com.gojuno.koptional.toOptional
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
@@ -11,9 +13,9 @@ import me.proxer.library.ProxerCall
 /**
  * @author Ruben Gees
  */
-class ProxerCallSingle<T : Any>(private val originalCall: ProxerCall<T>) : Single<T>() {
+class ProxerCallNullableSingle<T : Any>(private val originalCall: ProxerCall<T?>) : Single<Optional<T>>() {
 
-    override fun subscribeActual(observer: SingleObserver<in T>) {
+    override fun subscribeActual(observer: SingleObserver<in Optional<T>>) {
         val call = originalCall.clone()
         val disposable = CallDisposable(call)
 
@@ -26,7 +28,7 @@ class ProxerCallSingle<T : Any>(private val originalCall: ProxerCall<T>) : Singl
         var terminated = false
 
         try {
-            val response = call.safeExecute()
+            val response = call.execute().toOptional()
 
             if (!disposable.isDisposed) {
                 terminated = true

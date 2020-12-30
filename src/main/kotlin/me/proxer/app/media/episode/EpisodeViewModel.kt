@@ -7,7 +7,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.BaseViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.library.enums.Category
@@ -46,7 +45,7 @@ class EpisodeViewModel(private val entryId: String) : BaseViewModel<List<Episode
     fun bookmark(episode: Int, language: MediaLanguage, category: Category) {
         bookmarkDisposable?.dispose()
         bookmarkDisposable = Single.fromCallable { validators.validateLogin() }
-            .flatMap { api.ucp.setBookmark(entryId, episode, language, category).buildOptionalSingle() }
+            .flatMap { api.ucp.setBookmark(entryId, episode, language, category).buildSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { isLoading.value = true }

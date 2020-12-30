@@ -12,7 +12,6 @@ import me.proxer.app.exception.PartialException
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.ErrorUtils.ErrorAction.ButtonAction
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildPartialErrorSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.isAgeRestricted
@@ -117,10 +116,10 @@ class MangaViewModel(
         .map { MangaChapterInfo(it, entry.name, entry.episodeAmount) }
 
     @Suppress("ForbiddenVoid")
-    private fun updateUserState(endpoint: Endpoint<Unit>) {
+    private fun updateUserState(endpoint: Endpoint<Unit?>) {
         userStateDisposable?.dispose()
         userStateDisposable = Single.fromCallable { validators.validateLogin() }
-            .flatMap { endpoint.buildOptionalSingle() }
+            .flatMap { endpoint.buildSingle() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors(

@@ -8,7 +8,6 @@ import me.proxer.app.base.PagedViewModel
 import me.proxer.app.comment.LocalComment
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedComment
@@ -52,7 +51,7 @@ class CommentsViewModel(
         deleteDisposable = api.comment.update(comment.id)
             .comment("")
             .rating(0)
-            .buildOptionalSingle()
+            .buildSingle()
             .doOnSuccess { storageHelper.deleteCommentDraft(comment.entryId) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

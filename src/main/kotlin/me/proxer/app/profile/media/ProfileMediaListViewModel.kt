@@ -9,7 +9,6 @@ import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toLocalEntry
@@ -92,7 +91,7 @@ class ProfileMediaListViewModel(
 
         deletionQueue.poll()?.let { item ->
             deletionDisposable = api.ucp.deleteComment(item.commentId)
-                .buildOptionalSingle()
+                .buildSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors(

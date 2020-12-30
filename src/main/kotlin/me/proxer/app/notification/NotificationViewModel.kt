@@ -9,7 +9,6 @@ import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
 import me.proxer.app.util.data.UniqueQueue
 import me.proxer.app.util.extension.ProxerNotification
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toInstantBP
@@ -94,7 +93,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
         deletionQueue.clear()
 
         api.notifications.deleteAllNotifications()
-            .buildOptionalSingle()
+            .buildSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeAndLogErrors(
@@ -113,7 +112,7 @@ class NotificationViewModel : PagedViewModel<ProxerNotification>() {
 
         deletionQueue.poll()?.let { item ->
             deletionDisposable = api.notifications.deleteNotification(item.id)
-                .buildOptionalSingle()
+                .buildSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors(

@@ -6,15 +6,16 @@ import io.reactivex.Single
 import me.proxer.app.exception.PartialException
 import me.proxer.app.util.rx.CallResponseSingle
 import me.proxer.app.util.rx.CallStringBodySingle
+import me.proxer.app.util.rx.ProxerCallNullableSingle
 import me.proxer.app.util.rx.ProxerCallSingle
 import me.proxer.library.api.Endpoint
 import okhttp3.Call
 import okhttp3.Response
 
-inline fun <T : Any> Endpoint<T>.buildSingle(): Single<T> = ProxerCallSingle(build())
-    .map { requireNotNull(it.toNullable()) }
+inline fun <T : Any> Endpoint<T>.buildSingle() = ProxerCallSingle(build())
 
-inline fun <T : Any> Endpoint<T>.buildOptionalSingle() = ProxerCallSingle(build())
+@JvmName("buildNullableSingle")
+inline fun <T : Any> Endpoint<T?>.buildSingle() = ProxerCallNullableSingle(build())
 
 inline fun <I, T : Any> Endpoint<T>.buildPartialErrorSingle(input: I): Single<T> = buildSingle()
     .onErrorResumeNext { Single.error(PartialException(it, input)) }

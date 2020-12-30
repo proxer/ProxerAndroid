@@ -10,7 +10,6 @@ import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedViewModel
 import me.proxer.app.util.ErrorUtils
 import me.proxer.app.util.data.ResettingMutableLiveData
-import me.proxer.app.util.extension.buildOptionalSingle
 import me.proxer.app.util.extension.buildSingle
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toParsedMessage
@@ -217,22 +216,19 @@ class ChatViewModel(private val chatRoomId: String) : PagedViewModel<ParsedChatM
 
         sendMessageQueue.poll()?.let { item ->
             sendMessageDisposable = Single.fromCallable { validators.validateLogin() }
-                .flatMap { api.chat.sendMessage(chatRoomId, item.message).buildOptionalSingle() }
+                .flatMap { api.chat.sendMessage(chatRoomId, item.message).buildSingle() }
                 .retryWhen(RxRetryWithDelay(2, 3_000))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeAndLogErrors(
-                    {
-                        it.toNullable()?.let { id ->
-                            sentMessageIds.add(id)
+                    { id ->
+                        sentMessageIds.add(id)
 
-                            startPolling(true)
-                            doSendMessages()
-                        }
+                        startPolling(true)
+                        doSendMessages()
                     },
                     {
-                        data.value =
-                            data.value?.dropWhile { message -> message.id.toLong() < 0 }
+                        data.value = data.value?.dropWhile { message -> message.id.toLong() < 0 }
                         sendMessageQueue.clear()
 
                         sendMessageError.value = ErrorUtils.handle(it)
