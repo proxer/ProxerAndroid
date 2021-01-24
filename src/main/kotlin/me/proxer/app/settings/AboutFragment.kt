@@ -1,8 +1,11 @@
 package me.proxer.app.settings
 
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -27,7 +30,6 @@ import me.proxer.app.chat.prv.Participant
 import me.proxer.app.chat.prv.PrvMessengerActivity
 import me.proxer.app.chat.prv.create.CreateConferenceActivity
 import me.proxer.app.chat.prv.sync.MessengerDao
-import me.proxer.app.forum.TopicActivity
 import me.proxer.app.profile.ProfileActivity
 import me.proxer.app.settings.status.ServerStatusActivity
 import me.proxer.app.util.extension.androidUri
@@ -54,12 +56,12 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         private val discordLink = "https://discord.gg/XwrEDmA".toPrefixedHttpUrl()
         private val repositoryLink = "https://github.com/proxer/ProxerAndroid".toPrefixedHttpUrl()
 
-        private const val supportId = "374605"
-        private const val supportCategory = "anwendungen"
+        private const val supportProxerMail = "support@proxer.de"
+        private const val supportProxerName = "Support"
 
+        private const val developerGithubName = "rubengees"
         private const val developerProxerName = "RubyGee"
         private const val developerProxerId = "121658"
-        private const val developerGithubName = "rubengees"
 
         fun newInstance() = AboutFragment().apply {
             arguments = bundleOf()
@@ -235,19 +237,19 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .text(R.string.about_support_message_title)
             .subText(R.string.about_support_message_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon.cmd_email).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_forum).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
             .setOnClickAction {
                 Completable
                     .fromAction {
-                        messengerDao.findConferenceForUser(developerProxerName).let { existingConference ->
+                        messengerDao.findConferenceForUser(supportProxerName).let { existingConference ->
                             when (existingConference) {
                                 null -> CreateConferenceActivity.navigateTo(
                                     requireActivity(),
                                     false,
-                                    Participant(developerProxerName)
+                                    Participant(supportProxerName)
                                 )
                                 else -> PrvMessengerActivity.navigateTo(requireActivity(), existingConference)
                             }
@@ -257,14 +259,27 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                     .subscribeAndLogErrors()
             }.build(),
         MaterialAboutActionItem.Builder()
-            .text(R.string.about_support_forum_title)
-            .subText(R.string.about_support_forum_description)
+            .text(R.string.about_support_mail_title)
+            .subText(R.string.about_support_mail_description)
             .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_forum).apply {
+                IconicsDrawable(context, CommunityMaterial.Icon.cmd_email).apply {
                     colorInt = context.resolveColor(R.attr.colorIcon)
                 }
             )
-            .setOnClickAction { TopicActivity.navigateTo(requireActivity(), supportId, supportCategory) }
+            .setOnClickAction {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:")
+
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(supportProxerMail))
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_support_mail_subject))
+                }
+
+                try {
+                    startActivity(intent)
+                } catch (error: ActivityNotFoundException) {
+                    requireContext().toast(R.string.about_error_mail_no_activity)
+                }
+            }
             .build()
     )
 
