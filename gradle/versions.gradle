@@ -13,10 +13,10 @@ ext {
     javaVersion = JavaVersion.VERSION_1_8
 
     // Gradle
-    gradleVersion = "6.8-rc-4"
+    gradleVersion = "6.8.1"
 
     // Core plugins
-    androidPluginVersion = "4.2.0-beta02"
+    androidPluginVersion = "4.2.0-beta03"
     kotlinVersion = "1.4.21"
 
     // Utility plugins
@@ -27,14 +27,14 @@ ext {
 
     // Frameworks and compatibility libraries
     koinVersion = "2.2.2"
-    appcompatVersion = "1.3.0-alpha02"
+    appcompatVersion = "1.3.0-beta01"
     browserVersion = "1.3.0"
     lifecycleVersion = "2.2.0"
     roomVersion = "2.3.0-alpha03"
-    workVersion = "2.5.0-beta02"
-    coreKtxVersion = "1.5.0-alpha05"
+    workVersion = "2.5.0-rc01"
+    coreKtxVersion = "1.5.0-beta01"
     fragmentKtxVersion = "1.3.0-rc01"
-    shareTargetVersion = "1.1.0-rc01"
+    shareTargetVersion = "1.1.0"
     securityCryptoVersion = "1.1.0-alpha03"
     playCoreVersion = "1.9.0"
     adsIdentifierVersion = "17.0.0"
@@ -56,14 +56,14 @@ ext {
     gridlayoutVersion = "1.0.0"
     viewpagerVersion = "1.1.0-alpha01"
     exifinterfaceVersion = "1.3.2"
-    materialComponentsVersion = "1.3.0-beta01"
+    materialComponentsVersion = "1.3.0-rc01"
     constaintLayoutVersion = "2.1.0-alpha1"
     preferenceVersion = "1.1.1"
     supportPreferenceVersion = "6d5ebc7934"
-    iconicsVersion = "5.2.1"
+    iconicsVersion = "5.2.4"
     communityMaterialTypefaceVersion = "5.8.55.0-kotlin"
     materialDrawerVersion = "8.3.1"
-    aboutLibrariesVersion = "8.6.3"
+    aboutLibrariesVersion = "8.6.7"
     crossfaderVersion = "1.6.0"
     materialAboutVersion = "3.2.0-rc01"
     subsamplingScaleImageViewVersion = "90c6b27c13"
@@ -87,7 +87,7 @@ ext {
     glideVersion = "4.11.0"
     retrofitVersion = "2.9.0"
     okHttpVersion = "4.10.0-RC1"
-    okioVersion = "2.9.0"
+    okioVersion = "2.10.0"
     moshiVersion = "1.11.0"
     easyHeaderFooterAdapterVersion = "3.0.0"
     kOptionalVersion = "1.7.0"

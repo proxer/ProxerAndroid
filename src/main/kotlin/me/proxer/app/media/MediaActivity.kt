@@ -149,8 +149,7 @@ class MediaActivity : ImageTabsActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> name?.let {
-                ShareCompat.IntentBuilder
-                    .from(this)
+                ShareCompat.IntentBuilder(this)
                     .setText(getString(R.string.share_media, it, ProxerUrls.infoWeb(id)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))

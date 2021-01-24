@@ -57,8 +57,7 @@ class TranslatorGroupActivity : ImageTabsActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> name?.let {
-                ShareCompat.IntentBuilder
-                    .from(this)
+                ShareCompat.IntentBuilder(this)
                     .setText(getString(R.string.share_translator_group, it, ProxerUrls.translatorGroupWeb(id)))
                     .setType("text/plain")
                     .setChooserTitle(getString(R.string.share_title))

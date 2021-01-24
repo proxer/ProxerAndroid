@@ -108,8 +108,7 @@ class TopicActivity : DrawerActivity() {
                         it to url
                     }
                     ?.let { (topic, url) ->
-                        ShareCompat.IntentBuilder
-                            .from(this)
+                        ShareCompat.IntentBuilder(this)
                             .setText(getString(R.string.share_topic, topic, url))
                             .setType("text/plain")
                             .setChooserTitle(getString(R.string.share_title))
