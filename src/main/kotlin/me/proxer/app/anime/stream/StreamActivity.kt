@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -83,6 +82,7 @@ import me.proxer.app.util.extension.safeInject
 import me.proxer.app.util.extension.subscribeAndLogErrors
 import me.proxer.app.util.extension.toEpisodeAppString
 import me.proxer.app.util.extension.toPrefixedUrlOrNull
+import me.proxer.app.util.extension.toast
 import me.proxer.app.util.extension.unsafeLazy
 import me.proxer.library.enums.AnimeLanguage
 import me.proxer.library.enums.Category
@@ -101,6 +101,7 @@ class StreamActivity : BaseActivity() {
 
     companion object {
         private const val PREVIEW_MIME_TYPE = "video/mp4"
+        private const val CLOUDFLARE_HOST = "videodelivery.net"
     }
 
     internal val id: String
@@ -125,10 +126,11 @@ class StreamActivity : BaseActivity() {
         get() = requireNotNull(intent.data)
 
     private val isProxerStream: Boolean
-        get() = intent.dataString
-            ?.toPrefixedUrlOrNull()
-            ?.hasProxerStreamFileHost
-            ?: false
+        get() {
+            val url = intent.dataString?.toPrefixedUrlOrNull()
+
+            return url != null && (url.hasProxerStreamFileHost || url.host == CLOUDFLARE_HOST)
+        }
 
     private val mimeType: String
         get() = requireNotNull(intent.type)
@@ -315,7 +317,7 @@ class StreamActivity : BaseActivity() {
             mediaRouteButton = CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.action_cast)
         }
 
-        if (isInternalPlayerOnly || !canOpenInOtherApp()) {
+        if (isInternalPlayerOnly) {
             menu.findItem(R.id.action_open_in_other_app).isVisible = false
         }
 
@@ -639,12 +641,6 @@ class StreamActivity : BaseActivity() {
         sizeDp = 36
     }
 
-    private fun canOpenInOtherApp(): Boolean {
-        val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer).makeIntent(this)
-
-        return packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isNotEmpty()
-    }
-
     private fun openInOtherApp(): Boolean {
         return try {
             val intent = StreamResolutionResult.Video(uri.toString().toHttpUrl(), mimeType, referer)
@@ -656,6 +652,8 @@ class StreamActivity : BaseActivity() {
 
             true
         } catch (ignored: ActivityNotFoundException) {
+            toast(R.string.activity_stream_open_no_app)
+
             false
         }
     }

@@ -42,7 +42,13 @@ object ProxerStreamCFResolver : StreamResolver() {
 
                         val adTagUri = if (adTag.isNotBlank()) Uri.parse(adTag) else null
 
-                        StreamResolutionResult.Video(url, "application/dash+xml", adTag = adTagUri)
+                        StreamResolutionResult.Video(
+                            url,
+                            // Technically this should be application/dash+xml,
+                            // but other applications do not seem to support that.
+                            "application/x-mpegURL",
+                            adTag = adTagUri
+                        )
                     }
             }
     }

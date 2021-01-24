@@ -335,7 +335,9 @@
     <string name="activity_update_action_install">Installieren</string>
 
     <string name="activity_prv_messenger_send_to">Senden an…</string>
+
     <string name="activity_stream_cast_introduction">Tippe hier, um auf dein Google Cast Gerät zu streamen</string>
+    <string name="activity_stream_open_no_app">Es ist keine App installiert die dieses Video abspielen kann</string>
 
     <string name="dialog_login_title">Anmelden</string>
     <string name="dialog_login_positive">Anmelden</string>
