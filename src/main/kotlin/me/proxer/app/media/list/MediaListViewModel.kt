@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import me.proxer.app.base.PagedContentViewModel
 import me.proxer.app.media.LocalTag
@@ -52,7 +51,7 @@ class MediaListViewModel(
     override val itemsOnPage = 30
 
     override val isLoginRequired: Boolean
-        get() = type.isAgeRestricted()
+        get() = super.isLoginRequired || type.isAgeRestricted()
 
     override val isAgeConfirmationRequired: Boolean
         get() = isLoginRequired
@@ -145,7 +144,7 @@ class MediaListViewModel(
         return Single.zip(
             api.list.tagList().buildSingle(),
             api.list.tagList().type(TagType.H_TAG).buildSingle(),
-            BiFunction { first: List<Tag>, second: List<Tag> -> first + second }
+            { first: List<Tag>, second: List<Tag> -> first + second }
         )
     }
 

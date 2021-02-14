@@ -18,10 +18,13 @@ class TopicViewModel(private val id: String, private val resources: Resources) :
     override val itemsOnPage = 10
 
     override val dataSingle: Single<List<ParsedPost>>
-        get() = api.forum.topic(id)
-            .page(page)
-            .limit(itemsOnPage)
-            .buildSingle()
+        get() = Single.fromCallable { validate() }
+            .flatMap {
+                api.forum.topic(id)
+                    .page(page)
+                    .limit(itemsOnPage)
+                    .buildSingle()
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { metaData.value = it.toTopicMetaData() }
             .observeOn(Schedulers.computation())

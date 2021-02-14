@@ -34,8 +34,6 @@ class MangaViewModel(
     episode: Int
 ) : BaseViewModel<MangaChapterInfo>() {
 
-    override val isLoginRequired = true
-
     override val dataSingle: Single<MangaChapterInfo>
         get() = Single.fromCallable { validate() }
             .flatMap { entrySingle() }

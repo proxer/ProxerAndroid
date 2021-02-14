@@ -19,13 +19,10 @@ import kotlin.properties.Delegates
  */
 class ConferenceViewModel(searchQuery: String) : BaseViewModel<List<ConferenceWithMessage>>() {
 
-    override val isLoginRequired = true
-
     override val data = MediatorLiveData<List<ConferenceWithMessage>?>()
 
     override val dataSingle: Single<List<ConferenceWithMessage>>
-        get() = Single
-            .fromCallable { validators.validateLogin() }
+        get() = Single.fromCallable { validate() }
             .flatMap {
                 if (!MessengerWorker.isRunning) MessengerWorker.enqueueSynchronization()
 

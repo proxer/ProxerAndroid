@@ -18,9 +18,12 @@ import me.proxer.library.enums.MediaLanguage
 class EpisodeViewModel(private val entryId: String) : BaseViewModel<List<EpisodeRow>>() {
 
     override val dataSingle: Single<List<EpisodeRow>>
-        get() = api.info.episodeInfo(entryId)
-            .limit(Int.MAX_VALUE)
-            .buildSingle()
+        get() = Single.fromCallable { validate() }
+            .flatMap {
+                api.info.episodeInfo(entryId)
+                    .limit(Int.MAX_VALUE)
+                    .buildSingle()
+            }
             .map { info ->
                 info.episodes
                     .asSequence()

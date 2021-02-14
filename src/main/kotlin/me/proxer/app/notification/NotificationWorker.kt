@@ -92,7 +92,7 @@ class NotificationWorker(
         val areNewsNotificationsEnabled = preferenceHelper.areNewsNotificationsEnabled
         val areAccountNotificationsEnabled = preferenceHelper.areAccountNotificationsEnabled
 
-        if (!isStopped && areNewsNotificationsEnabled) {
+        if (!isStopped && areNewsNotificationsEnabled && notificationInfo != null) {
             fetchNews(applicationContext, notificationInfo)
         }
 

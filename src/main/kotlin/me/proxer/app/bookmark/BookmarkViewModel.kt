@@ -25,7 +25,6 @@ class BookmarkViewModel(
 ) : PagedContentViewModel<Bookmark>() {
 
     override val itemsOnPage = 30
-    override val isLoginRequired = true
 
     override val endpoint: PagingLimitEndpoint<List<Bookmark>>
         get() = api.ucp.bookmarks()

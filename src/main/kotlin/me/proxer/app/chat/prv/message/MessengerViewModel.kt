@@ -27,7 +27,6 @@ import me.proxer.app.util.extension.subscribeAndLogErrors
  */
 class MessengerViewModel(initialConference: LocalConference) : PagedViewModel<LocalMessage>() {
 
-    override val isLoginRequired = true
     override val itemsOnPage = MessengerWorker.MESSAGES_ON_PAGE
 
     @Suppress("UNUSED_PARAMETER")

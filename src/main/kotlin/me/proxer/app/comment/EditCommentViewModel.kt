@@ -45,8 +45,6 @@ class EditCommentViewModel(
         }
     }
 
-    override val isLoginRequired = true
-
     override val dataSingle: Single<LocalComment>
         get() = Single.fromCallable { validate() }
             .flatMap { api.comment.comment(id, entryId).buildSingle() }

@@ -28,7 +28,7 @@ abstract class BaseViewModel<T> : ViewModel() {
     open val error = MutableLiveData<ErrorUtils.ErrorAction?>()
     open val isLoading = MutableLiveData<Boolean?>()
 
-    protected open val isLoginRequired = false
+    protected open val isLoginRequired = true
     protected open val isAgeConfirmationRequired = false
 
     protected val bus by safeInject<RxBus>()

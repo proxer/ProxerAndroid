@@ -23,9 +23,11 @@ class ServerStatusViewModel : BaseViewModel<List<ServerStatus>>() {
         private val url = "https://proxer.de".toHttpUrl()
     }
 
+    override val isLoginRequired = false
+
     override val dataSingle: Single<List<ServerStatus>>
-        get() = client.newCall(constructRequest())
-            .toBodySingle()
+        get() = Single.fromCallable { validate() }
+            .flatMap { client.newCall(constructRequest()).toBodySingle() }
             .map { Jsoup.parse(it) }
             .map { scrape(it) }
 

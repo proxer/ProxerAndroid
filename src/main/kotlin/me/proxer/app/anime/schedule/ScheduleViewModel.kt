@@ -12,7 +12,8 @@ import me.proxer.library.enums.CalendarDay
 class ScheduleViewModel : BaseViewModel<Map<CalendarDay, List<CalendarEntry>>>() {
 
     override val dataSingle: Single<Map<CalendarDay, List<CalendarEntry>>>
-        get() = api.media.calendar().buildSingle()
+        get() = Single.fromCallable { validate() }
+            .flatMap { api.media.calendar().buildSingle() }
             .map { calendarEntries -> calendarEntries.groupBy { it.weekDay } }
             .map { groupedCalendarEntries ->
                 groupedCalendarEntries.mapValues { (_, calendarEntries) ->

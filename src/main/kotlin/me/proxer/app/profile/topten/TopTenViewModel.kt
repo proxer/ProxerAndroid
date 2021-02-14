@@ -26,28 +26,31 @@ class TopTenViewModel(
 ) : BaseViewModel<ZippedTopTenResult>() {
 
     override val dataSingle: Single<ZippedTopTenResult>
-        get() = when (storageHelper.user?.matches(userId, username) == true) {
-            true ->
-                api.ucp.topTen().buildSingle()
-                    .map { entries -> entries.map { it.toLocalEntryUcp() } }
-                    .map {
-                        val animeList = it.filter { entry -> entry.category == Category.ANIME }
-                        val mangaList = it.filter { entry -> entry.category == Category.MANGA }
+        get() = Single.fromCallable { validate() }
+            .flatMap {
+                when (storageHelper.user?.matches(userId, username) == true) {
+                    true ->
+                        api.ucp.topTen().buildSingle()
+                            .map { entries -> entries.map { it.toLocalEntryUcp() } }
+                            .map {
+                                val animeList = it.filter { entry -> entry.category == Category.ANIME }
+                                val mangaList = it.filter { entry -> entry.category == Category.MANGA }
 
-                        ZippedTopTenResult(animeList, mangaList)
-                    }
-            false -> {
-                val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
+                                ZippedTopTenResult(animeList, mangaList)
+                            }
+                    false -> {
+                        val includeHentai = preferenceHelper.isAgeRestrictedMediaAllowed && storageHelper.isLoggedIn
 
-                Singles.zip(
-                    partialSingle(includeHentai, Category.ANIME),
-                    partialSingle(includeHentai, Category.MANGA),
-                    zipper = { animeEntries, mangaEntries ->
-                        ZippedTopTenResult(animeEntries, mangaEntries)
+                        Singles.zip(
+                            partialSingle(includeHentai, Category.ANIME),
+                            partialSingle(includeHentai, Category.MANGA),
+                            zipper = { animeEntries, mangaEntries ->
+                                ZippedTopTenResult(animeEntries, mangaEntries)
+                            }
+                        )
                     }
-                )
+                }
             }
-        }
 
     val itemDeletionError = ResettingMutableLiveData<ErrorUtils.ErrorAction?>()
 
