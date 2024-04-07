@@ -66,7 +66,7 @@
     </string>
     <string name="error_login_credentials">Falsches Passwort oder falscher Nutzername</string>
     <string name="error_login_two_factor_authentication">
-        Bitte gebe deinen Geheimschlüssel der Zwei-Faktor-Authentifizierung ein!
+        Bitte gib deinen Geheimschlüssel für die Zwei-Faktor-Authentifizierung ein! Der Code wird dir entweder per E-Mail zugesendet oder du findest ihn in deiner Authenticator-App.
     </string>
     <string name="error_login_ip_authentication">
         Du meldest dich von einem unbekannten IP-Netz an. Du wirst in wenigen Minuten eine E-Mail von uns erhalten.
