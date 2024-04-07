@@ -2,7 +2,7 @@ ext {
     // App
     appVersionMajor = 1
     appVersionMinor = 11
-    appVersionPatch = 4
+    appVersionPatch = 5
 
     minSdkVersion = 21
     targetSdkVersion = 30
