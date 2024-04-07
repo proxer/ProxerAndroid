@@ -887,14 +887,11 @@
         Bitte prüfe den Serverstatus bevor du einen Fehler meldest.
         Wenn es sich nicht um ein technisches Problem handelt, wende dich bitte an das zutreffende Team
     </string>
-    <string name="about_support_message_title">Nachricht</string>
-    <string name="about_support_message_description">Berichte Fehler oder mache Verbesserungsvorschläge per PN</string>
     <string name="about_support_mail_title">E-Mail</string>
     <string name="about_support_mail_description">Berichte Fehler oder mache Verbesserungsvorschläge per Mail</string>
     <string name="about_support_mail_subject">Proxer.Me Android App Support</string>
     <string name="about_developer_title">Entwickler</string>
     <string name="about_developer_github_title">GitHub</string>
-    <string name="about_developer_proxer_title">Proxer</string>
     <string name="about_error_mail_no_activity">Es ist keine E-Mail App installiert</string>
 
     <string name="introduction_welcome_title">Willkommen!</string>
