@@ -4,25 +4,19 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.3
-
-      - name: Check Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1.0.3
+        uses: actions/checkout@v4
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v1.4.3
+        uses: actions/setup-java@v4
         with:
           java-version: 11
 
-      - name: Set up Gradle Cache
-        uses: actions/cache@v2.1.2
-        with:
-          path: ~/.gradle
-          key: ${{ runner.OS }}-gradle-
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Install secrets
         run: .github/workflows/create-secrets.sh
@@ -35,92 +29,15 @@ jobs:
         run: ./gradlew ktlintCheck detekt build bundle
 
       - name: Store reports
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Reports
           path: build/reports
 
       - name: Store outputs
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Outputs
           path: build/outputs
-
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.3.3
-        with:
-          fetch-depth: 0
-
-      - name: Download outputs
-        uses: actions/download-artifact@v2.0.5
-        with:
-          name: Outputs
-          path: build/outputs
-
-      - id: calculate-commit-range
-        name: Calculate commit range
-        uses: actions/github-script@v3.0.0
-        with:
-          github-token: ${{github.token}}
-          previews: 'antiope-preview'
-          script: |
-            const query = `{
-              repository(owner: "proxer", name: "ProxerAndroid") {
-                ref(qualifiedName: "master") {
-                  target {
-                    ... on Commit {
-                      history(first: 20, after: "${context.sha} 0") {
-                        edges {
-                          node {
-                            oid
-                            message
-                            checkSuites(first: 5) {
-                              nodes {
-                                conclusion
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }`;
-
-            const result = await github.graphql(query, {
-              headers: {
-                Accept: "application/vnd.github.antiope-preview+json"
-              }
-            });
-
-            const history = result.repository.ref.target.history.edges;
-
-            const firstSuccessfulCommit = history.findIndex(it => {
-              const nodes = it.node.checkSuites.nodes;
-
-              return (
-                nodes.length > 0 && nodes.every(check => check.conclusion !== "FAILURE")
-              );
-            });
-
-            if (firstSuccessfulCommit >= 0) {
-              return `${history[firstSuccessfulCommit].node.oid}...${context.sha}`;
-            } else {
-              return `${context.sha}~1...${context.sha}`;
-            }
-
-      - name: Publish to Discord
-        run: .github/workflows/publish-to-discord.sh
-        env:
-          COMMIT_RANGE: ${{ steps.calculate-commit-range.outputs.result }}
-          UPLOAD_URL: ${{ secrets.UPLOAD_URL }}
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
