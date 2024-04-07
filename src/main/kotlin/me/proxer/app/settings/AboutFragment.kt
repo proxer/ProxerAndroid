@@ -56,19 +56,13 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
         private val discordLink = "https://discord.gg/XwrEDmA".toPrefixedHttpUrl()
         private val repositoryLink = "https://github.com/proxer/ProxerAndroid".toPrefixedHttpUrl()
 
-        private const val supportProxerMail = "support@proxer.de"
-        private const val supportProxerName = "Support"
-
+        private const val supportProxerMail = "appsupport@proxer.de"
         private const val developerGithubName = "rubengees"
-        private const val developerProxerName = "RubyGee"
-        private const val developerProxerId = "121658"
 
         fun newInstance() = AboutFragment().apply {
             arguments = bundleOf()
         }
     }
-
-    private val messengerDao by safeInject<MessengerDao>()
 
     private var customTabsHelper by Delegates.notNull<CustomTabsHelperFragment>()
 
@@ -234,31 +228,6 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
             .setOnClickAction { showPage(teamLink, skipCheck = true) }
             .build(),
         MaterialAboutActionItem.Builder()
-            .text(R.string.about_support_message_title)
-            .subText(R.string.about_support_message_description)
-            .icon(
-                IconicsDrawable(context, CommunityMaterial.Icon2.cmd_forum).apply {
-                    colorInt = context.resolveColor(R.attr.colorIcon)
-                }
-            )
-            .setOnClickAction {
-                Completable
-                    .fromAction {
-                        messengerDao.findConferenceForUser(supportProxerName).let { existingConference ->
-                            when (existingConference) {
-                                null -> CreateConferenceActivity.navigateTo(
-                                    requireActivity(),
-                                    false,
-                                    Participant(supportProxerName)
-                                )
-                                else -> PrvMessengerActivity.navigateTo(requireActivity(), existingConference)
-                            }
-                        }
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .subscribeAndLogErrors()
-            }.build(),
-        MaterialAboutActionItem.Builder()
             .text(R.string.about_support_mail_title)
             .subText(R.string.about_support_mail_description)
             .icon(
@@ -299,20 +268,5 @@ class AboutFragment : MaterialAboutFragment(), CustomTabsAware {
                 )
             }
             .build(),
-        MaterialAboutActionItem.Builder()
-            .text(getString(R.string.about_developer_proxer_title))
-            .subText(developerProxerName)
-            .icon(
-                ContextCompat.getDrawable(context, R.drawable.ic_stat_proxer)?.apply {
-                    colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                        context.resolveColor(R.attr.colorIcon),
-                        BlendModeCompat.SRC_IN
-                    )
-                }
-            )
-            .setOnClickAction {
-                ProfileActivity.navigateTo(requireActivity(), developerProxerId, developerProxerName, null)
-            }
-            .build()
     )
 }
